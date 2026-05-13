@@ -5,6 +5,8 @@
 ## 1. Product
 
 - **App:** Katyayani Krishi Direct (KKD) — farmer-facing D2C app for agri inputs
+- **Play Store:** https://play.google.com/store/apps/details?id=com.katyayani.krishisevakendra
+- **Package:** `com.katyayani.krishisevakendra`
 - **Sister product:** Partner App (retailer-facing) — already in active redesign
 - **Core JTBD:** Order agri inputs (pesticides, fertilizers, seeds, etc.)
 
@@ -23,13 +25,20 @@
   - Simpler IA
 - **Quality bar:** Partner App level se **upar** — Partner App is the floor, not the ceiling
 
-## 4. Languages
+## 4. Languages (from April 2026 data)
 
-- TBD — to be confirmed from data sheet (which states/languages dominate user base)
+Confirmed user base split:
+- English 43% · Hindi 40% · Bengali 5% · Marathi 4% · Telugu 3% · Kannada 2% · Odia 1.4% · Tamil 0.8% · Malayalam 0.3%
+- **V1 target:** Hindi, English, Bengali, Marathi, Telugu (covers 95%+)
+- Note: English-leading split is likely a default-language artifact — revamp must ask language upfront with Hindi as default.
 
-## 5. Business goals
+## 5. Business goals (April 2026 baseline)
 
-- TBD — to be confirmed from data sheet (revenue target, GMV, DAU/MAU)
+- **Installs (lifetime):** 142,000
+- **MAU:** 90,000 · **DAU:** 9,000 (DAU/MAU = 10% — needs lift)
+- **April revenue:** ₹1.13 Cr · **Orders:** 10,310 · **AOV:** ₹1,099
+- **Install → Order conversion:** 7.7% (huge headroom)
+- Specific revenue target TBD — but the funnel math says fixing search + checkout could 2-3x orders without more installs.
 
 ## 6. Pain points (PM-stated)
 

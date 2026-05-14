@@ -78,13 +78,15 @@
     background: #fff;
   }
   @media (max-width: 480px) {
-    .topbar { padding: 8px 14px; }
+    body { height: 100vh; height: 100dvh; }
+    .topbar { padding: 8px 14px; flex-shrink: 0; }
     .topbar .sep, .topbar .label, .nav-spacer, .nav-btn { display: none; }
-    .stage { padding: 0; align-items: stretch; }
+    .stage { padding: 0; align-items: stretch; flex: 1; min-height: 0; overflow: hidden; }
     .phone {
-      width: 100%; height: 100vh;
+      width: 100%; height: 100%;
       border-radius: 0;
       box-shadow: none;
+      flex-shrink: 0;
     }
     .phone::before { display: none; }
   }

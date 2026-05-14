@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+*{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}.hi{font-family:'Noto Sans Devanagari',sans-serif}html,body{margin:0;padding:0}body{min-height:100vh;background:#fff;color:#1C1C1C}.scrollx{overflow-x:auto;scrollbar-width:none}.scrollx::-webkit-scrollbar{display:none}.tnum{font-variant-numeric:tabular-nums}.img-blend{mix-blend-mode:multiply}.chip{transition:all .15s}.chip.active{background:#0E7A4E;color:#fff;border-color:#0E7A4E}
+</style></head>
+<body class="min-h-screen pb-[88px]">
+
+<div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#1C1C1C" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#1C1C1C" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#1C1C1C" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#1C1C1C"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#1C1C1C"/></svg></div></div>
+
+<!-- Sticky search -->
+<div class="sticky top-0 bg-white pt-3 pb-3 px-4 z-10">
+  <div class="flex items-center gap-3">
+    <button onclick="location.href='home-loggedout.html'" class="w-10 h-10 rounded-full border border-[#EEE5D8] flex items-center justify-center flex-shrink-0">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="flex-1 bg-[#F6F2EA] rounded-full flex items-center gap-2 h-[44px] pl-3.5 pr-1">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#606060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input class="flex-1 outline-none bg-transparent text-[13px]" placeholder="Search products"/>
+      <button onclick="location.href='voice-search.html'" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#F4A93C,#0E7A4E)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Category chips -->
+<div class="scrollx flex gap-2 px-4 pb-3"><button class="chip active flex-shrink-0 h-9 px-3.5 rounded-full border border-[#EEE5D8] text-[12px] font-bold hi">सभी</button><button class="chip flex-shrink-0 h-9 px-3.5 rounded-full border border-[#EEE5D8] text-[12px] font-bold hi">कीटनाशक</button><button class="chip flex-shrink-0 h-9 px-3.5 rounded-full border border-[#EEE5D8] text-[12px] font-bold hi">उर्वरक</button><button class="chip flex-shrink-0 h-9 px-3.5 rounded-full border border-[#EEE5D8] text-[12px] font-bold hi">फफूंदनाशक</button><button class="chip flex-shrink-0 h-9 px-3.5 rounded-full border border-[#EEE5D8] text-[12px] font-bold hi">बायो</button></div>
+
+<!-- Filter / Sort bar -->
+<div class="flex items-center gap-2 px-4 mb-3 border-b border-[#EEE5D8] pb-3">
+  <button class="flex items-center gap-1.5 h-9 px-3 rounded-full border border-[#EEE5D8] text-[12px] font-bold"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 12h12M10 18h4"/></svg>Filter</button>
+  <button class="flex items-center gap-1.5 h-9 px-3 rounded-full border border-[#EEE5D8] text-[12px] font-bold"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h13M3 12h13M3 18h13M21 6l-3 3 3 3M18 9V3M18 21v-6M21 18l-3-3"/></svg>Sort</button>
+  <div class="flex-1"></div>
+  <span class="text-[11px] text-[#9E9E9E]">17 products</span>
+</div>
+
+<!-- Product grid -->
+<div class="px-4 grid grid-cols-2 gap-3">
+
+  <a href="pdp.html" class="block">
+    <div class="rounded-[14px] bg-[#F8F3E8] aspect-square flex items-center justify-center p-3 relative">
+      <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/>
+      <span class="absolute top-2 left-2 text-[8.5px] font-extrabold bg-[#0C831F] text-white px-1.5 py-0.5 rounded">28% OFF</span>
+      <span class="absolute bottom-2 left-2 text-[8.5px] font-extrabold bg-[#D4A537] text-[#1C1C1C] px-1.5 py-0.5 rounded">#1 BESTSELLER</span>
+    </div>
+    <div class="mt-2 text-[13px] font-bold leading-tight">Humic + Fulvic 98</div>
+    <div class="hi text-[10px] text-[#7A6A4E] mt-0.5">बायो-स्टिमुलेंट · 1 L</div>
+    <div class="flex items-baseline gap-2 mt-1"><span class="text-[16px] font-black tnum">₹376</span><span class="text-[11px] text-[#9E9E9E] line-through tnum">₹520</span></div>
+    <button class="w-full mt-1.5 h-9 rounded-[10px] bg-[#0C831F] text-white text-[12px] font-extrabold">ADD</button>
+  </a>
+
+  <a href="pdp.html" class="block">
+    <div class="rounded-[14px] bg-[#F8F3E8] aspect-square flex items-center justify-center p-3 relative">
+      <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full object-contain"/>
+      <span class="absolute top-2 left-2 text-[8.5px] font-extrabold bg-[#0C831F] text-white px-1.5 py-0.5 rounded">28% OFF</span>
+    </div>
+    <div class="mt-2 text-[13px] font-bold leading-tight">Chakrawarti</div>
+    <div class="hi text-[10px] text-[#7A6A4E] mt-0.5">कीटनाशक · 100 ml</div>
+    <div class="flex items-baseline gap-2 mt-1"><span class="text-[16px] font-black tnum">₹358</span><span class="text-[11px] text-[#9E9E9E] line-through tnum">₹495</span></div>
+    <button class="w-full mt-1.5 h-9 rounded-[10px] bg-[#0C831F] text-white text-[12px] font-extrabold">ADD</button>
+  </a>
+
+  <a href="pdp.html" class="block">
+    <div class="rounded-[14px] bg-[#F8F3E8] aspect-square flex items-center justify-center p-3 relative">
+      <img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" class="img-blend max-h-full object-contain"/>
+      <span class="absolute top-2 left-2 text-[8.5px] font-extrabold bg-[#0C831F] text-white px-1.5 py-0.5 rounded">28% OFF</span>
+    </div>
+    <div class="mt-2 text-[13px] font-bold leading-tight">Chakraveer</div>
+    <div class="hi text-[10px] text-[#7A6A4E] mt-0.5">कीटनाशक · 100 ml</div>
+    <div class="flex items-baseline gap-2 mt-1"><span class="text-[16px] font-black tnum">₹440</span><span class="text-[11px] text-[#9E9E9E] line-through tnum">₹610</span></div>
+    <button class="w-full mt-1.5 h-9 rounded-[10px] bg-[#0C831F] text-white text-[12px] font-extrabold">ADD</button>
+  </a>
+
+  <a href="pdp.html" class="block">
+    <div class="rounded-[14px] bg-[#F8F3E8] aspect-square flex items-center justify-center p-3 relative">
+      <img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" class="img-blend max-h-full object-contain"/>
+    </div>
+    <div class="mt-2 text-[13px] font-bold leading-tight">Antivirus</div>
+    <div class="hi text-[10px] text-[#7A6A4E] mt-0.5">वायरस-नाशक · 100 ml</div>
+    <div class="flex items-baseline gap-2 mt-1"><span class="text-[16px] font-black tnum">₹327</span></div>
+    <button class="w-full mt-1.5 h-9 rounded-[10px] bg-[#0C831F] text-white text-[12px] font-extrabold">ADD</button>
+  </a>
+
+  <a href="pdp.html" class="block">
+    <div class="rounded-[14px] bg-[#F8F3E8] aspect-square flex items-center justify-center p-3 relative">
+      <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend max-h-full object-contain"/>
+    </div>
+    <div class="mt-2 text-[13px] font-bold leading-tight">NPK 19-19-19</div>
+    <div class="hi text-[10px] text-[#7A6A4E] mt-0.5">उर्वरक · 1 kg</div>
+    <div class="flex items-baseline gap-2 mt-1"><span class="text-[16px] font-black tnum">₹330</span><span class="text-[11px] text-[#9E9E9E] line-through tnum">₹450</span></div>
+    <button class="w-full mt-1.5 h-9 rounded-[10px] bg-[#0C831F] text-white text-[12px] font-extrabold">ADD</button>
+  </a>
+
+  <a href="pdp.html" class="block">
+    <div class="rounded-[14px] bg-[#F8F3E8] aspect-square flex items-center justify-center p-3 relative">
+      <img src="https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp" class="img-blend max-h-full object-contain"/>
+    </div>
+    <div class="mt-2 text-[13px] font-bold leading-tight">Triple Attack Liquid</div>
+    <div class="hi text-[10px] text-[#7A6A4E] mt-0.5">बायो-कीटनाशक · 1 L</div>
+    <div class="flex items-baseline gap-2 mt-1"><span class="text-[16px] font-black tnum">₹509</span></div>
+    <button class="w-full mt-1.5 h-9 rounded-[10px] bg-[#0C831F] text-white text-[12px] font-extrabold">ADD</button>
+  </a>
+
+  <a href="pdp.html" class="block">
+    <div class="rounded-[14px] bg-[#F8F3E8] aspect-square flex items-center justify-center p-3 relative">
+      <img src="https://katyayanikrishidirect.com/cdn/shop/files/AZODHARMA_3.webp" class="img-blend max-h-full object-contain"/>
+    </div>
+    <div class="mt-2 text-[13px] font-bold leading-tight">Azodharma</div>
+    <div class="hi text-[10px] text-[#7A6A4E] mt-0.5">फफूंदनाशक · 100 ml</div>
+    <div class="flex items-baseline gap-2 mt-1"><span class="text-[16px] font-black tnum">₹310</span></div>
+    <button class="w-full mt-1.5 h-9 rounded-[10px] bg-[#0C831F] text-white text-[12px] font-extrabold">ADD</button>
+  </a>
+
+  <a href="pdp.html" class="block">
+    <div class="rounded-[14px] bg-[#F8F3E8] aspect-square flex items-center justify-center p-3 relative">
+      <img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhannat_2.webp" class="img-blend max-h-full object-contain"/>
+    </div>
+    <div class="mt-2 text-[13px] font-bold leading-tight">Bhannaat</div>
+    <div class="hi text-[10px] text-[#7A6A4E] mt-0.5">बायो-स्टिमुलेंट · 500 ml</div>
+    <div class="flex items-baseline gap-2 mt-1"><span class="text-[16px] font-black tnum">₹334</span></div>
+    <button class="w-full mt-1.5 h-9 rounded-[10px] bg-[#0C831F] text-white text-[12px] font-extrabold">ADD</button>
+  </a>
+
+</div>
+
+<!-- Bottom nav -->
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t border-[#EEE5D8] px-2 pt-2.5 pb-3"><div class="grid grid-cols-5 text-center"><button onclick="location.href='home.html'" class="flex flex-col items-center gap-1"><div class="w-8 h-[2.5px]"></div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9E9E9E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg><span class="text-[10.5px] text-[#606060] leading-none">Home</span></button><button class="flex flex-col items-center gap-1"><div class="w-8 h-[2.5px] rounded-full bg-[#0E7A4E]"></div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0E7A4E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2l1.5 3h9L18 2M5 5h14l-1 14H6L5 5z"/></svg><span class="text-[10.5px] font-bold text-[#0E7A4E] leading-none">Shop</span></button><button onclick="location.href='my-crop.html'" class="flex flex-col items-center gap-1"><div class="w-8 h-[2.5px]"></div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9E9E9E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8M8 6l4-4 4 4M5 22V12h14v10M9 16v6M15 16v6"/></svg><span class="text-[10.5px] text-[#606060] leading-none">My Crop</span></button><button onclick="location.href='advisory.html'" class="flex flex-col items-center gap-1"><div class="w-8 h-[2.5px]"></div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9E9E9E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.5-6.9M21 4v6h-6"/></svg><span class="text-[10.5px] text-[#606060] leading-none">Advisory</span></button><button onclick="location.href='account.html'" class="flex flex-col items-center gap-1"><div class="w-8 h-[2.5px]"></div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9E9E9E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 5-7 8-7s7 2 8 7"/></svg><span class="text-[10.5px] text-[#606060] leading-none">Account</span></button></div></div>
+
+</body></html>

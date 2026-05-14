@@ -3,44 +3,42 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>KKD App Revamp — Prototype</title>
+<title>KKD App Revamp — Full Prototype</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;700;800&family=Outfit:wght@900&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  * { font-family: 'Poppins', system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+  * { font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   .hi { font-family: 'Noto Sans Devanagari', sans-serif; }
   .wordmark { font-family: 'Outfit', sans-serif; font-style: italic; font-weight: 900; letter-spacing: -0.04em; }
   body { background: #0a0a0a; color: #fff; }
   .phone-frame {
-    width: 273px; height: 546px;
+    width: 220px; height: 440px;
     background: #0a0a0a;
-    border-radius: 32px;
-    padding: 0;
+    border-radius: 28px;
     overflow: hidden;
     position: relative; cursor: pointer;
-    box-shadow: 0 0 0 2px #2a2a2a, 0 20px 60px rgba(0,0,0,.6);
+    box-shadow: 0 0 0 2px #2a2a2a, 0 16px 40px rgba(0,0,0,.55);
     transition: transform .2s, box-shadow .2s;
   }
-  .phone-frame:hover { transform: translateY(-6px); box-shadow: 0 0 0 2px #2a2a2a, 0 32px 80px rgba(244,169,60,.4); }
+  .phone-frame:hover { transform: translateY(-4px); box-shadow: 0 0 0 2px #2a2a2a, 0 24px 60px rgba(244,169,60,.35); }
   .phone-frame::before {
-    content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
-    width: 8px; height: 8px; border-radius: 999px; background: #050505;
+    content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+    width: 7px; height: 7px; border-radius: 999px; background: #050505;
     box-shadow: inset 0 0 0 1px #1f1f1f; z-index: 30;
   }
   .phone-frame .screen { position: absolute; inset: 0; overflow: hidden; background: #fff; }
   .phone-frame iframe {
     width: 390px; height: 858px; border: none;
-    transform: scale(0.7); transform-origin: top left;
+    transform: scale(0.564); transform-origin: top left;
     display: block; pointer-events: none;
     scrollbar-width: none;
   }
   .phone-frame iframe::-webkit-scrollbar { display: none; }
-  .new-badge { background: #E23744; color: #fff; font-size: 8px; font-weight: 800; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .v2-badge { background: #F4A93C; color: #1C1C1C; font-size: 8px; font-weight: 800; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .pill-status { background: #0E7A4E; color: #fff; }
+  .new-badge { background:#E23744; color:#fff; font-size:8px; font-weight:800; padding:2px 5px; border-radius:3px; text-transform:uppercase; letter-spacing:0.5px; }
   .scrollx { overflow-x: auto; scrollbar-width: thin; }
   .scrollx::-webkit-scrollbar { height: 8px; }
   .scrollx::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 999px; }
+  .pill { display:inline-flex; align-items:center; gap:5px; padding:2px 8px; border-radius:999px; font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; }
 </style>
 </head>
 <body class="min-h-screen">
@@ -49,219 +47,148 @@
   <div class="border-b border-[#1a1a1a] bg-[#0a0a0a] sticky top-0 z-50">
     <div class="max-w-[1600px] mx-auto px-8 py-5 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-[10px] flex items-center justify-center font-extrabold text-white text-xl" style="background: linear-gradient(135deg, #F4A93C 0%, #0E7A4E 100%);">K</div>
+        <div class="w-12 h-12 rounded-[10px] flex items-center justify-center font-extrabold text-white text-xl" style="background:linear-gradient(135deg,#F4A93C 0%,#0E7A4E 100%)">K</div>
         <div>
           <div class="text-[22px] font-extrabold tracking-tight"><span class="wordmark">Katyayani</span> Krishi Direct</div>
-          <div class="text-[11px] text-[#888] font-medium uppercase tracking-wider">Clickable Prototype · v0.2 · B2C Browse-First Flow</div>
+          <div class="text-[11px] text-[#888] font-medium uppercase tracking-wider">Full Prototype · v1.0 · 30 screens</div>
         </div>
       </div>
       <div class="flex items-center gap-3 text-[12px]">
-        <div class="flex items-center gap-1.5 mr-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-[#F4A93C]"></span>
-          <span class="text-white font-bold">10 Screens · Wave 1</span>
-        </div>
+        <div class="flex items-center gap-1.5 mr-2"><span class="w-2.5 h-2.5 rounded-full bg-[#F4A93C]"></span><span class="text-white font-bold">30 screens · 8 flows</span></div>
         <a href="screens/philosophy.html" target="_blank" class="px-4 py-2 border border-[#9B72F5] text-[#9B72F5] text-[12px] font-medium rounded-md uppercase tracking-wide hover:bg-[#9B72F5]/10">💡 Philosophy</a>
-        <a href="viewer.html?s=design-system.html" target="_blank" class="px-4 py-2 border border-[#F4A93C] text-[#F4A93C] text-[12px] font-medium rounded-md uppercase tracking-wide hover:bg-[#F4A93C]/10">🎨 Design System</a>
-        <a href="viewer.html?s=splash.html" target="_blank" class="px-4 py-2 bg-[#0E7A4E] text-white text-[12px] font-medium rounded-md uppercase tracking-wide">▶ Start Prototype</a>
+        <a href="viewer.html?s=design-system.html" target="_blank" class="px-4 py-2 border border-[#F4A93C] text-[#F4A93C] text-[12px] font-medium rounded-md uppercase tracking-wide hover:bg-[#F4A93C]/10">🎨 Design</a>
+        <a href="viewer.html?s=splash.html" target="_blank" class="px-4 py-2 bg-[#0E7A4E] text-white text-[12px] font-medium rounded-md uppercase tracking-wide">▶ Start</a>
       </div>
     </div>
   </div>
 
   <div class="max-w-[1600px] mx-auto px-8 py-10">
 
-    <!-- v0.2 visual reset banner -->
-    <div class="mb-6 rounded-2xl p-6 border" style="background:linear-gradient(135deg, rgba(244,169,60,0.15) 0%, rgba(14,122,78,0.12) 100%); border-color: rgba(244,169,60,0.25)">
-      <div class="flex items-baseline gap-2 mb-2">
-        <span class="text-[18px] font-extrabold hi">किसान का अपना ऐप</span>
-        <span class="v2-badge">v0.2 visual reset</span>
-      </div>
-      <p class="text-[13px] text-[#ccc] leading-relaxed max-w-[920px]">
-        <strong class="text-white">What changed from v0.1:</strong> dropped Partner App's dark gradient hero → warm cream <code class="text-[#F4A93C] bg-black/30 px-1.5 py-0.5 rounded">#FAF7F2</code> base with sun-warm accents; bigger Devanagari script; light/warm palette throughout. <strong class="text-white">Flow change:</strong> B2C browse-first — Language → Home (logged-out browse with ₹100 unlock banner) → Login is contextual, triggered when user wants the offer or hits a locked feature (Krishi Doctor, Cart). No more upfront forced signup.
-      </p>
-    </div>
-
-    <!-- Data leak callouts -->
-    <div class="grid grid-cols-3 gap-4 mb-10">
-      <div class="border border-[#1a1a1a] rounded-2xl p-4 bg-[#0d0d0d]">
-        <div class="text-[10px] uppercase tracking-wider text-[#888] font-bold mb-1">Data leak</div>
-        <div class="text-[22px] font-black text-[#E23744]">−68%</div>
-        <div class="text-[12px] text-[#aaa] mt-1">Reg → ATC. Browse-first flow + voice search hit this directly.</div>
-      </div>
-      <div class="border border-[#1a1a1a] rounded-2xl p-4 bg-[#0d0d0d]">
-        <div class="text-[10px] uppercase tracking-wider text-[#888] font-bold mb-1">Data leak</div>
-        <div class="text-[22px] font-black text-[#E23744]">−33%</div>
-        <div class="text-[12px] text-[#aaa] mt-1">Install → Reg. No forced signup — let them see value first, ₹100 unlock pulls intent-driven signup.</div>
-      </div>
-      <div class="border border-[#1a1a1a] rounded-2xl p-4 bg-[#0d0d0d]">
-        <div class="text-[10px] uppercase tracking-wider text-[#888] font-bold mb-1">Data leak</div>
-        <div class="text-[22px] font-black text-[#E23744]">52%</div>
-        <div class="text-[12px] text-[#aaa] mt-1">Cart abandon. Trust pack on PDP/cart, Wave 2.</div>
+    <!-- Intro -->
+    <div class="mb-8 rounded-2xl p-6 border" style="background:linear-gradient(135deg,rgba(244,169,60,0.12),rgba(14,122,78,0.08));border-color:rgba(244,169,60,0.25)">
+      <div class="text-[20px] font-extrabold hi mb-1.5">किसान का अपना ऐप</div>
+      <p class="text-[13px] text-[#ccc] leading-relaxed max-w-[920px]">B2C browse-first agri app for Katyayani Krishi Direct. 30 screens across 8 flows. Light cream visual language (distinct from Partner App), image-led home with real product imagery, voice + photo as differentiation bets, trust pack on every PDP/cart to fix K1-K5 review complaints, full crop calendar fixing #14.</p>
+      <div class="flex flex-wrap items-center gap-2 mt-4">
+        <span class="pill bg-[#E23744]/15 text-[#E23744]">−68% Reg→ATC leak</span>
+        <span class="pill bg-[#E23744]/15 text-[#E23744]">−33% Install→Reg leak</span>
+        <span class="pill bg-[#E23744]/15 text-[#E23744]">52% Cart abandon</span>
+        <span class="pill bg-[#0E7A4E]/15 text-[#0E7A4E]">All 17 PM obs covered</span>
       </div>
     </div>
 
-    <!-- ============== FLOW 1: BROWSE-FIRST ============== -->
-    <div class="mb-12">
-      <div class="flex items-center gap-3 mb-1">
-        <div class="text-[24px] font-extrabold">1. Browse-first entry</div>
-        <span class="new-badge">NEW</span>
-        <span class="pill-status text-[10px] font-medium px-2 py-1 rounded uppercase">3 screens</span>
+    <!-- FLOW 1: Browse-first entry -->
+    <section class="mb-12">
+      <div class="flex items-center gap-3 mb-1"><div class="text-[22px] font-extrabold">1 · Browse-first entry</div><span class="new-badge">B2C</span><span class="text-[11px] text-[#888]">3 screens</span></div>
+      <p class="text-[12px] text-[#888] mb-5">App-open → Splash → Language → Home (logged-out). Login optional, contextual.</p>
+      <div class="scrollx flex gap-5 pb-3">
+        <div><a href="viewer.html?s=splash.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/splash.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Splash</div><div class="text-center text-[10px] text-[#0E7A4E]">✓ Single splash · 2.5s</div></div>
+        <div><a href="viewer.html?s=language.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/language.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Language</div><div class="text-center text-[10px] text-[#0E7A4E]">✓ Hindi default</div></div>
+        <div><a href="viewer.html?s=home-loggedout.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/home-loggedout.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Home · Browse <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">✓ ₹100 unlock banner</div></div>
       </div>
-      <p class="text-[13px] text-[#888] mb-6 max-w-[760px]">App-open → Splash → Language → Home (logged-out). User browses, sees products, gets value, then logs in when they want the ₹100 unlock or a locked feature.</p>
+    </section>
 
-      <div class="scrollx flex gap-6 pb-4">
-
-        <div>
-          <a href="viewer.html?s=splash.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/splash.html"></iframe></div></div></a>
-          <div class="text-center mt-3"><div class="text-[13px] font-semibold">Splash</div><div class="text-[10px] text-[#0E7A4E] mt-0.5">✓ 2.5s auto → Language</div><div class="text-[10px] text-[#888] mt-0.5">Single splash (was 4 loaders)</div></div>
-        </div>
-
-        <div>
-          <a href="viewer.html?s=language.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/language.html"></iframe></div></div></a>
-          <div class="text-center mt-3"><div class="text-[13px] font-semibold">Language <span class="v2-badge">v2</span></div><div class="text-[10px] text-[#0E7A4E] mt-0.5">✓ Hindi default · 5 langs</div><div class="text-[10px] text-[#888] mt-0.5">→ Home (no login)</div></div>
-        </div>
-
-        <div>
-          <a href="viewer.html?s=home-loggedout.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/home-loggedout.html"></iframe></div></div></a>
-          <div class="text-center mt-3"><div class="text-[13px] font-semibold">Home · Browse <span class="new-badge">NEW</span></div><div class="text-[10px] text-[#0E7A4E] mt-0.5">✓ ₹100 unlock banner</div><div class="text-[10px] text-[#888] mt-0.5">Login optional · contextual</div></div>
-        </div>
-
+    <!-- FLOW 2: Login flow -->
+    <section class="mb-12">
+      <div class="flex items-center gap-3 mb-1"><div class="text-[22px] font-extrabold">2 · Login (triggered by ₹100 unlock)</div><span class="text-[11px] text-[#888]">5 screens</span></div>
+      <p class="text-[12px] text-[#888] mb-5">Phone → OTP → Name (new) → My Crop (skip OK) → Permissions (value-first).</p>
+      <div class="scrollx flex gap-5 pb-3">
+        <div><a href="viewer.html?s=phone.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/phone.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Phone</div><div class="text-center text-[10px] text-[#0E7A4E]">✓ Auto-fetch SIM</div></div>
+        <div><a href="viewer.html?s=otp.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/otp.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">OTP</div><div class="text-center text-[10px] text-[#0E7A4E]">✓ Auto-fill SMS</div></div>
+        <div><a href="viewer.html?s=name.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/name.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Name</div><div class="text-center text-[10px] text-[#0E7A4E]">✓ Fix #4</div></div>
+        <div><a href="viewer.html?s=tell-us.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/tell-us.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">My Crop</div><div class="text-center text-[10px] text-[#0E7A4E]">✓ Fix #15</div></div>
+        <div><a href="viewer.html?s=permissions.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/permissions.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Permissions</div><div class="text-center text-[10px] text-[#0E7A4E]">✓ Fix #5–9</div></div>
       </div>
-    </div>
+    </section>
 
-    <!-- ============== FLOW 2: LOGIN UNLOCK ============== -->
-    <div class="mb-12">
-      <div class="flex items-center gap-3 mb-1">
-        <div class="text-[24px] font-extrabold">2. Login flow (triggered by ₹100 unlock)</div>
-        <span class="v2-badge">v0.2</span>
-        <span class="pill-status text-[10px] font-medium px-2 py-1 rounded uppercase">5 screens</span>
+    <!-- FLOW 3: Logged-in home -->
+    <section class="mb-12">
+      <div class="flex items-center gap-3 mb-1"><div class="text-[22px] font-extrabold">3 · Logged-in home</div><span class="text-[11px] text-[#888]">1 screen</span></div>
+      <p class="text-[12px] text-[#888] mb-5">₹100 applied + name greeting + Doctor unlocked.</p>
+      <div class="scrollx flex gap-5 pb-3">
+        <div><a href="viewer.html?s=home.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/home.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Home · Logged-in</div><div class="text-center text-[10px] text-[#0E7A4E]">✓ Image-led carousel</div></div>
       </div>
-      <p class="text-[13px] text-[#888] mb-6 max-w-[760px]">User taps ₹100 unlock banner / Login pill / locked feature → enters phone → OTP → name (new users) → optional crop preferences → permissions with value comm → returns to home with coins applied.</p>
+    </section>
 
-      <div class="scrollx flex gap-6 pb-4">
-
-        <div>
-          <a href="viewer.html?s=phone.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/phone.html"></iframe></div></div></a>
-          <div class="text-center mt-3"><div class="text-[13px] font-semibold">Phone Number <span class="v2-badge">v2</span></div><div class="text-[10px] text-[#0E7A4E] mt-0.5">✓ Auto-fetched from SIM</div><div class="text-[10px] text-[#888] mt-0.5">Triggered by unlock CTA</div></div>
-        </div>
-
-        <div>
-          <a href="viewer.html?s=otp.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/otp.html"></iframe></div></div></a>
-          <div class="text-center mt-3"><div class="text-[13px] font-semibold">OTP Verify <span class="v2-badge">v2</span></div><div class="text-[10px] text-[#0E7A4E] mt-0.5">✓ Auto-filled from SMS</div><div class="text-[10px] text-[#888] mt-0.5">Kept #3</div></div>
-        </div>
-
-        <div>
-          <a href="viewer.html?s=name.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/name.html"></iframe></div></div></a>
-          <div class="text-center mt-3"><div class="text-[13px] font-semibold">Name <span class="v2-badge">v2</span></div><div class="text-[10px] text-[#0E7A4E] mt-0.5">✓ Inline · new users only</div><div class="text-[10px] text-[#888] mt-0.5">Fixes #4</div></div>
-        </div>
-
-        <div>
-          <a href="viewer.html?s=tell-us.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/tell-us.html"></iframe></div></div></a>
-          <div class="text-center mt-3"><div class="text-[13px] font-semibold">My Crop <span class="v2-badge">v2</span></div><div class="text-[10px] text-[#0E7A4E] mt-0.5">✓ Crop + state · Skip OK</div><div class="text-[10px] text-[#888] mt-0.5">Fixes #15</div></div>
-        </div>
-
-        <div>
-          <a href="viewer.html?s=permissions.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/permissions.html"></iframe></div></div></a>
-          <div class="text-center mt-3"><div class="text-[13px] font-semibold">Permissions <span class="v2-badge">v2</span></div><div class="text-[10px] text-[#0E7A4E] mt-0.5">✓ Value-first · Coins shown</div><div class="text-[10px] text-[#888] mt-0.5">Fixes #5–9</div></div>
-        </div>
-
+    <!-- FLOW 4: Discovery + PDP -->
+    <section class="mb-12">
+      <div class="flex items-center gap-3 mb-1"><div class="text-[22px] font-extrabold">4 · Discovery + PDP</div><span class="new-badge">NEW</span><span class="text-[11px] text-[#888]">5 screens</span></div>
+      <p class="text-[12px] text-[#888] mb-5">Shop browse + voice + photo diagnosis + categories + PDP with trust pack.</p>
+      <div class="scrollx flex gap-5 pb-3">
+        <div><a href="viewer.html?s=shop.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/shop.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Shop <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">2-col grid · Filter · Sort</div></div>
+        <div><a href="viewer.html?s=voice-search.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/voice-search.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Voice Search <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Win bet · Hindi STT</div></div>
+        <div><a href="viewer.html?s=photo-diagnosis.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/photo-diagnosis.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Photo Diagnosis <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Win bet · Photo→Cure</div></div>
+        <div><a href="viewer.html?s=pdp.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/pdp.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">PDP <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Trust pack · #11–13</div></div>
+        <div><a href="viewer.html?s=categories.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/categories.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Categories <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Image banners</div></div>
       </div>
-    </div>
+    </section>
 
-    <!-- ============== FLOW 3: HOME LOGGED IN ============== -->
-    <div class="mb-12">
-      <div class="flex items-center gap-3 mb-1">
-        <div class="text-[24px] font-extrabold">3. Logged-in home</div>
-        <span class="v2-badge">v0.2</span>
-        <span class="pill-status text-[10px] font-medium px-2 py-1 rounded uppercase">1 screen</span>
+    <!-- FLOW 5: Cart → Order -->
+    <section class="mb-12">
+      <div class="flex items-center gap-3 mb-1"><div class="text-[22px] font-extrabold">5 · Cart → Order</div><span class="new-badge">NEW</span><span class="text-[11px] text-[#888]">7 screens</span></div>
+      <p class="text-[12px] text-[#888] mb-5">Cart with Parichay meter → checkout (COD/UPI/partial) → success → tracking + refund SLA.</p>
+      <div class="scrollx flex gap-5 pb-3">
+        <div><a href="viewer.html?s=cart.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/cart.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Cart <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Parichay meter</div></div>
+        <div><a href="viewer.html?s=checkout.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/checkout.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Checkout <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">COD · UPI · Partial</div></div>
+        <div><a href="viewer.html?s=order-success.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/order-success.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Success <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">WhatsApp sent ✓</div></div>
+        <div><a href="viewer.html?s=orders.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/orders.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Orders <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">12 orders list</div></div>
+        <div><a href="viewer.html?s=order-details.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/order-details.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Order Details <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Report issue · Fix K3</div></div>
+        <div><a href="viewer.html?s=track-order.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/track-order.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Track Order <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Live · Fix #16</div></div>
+        <div><a href="viewer.html?s=refund-status.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/refund-status.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Refund SLA <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Fix K2</div></div>
       </div>
-      <p class="text-[13px] text-[#888] mb-6 max-w-[760px]">Same layout as logged-out, but with: greeting by name, coins balance pill, ₹100 unlocked confirmation strip, Krishi Doctor unlocked (Call/Chat live).</p>
+    </section>
 
-      <div class="scrollx flex gap-6 pb-4">
-        <div>
-          <a href="viewer.html?s=home.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/home.html"></iframe></div></div></a>
-          <div class="text-center mt-3"><div class="text-[13px] font-semibold">Home · Logged-in <span class="v2-badge">v2</span></div><div class="text-[10px] text-[#0E7A4E] mt-0.5">✓ Coins · Name · Unlocked</div><div class="text-[10px] text-[#888] mt-0.5">Day-0 buy-ready</div></div>
-        </div>
+    <!-- FLOW 6: My Crop + Advisory -->
+    <section class="mb-12">
+      <div class="flex items-center gap-3 mb-1"><div class="text-[22px] font-extrabold">6 · My Crop + Advisory</div><span class="new-badge">NEW</span><span class="text-[11px] text-[#888]">4 screens</span></div>
+      <p class="text-[12px] text-[#888] mb-5">Active crops + crop calendar (fixes #14) + advisory + doctor call.</p>
+      <div class="scrollx flex gap-5 pb-3">
+        <div><a href="viewer.html?s=my-crop.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/my-crop.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">My Crop <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">2 active crops</div></div>
+        <div><a href="viewer.html?s=crop-calendar.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/crop-calendar.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Crop Calendar <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Fix #14 broken feat</div></div>
+        <div><a href="viewer.html?s=advisory.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/advisory.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Advisory <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Krishi Doctor</div></div>
+        <div><a href="viewer.html?s=doctor-call.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/doctor-call.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Doctor Call <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Live call UI</div></div>
       </div>
-    </div>
+    </section>
 
-    <!-- Visual differentiation note -->
-    <div class="mb-12 border border-[#F4A93C]/30 rounded-2xl p-6 bg-gradient-to-r from-[#F4A93C]/8 to-transparent">
-      <div class="text-[16px] font-extrabold mb-3 hi">v0.1 vs v0.2 — Visual reset</div>
-      <div class="grid grid-cols-2 gap-6 text-[12px]">
-        <div>
-          <div class="text-[#E23744] font-bold uppercase tracking-wider text-[10px] mb-2">v0.1 (looked like Partner App)</div>
-          <ul class="text-[#aaa] space-y-1.5">
-            <li>• Dark emerald gradient hero</li>
-            <li>• Cold grey #F8F8F8 page bg</li>
-            <li>• Same #EDEDED card borders</li>
-            <li>• Same gold #D4A537 only as accent</li>
-            <li>• Devanagari + Latin same weight</li>
-          </ul>
-        </div>
-        <div>
-          <div class="text-[#F4A93C] font-bold uppercase tracking-wider text-[10px] mb-2">v0.2 (farmer-tuned)</div>
-          <ul class="text-[#fff] space-y-1.5">
-            <li>• Light cream hero · sun motif · no dark gradient</li>
-            <li>• Warm cream <code class="text-[#F4A93C] bg-black/30 px-1 rounded">#FAF7F2</code> page bg</li>
-            <li>• Warmer <code class="text-[#F4A93C] bg-black/30 px-1 rounded">#EEE5D8</code> card borders</li>
-            <li>• Sun gold <code class="text-[#F4A93C] bg-black/30 px-1 rounded">#F4A93C</code> + peach <code class="text-[#F4A93C] bg-black/30 px-1 rounded">#FBF0E5</code> in tiles</li>
-            <li>• Devanagari hero text, English secondary</li>
-          </ul>
-        </div>
+    <!-- FLOW 7: Account -->
+    <section class="mb-12">
+      <div class="flex items-center gap-3 mb-1"><div class="text-[22px] font-extrabold">7 · Account + Settings</div><span class="new-badge">NEW</span><span class="text-[11px] text-[#888]">7 screens</span></div>
+      <p class="text-[12px] text-[#888] mb-5">Profile + settings + signout confirm (#17) + addresses + notifications + help.</p>
+      <div class="scrollx flex gap-5 pb-3">
+        <div><a href="viewer.html?s=account.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/account.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Account <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Profile · Stats</div></div>
+        <div><a href="viewer.html?s=settings.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/settings.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Settings <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Notif prefs</div></div>
+        <div><a href="viewer.html?s=signout-confirm.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/signout-confirm.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Signout Sheet <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Fix #17</div></div>
+        <div><a href="viewer.html?s=addresses.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/addresses.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Addresses <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Home + Farm</div></div>
+        <div><a href="viewer.html?s=add-address.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/add-address.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Add Address <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Form + GPS</div></div>
+        <div><a href="viewer.html?s=notifications.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/notifications.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Notifications <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Grouped by date</div></div>
+        <div><a href="viewer.html?s=help.html" target="_blank"><div class="phone-frame"><div class="screen"><iframe src="screens/help.html"></iframe></div></div></a><div class="text-center mt-2.5 text-[12px] font-semibold">Help <span class="new-badge">NEW</span></div><div class="text-center text-[10px] text-[#0E7A4E]">Call · WA · Chat</div></div>
       </div>
-    </div>
+    </section>
 
     <!-- Coverage map -->
     <div class="mb-12 border border-[#1a1a1a] rounded-2xl p-6 bg-[#0d0d0d]">
-      <div class="text-[16px] font-extrabold mb-4">Observation coverage</div>
+      <div class="text-[16px] font-extrabold mb-4">Observation coverage · 17 / 17</div>
       <div class="grid grid-cols-2 gap-x-8 gap-y-2 text-[12px] text-[#aaa]">
-        <div class="flex items-center gap-2"><span class="text-[#0E7A4E]">✓</span> #1 — 4 loaders → 1 splash</div>
-        <div class="flex items-center gap-2"><span class="text-[#0E7A4E]">✓</span> #2 — Auto-fetch mobile (kept)</div>
-        <div class="flex items-center gap-2"><span class="text-[#0E7A4E]">✓</span> #3 — Auto-fetch OTP (kept)</div>
-        <div class="flex items-center gap-2"><span class="text-[#0E7A4E]">✓</span> #4 — Name inline (new users only)</div>
-        <div class="flex items-center gap-2"><span class="text-[#0E7A4E]">✓</span> #5–9 — Value-first permissions + coins</div>
-        <div class="flex items-center gap-2"><span class="text-[#9E9E9E]">○</span> #10 — App-about modal (removed Wave 2)</div>
-        <div class="flex items-center gap-2"><span class="text-[#9E9E9E]">○</span> #11–13 — PDP fixes (Wave 2)</div>
-        <div class="flex items-center gap-2"><span class="text-[#9E9E9E]">○</span> #14 — Crop Calendar (Wave 3)</div>
-        <div class="flex items-center gap-2"><span class="text-[#0E7A4E]">✓</span> #15 — "My Crop" canonical</div>
-        <div class="flex items-center gap-2"><span class="text-[#9E9E9E]">○</span> #16 — "Track Order" canonical (Wave 2)</div>
-        <div class="flex items-center gap-2"><span class="text-[#9E9E9E]">○</span> #17 — Signout confirm (Wave 2)</div>
+        <div class="flex gap-2"><span class="text-[#0E7A4E]">✓</span> #1 — 4 loaders → 1 splash</div>
+        <div class="flex gap-2"><span class="text-[#0E7A4E]">✓</span> #2 — Auto-fetch mobile (kept)</div>
+        <div class="flex gap-2"><span class="text-[#0E7A4E]">✓</span> #3 — Auto-fetch OTP (kept)</div>
+        <div class="flex gap-2"><span class="text-[#0E7A4E]">✓</span> #4 — Name inline new-user only</div>
+        <div class="flex gap-2"><span class="text-[#0E7A4E]">✓</span> #5–9 — Permissions value-first</div>
+        <div class="flex gap-2"><span class="text-[#0E7A4E]">✓</span> #10 — About modal removed</div>
+        <div class="flex gap-2"><span class="text-[#0E7A4E]">✓</span> #11 — PDP single language popup</div>
+        <div class="flex gap-2"><span class="text-[#0E7A4E]">✓</span> #12 — Rating breakdown shown</div>
+        <div class="flex gap-2"><span class="text-[#0E7A4E]">✓</span> #13 — Variant chip row + sheet</div>
+        <div class="flex gap-2"><span class="text-[#0E7A4E]">✓</span> #14 — Crop Calendar works</div>
+        <div class="flex gap-2"><span class="text-[#0E7A4E]">✓</span> #15 — "My Crop" canonical</div>
+        <div class="flex gap-2"><span class="text-[#0E7A4E]">✓</span> #16 — "Track Order" canonical</div>
+        <div class="flex gap-2"><span class="text-[#0E7A4E]">✓</span> #17 — Signout confirm sheet</div>
       </div>
-    </div>
-
-    <!-- Next waves -->
-    <div class="mb-12">
-      <div class="text-[20px] font-extrabold mb-3">Next waves</div>
-      <div class="grid grid-cols-3 gap-4">
-        <div class="border border-[#1a1a1a] rounded-2xl p-5 bg-[#0d0d0d]">
-          <div class="text-[10px] uppercase tracking-wider font-bold text-[#F4A93C] mb-2">Wave 2 · Discovery + PDP</div>
-          <ul class="text-[12px] text-[#aaa] space-y-1.5">
-            <li>• Shop (search + categories)</li>
-            <li>• Voice search bottom sheet</li>
-            <li>• PDP with trust pack</li>
-            <li>• Photo diagnosis flow</li>
-            <li>• Variant chip row + sheet</li>
-          </ul>
-        </div>
-        <div class="border border-[#1a1a1a] rounded-2xl p-5 bg-[#0d0d0d]">
-          <div class="text-[10px] uppercase tracking-wider font-bold text-[#F4A93C] mb-2">Wave 3 · Cart + Orders</div>
-          <ul class="text-[12px] text-[#aaa] space-y-1.5">
-            <li>• Cart with Parichay meter</li>
-            <li>• Checkout (COD + UPI + partial)</li>
-            <li>• Order success + WA confirm</li>
-            <li>• Track Order canonical</li>
-            <li>• Refund SLA tracker</li>
-          </ul>
-        </div>
-        <div class="border border-[#1a1a1a] rounded-2xl p-5 bg-[#0d0d0d]">
-          <div class="text-[10px] uppercase tracking-wider font-bold text-[#F4A93C] mb-2">Wave 4 · My Crop + Advisory</div>
-          <ul class="text-[12px] text-[#aaa] space-y-1.5">
-            <li>• My Crop hub + calendar</li>
-            <li>• Advisory · Doctor call/chat</li>
-            <li>• Account · signout confirm</li>
-            <li>• Addresses · saved payment</li>
-            <li>• Notification preferences</li>
-          </ul>
+      <div class="border-t border-[#1a1a1a] mt-4 pt-4">
+        <div class="text-[11px] uppercase tracking-wider text-[#888] font-bold mb-2">Plus K1–K5 review pain fixes</div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-1 text-[11px] text-[#aaa]">
+          <div><span class="text-[#0E7A4E]">✓</span> K1: Payment confirmation + WA receipt</div>
+          <div><span class="text-[#0E7A4E]">✓</span> K2: Refund SLA tracker visible</div>
+          <div><span class="text-[#0E7A4E]">✓</span> K3: One-tap report issue · pre-approved</div>
+          <div><span class="text-[#0E7A4E]">✓</span> K4/K5: Factory-direct badge + savings on bill</div>
         </div>
       </div>
     </div>
@@ -278,7 +205,7 @@
       </div>
     </div>
 
-    <p class="text-[10px] text-[#666] text-center pt-2">Katyayani Krishi Direct · Prototype v0.2 · 2026-05-14</p>
+    <p class="text-[10px] text-[#666] text-center pt-2">Katyayani Krishi Direct · Full prototype v1.0 · 30 screens · 2026-05-14</p>
   </div>
 </body>
 </html>

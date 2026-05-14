@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>KKD · Screen Viewer</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #1a1a1a;
+    min-height: 100vh;
+    font-family: 'Poppins', system-ui, sans-serif;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+  }
+  .topbar {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid #0e0e0e;
+    background: #0d0d0d;
+  }
+  .topbar a { color: #aaa; text-decoration: none; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
+  .topbar a:hover { color: #fff; }
+  .topbar .sep { color: #444; }
+  .topbar .label { color: #888; font-size: 12px; font-family: ui-monospace, monospace; }
+  .nav-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 6px 10px; border-radius: 6px;
+    border: 1px solid #2a2a2a; color: #ccc;
+    font-size: 11px; font-weight: 600;
+    cursor: pointer; background: transparent;
+    text-decoration: none;
+  }
+  .nav-btn:hover { background: #1f1f1f; color: #fff; border-color: #3a3a3a; }
+  .nav-spacer { flex: 1; }
+  .stage {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 20px;
+  }
+  .phone {
+    width: 390px;
+    height: 858px;
+    background: #000;
+    border-radius: 44px;
+    box-shadow:
+      0 0 0 2px #2a2a2a,
+      0 0 0 10px #0a0a0a,
+      0 30px 80px rgba(0,0,0,0.6);
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: #050505;
+    box-shadow: inset 0 0 0 1px #1f1f1f;
+    z-index: 30;
+  }
+  iframe {
+    width: 100%; height: 100%;
+    border: 0;
+    display: block;
+    background: #fff;
+  }
+  @media (max-width: 480px) {
+    .topbar { padding: 8px 14px; }
+    .topbar .sep, .topbar .label, .nav-spacer, .nav-btn { display: none; }
+    .stage { padding: 0; align-items: stretch; }
+    .phone {
+      width: 100%; height: 100vh;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .phone::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a href="index.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Gallery
+    </a>
+    <span class="sep">·</span>
+    <span class="label" id="title">—</span>
+    <div class="nav-spacer"></div>
+    <button class="nav-btn" onclick="prevScreen()" title="Previous">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      Prev
+    </button>
+    <button class="nav-btn" onclick="nextScreen()" title="Next">
+      Next
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <button class="nav-btn" onclick="reload()" title="Reload">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+    </button>
+  </div>
+
+  <div class="stage">
+    <div class="phone">
+      <iframe id="frame" src=""></iframe>
+    </div>
+  </div>
+
+  <script>
+    // Onboarding + home flow order — used by Prev/Next
+    const ORDER = [
+      'splash.html',
+      'language.html',
+      'home-loggedout.html',
+      'phone.html',
+      'otp.html',
+      'name.html',
+      'tell-us.html',
+      'permissions.html',
+      'home.html',
+      'welcome.html',
+      'design-system.html',
+      'philosophy.html'
+    ];
+    const params = new URLSearchParams(location.search);
+    const screen = params.get('s') || 'splash.html';
+    document.getElementById('frame').src = 'screens/' + screen;
+    document.getElementById('title').textContent = screen;
+    document.title = 'KKD · ' + screen.replace('.html','');
+
+    function go(target) {
+      const url = new URL(location.href);
+      url.searchParams.set('s', target);
+      location.href = url.toString();
+    }
+    function nextScreen() {
+      const i = ORDER.indexOf(screen);
+      const n = i >= 0 && i < ORDER.length - 1 ? ORDER[i + 1] : ORDER[0];
+      go(n);
+    }
+    function prevScreen() {
+      const i = ORDER.indexOf(screen);
+      const p = i > 0 ? ORDER[i - 1] : ORDER[ORDER.length - 1];
+      go(p);
+    }
+    function reload() {
+      document.getElementById('frame').src = document.getElementById('frame').src;
+    }
+    // Keyboard shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight') nextScreen();
+      if (e.key === 'ArrowLeft') prevScreen();
+      if (e.key === 'r' || e.key === 'R') reload();
+    });
+  </script>
+</body>
+</html>

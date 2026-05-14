@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>KKD · Your crop</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  * { font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .hi { font-family: 'Noto Sans Devanagari', sans-serif; }
+  html, body { margin: 0; padding: 0; }
+  body { min-height: 100vh; background: #fff; color: #1C1C1C; }
+  .crop-tile { transition: all .15s ease; }
+  .crop-tile.active { border-color: #0C831F; background: #F0FDF5; box-shadow: 0 0 0 3px rgba(14,122,78,0.12); }
+  .crop-tile.active .crop-check { opacity: 1; transform: scale(1); }
+  .crop-check { opacity: 0; transform: scale(0.6); transition: all .15s; }
+</style>
+</head>
+<body class="min-h-screen pb-36 relative">
+
+  <!-- Status bar -->
+  <div class="flex items-center justify-between px-6 pt-3 text-[11px] font-bold text-[#1C1C1C]">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#1C1C1C" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#1C1C1C" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#1C1C1C" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#1C1C1C"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#1C1C1C"/></svg>
+    </div>
+  </div>
+
+  <!-- Heading -->
+  <div class="px-6 pt-6">
+    <div class="hi text-[26px] font-extrabold leading-tight">आप कौन-सी फसल उगाते हैं?</div>
+    <div class="text-[14px] text-[#606060] mt-1">Which crops do you grow?</div>
+    <p class="text-[11.5px] text-[#9E9E9E] mt-1.5">Pick up to 3 · We'll personalize your home and advisories</p>
+  </div>
+
+  <!-- Crop grid -->
+  <div class="px-6 mt-5 grid grid-cols-3 gap-2.5">
+
+    <button onclick="toggle(this)" class="crop-tile active relative aspect-square rounded-[10px] border-2 border-[#EDEDED] bg-white flex flex-col items-center justify-center gap-1.5">
+      <span class="text-[36px]">🌾</span>
+      <div class="hi text-[12.5px] font-bold leading-none">गेहूं</div>
+      <div class="text-[9.5px] text-[#606060] leading-none">Wheat</div>
+      <svg class="crop-check absolute top-1.5 right-1.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#0C831F"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <button onclick="toggle(this)" class="crop-tile relative aspect-square rounded-[10px] border-2 border-[#EDEDED] bg-white flex flex-col items-center justify-center gap-1.5">
+      <span class="text-[36px]">🌾</span>
+      <div class="hi text-[12.5px] font-bold leading-none">धान</div>
+      <div class="text-[9.5px] text-[#606060] leading-none">Rice</div>
+      <svg class="crop-check absolute top-1.5 right-1.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#0C831F"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <button onclick="toggle(this)" class="crop-tile active relative aspect-square rounded-[10px] border-2 border-[#EDEDED] bg-white flex flex-col items-center justify-center gap-1.5">
+      <span class="text-[36px]">🍅</span>
+      <div class="hi text-[12.5px] font-bold leading-none">टमाटर</div>
+      <div class="text-[9.5px] text-[#606060] leading-none">Tomato</div>
+      <svg class="crop-check absolute top-1.5 right-1.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#0C831F"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <button onclick="toggle(this)" class="crop-tile relative aspect-square rounded-[10px] border-2 border-[#EDEDED] bg-white flex flex-col items-center justify-center gap-1.5">
+      <span class="text-[36px]">🌶️</span>
+      <div class="hi text-[12.5px] font-bold leading-none">मिर्च</div>
+      <div class="text-[9.5px] text-[#606060] leading-none">Chilli</div>
+      <svg class="crop-check absolute top-1.5 right-1.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#0C831F"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <button onclick="toggle(this)" class="crop-tile relative aspect-square rounded-[10px] border-2 border-[#EDEDED] bg-white flex flex-col items-center justify-center gap-1.5">
+      <span class="text-[36px]">🌽</span>
+      <div class="hi text-[12.5px] font-bold leading-none">मक्का</div>
+      <div class="text-[9.5px] text-[#606060] leading-none">Maize</div>
+      <svg class="crop-check absolute top-1.5 right-1.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#0C831F"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <button onclick="toggle(this)" class="crop-tile relative aspect-square rounded-[10px] border-2 border-[#EDEDED] bg-white flex flex-col items-center justify-center gap-1.5">
+      <span class="text-[36px]">🌱</span>
+      <div class="hi text-[12.5px] font-bold leading-none">सोयाबीन</div>
+      <div class="text-[9.5px] text-[#606060] leading-none">Soybean</div>
+      <svg class="crop-check absolute top-1.5 right-1.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#0C831F"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <button onclick="toggle(this)" class="crop-tile relative aspect-square rounded-[10px] border-2 border-[#EDEDED] bg-white flex flex-col items-center justify-center gap-1.5">
+      <span class="text-[36px]">🪴</span>
+      <div class="hi text-[12.5px] font-bold leading-none">कपास</div>
+      <div class="text-[9.5px] text-[#606060] leading-none">Cotton</div>
+      <svg class="crop-check absolute top-1.5 right-1.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#0C831F"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <button onclick="toggle(this)" class="crop-tile relative aspect-square rounded-[10px] border-2 border-[#EDEDED] bg-white flex flex-col items-center justify-center gap-1.5">
+      <span class="text-[36px]">🎋</span>
+      <div class="hi text-[12.5px] font-bold leading-none">गन्ना</div>
+      <div class="text-[9.5px] text-[#606060] leading-none">Sugarcane</div>
+      <svg class="crop-check absolute top-1.5 right-1.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#0C831F"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <button class="crop-tile relative aspect-square rounded-[10px] border-2 border-dashed border-[#EDEDED] bg-white flex flex-col items-center justify-center gap-1.5">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9E9E9E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      <div class="hi text-[12.5px] font-bold leading-none text-[#606060]">और</div>
+      <div class="text-[9.5px] text-[#9E9E9E] leading-none">More</div>
+    </button>
+
+  </div>
+
+  <!-- State selector -->
+  <div class="px-6 mt-6">
+    <label class="hi text-[12px] font-bold text-[#606060] uppercase tracking-wide">राज्य · State</label>
+    <button class="mt-2 w-full flex items-center justify-between px-4 h-[56px] rounded-[10px] border-2 border-[#EDEDED] bg-white">
+      <div class="flex items-center gap-3">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0C831F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="3"/></svg>
+        <div>
+          <div class="hi text-[15px] font-bold leading-none">मध्य प्रदेश</div>
+          <div class="text-[11px] text-[#606060] mt-1 leading-none">Madhya Pradesh</div>
+        </div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9E9E9E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+  </div>
+
+  <!-- Sticky bar with selection count -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-[#EDEDED] px-6 py-4">
+    <div class="flex items-center justify-between mb-2">
+      <div class="text-[11.5px] text-[#606060]"><span class="font-bold text-[#1C1C1C]">2 of 3</span> crops selected</div>
+      <button onclick="location.href='permissions.html'" class="text-[11.5px] font-bold text-[#606060] uppercase tracking-wide">Skip</button>
+    </div>
+    <button onclick="location.href='permissions.html'" class="w-full h-[54px] rounded-[10px] bg-[#0C831F] text-white text-[16px] font-extrabold flex items-center justify-center gap-2">
+      <span class="hi">आगे</span>
+      <span class="opacity-70">·</span>
+      <span>Continue</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+
+  <script>
+    function toggle(btn){ btn.classList.toggle('active'); }
+  </script>
+</body>
+</html>

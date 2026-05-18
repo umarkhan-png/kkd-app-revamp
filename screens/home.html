@@ -20,28 +20,49 @@
 
   /* 3 themes · switched by tapping Deliver-to */
   .top-theme { transition: background .6s ease; position: relative; overflow: hidden; }
-  .top-theme[data-theme="green"]    { background: linear-gradient(180deg,#BBF7D0 0%,#D1FAE5 22%,#ECFDF5 50%,#FFFFFF 100%); }
-  .top-theme[data-theme="rain"]     { background: linear-gradient(180deg,#BFDBFE 0%,#DBEAFE 22%,#EFF6FF 50%,#FFFFFF 100%); }
-  .top-theme[data-theme="festival"] { background: linear-gradient(180deg,#FECACA 0%,#FED7AA 18%,#FEF3C7 45%,#FFFFFF 100%); }
+  .top-theme[data-theme="green"] {
+    background:
+      radial-gradient(ellipse at 75% 0%, rgba(253,224,71,.35) 0%, transparent 50%),
+      radial-gradient(ellipse at 15% 5%, rgba(34,197,94,.18) 0%, transparent 45%),
+      linear-gradient(180deg,#86EFAC 0%,#BBF7D0 18%,#D1FAE5 42%,#ECFDF5 70%,#FFFFFF 100%);
+  }
+  .top-theme[data-theme="rain"] {
+    background:
+      radial-gradient(ellipse at 80% 0%, rgba(255,255,255,.5) 0%, transparent 50%),
+      linear-gradient(180deg,#93C5FD 0%,#BFDBFE 18%,#DBEAFE 45%,#EFF6FF 70%,#FFFFFF 100%);
+  }
+  .top-theme[data-theme="festival"] {
+    background:
+      radial-gradient(ellipse at 20% 5%, rgba(236,72,153,.45) 0%, transparent 50%),
+      radial-gradient(ellipse at 78% 8%, rgba(168,85,247,.40) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 40%, rgba(251,191,36,.35) 0%, transparent 55%),
+      linear-gradient(180deg,#FBCFE8 0%,#FBCFE8 12%,#FED7AA 30%,#FEF3C7 55%,#FFFFFF 100%);
+  }
   /* Brief bloom on load + on theme change */
   .top-theme.bloom { animation: bloom 1.2s ease-out; }
   @keyframes bloom {
-    0%   { filter: saturate(1.5) brightness(1.05); }
+    0%   { filter: saturate(1.6) brightness(1.05); }
     100% { filter: saturate(1) brightness(1); }
   }
   /* Theme-specific info banner */
-  .theme-banner { display: none; align-items: center; gap: 8px; padding: 8px 16px; font-size: 12.5px; font-weight: 600; border-top: 1px solid; }
+  .theme-banner { display: none; align-items: center; gap: 8px; padding: 9px 16px; font-size: 12.5px; font-weight: 600; border-top: 1px solid; }
   .top-theme[data-theme="rain"] .rain-banner { display: flex; background: rgba(59,130,246,.10); color: #1E40AF; border-color: #BFDBFE; }
-  .top-theme[data-theme="festival"] .festival-banner { display: flex; background: rgba(249,115,22,.10); color: #9A3412; border-color: #FED7AA; }
-  /* Theme chip beside address (tiny indicator) */
-  .theme-chip { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 9999px; font-size: 10px; margin-left: 4px; }
-  .top-theme[data-theme="green"] .theme-chip { background: #DCFCE7; color: #15803D; }
-  .top-theme[data-theme="rain"] .theme-chip { background: #DBEAFE; color: #1D4ED8; }
-  .top-theme[data-theme="festival"] .theme-chip { background: #FED7AA; color: #9A3412; }
+  .top-theme[data-theme="festival"] .festival-banner { display: flex; background: rgba(236,72,153,.10); color: #9D174D; border-color: #FBCFE8; }
   /* Rain animation */
-  @keyframes rainfall { 0% { transform: translateY(-30px); opacity: 0; } 30% { opacity: .6; } 100% { transform: translateY(80px); opacity: 0; } }
-  .rain-drop { position: absolute; width: 1.5px; height: 12px; background: linear-gradient(180deg,transparent,#3B82F6); border-radius: 1px; animation: rainfall 1.4s linear infinite; }
+  @keyframes rainfall { 0% { transform: translateY(-30px); opacity: 0; } 30% { opacity: .6; } 100% { transform: translateY(90px); opacity: 0; } }
+  .rain-drop { position: absolute; width: 1.5px; height: 12px; background: linear-gradient(180deg,transparent,#3B82F6); border-radius: 1px; animation: rainfall 1.4s linear infinite; pointer-events: none; }
   .top-theme:not([data-theme="rain"]) .rain-drop { display: none; }
+  /* Holi gulal animation — colorful floating dots */
+  @keyframes holiFloat {
+    0%   { transform: translateY(-15px) translateX(0) rotate(0); opacity: 0; }
+    25%  { opacity: 1; }
+    75%  { opacity: .8; }
+    100% { transform: translateY(110px) translateX(var(--tx,15px)) rotate(540deg); opacity: 0; }
+  }
+  .holi-dot { position: absolute; border-radius: 50%; animation: holiFloat 4s ease-in infinite; pointer-events: none; box-shadow: 0 0 6px currentColor; }
+  .top-theme:not([data-theme="festival"]) .holi-dot { display: none; }
+  /* Holi gradient pulse on tilak */
+  @keyframes holiPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
   /* Status bar sticky at top · address/coin scroll away · search+categories sticky below */
   .sticky-status { position: sticky; top: 0; z-index: 70; }
@@ -82,6 +103,16 @@
   <div class="rain-drop" style="left:71%;animation-delay:.45s"></div>
   <div class="rain-drop" style="left:88%;animation-delay:.75s"></div>
 
+  <!-- Holi gulal animation (only visible when festival theme active) -->
+  <div class="holi-dot" style="left:6%;top:0;width:10px;height:10px;color:#EC4899;background:#EC4899;--tx:20px;animation-delay:0s"></div>
+  <div class="holi-dot" style="left:18%;top:0;width:8px;height:8px;color:#FBBF24;background:#FBBF24;--tx:-15px;animation-delay:.4s"></div>
+  <div class="holi-dot" style="left:30%;top:0;width:12px;height:12px;color:#A855F7;background:#A855F7;--tx:18px;animation-delay:.8s"></div>
+  <div class="holi-dot" style="left:44%;top:0;width:9px;height:9px;color:#F97316;background:#F97316;--tx:-22px;animation-delay:.2s"></div>
+  <div class="holi-dot" style="left:58%;top:0;width:11px;height:11px;color:#10B981;background:#10B981;--tx:14px;animation-delay:.6s"></div>
+  <div class="holi-dot" style="left:72%;top:0;width:8px;height:8px;color:#EC4899;background:#EC4899;--tx:-18px;animation-delay:1s"></div>
+  <div class="holi-dot" style="left:84%;top:0;width:10px;height:10px;color:#FBBF24;background:#FBBF24;--tx:22px;animation-delay:.5s"></div>
+  <div class="holi-dot" style="left:94%;top:0;width:9px;height:9px;color:#A855F7;background:#A855F7;--tx:-12px;animation-delay:.9s"></div>
+
   <!-- Status bar (sticky) -->
   <div class="sticky-status flex items-center justify-between px-4 pt-3 pb-2 text-[12px] font-semibold text-[#0F172A]">
     <span>9:41</span>
@@ -97,9 +128,7 @@
     <button id="addressBtn" class="flex items-center gap-2 min-w-0 flex-1 text-left" style="background:transparent;border:0">
       <i class="fa-solid fa-location-dot text-emerald-600 text-[16px]"></i>
       <div class="leading-tight min-w-0">
-        <div class="text-[11px] font-semibold text-[#94A3B8] uppercase tracking-wide flex items-center">Deliver to
-          <span class="theme-chip" id="themeChip">●</span>
-        </div>
+        <div class="text-[11px] font-semibold text-[#94A3B8] uppercase tracking-wide">Deliver to</div>
         <div class="flex items-center gap-1 text-[15px] font-bold text-[#0F172A] mt-0.5">
           Indore 452001
           <i class="fa-solid fa-chevron-down text-[10px] text-[#64748B] ml-0.5"></i>
@@ -111,8 +140,9 @@
         <i class="fa-solid fa-coins text-amber-500 text-[13px]"></i>
         <span class="text-[13.5px] font-bold text-amber-700 tnum">220</span>
       </div>
-      <a href="account.html" class="nu w-10 h-10 rounded-full flex items-center justify-center bg-white border border-[#E2E8F0]">
-        <i class="fa-solid fa-user text-[14px] text-[#475569]"></i>
+      <a href="account.html" class="nu w-10 h-10 rounded-full overflow-hidden flex-shrink-0 relative" style="border:2px solid #047857;box-shadow:0 2px 8px rgba(4,120,87,.18)">
+        <img src="https://i.pravatar.cc/80?img=68" alt="Ramesh" class="w-full h-full object-cover"/>
+        <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white"></span>
       </a>
     </div>
   </div>
@@ -123,8 +153,9 @@
     <span>Rain expected · 8 mm in 24 hrs · Hold spray for today</span>
   </div>
   <div class="theme-banner festival-banner">
-    <i class="fa-solid fa-gift text-orange-600"></i>
-    <span>Holi Sale · Flat 20% off on all fertilizers</span>
+    <span class="text-[15px]">🎨</span>
+    <span><strong>Happy Holi!</strong> 20% off + free gulal pack on orders ₹999+</span>
+    <span class="text-[15px] ml-auto">🎉</span>
   </div>
 
   </div><!-- /top-theme -->

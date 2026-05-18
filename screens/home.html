@@ -18,11 +18,25 @@
   .img-blend { mix-blend-mode: multiply; }
   .stars { color: #F59E0B; font-size: 12.5px; letter-spacing: 1.5px; }
 
-  /* Status bar sticky at top · address/coin/cart scroll away · search+categories sticky below */
-  .sticky-status { position: sticky; top: 0; z-index: 70; background: #FFFFFF; }
+  /* Top theme gradient (visible at load, fades to subtle) */
+  .top-theme {
+    background: linear-gradient(180deg, #FEF3C7 0%, #FFF8E1 25%, #FFFBEB 55%, #FFFFFF 100%);
+    animation: themeBloom 3s cubic-bezier(.4,0,.2,1) forwards;
+  }
+  @keyframes themeBloom {
+    0% { background: linear-gradient(180deg, #FFE0A8 0%, #FEF3C7 30%, #FFF8E1 65%, #FFFFFF 100%); }
+    60% { background: linear-gradient(180deg, #FEF3C7 0%, #FFF8E1 25%, #FFFBEB 55%, #FFFFFF 100%); }
+    100% { background: linear-gradient(180deg, #FFFBEB 0%, #FFFDF7 30%, #FFFFFF 70%, #FFFFFF 100%); }
+  }
+
+  /* Status bar sticky at top · address/coin scroll away · search+categories sticky below */
+  .sticky-status { position: sticky; top: 0; z-index: 70; }
   .sticky-actions { position: sticky; top: 32px; z-index: 60; background: #FFFFFF; }
   .sticky-search { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s; }
   .sticky-cats { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s; }
+
+  /* Floating cart bar above bottom nav */
+  .cart-fab { position: fixed; bottom: 76px; left: 12px; right: 12px; z-index: 45; }
 
   /* Category tile */
   .cat-tile { transition: transform .15s; }
@@ -43,7 +57,10 @@
 </head>
 <body>
 
-  <!-- Status bar (sticky at top — info chrome only) -->
+  <!-- Theme gradient wrapper · visible at load, fades to subtle -->
+  <div class="top-theme">
+
+  <!-- Status bar (sticky) -->
   <div class="sticky-status flex items-center justify-between px-4 pt-3 pb-2 text-[12px] font-semibold text-[#0F172A]">
     <span>9:41</span>
     <div class="flex items-center gap-1.5">
@@ -53,8 +70,8 @@
     </div>
   </div>
 
-  <!-- Info bar: address + coin + cart (NOT sticky · scrolls away) -->
-  <div class="flex items-center justify-between px-4 pt-2 pb-3 bg-white">
+  <!-- Info bar: address + coin + profile (cart removed, profile added) -->
+  <div class="flex items-center justify-between px-4 pt-2 pb-3">
     <div class="flex items-center gap-2 min-w-0 flex-1">
       <i class="fa-solid fa-location-dot text-emerald-600 text-[16px]"></i>
       <div class="leading-tight min-w-0">
@@ -70,23 +87,24 @@
         <i class="fa-solid fa-coins text-amber-500 text-[13px]"></i>
         <span class="text-[13.5px] font-bold text-amber-700 tnum">220</span>
       </div>
-      <a href="cart.html" class="nu w-10 h-10 rounded-full flex items-center justify-center relative" style="background:#F1F5F9">
-        <i class="fa-solid fa-bag-shopping text-[15px] text-[#475569]"></i>
-        <span class="absolute -top-0.5 -right-0.5 bg-emerald-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">3</span>
+      <a href="account.html" class="nu w-10 h-10 rounded-full flex items-center justify-center bg-white border border-[#E2E8F0]">
+        <i class="fa-solid fa-user text-[14px] text-[#475569]"></i>
       </a>
     </div>
   </div>
 
-  <!-- STICKY: search + categories ABOVE address row in pinned state -->
+  </div><!-- /top-theme -->
+
+  <!-- STICKY: search + categories -->
   <div class="sticky-actions">
 
-  <!-- Search -->
+  <!-- Search · voice icon less prominent -->
   <div class="sticky-search px-4 py-3">
     <div class="relative">
       <input id="search-input" type="text" placeholder="Search products, pests, crops" class="w-full pl-12 pr-12 py-3 rounded-xl text-[14.5px] font-medium focus:outline-none focus:ring-2 focus:ring-emerald-600/30" style="background:#F1F5F9;border:1px solid #E2E8F0"/>
       <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-[15px]" style="color:#94A3B8"></i>
-      <a href="voice-search.html" class="nu absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg flex items-center justify-center bg-emerald-600">
-        <i class="fa-solid fa-microphone text-white text-[13px]"></i>
+      <a href="voice-search.html" class="nu absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg flex items-center justify-center" style="background:#F1F5F9">
+        <i class="fa-solid fa-microphone text-[14px] text-[#475569]"></i>
       </a>
     </div>
   </div>
@@ -354,6 +372,23 @@
     </section>
 
   </main>
+
+  <!-- Floating cart bar (above bottom nav) -->
+  <a href="cart.html" class="nu cart-fab flex items-center justify-between px-4 py-3 rounded-2xl shadow-lg" style="background:#0F172A;color:#fff">
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center relative">
+        <i class="fa-solid fa-bag-shopping text-white text-[13px]"></i>
+        <span class="absolute -top-0.5 -right-0.5 bg-amber-400 text-[#1A1A1A] text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">3</span>
+      </div>
+      <div class="leading-tight">
+        <div class="text-[11px] text-white/70 font-medium">3 items · Save ₹400</div>
+        <div class="text-[13.5px] font-bold tnum">₹1,900</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5 text-[12.5px] font-bold">
+      View cart <i class="fa-solid fa-arrow-right text-[10px]"></i>
+    </div>
+  </a>
 
   <!-- Bottom nav -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white flex justify-around items-center px-2 py-2 z-50" style="height:68px;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04)">

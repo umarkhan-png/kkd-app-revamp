@@ -20,49 +20,44 @@
 
   /* 3 themes · switched by tapping Deliver-to */
   .top-theme { transition: background .6s ease; position: relative; overflow: hidden; }
+  /* Regular: subtle soft mint → white */
   .top-theme[data-theme="green"] {
-    background:
-      radial-gradient(ellipse at 75% 0%, rgba(253,224,71,.35) 0%, transparent 50%),
-      radial-gradient(ellipse at 15% 5%, rgba(34,197,94,.18) 0%, transparent 45%),
-      linear-gradient(180deg,#86EFAC 0%,#BBF7D0 18%,#D1FAE5 42%,#ECFDF5 70%,#FFFFFF 100%);
+    background: linear-gradient(180deg,#ECFDF5 0%,#F0FDF4 35%,#FFFFFF 90%);
   }
+  /* Rain: soft sky → white */
   .top-theme[data-theme="rain"] {
-    background:
-      radial-gradient(ellipse at 80% 0%, rgba(255,255,255,.5) 0%, transparent 50%),
-      linear-gradient(180deg,#93C5FD 0%,#BFDBFE 18%,#DBEAFE 45%,#EFF6FF 70%,#FFFFFF 100%);
+    background: linear-gradient(180deg,#DBEAFE 0%,#EFF6FF 40%,#FFFFFF 95%);
   }
+  /* Festival: clean cream base — splash blobs do the colorful work */
   .top-theme[data-theme="festival"] {
-    background:
-      radial-gradient(ellipse at 20% 5%, rgba(236,72,153,.45) 0%, transparent 50%),
-      radial-gradient(ellipse at 78% 8%, rgba(168,85,247,.40) 0%, transparent 55%),
-      radial-gradient(ellipse at 50% 40%, rgba(251,191,36,.35) 0%, transparent 55%),
-      linear-gradient(180deg,#FBCFE8 0%,#FBCFE8 12%,#FED7AA 30%,#FEF3C7 55%,#FFFFFF 100%);
+    background: linear-gradient(180deg,#FFFBEB 0%,#FFFDF6 40%,#FFFFFF 95%);
   }
   /* Brief bloom on load + on theme change */
-  .top-theme.bloom { animation: bloom 1.2s ease-out; }
+  .top-theme.bloom { animation: bloom 1s ease-out; }
   @keyframes bloom {
-    0%   { filter: saturate(1.6) brightness(1.05); }
+    0%   { filter: saturate(1.4) brightness(1.03); }
     100% { filter: saturate(1) brightness(1); }
   }
-  /* Theme-specific info banner */
-  .theme-banner { display: none; align-items: center; gap: 8px; padding: 9px 16px; font-size: 12.5px; font-weight: 600; border-top: 1px solid; }
-  .top-theme[data-theme="rain"] .rain-banner { display: flex; background: rgba(59,130,246,.10); color: #1E40AF; border-color: #BFDBFE; }
-  .top-theme[data-theme="festival"] .festival-banner { display: flex; background: rgba(236,72,153,.10); color: #9D174D; border-color: #FBCFE8; }
-  /* Rain animation */
-  @keyframes rainfall { 0% { transform: translateY(-30px); opacity: 0; } 30% { opacity: .6; } 100% { transform: translateY(90px); opacity: 0; } }
+  /* Theme-specific inline info line — above "Deliver to" */
+  .theme-line { display: none; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; margin-bottom: 3px; }
+  .top-theme[data-theme="rain"] .rain-line { display: inline-flex; color: #1D4ED8; }
+  .top-theme[data-theme="festival"] .holi-line { display: inline-flex; color: #BE185D; }
+  /* Rain drops animation */
+  @keyframes rainfall { 0% { transform: translateY(-30px); opacity: 0; } 30% { opacity: .55; } 100% { transform: translateY(90px); opacity: 0; } }
   .rain-drop { position: absolute; width: 1.5px; height: 12px; background: linear-gradient(180deg,transparent,#3B82F6); border-radius: 1px; animation: rainfall 1.4s linear infinite; pointer-events: none; }
   .top-theme:not([data-theme="rain"]) .rain-drop { display: none; }
-  /* Holi gulal animation — colorful floating dots */
-  @keyframes holiFloat {
-    0%   { transform: translateY(-15px) translateX(0) rotate(0); opacity: 0; }
-    25%  { opacity: 1; }
-    75%  { opacity: .8; }
-    100% { transform: translateY(110px) translateX(var(--tx,15px)) rotate(540deg); opacity: 0; }
+  /* Holi splash blobs — water-balloon-burst style: scale-in then static, subtle */
+  @keyframes splash {
+    0%   { transform: scale(0.3); opacity: 0; }
+    30%  { transform: scale(1.15); opacity: .55; }
+    100% { transform: scale(1); opacity: .4; }
   }
-  .holi-dot { position: absolute; border-radius: 50%; animation: holiFloat 4s ease-in infinite; pointer-events: none; box-shadow: 0 0 6px currentColor; }
-  .top-theme:not([data-theme="festival"]) .holi-dot { display: none; }
-  /* Holi gradient pulse on tilak */
-  @keyframes holiPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+  .holi-splash {
+    position: absolute; border-radius: 50%; pointer-events: none;
+    animation: splash 1s cubic-bezier(.34,1.56,.64,1) forwards;
+    filter: blur(1px);
+  }
+  .top-theme:not([data-theme="festival"]) .holi-splash { display: none; }
 
   /* Status bar sticky at top · address/coin scroll away · search+categories sticky below */
   .sticky-status { position: sticky; top: 0; z-index: 70; }
@@ -103,15 +98,13 @@
   <div class="rain-drop" style="left:71%;animation-delay:.45s"></div>
   <div class="rain-drop" style="left:88%;animation-delay:.75s"></div>
 
-  <!-- Holi gulal animation (only visible when festival theme active) -->
-  <div class="holi-dot" style="left:6%;top:0;width:10px;height:10px;color:#EC4899;background:#EC4899;--tx:20px;animation-delay:0s"></div>
-  <div class="holi-dot" style="left:18%;top:0;width:8px;height:8px;color:#FBBF24;background:#FBBF24;--tx:-15px;animation-delay:.4s"></div>
-  <div class="holi-dot" style="left:30%;top:0;width:12px;height:12px;color:#A855F7;background:#A855F7;--tx:18px;animation-delay:.8s"></div>
-  <div class="holi-dot" style="left:44%;top:0;width:9px;height:9px;color:#F97316;background:#F97316;--tx:-22px;animation-delay:.2s"></div>
-  <div class="holi-dot" style="left:58%;top:0;width:11px;height:11px;color:#10B981;background:#10B981;--tx:14px;animation-delay:.6s"></div>
-  <div class="holi-dot" style="left:72%;top:0;width:8px;height:8px;color:#EC4899;background:#EC4899;--tx:-18px;animation-delay:1s"></div>
-  <div class="holi-dot" style="left:84%;top:0;width:10px;height:10px;color:#FBBF24;background:#FBBF24;--tx:22px;animation-delay:.5s"></div>
-  <div class="holi-dot" style="left:94%;top:0;width:9px;height:9px;color:#A855F7;background:#A855F7;--tx:-12px;animation-delay:.9s"></div>
+  <!-- Holi splash blobs — water-balloon burst style, subtle -->
+  <div class="holi-splash" style="left:8%;top:18px;width:90px;height:90px;background:radial-gradient(circle,rgba(236,72,153,.65) 0%,transparent 65%);animation-delay:0s"></div>
+  <div class="holi-splash" style="left:62%;top:8px;width:110px;height:110px;background:radial-gradient(circle,rgba(168,85,247,.55) 0%,transparent 65%);animation-delay:.2s"></div>
+  <div class="holi-splash" style="left:30%;top:50px;width:80px;height:80px;background:radial-gradient(circle,rgba(251,191,36,.6) 0%,transparent 65%);animation-delay:.4s"></div>
+  <div class="holi-splash" style="left:78%;top:60px;width:75px;height:75px;background:radial-gradient(circle,rgba(16,185,129,.5) 0%,transparent 65%);animation-delay:.55s"></div>
+  <div class="holi-splash" style="left:50%;top:90px;width:70px;height:70px;background:radial-gradient(circle,rgba(249,115,22,.5) 0%,transparent 65%);animation-delay:.7s"></div>
+  <div class="holi-splash" style="left:18%;top:110px;width:65px;height:65px;background:radial-gradient(circle,rgba(59,130,246,.45) 0%,transparent 65%);animation-delay:.85s"></div>
 
   <!-- Status bar (sticky) -->
   <div class="sticky-status flex items-center justify-between px-4 pt-3 pb-2 text-[12px] font-semibold text-[#0F172A]">
@@ -128,6 +121,15 @@
     <button id="addressBtn" class="flex items-center gap-2 min-w-0 flex-1 text-left" style="background:transparent;border:0">
       <i class="fa-solid fa-location-dot text-emerald-600 text-[16px]"></i>
       <div class="leading-tight min-w-0">
+        <!-- Theme info line: shown above "Deliver to" for rain/festival -->
+        <span class="theme-line rain-line">
+          <i class="fa-solid fa-cloud-rain text-[11px]"></i>
+          Rain expected · 8 mm · Hold spray
+        </span>
+        <span class="theme-line holi-line">
+          <span class="text-[12px]">🎨</span>
+          Happy Holi · 20% off + free gulal
+        </span>
         <div class="text-[11px] font-semibold text-[#94A3B8] uppercase tracking-wide">Deliver to</div>
         <div class="flex items-center gap-1 text-[15px] font-bold text-[#0F172A] mt-0.5">
           Indore 452001
@@ -140,25 +142,12 @@
         <i class="fa-solid fa-coins text-amber-500 text-[13px]"></i>
         <span class="text-[13.5px] font-bold text-amber-700 tnum">220</span>
       </div>
-      <a href="account.html" class="nu w-10 h-10 rounded-full overflow-hidden flex-shrink-0 relative" style="border:2px solid #047857;box-shadow:0 2px 8px rgba(4,120,87,.18)">
-        <img src="https://i.pravatar.cc/80?img=68" alt="Ramesh" class="w-full h-full object-cover"/>
-        <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white"></span>
+      <!-- Profile · prominent FA user icon -->
+      <a href="account.html" class="nu w-10 h-10 rounded-full flex items-center justify-center bg-emerald-600 shadow-md" style="border:2px solid #047857">
+        <i class="fa-solid fa-user text-[15px] text-white"></i>
       </a>
     </div>
   </div>
-
-  <!-- Theme-specific info banner — tap for details -->
-  <a href="advisory.html" class="theme-banner rain-banner nu">
-    <i class="fa-solid fa-cloud-rain text-blue-600"></i>
-    <span class="flex-1">Rain expected · 8 mm in 24 hrs · Hold spray for today</span>
-    <i class="fa-solid fa-chevron-right text-blue-700 text-[11px]"></i>
-  </a>
-  <a href="shop.html" class="theme-banner festival-banner nu">
-    <span class="text-[15px]">🎨</span>
-    <span class="flex-1"><strong>Happy Holi!</strong> 20% off + free gulal on ₹999+</span>
-    <span class="text-[15px]">🎉</span>
-    <i class="fa-solid fa-chevron-right text-pink-700 text-[11px] ml-1"></i>
-  </a>
 
   </div><!-- /top-theme -->
 

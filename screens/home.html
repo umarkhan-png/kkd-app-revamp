@@ -10,19 +10,34 @@
 <style>
   * { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; letter-spacing: -0.01em; }
   html, body { margin: 0; padding: 0; }
-  body { background: #FFFFFF; color: #0F172A; padding-bottom: 84px; padding-top: 112px; }
+  body { background: #FFFFFF; color: #0F172A; padding-bottom: 84px; }
   .tnum { font-variant-numeric: tabular-nums; }
   a.nu { text-decoration: none; color: inherit; }
-  .scroll-x { overflow-x: auto; scrollbar-width: none; }
+  .scroll-x { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .scroll-x::-webkit-scrollbar { display: none; }
   .img-blend { mix-blend-mode: multiply; }
   .stars { color: #F59E0B; font-size: 11px; letter-spacing: 1.5px; }
+  /* Sticky top stack — header + search + category */
+  .sticky-stack { position: sticky; top: 0; z-index: 50; background: #FFFFFF; }
+  /* Category tile real-image circle */
+  .cat-tile { transition: transform .15s; }
+  .cat-tile:active { transform: scale(.96); }
+  .cat-circle {
+    width: 64px; height: 64px; border-radius: 9999px;
+    overflow: hidden; background: #F8FAFC;
+    border: 1.5px solid #F1F5F9;
+    display: flex; align-items: center; justify-content: center; padding: 6px;
+  }
+  .cat-circle.active { border-color: #047857; box-shadow: 0 0 0 3px rgba(4,120,87,0.12); }
+  .cat-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 9999px; }
+  .cat-circle img.contain { object-fit: contain; mix-blend-mode: multiply; }
 </style>
 </head>
 <body>
 
-  <!-- STICKY HEADER · white, minimal -->
-  <header class="fixed top-0 left-0 right-0 z-50 bg-white" style="border-bottom:1px solid #F1F5F9">
+  <!-- STICKY STACK: status bar + logo row + search + categories -->
+  <header class="sticky-stack" style="border-bottom:1px solid #F1F5F9">
+
     <!-- Status bar -->
     <div class="flex items-center justify-between px-4 pt-2.5 pb-1 text-[11px] font-semibold text-[#0F172A]">
       <span>9:41</span>
@@ -33,14 +48,14 @@
       </div>
     </div>
 
-    <!-- Top row · logo + actions -->
-    <div class="flex items-center justify-between px-4 py-2.5">
+    <!-- Logo + location + actions (NO hamburger / drawer) -->
+    <div class="flex items-center justify-between px-4 py-2">
       <div class="flex items-center gap-2.5">
         <img src="https://www.katyayaniorganics.com/wp-content/uploads/2022/06/cropped-logo-3.webp" class="w-8 h-8 object-contain"/>
         <div class="leading-tight">
-          <div class="text-[16px] font-bold tracking-tight text-[#0F172A]">Katyayani</div>
+          <div class="text-[15px] font-bold tracking-tight text-[#0F172A]">Katyayani</div>
           <div class="flex items-center gap-1 text-[10.5px] text-[#64748B] mt-0.5">
-            <i class="fa-solid fa-location-dot text-[9px]"></i> Indore 452001
+            <i class="fa-solid fa-location-dot text-[9px] text-emerald-600"></i> Indore 452001
             <i class="fa-solid fa-chevron-down text-[8px] ml-0.5"></i>
           </div>
         </div>
@@ -61,21 +76,64 @@
       </div>
     </div>
 
-    <!-- Search row -->
-    <div class="px-4 pb-3">
+    <!-- Search bar -->
+    <div class="px-4 pb-2.5">
       <div class="relative">
-        <input id="search-input" type="text" placeholder="Search for products, pests, crops" class="w-full pl-11 pr-12 py-2.5 rounded-xl text-[13.5px] focus:outline-none focus:ring-2 focus:ring-emerald-600/30" style="background:#F1F5F9;border:1px solid #E2E8F0"/>
+        <input id="search-input" type="text" placeholder="Search products, pests, crops" class="w-full pl-11 pr-12 py-2.5 rounded-xl text-[13.5px] focus:outline-none focus:ring-2 focus:ring-emerald-600/30" style="background:#F1F5F9;border:1px solid #E2E8F0"/>
         <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-[14px]" style="color:#94A3B8"></i>
         <a href="voice-search.html" class="nu absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center bg-emerald-600">
           <i class="fa-solid fa-microphone text-white text-[12px]"></i>
         </a>
       </div>
     </div>
+
+    <!-- Categories — real product photos, horizontal scroll -->
+    <div class="scroll-x py-2.5 px-2 border-t" style="border-color:#F1F5F9">
+      <div class="flex gap-3 px-2">
+        <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px">
+          <div class="cat-circle active"><div class="w-full h-full rounded-full flex items-center justify-center bg-emerald-50"><i class="fa-solid fa-bars-staggered text-emerald-700 text-[20px]"></i></div></div>
+          <span class="text-[10.5px] font-semibold text-emerald-700">All</span>
+        </a>
+        <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px">
+          <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="contain"/></div>
+          <span class="text-[10.5px] font-semibold text-[#475569] text-center leading-tight">Insecticide</span>
+        </a>
+        <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px">
+          <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="contain"/></div>
+          <span class="text-[10.5px] font-semibold text-[#475569] text-center leading-tight">Fertilizer</span>
+        </a>
+        <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px">
+          <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/AZODHARMA_3.webp" class="contain"/></div>
+          <span class="text-[10.5px] font-semibold text-[#475569] text-center leading-tight">Fungicide</span>
+        </a>
+        <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px">
+          <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="contain"/></div>
+          <span class="text-[10.5px] font-semibold text-[#475569] text-center leading-tight">Bio-stim</span>
+        </a>
+        <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px">
+          <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" class="contain"/></div>
+          <span class="text-[10.5px] font-semibold text-[#475569] text-center leading-tight">Viricide</span>
+        </a>
+        <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px">
+          <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Pro_Grow_2_1__11zon.webp" class="contain"/></div>
+          <span class="text-[10.5px] font-semibold text-[#475569] text-center leading-tight">PGR</span>
+        </a>
+        <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px">
+          <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp" class="contain"/></div>
+          <span class="text-[10.5px] font-semibold text-[#475569] text-center leading-tight">Combos</span>
+        </a>
+        <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px">
+          <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" class="contain"/></div>
+          <span class="text-[10.5px] font-semibold text-[#475569] text-center leading-tight">Soil care</span>
+        </a>
+      </div>
+    </div>
+
   </header>
 
   <main>
 
-    <!-- Greeting + active status -->
+    <!-- Greeting + day -->
     <section class="px-4 pt-5">
       <div class="flex items-baseline justify-between mb-1">
         <h1 class="text-[26px] font-bold tracking-tight">Hi, Ramesh</h1>
@@ -84,7 +142,7 @@
       <p class="text-[13.5px] text-[#64748B]">What do you need today?</p>
     </section>
 
-    <!-- ₹100 hero offer banner · single, clean -->
+    <!-- ₹100 hero offer banner -->
     <section class="px-4 mt-5">
       <a href="cart.html" class="nu block rounded-2xl overflow-hidden relative" style="background:linear-gradient(135deg,#065F46 0%,#047857 100%)">
         <div class="flex items-center">
@@ -117,41 +175,7 @@
       </a>
     </section>
 
-    <!-- Categories · 4 clean tiles -->
-    <section class="px-4 mt-7">
-      <div class="flex items-baseline justify-between mb-3">
-        <h2 class="text-[17px] font-bold tracking-tight">Categories</h2>
-        <a href="shop.html" class="nu text-[12px] font-semibold text-emerald-700">All →</a>
-      </div>
-      <div class="grid grid-cols-4 gap-3">
-        <a href="shop.html" class="nu flex flex-col items-center">
-          <div class="w-full aspect-square rounded-2xl flex items-center justify-center" style="background:#FEF2F2">
-            <i class="fa-solid fa-bug text-[26px] text-rose-500"></i>
-          </div>
-          <span class="text-[11.5px] font-semibold text-[#0F172A] mt-2">Pesticides</span>
-        </a>
-        <a href="shop.html" class="nu flex flex-col items-center">
-          <div class="w-full aspect-square rounded-2xl flex items-center justify-center" style="background:#ECFDF5">
-            <i class="fa-solid fa-seedling text-[26px] text-emerald-600"></i>
-          </div>
-          <span class="text-[11.5px] font-semibold text-[#0F172A] mt-2">Fertilizers</span>
-        </a>
-        <a href="shop.html" class="nu flex flex-col items-center">
-          <div class="w-full aspect-square rounded-2xl flex items-center justify-center" style="background:#EFF6FF">
-            <i class="fa-solid fa-leaf text-[26px] text-blue-600"></i>
-          </div>
-          <span class="text-[11.5px] font-semibold text-[#0F172A] mt-2">Fungicides</span>
-        </a>
-        <a href="shop.html" class="nu flex flex-col items-center">
-          <div class="w-full aspect-square rounded-2xl flex items-center justify-center" style="background:#FFFBEB">
-            <i class="fa-solid fa-flask text-[26px] text-amber-600"></i>
-          </div>
-          <span class="text-[11.5px] font-semibold text-[#0F172A] mt-2">Bio</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- Bestsellers · 2x2 grid · big cards -->
+    <!-- Bestsellers · 2x2 grid -->
     <section class="px-4 mt-8">
       <div class="flex items-baseline justify-between mb-3">
         <h2 class="text-[17px] font-bold tracking-tight">Bestsellers</h2>
@@ -220,7 +244,7 @@
       </div>
     </section>
 
-    <!-- Buy Again · horizontal scroll -->
+    <!-- Buy Again -->
     <section class="mt-8">
       <div class="px-4 flex items-baseline justify-between mb-3">
         <h2 class="text-[17px] font-bold tracking-tight">Buy again</h2>
@@ -256,7 +280,7 @@
       </div>
     </section>
 
-    <!-- Single offer · Combo of the day -->
+    <!-- Combo of the day -->
     <section class="px-4 mt-8">
       <h2 class="text-[17px] font-bold tracking-tight mb-3">Combo of the day</h2>
       <a href="pdp.html" class="nu block rounded-2xl overflow-hidden" style="background:#F0FDF4;border:1px solid #BBF7D0">
@@ -295,7 +319,7 @@
       </a>
     </section>
 
-    <!-- Voice + Photo · utility row -->
+    <!-- Voice + Photo utility row -->
     <section class="px-4 mt-3 grid grid-cols-2 gap-3">
       <a href="voice-search.html" class="nu flex items-center gap-2.5 p-3 rounded-xl" style="background:#FFFFFF;border:1px solid #F1F5F9">
         <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#F1F5F9">
@@ -317,7 +341,7 @@
       </a>
     </section>
 
-    <!-- Brand strip -->
+    <!-- Trust strip -->
     <section class="px-4 mt-8 mb-2">
       <div class="rounded-2xl p-5 text-center" style="background:#F8FAFC">
         <div class="flex items-center justify-center gap-2 mb-2">
@@ -331,7 +355,7 @@
 
   </main>
 
-  <!-- Bottom nav · 4 tabs -->
+  <!-- Bottom nav -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white flex justify-around items-center px-2 py-2 z-50" style="height:68px;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04)">
     <a href="home.html" class="nu flex flex-col items-center gap-1" style="color:#047857">
       <i class="fa-solid fa-house text-[18px]"></i>

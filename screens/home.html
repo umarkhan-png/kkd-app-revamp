@@ -80,20 +80,27 @@
   /* Floating cart bar above bottom nav */
   .cart-fab { position: fixed; bottom: 76px; left: 12px; right: 12px; z-index: 45; }
 
-  /* Category tile — compacts proportionally on scroll (gap stays balanced) */
+  /* Category tile — uniform light circle + object-only product image (white bg removed via blend) */
   .cat-tile { transition: width .25s, transform .15s; }
   .cat-tile:active { transform: scale(.96); }
   .cat-circle {
     width: 72px; height: 72px; border-radius: 9999px;
-    overflow: hidden; background: #F8FAFC;
-    border: 2px solid #F1F5F9;
-    transition: width .25s, height .25s, border-width .25s;
+    background: #F1F5F9;
+    border: 1.5px solid #E2E8F0;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    padding: 8px;
+    transition: width .25s, height .25s, padding .25s, border-width .25s;
   }
-  .cat-circle img { width: 100%; height: 100%; object-fit: cover; }
+  .cat-circle img {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
   .cat-label { transition: font-size .25s; }
   /* Compact state — shrinks circle + tile width together so gap looks consistent */
   body.scrolled .cat-tile  { width: 58px !important; }
-  body.scrolled .cat-circle { width: 50px; height: 50px; border-width: 1.5px; }
+  body.scrolled .cat-circle { width: 50px; height: 50px; border-width: 1px; padding: 5px; }
   body.scrolled .cat-label { font-size: 11px; }
   body.scrolled .sticky-cats { padding-top: 8px; padding-bottom: 8px; }
 </style>
@@ -185,40 +192,40 @@
     </div>
   </div>
 
-  <!-- STICKY CATEGORIES — real category-themed images, horizontal scroll, compacts on scroll -->
+  <!-- STICKY CATEGORIES — uniform circle bg + object-only product images (multiply blend removes their light bg) -->
   <div class="sticky-cats cat-row scroll-x py-3">
     <div class="flex gap-3 px-4">
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://img.4imz.com/media/AVU4CCZA/product/insecticide-1760080280.jpg" alt="Insecticide"/></div>
+        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" alt="Insecticide"/></div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Insecticide</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=200&q=80" alt="Fungicide"/></div>
+        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/AZODHARMA_3.webp" alt="Fungicide"/></div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Fungicide</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://img.4imz.com/media/AVU4CCZA/product/herbicides-1760159807.png" alt="Herbicide"/></div>
-        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Herbicide</span>
+        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" alt="Viricide"/></div>
+        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Viricide</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://img.4imz.com/media/AVU4CCZA/product/mix-micro-nutrient-fertilizers-1760084762.png" alt="Fertilizer"/></div>
+        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" alt="Fertilizer"/></div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Fertilizer</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://img.4imz.com/media/AVU4CCZA/product/plant-growth-promoter-1760086991.jpg" alt="Bio-stim"/></div>
+        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" alt="Bio-stim"/></div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Bio-stim</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://img.4imz.com/media/AVU4CCZA/product/edta-mix-micronutrients-1760083642.png" alt="Micronutrients"/></div>
-        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Micronutrients</span>
-      </a>
-      <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://img.4imz.com/media/AVU4CCZA/product/plant-growth-promoter-1760086991.jpg" alt="PGR"/></div>
+        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Pro_Grow_2_1__11zon.webp" alt="PGR"/></div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">PGR</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://img.4imz.com/media/AVU4CCZA/product/insecticide-1760080280.jpg" alt="Viricide"/></div>
-        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Viricide</span>
+        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" alt="Mycorrhiza"/></div>
+        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Mycorrhiza</span>
+      </a>
+      <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
+        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp" alt="Combos"/></div>
+        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Combos</span>
       </a>
     </div>
   </div>

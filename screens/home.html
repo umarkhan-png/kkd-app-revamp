@@ -57,19 +57,24 @@
   @keyframes rainfall { 0% { transform: translateY(-30px); opacity: 0; } 30% { opacity: .55; } 100% { transform: translateY(90px); opacity: 0; } }
   .rain-drop { position: absolute; width: 1.5px; height: 12px; background: linear-gradient(180deg,transparent,#3B82F6); border-radius: 1px; animation: rainfall 1.4s linear infinite; pointer-events: none; }
   .top-theme:not([data-theme="rain"]) .rain-drop { display: none; }
-  /* Holi color dashes — thin streaks bursting OUT from the gradient zones */
-  @keyframes dashShoot {
-    0%   { transform: scaleY(0) rotate(var(--rot,0deg)); opacity: 0; }
-    45%  { transform: scaleY(1.3) rotate(var(--rot,0deg)); opacity: 1; }
-    100% { transform: scaleY(1) rotate(var(--rot,0deg)); opacity: .85; }
+  /* Holi color burst — firework-style: 8 colored rays radiating from a center point */
+  .holi-burst {
+    position: absolute; width: 56px; height: 56px;
+    pointer-events: none; transform: translate(-50%,-50%);
   }
-  .holi-dash {
-    position: absolute; border-radius: 2px; pointer-events: none;
-    transform-origin: top center;
-    animation: dashShoot .9s cubic-bezier(.34,1.4,.64,1) forwards;
-    box-shadow: 0 1px 4px currentColor;
+  .top-theme:not([data-theme="festival"]) .holi-burst { display: none; }
+  .holi-burst span {
+    position: absolute; top: 50%; left: 50%;
+    width: 3px; height: 22px; border-radius: 2px;
+    transform-origin: center 0;
+    animation: burstRay .9s cubic-bezier(.34,1.4,.64,1) forwards;
+    box-shadow: 0 0 6px currentColor;
   }
-  .top-theme:not([data-theme="festival"]) .holi-dash { display: none; }
+  @keyframes burstRay {
+    0%   { transform: translate(-50%,0) rotate(var(--a,0deg)) scaleY(0); opacity: 0; }
+    50%  { transform: translate(-50%,0) rotate(var(--a,0deg)) scaleY(1.3); opacity: 1; }
+    100% { transform: translate(-50%,0) rotate(var(--a,0deg)) scaleY(1); opacity: .9; }
+  }
 
   /* Status bar sticky at top · address/coin scroll away · search+categories sticky below */
   .sticky-status { position: sticky; top: 0; z-index: 70; }
@@ -80,27 +85,22 @@
   /* Floating cart bar above bottom nav */
   .cart-fab { position: fixed; bottom: 76px; left: 12px; right: 12px; z-index: 45; }
 
-  /* Category tile — uniform light circle + object-only product image (white bg removed via blend) */
+  /* Category tile — uniform circle + emoji object (disease/concept representation) */
   .cat-tile { transition: width .25s, transform .15s; }
   .cat-tile:active { transform: scale(.96); }
   .cat-circle {
     width: 72px; height: 72px; border-radius: 9999px;
     background: #F1F5F9;
     border: 1.5px solid #E2E8F0;
-    overflow: hidden;
     display: flex; align-items: center; justify-content: center;
-    padding: 8px;
-    transition: width .25s, height .25s, padding .25s, border-width .25s;
+    transition: width .25s, height .25s, border-width .25s;
   }
-  .cat-circle img {
-    max-width: 100%; max-height: 100%;
-    object-fit: contain;
-    mix-blend-mode: multiply;
-  }
+  .cat-emoji { font-size: 34px; line-height: 1; transition: font-size .25s; }
   .cat-label { transition: font-size .25s; }
+  body.scrolled .cat-emoji { font-size: 24px; }
   /* Compact state — shrinks circle + tile width together so gap looks consistent */
   body.scrolled .cat-tile  { width: 58px !important; }
-  body.scrolled .cat-circle { width: 50px; height: 50px; border-width: 1px; padding: 5px; }
+  body.scrolled .cat-circle { width: 50px; height: 50px; border-width: 1px; }
   body.scrolled .cat-label { font-size: 11px; }
   body.scrolled .sticky-cats { padding-top: 8px; padding-bottom: 8px; }
 </style>
@@ -118,18 +118,37 @@
   <div class="rain-drop" style="left:71%;animation-delay:.45s"></div>
   <div class="rain-drop" style="left:88%;animation-delay:.75s"></div>
 
-  <!-- Holi color dashes — streaks bursting from the colored gradient zones -->
-  <div class="holi-dash" style="left:8%;top:30px;width:3px;height:28px;background:#EC4899;color:#EC4899;--rot:18deg;animation-delay:.05s"></div>
-  <div class="holi-dash" style="left:14%;top:50px;width:2.5px;height:22px;background:#EC4899;color:#EC4899;--rot:-12deg;animation-delay:.15s"></div>
-  <div class="holi-dash" style="left:32%;top:38px;width:3px;height:30px;background:#FBBF24;color:#FBBF24;--rot:8deg;animation-delay:.25s"></div>
-  <div class="holi-dash" style="left:38%;top:60px;width:2.5px;height:24px;background:#FBBF24;color:#FBBF24;--rot:-22deg;animation-delay:.35s"></div>
-  <div class="holi-dash" style="left:58%;top:34px;width:3px;height:32px;background:#A855F7;color:#A855F7;--rot:25deg;animation-delay:.2s"></div>
-  <div class="holi-dash" style="left:64%;top:58px;width:2.5px;height:22px;background:#A855F7;color:#A855F7;--rot:-15deg;animation-delay:.4s"></div>
-  <div class="holi-dash" style="left:84%;top:38px;width:3px;height:28px;background:#10B981;color:#10B981;--rot:-18deg;animation-delay:.3s"></div>
-  <div class="holi-dash" style="left:90%;top:62px;width:2.5px;height:22px;background:#10B981;color:#10B981;--rot:14deg;animation-delay:.45s"></div>
-  <div class="holi-dash" style="left:24%;top:88px;width:2.5px;height:18px;background:#F97316;color:#F97316;--rot:-30deg;animation-delay:.55s"></div>
-  <div class="holi-dash" style="left:50%;top:96px;width:2.5px;height:20px;background:#3B82F6;color:#3B82F6;--rot:22deg;animation-delay:.65s"></div>
-  <div class="holi-dash" style="left:74%;top:90px;width:2.5px;height:18px;background:#EC4899;color:#EC4899;--rot:-10deg;animation-delay:.75s"></div>
+  <!-- Holi color bursts — firework-style explosions from 3 strategic spots -->
+  <div class="holi-burst" style="left:18%;top:50px">
+    <span style="--a:0deg;background:#EC4899;color:#EC4899;animation-delay:0s"></span>
+    <span style="--a:45deg;background:#FBBF24;color:#FBBF24;animation-delay:.05s"></span>
+    <span style="--a:90deg;background:#A855F7;color:#A855F7;animation-delay:.1s"></span>
+    <span style="--a:135deg;background:#10B981;color:#10B981;animation-delay:.15s"></span>
+    <span style="--a:180deg;background:#F97316;color:#F97316;animation-delay:.2s"></span>
+    <span style="--a:225deg;background:#3B82F6;color:#3B82F6;animation-delay:.25s"></span>
+    <span style="--a:270deg;background:#EC4899;color:#EC4899;animation-delay:.3s"></span>
+    <span style="--a:315deg;background:#FBBF24;color:#FBBF24;animation-delay:.35s"></span>
+  </div>
+  <div class="holi-burst" style="left:52%;top:34px">
+    <span style="--a:0deg;background:#A855F7;color:#A855F7;animation-delay:.2s"></span>
+    <span style="--a:45deg;background:#10B981;color:#10B981;animation-delay:.25s"></span>
+    <span style="--a:90deg;background:#F97316;color:#F97316;animation-delay:.3s"></span>
+    <span style="--a:135deg;background:#3B82F6;color:#3B82F6;animation-delay:.35s"></span>
+    <span style="--a:180deg;background:#EC4899;color:#EC4899;animation-delay:.4s"></span>
+    <span style="--a:225deg;background:#FBBF24;color:#FBBF24;animation-delay:.45s"></span>
+    <span style="--a:270deg;background:#A855F7;color:#A855F7;animation-delay:.5s"></span>
+    <span style="--a:315deg;background:#10B981;color:#10B981;animation-delay:.55s"></span>
+  </div>
+  <div class="holi-burst" style="left:84%;top:72px">
+    <span style="--a:0deg;background:#FBBF24;color:#FBBF24;animation-delay:.4s"></span>
+    <span style="--a:45deg;background:#EC4899;color:#EC4899;animation-delay:.45s"></span>
+    <span style="--a:90deg;background:#3B82F6;color:#3B82F6;animation-delay:.5s"></span>
+    <span style="--a:135deg;background:#A855F7;color:#A855F7;animation-delay:.55s"></span>
+    <span style="--a:180deg;background:#FBBF24;color:#FBBF24;animation-delay:.6s"></span>
+    <span style="--a:225deg;background:#10B981;color:#10B981;animation-delay:.65s"></span>
+    <span style="--a:270deg;background:#F97316;color:#F97316;animation-delay:.7s"></span>
+    <span style="--a:315deg;background:#EC4899;color:#EC4899;animation-delay:.75s"></span>
+  </div>
 
   <!-- Status bar (sticky) -->
   <div class="sticky-status flex items-center justify-between px-4 pt-3 pb-2 text-[12px] font-semibold text-[#0F172A]">
@@ -192,39 +211,39 @@
     </div>
   </div>
 
-  <!-- STICKY CATEGORIES — uniform circle bg + object-only product images (multiply blend removes their light bg) -->
+  <!-- STICKY CATEGORIES — uniform circle + emoji representing the pest/disease the category treats -->
   <div class="sticky-cats cat-row scroll-x py-3">
     <div class="flex gap-3 px-4">
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" alt="Insecticide"/></div>
+        <div class="cat-circle"><span class="cat-emoji">🐛</span></div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Insecticide</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/AZODHARMA_3.webp" alt="Fungicide"/></div>
+        <div class="cat-circle"><span class="cat-emoji">🍄</span></div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Fungicide</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" alt="Viricide"/></div>
+        <div class="cat-circle"><span class="cat-emoji">🦠</span></div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Viricide</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" alt="Fertilizer"/></div>
+        <div class="cat-circle"><span class="cat-emoji">🌾</span></div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Fertilizer</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" alt="Bio-stim"/></div>
+        <div class="cat-circle"><span class="cat-emoji">🌱</span></div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Bio-stim</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Pro_Grow_2_1__11zon.webp" alt="PGR"/></div>
+        <div class="cat-circle"><span class="cat-emoji">🌿</span></div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">PGR</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" alt="Mycorrhiza"/></div>
+        <div class="cat-circle"><span class="cat-emoji">🪱</span></div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Mycorrhiza</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp" alt="Combos"/></div>
+        <div class="cat-circle"><span class="cat-emoji">🛡️</span></div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Combos</span>
       </a>
     </div>

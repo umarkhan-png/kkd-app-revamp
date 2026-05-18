@@ -68,21 +68,15 @@
   /* Floating cart bar above bottom nav */
   .cart-fab { position: fixed; bottom: 76px; left: 12px; right: 12px; z-index: 45; }
 
-  /* Category tile */
+  /* Category tile — same gap on scroll, no compaction */
   .cat-tile { transition: transform .15s; }
   .cat-tile:active { transform: scale(.96); }
   .cat-circle {
     width: 72px; height: 72px; border-radius: 9999px;
     overflow: hidden; background: #F8FAFC;
     border: 2px solid #F1F5F9;
-    transition: width .25s, height .25s;
   }
   .cat-circle img { width: 100%; height: 100%; object-fit: cover; }
-
-  /* Compact state — when window scrolled past header */
-  body.scrolled .cat-circle { width: 48px; height: 48px; }
-  body.scrolled .cat-label { font-size: 10px; }
-  body.scrolled .cat-row { padding-top: 8px; padding-bottom: 8px; }
 </style>
 </head>
 <body>
@@ -127,7 +121,7 @@
       <i class="fa-solid fa-location-dot text-emerald-600 text-[16px]"></i>
       <div class="leading-tight min-w-0">
         <div class="text-[11px] font-semibold text-[#94A3B8] uppercase tracking-wide">Deliver to</div>
-        <div class="flex items-center gap-1 text-[15px] font-bold text-[#0F172A] mt-0.5">
+        <div class="flex items-center gap-1 text-[16px] font-bold text-[#0F172A] mt-0.5">
           Indore 452001
           <i class="fa-solid fa-chevron-down text-[10px] text-[#64748B] ml-0.5"></i>
         </div>
@@ -138,8 +132,8 @@
         <i class="fa-solid fa-coins text-amber-500 text-[13px]"></i>
         <span class="text-[13.5px] font-bold text-amber-700 tnum">220</span>
       </div>
-      <a href="account.html" class="nu w-10 h-10 rounded-full flex items-center justify-center bg-emerald-600 shadow-md" style="border:2px solid #047857">
-        <i class="fa-solid fa-user text-[15px] text-white"></i>
+      <a href="account.html" class="nu w-10 h-10 rounded-full flex items-center justify-center bg-white shadow-sm" style="border:1px solid #E2E8F0">
+        <i class="fa-solid fa-user text-[14px] text-emerald-600"></i>
       </a>
     </div>
   </div>
@@ -164,7 +158,7 @@
   <!-- Search · voice icon less prominent -->
   <div class="sticky-search px-4 py-3">
     <div class="relative">
-      <input id="search-input" type="text" placeholder="Search products, pests, crops" class="w-full pl-12 pr-12 py-3 rounded-xl text-[14.5px] font-medium focus:outline-none focus:ring-2 focus:ring-emerald-600/30" style="background:#F1F5F9;border:1px solid #E2E8F0"/>
+      <input id="search-input" type="text" placeholder="Search products, pests, crops" class="w-full pl-12 pr-12 py-3 rounded-xl text-[15.5px] font-medium focus:outline-none focus:ring-2 focus:ring-emerald-600/30" style="background:#F1F5F9;border:1px solid #E2E8F0"/>
       <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-[15px]" style="color:#94A3B8"></i>
       <a href="voice-search.html" class="nu absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg flex items-center justify-center" style="background:#F1F5F9">
         <i class="fa-solid fa-microphone text-[14px] text-[#475569]"></i>
@@ -177,35 +171,35 @@
     <div class="flex gap-3 px-4">
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle"><img src="https://img.4imz.com/media/AVU4CCZA/product/insecticide-1760080280.jpg" alt="Insecticide"/></div>
-        <span class="cat-label text-[12px] font-semibold text-[#0F172A] text-center leading-tight">Insecticide</span>
+        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Insecticide</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle"><img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=200&q=80" alt="Fungicide"/></div>
-        <span class="cat-label text-[12px] font-semibold text-[#0F172A] text-center leading-tight">Fungicide</span>
+        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Fungicide</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle"><img src="https://img.4imz.com/media/AVU4CCZA/product/herbicides-1760159807.png" alt="Herbicide"/></div>
-        <span class="cat-label text-[12px] font-semibold text-[#0F172A] text-center leading-tight">Herbicide</span>
+        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Herbicide</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle"><img src="https://img.4imz.com/media/AVU4CCZA/product/mix-micro-nutrient-fertilizers-1760084762.png" alt="Fertilizer"/></div>
-        <span class="cat-label text-[12px] font-semibold text-[#0F172A] text-center leading-tight">Fertilizer</span>
+        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Fertilizer</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle"><img src="https://img.4imz.com/media/AVU4CCZA/product/plant-growth-promoter-1760086991.jpg" alt="Bio-stim"/></div>
-        <span class="cat-label text-[12px] font-semibold text-[#0F172A] text-center leading-tight">Bio-stim</span>
+        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Bio-stim</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle"><img src="https://img.4imz.com/media/AVU4CCZA/product/edta-mix-micronutrients-1760083642.png" alt="Micronutrients"/></div>
-        <span class="cat-label text-[12px] font-semibold text-[#0F172A] text-center leading-tight">Micronutrients</span>
+        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Micronutrients</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle"><img src="https://img.4imz.com/media/AVU4CCZA/product/plant-growth-promoter-1760086991.jpg" alt="PGR"/></div>
-        <span class="cat-label text-[12px] font-semibold text-[#0F172A] text-center leading-tight">PGR</span>
+        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">PGR</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle"><img src="https://img.4imz.com/media/AVU4CCZA/product/insecticide-1760080280.jpg" alt="Viricide"/></div>
-        <span class="cat-label text-[12px] font-semibold text-[#0F172A] text-center leading-tight">Viricide</span>
+        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Viricide</span>
       </a>
     </div>
   </div>
@@ -217,10 +211,10 @@
     <!-- Greeting -->
     <section class="px-4 pt-6">
       <div class="flex items-baseline justify-between mb-1.5">
-        <h1 class="text-[30px] font-bold tracking-tight">Hi, Ramesh</h1>
+        <h1 class="text-[32px] font-bold tracking-tight">Hi, Ramesh</h1>
         <span class="text-[12.5px] text-[#94A3B8] font-medium">Mon · 18 May</span>
       </div>
-      <p class="text-[15px] text-[#64748B]">What do you need today?</p>
+      <p class="text-[16px] text-[#64748B]">What do you need today?</p>
     </section>
 
     <!-- ₹100 hero offer -->
@@ -229,7 +223,7 @@
         <div class="flex items-center">
           <div class="flex-1 p-5 text-white">
             <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/15 backdrop-blur text-[10.5px] font-bold uppercase tracking-wider mb-2.5">Active · Auto-apply</div>
-            <div class="text-[24px] font-bold leading-tight">₹100 off ready</div>
+            <div class="text-[26px] font-bold leading-tight">₹100 off ready</div>
             <p class="text-[13px] text-emerald-100 mt-1.5">First order welcome · Expires 22 May</p>
             <div class="inline-flex items-center gap-1.5 mt-3.5 px-4 py-2 rounded-full bg-white text-emerald-700 text-[13px] font-bold">
               Use now <i class="fa-solid fa-arrow-right text-[11px]"></i>
@@ -249,7 +243,7 @@
           <i class="fa-solid fa-truck-fast text-amber-700 text-[18px]"></i>
         </div>
         <div class="flex-1 min-w-0">
-          <div class="text-[14px] font-bold text-[#78350F] leading-tight">In transit · ETA Thu</div>
+          <div class="text-[15px] font-bold text-[#78350F] leading-tight">In transit · ETA Thu</div>
           <div class="text-[12px] text-amber-700 mt-1 tnum">#KKD-26194 · 3 items</div>
         </div>
         <i class="fa-solid fa-chevron-right text-[13px] text-amber-700"></i>
@@ -259,7 +253,7 @@
     <!-- Bestsellers -->
     <section class="px-4 mt-8">
       <div class="flex items-baseline justify-between mb-4">
-        <h2 class="text-[19px] font-bold tracking-tight">Bestsellers</h2>
+        <h2 class="text-[21px] font-bold tracking-tight">Bestsellers</h2>
         <a href="shop.html" class="nu text-[13px] font-semibold text-emerald-700">See all →</a>
       </div>
       <div class="grid grid-cols-2 gap-3">
@@ -273,7 +267,7 @@
           <div class="text-[11.5px] text-[#64748B] mt-1">Bio-stimulant · 1L</div>
           <div class="stars mt-1.5">★★★★★ <span class="text-[#64748B] font-medium ml-0.5">4.7</span></div>
           <div class="flex items-baseline gap-1.5 mt-2">
-            <span class="text-[18px] font-bold tnum">₹376</span>
+            <span class="text-[19px] font-bold tnum">₹376</span>
             <span class="text-[12px] text-[#94A3B8] line-through tnum">₹520</span>
           </div>
           <button class="w-full mt-2.5 h-10 rounded-lg bg-emerald-600 text-white text-[13px] font-semibold">Add</button>
@@ -284,11 +278,11 @@
             <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full object-contain"/>
             <span class="absolute top-2 left-2 text-[10px] font-bold bg-rose-50 text-rose-600 px-1.5 py-0.5 rounded">−28%</span>
           </div>
-          <div class="text-[14px] font-semibold leading-tight">Chakrawarti</div>
+          <div class="text-[15px] font-semibold leading-tight">Chakrawarti</div>
           <div class="text-[11.5px] text-[#64748B] mt-1">Insecticide · 100ml</div>
           <div class="stars mt-1.5">★★★★★ <span class="text-[#64748B] font-medium ml-0.5">4.8</span></div>
           <div class="flex items-baseline gap-1.5 mt-2">
-            <span class="text-[18px] font-bold tnum">₹358</span>
+            <span class="text-[19px] font-bold tnum">₹358</span>
             <span class="text-[12px] text-[#94A3B8] line-through tnum">₹495</span>
           </div>
           <button class="w-full mt-2.5 h-10 rounded-lg bg-emerald-600 text-white text-[13px] font-semibold">Add</button>
@@ -299,11 +293,11 @@
             <img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" class="img-blend max-h-full object-contain"/>
             <span class="absolute top-2 left-2 text-[10px] font-bold bg-rose-50 text-rose-600 px-1.5 py-0.5 rounded">−28%</span>
           </div>
-          <div class="text-[14px] font-semibold leading-tight">Chakraveer</div>
+          <div class="text-[15px] font-semibold leading-tight">Chakraveer</div>
           <div class="text-[11.5px] text-[#64748B] mt-1">Insecticide · 100ml</div>
           <div class="stars mt-1.5">★★★★☆ <span class="text-[#64748B] font-medium ml-0.5">4.5</span></div>
           <div class="flex items-baseline gap-1.5 mt-2">
-            <span class="text-[18px] font-bold tnum">₹440</span>
+            <span class="text-[19px] font-bold tnum">₹440</span>
             <span class="text-[12px] text-[#94A3B8] line-through tnum">₹610</span>
           </div>
           <button class="w-full mt-2.5 h-10 rounded-lg bg-emerald-600 text-white text-[13px] font-semibold">Add</button>
@@ -313,11 +307,11 @@
           <div class="aspect-square rounded-xl flex items-center justify-center p-4 mb-3" style="background:#F8FAFC">
             <img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" class="img-blend max-h-full object-contain"/>
           </div>
-          <div class="text-[14px] font-semibold leading-tight">Antivirus</div>
+          <div class="text-[15px] font-semibold leading-tight">Antivirus</div>
           <div class="text-[11.5px] text-[#64748B] mt-1">Viricide · 100ml</div>
           <div class="stars mt-1.5">★★★★★ <span class="text-[#64748B] font-medium ml-0.5">4.9</span></div>
           <div class="flex items-baseline gap-1.5 mt-2">
-            <span class="text-[18px] font-bold tnum">₹327</span>
+            <span class="text-[19px] font-bold tnum">₹327</span>
           </div>
           <button class="w-full mt-2.5 h-10 rounded-lg bg-emerald-600 text-white text-[13px] font-semibold">Add</button>
         </a>
@@ -328,7 +322,7 @@
     <!-- Buy Again -->
     <section class="mt-8">
       <div class="px-4 flex items-baseline justify-between mb-4">
-        <h2 class="text-[19px] font-bold tracking-tight">Buy again</h2>
+        <h2 class="text-[21px] font-bold tracking-tight">Buy again</h2>
         <a href="orders.html" class="nu text-[13px] font-semibold text-emerald-700">History →</a>
       </div>
       <div class="overflow-x-auto scroll-x">
@@ -363,15 +357,15 @@
 
     <!-- Combo of the day -->
     <section class="px-4 mt-8">
-      <h2 class="text-[19px] font-bold tracking-tight mb-3">Combo of the day</h2>
+      <h2 class="text-[21px] font-bold tracking-tight mb-3">Combo of the day</h2>
       <a href="pdp.html" class="nu block rounded-2xl overflow-hidden" style="background:#F0FDF4;border:1px solid #BBF7D0">
         <div class="flex items-center">
           <div class="flex-1 p-4">
             <div class="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-bold uppercase tracking-wider text-emerald-700" style="background:rgba(255,255,255,0.7)">Save ₹251</div>
-            <div class="text-[18px] font-bold mt-2 leading-tight text-[#0F172A]">Tomato Care Combo</div>
+            <div class="text-[19px] font-bold mt-2 leading-tight text-[#0F172A]">Tomato Care Combo</div>
             <p class="text-[12.5px] text-[#475569] mt-1">Humic + Chakrawarti · For 1 acre</p>
             <div class="flex items-baseline gap-2 mt-2.5">
-              <span class="text-[22px] font-bold tnum text-emerald-700">₹999</span>
+              <span class="text-[24px] font-bold tnum text-emerald-700">₹999</span>
               <span class="text-[13px] text-[#94A3B8] line-through tnum">₹1,250</span>
             </div>
             <div class="inline-flex items-center gap-1.5 mt-3 px-3.5 py-2 rounded-lg bg-emerald-600 text-white text-[12.5px] font-bold">Add combo <i class="fa-solid fa-arrow-right text-[10px]"></i></div>
@@ -391,7 +385,7 @@
           <i class="fa-solid fa-headset text-[20px] text-[#475569]"></i>
         </div>
         <div class="flex-1 min-w-0">
-          <div class="text-[14.5px] font-bold leading-tight">Need help with your crop?</div>
+          <div class="text-[15.5px] font-bold leading-tight">Need help with your crop?</div>
           <div class="text-[12px] text-[#64748B] mt-1">Free 5-min call with an agronomist</div>
         </div>
         <span class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-emerald-600">
@@ -407,7 +401,7 @@
           <i class="fa-solid fa-microphone text-[16px] text-[#475569]"></i>
         </div>
         <div class="flex-1 min-w-0">
-          <div class="text-[13.5px] font-bold leading-tight">Voice search</div>
+          <div class="text-[14.5px] font-bold leading-tight">Voice search</div>
           <div class="text-[11px] text-[#64748B] mt-0.5">Speak product name</div>
         </div>
       </a>
@@ -416,7 +410,7 @@
           <i class="fa-solid fa-camera text-[16px] text-[#475569]"></i>
         </div>
         <div class="flex-1 min-w-0">
-          <div class="text-[13.5px] font-bold leading-tight">Diagnose</div>
+          <div class="text-[14.5px] font-bold leading-tight">Diagnose</div>
           <div class="text-[11px] text-[#64748B] mt-0.5">Photo of disease</div>
         </div>
       </a>
@@ -445,7 +439,7 @@
       </div>
       <div class="leading-tight">
         <div class="text-[11px] text-white/70 font-medium">3 items · Save ₹400</div>
-        <div class="text-[13.5px] font-bold tnum">₹1,900</div>
+        <div class="text-[14.5px] font-bold tnum">₹1,900</div>
       </div>
     </div>
     <div class="flex items-center gap-1.5 text-[12.5px] font-bold">
@@ -453,23 +447,23 @@
     </div>
   </a>
 
-  <!-- Bottom nav -->
+  <!-- Bottom nav — active uses emerald-500 matching cart icon bg -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white flex justify-around items-center px-2 py-2 z-50" style="height:68px;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04)">
-    <a href="home.html" class="nu flex flex-col items-center gap-1" style="color:#047857">
-      <i class="fa-solid fa-house text-[19px]"></i>
-      <span class="text-[11.5px] font-bold">Home</span>
+    <a href="home.html" class="nu flex flex-col items-center gap-1" style="color:#10B981">
+      <i class="fa-solid fa-house text-[20px]"></i>
+      <span class="text-[12.5px] font-bold">Home</span>
     </a>
     <a href="my-crop.html" class="nu flex flex-col items-center gap-1" style="color:#94A3B8">
-      <i class="fa-solid fa-wheat-awn text-[19px]"></i>
-      <span class="text-[11.5px] font-semibold">Crops</span>
+      <i class="fa-solid fa-wheat-awn text-[20px]"></i>
+      <span class="text-[12.5px] font-semibold">Crops</span>
     </a>
     <a href="shop.html" class="nu flex flex-col items-center gap-1" style="color:#94A3B8">
-      <i class="fa-solid fa-newspaper text-[19px]"></i>
-      <span class="text-[11.5px] font-semibold">News</span>
+      <i class="fa-solid fa-newspaper text-[20px]"></i>
+      <span class="text-[12.5px] font-semibold">News</span>
     </a>
     <a href="advisory.html" class="nu flex flex-col items-center gap-1" style="color:#94A3B8">
-      <i class="fa-solid fa-headset text-[19px]"></i>
-      <span class="text-[11.5px] font-semibold">Advisor</span>
+      <i class="fa-solid fa-headset text-[20px]"></i>
+      <span class="text-[12.5px] font-semibold">Advisor</span>
     </a>
   </nav>
 
@@ -489,12 +483,7 @@
     }
     if(input) type();
 
-    // Compact categories on scroll
-    window.addEventListener('scroll', () => {
-      const y = window.scrollY;
-      if (y > 40) document.body.classList.add('scrolled');
-      else document.body.classList.remove('scrolled');
-    });
+    // (Categories stay at constant size on scroll — no compaction)
 
     // 3 themes · tap Deliver-to to switch
     const themeRoot = document.getElementById('themeRoot');

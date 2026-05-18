@@ -18,9 +18,11 @@
   .img-blend { mix-blend-mode: multiply; }
   .stars { color: #F59E0B; font-size: 12.5px; letter-spacing: 1.5px; }
 
-  /* Sticky region: only search + categories */
-  .sticky-search { position: sticky; top: 0; z-index: 60; background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s; }
-  .sticky-cats { position: sticky; top: 66px; z-index: 55; background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s, top .25s; }
+  /* Sticky top stack: info bar + search + categories */
+  .sticky-top { position: sticky; top: 0; z-index: 60; background: #FFFFFF; }
+  .sticky-info { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; }
+  .sticky-search { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s; }
+  .sticky-cats { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s; }
 
   /* Category tile */
   .cat-tile { transition: transform .15s; }
@@ -41,8 +43,11 @@
 </head>
 <body>
 
-  <!-- TOP BAR (scrolls away) · address + coin + cart (no logo, no brand text) -->
-  <div class="flex items-center justify-between px-4 pt-3 text-[12px] font-semibold text-[#0F172A]">
+  <!-- STICKY TOP STACK: info bar + search + categories ALL freeze on scroll -->
+  <div class="sticky-top">
+
+  <!-- Status bar -->
+  <div class="sticky-info flex items-center justify-between px-4 pt-3 text-[12px] font-semibold text-[#0F172A]">
     <span>9:41</span>
     <div class="flex items-center gap-1.5">
       <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
@@ -51,7 +56,8 @@
     </div>
   </div>
 
-  <div class="flex items-center justify-between px-4 mt-3 pb-3">
+  <!-- Info bar: address + coin + cart (now freezes too) -->
+  <div class="sticky-info flex items-center justify-between px-4 mt-3 pb-3">
     <div class="flex items-center gap-2 min-w-0 flex-1">
       <i class="fa-solid fa-location-dot text-emerald-600 text-[16px]"></i>
       <div class="leading-tight min-w-0">
@@ -74,7 +80,7 @@
     </div>
   </div>
 
-  <!-- STICKY SEARCH -->
+  <!-- Search -->
   <div class="sticky-search px-4 py-3">
     <div class="relative">
       <input id="search-input" type="text" placeholder="Search products, pests, crops" class="w-full pl-12 pr-12 py-3 rounded-xl text-[14.5px] font-medium focus:outline-none focus:ring-2 focus:ring-emerald-600/30" style="background:#F1F5F9;border:1px solid #E2E8F0"/>
@@ -93,7 +99,7 @@
         <span class="cat-label text-[12px] font-semibold text-[#0F172A] text-center leading-tight">Insecticide</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><img src="https://img.4imz.com/media/AVU4CCZA/product/fungicides-1760159938.png" alt="Fungicide"/></div>
+        <div class="cat-circle"><img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=200&q=80" alt="Fungicide"/></div>
         <span class="cat-label text-[12px] font-semibold text-[#0F172A] text-center leading-tight">Fungicide</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
@@ -122,6 +128,8 @@
       </a>
     </div>
   </div>
+
+  </div><!-- /sticky-top -->
 
   <main>
 

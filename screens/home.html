@@ -18,16 +18,30 @@
   .img-blend { mix-blend-mode: multiply; }
   .stars { color: #F59E0B; font-size: 12.5px; letter-spacing: 1.5px; }
 
-  /* Top theme gradient (visible at load, fades to subtle) */
-  .top-theme {
-    background: linear-gradient(180deg, #FEF3C7 0%, #FFF8E1 25%, #FFFBEB 55%, #FFFFFF 100%);
-    animation: themeBloom 3s cubic-bezier(.4,0,.2,1) forwards;
+  /* 3 themes · switched by tapping Deliver-to */
+  .top-theme { transition: background .6s ease; position: relative; overflow: hidden; }
+  .top-theme[data-theme="green"]    { background: linear-gradient(180deg,#BBF7D0 0%,#D1FAE5 22%,#ECFDF5 50%,#FFFFFF 100%); }
+  .top-theme[data-theme="rain"]     { background: linear-gradient(180deg,#BFDBFE 0%,#DBEAFE 22%,#EFF6FF 50%,#FFFFFF 100%); }
+  .top-theme[data-theme="festival"] { background: linear-gradient(180deg,#FECACA 0%,#FED7AA 18%,#FEF3C7 45%,#FFFFFF 100%); }
+  /* Brief bloom on load + on theme change */
+  .top-theme.bloom { animation: bloom 1.2s ease-out; }
+  @keyframes bloom {
+    0%   { filter: saturate(1.5) brightness(1.05); }
+    100% { filter: saturate(1) brightness(1); }
   }
-  @keyframes themeBloom {
-    0% { background: linear-gradient(180deg, #FFE0A8 0%, #FEF3C7 30%, #FFF8E1 65%, #FFFFFF 100%); }
-    60% { background: linear-gradient(180deg, #FEF3C7 0%, #FFF8E1 25%, #FFFBEB 55%, #FFFFFF 100%); }
-    100% { background: linear-gradient(180deg, #FFFBEB 0%, #FFFDF7 30%, #FFFFFF 70%, #FFFFFF 100%); }
-  }
+  /* Theme-specific info banner */
+  .theme-banner { display: none; align-items: center; gap: 8px; padding: 8px 16px; font-size: 12.5px; font-weight: 600; border-top: 1px solid; }
+  .top-theme[data-theme="rain"] .rain-banner { display: flex; background: rgba(59,130,246,.10); color: #1E40AF; border-color: #BFDBFE; }
+  .top-theme[data-theme="festival"] .festival-banner { display: flex; background: rgba(249,115,22,.10); color: #9A3412; border-color: #FED7AA; }
+  /* Theme chip beside address (tiny indicator) */
+  .theme-chip { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 9999px; font-size: 10px; margin-left: 4px; }
+  .top-theme[data-theme="green"] .theme-chip { background: #DCFCE7; color: #15803D; }
+  .top-theme[data-theme="rain"] .theme-chip { background: #DBEAFE; color: #1D4ED8; }
+  .top-theme[data-theme="festival"] .theme-chip { background: #FED7AA; color: #9A3412; }
+  /* Rain animation */
+  @keyframes rainfall { 0% { transform: translateY(-30px); opacity: 0; } 30% { opacity: .6; } 100% { transform: translateY(80px); opacity: 0; } }
+  .rain-drop { position: absolute; width: 1.5px; height: 12px; background: linear-gradient(180deg,transparent,#3B82F6); border-radius: 1px; animation: rainfall 1.4s linear infinite; }
+  .top-theme:not([data-theme="rain"]) .rain-drop { display: none; }
 
   /* Status bar sticky at top · address/coin scroll away · search+categories sticky below */
   .sticky-status { position: sticky; top: 0; z-index: 70; }
@@ -57,8 +71,16 @@
 </head>
 <body>
 
-  <!-- Theme gradient wrapper · visible at load, fades to subtle -->
-  <div class="top-theme">
+  <!-- Theme gradient wrapper · 3 themes (green/rain/festival), tap Deliver-to to switch -->
+  <div class="top-theme bloom" data-theme="green" id="themeRoot">
+
+  <!-- Rain animation (only visible when rain theme active) -->
+  <div class="rain-drop" style="left:8%;animation-delay:0s"></div>
+  <div class="rain-drop" style="left:22%;animation-delay:.3s"></div>
+  <div class="rain-drop" style="left:38%;animation-delay:.6s"></div>
+  <div class="rain-drop" style="left:55%;animation-delay:.15s"></div>
+  <div class="rain-drop" style="left:71%;animation-delay:.45s"></div>
+  <div class="rain-drop" style="left:88%;animation-delay:.75s"></div>
 
   <!-- Status bar (sticky) -->
   <div class="sticky-status flex items-center justify-between px-4 pt-3 pb-2 text-[12px] font-semibold text-[#0F172A]">
@@ -70,18 +92,20 @@
     </div>
   </div>
 
-  <!-- Info bar: address + coin + profile (cart removed, profile added) -->
-  <div class="flex items-center justify-between px-4 pt-2 pb-3">
-    <div class="flex items-center gap-2 min-w-0 flex-1">
+  <!-- Info bar: address (tap to change theme) + coin + profile -->
+  <div class="flex items-center justify-between px-4 pt-2 pb-3 relative">
+    <button id="addressBtn" class="flex items-center gap-2 min-w-0 flex-1 text-left" style="background:transparent;border:0">
       <i class="fa-solid fa-location-dot text-emerald-600 text-[16px]"></i>
       <div class="leading-tight min-w-0">
-        <div class="text-[11px] font-semibold text-[#94A3B8] uppercase tracking-wide">Deliver to</div>
+        <div class="text-[11px] font-semibold text-[#94A3B8] uppercase tracking-wide flex items-center">Deliver to
+          <span class="theme-chip" id="themeChip">●</span>
+        </div>
         <div class="flex items-center gap-1 text-[15px] font-bold text-[#0F172A] mt-0.5">
           Indore 452001
           <i class="fa-solid fa-chevron-down text-[10px] text-[#64748B] ml-0.5"></i>
         </div>
       </div>
-    </div>
+    </button>
     <div class="flex items-center gap-2 flex-shrink-0">
       <div class="flex items-center gap-1.5 h-10 px-3 rounded-full bg-amber-50 border border-amber-100">
         <i class="fa-solid fa-coins text-amber-500 text-[13px]"></i>
@@ -91,6 +115,16 @@
         <i class="fa-solid fa-user text-[14px] text-[#475569]"></i>
       </a>
     </div>
+  </div>
+
+  <!-- Theme-specific info banner -->
+  <div class="theme-banner rain-banner">
+    <i class="fa-solid fa-cloud-rain text-blue-600"></i>
+    <span>Rain expected · 8 mm in 24 hrs · Hold spray for today</span>
+  </div>
+  <div class="theme-banner festival-banner">
+    <i class="fa-solid fa-gift text-orange-600"></i>
+    <span>Holi Sale · Flat 20% off on all fertilizers</span>
   </div>
 
   </div><!-- /top-theme -->
@@ -427,12 +461,23 @@
     if(input) type();
 
     // Compact categories on scroll
-    let lastY = 0;
     window.addEventListener('scroll', () => {
       const y = window.scrollY;
       if (y > 40) document.body.classList.add('scrolled');
       else document.body.classList.remove('scrolled');
-      lastY = y;
+    });
+
+    // 3 themes · tap Deliver-to to switch
+    const themeRoot = document.getElementById('themeRoot');
+    const addressBtn = document.getElementById('addressBtn');
+    const themes = ['green', 'rain', 'festival'];
+    let themeIdx = 0;
+    addressBtn.addEventListener('click', () => {
+      themeIdx = (themeIdx + 1) % themes.length;
+      themeRoot.setAttribute('data-theme', themes[themeIdx]);
+      themeRoot.classList.remove('bloom');
+      void themeRoot.offsetWidth; // restart animation
+      themeRoot.classList.add('bloom');
     });
   </script>
 </body>

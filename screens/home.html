@@ -91,8 +91,10 @@
     transition: width .25s, height .25s, border-width .25s;
   }
   .cat-emoji { font-size: 34px; line-height: 1; transition: font-size .25s; }
+  .cat-svg { width: 36px; height: 36px; transition: width .25s, height .25s; display: block; }
   .cat-label { transition: font-size .25s; }
   body.scrolled .cat-emoji { font-size: 24px; }
+  body.scrolled .cat-svg { width: 26px; height: 26px; }
   /* Compact state — shrinks circle + tile width together so gap looks consistent */
   body.scrolled .cat-tile  { width: 58px !important; }
   body.scrolled .cat-circle { width: 50px; height: 50px; border-width: 1px; }
@@ -196,7 +198,17 @@
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Pesticide</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><span class="cat-emoji">🍂</span></div>
+        <div class="cat-circle">
+          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="fungus on leaf">
+            <path d="M18 3 C8 6 4 16 6 26 C7 30 11 33 18 33 C25 33 29 30 30 26 C32 16 28 6 18 3 Z" fill="#22C55E"/>
+            <line x1="18" y1="5" x2="18" y2="32" stroke="#15803D" stroke-width="1.2" stroke-linecap="round"/>
+            <circle cx="12" cy="14" r="2"   fill="#7C2D12"/>
+            <circle cx="24" cy="12" r="1.6" fill="#78350F"/>
+            <circle cx="13" cy="24" r="2.2" fill="#7C2D12"/>
+            <circle cx="24" cy="23" r="1.8" fill="#78350F"/>
+            <circle cx="19" cy="18" r="1.4" fill="#92400E"/>
+          </svg>
+        </div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Fungicide</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
@@ -204,7 +216,15 @@
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Fertilizer</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
-        <div class="cat-circle"><span class="cat-emoji">🌱</span></div>
+        <div class="cat-circle">
+          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" stroke="#16A34A" stroke-width="2.4" stroke-linecap="round" aria-label="grass / weeds">
+            <path d="M7 32 Q5 22 9 8"/>
+            <path d="M13 32 Q11 20 15 6"/>
+            <path d="M18 32 L18 5"/>
+            <path d="M23 32 Q25 20 21 8"/>
+            <path d="M29 32 Q31 22 27 10"/>
+          </svg>
+        </div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Herbicide</span>
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">

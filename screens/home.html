@@ -28,14 +28,14 @@
   .top-theme[data-theme="rain"] {
     background: linear-gradient(180deg,#DBEAFE 0%,#EFF6FF 40%,#FFFFFF 95%);
   }
-  /* Festival: multi-color soft top band (pink/amber/purple/green clouds) + cream base */
+  /* Festival (Christmas): red/green/gold soft top band + cool snowy base */
   .top-theme[data-theme="festival"] {
     background:
-      radial-gradient(ellipse 180px 90px at 10% 5%, rgba(236,72,153,.45), transparent 70%),
-      radial-gradient(ellipse 180px 80px at 35% 8%, rgba(251,191,36,.40), transparent 70%),
-      radial-gradient(ellipse 180px 90px at 60% 4%, rgba(168,85,247,.42), transparent 70%),
-      radial-gradient(ellipse 180px 80px at 88% 8%, rgba(16,185,129,.40), transparent 70%),
-      linear-gradient(180deg,#FFFBEB 0%,#FFFDF6 55%,#FFFFFF 100%);
+      radial-gradient(ellipse 180px 90px at 10% 5%, rgba(220,38,38,.40), transparent 70%),
+      radial-gradient(ellipse 180px 80px at 35% 8%, rgba(21,128,61,.38), transparent 70%),
+      radial-gradient(ellipse 180px 90px at 60% 4%, rgba(251,191,36,.40), transparent 70%),
+      radial-gradient(ellipse 180px 80px at 88% 8%, rgba(220,38,38,.36), transparent 70%),
+      linear-gradient(180deg,#F0FDF4 0%,#F8FAFC 55%,#FFFFFF 100%);
   }
   /* Brief bloom on load + on theme change */
   .top-theme.bloom { animation: bloom 1s ease-out; }
@@ -50,31 +50,26 @@
     background: linear-gradient(90deg, rgba(59,130,246,.16) 0%, rgba(96,165,250,.10) 60%, rgba(147,197,253,.08) 100%);
   }
   .top-theme[data-theme="festival"] .festival-banner {
-    display: flex; color: #831843; border-color: #FBCFE8;
-    background: linear-gradient(90deg, rgba(236,72,153,.18) 0%, rgba(251,191,36,.16) 35%, rgba(168,85,247,.14) 65%, rgba(16,185,129,.14) 100%);
+    display: flex; color: #7F1D1D; border-color: #FECACA;
+    background: linear-gradient(90deg, rgba(220,38,38,.18) 0%, rgba(251,191,36,.16) 45%, rgba(21,128,61,.18) 100%);
   }
   /* Rain drops animation */
   @keyframes rainfall { 0% { transform: translateY(-30px); opacity: 0; } 30% { opacity: .55; } 100% { transform: translateY(90px); opacity: 0; } }
   .rain-drop { position: absolute; width: 1.5px; height: 12px; background: linear-gradient(180deg,transparent,#3B82F6); border-radius: 1px; animation: rainfall 1.4s linear infinite; pointer-events: none; }
   .top-theme:not([data-theme="rain"]) .rain-drop { display: none; }
-  /* Holi color burst — firework-style: 8 colored rays radiating from a center point */
-  .holi-burst {
-    position: absolute; width: 56px; height: 56px;
-    pointer-events: none; transform: translate(-50%,-50%);
+  /* Christmas snowfall — soft falling snowflakes (only visible on festival theme) */
+  @keyframes snowfall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+    20%  { opacity: .9; }
+    100% { transform: translateY(140px) rotate(220deg); opacity: 0; }
   }
-  .top-theme:not([data-theme="festival"]) .holi-burst { display: none; }
-  .holi-burst span {
-    position: absolute; top: 50%; left: 50%;
-    width: 3px; height: 22px; border-radius: 2px;
-    transform-origin: center 0;
-    animation: burstRay .9s cubic-bezier(.34,1.4,.64,1) forwards;
-    box-shadow: 0 0 6px currentColor;
+  .snow-flake {
+    position: absolute; top: 0; color: #FFFFFF; font-size: 14px;
+    text-shadow: 0 1px 4px rgba(15,23,42,.25), 0 0 8px rgba(255,255,255,.7);
+    animation: snowfall 3.4s linear infinite;
+    pointer-events: none; user-select: none;
   }
-  @keyframes burstRay {
-    0%   { transform: translate(-50%,0) rotate(var(--a,0deg)) scaleY(0); opacity: 0; }
-    50%  { transform: translate(-50%,0) rotate(var(--a,0deg)) scaleY(1.3); opacity: 1; }
-    100% { transform: translate(-50%,0) rotate(var(--a,0deg)) scaleY(1); opacity: .9; }
-  }
+  .top-theme:not([data-theme="festival"]) .snow-flake { display: none; }
 
   /* Status bar sticky at top · address/coin scroll away · search+categories sticky below */
   .sticky-status { position: sticky; top: 0; z-index: 70; }
@@ -118,37 +113,19 @@
   <div class="rain-drop" style="left:71%;animation-delay:.45s"></div>
   <div class="rain-drop" style="left:88%;animation-delay:.75s"></div>
 
-  <!-- Holi color bursts — firework-style explosions from 3 strategic spots -->
-  <div class="holi-burst" style="left:18%;top:50px">
-    <span style="--a:0deg;background:#EC4899;color:#EC4899;animation-delay:0s"></span>
-    <span style="--a:45deg;background:#FBBF24;color:#FBBF24;animation-delay:.05s"></span>
-    <span style="--a:90deg;background:#A855F7;color:#A855F7;animation-delay:.1s"></span>
-    <span style="--a:135deg;background:#10B981;color:#10B981;animation-delay:.15s"></span>
-    <span style="--a:180deg;background:#F97316;color:#F97316;animation-delay:.2s"></span>
-    <span style="--a:225deg;background:#3B82F6;color:#3B82F6;animation-delay:.25s"></span>
-    <span style="--a:270deg;background:#EC4899;color:#EC4899;animation-delay:.3s"></span>
-    <span style="--a:315deg;background:#FBBF24;color:#FBBF24;animation-delay:.35s"></span>
-  </div>
-  <div class="holi-burst" style="left:52%;top:34px">
-    <span style="--a:0deg;background:#A855F7;color:#A855F7;animation-delay:.2s"></span>
-    <span style="--a:45deg;background:#10B981;color:#10B981;animation-delay:.25s"></span>
-    <span style="--a:90deg;background:#F97316;color:#F97316;animation-delay:.3s"></span>
-    <span style="--a:135deg;background:#3B82F6;color:#3B82F6;animation-delay:.35s"></span>
-    <span style="--a:180deg;background:#EC4899;color:#EC4899;animation-delay:.4s"></span>
-    <span style="--a:225deg;background:#FBBF24;color:#FBBF24;animation-delay:.45s"></span>
-    <span style="--a:270deg;background:#A855F7;color:#A855F7;animation-delay:.5s"></span>
-    <span style="--a:315deg;background:#10B981;color:#10B981;animation-delay:.55s"></span>
-  </div>
-  <div class="holi-burst" style="left:84%;top:72px">
-    <span style="--a:0deg;background:#FBBF24;color:#FBBF24;animation-delay:.4s"></span>
-    <span style="--a:45deg;background:#EC4899;color:#EC4899;animation-delay:.45s"></span>
-    <span style="--a:90deg;background:#3B82F6;color:#3B82F6;animation-delay:.5s"></span>
-    <span style="--a:135deg;background:#A855F7;color:#A855F7;animation-delay:.55s"></span>
-    <span style="--a:180deg;background:#FBBF24;color:#FBBF24;animation-delay:.6s"></span>
-    <span style="--a:225deg;background:#10B981;color:#10B981;animation-delay:.65s"></span>
-    <span style="--a:270deg;background:#F97316;color:#F97316;animation-delay:.7s"></span>
-    <span style="--a:315deg;background:#EC4899;color:#EC4899;animation-delay:.75s"></span>
-  </div>
+  <!-- Christmas snowfall — only visible on festival theme -->
+  <span class="snow-flake" style="left:6%;animation-delay:0s;font-size:13px">❄</span>
+  <span class="snow-flake" style="left:14%;animation-delay:.6s;font-size:11px">❄</span>
+  <span class="snow-flake" style="left:22%;animation-delay:1.2s;font-size:15px">❅</span>
+  <span class="snow-flake" style="left:30%;animation-delay:.3s;font-size:12px">❄</span>
+  <span class="snow-flake" style="left:38%;animation-delay:1.8s;font-size:14px">❅</span>
+  <span class="snow-flake" style="left:46%;animation-delay:.9s;font-size:11px">❄</span>
+  <span class="snow-flake" style="left:54%;animation-delay:1.5s;font-size:13px">❅</span>
+  <span class="snow-flake" style="left:62%;animation-delay:.2s;font-size:12px">❄</span>
+  <span class="snow-flake" style="left:70%;animation-delay:1.1s;font-size:15px">❅</span>
+  <span class="snow-flake" style="left:78%;animation-delay:.7s;font-size:12px">❄</span>
+  <span class="snow-flake" style="left:86%;animation-delay:1.7s;font-size:14px">❅</span>
+  <span class="snow-flake" style="left:94%;animation-delay:.4s;font-size:11px">❄</span>
 
   <!-- Status bar (sticky) -->
   <div class="sticky-status flex items-center justify-between px-4 pt-3 pb-2 text-[12px] font-semibold text-[#0F172A]">
@@ -190,9 +167,9 @@
     <i class="fa-solid fa-chevron-right text-blue-700 text-[11px]"></i>
   </a>
   <a href="shop.html" class="theme-banner festival-banner nu">
-    <span class="text-[15px]">🎊</span>
-    <span class="flex-1"><strong>Happy Holi!</strong> 20% off + free gulal on ₹999+</span>
-    <i class="fa-solid fa-chevron-right text-pink-700 text-[11px]"></i>
+    <span class="text-[15px]">🎄</span>
+    <span class="flex-1"><strong>Merry Christmas!</strong> 20% off + free gift on ₹999+</span>
+    <i class="fa-solid fa-chevron-right text-red-700 text-[11px]"></i>
   </a>
 
   </div><!-- /top-theme -->

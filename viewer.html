@@ -77,6 +77,9 @@
     display: block;
     background: #fff;
   }
+  /* Hide scrollbars inside the phone preview while keeping scroll functional */
+  iframe { scrollbar-width: none; -ms-overflow-style: none; }
+  iframe::-webkit-scrollbar { display: none; width: 0; height: 0; }
   @media (max-width: 480px) {
     body { height: 100vh; height: 100dvh; }
     .topbar { padding: 8px 14px; flex-shrink: 0; }
@@ -117,7 +120,7 @@
 
   <div class="stage">
     <div class="phone">
-      <iframe id="frame" src=""></iframe>
+      <iframe id="frame" src="" onload="hideInnerScrollbars(this)"></iframe>
     </div>
   </div>
 
@@ -160,6 +163,16 @@
     }
     function reload() {
       document.getElementById('frame').src = document.getElementById('frame').src;
+    }
+    // Inject scrollbar-hiding CSS into each loaded screen (same-origin iframes)
+    function hideInnerScrollbars(frame) {
+      try {
+        const doc = frame.contentDocument;
+        if (!doc) return;
+        const style = doc.createElement('style');
+        style.textContent = 'html,body{scrollbar-width:none!important;-ms-overflow-style:none!important}html::-webkit-scrollbar,body::-webkit-scrollbar,*::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}';
+        doc.head.appendChild(style);
+      } catch (e) { /* cross-origin — ignore */ }
     }
     // Keyboard shortcuts
     window.addEventListener('keydown', (e) => {

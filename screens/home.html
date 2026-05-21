@@ -43,8 +43,12 @@
     0%   { filter: saturate(1.4) brightness(1.03); }
     100% { filter: saturate(1) brightness(1); }
   }
-  /* Status banner carousel — hide scrollbar (slides snap, dots indicate, swipeable + auto-cycle) */
-  #statusScroll::-webkit-scrollbar { display: none; }
+  /* Top status banner — always visible inside top-theme, JS swaps content + style classes */
+  .theme-banner { display: flex; align-items: center; gap: 8px; padding: 9px 16px; font-size: 12.5px; font-weight: 600; border-top: 1px solid; }
+  #topStatusBanner               { border-color: #BFDBFE; }
+  #topStatusBanner.style-rain    { background: linear-gradient(90deg, rgba(59,130,246,.16) 0%, rgba(96,165,250,.10) 60%, rgba(147,197,253,.08) 100%); }
+  #topStatusBanner.style-festival{ background: linear-gradient(90deg, rgba(220,38,38,.18) 0%, rgba(251,191,36,.16) 45%, rgba(21,128,61,.18) 100%); border-color: #FECACA; }
+  #topStatusBanner.style-order   { background: linear-gradient(90deg, rgba(16,185,129,.18) 0%, rgba(110,231,183,.14) 60%, rgba(167,243,208,.10) 100%); border-color: #BBF7D0; }
   .top-theme[data-theme="festival"] .festival-banner {
     display: flex; color: #7F1D1D; border-color: #FECACA;
     background: linear-gradient(90deg, rgba(220,38,38,.18) 0%, rgba(251,191,36,.16) 45%, rgba(21,128,61,.18) 100%);
@@ -67,17 +71,25 @@
   }
   .top-theme:not([data-theme="festival"]) .snow-flake { display: none; }
 
-  /* Ask Expert floating action button — sits above bottom nav, lifts above cart when cart visible */
+  /* Ask Expert FAB — default = extended pill with photo + text; on scroll = compact circle */
   .expert-fab {
-    position: fixed; right: 14px; bottom: 84px; z-index: 46;
-    width: 58px; height: 58px; border-radius: 999px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+    position: fixed; right: 12px; bottom: 84px; z-index: 46;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 14px 5px 5px;
+    border-radius: 999px;
     background: linear-gradient(145deg,#10B981,#065F46);
-    text-decoration: none;
+    text-decoration: none; color: #FFFFFF;
     animation: expertFabPulse 2.8s ease-in-out infinite;
-    transition: bottom .3s ease;
+    transition: bottom .3s ease, padding .3s ease, max-width .3s ease;
+    overflow: hidden;
+    max-width: 200px;
   }
+  .expert-fab .expert-photo { width: 40px; height: 40px; border-radius: 999px; object-fit: cover; border: 2px solid #FFFFFF; flex-shrink: 0; }
+  .expert-fab .expert-text  { display: flex; flex-direction: column; line-height: 1.1; transition: opacity .25s ease, width .25s ease; }
   .expert-fab.lifted { bottom: 156px; }
+  .expert-fab.compact { padding: 4px; max-width: 50px; }
+  .expert-fab.compact .expert-text { opacity: 0; width: 0; pointer-events: none; }
+  .expert-fab.compact .expert-photo { width: 42px; height: 42px; }
   @keyframes expertFabPulse {
     0%, 100% { box-shadow: 0 6px 18px -4px rgba(16,185,129,.65), 0 0 0 2px rgba(16,185,129,.2), inset 0 1px 0 rgba(255,255,255,.18); }
     50%      { box-shadow: 0 6px 22px -2px rgba(16,185,129,.8),  0 0 0 7px rgba(16,185,129,.1), inset 0 1px 0 rgba(255,255,255,.18); }
@@ -89,8 +101,10 @@
     50%      { transform: scale(1.15) rotate(3deg); opacity: 0.85; }
   }
 
-  /* Status bar sticky at top · address/coin scroll away · search+categories sticky below */
-  .sticky-status { position: sticky; top: 0; z-index: 70; }
+  /* Status bar sticky at top — frosted glass bg so page content doesn't show through */
+  .sticky-status { position: sticky; top: 0; z-index: 70; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  .top-theme[data-theme="rain"]     .sticky-status { background: rgba(219,234,254,0.85); }
+  .top-theme[data-theme="festival"] .sticky-status { background: rgba(255,247,237,0.85); }
   .sticky-actions { position: sticky; top: 32px; z-index: 60; background: #FFFFFF; }
   .sticky-search { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s; }
   .sticky-cats { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s; }
@@ -184,12 +198,19 @@
       </div>
     </button>
     <div class="flex items-center gap-2 flex-shrink-0">
-      <div class="flex items-center gap-1.5 h-10 px-3 rounded-full bg-amber-50 border border-amber-100">
-        <i class="fa-solid fa-coins text-amber-500 text-[13px]"></i>
-        <span class="text-[13.5px] font-bold text-amber-700 tnum">220</span>
+      <div class="flex items-center gap-1.5 h-10 px-3 rounded-full" style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgba(15,23,42,0.04)">
+        <i class="fa-solid fa-coins text-[13px]" style="color:#F59E0B"></i>
+        <span class="text-[13.5px] font-bold tnum" style="color:#0F172A">220</span>
       </div>
     </div>
   </div>
+
+  <!-- Top status banner — auto-rotates rain → christmas → order every 4s (in-place text swap) -->
+  <a href="#" id="topStatusBanner" class="theme-banner rain-banner nu" style="flex-wrap:nowrap;transition:opacity .3s ease">
+    <i id="tsbIcon" class="fa-solid fa-cloud-rain text-[14px] flex-shrink-0" style="color:#2563EB"></i>
+    <span id="tsbText" class="flex-1 min-w-0 text-[12.5px] font-semibold leading-snug" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#1E40AF"><strong>Rain expected</strong> · 8 mm in 24 hrs · Hold spray for today</span>
+    <i id="tsbChev" class="fa-solid fa-chevron-right text-[11px] flex-shrink-0" style="color:#1D4ED8"></i>
+  </a>
 
   </div><!-- /top-theme -->
 
@@ -316,152 +337,151 @@
 
   <main>
 
-    <!-- Bestsellers (moved up — first section under categories) -->
+    <!-- Bestsellers — social-proof header (avatar pile + live counter + bold title) -->
     <section class="px-4 pt-5">
       <div class="flex items-end justify-between mb-4">
-        <div>
-          <h2 class="text-[22px] font-extrabold tracking-tight text-[#0F172A] leading-tight inline-flex items-center gap-2">
-            <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg" style="background:#FEF3C7"><i class="fa-solid fa-crown text-[14px]" style="color:#92400E"></i></span>
-            Bestsellers
+        <div class="min-w-0">
+          <!-- Top row: avatar pile + counter -->
+          <div class="flex items-center gap-2 mb-1.5">
+            <div class="flex" style="margin-right:-4px">
+              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[12px] leading-none" style="background:#FED7AA;border:2px solid #FFFFFF">🧑🏽‍🌾</div>
+              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[12px] leading-none" style="background:#A7F3D0;border:2px solid #FFFFFF;margin-left:-8px">👨🏽‍🌾</div>
+              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[12px] leading-none" style="background:#FDE68A;border:2px solid #FFFFFF;margin-left:-8px">👩🏽‍🌾</div>
+            </div>
+            <span class="text-[11.5px] font-semibold text-[#64748B]"><strong style="color:#047857">2,840 farmers</strong> picked these this week</span>
+          </div>
+          <!-- Title with red underline accent -->
+          <h2 class="text-[22px] font-extrabold tracking-tight text-[#0F172A] leading-tight inline-block relative">
+            What farmers are buying
+            <span class="absolute left-0 -bottom-0.5 w-12 h-1 rounded-full" style="background:#F59E0B"></span>
           </h2>
-          <p class="text-[12px] text-[#64748B] mt-1">Top picks farmers love · trusted by 142K+</p>
         </div>
-        <a href="shop.html" class="nu text-[13px] font-bold flex-shrink-0" style="color:#059669">See all →</a>
+        <a href="shop.html" class="nu text-[13px] font-bold flex-shrink-0 mb-0.5" style="color:#059669">See all →</a>
       </div>
       <div class="grid grid-cols-2 gap-3">
 
         <a href="pdp.html" class="nu rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB">
-          <!-- Header row: badge LEFT + rating RIGHT (above image, no overlap) -->
-          <div class="flex items-center justify-between px-3 pt-3">
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-extrabold tracking-wider" style="background:#FEF3C7;color:#92400E">
-              <i class="fa-solid fa-crown text-[8.5px]"></i>BESTSELLER
-            </span>
-            <span class="inline-flex items-center gap-0.5 text-[12.5px] font-bold" style="color:#475569">
-              <i class="fa-solid fa-star text-[10px]" style="color:#F59E0B"></i>4.7
-            </span>
-          </div>
-          <!-- Clean image area (no overlays) -->
-          <div class="aspect-square flex items-center justify-center p-4 mt-2" style="background:#F8FAFC">
+          <!-- Compact image area with badges sitting on the grey shade (top corners, out of product center) -->
+          <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:140px">
             <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/>
+            <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FEF3C7;color:#92400E">
+              <i class="fa-solid fa-crown text-[7.5px]"></i>BESTSELLER
+            </span>
+            <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-bold shadow-sm" style="background:#FFFFFF;color:#475569">
+              <i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>4.7
+            </span>
           </div>
-          <!-- Info block -->
-          <div class="p-3">
+          <div class="p-2.5">
             <div class="leading-tight">
-              <div class="text-[15px] font-bold text-[#0F172A] truncate">Humic + Fulvic 98</div>
-              <div class="text-[11.5px] mt-0.5 truncate" style="color:#94A3B8">Humic 12% + Fulvic 8%</div>
+              <div class="text-[14.5px] font-bold text-[#0F172A] truncate">Humic + Fulvic 98</div>
+              <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Humic 12% + Fulvic 8%</div>
             </div>
-            <div class="text-[11.5px] text-[#64748B] mt-1.5">1L · Bio-stimulant</div>
-            <div class="flex items-baseline gap-1.5 mt-2 flex-wrap">
-              <span class="text-[20px] font-extrabold tnum text-[#0F172A]">₹376</span>
-              <span class="text-[12px] text-[#94A3B8] line-through tnum">₹520</span>
-              <span class="text-[11px] font-extrabold" style="color:#047857">28% off</span>
+            <div class="text-[10.5px] text-[#64748B] mt-1">1L · Bio-stimulant</div>
+            <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
+              <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹376</span>
+              <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹520</span>
+              <span class="text-[10.5px] font-extrabold" style="color:#047857">28% off</span>
             </div>
-            <div class="mt-2.5 qty-wrap">
-              <button class="qty-add w-full h-9 rounded-lg text-white text-[13.5px] font-semibold" style="background:#059669">Add</button>
-              <div class="qty-steps w-full h-9 rounded-lg text-white items-center justify-between px-1" style="background:#059669;display:none">
-                <button class="qty-dec w-9 h-9 flex items-center justify-center text-[20px] font-bold">−</button>
-                <span class="qty-val text-[15px] font-bold tnum">1</span>
-                <button class="qty-inc w-9 h-9 flex items-center justify-center text-[20px] font-bold">+</button>
+            <div class="mt-2 qty-wrap">
+              <button class="qty-add w-full h-8 rounded-lg text-white text-[12.5px] font-semibold" style="background:#059669">Add</button>
+              <div class="qty-steps w-full h-8 rounded-lg text-white items-center justify-between px-1" style="background:#059669;display:none">
+                <button class="qty-dec w-8 h-8 flex items-center justify-center text-[18px] font-bold">−</button>
+                <span class="qty-val text-[14px] font-bold tnum">1</span>
+                <button class="qty-inc w-8 h-8 flex items-center justify-center text-[18px] font-bold">+</button>
               </div>
             </div>
           </div>
         </a>
 
         <a href="pdp.html" class="nu rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB">
-          <div class="flex items-center justify-between px-3 pt-3">
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-extrabold tracking-wider" style="background:#FEF3C7;color:#92400E">
-              <i class="fa-solid fa-crown text-[8.5px]"></i>BESTSELLER
-            </span>
-            <span class="inline-flex items-center gap-0.5 text-[12.5px] font-bold" style="color:#475569">
-              <i class="fa-solid fa-star text-[10px]" style="color:#F59E0B"></i>4.8
-            </span>
-          </div>
-          <div class="aspect-square flex items-center justify-center p-4 mt-2" style="background:#F8FAFC">
+          <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:140px">
             <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full object-contain"/>
+            <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FEF3C7;color:#92400E">
+              <i class="fa-solid fa-crown text-[7.5px]"></i>BESTSELLER
+            </span>
+            <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-bold shadow-sm" style="background:#FFFFFF;color:#475569">
+              <i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>4.8
+            </span>
           </div>
-          <div class="p-3">
+          <div class="p-2.5">
             <div class="leading-tight">
-              <div class="text-[15px] font-bold text-[#0F172A] truncate">Chakrawarti ZC</div>
-              <div class="text-[11.5px] mt-0.5 truncate" style="color:#94A3B8">Chloran. + Lambda-Cy. ZC</div>
+              <div class="text-[14.5px] font-bold text-[#0F172A] truncate">Chakrawarti ZC</div>
+              <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Chloran. + Lambda-Cy. ZC</div>
             </div>
-            <div class="text-[11.5px] text-[#64748B] mt-1.5">100ml · Insecticide</div>
-            <div class="flex items-baseline gap-1.5 mt-2 flex-wrap">
-              <span class="text-[20px] font-extrabold tnum text-[#0F172A]">₹358</span>
-              <span class="text-[12px] text-[#94A3B8] line-through tnum">₹495</span>
-              <span class="text-[11px] font-extrabold" style="color:#047857">28% off</span>
+            <div class="text-[10.5px] text-[#64748B] mt-1">100ml · Insecticide</div>
+            <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
+              <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹358</span>
+              <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹495</span>
+              <span class="text-[10.5px] font-extrabold" style="color:#047857">28% off</span>
             </div>
-            <div class="mt-2.5 qty-wrap">
-              <button class="qty-add w-full h-9 rounded-lg text-white text-[13.5px] font-semibold" style="background:#059669">Add</button>
-              <div class="qty-steps w-full h-9 rounded-lg text-white items-center justify-between px-1" style="background:#059669;display:none">
-                <button class="qty-dec w-9 h-9 flex items-center justify-center text-[20px] font-bold">−</button>
-                <span class="qty-val text-[15px] font-bold tnum">1</span>
-                <button class="qty-inc w-9 h-9 flex items-center justify-center text-[20px] font-bold">+</button>
+            <div class="mt-2 qty-wrap">
+              <button class="qty-add w-full h-8 rounded-lg text-white text-[12.5px] font-semibold" style="background:#059669">Add</button>
+              <div class="qty-steps w-full h-8 rounded-lg text-white items-center justify-between px-1" style="background:#059669;display:none">
+                <button class="qty-dec w-8 h-8 flex items-center justify-center text-[18px] font-bold">−</button>
+                <span class="qty-val text-[14px] font-bold tnum">1</span>
+                <button class="qty-inc w-8 h-8 flex items-center justify-center text-[18px] font-bold">+</button>
               </div>
             </div>
           </div>
         </a>
 
         <a href="pdp.html" class="nu rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB">
-          <div class="flex items-center justify-between px-3 pt-3">
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-extrabold tracking-wider" style="background:#DBEAFE;color:#1E40AF">
-              <i class="fa-solid fa-bolt text-[8.5px]"></i>TOP PICK
-            </span>
-            <span class="inline-flex items-center gap-0.5 text-[12.5px] font-bold" style="color:#475569">
-              <i class="fa-solid fa-star text-[10px]" style="color:#F59E0B"></i>4.5
-            </span>
-          </div>
-          <div class="aspect-square flex items-center justify-center p-4 mt-2" style="background:#F8FAFC">
+          <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:140px">
             <img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" class="img-blend max-h-full object-contain"/>
+            <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#DBEAFE;color:#1E40AF">
+              <i class="fa-solid fa-bolt text-[7.5px]"></i>TOP PICK
+            </span>
+            <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-bold shadow-sm" style="background:#FFFFFF;color:#475569">
+              <i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>4.5
+            </span>
           </div>
-          <div class="p-3">
+          <div class="p-2.5">
             <div class="leading-tight">
-              <div class="text-[15px] font-bold text-[#0F172A] truncate">Chakraveer 18.5%</div>
-              <div class="text-[11.5px] mt-0.5 truncate" style="color:#94A3B8">Chlorantraniliprole 18.5% SC</div>
+              <div class="text-[14.5px] font-bold text-[#0F172A] truncate">Chakraveer 18.5%</div>
+              <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Chlorantraniliprole 18.5% SC</div>
             </div>
-            <div class="text-[11.5px] text-[#64748B] mt-1.5">100ml · Insecticide</div>
-            <div class="flex items-baseline gap-1.5 mt-2 flex-wrap">
-              <span class="text-[20px] font-extrabold tnum text-[#0F172A]">₹440</span>
-              <span class="text-[12px] text-[#94A3B8] line-through tnum">₹610</span>
-              <span class="text-[11px] font-extrabold" style="color:#047857">28% off</span>
+            <div class="text-[10.5px] text-[#64748B] mt-1">100ml · Insecticide</div>
+            <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
+              <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹440</span>
+              <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹610</span>
+              <span class="text-[10.5px] font-extrabold" style="color:#047857">28% off</span>
             </div>
-            <div class="mt-2.5 qty-wrap">
-              <button class="qty-add w-full h-9 rounded-lg text-white text-[13.5px] font-semibold" style="background:#059669">Add</button>
-              <div class="qty-steps w-full h-9 rounded-lg text-white items-center justify-between px-1" style="background:#059669;display:none">
-                <button class="qty-dec w-9 h-9 flex items-center justify-center text-[20px] font-bold">−</button>
-                <span class="qty-val text-[15px] font-bold tnum">1</span>
-                <button class="qty-inc w-9 h-9 flex items-center justify-center text-[20px] font-bold">+</button>
+            <div class="mt-2 qty-wrap">
+              <button class="qty-add w-full h-8 rounded-lg text-white text-[12.5px] font-semibold" style="background:#059669">Add</button>
+              <div class="qty-steps w-full h-8 rounded-lg text-white items-center justify-between px-1" style="background:#059669;display:none">
+                <button class="qty-dec w-8 h-8 flex items-center justify-center text-[18px] font-bold">−</button>
+                <span class="qty-val text-[14px] font-bold tnum">1</span>
+                <button class="qty-inc w-8 h-8 flex items-center justify-center text-[18px] font-bold">+</button>
               </div>
             </div>
           </div>
         </a>
 
         <a href="pdp.html" class="nu rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB">
-          <div class="flex items-center justify-between px-3 pt-3">
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-extrabold tracking-wider" style="background:#FCE7F3;color:#9D174D">
-              <i class="fa-solid fa-sparkles text-[8.5px]"></i>NEW
-            </span>
-            <span class="inline-flex items-center gap-0.5 text-[12.5px] font-bold" style="color:#475569">
-              <i class="fa-solid fa-star text-[10px]" style="color:#F59E0B"></i>4.9
-            </span>
-          </div>
-          <div class="aspect-square flex items-center justify-center p-4 mt-2" style="background:#F8FAFC">
+          <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:140px">
             <img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" class="img-blend max-h-full object-contain"/>
+            <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FCE7F3;color:#9D174D">
+              <i class="fa-solid fa-sparkles text-[7.5px]"></i>NEW
+            </span>
+            <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-bold shadow-sm" style="background:#FFFFFF;color:#475569">
+              <i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>4.9
+            </span>
           </div>
-          <div class="p-3">
+          <div class="p-2.5">
             <div class="leading-tight">
-              <div class="text-[15px] font-bold text-[#0F172A] truncate">Antivirus</div>
-              <div class="text-[11.5px] mt-0.5 truncate" style="color:#94A3B8">Anti-viral biostimulant</div>
+              <div class="text-[14.5px] font-bold text-[#0F172A] truncate">Antivirus</div>
+              <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Anti-viral biostimulant</div>
             </div>
-            <div class="text-[11.5px] text-[#64748B] mt-1.5">100ml · Viricide</div>
-            <div class="flex items-baseline gap-1.5 mt-2">
-              <span class="text-[20px] font-extrabold tnum text-[#0F172A]">₹327</span>
+            <div class="text-[10.5px] text-[#64748B] mt-1">100ml · Viricide</div>
+            <div class="flex items-baseline gap-1.5 mt-1.5">
+              <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹327</span>
             </div>
-            <div class="mt-2.5 qty-wrap">
-              <button class="qty-add w-full h-9 rounded-lg text-white text-[13.5px] font-semibold" style="background:#059669">Add</button>
-              <div class="qty-steps w-full h-9 rounded-lg text-white items-center justify-between px-1" style="background:#059669;display:none">
-                <button class="qty-dec w-9 h-9 flex items-center justify-center text-[20px] font-bold">−</button>
-                <span class="qty-val text-[15px] font-bold tnum">1</span>
-                <button class="qty-inc w-9 h-9 flex items-center justify-center text-[20px] font-bold">+</button>
+            <div class="mt-2 qty-wrap">
+              <button class="qty-add w-full h-8 rounded-lg text-white text-[12.5px] font-semibold" style="background:#059669">Add</button>
+              <div class="qty-steps w-full h-8 rounded-lg text-white items-center justify-between px-1" style="background:#059669;display:none">
+                <button class="qty-dec w-8 h-8 flex items-center justify-center text-[18px] font-bold">−</button>
+                <span class="qty-val text-[14px] font-bold tnum">1</span>
+                <button class="qty-inc w-8 h-8 flex items-center justify-center text-[18px] font-bold">+</button>
               </div>
             </div>
           </div>
@@ -470,33 +490,6 @@
       </div>
     </section>
 
-    <!-- Status banner BELOW bestseller — horizontal snap-scroll (auto + manual) through rain / festival / order -->
-    <section class="mt-5">
-      <div id="statusScroll" class="overflow-x-auto" style="scroll-snap-type:x mandatory;scrollbar-width:none">
-        <div class="flex gap-3 px-4">
-          <a href="shop.html?weather=rain" class="status-slide flex-shrink-0 flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl" style="width:calc(100vw - 32px);max-width:358px;scroll-snap-align:start;background:#EFF6FF;border:1px solid #BFDBFE">
-            <i class="fa-solid fa-cloud-rain text-[14px] flex-shrink-0" style="color:#2563EB"></i>
-            <span class="flex-1 min-w-0 text-[12.5px] font-semibold leading-snug" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#1E40AF"><strong>Rain expected</strong> · 8 mm in 24 hrs · Hold spray</span>
-            <i class="fa-solid fa-chevron-right text-[11px] flex-shrink-0" style="color:#1D4ED8"></i>
-          </a>
-          <a href="shop.html" class="status-slide flex-shrink-0 flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl" style="width:calc(100vw - 32px);max-width:358px;scroll-snap-align:start;background:#FEF3C7;border:1px solid #FCD34D">
-            <i class="fa-solid fa-gifts text-[14px] flex-shrink-0" style="color:#DC2626"></i>
-            <span class="flex-1 min-w-0 text-[12.5px] font-semibold leading-snug" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#7F1D1D"><strong>Christmas offer</strong> · 20% off + free gift on ₹999+</span>
-            <i class="fa-solid fa-chevron-right text-[11px] flex-shrink-0" style="color:#B91C1C"></i>
-          </a>
-          <a href="track-order.html" class="status-slide flex-shrink-0 flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl" style="width:calc(100vw - 32px);max-width:358px;scroll-snap-align:start;background:#F0FDF4;border:1px solid #BBF7D0">
-            <i class="fa-solid fa-truck-fast text-[14px] flex-shrink-0" style="color:#059669"></i>
-            <span class="flex-1 min-w-0 text-[12.5px] font-semibold leading-snug" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#065F46"><strong>Arriving Thursday</strong> · #KKD-26194 · 3 items</span>
-            <i class="fa-solid fa-chevron-right text-[11px] flex-shrink-0" style="color:#047857"></i>
-          </a>
-        </div>
-      </div>
-      <div class="flex justify-center gap-1.5 mt-2" id="statusDots">
-        <span class="status-dot rounded-full transition-all" style="background:#059669;width:14px;height:6px"></span>
-        <span class="status-dot rounded-full transition-all" style="background:#CBD5E1;width:6px;height:6px"></span>
-        <span class="status-dot rounded-full transition-all" style="background:#CBD5E1;width:6px;height:6px"></span>
-      </div>
-    </section>
 
     <!-- ⚡ FLASH SALE · violet → magenta → amber gradient · 2×2 product grid -->
     <section class="px-4 mt-6">
@@ -750,117 +743,126 @@
       </div>
     </section>
 
-    <!-- HERO product showcase · FULL-WIDTH SQUARE cards · horizontal snap-scroll, next card peeks -->
+    <!-- HERO editorial product showcase · FULL-BLEED image cards with overlay text · snap-scroll -->
     <section class="mt-6">
       <div class="overflow-x-auto scroll-x hero-square-scroll" style="scroll-snap-type:x mandatory">
         <div class="flex gap-3 px-4 pb-1">
 
           <!-- Square 1 · Chakrawarti (emerald) -->
-          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative shadow-lg" style="width:340px;height:340px;scroll-snap-align:start">
-            <div class="absolute inset-0" style="background:linear-gradient(135deg,#064E3B 0%,#10B981 100%)"></div>
-            <div class="relative h-full flex flex-col">
-              <div class="px-4 pt-4 flex items-start justify-between">
-                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider" style="background:#FBBF24;color:#78350F">⭐ Bestseller</span>
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-3xl overflow-hidden relative shadow-xl" style="width:340px;height:340px;scroll-snap-align:start;background:linear-gradient(160deg,#064E3B 0%,#047857 60%,#10B981 100%)">
+            <!-- Decorative orbs -->
+            <div class="absolute -top-12 -right-12 w-40 h-40 rounded-full" style="background:radial-gradient(circle,rgba(251,191,36,0.25) 0%,transparent 70%)"></div>
+            <div class="absolute -bottom-16 -left-16 w-44 h-44 rounded-full" style="background:radial-gradient(circle,rgba(255,255,255,0.15) 0%,transparent 70%)"></div>
+            <!-- BIG full-bleed product image (centered, multiply blend hides white bg) -->
+            <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="absolute inset-0 m-auto img-blend" style="max-height:62%;max-width:75%;filter:drop-shadow(0 20px 36px rgba(0,0,0,0.45))"/>
+            <!-- Top overlay: badge + rating + title -->
+            <div class="absolute top-0 left-0 right-0 p-4 text-white">
+              <div class="flex items-start justify-between">
+                <span class="px-2.5 py-1 rounded-full text-[10.5px] font-extrabold uppercase tracking-wider" style="background:#FBBF24;color:#78350F">⭐ Bestseller</span>
                 <span class="inline-flex items-center gap-0.5 px-2 py-1 rounded-md text-[11px] font-bold shadow-sm" style="background:rgba(255,255,255,0.95);color:#475569"><i class="fa-solid fa-star text-[9px]" style="color:#F59E0B"></i>4.8</span>
               </div>
-              <div class="flex-1 flex items-center justify-center p-4">
-                <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="max-h-[150px] max-w-full object-contain" style="filter:drop-shadow(0 12px 24px rgba(0,0,0,0.4))"/>
+              <div class="mt-3">
+                <div class="text-[24px] font-extrabold leading-tight">Chakrawarti ZC</div>
+                <div class="text-[11.5px] mt-0.5" style="color:rgba(255,255,255,0.85)">Chloran. + Lambda-Cy. ZC</div>
               </div>
-              <div class="bg-white p-4">
-                <div class="leading-tight">
-                  <div class="text-[16px] font-bold text-[#0F172A]">Chakrawarti ZC</div>
-                  <div class="text-[11.5px] mt-0.5" style="color:#94A3B8">Chloran. + Lambda-Cy. ZC</div>
-                </div>
-                <div class="flex items-center justify-between mt-2">
-                  <div class="flex items-baseline gap-1.5 flex-wrap">
-                    <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹358</span>
-                    <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹495</span>
-                    <span class="text-[11px] font-extrabold" style="color:#047857">28% off</span>
+            </div>
+            <!-- Bottom overlay: price + add (with dark gradient for readability) -->
+            <div class="absolute bottom-0 left-0 right-0 p-4 text-white" style="background:linear-gradient(0deg,rgba(0,0,0,0.5) 0%,rgba(0,0,0,0) 100%)">
+              <div class="flex items-end justify-between">
+                <div>
+                  <div class="flex items-baseline gap-1.5">
+                    <span class="text-[26px] font-extrabold tnum">₹358</span>
+                    <span class="text-[13px] line-through" style="color:rgba(255,255,255,0.7)">₹495</span>
                   </div>
-                  <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-white text-[12px] font-extrabold" style="background:#059669">Add <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
+                  <div class="text-[11px] font-bold mt-0.5" style="color:#FBBF24">SAVE ₹137 · 28% off</div>
                 </div>
+                <button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] font-extrabold" style="background:#FFFFFF;color:#064E3B;box-shadow:0 6px 16px rgba(0,0,0,0.2)">Add <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
               </div>
             </div>
           </a>
 
           <!-- Square 2 · Antivirus (indigo/purple) -->
-          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative shadow-lg" style="width:340px;height:340px;scroll-snap-align:start">
-            <div class="absolute inset-0" style="background:linear-gradient(135deg,#312E81 0%,#7C3AED 100%)"></div>
-            <div class="relative h-full flex flex-col">
-              <div class="px-4 pt-4 flex items-start justify-between">
-                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider" style="background:#FCE7F3;color:#9D174D">✨ New</span>
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-3xl overflow-hidden relative shadow-xl" style="width:340px;height:340px;scroll-snap-align:start;background:linear-gradient(160deg,#1E1B4B 0%,#4338CA 55%,#7C3AED 100%)">
+            <div class="absolute -top-12 -right-12 w-40 h-40 rounded-full" style="background:radial-gradient(circle,rgba(251,191,36,0.2) 0%,transparent 70%)"></div>
+            <div class="absolute -bottom-16 -left-16 w-44 h-44 rounded-full" style="background:radial-gradient(circle,rgba(255,255,255,0.12) 0%,transparent 70%)"></div>
+            <img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" class="absolute inset-0 m-auto img-blend" style="max-height:62%;max-width:75%;filter:drop-shadow(0 20px 36px rgba(0,0,0,0.45))"/>
+            <div class="absolute top-0 left-0 right-0 p-4 text-white">
+              <div class="flex items-start justify-between">
+                <span class="px-2.5 py-1 rounded-full text-[10.5px] font-extrabold uppercase tracking-wider" style="background:#FCE7F3;color:#9D174D">✨ New launch</span>
                 <span class="inline-flex items-center gap-0.5 px-2 py-1 rounded-md text-[11px] font-bold shadow-sm" style="background:rgba(255,255,255,0.95);color:#475569"><i class="fa-solid fa-star text-[9px]" style="color:#F59E0B"></i>4.9</span>
               </div>
-              <div class="flex-1 flex items-center justify-center p-4">
-                <img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" class="max-h-[150px] max-w-full object-contain" style="filter:drop-shadow(0 12px 24px rgba(0,0,0,0.4))"/>
+              <div class="mt-3">
+                <div class="text-[24px] font-extrabold leading-tight">Antivirus</div>
+                <div class="text-[11.5px] mt-0.5" style="color:rgba(255,255,255,0.85)">Anti-viral biostimulant</div>
               </div>
-              <div class="bg-white p-4">
-                <div class="leading-tight">
-                  <div class="text-[16px] font-bold text-[#0F172A]">Antivirus</div>
-                  <div class="text-[11.5px] mt-0.5" style="color:#94A3B8">Anti-viral biostimulant</div>
-                </div>
-                <div class="flex items-center justify-between mt-2">
-                  <div class="flex items-baseline gap-1.5 flex-wrap">
-                    <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹327</span>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-4 text-white" style="background:linear-gradient(0deg,rgba(0,0,0,0.5) 0%,rgba(0,0,0,0) 100%)">
+              <div class="flex items-end justify-between">
+                <div>
+                  <div class="flex items-baseline gap-1.5">
+                    <span class="text-[26px] font-extrabold tnum">₹327</span>
                   </div>
-                  <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-white text-[12px] font-extrabold" style="background:#059669">Add <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
+                  <div class="text-[11px] font-bold mt-0.5" style="color:#FBBF24">★ 4.9 · 1.2K reviews</div>
                 </div>
+                <button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] font-extrabold" style="background:#FFFFFF;color:#4338CA;box-shadow:0 6px 16px rgba(0,0,0,0.2)">Add <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
               </div>
             </div>
           </a>
 
           <!-- Square 3 · NPK 19-19-19 (amber/orange) -->
-          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative shadow-lg" style="width:340px;height:340px;scroll-snap-align:start">
-            <div class="absolute inset-0" style="background:linear-gradient(135deg,#7C2D12 0%,#F59E0B 100%)"></div>
-            <div class="relative h-full flex flex-col">
-              <div class="px-4 pt-4 flex items-start justify-between">
-                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider" style="background:#FFFFFF;color:#9A3412">🌱 Boost growth</span>
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-3xl overflow-hidden relative shadow-xl" style="width:340px;height:340px;scroll-snap-align:start;background:linear-gradient(160deg,#7C2D12 0%,#C2410C 55%,#F59E0B 100%)">
+            <div class="absolute -top-12 -right-12 w-40 h-40 rounded-full" style="background:radial-gradient(circle,rgba(255,255,255,0.25) 0%,transparent 70%)"></div>
+            <div class="absolute -bottom-16 -left-16 w-44 h-44 rounded-full" style="background:radial-gradient(circle,rgba(0,0,0,0.18) 0%,transparent 70%)"></div>
+            <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="absolute inset-0 m-auto img-blend" style="max-height:62%;max-width:75%;filter:drop-shadow(0 20px 36px rgba(0,0,0,0.45))"/>
+            <div class="absolute top-0 left-0 right-0 p-4 text-white">
+              <div class="flex items-start justify-between">
+                <span class="px-2.5 py-1 rounded-full text-[10.5px] font-extrabold uppercase tracking-wider" style="background:#FFFFFF;color:#9A3412">🌱 Boost growth</span>
                 <span class="inline-flex items-center gap-0.5 px-2 py-1 rounded-md text-[11px] font-bold shadow-sm" style="background:rgba(255,255,255,0.95);color:#475569"><i class="fa-solid fa-star text-[9px]" style="color:#F59E0B"></i>4.6</span>
               </div>
-              <div class="flex-1 flex items-center justify-center p-4">
-                <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="max-h-[150px] max-w-full object-contain" style="filter:drop-shadow(0 12px 24px rgba(0,0,0,0.4))"/>
+              <div class="mt-3">
+                <div class="text-[24px] font-extrabold leading-tight">NPK 19-19-19</div>
+                <div class="text-[11.5px] mt-0.5" style="color:rgba(255,255,255,0.9)">N 19 · P 19 · K 19</div>
               </div>
-              <div class="bg-white p-4">
-                <div class="leading-tight">
-                  <div class="text-[16px] font-bold text-[#0F172A]">NPK 19-19-19</div>
-                  <div class="text-[11.5px] mt-0.5" style="color:#94A3B8">N 19 · P 19 · K 19</div>
-                </div>
-                <div class="flex items-center justify-between mt-2">
-                  <div class="flex items-baseline gap-1.5 flex-wrap">
-                    <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹289</span>
-                    <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹340</span>
-                    <span class="text-[11px] font-extrabold" style="color:#047857">15% off</span>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-4 text-white" style="background:linear-gradient(0deg,rgba(0,0,0,0.5) 0%,rgba(0,0,0,0) 100%)">
+              <div class="flex items-end justify-between">
+                <div>
+                  <div class="flex items-baseline gap-1.5">
+                    <span class="text-[26px] font-extrabold tnum">₹289</span>
+                    <span class="text-[13px] line-through" style="color:rgba(255,255,255,0.7)">₹340</span>
                   </div>
-                  <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-white text-[12px] font-extrabold" style="background:#059669">Add <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
+                  <div class="text-[11px] font-bold mt-0.5" style="color:#FBBF24">SAVE ₹51 · 15% off</div>
                 </div>
+                <button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] font-extrabold" style="background:#FFFFFF;color:#9A3412;box-shadow:0 6px 16px rgba(0,0,0,0.2)">Add <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
               </div>
             </div>
           </a>
 
           <!-- Square 4 · Humic + Fulvic 98 (dark teal) -->
-          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative shadow-lg" style="width:340px;height:340px;scroll-snap-align:start">
-            <div class="absolute inset-0" style="background:linear-gradient(135deg,#134E4A 0%,#0D9488 100%)"></div>
-            <div class="relative h-full flex flex-col">
-              <div class="px-4 pt-4 flex items-start justify-between">
-                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider" style="background:#FBBF24;color:#78350F">🔥 Hot deal</span>
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-3xl overflow-hidden relative shadow-xl" style="width:340px;height:340px;scroll-snap-align:start;background:linear-gradient(160deg,#134E4A 0%,#0F766E 55%,#0D9488 100%)">
+            <div class="absolute -top-12 -right-12 w-40 h-40 rounded-full" style="background:radial-gradient(circle,rgba(251,191,36,0.2) 0%,transparent 70%)"></div>
+            <div class="absolute -bottom-16 -left-16 w-44 h-44 rounded-full" style="background:radial-gradient(circle,rgba(255,255,255,0.12) 0%,transparent 70%)"></div>
+            <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="absolute inset-0 m-auto img-blend" style="max-height:62%;max-width:75%;filter:drop-shadow(0 20px 36px rgba(0,0,0,0.45))"/>
+            <div class="absolute top-0 left-0 right-0 p-4 text-white">
+              <div class="flex items-start justify-between">
+                <span class="px-2.5 py-1 rounded-full text-[10.5px] font-extrabold uppercase tracking-wider" style="background:#FBBF24;color:#78350F">🔥 Hot deal</span>
                 <span class="inline-flex items-center gap-0.5 px-2 py-1 rounded-md text-[11px] font-bold shadow-sm" style="background:rgba(255,255,255,0.95);color:#475569"><i class="fa-solid fa-star text-[9px]" style="color:#F59E0B"></i>4.7</span>
               </div>
-              <div class="flex-1 flex items-center justify-center p-4">
-                <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="max-h-[150px] max-w-full object-contain" style="filter:drop-shadow(0 12px 24px rgba(0,0,0,0.4))"/>
+              <div class="mt-3">
+                <div class="text-[24px] font-extrabold leading-tight">Humic + Fulvic 98</div>
+                <div class="text-[11.5px] mt-0.5" style="color:rgba(255,255,255,0.85)">Humic 12% + Fulvic 8%</div>
               </div>
-              <div class="bg-white p-4">
-                <div class="leading-tight">
-                  <div class="text-[16px] font-bold text-[#0F172A]">Humic + Fulvic 98</div>
-                  <div class="text-[11.5px] mt-0.5" style="color:#94A3B8">Humic 12% + Fulvic 8%</div>
-                </div>
-                <div class="flex items-center justify-between mt-2">
-                  <div class="flex items-baseline gap-1.5 flex-wrap">
-                    <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹376</span>
-                    <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹520</span>
-                    <span class="text-[11px] font-extrabold" style="color:#047857">28% off</span>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-4 text-white" style="background:linear-gradient(0deg,rgba(0,0,0,0.5) 0%,rgba(0,0,0,0) 100%)">
+              <div class="flex items-end justify-between">
+                <div>
+                  <div class="flex items-baseline gap-1.5">
+                    <span class="text-[26px] font-extrabold tnum">₹376</span>
+                    <span class="text-[13px] line-through" style="color:rgba(255,255,255,0.7)">₹520</span>
                   </div>
-                  <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-white text-[12px] font-extrabold" style="background:#059669">Add <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
+                  <div class="text-[11px] font-bold mt-0.5" style="color:#FBBF24">SAVE ₹144 · 28% off</div>
                 </div>
+                <button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] font-extrabold" style="background:#FFFFFF;color:#134E4A;box-shadow:0 6px 16px rgba(0,0,0,0.2)">Add <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
               </div>
             </div>
           </a>
@@ -1085,11 +1087,13 @@
     </div>
   </a>
 
-  <!-- Ask Expert floating button — pulsing emerald orb above bottom nav · auto-lifts when cart visible -->
+  <!-- Ask Expert FAB — pill with agronomist photo + text · compact circle on scroll -->
   <a href="advisory.html" id="expertFab" class="expert-fab" aria-label="Ask an agronomist">
-    <i class="fa-solid fa-headset text-white text-[20px]"></i>
-    <span class="text-[7.5px] font-bold text-white leading-none tracking-tight mt-1">Ask</span>
-    <span class="text-[7.5px] font-bold text-white leading-none tracking-tight">Expert</span>
+    <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=128&q=80&fit=crop" class="expert-photo" alt="Krishi expert"/>
+    <span class="expert-text">
+      <span class="text-[11.5px] font-extrabold">Ask Expert</span>
+      <span class="text-[9px] font-semibold" style="color:rgba(255,255,255,0.85)">Free agronomist call</span>
+    </span>
   </a>
 
   <!-- Bottom nav — Home / Crop / Category / Profile -->
@@ -1201,6 +1205,11 @@
         if (y > 120) cb.classList.add('compact');
         else cb.classList.remove('compact');
       }
+      const fab = document.getElementById('expertFab');
+      if (fab) {
+        if (y > 120) fab.classList.add('compact');
+        else fab.classList.remove('compact');
+      }
     });
 
     // 3 themes · tap Deliver-to to switch
@@ -1244,42 +1253,35 @@
     cropTabs.forEach(btn => btn.addEventListener('click', () => selectCropTab(btn)));
     if (cropTabs[0]) selectCropTab(cropTabs[0]);
 
-    // Status banner carousel — auto-cycle every 4s, syncs with manual swipe, dots update
-    (function statusCarousel(){
-      const scroller = document.getElementById('statusScroll');
-      const dots = document.querySelectorAll('.status-dot');
-      if (!scroller || !dots.length) return;
-      let idx = 0;
-      let timer;
-      function updateDots(i){
-        dots.forEach((d, k) => {
-          d.style.background = k === i ? '#059669' : '#CBD5E1';
-          d.style.width = k === i ? '14px' : '6px';
-        });
+    // Top status banner — rotates through 3 states every 4s with fade swap
+    (function rotateTopBanner(){
+      const banner = document.getElementById('topStatusBanner');
+      const icon   = document.getElementById('tsbIcon');
+      const text   = document.getElementById('tsbText');
+      const chev   = document.getElementById('tsbChev');
+      if (!banner) return;
+      banner.classList.add('style-rain');
+      const states = [
+        { cls:'style-rain',     href:'shop.html?weather=rain', icon:'fa-cloud-rain', iconColor:'#2563EB', textColor:'#1E40AF', chevColor:'#1D4ED8',
+          html:'<strong>Rain expected</strong> · 8 mm in 24 hrs · Hold spray for today' },
+        { cls:'style-festival', href:'shop.html',              icon:'fa-gifts',     iconColor:'#DC2626', textColor:'#7F1D1D', chevColor:'#B91C1C',
+          html:'<strong>Christmas offer</strong> · 20% off + free gift on ₹999+' },
+        { cls:'style-order',    href:'track-order.html',       icon:'fa-truck-fast',iconColor:'#059669', textColor:'#065F46', chevColor:'#047857',
+          html:'<strong>Arriving Thursday</strong> · #KKD-26194 · 3 items' }
+      ];
+      let i = 0;
+      function apply(s){
+        banner.classList.remove('style-rain','style-festival','style-order');
+        banner.classList.add(s.cls);
+        banner.href = s.href;
+        icon.className = 'fa-solid ' + s.icon + ' text-[14px] flex-shrink-0';
+        icon.style.color = s.iconColor;
+        text.innerHTML = s.html;
+        text.style.color = s.textColor;
+        chev.style.color = s.chevColor;
       }
-      function goTo(i){
-        idx = ((i % dots.length) + dots.length) % dots.length;
-        const slideW = scroller.clientWidth;
-        scroller.scrollTo({ left: idx * slideW, behavior: 'smooth' });
-        updateDots(idx);
-      }
-      function startAuto(){
-        clearInterval(timer);
-        timer = setInterval(() => goTo(idx + 1), 4000);
-      }
-      startAuto();
-      // Sync dots on manual swipe + reset auto-cycle timer
-      let raf;
-      scroller.addEventListener('scroll', () => {
-        if (raf) cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(() => {
-          const i = Math.round(scroller.scrollLeft / scroller.clientWidth);
-          if (i !== idx) { idx = i; updateDots(idx); }
-        });
-      });
-      // When the user touches the scroller, pause auto-cycle briefly so it doesn't fight them
-      ['touchstart','mousedown'].forEach(evt => scroller.addEventListener(evt, () => clearInterval(timer)));
-      ['touchend','mouseup'].forEach(evt   => scroller.addEventListener(evt, () => setTimeout(startAuto, 1500)));
+      apply(states[0]);
+      setInterval(() => { i = (i + 1) % states.length; banner.style.opacity = '0'; setTimeout(() => { apply(states[i]); banner.style.opacity = '1'; }, 200); }, 4000);
     })();
 
     // ⚡ Flash sale live countdown — counts down to 0, then resets to a fresh window

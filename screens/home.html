@@ -71,6 +71,12 @@
   }
   .top-theme:not([data-theme="festival"]) .snow-flake { display: none; }
 
+  /* Flash sale ⚡ icon pulse */
+  @keyframes flashPulse {
+    0%, 100% { transform: scale(1) rotate(-3deg); opacity: 1; }
+    50%      { transform: scale(1.15) rotate(3deg); opacity: 0.85; }
+  }
+
   /* Status bar sticky at top · address/coin scroll away · search+categories sticky below */
   .sticky-status { position: sticky; top: 0; z-index: 70; }
   .sticky-actions { position: sticky; top: 32px; z-index: 60; background: #FFFFFF; }
@@ -263,26 +269,19 @@
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle">
-          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="combo — wrapped gift box with bow">
-            <!-- Box body -->
-            <rect x="5" y="15" width="26" height="17" rx="1.5" fill="#16A34A"/>
-            <!-- Vertical red ribbon on body -->
-            <rect x="15" y="15" width="6" height="17" fill="#DC2626"/>
-            <!-- Horizontal red ribbon -->
-            <rect x="5" y="21" width="26" height="3" fill="#DC2626"/>
-            <!-- Box lid -->
-            <rect x="4" y="11" width="28" height="6" rx="1.5" fill="#15803D"/>
-            <!-- Vertical ribbon on lid -->
-            <rect x="15" y="11" width="6" height="6" fill="#B91C1C"/>
-            <!-- Bow left loop -->
-            <path d="M18 11 C 12 5 8 6 9.5 10 C 10.5 12 15 11.5 18 11 Z" fill="#DC2626"/>
-            <!-- Bow right loop -->
-            <path d="M18 11 C 24 5 28 6 26.5 10 C 25.5 12 21 11.5 18 11 Z" fill="#DC2626"/>
-            <!-- Bow knot center -->
-            <ellipse cx="18" cy="10" rx="1.8" ry="2.2" fill="#7F1D1D"/>
-            <!-- Ribbon tails -->
-            <path d="M16.5 12 L14 14 L14.5 12 Z" fill="#DC2626"/>
-            <path d="M19.5 12 L22 14 L21.5 12 Z" fill="#DC2626"/>
+          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="combo — 3 stacked packaged boxes">
+            <!-- Bottom box (largest, blue) -->
+            <rect x="3" y="22" width="30" height="11" rx="1.5" fill="#2563EB"/>
+            <line x1="18" y1="22" x2="18" y2="33" stroke="#1E40AF" stroke-width="1"/>
+            <line x1="3" y1="27" x2="33" y2="27" stroke="#1E40AF" stroke-width="1"/>
+            <!-- Middle box (amber) -->
+            <rect x="6" y="13" width="24" height="10" rx="1.5" fill="#F59E0B"/>
+            <line x1="18" y1="13" x2="18" y2="23" stroke="#B45309" stroke-width="1"/>
+            <line x1="6" y1="18" x2="30" y2="18" stroke="#B45309" stroke-width="1"/>
+            <!-- Top box (smallest, green) -->
+            <rect x="10" y="4" width="16" height="10" rx="1.5" fill="#10B981"/>
+            <line x1="18" y1="4" x2="18" y2="14" stroke="#047857" stroke-width="1"/>
+            <line x1="10" y1="9" x2="26" y2="9" stroke="#047857" stroke-width="1"/>
           </svg>
         </div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Combo</span>
@@ -372,6 +371,82 @@
           <button class="w-full mt-2.5 h-11 rounded-lg bg-emerald-600 text-white text-[14.5px] font-semibold">Add</button>
         </a>
 
+      </div>
+    </section>
+
+    <!-- ⚡ FLASH SALE · live timer + 3 deal products · eye-catching gradient -->
+    <section class="px-4 mt-6">
+      <div class="rounded-2xl overflow-hidden relative" style="background:linear-gradient(135deg,#7F1D1D 0%,#DC2626 45%,#F97316 100%);box-shadow:0 8px 24px -8px rgba(220,38,38,0.5)">
+        <!-- Diagonal stripe shimmer overlay -->
+        <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(45deg,rgba(255,255,255,0.06) 0,rgba(255,255,255,0.06) 2px,transparent 2px,transparent 14px)"></div>
+        <!-- Glow orbs (decorative) -->
+        <div class="absolute -top-8 -right-8 w-32 h-32 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(251,191,36,0.45) 0%,transparent 65%)"></div>
+        <div class="absolute -bottom-6 -left-6 w-24 h-24 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(252,165,165,0.4) 0%,transparent 65%)"></div>
+
+        <div class="relative p-4 text-white">
+          <!-- Header: title + countdown -->
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-[22px] inline-block" style="animation:flashPulse 1s ease-in-out infinite;filter:drop-shadow(0 0 8px rgba(251,191,36,0.8))">⚡</span>
+              <div>
+                <div class="text-[16px] font-extrabold tracking-wider leading-none">FLASH SALE</div>
+                <div class="text-[10.5px] text-red-100 mt-0.5 font-semibold">Up to 50% off · Limited stock</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg" style="background:rgba(0,0,0,0.35);backdrop-filter:blur(4px)">
+              <i class="fa-regular fa-clock text-[11px]"></i>
+              <span class="text-[13px] font-extrabold tnum tracking-wider" id="flashTimer">02:14:38</span>
+            </div>
+          </div>
+
+          <!-- Deal product tiles -->
+          <div class="flex gap-2">
+            <a href="pdp.html" class="nu flex-1 rounded-xl p-2 bg-white text-[#0F172A]">
+              <div class="aspect-square rounded-lg p-2 mb-1.5 relative" style="background:#FEF2F2">
+                <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="w-full h-full object-contain img-blend"/>
+                <span class="absolute top-1 left-1 text-[8.5px] font-extrabold text-white px-1 py-0.5 rounded" style="background:#DC2626">50%</span>
+              </div>
+              <div class="text-[11px] font-bold leading-tight truncate">Chakrawarti</div>
+              <div class="flex items-baseline gap-1 mt-0.5">
+                <span class="text-[13px] font-extrabold text-red-600 tnum">₹248</span>
+                <span class="text-[9px] text-[#94A3B8] line-through tnum">₹495</span>
+              </div>
+            </a>
+            <a href="pdp.html" class="nu flex-1 rounded-xl p-2 bg-white text-[#0F172A]">
+              <div class="aspect-square rounded-lg p-2 mb-1.5 relative" style="background:#FEF2F2">
+                <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="w-full h-full object-contain img-blend"/>
+                <span class="absolute top-1 left-1 text-[8.5px] font-extrabold text-white px-1 py-0.5 rounded" style="background:#DC2626">40%</span>
+              </div>
+              <div class="text-[11px] font-bold leading-tight truncate">Humic+Fulvic</div>
+              <div class="flex items-baseline gap-1 mt-0.5">
+                <span class="text-[13px] font-extrabold text-red-600 tnum">₹312</span>
+                <span class="text-[9px] text-[#94A3B8] line-through tnum">₹520</span>
+              </div>
+            </a>
+            <a href="pdp.html" class="nu flex-1 rounded-xl p-2 bg-white text-[#0F172A]">
+              <div class="aspect-square rounded-lg p-2 mb-1.5 relative" style="background:#FEF2F2">
+                <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="w-full h-full object-contain img-blend"/>
+                <span class="absolute top-1 left-1 text-[8.5px] font-extrabold text-white px-1 py-0.5 rounded" style="background:#DC2626">35%</span>
+              </div>
+              <div class="text-[11px] font-bold leading-tight truncate">NPK 19-19-19</div>
+              <div class="flex items-baseline gap-1 mt-0.5">
+                <span class="text-[13px] font-extrabold text-red-600 tnum">₹221</span>
+                <span class="text-[9px] text-[#94A3B8] line-through tnum">₹340</span>
+              </div>
+            </a>
+          </div>
+
+          <!-- Stock urgency bar + CTA -->
+          <div class="flex items-center justify-between mt-3">
+            <div class="flex items-center gap-1.5 text-[10.5px] font-semibold text-red-100">
+              <i class="fa-solid fa-fire text-[11px] text-amber-300"></i>
+              <span>Only <strong class="text-white">38 units</strong> left</span>
+            </div>
+            <a href="shop.html?sale=flash" class="nu inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-red-700 text-[12px] font-extrabold">
+              See all deals <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -550,8 +625,8 @@
                   <span class="text-[12px] text-emerald-100 line-through tnum">₹495</span>
                   <span class="ml-1 text-[10px] font-extrabold bg-amber-400 text-amber-900 px-1.5 py-0.5 rounded">28% OFF</span>
                 </div>
-                <button class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-white text-emerald-700 text-[12.5px] font-extrabold" style="width:fit-content">
-                  Add <i class="fa-solid fa-plus text-[9px]"></i>
+                <button class="inline-flex items-center gap-1.5 mt-1 px-4 py-2 rounded-full bg-white text-emerald-700 text-[12.5px] font-extrabold" style="width:fit-content;box-shadow:0 4px 12px rgba(0,0,0,0.18)">
+                  Add to cart <i class="fa-solid fa-arrow-right text-[10px]"></i>
                 </button>
               </div>
               <div class="w-[125px] flex items-center justify-center p-3">
@@ -573,8 +648,8 @@
                   <span class="text-[22px] font-extrabold tnum">₹327</span>
                   <span class="ml-1 text-[10px] font-extrabold bg-amber-400 text-amber-900 px-1.5 py-0.5 rounded">★ 4.9</span>
                 </div>
-                <button class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-white text-purple-700 text-[12.5px] font-extrabold" style="width:fit-content">
-                  Add <i class="fa-solid fa-plus text-[9px]"></i>
+                <button class="inline-flex items-center gap-1.5 mt-1 px-4 py-2 rounded-full bg-white text-purple-700 text-[12.5px] font-extrabold" style="width:fit-content;box-shadow:0 4px 12px rgba(0,0,0,0.18)">
+                  Add to cart <i class="fa-solid fa-arrow-right text-[10px]"></i>
                 </button>
               </div>
               <div class="w-[125px] flex items-center justify-center p-3">
@@ -597,8 +672,8 @@
                   <span class="text-[12px] text-amber-100 line-through tnum">₹340</span>
                   <span class="ml-1 text-[10px] font-extrabold bg-white/30 text-white px-1.5 py-0.5 rounded">15% OFF</span>
                 </div>
-                <button class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-white text-orange-700 text-[12.5px] font-extrabold" style="width:fit-content">
-                  Add <i class="fa-solid fa-plus text-[9px]"></i>
+                <button class="inline-flex items-center gap-1.5 mt-1 px-4 py-2 rounded-full bg-white text-orange-700 text-[12.5px] font-extrabold" style="width:fit-content;box-shadow:0 4px 12px rgba(0,0,0,0.18)">
+                  Add to cart <i class="fa-solid fa-arrow-right text-[10px]"></i>
                 </button>
               </div>
               <div class="w-[125px] flex items-center justify-center p-3">
@@ -621,8 +696,8 @@
                   <span class="text-[12px] text-teal-100 line-through tnum">₹520</span>
                   <span class="ml-1 text-[10px] font-extrabold bg-amber-400 text-amber-900 px-1.5 py-0.5 rounded">28% OFF</span>
                 </div>
-                <button class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-white text-teal-700 text-[12.5px] font-extrabold" style="width:fit-content">
-                  Add <i class="fa-solid fa-plus text-[9px]"></i>
+                <button class="inline-flex items-center gap-1.5 mt-1 px-4 py-2 rounded-full bg-white text-teal-700 text-[12.5px] font-extrabold" style="width:fit-content;box-shadow:0 4px 12px rgba(0,0,0,0.18)">
+                  Add to cart <i class="fa-solid fa-arrow-right text-[10px]"></i>
                 </button>
               </div>
               <div class="w-[125px] flex items-center justify-center p-3">
@@ -954,6 +1029,24 @@
     // Pre-select Tomato (first card) on load
     if (cropPicks[0]) selectCrop(cropPicks[0]);
 
+    // ⚡ Flash sale live countdown — counts down to 0, then resets to a fresh window
+    (function startFlashTimer(){
+      const el = document.getElementById('flashTimer');
+      if (!el) return;
+      function reset(){ return Date.now() + (2*3600 + 14*60 + 38) * 1000; }
+      let end = reset();
+      function tick(){
+        let diff = end - Date.now();
+        if (diff <= 0) { end = reset(); diff = end - Date.now(); }
+        const h = String(Math.floor(diff/3600000)).padStart(2,'0');
+        const m = String(Math.floor(diff/60000) % 60).padStart(2,'0');
+        const s = String(Math.floor(diff/1000) % 60).padStart(2,'0');
+        el.textContent = h + ':' + m + ':' + s;
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+
     // Cart bar — hidden by default, reveal + increment on any Add / Buy-again click
     const cartBar = document.getElementById('cartBar');
     const cartTotalEl = document.getElementById('cartTotal');
@@ -976,10 +1069,10 @@
       });
       cartBar.style.display = 'flex';
     }
-    // Wire every Add / Buy again button on the page
+    // Wire every Add / Add-to-cart / Buy-again button on the page
     document.querySelectorAll('button').forEach(btn => {
       const t = (btn.textContent || '').trim().toLowerCase();
-      if (t === 'add' || t === 'buy again') {
+      if (t === 'add' || t.startsWith('add to cart') || t === 'buy again') {
         btn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); bumpCart(); });
       }
     });

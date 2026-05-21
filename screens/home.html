@@ -113,7 +113,8 @@
     gap: 10px;
     max-width: 92%;
   }
-  .cart-fab.compact .cart-view { display: none; }
+  .cart-fab.compact .view-label,
+  .cart-fab.compact .cart-save { display: none; }
   .cart-fab.compact .cart-summary { gap: 8px !important; }
 
   /* Category tile — uniform circle + emoji object (disease/concept representation) */
@@ -1044,11 +1045,12 @@
       <div class="flex items-baseline gap-1.5 min-w-0">
         <span class="text-[18px] font-extrabold tnum">₹<span id="cartTotal">358</span></span>
         <span class="text-[11.5px] text-white/70 font-medium whitespace-nowrap"><span id="cartCount">1</span> item</span>
-        <span class="text-[11.5px] font-bold whitespace-nowrap" style="color:#34D399">· Save ₹<span id="cartSave">137</span></span>
+        <span class="cart-save text-[11.5px] font-bold whitespace-nowrap" style="color:#34D399">· Save ₹<span id="cartSave">137</span></span>
       </div>
     </div>
     <div class="cart-view flex items-center gap-1.5 text-[12.5px] font-bold flex-shrink-0">
-      View cart <i class="fa-solid fa-arrow-right text-[10px]"></i>
+      <span class="view-label">View cart</span>
+      <i class="fa-solid fa-arrow-right text-[10px]"></i>
     </div>
   </a>
 

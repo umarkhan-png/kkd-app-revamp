@@ -74,6 +74,20 @@
   /* Info banner scroll — hide scrollbar */
   #infoBannerScroll::-webkit-scrollbar { display: none; }
 
+  /* Krishi AI floating action button — pulse animation (matches partner-app pattern) */
+  .krishi-ai-fab {
+    position: fixed; right: 14px; bottom: 156px; z-index: 46;
+    width: 58px; height: 58px; border-radius: 999px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+    background: linear-gradient(145deg,#10B981,#065F46);
+    text-decoration: none;
+    animation: aiFabPulse 2.8s ease-in-out infinite;
+  }
+  @keyframes aiFabPulse {
+    0%, 100% { box-shadow: 0 6px 18px -4px rgba(16,185,129,.65), 0 0 0 2px rgba(16,185,129,.2), inset 0 1px 0 rgba(255,255,255,.18); }
+    50%      { box-shadow: 0 6px 22px -2px rgba(16,185,129,.8),  0 0 0 7px rgba(16,185,129,.1), inset 0 1px 0 rgba(255,255,255,.18); }
+  }
+
   /* Flash sale ⚡ icon pulse */
   @keyframes flashPulse {
     0%, 100% { transform: scale(1) rotate(-3deg); opacity: 1; }
@@ -176,9 +190,6 @@
         <i class="fa-solid fa-coins text-amber-500 text-[13px]"></i>
         <span class="text-[13.5px] font-bold text-amber-700 tnum">220</span>
       </div>
-      <a href="account.html" class="nu w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E2E8F0">
-        <i class="fa-solid fa-user text-[14px]" style="color:#059669"></i>
-      </a>
     </div>
   </div>
 
@@ -1039,7 +1050,23 @@
     </div>
   </a>
 
-  <!-- Bottom nav — active uses emerald-500 matching cart icon bg -->
+  <!-- Krishi AI floating button (Ask Anything) — pulsing emerald orb, bottom-right above cart -->
+  <a href="advisory.html" class="krishi-ai-fab" aria-label="Ask Krishi AI">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <rect x="4" y="7" width="16" height="11" rx="3" fill="rgba(255,255,255,0.18)" stroke="white" stroke-width="1.6"/>
+      <line x1="12" y1="4" x2="12" y2="7" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="12" cy="3.5" r="1.2" fill="white"/>
+      <circle cx="9" cy="12" r="1.5" fill="white"/>
+      <circle cx="15" cy="12" r="1.5" fill="white"/>
+      <path d="M9.5 15.5h5" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+      <rect x="1.5" y="10" width="2" height="4" rx="1" fill="white" opacity=".7"/>
+      <rect x="20.5" y="10" width="2" height="4" rx="1" fill="white" opacity=".7"/>
+    </svg>
+    <span class="text-[7.5px] font-semibold text-white leading-none tracking-tight mt-0.5">Ask</span>
+    <span class="text-[7.5px] font-semibold text-white leading-none tracking-tight">Krishi AI</span>
+  </a>
+
+  <!-- Bottom nav — Home / Crop / Category / Profile -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white flex justify-around items-center px-2 py-2 z-50" style="height:68px;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04)">
     <a href="home.html" class="nu flex flex-col items-center gap-1" style="color:#10B981">
       <i class="fa-solid fa-house text-[20px]"></i>
@@ -1047,15 +1074,15 @@
     </a>
     <a href="my-crop.html" class="nu flex flex-col items-center gap-1" style="color:#94A3B8">
       <i class="fa-solid fa-wheat-awn text-[20px]"></i>
-      <span class="text-[12.5px] font-semibold">Crops</span>
+      <span class="text-[12.5px] font-semibold">Crop</span>
     </a>
-    <a href="shop.html" class="nu flex flex-col items-center gap-1" style="color:#94A3B8">
-      <i class="fa-solid fa-newspaper text-[20px]"></i>
-      <span class="text-[12.5px] font-semibold">News</span>
+    <a href="categories.html" class="nu flex flex-col items-center gap-1" style="color:#94A3B8">
+      <i class="fa-solid fa-grip text-[20px]"></i>
+      <span class="text-[12.5px] font-semibold">Category</span>
     </a>
-    <a href="advisory.html" class="nu flex flex-col items-center gap-1" style="color:#94A3B8">
-      <i class="fa-solid fa-headset text-[20px]"></i>
-      <span class="text-[12.5px] font-semibold">Advisor</span>
+    <a href="account.html" class="nu flex flex-col items-center gap-1" style="color:#94A3B8">
+      <i class="fa-solid fa-user text-[20px]"></i>
+      <span class="text-[12.5px] font-semibold">Profile</span>
     </a>
   </nav>
 

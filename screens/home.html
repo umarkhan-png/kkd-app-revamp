@@ -317,7 +317,7 @@
         <a href="pdp.html" class="nu rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
           <div class="aspect-square rounded-xl flex items-center justify-center p-4 mb-3 relative" style="background:#F8FAFC">
             <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/>
-            <span class="absolute top-2 left-2 text-[11px] font-extrabold bg-amber-400 px-2 py-1 rounded-md shadow-sm tracking-wide" style="color:#78350F">28% OFF</span>
+            <span class="absolute top-2 left-2 inline-flex items-center px-2 py-1 rounded-md text-[11px] font-extrabold text-white tracking-wider shadow-md" style="background:linear-gradient(135deg,#064E3B 0%,#047857 100%)">28% OFF</span>
           </div>
           <div class="text-[15.5px] font-semibold text-[#0F172A] leading-tight">Humic + Fulvic 98</div>
           <div class="text-[13px] text-[#64748B] mt-1">Bio-stimulant · 1L</div>
@@ -335,7 +335,7 @@
         <a href="pdp.html" class="nu rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
           <div class="aspect-square rounded-xl flex items-center justify-center p-4 mb-3 relative" style="background:#F8FAFC">
             <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full object-contain"/>
-            <span class="absolute top-2 left-2 text-[11px] font-extrabold bg-amber-400 px-2 py-1 rounded-md shadow-sm tracking-wide" style="color:#78350F">28% OFF</span>
+            <span class="absolute top-2 left-2 inline-flex items-center px-2 py-1 rounded-md text-[11px] font-extrabold text-white tracking-wider shadow-md" style="background:linear-gradient(135deg,#064E3B 0%,#047857 100%)">28% OFF</span>
           </div>
           <div class="text-[15.5px] font-semibold text-[#0F172A] leading-tight">Chakrawarti</div>
           <div class="text-[13px] text-[#64748B] mt-1">Insecticide · 100ml</div>
@@ -353,7 +353,7 @@
         <a href="pdp.html" class="nu rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
           <div class="aspect-square rounded-xl flex items-center justify-center p-4 mb-3 relative" style="background:#F8FAFC">
             <img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" class="img-blend max-h-full object-contain"/>
-            <span class="absolute top-2 left-2 text-[11px] font-extrabold bg-amber-400 px-2 py-1 rounded-md shadow-sm tracking-wide" style="color:#78350F">28% OFF</span>
+            <span class="absolute top-2 left-2 inline-flex items-center px-2 py-1 rounded-md text-[11px] font-extrabold text-white tracking-wider shadow-md" style="background:linear-gradient(135deg,#064E3B 0%,#047857 100%)">28% OFF</span>
           </div>
           <div class="text-[15.5px] font-semibold text-[#0F172A] leading-tight">Chakraveer</div>
           <div class="text-[13px] text-[#64748B] mt-1">Insecticide · 100ml</div>
@@ -387,55 +387,62 @@
       </div>
     </section>
 
-    <!-- Select crop · see products -->
+    <!-- Select crop · real photos + Add crop -->
     <section class="mt-8">
-      <div class="px-4 flex items-baseline justify-between mb-3">
+      <div class="px-4 mb-3">
         <h2 class="text-[19px] font-bold tracking-tight">Select your crop</h2>
-        <a href="shop.html" class="nu text-[12.5px] font-semibold text-emerald-700">All crops →</a>
+        <p class="text-[12px] text-[#64748B] mt-0.5">Tap any crop to see relevant products</p>
       </div>
       <div class="overflow-x-auto scroll-x">
         <div class="flex gap-3.5 px-4 pb-1" id="cropRow">
           <button data-crop="tomato" class="crop-pick nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer" style="width:72px">
-            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5 crop-circle" style="background:#FEE2E2;border:2px solid #FCA5A5">
-              <span class="text-[34px] leading-none">🍅</span>
+            <div class="w-16 h-16 rounded-full overflow-hidden mb-1.5 crop-circle" style="background:#FEE2E2;border:2px solid #E2E8F0">
+              <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🍅')"/>
             </div>
             <span class="text-[12.5px] font-semibold text-[#0F172A]">Tomato</span>
           </button>
           <button data-crop="chilli" class="crop-pick nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer" style="width:72px">
-            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5 crop-circle" style="background:#FFEDD5;border:2px solid #FED7AA">
-              <span class="text-[34px] leading-none">🌶️</span>
+            <div class="w-16 h-16 rounded-full overflow-hidden mb-1.5 crop-circle" style="background:#FFEDD5;border:2px solid #E2E8F0">
+              <img src="https://images.unsplash.com/photo-1583852048850-31c0d0e7cdde?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌶️')"/>
             </div>
             <span class="text-[12.5px] font-semibold text-[#0F172A]">Chilli</span>
           </button>
           <button data-crop="wheat" class="crop-pick nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer" style="width:72px">
-            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5 crop-circle" style="background:#FEF3C7;border:2px solid #FDE68A">
-              <span class="text-[34px] leading-none">🌾</span>
+            <div class="w-16 h-16 rounded-full overflow-hidden mb-1.5 crop-circle" style="background:#FEF3C7;border:2px solid #E2E8F0">
+              <img src="https://images.unsplash.com/photo-1574226516831-e1dff420e562?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌾')"/>
             </div>
             <span class="text-[12.5px] font-semibold text-[#0F172A]">Wheat</span>
           </button>
           <button data-crop="maize" class="crop-pick nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer" style="width:72px">
-            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5 crop-circle" style="background:#FEF9C3;border:2px solid #FDE047">
-              <span class="text-[34px] leading-none">🌽</span>
+            <div class="w-16 h-16 rounded-full overflow-hidden mb-1.5 crop-circle" style="background:#FEF9C3;border:2px solid #E2E8F0">
+              <img src="https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌽')"/>
             </div>
             <span class="text-[12.5px] font-semibold text-[#0F172A]">Maize</span>
           </button>
           <button data-crop="cotton" class="crop-pick nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer" style="width:72px">
-            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5 crop-circle" style="background:#F1F5F9;border:2px solid #E2E8F0">
-              <span class="text-[30px] leading-none">☁️</span>
+            <div class="w-16 h-16 rounded-full overflow-hidden mb-1.5 crop-circle" style="background:#F1F5F9;border:2px solid #E2E8F0">
+              <img src="https://images.unsplash.com/photo-1591885503007-9b80d9c89a52?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'☁️')"/>
             </div>
             <span class="text-[12.5px] font-semibold text-[#0F172A]">Cotton</span>
           </button>
           <button data-crop="sugarcane" class="crop-pick nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer" style="width:72px">
-            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5 crop-circle" style="background:#DCFCE7;border:2px solid #BBF7D0">
-              <span class="text-[30px] leading-none">🎋</span>
+            <div class="w-16 h-16 rounded-full overflow-hidden mb-1.5 crop-circle" style="background:#DCFCE7;border:2px solid #E2E8F0">
+              <img src="https://images.unsplash.com/photo-1597106776019-b4ecc878c202?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🎋')"/>
             </div>
             <span class="text-[12.5px] font-semibold text-[#0F172A]">Sugarcane</span>
           </button>
           <button data-crop="paddy" class="crop-pick nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer" style="width:72px">
-            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5 crop-circle" style="background:#ECFDF5;border:2px solid #A7F3D0">
-              <span class="text-[30px] leading-none">🌱</span>
+            <div class="w-16 h-16 rounded-full overflow-hidden mb-1.5 crop-circle" style="background:#ECFDF5;border:2px solid #E2E8F0">
+              <img src="https://images.unsplash.com/photo-1568347877321-f8935c7dc5a8?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌱')"/>
             </div>
             <span class="text-[12.5px] font-semibold text-[#0F172A]">Paddy</span>
+          </button>
+          <!-- + Add crop tile (last) -->
+          <button id="addCropBtn" class="nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer" style="width:72px">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5" style="background:#F8FAFC;border:2px dashed #94A3B8">
+              <i class="fa-solid fa-plus text-[22px]" style="color:#475569"></i>
+            </div>
+            <span class="text-[12.5px] font-semibold" style="color:#475569">Add crop</span>
           </button>
         </div>
       </div>
@@ -456,7 +463,7 @@
           <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
             <div class="aspect-square rounded-xl flex items-center justify-center p-3 mb-3 relative" style="background:#F8FAFC">
               <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full object-contain"/>
-              <span class="absolute top-2 left-2 text-[10.5px] font-extrabold bg-amber-400 px-1.5 py-0.5 rounded shadow-sm tracking-wide" style="color:#78350F">28% OFF</span>
+              <span class="absolute top-2 left-2 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-extrabold text-white tracking-wider shadow" style="background:linear-gradient(135deg,#064E3B 0%,#047857 100%)">28% OFF</span>
             </div>
             <div class="text-[14.5px] font-semibold text-[#0F172A] leading-tight">Chakrawarti</div>
             <div class="text-[12px] text-[#64748B] mt-1">Insecticide · 100ml</div>
@@ -490,7 +497,7 @@
           <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
             <div class="aspect-square rounded-xl flex items-center justify-center p-3 mb-3 relative" style="background:#F8FAFC">
               <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend max-h-full object-contain"/>
-              <span class="absolute top-2 left-2 text-[10.5px] font-extrabold bg-amber-400 px-1.5 py-0.5 rounded shadow-sm tracking-wide" style="color:#78350F">15% OFF</span>
+              <span class="absolute top-2 left-2 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-extrabold text-white tracking-wider shadow" style="background:linear-gradient(135deg,#064E3B 0%,#047857 100%)">15% OFF</span>
             </div>
             <div class="text-[14.5px] font-semibold text-[#0F172A] leading-tight">NPK 19-19-19</div>
             <div class="text-[12px] text-[#64748B] mt-1">Fertilizer · 1kg</div>
@@ -508,7 +515,7 @@
           <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
             <div class="aspect-square rounded-xl flex items-center justify-center p-3 mb-3 relative" style="background:#F8FAFC">
               <img src="https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp" class="img-blend max-h-full object-contain"/>
-              <span class="absolute top-2 left-2 text-[10.5px] font-extrabold bg-amber-400 px-1.5 py-0.5 rounded shadow-sm tracking-wide" style="color:#78350F">22% OFF</span>
+              <span class="absolute top-2 left-2 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-extrabold text-white tracking-wider shadow" style="background:linear-gradient(135deg,#064E3B 0%,#047857 100%)">22% OFF</span>
             </div>
             <div class="text-[14.5px] font-semibold text-[#0F172A] leading-tight">Triple Attack</div>
             <div class="text-[12px] text-[#64748B] mt-1">Combo · 3-in-1</div>
@@ -639,7 +646,7 @@
           <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
             <div class="aspect-square rounded-xl flex items-center justify-center p-3 mb-3 relative" style="background:#F8FAFC">
               <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/>
-              <span class="absolute top-2 left-2 text-[10.5px] font-extrabold bg-amber-400 px-1.5 py-0.5 rounded shadow-sm tracking-wide" style="color:#78350F">28% OFF</span>
+              <span class="absolute top-2 left-2 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-extrabold text-white tracking-wider shadow" style="background:linear-gradient(135deg,#064E3B 0%,#047857 100%)">28% OFF</span>
             </div>
             <div class="text-[14.5px] font-semibold text-[#0F172A] leading-tight">Humic+Fulvic 98</div>
             <div class="text-[12px] text-[#64748B] mt-1">Bought 12 May · 1L</div>
@@ -657,7 +664,7 @@
           <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
             <div class="aspect-square rounded-xl flex items-center justify-center p-3 mb-3 relative" style="background:#F8FAFC">
               <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full object-contain"/>
-              <span class="absolute top-2 left-2 text-[10.5px] font-extrabold bg-amber-400 px-1.5 py-0.5 rounded shadow-sm tracking-wide" style="color:#78350F">28% OFF</span>
+              <span class="absolute top-2 left-2 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-extrabold text-white tracking-wider shadow" style="background:linear-gradient(135deg,#064E3B 0%,#047857 100%)">28% OFF</span>
             </div>
             <div class="text-[14.5px] font-semibold text-[#0F172A] leading-tight">Chakrawarti</div>
             <div class="text-[12px] text-[#64748B] mt-1">Bought 12 May · 100ml</div>
@@ -675,7 +682,7 @@
           <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
             <div class="aspect-square rounded-xl flex items-center justify-center p-3 mb-3 relative" style="background:#F8FAFC">
               <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend max-h-full object-contain"/>
-              <span class="absolute top-2 left-2 text-[10.5px] font-extrabold bg-amber-400 px-1.5 py-0.5 rounded shadow-sm tracking-wide" style="color:#78350F">15% OFF</span>
+              <span class="absolute top-2 left-2 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-extrabold text-white tracking-wider shadow" style="background:linear-gradient(135deg,#064E3B 0%,#047857 100%)">15% OFF</span>
             </div>
             <div class="text-[14.5px] font-semibold text-[#0F172A] leading-tight">NPK 19-19-19</div>
             <div class="text-[12px] text-[#64748B] mt-1">Bought 28 Apr · 1kg</div>
@@ -842,15 +849,20 @@
       themeRoot.classList.add('bloom');
     });
 
+    // Crop image fallback — if Unsplash URL fails, swap img for emoji
+    function cropFallback(img, emoji) {
+      img.outerHTML = '<div class="w-full h-full flex items-center justify-center" style="font-size:32px;line-height:1">' + emoji + '</div>';
+    }
+
     // Crop picker — selected ring + update "For your X" heading + View-all link
     const cropPicks = document.querySelectorAll('.crop-pick');
     const cropPickName = document.getElementById('cropPickName');
     const cropPickNameLow = document.getElementById('cropPickNameLow');
     const cropViewAll = document.getElementById('cropViewAll');
     function selectCrop(btn){
-      cropPicks.forEach(b => b.querySelector('.crop-circle').style.boxShadow = '');
+      cropPicks.forEach(b => { const c = b.querySelector('.crop-circle'); if (c) c.style.boxShadow = ''; });
       const circle = btn.querySelector('.crop-circle');
-      circle.style.boxShadow = '0 0 0 3px #10B981';
+      if (circle) circle.style.boxShadow = '0 0 0 3px #10B981';
       const crop = btn.dataset.crop;
       const label = btn.querySelector('span:last-child').textContent;
       cropPickName.textContent = label;
@@ -860,6 +872,22 @@
     cropPicks.forEach(btn => btn.addEventListener('click', () => selectCrop(btn)));
     // Pre-select Tomato (first card) on load
     if (cropPicks[0]) selectCrop(cropPicks[0]);
+
+    // Add custom crop
+    const addCropBtn = document.getElementById('addCropBtn');
+    if (addCropBtn) addCropBtn.addEventListener('click', () => {
+      const name = (prompt('Enter your crop name:') || '').trim();
+      if (!name) return;
+      const row = document.getElementById('cropRow');
+      const btn = document.createElement('button');
+      btn.className = 'crop-pick nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer';
+      btn.style.width = '72px';
+      btn.dataset.crop = name.toLowerCase().replace(/\s+/g,'-');
+      btn.innerHTML = '<div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5 crop-circle" style="background:#ECFDF5;border:2px solid #A7F3D0"><span class="text-[28px] font-extrabold text-emerald-700">' + name.charAt(0).toUpperCase() + '</span></div><span class="text-[12.5px] font-semibold text-[#0F172A]">' + name + '</span>';
+      row.insertBefore(btn, addCropBtn);
+      btn.addEventListener('click', () => selectCrop(btn));
+      selectCrop(btn);
+    });
   </script>
 </body>
 </html>

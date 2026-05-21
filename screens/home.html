@@ -163,10 +163,10 @@
   </div>
 
   <!-- Theme-specific banner (restored — below address with chevron) -->
-  <a href="shop.html?weather=rain" class="theme-banner rain-banner nu">
-    <i class="fa-solid fa-cloud-rain text-blue-600"></i>
-    <span class="flex-1"><strong>Rain in 24 hrs · 8 mm</strong> — Shop rain-ready fungicides</span>
-    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10.5px] font-bold uppercase tracking-wider text-white ml-1" style="background:#2563EB">Shop <i class="fa-solid fa-arrow-right text-[8.5px]"></i></span>
+  <a href="shop.html?weather=rain" class="theme-banner rain-banner nu" style="flex-wrap:nowrap">
+    <i class="fa-solid fa-cloud-rain text-blue-600 flex-shrink-0"></i>
+    <span class="flex-1 min-w-0" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><strong>Rain 8mm</strong> · BUY rain-ready fungicides</span>
+    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10.5px] font-bold uppercase tracking-wider text-white flex-shrink-0" style="background:#2563EB">View <i class="fa-solid fa-arrow-right text-[8.5px]"></i></span>
   </a>
   <a href="shop.html" class="theme-banner festival-banner nu">
     <span class="text-[15px]">🎄</span>
@@ -242,24 +242,32 @@
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle">
-          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="flat grass illustration — 3 tufts, clean Google-reference style">
-            <!-- BACK layer (darkest green) -->
+          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="single dense grass tuft — Google flat-illustration reference">
+            <!-- Single tuft of 7 blades fanning from a common base (~x=18, y=33) -->
+            <!-- Darker BACK blades for depth -->
             <g fill="#15803D">
-              <path d="M6 33 C5 24 3 16 3 9 C5 16 7 24 7.5 33 Z"/>
-              <path d="M17 33 C15 23 13 14 12 5 C15 14 16.5 23 17.5 33 Z"/>
-              <path d="M28 33 C27 24 25 16 24 9 C26 16 27.5 24 28.5 33 Z"/>
+              <!-- back-left, leans left -->
+              <path d="M16 33 C13 24 9 16 5 9 C10 16 14 24 17 33 Z"/>
+              <!-- back-mid-left, near-straight -->
+              <path d="M16.5 33 C16 22 16 12 15 2 C17 12 17.5 22 17.5 33 Z"/>
+              <!-- back-right, leans right -->
+              <path d="M20 33 C23 24 27 16 31 9 C26 16 22 24 19 33 Z"/>
+              <!-- back-mid-right, near-straight -->
+              <path d="M19.5 33 C19 22 20 12 21 2 C20 12 20.5 22 20.5 33 Z"/>
             </g>
-            <!-- MID layer (tallest, brightest green) -->
+            <!-- BRIGHTEST front blades (tallest, true center + outer lean) -->
             <g fill="#22C55E">
-              <path d="M6.5 33 C6 21 7 11 7.5 3 C8 11 8.5 21 8 33 Z"/>
-              <path d="M17.5 33 C17 22 17.5 11 18 1 C18.5 11 19.5 22 19 33 Z"/>
-              <path d="M28 33 C27.5 21 28 11 28.5 3 C29 11 29.5 21 29.5 33 Z"/>
+              <!-- center tallest -->
+              <path d="M17.25 33 C16.5 21 17.5 10 18 0 C18.5 10 19.5 21 18.75 33 Z"/>
+              <!-- front-left lean -->
+              <path d="M17 33 C16 24 14 16 11 8 C14 16 15.5 24 18 33 Z"/>
+              <!-- front-right lean -->
+              <path d="M19 33 C20 24 22 16 25 8 C22 16 20.5 24 18 33 Z"/>
             </g>
-            <!-- FRONT layer (mid green, leans outward) -->
+            <!-- MID green between for extra body -->
             <g fill="#16A34A">
-              <path d="M7.5 33 C8 25 10 18 13 11 C11 18 9.5 25 9 33 Z"/>
-              <path d="M19 33 C19.5 23 21.5 14 24 5 C21 14 19.5 23 19.5 33 Z"/>
-              <path d="M29.5 33 C30 25 32 18 33 11 C32 18 30.5 25 30.5 33 Z"/>
+              <path d="M14 33 C13.5 24 13 16 12 7 C14 16 14.5 24 15 33 Z"/>
+              <path d="M22 33 C22.5 24 23 16 24 7 C22 16 21.5 24 21 33 Z"/>
             </g>
           </svg>
         </div>

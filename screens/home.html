@@ -162,18 +162,6 @@
     </div>
   </div>
 
-  <!-- Theme-specific banner (restored — below address with chevron) -->
-  <a href="shop.html?weather=rain" class="theme-banner rain-banner nu" style="flex-wrap:nowrap">
-    <i class="fa-solid fa-cloud-rain text-blue-600 flex-shrink-0"></i>
-    <span class="flex-1 min-w-0" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><strong>Rain 8mm</strong> · BUY rain-ready fungicides</span>
-    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10.5px] font-bold uppercase tracking-wider text-white flex-shrink-0" style="background:#2563EB">View <i class="fa-solid fa-arrow-right text-[8.5px]"></i></span>
-  </a>
-  <a href="shop.html" class="theme-banner festival-banner nu">
-    <span class="text-[15px]">🎄</span>
-    <span class="flex-1"><strong>Merry Christmas!</strong> 20% off + free gift on ₹999+</span>
-    <i class="fa-solid fa-chevron-right text-red-700 text-[11px]"></i>
-  </a>
-
   </div><!-- /top-theme -->
 
   <!-- STICKY: search + categories -->
@@ -275,26 +263,26 @@
       </a>
       <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle">
-          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="combo — bottle + bottle + bottle">
-            <!-- Left bottle (green) -->
-            <rect x="2"    y="13" width="8" height="20" rx="1.5" fill="#16A34A"/>
-            <rect x="3.5"  y="9"  width="5" height="4" fill="#15803D"/>
-            <rect x="4"    y="6.5" width="4" height="2.5" rx="0.5" fill="#15803D"/>
-            <rect x="3"    y="15" width="1.3" height="14" rx="0.6" fill="#FFFFFF" opacity="0.35"/>
-            <!-- "+" between left and center -->
-            <text x="12.5" y="26" text-anchor="middle" font-size="11" font-weight="900" fill="#D97706" style="font-family: Inter, system-ui, sans-serif;">+</text>
-            <!-- Center bottle (amber) -->
-            <rect x="14"   y="13" width="8" height="20" rx="1.5" fill="#D97706"/>
-            <rect x="15.5" y="9"  width="5" height="4" fill="#92400E"/>
-            <rect x="16"   y="6.5" width="4" height="2.5" rx="0.5" fill="#92400E"/>
-            <rect x="15"   y="15" width="1.3" height="14" rx="0.6" fill="#FFFFFF" opacity="0.35"/>
-            <!-- "+" between center and right -->
-            <text x="24.5" y="26" text-anchor="middle" font-size="11" font-weight="900" fill="#D97706" style="font-family: Inter, system-ui, sans-serif;">+</text>
-            <!-- Right bottle (blue) -->
-            <rect x="26"   y="13" width="8" height="20" rx="1.5" fill="#2563EB"/>
-            <rect x="27.5" y="9"  width="5" height="4" fill="#1E40AF"/>
-            <rect x="28"   y="6.5" width="4" height="2.5" rx="0.5" fill="#1E40AF"/>
-            <rect x="27"   y="15" width="1.3" height="14" rx="0.6" fill="#FFFFFF" opacity="0.35"/>
+          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="combo — wrapped gift box with bow">
+            <!-- Box body -->
+            <rect x="5" y="15" width="26" height="17" rx="1.5" fill="#16A34A"/>
+            <!-- Vertical red ribbon on body -->
+            <rect x="15" y="15" width="6" height="17" fill="#DC2626"/>
+            <!-- Horizontal red ribbon -->
+            <rect x="5" y="21" width="26" height="3" fill="#DC2626"/>
+            <!-- Box lid -->
+            <rect x="4" y="11" width="28" height="6" rx="1.5" fill="#15803D"/>
+            <!-- Vertical ribbon on lid -->
+            <rect x="15" y="11" width="6" height="6" fill="#B91C1C"/>
+            <!-- Bow left loop -->
+            <path d="M18 11 C 12 5 8 6 9.5 10 C 10.5 12 15 11.5 18 11 Z" fill="#DC2626"/>
+            <!-- Bow right loop -->
+            <path d="M18 11 C 24 5 28 6 26.5 10 C 25.5 12 21 11.5 18 11 Z" fill="#DC2626"/>
+            <!-- Bow knot center -->
+            <ellipse cx="18" cy="10" rx="1.8" ry="2.2" fill="#7F1D1D"/>
+            <!-- Ribbon tails -->
+            <path d="M16.5 12 L14 14 L14.5 12 Z" fill="#DC2626"/>
+            <path d="M19.5 12 L22 14 L21.5 12 Z" fill="#DC2626"/>
           </svg>
         </div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Combo</span>
@@ -385,6 +373,15 @@
         </a>
 
       </div>
+    </section>
+
+    <!-- Weather banner (moved below Bestsellers · clean simple version) -->
+    <section class="px-4 mt-5">
+      <a href="shop.html?weather=rain" class="nu flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl" style="background:#EFF6FF;border:1px solid #BFDBFE">
+        <i class="fa-solid fa-cloud-rain text-blue-600 text-[14px] flex-shrink-0"></i>
+        <span class="flex-1 text-[12.5px] font-semibold text-[#1E40AF] leading-snug">Rain expected · 8 mm in 24 hrs · Hold spray for today</span>
+        <i class="fa-solid fa-chevron-right text-blue-700 text-[11px] flex-shrink-0"></i>
+      </a>
     </section>
 
     <!-- Select crop · real photos + Add crop -->
@@ -534,68 +531,103 @@
       </div>
     </section>
 
-    <!-- HERO offers · colorful horizontal carousel · snap-scroll -->
+    <!-- HERO product spotlights · colorful gradient cards · snap-scroll -->
     <section class="mt-6">
       <div class="overflow-x-auto scroll-x" style="scroll-snap-type:x mandatory">
         <div class="flex gap-3 px-4 pb-1">
 
-          <!-- Card 1 · ₹100 off (emerald) -->
-          <a href="cart.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:340px;scroll-snap-align:start;background:linear-gradient(135deg,#065F46 0%,#10B981 100%)">
-            <div class="flex items-center h-[148px]">
-              <div class="flex-1 p-5 text-white">
-                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/20 text-[10.5px] font-bold uppercase tracking-wider mb-2">Active · Auto-apply</div>
-                <div class="text-[24px] font-extrabold leading-tight">₹100 OFF</div>
-                <p class="text-[12px] text-emerald-50 mt-1">First order · Expires 22 May</p>
-                <div class="inline-flex items-center gap-1.5 mt-3 px-3.5 py-1.5 rounded-full bg-white text-emerald-700 text-[12.5px] font-extrabold">
-                  Use now <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          <!-- Spotlight 1 · Chakrawarti (emerald) -->
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:340px;scroll-snap-align:start;background:linear-gradient(135deg,#064E3B 0%,#10B981 100%)">
+            <div class="flex items-stretch h-[170px]">
+              <div class="flex-1 p-4 text-white flex flex-col justify-between">
+                <div>
+                  <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/25 text-[10px] font-extrabold uppercase tracking-wider">⭐ Bestseller</div>
+                  <div class="text-[20px] font-extrabold leading-tight mt-2">Chakrawarti</div>
+                  <p class="text-[11.5px] text-emerald-50 mt-0.5">Sucking pest killer · 100ml</p>
                 </div>
+                <div class="flex items-baseline gap-1.5">
+                  <span class="text-[22px] font-extrabold tnum">₹358</span>
+                  <span class="text-[12px] text-emerald-100 line-through tnum">₹495</span>
+                  <span class="ml-1 text-[10px] font-extrabold bg-amber-400 text-amber-900 px-1.5 py-0.5 rounded">28% OFF</span>
+                </div>
+                <button class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-white text-emerald-700 text-[12.5px] font-extrabold" style="width:fit-content">
+                  Add <i class="fa-solid fa-plus text-[9px]"></i>
+                </button>
               </div>
-              <div class="text-[80px] leading-none pr-4" style="filter:drop-shadow(0 6px 16px rgba(0,0,0,0.3))">🪙</div>
+              <div class="w-[125px] flex items-center justify-center p-3">
+                <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="max-h-full max-w-full object-contain" style="filter:drop-shadow(0 8px 16px rgba(0,0,0,0.3))"/>
+              </div>
             </div>
           </a>
 
-          <!-- Card 2 · Tomato Combo (orange/red) -->
-          <a href="shop.html?crop=tomato" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:340px;scroll-snap-align:start;background:linear-gradient(135deg,#9A3412 0%,#F97316 100%)">
-            <div class="flex items-center h-[148px]">
-              <div class="flex-1 p-5 text-white">
-                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/20 text-[10.5px] font-bold uppercase tracking-wider mb-2">Tomato special</div>
-                <div class="text-[24px] font-extrabold leading-tight">Save ₹250</div>
-                <p class="text-[12px] text-orange-50 mt-1">Triple-attack tomato combo</p>
-                <div class="inline-flex items-center gap-1.5 mt-3 px-3.5 py-1.5 rounded-full bg-white text-orange-700 text-[12.5px] font-extrabold">
-                  Shop combo <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          <!-- Spotlight 2 · Antivirus (indigo/purple) -->
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:340px;scroll-snap-align:start;background:linear-gradient(135deg,#312E81 0%,#7C3AED 100%)">
+            <div class="flex items-stretch h-[170px]">
+              <div class="flex-1 p-4 text-white flex flex-col justify-between">
+                <div>
+                  <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/25 text-[10px] font-extrabold uppercase tracking-wider">🛡️ Top viricide</div>
+                  <div class="text-[20px] font-extrabold leading-tight mt-2">Antivirus</div>
+                  <p class="text-[11.5px] text-purple-50 mt-0.5">Yellow-leaf virus cure · 100ml</p>
                 </div>
+                <div class="flex items-baseline gap-1.5">
+                  <span class="text-[22px] font-extrabold tnum">₹327</span>
+                  <span class="ml-1 text-[10px] font-extrabold bg-amber-400 text-amber-900 px-1.5 py-0.5 rounded">★ 4.9</span>
+                </div>
+                <button class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-white text-purple-700 text-[12.5px] font-extrabold" style="width:fit-content">
+                  Add <i class="fa-solid fa-plus text-[9px]"></i>
+                </button>
               </div>
-              <div class="text-[80px] leading-none pr-4" style="filter:drop-shadow(0 6px 16px rgba(0,0,0,0.3))">🍅</div>
+              <div class="w-[125px] flex items-center justify-center p-3">
+                <img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" class="max-h-full max-w-full object-contain" style="filter:drop-shadow(0 8px 16px rgba(0,0,0,0.3))"/>
+              </div>
             </div>
           </a>
 
-          <!-- Card 3 · Free delivery (blue) -->
-          <a href="shop.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:340px;scroll-snap-align:start;background:linear-gradient(135deg,#1E3A8A 0%,#3B82F6 100%)">
-            <div class="flex items-center h-[148px]">
-              <div class="flex-1 p-5 text-white">
-                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/20 text-[10.5px] font-bold uppercase tracking-wider mb-2">No min order</div>
-                <div class="text-[24px] font-extrabold leading-tight">Free Delivery</div>
-                <p class="text-[12px] text-blue-50 mt-1">On every order above ₹999</p>
-                <div class="inline-flex items-center gap-1.5 mt-3 px-3.5 py-1.5 rounded-full bg-white text-blue-700 text-[12.5px] font-extrabold">
-                  Start shopping <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          <!-- Spotlight 3 · NPK 19-19-19 (amber/orange) -->
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:340px;scroll-snap-align:start;background:linear-gradient(135deg,#7C2D12 0%,#F59E0B 100%)">
+            <div class="flex items-stretch h-[170px]">
+              <div class="flex-1 p-4 text-white flex flex-col justify-between">
+                <div>
+                  <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/25 text-[10px] font-extrabold uppercase tracking-wider">🌱 Boost growth</div>
+                  <div class="text-[20px] font-extrabold leading-tight mt-2">NPK 19-19-19</div>
+                  <p class="text-[11.5px] text-amber-50 mt-0.5">Balanced fertilizer · 1kg</p>
                 </div>
+                <div class="flex items-baseline gap-1.5">
+                  <span class="text-[22px] font-extrabold tnum">₹289</span>
+                  <span class="text-[12px] text-amber-100 line-through tnum">₹340</span>
+                  <span class="ml-1 text-[10px] font-extrabold bg-white/30 text-white px-1.5 py-0.5 rounded">15% OFF</span>
+                </div>
+                <button class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-white text-orange-700 text-[12.5px] font-extrabold" style="width:fit-content">
+                  Add <i class="fa-solid fa-plus text-[9px]"></i>
+                </button>
               </div>
-              <div class="text-[80px] leading-none pr-4" style="filter:drop-shadow(0 6px 16px rgba(0,0,0,0.3))">🚚</div>
+              <div class="w-[125px] flex items-center justify-center p-3">
+                <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="max-h-full max-w-full object-contain" style="filter:drop-shadow(0 8px 16px rgba(0,0,0,0.3))"/>
+              </div>
             </div>
           </a>
 
-          <!-- Card 4 · Refer & Earn (purple) -->
-          <a href="account.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:340px;scroll-snap-align:start;background:linear-gradient(135deg,#581C87 0%,#A855F7 100%)">
-            <div class="flex items-center h-[148px]">
-              <div class="flex-1 p-5 text-white">
-                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/20 text-[10.5px] font-bold uppercase tracking-wider mb-2">Earn coins</div>
-                <div class="text-[24px] font-extrabold leading-tight">Refer & Earn ₹50</div>
-                <p class="text-[12px] text-purple-50 mt-1">For every farmer friend you invite</p>
-                <div class="inline-flex items-center gap-1.5 mt-3 px-3.5 py-1.5 rounded-full bg-white text-purple-700 text-[12.5px] font-extrabold">
-                  Invite now <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          <!-- Spotlight 4 · Humic + Fulvic 98 (dark teal) -->
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:340px;scroll-snap-align:start;background:linear-gradient(135deg,#134E4A 0%,#0D9488 100%)">
+            <div class="flex items-stretch h-[170px]">
+              <div class="flex-1 p-4 text-white flex flex-col justify-between">
+                <div>
+                  <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/25 text-[10px] font-extrabold uppercase tracking-wider">🔥 Hot deal</div>
+                  <div class="text-[20px] font-extrabold leading-tight mt-2">Humic + Fulvic 98</div>
+                  <p class="text-[11.5px] text-teal-50 mt-0.5">Bio-stimulant · 1L bottle</p>
                 </div>
+                <div class="flex items-baseline gap-1.5">
+                  <span class="text-[22px] font-extrabold tnum">₹376</span>
+                  <span class="text-[12px] text-teal-100 line-through tnum">₹520</span>
+                  <span class="ml-1 text-[10px] font-extrabold bg-amber-400 text-amber-900 px-1.5 py-0.5 rounded">28% OFF</span>
+                </div>
+                <button class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-white text-teal-700 text-[12.5px] font-extrabold" style="width:fit-content">
+                  Add <i class="fa-solid fa-plus text-[9px]"></i>
+                </button>
               </div>
-              <div class="text-[80px] leading-none pr-4" style="filter:drop-shadow(0 6px 16px rgba(0,0,0,0.3))">🎁</div>
+              <div class="w-[125px] flex items-center justify-center p-3">
+                <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="max-h-full max-w-full object-contain" style="filter:drop-shadow(0 8px 16px rgba(0,0,0,0.3))"/>
+              </div>
             </div>
           </a>
 
@@ -603,34 +635,55 @@
       </div>
     </section>
 
-    <!-- Active order strip (enhanced — live pulse + 3-step progress, same tile size) -->
+    <!-- Active order tracker (intuitive 3-step horizontal stepper) -->
     <section class="px-4 mt-3">
-      <a href="track-order.html" class="nu flex items-center gap-3 p-4 rounded-xl relative overflow-hidden" style="background:linear-gradient(135deg,#FFFBEB 0%,#FEF3C7 100%);border:1px solid #FDE68A">
-        <!-- Truck icon + live pulse dot -->
-        <div class="relative flex-shrink-0">
-          <div class="w-11 h-11 rounded-full flex items-center justify-center" style="background:#FDE68A">
-            <i class="fa-solid fa-truck-fast text-amber-700 text-[18px]"></i>
+      <a href="track-order.html" class="nu block rounded-2xl p-4" style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 2px 8px rgba(15,23,42,0.04)">
+        <!-- Header row -->
+        <div class="flex items-center justify-between mb-3.5">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:#ECFDF5">
+              <i class="fa-solid fa-truck-fast text-emerald-700 text-[15px]"></i>
+            </div>
+            <div class="min-w-0">
+              <div class="text-[14.5px] font-bold text-[#0F172A] leading-tight">Arriving Thursday</div>
+              <div class="text-[11.5px] text-[#64748B] mt-0.5 tnum">#KKD-26194 · 3 items · ₹1,830</div>
+            </div>
           </div>
-          <span class="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[#FFFBEB] animate-pulse"></span>
+          <span class="inline-flex items-center gap-1 text-[12px] font-bold text-emerald-700 flex-shrink-0">
+            Track <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </span>
         </div>
-        <!-- Status text + progress -->
-        <div class="flex-1 min-w-0">
-          <div class="flex items-baseline gap-1.5">
-            <span class="text-[15px] font-bold text-[#78350F] leading-tight">In transit</span>
-            <span class="text-[12px] font-semibold text-amber-700">· ETA Thu</span>
+        <!-- 3-step stepper with connecting lines -->
+        <div class="flex items-start">
+          <!-- Step 1 · Packed (done) -->
+          <div class="flex flex-col items-center" style="width:60px">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center bg-emerald-600">
+              <i class="fa-solid fa-check text-white text-[11px]"></i>
+            </div>
+            <span class="text-[10.5px] font-bold text-[#0F172A] mt-1.5 text-center">Packed</span>
+            <span class="text-[9.5px] text-[#64748B] mt-0.5">Mon</span>
           </div>
-          <div class="text-[11.5px] text-amber-700 mt-0.5 tnum">#KKD-26194 · 3 items</div>
-          <!-- 3-step progress (Packed → Shipped → Out for delivery, current = step 2) -->
-          <div class="flex items-center gap-1 mt-1.5">
-            <span class="h-[3px] flex-1 rounded-full" style="background:#D97706"></span>
-            <span class="h-[3px] flex-1 rounded-full" style="background:#D97706"></span>
-            <span class="h-[3px] flex-1 rounded-full" style="background:#FDE68A"></span>
+          <!-- Connector 1-2 (done) -->
+          <div class="flex-1 h-0.5 mt-[13px] mx-1 rounded-full" style="background:#10B981"></div>
+          <!-- Step 2 · In transit (current) -->
+          <div class="flex flex-col items-center" style="width:64px">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center bg-emerald-600 ring-4 ring-emerald-100">
+              <i class="fa-solid fa-truck text-white text-[10px]"></i>
+            </div>
+            <span class="text-[10.5px] font-bold text-emerald-700 mt-1.5 text-center">In transit</span>
+            <span class="text-[9.5px] text-[#64748B] mt-0.5">Wed</span>
+          </div>
+          <!-- Connector 2-3 (pending) -->
+          <div class="flex-1 h-0.5 mt-[13px] mx-1 rounded-full" style="background:#E2E8F0"></div>
+          <!-- Step 3 · Delivered (pending) -->
+          <div class="flex flex-col items-center" style="width:60px">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:1.5px solid #E2E8F0">
+              <i class="fa-solid fa-house text-[#94A3B8] text-[10px]"></i>
+            </div>
+            <span class="text-[10.5px] font-semibold text-[#64748B] mt-1.5 text-center">Delivered</span>
+            <span class="text-[9.5px] text-[#94A3B8] mt-0.5">Thu</span>
           </div>
         </div>
-        <!-- Track CTA -->
-        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider text-white" style="background:#D97706">
-          Track <i class="fa-solid fa-arrow-right text-[9px]"></i>
-        </span>
       </a>
     </section>
 
@@ -762,33 +815,61 @@
       </a>
     </section>
 
-    <!-- Trust strip -->
+    <!-- Brand footer · image-forward (similar feel to partner app ending) -->
     <section class="px-4 mt-8 mb-2">
-      <div class="rounded-2xl p-5 text-center" style="background:#F8FAFC">
-        <div class="flex items-center justify-center gap-2 mb-2">
-          <i class="fa-solid fa-shield-halved text-[15px] text-emerald-600"></i>
-          <span class="text-[11.5px] font-bold uppercase tracking-wider text-emerald-700">Trusted brand</span>
+      <div class="rounded-2xl overflow-hidden relative" style="min-height:220px;background:linear-gradient(135deg,#064E3B 0%,#047857 60%,#10B981 100%)">
+        <!-- Field image background (low opacity for depth) -->
+        <div class="absolute inset-0" style="background:url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=600&q=70&fit=crop') center/cover;opacity:0.18"></div>
+        <!-- Gradient overlay so text stays readable -->
+        <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(4,120,87,0.4) 0%,rgba(6,78,59,0.85) 100%)"></div>
+
+        <div class="relative p-5 text-white">
+          <!-- Hindi tagline -->
+          <div class="text-[22px] font-extrabold leading-tight" style="font-family:'Noto Sans Devanagari','Inter',sans-serif">किसान का अपना ब्रांड</div>
+          <p class="text-[12.5px] text-emerald-50 mt-1 leading-snug">CIB-CR Licensed · Lab tested · Factory-direct</p>
+
+          <!-- Stats row -->
+          <div class="grid grid-cols-3 gap-3 mt-4">
+            <div class="rounded-xl px-2.5 py-2.5" style="background:rgba(255,255,255,0.12);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.18)">
+              <div class="text-[18px] font-extrabold tnum leading-tight">142K+</div>
+              <div class="text-[9px] text-emerald-100 uppercase tracking-wider mt-0.5">Farmers</div>
+            </div>
+            <div class="rounded-xl px-2.5 py-2.5" style="background:rgba(255,255,255,0.12);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.18)">
+              <div class="text-[18px] font-extrabold tnum leading-tight">28</div>
+              <div class="text-[9px] text-emerald-100 uppercase tracking-wider mt-0.5">States</div>
+            </div>
+            <div class="rounded-xl px-2.5 py-2.5" style="background:rgba(255,255,255,0.12);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.18)">
+              <div class="text-[18px] font-extrabold tnum leading-tight">4.7★</div>
+              <div class="text-[9px] text-emerald-100 uppercase tracking-wider mt-0.5">Avg rating</div>
+            </div>
+          </div>
+
+          <!-- CTA + signature -->
+          <div class="flex items-center justify-between mt-4">
+            <a href="about.html" class="nu inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-emerald-700 text-[12px] font-extrabold">
+              Our story <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </a>
+            <span class="text-[10px] text-emerald-100/80 font-semibold tracking-wider uppercase">Katyayani · Since 2008</span>
+          </div>
         </div>
-        <p class="text-[14px] font-semibold text-[#0F172A] leading-snug max-w-[280px] mx-auto">CIB-CR Licensed · Lab tested<br/>Direct from Katyayani factory</p>
-        <a href="about.html" class="nu inline-block mt-3 text-[12.5px] font-semibold text-emerald-700">Learn more →</a>
       </div>
     </section>
 
   </main>
 
-  <!-- Floating cart bar (above bottom nav) -->
-  <a href="cart.html" class="nu cart-fab flex items-center justify-between px-4 py-3 rounded-2xl shadow-lg" style="background:#0F172A;color:#fff">
-    <div class="flex items-center gap-2.5">
-      <div class="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center relative">
-        <i class="fa-solid fa-bag-shopping text-white text-[13px]"></i>
-        <span class="absolute -top-0.5 -right-0.5 bg-amber-400 text-[#1A1A1A] text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">3</span>
+  <!-- Floating cart bar — HIDDEN by default, appears when Add is tapped · one-liner -->
+  <a href="cart.html" id="cartBar" class="nu cart-fab items-center justify-between px-4 py-3 rounded-2xl shadow-lg" style="background:#0F172A;color:#fff;display:none">
+    <div class="flex items-center gap-3 min-w-0">
+      <div class="w-9 h-9 rounded-full bg-emerald-600 flex items-center justify-center flex-shrink-0">
+        <i class="fa-solid fa-bag-shopping text-white text-[14px]"></i>
       </div>
-      <div class="leading-tight">
-        <div class="text-[11px] text-white/70 font-medium">3 items · Save ₹400</div>
-        <div class="text-[14.5px] font-bold tnum">₹1,900</div>
+      <div class="flex items-baseline gap-1.5 min-w-0">
+        <span class="text-[18px] font-extrabold tnum">₹<span id="cartTotal">358</span></span>
+        <span class="text-[11.5px] text-white/70 font-medium whitespace-nowrap"><span id="cartCount">1</span> item</span>
+        <span class="text-[11.5px] font-bold whitespace-nowrap" style="color:#34D399">· Save ₹<span id="cartSave">137</span></span>
       </div>
     </div>
-    <div class="flex items-center gap-1.5 text-[12.5px] font-bold">
+    <div class="flex items-center gap-1.5 text-[12.5px] font-bold flex-shrink-0">
       View cart <i class="fa-solid fa-arrow-right text-[10px]"></i>
     </div>
   </a>
@@ -872,6 +953,36 @@
     cropPicks.forEach(btn => btn.addEventListener('click', () => selectCrop(btn)));
     // Pre-select Tomato (first card) on load
     if (cropPicks[0]) selectCrop(cropPicks[0]);
+
+    // Cart bar — hidden by default, reveal + increment on any Add / Buy-again click
+    const cartBar = document.getElementById('cartBar');
+    const cartTotalEl = document.getElementById('cartTotal');
+    const cartCountEl = document.getElementById('cartCount');
+    const cartSaveEl  = document.getElementById('cartSave');
+    let cartItems = 0, cartAmount = 0, cartSaving = 0;
+    function bumpCart() {
+      cartItems += 1;
+      const price = 280 + Math.floor(Math.random() * 210);
+      const save  = Math.floor(price * 0.27);
+      cartAmount += price;
+      cartSaving += save;
+      cartTotalEl.textContent = cartAmount.toLocaleString('en-IN');
+      cartCountEl.textContent = cartItems;
+      cartSaveEl.textContent  = cartSaving.toLocaleString('en-IN');
+      // Singular vs plural label
+      const itemLabel = cartCountEl.parentNode;
+      itemLabel.childNodes.forEach(n => {
+        if (n.nodeType === 3) n.textContent = (cartItems === 1 ? ' item' : ' items');
+      });
+      cartBar.style.display = 'flex';
+    }
+    // Wire every Add / Buy again button on the page
+    document.querySelectorAll('button').forEach(btn => {
+      const t = (btn.textContent || '').trim().toLowerCase();
+      if (t === 'add' || t === 'buy again') {
+        btn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); bumpCart(); });
+      }
+    });
 
     // Add custom crop
     const addCropBtn = document.getElementById('addCropBtn');

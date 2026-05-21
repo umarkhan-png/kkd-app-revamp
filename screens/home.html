@@ -390,68 +390,210 @@
     <!-- Select crop · see products -->
     <section class="mt-8">
       <div class="px-4 flex items-baseline justify-between mb-3">
-        <h2 class="text-[19px] font-bold tracking-tight">Select crop · see products</h2>
+        <h2 class="text-[19px] font-bold tracking-tight">Select your crop</h2>
         <a href="shop.html" class="nu text-[12.5px] font-semibold text-emerald-700">All crops →</a>
       </div>
       <div class="overflow-x-auto scroll-x">
-        <div class="flex gap-3.5 px-4 pb-1">
-          <a href="shop.html?crop=chilli" class="nu flex-shrink-0 flex flex-col items-center" style="width:72px">
-            <div class="w-16 h-16 rounded-full overflow-hidden mb-1.5" style="background:#F8FAFC;border:1.5px solid #E2E8F0">
-              <img src="https://images.unsplash.com/photo-1583394247568-eaba1c5ae71b?w=128&q=80" class="w-full h-full object-cover"/>
-            </div>
-            <span class="text-[12.5px] font-semibold text-[#0F172A]">Chilli</span>
-          </a>
-          <a href="shop.html?crop=tomato" class="nu flex-shrink-0 flex flex-col items-center" style="width:72px">
-            <div class="w-16 h-16 rounded-full overflow-hidden mb-1.5" style="background:#F8FAFC;border:1.5px solid #E2E8F0">
-              <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=128&q=80" class="w-full h-full object-cover"/>
+        <div class="flex gap-3.5 px-4 pb-1" id="cropRow">
+          <button data-crop="tomato" class="crop-pick nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer" style="width:72px">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5 crop-circle" style="background:#FEE2E2;border:2px solid #FCA5A5">
+              <span class="text-[34px] leading-none">🍅</span>
             </div>
             <span class="text-[12.5px] font-semibold text-[#0F172A]">Tomato</span>
-          </a>
-          <a href="shop.html?crop=wheat" class="nu flex-shrink-0 flex flex-col items-center" style="width:72px">
-            <div class="w-16 h-16 rounded-full overflow-hidden mb-1.5" style="background:#F8FAFC;border:1.5px solid #E2E8F0">
-              <img src="https://images.unsplash.com/photo-1535912559178-2a1cd9bcd7fb?w=128&q=80" class="w-full h-full object-cover"/>
+          </button>
+          <button data-crop="chilli" class="crop-pick nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer" style="width:72px">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5 crop-circle" style="background:#FFEDD5;border:2px solid #FED7AA">
+              <span class="text-[34px] leading-none">🌶️</span>
+            </div>
+            <span class="text-[12.5px] font-semibold text-[#0F172A]">Chilli</span>
+          </button>
+          <button data-crop="wheat" class="crop-pick nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer" style="width:72px">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5 crop-circle" style="background:#FEF3C7;border:2px solid #FDE68A">
+              <span class="text-[34px] leading-none">🌾</span>
             </div>
             <span class="text-[12.5px] font-semibold text-[#0F172A]">Wheat</span>
-          </a>
-          <a href="shop.html?crop=maize" class="nu flex-shrink-0 flex flex-col items-center" style="width:72px">
-            <div class="w-16 h-16 rounded-full overflow-hidden mb-1.5" style="background:#F8FAFC;border:1.5px solid #E2E8F0">
-              <img src="https://images.unsplash.com/photo-1626371893373-aeb16df5b1be?w=128&q=80" class="w-full h-full object-cover"/>
+          </button>
+          <button data-crop="maize" class="crop-pick nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer" style="width:72px">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5 crop-circle" style="background:#FEF9C3;border:2px solid #FDE047">
+              <span class="text-[34px] leading-none">🌽</span>
             </div>
             <span class="text-[12.5px] font-semibold text-[#0F172A]">Maize</span>
-          </a>
-          <a href="shop.html?crop=cotton" class="nu flex-shrink-0 flex flex-col items-center" style="width:72px">
-            <div class="w-16 h-16 rounded-full overflow-hidden mb-1.5" style="background:#F8FAFC;border:1.5px solid #E2E8F0">
-              <img src="https://images.unsplash.com/photo-1601493700750-58da8dabb6c8?w=128&q=80" class="w-full h-full object-cover"/>
+          </button>
+          <button data-crop="cotton" class="crop-pick nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer" style="width:72px">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5 crop-circle" style="background:#F1F5F9;border:2px solid #E2E8F0">
+              <span class="text-[30px] leading-none">☁️</span>
             </div>
             <span class="text-[12.5px] font-semibold text-[#0F172A]">Cotton</span>
-          </a>
-          <a href="shop.html?crop=sugarcane" class="nu flex-shrink-0 flex flex-col items-center" style="width:72px">
-            <div class="w-16 h-16 rounded-full overflow-hidden mb-1.5" style="background:#F8FAFC;border:1.5px solid #E2E8F0">
-              <img src="https://images.unsplash.com/photo-1606051183024-d5b3f5b9c2b8?w=128&q=80" class="w-full h-full object-cover"/>
+          </button>
+          <button data-crop="sugarcane" class="crop-pick nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer" style="width:72px">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5 crop-circle" style="background:#DCFCE7;border:2px solid #BBF7D0">
+              <span class="text-[30px] leading-none">🎋</span>
             </div>
             <span class="text-[12.5px] font-semibold text-[#0F172A]">Sugarcane</span>
-          </a>
+          </button>
+          <button data-crop="paddy" class="crop-pick nu flex-shrink-0 flex flex-col items-center bg-transparent border-0 p-0 cursor-pointer" style="width:72px">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-1.5 crop-circle" style="background:#ECFDF5;border:2px solid #A7F3D0">
+              <span class="text-[30px] leading-none">🌱</span>
+            </div>
+            <span class="text-[12.5px] font-semibold text-[#0F172A]">Paddy</span>
+          </button>
         </div>
       </div>
     </section>
 
-    <!-- ₹100 hero offer -->
-    <section class="px-4 mt-6">
-      <a href="cart.html" class="nu block rounded-2xl overflow-hidden relative" style="background:linear-gradient(135deg,#065F46 0%,#047857 100%)">
-        <div class="flex items-center">
-          <div class="flex-1 p-5 text-white">
-            <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/15 backdrop-blur text-[10.5px] font-bold uppercase tracking-wider mb-2.5">Active · Auto-apply</div>
-            <div class="text-[26px] font-bold leading-tight">₹100 off ready</div>
-            <p class="text-[13px] text-emerald-100 mt-1.5">First order welcome · Expires 22 May</p>
-            <div class="inline-flex items-center gap-1.5 mt-3.5 px-4 py-2 rounded-full bg-white text-emerald-700 text-[13px] font-bold">
-              Use now <i class="fa-solid fa-arrow-right text-[11px]"></i>
-            </div>
-          </div>
-          <div class="w-[110px] pr-3">
-            <div class="text-[88px] leading-none" style="filter:drop-shadow(0 8px 20px rgba(0,0,0,0.3))">🪙</div>
-          </div>
+    <!-- For your crop · auto-updates when user picks -->
+    <section class="mt-6">
+      <div class="px-4 flex items-baseline justify-between mb-3">
+        <div>
+          <h2 class="text-[19px] font-bold tracking-tight">For your <span id="cropPickName" class="text-emerald-700">Tomato</span></h2>
+          <p class="text-[12px] text-[#64748B] mt-0.5">Hand-picked products for <span id="cropPickNameLow">tomato</span> farmers</p>
         </div>
-      </a>
+        <a href="shop.html?crop=tomato" id="cropViewAll" class="nu text-[12.5px] font-semibold text-emerald-700 flex-shrink-0">View all →</a>
+      </div>
+      <div class="overflow-x-auto scroll-x">
+        <div class="flex gap-3 px-4 pb-1">
+
+          <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
+            <div class="aspect-square rounded-xl flex items-center justify-center p-3 mb-3 relative" style="background:#F8FAFC">
+              <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full object-contain"/>
+              <span class="absolute top-2 left-2 text-[10.5px] font-extrabold bg-amber-400 px-1.5 py-0.5 rounded shadow-sm tracking-wide" style="color:#78350F">28% OFF</span>
+            </div>
+            <div class="text-[14.5px] font-semibold text-[#0F172A] leading-tight">Chakrawarti</div>
+            <div class="text-[12px] text-[#64748B] mt-1">Insecticide · 100ml</div>
+            <div class="mt-1.5 flex items-center gap-1">
+              <i class="fa-solid fa-star text-[12px]" style="color:#F59E0B"></i>
+              <span class="text-[13px] font-bold text-[#0F172A] tnum">4.8</span>
+            </div>
+            <div class="flex items-baseline gap-1.5 mt-2">
+              <span class="text-[18px] font-bold tnum">₹358</span>
+              <span class="text-[12px] text-[#94A3B8] line-through tnum">₹495</span>
+            </div>
+            <button class="w-full mt-2 h-10 rounded-lg bg-emerald-600 text-white text-[13.5px] font-semibold">Add</button>
+          </a>
+
+          <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
+            <div class="aspect-square rounded-xl flex items-center justify-center p-3 mb-3 relative" style="background:#F8FAFC">
+              <img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" class="img-blend max-h-full object-contain"/>
+            </div>
+            <div class="text-[14.5px] font-semibold text-[#0F172A] leading-tight">Antivirus</div>
+            <div class="text-[12px] text-[#64748B] mt-1">Viricide · 100ml</div>
+            <div class="mt-1.5 flex items-center gap-1">
+              <i class="fa-solid fa-star text-[12px]" style="color:#F59E0B"></i>
+              <span class="text-[13px] font-bold text-[#0F172A] tnum">4.9</span>
+            </div>
+            <div class="flex items-baseline gap-1.5 mt-2">
+              <span class="text-[18px] font-bold tnum">₹327</span>
+            </div>
+            <button class="w-full mt-2 h-10 rounded-lg bg-emerald-600 text-white text-[13.5px] font-semibold">Add</button>
+          </a>
+
+          <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
+            <div class="aspect-square rounded-xl flex items-center justify-center p-3 mb-3 relative" style="background:#F8FAFC">
+              <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend max-h-full object-contain"/>
+              <span class="absolute top-2 left-2 text-[10.5px] font-extrabold bg-amber-400 px-1.5 py-0.5 rounded shadow-sm tracking-wide" style="color:#78350F">15% OFF</span>
+            </div>
+            <div class="text-[14.5px] font-semibold text-[#0F172A] leading-tight">NPK 19-19-19</div>
+            <div class="text-[12px] text-[#64748B] mt-1">Fertilizer · 1kg</div>
+            <div class="mt-1.5 flex items-center gap-1">
+              <i class="fa-solid fa-star text-[12px]" style="color:#F59E0B"></i>
+              <span class="text-[13px] font-bold text-[#0F172A] tnum">4.6</span>
+            </div>
+            <div class="flex items-baseline gap-1.5 mt-2">
+              <span class="text-[18px] font-bold tnum">₹289</span>
+              <span class="text-[12px] text-[#94A3B8] line-through tnum">₹340</span>
+            </div>
+            <button class="w-full mt-2 h-10 rounded-lg bg-emerald-600 text-white text-[13.5px] font-semibold">Add</button>
+          </a>
+
+          <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
+            <div class="aspect-square rounded-xl flex items-center justify-center p-3 mb-3 relative" style="background:#F8FAFC">
+              <img src="https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp" class="img-blend max-h-full object-contain"/>
+              <span class="absolute top-2 left-2 text-[10.5px] font-extrabold bg-amber-400 px-1.5 py-0.5 rounded shadow-sm tracking-wide" style="color:#78350F">22% OFF</span>
+            </div>
+            <div class="text-[14.5px] font-semibold text-[#0F172A] leading-tight">Triple Attack</div>
+            <div class="text-[12px] text-[#64748B] mt-1">Combo · 3-in-1</div>
+            <div class="mt-1.5 flex items-center gap-1">
+              <i class="fa-solid fa-star text-[12px]" style="color:#F59E0B"></i>
+              <span class="text-[13px] font-bold text-[#0F172A] tnum">4.7</span>
+            </div>
+            <div class="flex items-baseline gap-1.5 mt-2">
+              <span class="text-[18px] font-bold tnum">₹712</span>
+              <span class="text-[12px] text-[#94A3B8] line-through tnum">₹910</span>
+            </div>
+            <button class="w-full mt-2 h-10 rounded-lg bg-emerald-600 text-white text-[13.5px] font-semibold">Add</button>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- HERO offers · colorful horizontal carousel · snap-scroll -->
+    <section class="mt-6">
+      <div class="overflow-x-auto scroll-x" style="scroll-snap-type:x mandatory">
+        <div class="flex gap-3 px-4 pb-1">
+
+          <!-- Card 1 · ₹100 off (emerald) -->
+          <a href="cart.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:340px;scroll-snap-align:start;background:linear-gradient(135deg,#065F46 0%,#10B981 100%)">
+            <div class="flex items-center h-[148px]">
+              <div class="flex-1 p-5 text-white">
+                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/20 text-[10.5px] font-bold uppercase tracking-wider mb-2">Active · Auto-apply</div>
+                <div class="text-[24px] font-extrabold leading-tight">₹100 OFF</div>
+                <p class="text-[12px] text-emerald-50 mt-1">First order · Expires 22 May</p>
+                <div class="inline-flex items-center gap-1.5 mt-3 px-3.5 py-1.5 rounded-full bg-white text-emerald-700 text-[12.5px] font-extrabold">
+                  Use now <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </div>
+              </div>
+              <div class="text-[80px] leading-none pr-4" style="filter:drop-shadow(0 6px 16px rgba(0,0,0,0.3))">🪙</div>
+            </div>
+          </a>
+
+          <!-- Card 2 · Tomato Combo (orange/red) -->
+          <a href="shop.html?crop=tomato" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:340px;scroll-snap-align:start;background:linear-gradient(135deg,#9A3412 0%,#F97316 100%)">
+            <div class="flex items-center h-[148px]">
+              <div class="flex-1 p-5 text-white">
+                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/20 text-[10.5px] font-bold uppercase tracking-wider mb-2">Tomato special</div>
+                <div class="text-[24px] font-extrabold leading-tight">Save ₹250</div>
+                <p class="text-[12px] text-orange-50 mt-1">Triple-attack tomato combo</p>
+                <div class="inline-flex items-center gap-1.5 mt-3 px-3.5 py-1.5 rounded-full bg-white text-orange-700 text-[12.5px] font-extrabold">
+                  Shop combo <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </div>
+              </div>
+              <div class="text-[80px] leading-none pr-4" style="filter:drop-shadow(0 6px 16px rgba(0,0,0,0.3))">🍅</div>
+            </div>
+          </a>
+
+          <!-- Card 3 · Free delivery (blue) -->
+          <a href="shop.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:340px;scroll-snap-align:start;background:linear-gradient(135deg,#1E3A8A 0%,#3B82F6 100%)">
+            <div class="flex items-center h-[148px]">
+              <div class="flex-1 p-5 text-white">
+                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/20 text-[10.5px] font-bold uppercase tracking-wider mb-2">No min order</div>
+                <div class="text-[24px] font-extrabold leading-tight">Free Delivery</div>
+                <p class="text-[12px] text-blue-50 mt-1">On every order above ₹999</p>
+                <div class="inline-flex items-center gap-1.5 mt-3 px-3.5 py-1.5 rounded-full bg-white text-blue-700 text-[12.5px] font-extrabold">
+                  Start shopping <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </div>
+              </div>
+              <div class="text-[80px] leading-none pr-4" style="filter:drop-shadow(0 6px 16px rgba(0,0,0,0.3))">🚚</div>
+            </div>
+          </a>
+
+          <!-- Card 4 · Refer & Earn (purple) -->
+          <a href="account.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:340px;scroll-snap-align:start;background:linear-gradient(135deg,#581C87 0%,#A855F7 100%)">
+            <div class="flex items-center h-[148px]">
+              <div class="flex-1 p-5 text-white">
+                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/20 text-[10.5px] font-bold uppercase tracking-wider mb-2">Earn coins</div>
+                <div class="text-[24px] font-extrabold leading-tight">Refer & Earn ₹50</div>
+                <p class="text-[12px] text-purple-50 mt-1">For every farmer friend you invite</p>
+                <div class="inline-flex items-center gap-1.5 mt-3 px-3.5 py-1.5 rounded-full bg-white text-purple-700 text-[12.5px] font-extrabold">
+                  Invite now <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </div>
+              </div>
+              <div class="text-[80px] leading-none pr-4" style="filter:drop-shadow(0 6px 16px rgba(0,0,0,0.3))">🎁</div>
+            </div>
+          </a>
+
+        </div>
+      </div>
     </section>
 
     <!-- Active order strip (enhanced — live pulse + 3-step progress, same tile size) -->
@@ -485,7 +627,7 @@
       </a>
     </section>
 
-    <!-- Buy Again -->
+    <!-- Buy Again — same card style as Bestsellers -->
     <section class="mt-8">
       <div class="px-4 flex items-baseline justify-between mb-4">
         <h2 class="text-[21px] font-bold tracking-tight">Buy again</h2>
@@ -493,30 +635,61 @@
       </div>
       <div class="overflow-x-auto scroll-x">
         <div class="flex gap-3 px-4 pb-1">
-          <a href="pdp.html" class="nu flex-shrink-0 w-[150px]">
-            <div class="aspect-square rounded-xl flex items-center justify-center p-3" style="background:#F8FAFC;border:1px solid #F1F5F9">
+
+          <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
+            <div class="aspect-square rounded-xl flex items-center justify-center p-3 mb-3 relative" style="background:#F8FAFC">
               <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/>
+              <span class="absolute top-2 left-2 text-[10.5px] font-extrabold bg-amber-400 px-1.5 py-0.5 rounded shadow-sm tracking-wide" style="color:#78350F">28% OFF</span>
             </div>
-            <div class="text-[13.5px] font-semibold mt-2 leading-tight">Humic+Fulvic 98</div>
-            <div class="text-[11.5px] text-[#64748B] mt-0.5">Bought 12 May</div>
-            <button class="mt-2 w-full h-9 rounded-lg text-[12.5px] font-semibold" style="background:#F0FDF4;color:#047857;border:1px solid #BBF7D0">Buy again</button>
+            <div class="text-[14.5px] font-semibold text-[#0F172A] leading-tight">Humic+Fulvic 98</div>
+            <div class="text-[12px] text-[#64748B] mt-1">Bought 12 May · 1L</div>
+            <div class="mt-1.5 flex items-center gap-1">
+              <i class="fa-solid fa-star text-[12px]" style="color:#F59E0B"></i>
+              <span class="text-[13px] font-bold text-[#0F172A] tnum">4.7</span>
+            </div>
+            <div class="flex items-baseline gap-1.5 mt-2">
+              <span class="text-[18px] font-bold tnum">₹376</span>
+              <span class="text-[12px] text-[#94A3B8] line-through tnum">₹520</span>
+            </div>
+            <button class="w-full mt-2 h-10 rounded-lg bg-emerald-600 text-white text-[13.5px] font-semibold">Buy again</button>
           </a>
-          <a href="pdp.html" class="nu flex-shrink-0 w-[150px]">
-            <div class="aspect-square rounded-xl flex items-center justify-center p-3" style="background:#F8FAFC;border:1px solid #F1F5F9">
+
+          <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
+            <div class="aspect-square rounded-xl flex items-center justify-center p-3 mb-3 relative" style="background:#F8FAFC">
               <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full object-contain"/>
+              <span class="absolute top-2 left-2 text-[10.5px] font-extrabold bg-amber-400 px-1.5 py-0.5 rounded shadow-sm tracking-wide" style="color:#78350F">28% OFF</span>
             </div>
-            <div class="text-[13.5px] font-semibold mt-2 leading-tight">Chakrawarti</div>
-            <div class="text-[11.5px] text-[#64748B] mt-0.5">Bought 12 May</div>
-            <button class="mt-2 w-full h-9 rounded-lg text-[12.5px] font-semibold" style="background:#F0FDF4;color:#047857;border:1px solid #BBF7D0">Buy again</button>
+            <div class="text-[14.5px] font-semibold text-[#0F172A] leading-tight">Chakrawarti</div>
+            <div class="text-[12px] text-[#64748B] mt-1">Bought 12 May · 100ml</div>
+            <div class="mt-1.5 flex items-center gap-1">
+              <i class="fa-solid fa-star text-[12px]" style="color:#F59E0B"></i>
+              <span class="text-[13px] font-bold text-[#0F172A] tnum">4.8</span>
+            </div>
+            <div class="flex items-baseline gap-1.5 mt-2">
+              <span class="text-[18px] font-bold tnum">₹358</span>
+              <span class="text-[12px] text-[#94A3B8] line-through tnum">₹495</span>
+            </div>
+            <button class="w-full mt-2 h-10 rounded-lg bg-emerald-600 text-white text-[13.5px] font-semibold">Buy again</button>
           </a>
-          <a href="pdp.html" class="nu flex-shrink-0 w-[150px]">
-            <div class="aspect-square rounded-xl flex items-center justify-center p-3" style="background:#F8FAFC;border:1px solid #F1F5F9">
+
+          <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl p-3" style="background:#FFFFFF;border:1px solid #F1F5F9">
+            <div class="aspect-square rounded-xl flex items-center justify-center p-3 mb-3 relative" style="background:#F8FAFC">
               <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend max-h-full object-contain"/>
+              <span class="absolute top-2 left-2 text-[10.5px] font-extrabold bg-amber-400 px-1.5 py-0.5 rounded shadow-sm tracking-wide" style="color:#78350F">15% OFF</span>
             </div>
-            <div class="text-[13.5px] font-semibold mt-2 leading-tight">NPK 19-19-19</div>
-            <div class="text-[11.5px] text-[#64748B] mt-0.5">Bought 28 Apr</div>
-            <button class="mt-2 w-full h-9 rounded-lg text-[12.5px] font-semibold" style="background:#F0FDF4;color:#047857;border:1px solid #BBF7D0">Buy again</button>
+            <div class="text-[14.5px] font-semibold text-[#0F172A] leading-tight">NPK 19-19-19</div>
+            <div class="text-[12px] text-[#64748B] mt-1">Bought 28 Apr · 1kg</div>
+            <div class="mt-1.5 flex items-center gap-1">
+              <i class="fa-solid fa-star text-[12px]" style="color:#F59E0B"></i>
+              <span class="text-[13px] font-bold text-[#0F172A] tnum">4.6</span>
+            </div>
+            <div class="flex items-baseline gap-1.5 mt-2">
+              <span class="text-[18px] font-bold tnum">₹289</span>
+              <span class="text-[12px] text-[#94A3B8] line-through tnum">₹340</span>
+            </div>
+            <button class="w-full mt-2 h-10 rounded-lg bg-emerald-600 text-white text-[13.5px] font-semibold">Buy again</button>
           </a>
+
         </div>
       </div>
     </section>
@@ -668,6 +841,25 @@
       void themeRoot.offsetWidth; // restart animation
       themeRoot.classList.add('bloom');
     });
+
+    // Crop picker — selected ring + update "For your X" heading + View-all link
+    const cropPicks = document.querySelectorAll('.crop-pick');
+    const cropPickName = document.getElementById('cropPickName');
+    const cropPickNameLow = document.getElementById('cropPickNameLow');
+    const cropViewAll = document.getElementById('cropViewAll');
+    function selectCrop(btn){
+      cropPicks.forEach(b => b.querySelector('.crop-circle').style.boxShadow = '');
+      const circle = btn.querySelector('.crop-circle');
+      circle.style.boxShadow = '0 0 0 3px #10B981';
+      const crop = btn.dataset.crop;
+      const label = btn.querySelector('span:last-child').textContent;
+      cropPickName.textContent = label;
+      cropPickNameLow.textContent = label.toLowerCase();
+      cropViewAll.href = 'shop.html?crop=' + crop;
+    }
+    cropPicks.forEach(btn => btn.addEventListener('click', () => selectCrop(btn)));
+    // Pre-select Tomato (first card) on load
+    if (cropPicks[0]) selectCrop(cropPicks[0]);
   </script>
 </body>
 </html>

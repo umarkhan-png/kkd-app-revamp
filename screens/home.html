@@ -113,8 +113,9 @@
     50%      { transform: scale(1.15) rotate(3deg); opacity: 0.85; }
   }
 
-  /* Status bar — solid white when scrolled so page content never shows through; icons stay dark/visible */
-  .sticky-status { position: sticky; top: 0; z-index: 70; background: #FFFFFF; box-shadow: 0 1px 0 rgba(15,23,42,0.04); }
+  /* Status bar — transparent at top (top-theme gradient shows through); turns white only when scrolled (same trigger as compact categories) */
+  .sticky-status { position: sticky; top: 0; z-index: 70; background: transparent; transition: background .2s ease, box-shadow .2s ease; }
+  body.scrolled .sticky-status { background: #FFFFFF; box-shadow: 0 1px 0 rgba(15,23,42,0.04); }
   .sticky-actions { position: sticky; top: 32px; z-index: 60; background: #FFFFFF; }
   .sticky-search { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s; }
   .sticky-cats { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s; }

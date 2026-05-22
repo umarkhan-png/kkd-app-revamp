@@ -90,20 +90,21 @@
   }
   .expert-fab .expert-photo-wrap { position: relative; flex-shrink: 0; }
   .expert-fab .expert-photo { width: 40px; height: 40px; border-radius: 999px; object-fit: cover; border: 2px solid #FFFFFF; display: block; }
-  .expert-fab .expert-badge { display: none; position: absolute; bottom: -3px; right: -3px; width: 20px; height: 20px; border-radius: 999px; background: #F59E0B; border: 2px solid #FFFFFF; align-items: center; justify-content: center; color: #FFFFFF; font-size: 9px; }
   .expert-fab .expert-text  { display: flex; flex-direction: column; line-height: 1.1; transition: opacity .25s ease, max-width .25s ease; overflow: hidden; max-width: 160px; }
+  .expert-fab .expert-compact-label { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 6px; padding: 3px 9px; border-radius: 999px; font-size: 9.5px; font-weight: 800; color: #0F172A; background: #FFFFFF; white-space: nowrap; box-shadow: 0 4px 10px rgba(0,0,0,0.18); letter-spacing: 0.02em; }
   .expert-fab.lifted { bottom: 156px; }
-  /* Compact circle on scroll */
+  /* Compact circle on scroll — perfectly centered photo + floating 'Ask Expert' tag below */
   .expert-fab.compact {
-    padding: 4px;
-    max-width: 56px;
-    width: 56px; height: 56px;
+    padding: 5px;
+    max-width: 58px;
+    width: 58px; height: 58px;
     animation: none;
+    justify-content: center;
     box-shadow: 0 6px 16px -4px rgba(16,185,129,.55), inset 0 1px 0 rgba(255,255,255,.2);
   }
   .expert-fab.compact .expert-text { opacity: 0; max-width: 0; pointer-events: none; margin: 0; }
-  .expert-fab.compact .expert-photo { width: 44px; height: 44px; }
-  .expert-fab.compact .expert-badge { display: flex; }
+  .expert-fab.compact .expert-photo { width: 46px; height: 46px; }
+  .expert-fab.compact .expert-compact-label { display: block; }
   @keyframes expertFabPulse {
     0%, 100% { box-shadow: 0 6px 18px -4px rgba(16,185,129,.65), 0 0 0 2px rgba(16,185,129,.2), inset 0 1px 0 rgba(255,255,255,.18); }
     50%      { box-shadow: 0 6px 22px -2px rgba(16,185,129,.8),  0 0 0 7px rgba(16,185,129,.1), inset 0 1px 0 rgba(255,255,255,.18); }
@@ -210,9 +211,9 @@
       </div>
     </button>
     <div class="flex items-center gap-2 flex-shrink-0">
-      <div class="flex items-center gap-1.5 h-10 px-2">
-        <i class="fa-solid fa-coins text-[16px]" style="color:#D9A441"></i>
-        <span class="text-[15px] font-extrabold tnum" style="color:#0F172A">220</span>
+      <div class="flex items-center gap-1.5 h-10 px-3 rounded-full" style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgba(15,23,42,0.04)">
+        <i class="fa-solid fa-coins text-[14px]" style="color:#D9A441"></i>
+        <span class="text-[14px] font-extrabold tnum" style="color:#0F172A">220</span>
       </div>
     </div>
   </div>
@@ -487,34 +488,6 @@
       </div>
     </section>
 
-
-    <!-- Below-bestseller banner CAROUSEL · auto-cycles + swipeable (rain / festival / order) -->
-    <section class="mt-5">
-      <div id="statusScroll" class="overflow-x-auto" style="scroll-snap-type:x mandatory;scrollbar-width:none">
-        <div class="flex gap-3 px-4">
-          <a href="shop.html?weather=rain" class="status-slide flex-shrink-0 flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl" style="width:calc(100vw - 32px);max-width:358px;scroll-snap-align:start;background:#EFF6FF;border:1px solid #BFDBFE">
-            <i class="fa-solid fa-cloud-rain text-[14px] flex-shrink-0" style="color:#2563EB"></i>
-            <span class="flex-1 min-w-0 text-[12.5px] font-semibold leading-snug" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#1E40AF"><strong>Rain expected</strong> · 8 mm in 24 hrs · Hold spray</span>
-            <i class="fa-solid fa-chevron-right text-[11px] flex-shrink-0" style="color:#1D4ED8"></i>
-          </a>
-          <a href="shop.html" class="status-slide flex-shrink-0 flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl" style="width:calc(100vw - 32px);max-width:358px;scroll-snap-align:start;background:#FEF3C7;border:1px solid #FCD34D">
-            <i class="fa-solid fa-gifts text-[14px] flex-shrink-0" style="color:#DC2626"></i>
-            <span class="flex-1 min-w-0 text-[12.5px] font-semibold leading-snug" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#7F1D1D"><strong>Christmas offer</strong> · 20% off + free gift on ₹999+</span>
-            <i class="fa-solid fa-chevron-right text-[11px] flex-shrink-0" style="color:#B91C1C"></i>
-          </a>
-          <a href="track-order.html" class="status-slide flex-shrink-0 flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl" style="width:calc(100vw - 32px);max-width:358px;scroll-snap-align:start;background:#F0FDF4;border:1px solid #BBF7D0">
-            <i class="fa-solid fa-truck-fast text-[14px] flex-shrink-0" style="color:#059669"></i>
-            <span class="flex-1 min-w-0 text-[12.5px] font-semibold leading-snug" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#065F46"><strong>Arriving Thursday</strong> · #KKD-26194 · 3 items</span>
-            <i class="fa-solid fa-chevron-right text-[11px] flex-shrink-0" style="color:#047857"></i>
-          </a>
-        </div>
-      </div>
-      <div class="flex justify-center gap-1.5 mt-2" id="statusDots">
-        <span class="status-dot rounded-full transition-all" style="background:#059669;width:14px;height:6px"></span>
-        <span class="status-dot rounded-full transition-all" style="background:#CBD5E1;width:6px;height:6px"></span>
-        <span class="status-dot rounded-full transition-all" style="background:#CBD5E1;width:6px;height:6px"></span>
-      </div>
-    </section>
 
     <!-- ⚡ STEAL DEALS · Flipkart-Minutes style: lavender section + pink header strip per card + lock-price chips -->
     <section class="mt-6">
@@ -1085,16 +1058,16 @@
     </div>
   </a>
 
-  <!-- Ask Expert FAB — pill with agronomist photo + text · compact circle on scroll (with headset badge) -->
+  <!-- Ask Expert FAB — extended pill with photo + text · compact = centered photo circle + floating 'Ask Expert' label -->
   <a href="advisory.html" id="expertFab" class="expert-fab" aria-label="Ask an agronomist">
     <span class="expert-photo-wrap">
       <img src="../assets/expert.png" class="expert-photo" alt="Krishi expert · Indian agronomist"/>
-      <span class="expert-badge"><i class="fa-solid fa-headset"></i></span>
     </span>
     <span class="expert-text">
       <span class="text-[11.5px] font-extrabold">Ask Expert</span>
       <span class="text-[9px] font-semibold" style="color:rgba(255,255,255,0.85)">Free agronomist call</span>
     </span>
+    <span class="expert-compact-label">Ask Expert</span>
   </a>
 
   <!-- Bottom nav — Home / Crop / Category / Profile -->

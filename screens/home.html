@@ -149,14 +149,14 @@
   .cat-emoji { font-size: 34px; line-height: 1; transition: font-size .25s; }
   .cat-svg { width: 36px; height: 36px; transition: width .25s, height .25s; display: block; }
   .cat-label { transition: font-size .25s; }
-  body.scrolled .cat-emoji { font-size: 26px; }
-  body.scrolled .cat-svg { width: 28px; height: 28px; }
+  body.scrolled .cat-emoji { font-size: 22px; }
+  body.scrolled .cat-svg { width: 24px; height: 24px; }
   /* Compact state — shrinks circle + tile width together so gap looks consistent */
-  /* Scrolled: tiles distribute evenly across the full width — no blank space after last tile */
-  body.scrolled .cat-tile  { width: auto !important; }
-  body.scrolled .cat-circle { width: 52px; height: 52px; border-width: 1px; }
-  body.scrolled .cat-label { font-size: 12px; }
-  body.scrolled .sticky-cats { padding-top: 8px; padding-bottom: 8px; overflow: visible; }
+  /* Scrolled: even smaller tiles, distributed across full width */
+  body.scrolled .cat-tile  { width: auto !important; gap: 4px !important; }
+  body.scrolled .cat-circle { width: 42px; height: 42px; border-width: 1px; }
+  body.scrolled .cat-label { font-size: 10.5px; }
+  body.scrolled .sticky-cats { padding-top: 6px; padding-bottom: 6px; overflow: visible; }
   body.scrolled .sticky-cats > div { display: flex; justify-content: space-around; gap: 0 !important; padding: 0 8px !important; }
 </style>
 </head>
@@ -609,11 +609,11 @@
       </div>
     </section>
 
-    <!-- Shop by Crop · KKD-polished bordered card (inspired by partner app but refined) -->
-    <section class="mt-8 px-4">
-      <div class="rounded-2xl overflow-hidden bg-white" style="border:1px solid #E2E8F0;box-shadow:0 2px 12px rgba(15,23,42,0.04)">
+    <!-- Shop by Crop · edge-to-edge bordered card -->
+    <section class="mt-8">
+      <div class="overflow-hidden bg-white" style="border-top:1px solid #E2E8F0;border-bottom:1px solid #E2E8F0">
         <!-- Header row -->
-        <div class="px-4 pt-4 pb-3 flex items-center justify-between" style="border-bottom:1px solid #F1F5F9">
+        <div class="px-4 pt-4 pb-3 flex items-center justify-between" style="border-bottom:1px solid #F1F5F9;background:linear-gradient(180deg,#FFFFFF 0%,#F8FAFC 100%)">
           <div>
             <div class="flex items-center gap-1.5">
               <span class="text-[18px] leading-none">🌾</span>
@@ -627,19 +627,21 @@
           </button>
         </div>
 
-        <!-- EMPTY STATE (default) -->
-        <div id="cropEmptyState" class="px-4 py-8 text-center">
-          <div class="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-3" style="background:#ECFDF5">
-            <span class="text-[28px]">🌱</span>
+        <!-- EMPTY STATE (compact horizontal — half the height of before) -->
+        <div id="cropEmptyState" class="px-4 py-4 flex items-center gap-3" style="background:linear-gradient(160deg,#F4FBF7 0%,#EAF5EF 100%)">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;border:2px dashed #10B981">
+            <span class="text-[22px] leading-none">🌱</span>
           </div>
-          <div class="text-[14px] font-bold text-[#0F172A]">No crops added yet</div>
-          <p class="text-[12px] text-[#64748B] mt-1 max-w-[240px] mx-auto leading-snug">Tap <strong>Add Crop</strong> to see products hand-picked for your fields</p>
+          <div class="flex-1 min-w-0">
+            <div class="text-[13.5px] font-bold text-[#0F172A]">No crops added yet</div>
+            <p class="text-[11.5px] text-[#64748B] mt-0.5 leading-snug">Tap <strong style="color:#059669">+ Add Crop</strong> to see hand-picked products</p>
+          </div>
         </div>
 
         <!-- POPULATED STATE (hidden until first crop added) -->
-        <div id="cropPopulatedState" style="display:none">
+        <div id="cropPopulatedState" style="display:none;background:linear-gradient(160deg,#F4FBF7 0%,#EAF5EF 100%)">
           <!-- Crop tabs (horizontal scroll) -->
-          <div class="overflow-x-auto scroll-x pt-3 pb-2" style="background:#F8FAFC">
+          <div class="overflow-x-auto scroll-x pt-3 pb-2">
             <div class="flex gap-2 px-3 min-w-max" id="cropTabsList">
               <button data-crop="tomato" class="crop-tab flex flex-col items-center gap-1 bg-transparent border-0 cursor-pointer flex-shrink-0 py-1.5 px-1.5 rounded-lg" style="width:62px">
                 <div class="w-11 h-11 rounded-full overflow-hidden crop-circle" style="background:#FEE2E2;border:2px solid #D1D5DB">
@@ -1192,11 +1194,11 @@
           <span class="text-[12px] font-bold text-[#0F172A]">Paddy</span>
         </button>
         <button data-crop="onion" class="crop-choice flex flex-col items-center p-3 rounded-xl bg-white relative" style="border:2px solid #E2E8F0">
-          <div class="w-14 h-14 rounded-full flex items-center justify-center mb-2 text-[28px]" style="background:#FCE7F3">🧅</div>
+          <div class="w-14 h-14 rounded-full overflow-hidden mb-2" style="background:#FCE7F3"><img src="https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🧅',30)"/></div>
           <span class="text-[12px] font-bold text-[#0F172A]">Onion</span>
         </button>
         <button data-crop="potato" class="crop-choice flex flex-col items-center p-3 rounded-xl bg-white relative" style="border:2px solid #E2E8F0">
-          <div class="w-14 h-14 rounded-full flex items-center justify-center mb-2 text-[28px]" style="background:#FEF3C7">🥔</div>
+          <div class="w-14 h-14 rounded-full overflow-hidden mb-2" style="background:#FEF3C7"><img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🥔',30)"/></div>
           <span class="text-[12px] font-bold text-[#0F172A]">Potato</span>
         </button>
       </div>

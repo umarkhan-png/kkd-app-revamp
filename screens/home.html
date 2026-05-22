@@ -632,6 +632,46 @@
       </div>
     </section>
 
+    <!-- KISAN EXCLUSIVE promo · 2-banner stack: cream timer strip + dark green mega-mela card -->
+    <section class="px-4 mt-5">
+      <!-- TOP cream timer strip -->
+      <a href="shop.html?sale=mela" class="nu flex items-center justify-between px-3.5 py-2.5 rounded-xl mb-2" style="background:linear-gradient(180deg,#FEF3C7 0%,#FDE68A 100%);border:1px solid #FCD34D">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #FCD34D">
+            <i class="fa-regular fa-clock text-[12px]" style="color:#92400E"></i>
+          </div>
+          <div class="leading-tight">
+            <div class="text-[9.5px] font-extrabold tracking-[0.12em]" style="color:#92400E">FLASH DEAL ENDS IN</div>
+            <div class="text-[14px] font-extrabold tnum" style="color:#0F172A" id="megaTimer">02:34:56</div>
+          </div>
+        </div>
+        <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-extrabold text-white" style="background:#0F172A">SHOP NOW <i class="fa-solid fa-chevron-right text-[9px]"></i></span>
+      </a>
+
+      <!-- BOTTOM dark green mega-mela card -->
+      <a href="shop.html?sale=mela" class="nu block rounded-xl overflow-hidden relative" style="background:linear-gradient(135deg,#042919 0%,#0E7A4E 100%);min-height:140px;box-shadow:0 6px 18px -8px rgba(4,41,25,0.45)">
+        <!-- Decorative % symbol (faded amber) -->
+        <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[160px] font-black italic leading-none pointer-events-none select-none" style="color:rgba(251,191,36,0.13)">%</div>
+        <div class="relative p-4 text-white">
+          <div class="text-[10px] font-extrabold tracking-[0.18em]" style="color:#FBBF24">KISAN EXCLUSIVE</div>
+          <div class="mt-1.5 leading-none">
+            <span class="text-[24px] font-extrabold">Mega Krishi</span>
+            <span class="text-[24px] font-extrabold italic ml-1" style="color:#FBBF24">Bachat Mela</span>
+          </div>
+          <div class="flex items-end justify-between mt-3">
+            <div>
+              <div class="text-[9.5px] font-bold tracking-[0.12em]" style="color:rgba(255,255,255,0.75)">EXTRA DISCOUNT</div>
+              <div class="flex items-baseline gap-1 mt-0.5">
+                <span class="text-[24px] font-extrabold tnum">₹500</span>
+                <span class="text-[11px] font-bold tracking-wider" style="color:rgba(255,255,255,0.65)">OFF</span>
+              </div>
+            </div>
+            <button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12.5px] font-extrabold" style="background:#FBBF24;color:#0F172A;box-shadow:0 4px 12px rgba(251,191,36,0.4)">SHOP NOW <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
+          </div>
+        </div>
+      </a>
+    </section>
+
     <!-- Shop by Crop · edge-to-edge bordered card -->
     <section class="mt-8">
       <div class="overflow-hidden bg-white" style="border-top:1px solid #E2E8F0;border-bottom:1px solid #E2E8F0">
@@ -1338,19 +1378,23 @@
       ['touchend','mouseup'].forEach(evt   => scroller.addEventListener(evt, () => setTimeout(startAuto, 1500)));
     })();
 
-    // ⚡ Flash sale live countdown — counts down to 0, then resets to a fresh window
-    (function startFlashTimer(){
-      const el = document.getElementById('flashTimer');
-      if (!el) return;
-      function reset(){ return Date.now() + (2*3600 + 14*60 + 38) * 1000; }
-      let end = reset();
+    // ⚡ Live countdown — drives BOTH the flash timer and the Mega Mela timer
+    (function startCountdown(){
+      const targets = [
+        { el: document.getElementById('flashTimer'), seconds: 2*3600 + 14*60 + 38 },
+        { el: document.getElementById('megaTimer'),  seconds: 2*3600 + 34*60 + 56 }
+      ].filter(t => t.el);
+      if (!targets.length) return;
+      const ends = targets.map(t => Date.now() + t.seconds * 1000);
       function tick(){
-        let diff = end - Date.now();
-        if (diff <= 0) { end = reset(); diff = end - Date.now(); }
-        const h = String(Math.floor(diff/3600000)).padStart(2,'0');
-        const m = String(Math.floor(diff/60000) % 60).padStart(2,'0');
-        const s = String(Math.floor(diff/1000) % 60).padStart(2,'0');
-        el.textContent = h + ':' + m + ':' + s;
+        targets.forEach((t, i) => {
+          let diff = ends[i] - Date.now();
+          if (diff <= 0) { ends[i] = Date.now() + t.seconds * 1000; diff = ends[i] - Date.now(); }
+          const h = String(Math.floor(diff/3600000)).padStart(2,'0');
+          const m = String(Math.floor(diff/60000) % 60).padStart(2,'0');
+          const s = String(Math.floor(diff/1000) % 60).padStart(2,'0');
+          t.el.textContent = h + ':' + m + ':' + s;
+        });
       }
       tick();
       setInterval(tick, 1000);

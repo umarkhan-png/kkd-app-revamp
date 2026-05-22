@@ -43,6 +43,9 @@
     0%   { filter: saturate(1.4) brightness(1.03); }
     100% { filter: saturate(1) brightness(1); }
   }
+  /* Status carousel below bestseller — hide its scrollbar */
+  #statusScroll::-webkit-scrollbar { display: none; }
+
   /* Top status banner — always visible inside top-theme, JS swaps content + style classes */
   .theme-banner { display: flex; align-items: center; gap: 8px; padding: 9px 16px; font-size: 12.5px; font-weight: 600; border-top: 1px solid; }
   #topStatusBanner               { border-color: #BFDBFE; }
@@ -80,16 +83,27 @@
     background: linear-gradient(145deg,#10B981,#065F46);
     text-decoration: none; color: #FFFFFF;
     animation: expertFabPulse 2.8s ease-in-out infinite;
-    transition: bottom .3s ease, padding .3s ease, max-width .3s ease;
-    overflow: hidden;
-    max-width: 200px;
+    transition: bottom .3s ease, padding .3s ease, max-width .3s ease, width .3s ease, height .3s ease;
+    overflow: visible;
+    max-width: 220px;
+    box-shadow: 0 6px 18px -4px rgba(16,185,129,.55), inset 0 1px 0 rgba(255,255,255,.18);
   }
-  .expert-fab .expert-photo { width: 40px; height: 40px; border-radius: 999px; object-fit: cover; border: 2px solid #FFFFFF; flex-shrink: 0; }
-  .expert-fab .expert-text  { display: flex; flex-direction: column; line-height: 1.1; transition: opacity .25s ease, width .25s ease; }
+  .expert-fab .expert-photo-wrap { position: relative; flex-shrink: 0; }
+  .expert-fab .expert-photo { width: 40px; height: 40px; border-radius: 999px; object-fit: cover; border: 2px solid #FFFFFF; display: block; }
+  .expert-fab .expert-badge { display: none; position: absolute; bottom: -3px; right: -3px; width: 20px; height: 20px; border-radius: 999px; background: #F59E0B; border: 2px solid #FFFFFF; align-items: center; justify-content: center; color: #FFFFFF; font-size: 9px; }
+  .expert-fab .expert-text  { display: flex; flex-direction: column; line-height: 1.1; transition: opacity .25s ease, max-width .25s ease; overflow: hidden; max-width: 160px; }
   .expert-fab.lifted { bottom: 156px; }
-  .expert-fab.compact { padding: 4px; max-width: 50px; }
-  .expert-fab.compact .expert-text { opacity: 0; width: 0; pointer-events: none; }
-  .expert-fab.compact .expert-photo { width: 42px; height: 42px; }
+  /* Compact circle on scroll */
+  .expert-fab.compact {
+    padding: 4px;
+    max-width: 56px;
+    width: 56px; height: 56px;
+    animation: none;
+    box-shadow: 0 6px 16px -4px rgba(16,185,129,.55), inset 0 1px 0 rgba(255,255,255,.2);
+  }
+  .expert-fab.compact .expert-text { opacity: 0; max-width: 0; pointer-events: none; margin: 0; }
+  .expert-fab.compact .expert-photo { width: 44px; height: 44px; }
+  .expert-fab.compact .expert-badge { display: flex; }
   @keyframes expertFabPulse {
     0%, 100% { box-shadow: 0 6px 18px -4px rgba(16,185,129,.65), 0 0 0 2px rgba(16,185,129,.2), inset 0 1px 0 rgba(255,255,255,.18); }
     50%      { box-shadow: 0 6px 22px -2px rgba(16,185,129,.8),  0 0 0 7px rgba(16,185,129,.1), inset 0 1px 0 rgba(255,255,255,.18); }
@@ -473,6 +487,34 @@
       </div>
     </section>
 
+
+    <!-- Below-bestseller banner CAROUSEL · auto-cycles + swipeable (rain / festival / order) -->
+    <section class="mt-5">
+      <div id="statusScroll" class="overflow-x-auto" style="scroll-snap-type:x mandatory;scrollbar-width:none">
+        <div class="flex gap-3 px-4">
+          <a href="shop.html?weather=rain" class="status-slide flex-shrink-0 flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl" style="width:calc(100vw - 32px);max-width:358px;scroll-snap-align:start;background:#EFF6FF;border:1px solid #BFDBFE">
+            <i class="fa-solid fa-cloud-rain text-[14px] flex-shrink-0" style="color:#2563EB"></i>
+            <span class="flex-1 min-w-0 text-[12.5px] font-semibold leading-snug" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#1E40AF"><strong>Rain expected</strong> · 8 mm in 24 hrs · Hold spray</span>
+            <i class="fa-solid fa-chevron-right text-[11px] flex-shrink-0" style="color:#1D4ED8"></i>
+          </a>
+          <a href="shop.html" class="status-slide flex-shrink-0 flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl" style="width:calc(100vw - 32px);max-width:358px;scroll-snap-align:start;background:#FEF3C7;border:1px solid #FCD34D">
+            <i class="fa-solid fa-gifts text-[14px] flex-shrink-0" style="color:#DC2626"></i>
+            <span class="flex-1 min-w-0 text-[12.5px] font-semibold leading-snug" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#7F1D1D"><strong>Christmas offer</strong> · 20% off + free gift on ₹999+</span>
+            <i class="fa-solid fa-chevron-right text-[11px] flex-shrink-0" style="color:#B91C1C"></i>
+          </a>
+          <a href="track-order.html" class="status-slide flex-shrink-0 flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl" style="width:calc(100vw - 32px);max-width:358px;scroll-snap-align:start;background:#F0FDF4;border:1px solid #BBF7D0">
+            <i class="fa-solid fa-truck-fast text-[14px] flex-shrink-0" style="color:#059669"></i>
+            <span class="flex-1 min-w-0 text-[12.5px] font-semibold leading-snug" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#065F46"><strong>Arriving Thursday</strong> · #KKD-26194 · 3 items</span>
+            <i class="fa-solid fa-chevron-right text-[11px] flex-shrink-0" style="color:#047857"></i>
+          </a>
+        </div>
+      </div>
+      <div class="flex justify-center gap-1.5 mt-2" id="statusDots">
+        <span class="status-dot rounded-full transition-all" style="background:#059669;width:14px;height:6px"></span>
+        <span class="status-dot rounded-full transition-all" style="background:#CBD5E1;width:6px;height:6px"></span>
+        <span class="status-dot rounded-full transition-all" style="background:#CBD5E1;width:6px;height:6px"></span>
+      </div>
+    </section>
 
     <!-- ⚡ FLASH SALE · violet → magenta → amber gradient · 2×2 product grid -->
     <section class="px-4 mt-6">
@@ -1070,9 +1112,12 @@
     </div>
   </a>
 
-  <!-- Ask Expert FAB — pill with agronomist photo + text · compact circle on scroll -->
+  <!-- Ask Expert FAB — pill with agronomist photo + text · compact circle on scroll (with headset badge) -->
   <a href="advisory.html" id="expertFab" class="expert-fab" aria-label="Ask an agronomist">
-    <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=128&q=80&fit=crop" class="expert-photo" alt="Krishi expert"/>
+    <span class="expert-photo-wrap">
+      <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=128&q=80&fit=crop" class="expert-photo" alt="Krishi expert"/>
+      <span class="expert-badge"><i class="fa-solid fa-headset"></i></span>
+    </span>
     <span class="expert-text">
       <span class="text-[11.5px] font-extrabold">Ask Expert</span>
       <span class="text-[9px] font-semibold" style="color:rgba(255,255,255,0.85)">Free agronomist call</span>
@@ -1267,6 +1312,37 @@
       setInterval(() => { i = (i + 1) % states.length; banner.style.opacity = '0'; setTimeout(() => { apply(states[i]); banner.style.opacity = '1'; }, 200); }, 4000);
     })();
 
+    // Status carousel — auto-cycle every 4s, dots sync with manual swipe, pauses on touch
+    (function statusCarousel(){
+      const scroller = document.getElementById('statusScroll');
+      const dots = document.querySelectorAll('.status-dot');
+      if (!scroller || !dots.length) return;
+      let idx = 0, timer;
+      function updateDots(i){
+        dots.forEach((d, k) => {
+          d.style.background = k === i ? '#059669' : '#CBD5E1';
+          d.style.width = k === i ? '14px' : '6px';
+        });
+      }
+      function goTo(i){
+        idx = ((i % dots.length) + dots.length) % dots.length;
+        scroller.scrollTo({ left: idx * scroller.clientWidth, behavior: 'smooth' });
+        updateDots(idx);
+      }
+      function startAuto(){ clearInterval(timer); timer = setInterval(() => goTo(idx + 1), 4000); }
+      startAuto();
+      let raf;
+      scroller.addEventListener('scroll', () => {
+        if (raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          const i = Math.round(scroller.scrollLeft / scroller.clientWidth);
+          if (i !== idx) { idx = i; updateDots(idx); }
+        });
+      });
+      ['touchstart','mousedown'].forEach(evt => scroller.addEventListener(evt, () => clearInterval(timer)));
+      ['touchend','mouseup'].forEach(evt   => scroller.addEventListener(evt, () => setTimeout(startAuto, 1500)));
+    })();
+
     // ⚡ Flash sale live countdown — counts down to 0, then resets to a fresh window
     (function startFlashTimer(){
       const el = document.getElementById('flashTimer');
@@ -1290,25 +1366,40 @@
     const cartTotalEl = document.getElementById('cartTotal');
     const cartCountEl = document.getElementById('cartCount');
     const cartSaveEl  = document.getElementById('cartSave');
-    let cartItems = 0, cartAmount = 0, cartSaving = 0;
-    function bumpCart() {
-      cartItems += 1;
-      const price = 280 + Math.floor(Math.random() * 210);
-      const save  = Math.floor(price * 0.27);
-      cartAmount += price;
-      cartSaving += save;
+    let cartItems = 0, cartAmount = 0, cartSaving = 0, lastUnit = 0;
+    function renderCart() {
       cartTotalEl.textContent = cartAmount.toLocaleString('en-IN');
       cartCountEl.textContent = cartItems;
       cartSaveEl.textContent  = cartSaving.toLocaleString('en-IN');
-      // Singular vs plural label
       const itemLabel = cartCountEl.parentNode;
       itemLabel.childNodes.forEach(n => {
         if (n.nodeType === 3) n.textContent = (cartItems === 1 ? ' item' : ' items');
       });
+    }
+    function bumpCart() {
+      cartItems += 1;
+      lastUnit = 280 + Math.floor(Math.random() * 210);
+      cartAmount += lastUnit;
+      cartSaving += Math.floor(lastUnit * 0.27);
+      renderCart();
       cartBar.style.display = 'flex';
-      // Lift the Ask Expert FAB above the cart bar
       const fab = document.getElementById('expertFab');
       if (fab) fab.classList.add('lifted');
+    }
+    function unbumpCart() {
+      cartItems = Math.max(0, cartItems - 1);
+      if (cartItems === 0) {
+        cartAmount = 0; cartSaving = 0;
+        cartBar.style.display = 'none';
+        const fab = document.getElementById('expertFab');
+        if (fab) fab.classList.remove('lifted');
+        return;
+      }
+      // Subtract roughly the average unit price
+      const avg = Math.round(cartAmount / (cartItems + 1));
+      cartAmount = Math.max(0, cartAmount - avg);
+      cartSaving = Math.max(0, cartSaving - Math.floor(avg * 0.27));
+      renderCart();
     }
     // Hero "Add to cart →" buttons → simple bump (no in-place qty since hero is a banner CTA)
     document.querySelectorAll('button').forEach(btn => {
@@ -1343,6 +1434,7 @@
       decBtn.addEventListener('click', (e) => {
         e.preventDefault(); e.stopPropagation();
         qty -= 1;
+        unbumpCart();
         if (qty <= 0) { qty = 0; valEl.textContent = 1; showAdd(); }
         else { valEl.textContent = qty; }
       });

@@ -488,30 +488,36 @@
     </section>
 
 
-    <!-- ⚡ FLASH DEALS · KKD-style adaptation of the steal-deals layout (emerald + amber, clean white cards) -->
+    <!-- ⚡ FLASH DEALS · KKD style with extra visual flair · price/MRP/OFF% prominent · wider cards so text doesn't truncate -->
     <section class="mt-6">
-      <div class="px-4 py-4 relative" style="background:linear-gradient(180deg,#FFFBEB 0%,#FEF3C7 100%)">
+      <div class="px-4 py-4 relative overflow-hidden" style="background:linear-gradient(180deg,#FFFBEB 0%,#FEF3C7 100%)">
+        <!-- Decorative shimmer & sparkles for tadakta-hua effect -->
+        <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(45deg,rgba(251,191,36,0.07) 0,rgba(251,191,36,0.07) 2px,transparent 2px,transparent 16px)"></div>
+        <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(251,191,36,0.5) 0%,transparent 65%)"></div>
+        <div class="absolute top-2 left-1/3 text-[14px] pointer-events-none" style="animation:flashPulse 1.6s ease-in-out infinite;color:#F59E0B;filter:drop-shadow(0 0 6px rgba(251,191,36,0.6))">✨</div>
+        <div class="absolute bottom-2 right-1/4 text-[10px] pointer-events-none" style="animation:flashPulse 2s ease-in-out infinite;color:#F59E0B">✨</div>
+
         <!-- Header: emerald deal pill + amber timer chip -->
-        <div class="flex items-center justify-between mb-3">
+        <div class="relative flex items-center justify-between mb-3">
           <div class="flex items-center gap-2 min-w-0">
-            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold tracking-[0.12em] text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">⚡ FLASH DEALS</span>
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold tracking-[0.12em] text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%);box-shadow:0 4px 10px -2px rgba(5,150,105,0.5)">⚡ FLASH DEALS</span>
             <span class="text-[14.5px] font-extrabold text-[#0F172A] truncate">Save big this week</span>
           </div>
-          <div class="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-extrabold tnum" style="background:#0F172A;color:#FBBF24">
+          <div class="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-extrabold tnum" style="background:#0F172A;color:#FBBF24;box-shadow:0 4px 10px -2px rgba(15,23,42,0.4)">
             <i class="fa-regular fa-clock text-[10px]"></i>
             <span id="flashTimer">02:14:38</span>
           </div>
         </div>
 
-        <!-- Horizontal-scroll cards · clean white · emerald header strip + amber lock-price chip -->
-        <div class="overflow-x-auto scroll-x" style="margin-left:-4px;margin-right:-4px">
+        <!-- Horizontal-scroll cards — wider (190px) so text fits, MRP + OFF% prominent -->
+        <div class="overflow-x-auto scroll-x relative" style="margin-left:-4px;margin-right:-4px">
           <div class="flex gap-2.5 px-1 pb-1">
 
             <!-- Card 1 · Chakrawarti -->
-            <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:170px;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(15,23,42,0.04)">
-              <div class="px-3 py-2 flex items-center gap-1 text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
-                <i class="fa-solid fa-bolt text-[10px]" style="color:#FBBF24"></i>
-                <span class="text-[11px] font-extrabold">Save ₹247</span>
+            <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:190px;border:1px solid #E5E7EB;box-shadow:0 2px 10px rgba(15,23,42,0.06)">
+              <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
+                <span class="text-[11.5px] font-extrabold">Save ₹247</span>
+                <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">50% OFF</span>
               </div>
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
@@ -521,20 +527,22 @@
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
                 <div class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold mb-1" style="background:#F1F5F9;color:#475569">100 ml</div>
-                <div class="text-[12.5px] font-bold leading-tight text-[#0F172A] truncate">Chakrawarti ZC</div>
-                <div class="text-[10px] mt-0.5 truncate" style="color:#94A3B8">Chloran. + Lambda-Cy.</div>
-                <div class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md mt-1.5 text-[11px] font-extrabold" style="background:#FBBF24;color:#0F172A">
-                  <i class="fa-solid fa-lock text-[8px]"></i>₹248
+                <div class="text-[13px] font-bold leading-tight text-[#0F172A]">Chakrawarti ZC</div>
+                <div class="text-[10.5px] mt-0.5 truncate" style="color:#94A3B8">Chloran. + Lambda-Cy.</div>
+                <div class="flex items-baseline gap-1.5 mt-1.5">
+                  <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[11.5px] font-extrabold" style="background:#FBBF24;color:#0F172A">
+                    <i class="fa-solid fa-lock text-[8px]"></i>₹248
+                  </span>
+                  <span class="text-[11px] tnum line-through" style="color:#94A3B8">MRP ₹495</span>
                 </div>
-                <div class="text-[10px] mt-0.5" style="color:#94A3B8">was ₹495</div>
               </div>
             </div>
 
             <!-- Card 2 · Humic + Fulvic -->
-            <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:170px;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(15,23,42,0.04)">
-              <div class="px-3 py-2 flex items-center gap-1 text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
-                <i class="fa-solid fa-bolt text-[10px]" style="color:#FBBF24"></i>
-                <span class="text-[11px] font-extrabold">Save ₹208</span>
+            <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:190px;border:1px solid #E5E7EB;box-shadow:0 2px 10px rgba(15,23,42,0.06)">
+              <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
+                <span class="text-[11.5px] font-extrabold">Save ₹208</span>
+                <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">40% OFF</span>
               </div>
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
@@ -544,20 +552,22 @@
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
                 <div class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold mb-1" style="background:#F1F5F9;color:#475569">1 L</div>
-                <div class="text-[12.5px] font-bold leading-tight text-[#0F172A] truncate">Humic + Fulvic 98</div>
-                <div class="text-[10px] mt-0.5 truncate" style="color:#94A3B8">Humic 12% + Fulvic 8%</div>
-                <div class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md mt-1.5 text-[11px] font-extrabold" style="background:#FBBF24;color:#0F172A">
-                  <i class="fa-solid fa-lock text-[8px]"></i>₹312
+                <div class="text-[13px] font-bold leading-tight text-[#0F172A]">Humic + Fulvic 98</div>
+                <div class="text-[10.5px] mt-0.5 truncate" style="color:#94A3B8">Humic 12% + Fulvic 8%</div>
+                <div class="flex items-baseline gap-1.5 mt-1.5">
+                  <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[11.5px] font-extrabold" style="background:#FBBF24;color:#0F172A">
+                    <i class="fa-solid fa-lock text-[8px]"></i>₹312
+                  </span>
+                  <span class="text-[11px] tnum line-through" style="color:#94A3B8">MRP ₹520</span>
                 </div>
-                <div class="text-[10px] mt-0.5" style="color:#94A3B8">was ₹520</div>
               </div>
             </div>
 
             <!-- Card 3 · NPK -->
-            <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:170px;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(15,23,42,0.04)">
-              <div class="px-3 py-2 flex items-center gap-1 text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
-                <i class="fa-solid fa-bolt text-[10px]" style="color:#FBBF24"></i>
-                <span class="text-[11px] font-extrabold">Save ₹119</span>
+            <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:190px;border:1px solid #E5E7EB;box-shadow:0 2px 10px rgba(15,23,42,0.06)">
+              <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
+                <span class="text-[11.5px] font-extrabold">Save ₹119</span>
+                <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">35% OFF</span>
               </div>
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
@@ -567,20 +577,22 @@
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
                 <div class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold mb-1" style="background:#F1F5F9;color:#475569">1 kg</div>
-                <div class="text-[12.5px] font-bold leading-tight text-[#0F172A] truncate">NPK 19-19-19</div>
-                <div class="text-[10px] mt-0.5 truncate" style="color:#94A3B8">N 19 · P 19 · K 19</div>
-                <div class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md mt-1.5 text-[11px] font-extrabold" style="background:#FBBF24;color:#0F172A">
-                  <i class="fa-solid fa-lock text-[8px]"></i>₹221
+                <div class="text-[13px] font-bold leading-tight text-[#0F172A]">NPK 19-19-19</div>
+                <div class="text-[10.5px] mt-0.5 truncate" style="color:#94A3B8">N 19 · P 19 · K 19</div>
+                <div class="flex items-baseline gap-1.5 mt-1.5">
+                  <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[11.5px] font-extrabold" style="background:#FBBF24;color:#0F172A">
+                    <i class="fa-solid fa-lock text-[8px]"></i>₹221
+                  </span>
+                  <span class="text-[11px] tnum line-through" style="color:#94A3B8">MRP ₹340</span>
                 </div>
-                <div class="text-[10px] mt-0.5" style="color:#94A3B8">was ₹340</div>
               </div>
             </div>
 
             <!-- Card 4 · Triple Attack -->
-            <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:170px;border:1px solid #E5E7EB;box-shadow:0 2px 8px rgba(15,23,42,0.04)">
-              <div class="px-3 py-2 flex items-center gap-1 text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
-                <i class="fa-solid fa-bolt text-[10px]" style="color:#FBBF24"></i>
-                <span class="text-[11px] font-extrabold">Save ₹410</span>
+            <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:190px;border:1px solid #E5E7EB;box-shadow:0 2px 10px rgba(15,23,42,0.06)">
+              <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
+                <span class="text-[11.5px] font-extrabold">Save ₹410</span>
+                <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">45% OFF</span>
               </div>
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
@@ -590,12 +602,14 @@
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
                 <div class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold mb-1" style="background:#F1F5F9;color:#475569">Combo</div>
-                <div class="text-[12.5px] font-bold leading-tight text-[#0F172A] truncate">Triple Attack</div>
-                <div class="text-[10px] mt-0.5 truncate" style="color:#94A3B8">Imida + Mancozeb + NPK</div>
-                <div class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md mt-1.5 text-[11px] font-extrabold" style="background:#FBBF24;color:#0F172A">
-                  <i class="fa-solid fa-lock text-[8px]"></i>₹500
+                <div class="text-[13px] font-bold leading-tight text-[#0F172A]">Triple Attack</div>
+                <div class="text-[10.5px] mt-0.5 truncate" style="color:#94A3B8">Imida + Mancozeb + NPK</div>
+                <div class="flex items-baseline gap-1.5 mt-1.5">
+                  <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[11.5px] font-extrabold" style="background:#FBBF24;color:#0F172A">
+                    <i class="fa-solid fa-lock text-[8px]"></i>₹500
+                  </span>
+                  <span class="text-[11px] tnum line-through" style="color:#94A3B8">MRP ₹910</span>
                 </div>
-                <div class="text-[10px] mt-0.5" style="color:#94A3B8">was ₹910</div>
               </div>
             </div>
 

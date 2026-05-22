@@ -101,10 +101,8 @@
     50%      { transform: scale(1.15) rotate(3deg); opacity: 0.85; }
   }
 
-  /* Status bar sticky at top — frosted glass bg so page content doesn't show through */
-  .sticky-status { position: sticky; top: 0; z-index: 70; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-  .top-theme[data-theme="rain"]     .sticky-status { background: rgba(219,234,254,0.85); }
-  .top-theme[data-theme="festival"] .sticky-status { background: rgba(255,247,237,0.85); }
+  /* Status bar — transparent so the top-theme gradient flows through behind it */
+  .sticky-status { position: sticky; top: 0; z-index: 70; background: transparent; }
   .sticky-actions { position: sticky; top: 32px; z-index: 60; background: #FFFFFF; }
   .sticky-search { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s; }
   .sticky-cats { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s; }
@@ -198,9 +196,9 @@
       </div>
     </button>
     <div class="flex items-center gap-2 flex-shrink-0">
-      <div class="flex items-center gap-1.5 h-10 px-3 rounded-full" style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgba(15,23,42,0.04)">
-        <i class="fa-solid fa-coins text-[13px]" style="color:#F59E0B"></i>
-        <span class="text-[13.5px] font-bold tnum" style="color:#0F172A">220</span>
+      <div class="flex items-center gap-1.5 h-10 px-2">
+        <i class="fa-solid fa-coins text-[16px]" style="color:#D9A441"></i>
+        <span class="text-[15px] font-extrabold tnum" style="color:#0F172A">220</span>
       </div>
     </div>
   </div>
@@ -337,26 +335,11 @@
 
   <main>
 
-    <!-- Bestsellers — social-proof header (avatar pile + live counter + bold title) -->
+    <!-- Bestsellers (moved up — first section under categories) -->
     <section class="px-4 pt-5">
-      <div class="flex items-end justify-between mb-4">
-        <div class="min-w-0">
-          <!-- Top row: avatar pile + counter -->
-          <div class="flex items-center gap-2 mb-1.5">
-            <div class="flex" style="margin-right:-4px">
-              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[12px] leading-none" style="background:#FED7AA;border:2px solid #FFFFFF">🧑🏽‍🌾</div>
-              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[12px] leading-none" style="background:#A7F3D0;border:2px solid #FFFFFF;margin-left:-8px">👨🏽‍🌾</div>
-              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[12px] leading-none" style="background:#FDE68A;border:2px solid #FFFFFF;margin-left:-8px">👩🏽‍🌾</div>
-            </div>
-            <span class="text-[11.5px] font-semibold text-[#64748B]"><strong style="color:#047857">2,840 farmers</strong> picked these this week</span>
-          </div>
-          <!-- Title with red underline accent -->
-          <h2 class="text-[22px] font-extrabold tracking-tight text-[#0F172A] leading-tight inline-block relative">
-            What farmers are buying
-            <span class="absolute left-0 -bottom-0.5 w-12 h-1 rounded-full" style="background:#F59E0B"></span>
-          </h2>
-        </div>
-        <a href="shop.html" class="nu text-[13px] font-bold flex-shrink-0 mb-0.5" style="color:#059669">See all →</a>
+      <div class="flex items-baseline justify-between mb-4">
+        <h2 class="text-[21px] font-bold tracking-tight">Bestsellers</h2>
+        <a href="shop.html" class="nu text-[13px] font-semibold text-emerald-700">See all</a>
       </div>
       <div class="grid grid-cols-2 gap-3">
 

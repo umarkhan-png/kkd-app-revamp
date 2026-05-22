@@ -90,8 +90,7 @@
   }
   .expert-fab .expert-photo-wrap { position: relative; flex-shrink: 0; }
   .expert-fab .expert-photo { width: 40px; height: 40px; border-radius: 999px; object-fit: cover; border: 2px solid #FFFFFF; display: block; }
-  .expert-fab .expert-video-badge { display: none; position: absolute; bottom: -2px; right: -2px; width: 22px; height: 22px; border-radius: 999px; background: #DC2626; border: 2px solid #FFFFFF; align-items: center; justify-content: center; color: #FFFFFF; font-size: 9px; box-shadow: 0 2px 6px rgba(220,38,38,0.4); }
-  .expert-fab.compact .expert-video-badge { display: flex; }
+  .expert-fab .expert-video-badge { display: flex; position: absolute; bottom: -2px; right: -2px; width: 22px; height: 22px; border-radius: 999px; background: #DC2626; border: 2px solid #FFFFFF; align-items: center; justify-content: center; color: #FFFFFF; font-size: 9px; box-shadow: 0 2px 6px rgba(220,38,38,0.4); }
   .expert-fab .expert-text  { display: flex; flex-direction: column; line-height: 1.1; transition: opacity .25s ease, max-width .25s ease; overflow: hidden; max-width: 160px; }
   .expert-fab .expert-sub   { display: block; }
   .expert-fab.lifted { bottom: 156px; }
@@ -105,20 +104,6 @@
   }
   .expert-fab.compact .expert-photo { width: 52px; height: 52px; }
   .expert-fab.compact .expert-text  { opacity: 0; max-width: 0; pointer-events: none; margin: 0; }
-  .expert-fab.compact::before {
-    content: 'Ask Expert';
-    position: absolute;
-    right: calc(100% + 6px);
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 11px; font-weight: 800;
-    color: #064E3B; background: #FFFFFF;
-    padding: 5px 10px;
-    border-radius: 999px;
-    white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
-    pointer-events: none;
-  }
   @keyframes expertFabPulse {
     0%, 100% { box-shadow: 0 6px 18px -4px rgba(16,185,129,.65), 0 0 0 2px rgba(16,185,129,.2), inset 0 1px 0 rgba(255,255,255,.18); }
     50%      { box-shadow: 0 6px 22px -2px rgba(16,185,129,.8),  0 0 0 7px rgba(16,185,129,.1), inset 0 1px 0 rgba(255,255,255,.18); }
@@ -363,10 +348,10 @@
 
   </div><!-- /sticky-actions -->
 
-  <main>
+  <main style="display:flex;flex-direction:column">
 
     <!-- Bestsellers (moved up — first section under categories) -->
-    <section class="px-4 pt-5">
+    <section class="px-4 pt-5" style="order:2">
       <div class="flex items-baseline justify-between mb-4">
         <h2 class="text-[21px] font-bold tracking-tight">Bestsellers</h2>
         <a href="shop.html" class="nu text-[13px] font-semibold" style="color:#059669">See all</a>
@@ -505,7 +490,7 @@
 
 
     <!-- ⚡ FLASH DEALS · KKD style with extra visual flair · price/MRP/OFF% prominent · wider cards so text doesn't truncate -->
-    <section class="mt-6">
+    <section class="mt-6" style="order:1">
       <div class="px-4 py-4 relative overflow-hidden" style="background:linear-gradient(180deg,#FFFBEB 0%,#FEF3C7 100%)">
         <!-- Decorative shimmer & sparkles for tadakta-hua effect -->
         <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(45deg,rgba(251,191,36,0.07) 0,rgba(251,191,36,0.07) 2px,transparent 2px,transparent 16px)"></div>
@@ -513,15 +498,16 @@
         <div class="absolute top-2 left-1/3 text-[14px] pointer-events-none" style="animation:flashPulse 1.6s ease-in-out infinite;color:#F59E0B;filter:drop-shadow(0 0 6px rgba(251,191,36,0.6))">✨</div>
         <div class="absolute bottom-2 right-1/4 text-[10px] pointer-events-none" style="animation:flashPulse 2s ease-in-out infinite;color:#F59E0B">✨</div>
 
-        <!-- Header: emerald deal pill + amber timer chip -->
+        <!-- Header: emerald deal pill + appealing 3-box countdown clock -->
         <div class="relative flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2 min-w-0">
-            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold tracking-[0.12em] text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%);box-shadow:0 4px 10px -2px rgba(5,150,105,0.5)">⚡ FLASH DEALS</span>
-            <span class="text-[14.5px] font-extrabold text-[#0F172A] truncate">Save big this week</span>
-          </div>
-          <div class="flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-extrabold tnum" style="background:#0F172A;color:#FBBF24;box-shadow:0 4px 10px -2px rgba(15,23,42,0.4)">
-            <i class="fa-regular fa-clock text-[10px]"></i>
-            <span id="flashTimer">02:14:38</span>
+          <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-[12px] font-extrabold tracking-[0.12em] text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%);box-shadow:0 4px 10px -2px rgba(5,150,105,0.5)">⚡ FLASH DEALS</span>
+          <!-- Countdown clock: 3 separate dark tiles for H : M : S with amber digits + glow -->
+          <div class="flex items-center gap-1">
+            <span class="px-2 py-1.5 rounded-md tnum text-[14px] font-extrabold leading-none" id="flashTimerH" style="background:#0F172A;color:#FBBF24;min-width:34px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">02</span>
+            <span class="text-[14px] font-extrabold" style="color:#0F172A">:</span>
+            <span class="px-2 py-1.5 rounded-md tnum text-[14px] font-extrabold leading-none" id="flashTimerM" style="background:#0F172A;color:#FBBF24;min-width:34px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">14</span>
+            <span class="text-[14px] font-extrabold" style="color:#0F172A">:</span>
+            <span class="px-2 py-1.5 rounded-md tnum text-[14px] font-extrabold leading-none" id="flashTimerS" style="background:#0F172A;color:#FBBF24;min-width:34px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">38</span>
           </div>
         </div>
 
@@ -634,54 +620,51 @@
       </div>
     </section>
 
-    <!-- KISAN EXCLUSIVE promo · 2-banner stack: cream timer strip + dark green mega-mela card -->
-    <section class="px-4 mt-5">
-      <!-- TOP cream timer strip -->
-      <a href="shop.html?sale=mela" class="nu flex items-center justify-between px-3.5 py-2.5 rounded-xl mb-2" style="background:linear-gradient(180deg,#FEF3C7 0%,#FDE68A 100%);border:1px solid #FCD34D">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #FCD34D">
-            <i class="fa-regular fa-clock text-[12px]" style="color:#92400E"></i>
-          </div>
-          <div class="leading-tight">
-            <div class="text-[9.5px] font-extrabold tracking-[0.12em]" style="color:#92400E">FLASH DEAL ENDS IN</div>
-            <div class="text-[14px] font-extrabold tnum" style="color:#0F172A" id="megaTimer">02:34:56</div>
-          </div>
-        </div>
-        <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-extrabold text-white" style="background:#0F172A">SHOP NOW <i class="fa-solid fa-chevron-right text-[9px]"></i></span>
-      </a>
+    <!-- KISAN EXCLUSIVE · Mega Krishi Bachat Mela · TALLER tadakta-hua eye-catching dark-green card -->
+    <section class="px-4 mt-5" style="order:3">
+      <a href="shop.html?sale=mela" class="nu block rounded-2xl overflow-hidden relative" style="background:linear-gradient(135deg,#042919 0%,#0E7A4E 60%,#10B981 120%);min-height:200px;box-shadow:0 10px 26px -10px rgba(4,41,25,0.6)">
+        <!-- Animated shimmer overlay (diagonal sweep) -->
+        <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(45deg,rgba(251,191,36,0.06) 0,rgba(251,191,36,0.06) 2px,transparent 2px,transparent 16px)"></div>
+        <!-- Decorative giant % symbol (faded amber) -->
+        <div class="absolute right-2 top-1/2 -translate-y-1/2 text-[180px] font-black italic leading-none pointer-events-none select-none" style="color:rgba(251,191,36,0.16);text-shadow:0 0 60px rgba(251,191,36,0.25)">%</div>
+        <!-- Floating sparkles for tadakta-hua feel -->
+        <div class="absolute top-3 right-1/3 text-[14px] pointer-events-none" style="animation:flashPulse 1.6s ease-in-out infinite;color:#FBBF24;filter:drop-shadow(0 0 8px rgba(251,191,36,0.8))">✨</div>
+        <div class="absolute bottom-4 left-1/3 text-[11px] pointer-events-none" style="animation:flashPulse 2.2s ease-in-out infinite;color:#FBBF24;filter:drop-shadow(0 0 6px rgba(251,191,36,0.7))">✨</div>
+        <div class="absolute top-1/2 left-2 text-[9px] pointer-events-none" style="animation:flashPulse 1.9s ease-in-out infinite;color:#FBBF24">✨</div>
+        <!-- Amber glow orbs -->
+        <div class="absolute -top-12 -left-12 w-36 h-36 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(251,191,36,0.3) 0%,transparent 65%)"></div>
+        <div class="absolute -bottom-12 -right-12 w-44 h-44 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(16,185,129,0.4) 0%,transparent 65%)"></div>
 
-      <!-- BOTTOM dark green mega-mela card -->
-      <a href="shop.html?sale=mela" class="nu block rounded-xl overflow-hidden relative" style="background:linear-gradient(135deg,#042919 0%,#0E7A4E 100%);min-height:140px;box-shadow:0 6px 18px -8px rgba(4,41,25,0.45)">
-        <!-- Decorative % symbol (faded amber) -->
-        <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[160px] font-black italic leading-none pointer-events-none select-none" style="color:rgba(251,191,36,0.13)">%</div>
-        <div class="relative p-4 text-white">
-          <div class="text-[10px] font-extrabold tracking-[0.18em]" style="color:#FBBF24">KISAN EXCLUSIVE</div>
-          <div class="mt-1.5 leading-none">
-            <span class="text-[24px] font-extrabold">Mega Krishi</span>
-            <span class="text-[24px] font-extrabold italic ml-1" style="color:#FBBF24">Bachat Mela</span>
+        <div class="relative p-5 text-white">
+          <div class="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-[10.5px] font-extrabold tracking-[0.18em]" style="background:rgba(251,191,36,0.18);color:#FBBF24;border:1px solid rgba(251,191,36,0.4)">
+            <i class="fa-solid fa-crown text-[9px]"></i> KISAN EXCLUSIVE
           </div>
-          <div class="flex items-end justify-between mt-3">
+          <div class="mt-3 leading-none">
+            <span class="text-[28px] font-extrabold">Mega Krishi</span>
+            <span class="text-[28px] font-extrabold italic ml-1" style="color:#FBBF24;text-shadow:0 0 14px rgba(251,191,36,0.5)">Bachat Mela</span>
+          </div>
+          <div class="flex items-end justify-between mt-5">
             <div>
-              <div class="text-[9.5px] font-bold tracking-[0.12em]" style="color:rgba(255,255,255,0.75)">EXTRA DISCOUNT</div>
-              <div class="flex items-baseline gap-1 mt-0.5">
-                <span class="text-[24px] font-extrabold tnum">₹500</span>
-                <span class="text-[11px] font-bold tracking-wider" style="color:rgba(255,255,255,0.65)">OFF</span>
+              <div class="text-[10px] font-bold tracking-[0.14em]" style="color:rgba(255,255,255,0.8)">EXTRA DISCOUNT</div>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span class="text-[30px] font-extrabold tnum" style="color:#FBBF24;text-shadow:0 0 12px rgba(251,191,36,0.45)">₹500</span>
+                <span class="text-[12px] font-bold tracking-wider" style="color:rgba(255,255,255,0.75)">OFF</span>
               </div>
             </div>
-            <button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12.5px] font-extrabold" style="background:#FBBF24;color:#0F172A;box-shadow:0 4px 12px rgba(251,191,36,0.4)">SHOP NOW <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
+            <button class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-[13px] font-extrabold" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#0F172A;box-shadow:0 6px 18px rgba(251,191,36,0.55),inset 0 1px 0 rgba(255,255,255,0.4)">SHOP NOW <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
           </div>
         </div>
       </a>
     </section>
 
-    <!-- Shop by Crop · edge-to-edge bordered card -->
-    <section class="mt-8">
+    <!-- Select your crop · edge-to-edge bordered card -->
+    <section class="mt-8" style="order:4">
       <div class="overflow-hidden bg-white" style="border-top:1px solid #E2E8F0;border-bottom:1px solid #E2E8F0">
         <!-- Header row — light, single line, less text -->
         <div class="px-4 py-3 flex items-center justify-between" style="background:#FFFFFF">
           <div class="flex items-center gap-1.5">
             <span class="text-[18px] leading-none">🌾</span>
-            <span class="text-[16px] text-[#0F172A] font-extrabold tracking-tight">Shop by Crop</span>
+            <span class="text-[16px] text-[#0F172A] font-extrabold tracking-tight">Select your crop</span>
           </div>
           <button id="addCropBtn" class="flex items-center gap-1 text-[12.5px] font-bold px-2.5 py-1 rounded-full" style="color:#059669;background:#ECFDF5;border:1px solid #BBF7D0">
             <i class="fa-solid fa-plus text-[10px]"></i>
@@ -721,45 +704,45 @@
         </div>
 
         <!-- POPULATED STATE (hidden until first crop added) -->
-        <div id="cropPopulatedState" style="display:none;background:linear-gradient(160deg,#F4FBF7 0%,#EAF5EF 100%)">
-          <!-- Crop tabs (horizontal scroll) -->
-          <div class="overflow-x-auto scroll-x pt-3 pb-2">
-            <div class="flex gap-2 px-3 min-w-max" id="cropTabsList">
-              <button data-crop="tomato" class="crop-tab flex flex-col items-center gap-1 bg-transparent border-0 cursor-pointer flex-shrink-0 py-1.5 px-1.5 rounded-lg" style="width:62px">
-                <div class="w-11 h-11 rounded-full overflow-hidden crop-circle" style="background:#FEE2E2;border:2px solid #D1D5DB">
-                  <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🍅',24)"/>
+        <div id="cropPopulatedState" style="display:none;background:#FFFFFF">
+          <!-- Crop tabs (horizontal scroll) — same chip style as empty state -->
+          <div class="overflow-x-auto scroll-x pt-2 pb-3 px-4">
+            <div class="flex gap-2 min-w-max" id="cropTabsList">
+              <button data-crop="tomato" class="crop-tab flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-white cursor-pointer flex-shrink-0" style="border:1px solid #E5E7EB">
+                <div class="w-7 h-7 rounded-full overflow-hidden crop-circle" style="background:#FEE2E2">
+                  <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🍅',16)"/>
                 </div>
-                <span class="text-[11px] font-semibold text-[#0F172A] crop-label">Tomato</span>
+                <span class="text-[12.5px] font-bold text-[#0F172A] crop-label">Tomato</span>
               </button>
-              <button data-crop="chilli" class="crop-tab flex flex-col items-center gap-1 bg-transparent border-0 cursor-pointer flex-shrink-0 py-1.5 px-1.5 rounded-lg" style="width:62px">
-                <div class="w-11 h-11 rounded-full overflow-hidden crop-circle" style="background:#FFEDD5;border:2px solid #D1D5DB">
-                  <img src="https://images.unsplash.com/photo-1583852048850-31c0d0e7cdde?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌶️',24)"/>
+              <button data-crop="chilli" class="crop-tab flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-white cursor-pointer flex-shrink-0" style="border:1px solid #E5E7EB">
+                <div class="w-7 h-7 rounded-full overflow-hidden crop-circle" style="background:#FFEDD5">
+                  <img src="https://images.unsplash.com/photo-1583852048850-31c0d0e7cdde?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌶️',16)"/>
                 </div>
-                <span class="text-[11px] font-semibold text-[#0F172A] crop-label">Chilli</span>
+                <span class="text-[12.5px] font-bold text-[#0F172A] crop-label">Chilli</span>
               </button>
-              <button data-crop="wheat" class="crop-tab flex flex-col items-center gap-1 bg-transparent border-0 cursor-pointer flex-shrink-0 py-1.5 px-1.5 rounded-lg" style="width:62px">
-                <div class="w-11 h-11 rounded-full overflow-hidden crop-circle" style="background:#FEF3C7;border:2px solid #D1D5DB">
-                  <img src="https://images.unsplash.com/photo-1574226516831-e1dff420e562?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌾',24)"/>
+              <button data-crop="wheat" class="crop-tab flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-white cursor-pointer flex-shrink-0" style="border:1px solid #E5E7EB">
+                <div class="w-7 h-7 rounded-full overflow-hidden crop-circle" style="background:#FEF3C7">
+                  <img src="https://images.unsplash.com/photo-1574226516831-e1dff420e562?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌾',16)"/>
                 </div>
-                <span class="text-[11px] font-semibold text-[#0F172A] crop-label">Wheat</span>
+                <span class="text-[12.5px] font-bold text-[#0F172A] crop-label">Wheat</span>
               </button>
-              <button data-crop="maize" class="crop-tab flex flex-col items-center gap-1 bg-transparent border-0 cursor-pointer flex-shrink-0 py-1.5 px-1.5 rounded-lg" style="width:62px">
-                <div class="w-11 h-11 rounded-full overflow-hidden crop-circle" style="background:#FEF9C3;border:2px solid #D1D5DB">
-                  <img src="https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌽',24)"/>
+              <button data-crop="maize" class="crop-tab flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-white cursor-pointer flex-shrink-0" style="border:1px solid #E5E7EB">
+                <div class="w-7 h-7 rounded-full overflow-hidden crop-circle" style="background:#FEF9C3">
+                  <img src="https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌽',16)"/>
                 </div>
-                <span class="text-[11px] font-semibold text-[#0F172A] crop-label">Maize</span>
+                <span class="text-[12.5px] font-bold text-[#0F172A] crop-label">Maize</span>
               </button>
-              <button data-crop="cotton" class="crop-tab flex flex-col items-center gap-1 bg-transparent border-0 cursor-pointer flex-shrink-0 py-1.5 px-1.5 rounded-lg" style="width:62px">
-                <div class="w-11 h-11 rounded-full overflow-hidden crop-circle" style="background:#F1F5F9;border:2px solid #D1D5DB">
-                  <img src="https://images.unsplash.com/photo-1591885503007-9b80d9c89a52?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'☁️',22)"/>
+              <button data-crop="cotton" class="crop-tab flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-white cursor-pointer flex-shrink-0" style="border:1px solid #E5E7EB">
+                <div class="w-7 h-7 rounded-full overflow-hidden crop-circle" style="background:#F1F5F9">
+                  <img src="https://images.unsplash.com/photo-1591885503007-9b80d9c89a52?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'☁️',16)"/>
                 </div>
-                <span class="text-[11px] font-semibold text-[#0F172A] crop-label">Cotton</span>
+                <span class="text-[12.5px] font-bold text-[#0F172A] crop-label">Cotton</span>
               </button>
-              <button data-crop="sugarcane" class="crop-tab flex flex-col items-center gap-1 bg-transparent border-0 cursor-pointer flex-shrink-0 py-1.5 px-1.5 rounded-lg" style="width:62px">
-                <div class="w-11 h-11 rounded-full overflow-hidden crop-circle" style="background:#DCFCE7;border:2px solid #D1D5DB">
-                  <img src="https://images.unsplash.com/photo-1597106776019-b4ecc878c202?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🎋',22)"/>
+              <button data-crop="sugarcane" class="crop-tab flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-white cursor-pointer flex-shrink-0" style="border:1px solid #E5E7EB">
+                <div class="w-7 h-7 rounded-full overflow-hidden crop-circle" style="background:#DCFCE7">
+                  <img src="https://images.unsplash.com/photo-1597106776019-b4ecc878c202?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🎋',16)"/>
                 </div>
-                <span class="text-[11px] font-semibold text-[#0F172A] crop-label">Sugarcane</span>
+                <span class="text-[12.5px] font-bold text-[#0F172A] crop-label">Sugarcane</span>
               </button>
             </div>
           </div>
@@ -853,81 +836,105 @@
     </section>
 
     <!-- HERO showcase · asymmetric magazine cards: tall solid color block on LEFT with all info, big product image floating on RIGHT overflowing the panel -->
-    <section class="mt-6">
+    <section class="mt-6" style="order:5">
       <div class="overflow-x-auto scroll-x hero-square-scroll" style="scroll-snap-type:x mandatory">
         <div class="flex gap-3 px-4 pb-1">
 
-          <!-- Card 1 · Chakrawarti (emerald) -->
-          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative shadow-lg" style="width:340px;height:280px;scroll-snap-align:start;background:#FFFFFF;border:1px solid #E2E8F0">
-            <!-- Left color panel (60% width) -->
-            <div class="absolute left-0 top-0 bottom-0 p-4 flex flex-col justify-between text-white" style="width:60%;background:linear-gradient(155deg,#064E3B 0%,#10B981 100%)">
+          <!-- Card 1 · Chakrawarti -->
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative shadow-lg" style="width:340px;height:300px;scroll-snap-align:start;background:linear-gradient(155deg,#064E3B 0%,#10B981 100%);border:1px solid #E2E8F0">
+            <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend absolute" style="right:-12px;top:50%;transform:translateY(-50%);max-height:78%;max-width:55%;filter:drop-shadow(0 16px 28px rgba(0,0,0,0.3))"/>
+            <div class="relative p-4 flex flex-col justify-between text-white h-full" style="width:62%">
               <div>
                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FBBF24;color:#78350F">⭐ BESTSELLER</span>
-                <div class="text-[22px] font-extrabold leading-tight mt-3">Chakrawarti ZC</div>
-                <div class="text-[11.5px] mt-1" style="color:rgba(255,255,255,0.85)">Sucking pest killer · 100ml</div>
-                <div class="flex items-baseline gap-1.5 mt-3">
+                <div class="text-[22px] font-extrabold leading-tight mt-2.5">Chakrawarti ZC</div>
+                <div class="text-[11px] mt-0.5" style="color:rgba(255,255,255,0.85)">Chloran. + Lambda-Cy.</div>
+                <div class="flex flex-wrap gap-1 mt-2">
+                  <span class="text-[9.5px] font-bold px-1.5 py-0.5 rounded" style="background:rgba(255,255,255,0.18);color:#FFFFFF">🍅 Tomato</span>
+                  <span class="text-[9.5px] font-bold px-1.5 py-0.5 rounded" style="background:rgba(255,255,255,0.18);color:#FFFFFF">🌶️ Chilli</span>
+                </div>
+                <div class="text-[11px] font-semibold mt-2" style="color:#FBBF24">✓ Aphid · Whitefly · Thrips killer</div>
+              </div>
+              <div>
+                <div class="flex items-baseline gap-1.5">
                   <span class="text-[22px] font-extrabold tnum">₹358</span>
                   <span class="text-[12px] line-through" style="color:rgba(255,255,255,0.65)">₹495</span>
+                  <span class="text-[10px] font-extrabold ml-0.5" style="color:#FBBF24">28% OFF</span>
                 </div>
-                <div class="text-[10.5px] font-extrabold" style="color:#FBBF24">SAVE ₹137</div>
+                <button class="inline-flex items-center gap-1.5 mt-2 px-3.5 py-1.5 rounded-full text-[12px] font-extrabold" style="background:#FFFFFF;color:#064E3B;width:fit-content">Shop now <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
               </div>
-              <button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-extrabold" style="background:#FFFFFF;color:#064E3B;width:fit-content">Shop now <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
             </div>
-            <!-- Big product image on right, overlapping the panel for layered feel -->
-            <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend absolute" style="right:-8px;top:50%;transform:translateY(-50%);max-height:80%;max-width:55%;filter:drop-shadow(0 16px 28px rgba(0,0,0,0.3))"/>
           </a>
 
-          <!-- Card 2 · Antivirus (indigo) -->
-          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative shadow-lg" style="width:340px;height:280px;scroll-snap-align:start;background:#FFFFFF;border:1px solid #E2E8F0">
-            <div class="absolute left-0 top-0 bottom-0 p-4 flex flex-col justify-between text-white" style="width:60%;background:linear-gradient(155deg,#312E81 0%,#7C3AED 100%)">
+          <!-- Card 2 · Antivirus -->
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative shadow-lg" style="width:340px;height:300px;scroll-snap-align:start;background:linear-gradient(155deg,#312E81 0%,#7C3AED 100%);border:1px solid #E2E8F0">
+            <img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" class="img-blend absolute" style="right:-12px;top:50%;transform:translateY(-50%);max-height:78%;max-width:55%;filter:drop-shadow(0 16px 28px rgba(0,0,0,0.3))"/>
+            <div class="relative p-4 flex flex-col justify-between text-white h-full" style="width:62%">
               <div>
                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FCE7F3;color:#9D174D">✨ NEW</span>
-                <div class="text-[22px] font-extrabold leading-tight mt-3">Antivirus</div>
-                <div class="text-[11.5px] mt-1" style="color:rgba(255,255,255,0.85)">Yellow-leaf cure · 100ml</div>
-                <div class="flex items-baseline gap-1.5 mt-3">
-                  <span class="text-[22px] font-extrabold tnum">₹327</span>
+                <div class="text-[22px] font-extrabold leading-tight mt-2.5">Antivirus</div>
+                <div class="text-[11px] mt-0.5" style="color:rgba(255,255,255,0.85)">Anti-viral biostimulant</div>
+                <div class="flex flex-wrap gap-1 mt-2">
+                  <span class="text-[9.5px] font-bold px-1.5 py-0.5 rounded" style="background:rgba(255,255,255,0.18);color:#FFFFFF">🍅 Tomato</span>
+                  <span class="text-[9.5px] font-bold px-1.5 py-0.5 rounded" style="background:rgba(255,255,255,0.18);color:#FFFFFF">🌶️ Pepper</span>
                 </div>
-                <div class="text-[10.5px] font-extrabold" style="color:#FBBF24">★ 4.9 · top viricide</div>
+                <div class="text-[11px] font-semibold mt-2" style="color:#FBBF24">✓ Stops yellow-leaf virus fast</div>
               </div>
-              <button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-extrabold" style="background:#FFFFFF;color:#4338CA;width:fit-content">Shop now <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
+              <div>
+                <div class="flex items-baseline gap-1.5">
+                  <span class="text-[22px] font-extrabold tnum">₹327</span>
+                  <span class="text-[10px] font-extrabold ml-0.5" style="color:#FBBF24">★ 4.9</span>
+                </div>
+                <button class="inline-flex items-center gap-1.5 mt-2 px-3.5 py-1.5 rounded-full text-[12px] font-extrabold" style="background:#FFFFFF;color:#4338CA;width:fit-content">Shop now <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
+              </div>
             </div>
-            <img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" class="img-blend absolute" style="right:-8px;top:50%;transform:translateY(-50%);max-height:80%;max-width:55%;filter:drop-shadow(0 16px 28px rgba(0,0,0,0.3))"/>
           </a>
 
-          <!-- Card 3 · NPK 19-19-19 (amber) -->
-          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative shadow-lg" style="width:340px;height:280px;scroll-snap-align:start;background:#FFFFFF;border:1px solid #E2E8F0">
-            <div class="absolute left-0 top-0 bottom-0 p-4 flex flex-col justify-between text-white" style="width:60%;background:linear-gradient(155deg,#7C2D12 0%,#F59E0B 100%)">
+          <!-- Card 3 · NPK 19-19-19 -->
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative shadow-lg" style="width:340px;height:300px;scroll-snap-align:start;background:linear-gradient(155deg,#7C2D12 0%,#F59E0B 100%);border:1px solid #E2E8F0">
+            <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend absolute" style="right:-12px;top:50%;transform:translateY(-50%);max-height:78%;max-width:55%;filter:drop-shadow(0 16px 28px rgba(0,0,0,0.3))"/>
+            <div class="relative p-4 flex flex-col justify-between text-white h-full" style="width:62%">
               <div>
                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FFFFFF;color:#9A3412">🌱 TOP PICK</span>
-                <div class="text-[22px] font-extrabold leading-tight mt-3">NPK 19-19-19</div>
-                <div class="text-[11.5px] mt-1" style="color:rgba(255,255,255,0.9)">Balanced fertilizer · 1kg</div>
-                <div class="flex items-baseline gap-1.5 mt-3">
+                <div class="text-[22px] font-extrabold leading-tight mt-2.5">NPK 19-19-19</div>
+                <div class="text-[11px] mt-0.5" style="color:rgba(255,255,255,0.9)">N 19 · P 19 · K 19</div>
+                <div class="flex flex-wrap gap-1 mt-2">
+                  <span class="text-[9.5px] font-bold px-1.5 py-0.5 rounded" style="background:rgba(255,255,255,0.22);color:#FFFFFF">All crops</span>
+                </div>
+                <div class="text-[11px] font-semibold mt-2" style="color:#FEF3C7">✓ Boosts root + flowering + fruit</div>
+              </div>
+              <div>
+                <div class="flex items-baseline gap-1.5">
                   <span class="text-[22px] font-extrabold tnum">₹289</span>
                   <span class="text-[12px] line-through" style="color:rgba(255,255,255,0.7)">₹340</span>
+                  <span class="text-[10px] font-extrabold ml-0.5" style="color:#FEF3C7">15% OFF</span>
                 </div>
-                <div class="text-[10.5px] font-extrabold" style="color:#FEF3C7">SAVE ₹51</div>
+                <button class="inline-flex items-center gap-1.5 mt-2 px-3.5 py-1.5 rounded-full text-[12px] font-extrabold" style="background:#FFFFFF;color:#9A3412;width:fit-content">Shop now <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
               </div>
-              <button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-extrabold" style="background:#FFFFFF;color:#9A3412;width:fit-content">Shop now <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
             </div>
-            <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend absolute" style="right:-8px;top:50%;transform:translateY(-50%);max-height:80%;max-width:55%;filter:drop-shadow(0 16px 28px rgba(0,0,0,0.3))"/>
           </a>
 
-          <!-- Card 4 · Humic + Fulvic 98 (teal) -->
-          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative shadow-lg" style="width:340px;height:280px;scroll-snap-align:start;background:#FFFFFF;border:1px solid #E2E8F0">
-            <div class="absolute left-0 top-0 bottom-0 p-4 flex flex-col justify-between text-white" style="width:60%;background:linear-gradient(155deg,#134E4A 0%,#0D9488 100%)">
+          <!-- Card 4 · Humic + Fulvic 98 -->
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative shadow-lg" style="width:340px;height:300px;scroll-snap-align:start;background:linear-gradient(155deg,#134E4A 0%,#0D9488 100%);border:1px solid #E2E8F0">
+            <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend absolute" style="right:-12px;top:50%;transform:translateY(-50%);max-height:78%;max-width:55%;filter:drop-shadow(0 16px 28px rgba(0,0,0,0.3))"/>
+            <div class="relative p-4 flex flex-col justify-between text-white h-full" style="width:62%">
               <div>
                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FBBF24;color:#78350F">🔥 HOT DEAL</span>
-                <div class="text-[20px] font-extrabold leading-tight mt-3">Humic + Fulvic 98</div>
-                <div class="text-[11.5px] mt-1" style="color:rgba(255,255,255,0.85)">Bio-stimulant · 1L</div>
-                <div class="flex items-baseline gap-1.5 mt-3">
+                <div class="text-[20px] font-extrabold leading-tight mt-2.5">Humic + Fulvic 98</div>
+                <div class="text-[11px] mt-0.5" style="color:rgba(255,255,255,0.85)">Humic 12% + Fulvic 8%</div>
+                <div class="flex flex-wrap gap-1 mt-2">
+                  <span class="text-[9.5px] font-bold px-1.5 py-0.5 rounded" style="background:rgba(255,255,255,0.18);color:#FFFFFF">All crops</span>
+                </div>
+                <div class="text-[11px] font-semibold mt-2" style="color:#FBBF24">✓ Wakes up tired soil + roots</div>
+              </div>
+              <div>
+                <div class="flex items-baseline gap-1.5">
                   <span class="text-[22px] font-extrabold tnum">₹376</span>
                   <span class="text-[12px] line-through" style="color:rgba(255,255,255,0.7)">₹520</span>
+                  <span class="text-[10px] font-extrabold ml-0.5" style="color:#FBBF24">28% OFF</span>
                 </div>
-                <div class="text-[10.5px] font-extrabold" style="color:#FBBF24">SAVE ₹144</div>
+                <button class="inline-flex items-center gap-1.5 mt-2 px-3.5 py-1.5 rounded-full text-[12px] font-extrabold" style="background:#FFFFFF;color:#134E4A;width:fit-content">Shop now <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
               </div>
-              <button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-extrabold" style="background:#FFFFFF;color:#134E4A;width:fit-content">Shop now <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
             </div>
-            <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend absolute" style="right:-8px;top:50%;transform:translateY(-50%);max-height:80%;max-width:55%;filter:drop-shadow(0 16px 28px rgba(0,0,0,0.3))"/>
           </a>
 
         </div>
@@ -936,7 +943,7 @@
 
 
     <!-- Buy Again — same card style as Bestsellers -->
-    <section class="mt-8">
+    <section class="mt-8" style="order:6">
       <div class="px-4 flex items-baseline justify-between mb-4">
         <h2 class="text-[21px] font-bold tracking-tight">Buy again</h2>
         <a href="orders.html" class="nu text-[13px] font-semibold text-emerald-700">History →</a>
@@ -1302,13 +1309,12 @@
     const cropViewAll = document.getElementById('cropViewAll');
     function selectCropTab(btn){
       cropTabs.forEach(b => {
-        b.style.background = 'transparent';
-        const c = b.querySelector('.crop-circle'); if (c) c.style.borderColor = '#D1D5DB';
+        b.style.background = '#FFFFFF';
+        b.style.borderColor = '#E5E7EB';
         const l = b.querySelector('.crop-label');  if (l) l.style.color = '#0F172A';
       });
       btn.style.background = '#ECFDF5';
-      const circle = btn.querySelector('.crop-circle');
-      if (circle) circle.style.borderColor = '#059669';
+      btn.style.borderColor = '#059669';
       const label = btn.querySelector('.crop-label');
       if (label) label.style.color = '#0E7A4E';
       const crop = btn.dataset.crop;
@@ -1381,23 +1387,20 @@
       ['touchend','mouseup'].forEach(evt   => scroller.addEventListener(evt, () => setTimeout(startAuto, 1500)));
     })();
 
-    // ⚡ Live countdown — drives BOTH the flash timer and the Mega Mela timer
+    // ⚡ Live countdown — populates the 3-box flash timer (H : M : S)
     (function startCountdown(){
-      const targets = [
-        { el: document.getElementById('flashTimer'), seconds: 2*3600 + 14*60 + 38 },
-        { el: document.getElementById('megaTimer'),  seconds: 2*3600 + 34*60 + 56 }
-      ].filter(t => t.el);
-      if (!targets.length) return;
-      const ends = targets.map(t => Date.now() + t.seconds * 1000);
+      const hEl = document.getElementById('flashTimerH');
+      const mEl = document.getElementById('flashTimerM');
+      const sEl = document.getElementById('flashTimerS');
+      if (!hEl || !mEl || !sEl) return;
+      const initial = 2*3600 + 14*60 + 38;
+      let end = Date.now() + initial * 1000;
       function tick(){
-        targets.forEach((t, i) => {
-          let diff = ends[i] - Date.now();
-          if (diff <= 0) { ends[i] = Date.now() + t.seconds * 1000; diff = ends[i] - Date.now(); }
-          const h = String(Math.floor(diff/3600000)).padStart(2,'0');
-          const m = String(Math.floor(diff/60000) % 60).padStart(2,'0');
-          const s = String(Math.floor(diff/1000) % 60).padStart(2,'0');
-          t.el.textContent = h + ':' + m + ':' + s;
-        });
+        let diff = end - Date.now();
+        if (diff <= 0) { end = Date.now() + initial * 1000; diff = end - Date.now(); }
+        hEl.textContent = String(Math.floor(diff/3600000)).padStart(2,'0');
+        mEl.textContent = String(Math.floor(diff/60000) % 60).padStart(2,'0');
+        sEl.textContent = String(Math.floor(diff/1000) % 60).padStart(2,'0');
       }
       tick();
       setInterval(tick, 1000);

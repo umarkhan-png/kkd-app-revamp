@@ -357,7 +357,7 @@
 
     <!-- ⚡ FLASH DEALS · KKD style with extra visual flair · price/MRP/OFF% prominent · wider cards so text doesn't truncate -->
     <section class="mt-6">
-      <div class="px-4 py-4 relative overflow-hidden" style="background:linear-gradient(135deg,#EA580C 0%,#F59E0B 35%,#FBBF24 70%,#FDE68A 100%)">
+      <div class="px-4 py-4 relative" style="background:linear-gradient(135deg,#EA580C 0%,#F59E0B 35%,#FBBF24 70%,#FDE68A 100%);overflow:visible">
         <!-- Tadakta-hua: deep amber-orange base + diagonal shimmer stripes + 3 glow orbs + 5 floating sparkles + vignette -->
         <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(45deg,rgba(255,255,255,0.15) 0,rgba(255,255,255,0.15) 2px,transparent 2px,transparent 14px)"></div>
         <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(-45deg,rgba(124,45,18,0.08) 0,rgba(124,45,18,0.08) 1px,transparent 1px,transparent 22px)"></div>
@@ -386,8 +386,8 @@
           </div>
         </div>
 
-        <!-- Horizontal-scroll cards — wider (190px) so text fits, MRP + OFF% prominent -->
-        <div class="overflow-x-auto scroll-x relative" style="margin-left:-4px;margin-right:-4px">
+        <!-- Horizontal-scroll cards — extends past the section's right px-4 padding so the 3rd card peeks all the way to the viewport's right edge (no trailing gutter) -->
+        <div class="overflow-x-auto scroll-x relative" style="margin-left:-4px;margin-right:-16px">
           <div class="flex gap-2.5 px-1 pb-1">
 
             <!-- Card 1 · Chakrawarti -->
@@ -499,7 +499,7 @@
     <!-- KISAN EXCLUSIVE · Mega Krishi Bachat Mela · 3-slide auto-rotating carousel -->
     <section class="mt-5">
       <div class="relative">
-        <div id="melaRail" class="flex gap-3 scroll-x snap-x snap-mandatory scroll-smooth" style="padding:0 0 0 16px;scroll-padding-left:0">
+        <div id="melaRail" class="flex gap-4 scroll-x snap-x snap-mandatory scroll-smooth" style="padding:0 0 0 16px;scroll-padding-left:16px">
 
           <!-- Slide 1 · Mega Krishi Bachat Mela headline (KKD dark-green tadakta) -->
           <a href="shop.html?sale=mela" data-mela-slide="0" class="nu snap-start flex-shrink-0 block rounded-2xl overflow-hidden relative" style="width:calc(100vw - 44px);max-width:360px;min-height:150px;background:linear-gradient(135deg,#042919 0%,#0E7A4E 60%,#10B981 120%);box-shadow:0 10px 26px -10px rgba(4,41,25,0.6)">

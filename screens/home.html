@@ -114,6 +114,11 @@
     0%, 100% { transform: scale(1) rotate(-3deg); opacity: 1; }
     50%      { transform: scale(1.15) rotate(3deg); opacity: 0.85; }
   }
+  /* Select-your-crop View Products CTA — gentle pulse so user notices the tap target once a crop is picked */
+  @keyframes cropCtaPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 8px 20px -6px rgba(5,150,105,0.55),0 2px 6px rgba(0,0,0,0.08); }
+    50%      { transform: scale(1.02); box-shadow: 0 10px 26px -6px rgba(5,150,105,0.7),0 3px 8px rgba(0,0,0,0.1); }
+  }
 
   /* Status bar — transparent at top (top-theme gradient shows through); turns white only when scrolled (same trigger as compact categories) */
   .sticky-status { position: sticky; top: 0; z-index: 70; background: transparent; transition: background .2s ease, box-shadow .2s ease; }
@@ -629,24 +634,28 @@
       </div>
     </section>
 
-    <!-- Select your crop · edge-to-edge · inline multi-select chip picker · always-visible View More CTA -->
+    <!-- Select your crop · edge-to-edge · inline multi-select chip picker · tinted bg + stateful CTA so the affordance is obvious -->
     <section class="mt-8">
-      <div class="overflow-hidden bg-white" style="border-top:1px solid #E2E8F0;border-bottom:1px solid #E2E8F0">
+      <div class="overflow-hidden relative" style="background:linear-gradient(180deg,#F0FDF4 0%,#FFFFFF 55%,#ECFDF5 100%);border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0">
+        <!-- Faded leaf motif accents top-right + bottom-left for the harvest feel -->
+        <div class="absolute -top-4 -right-3 text-[80px] leading-none pointer-events-none select-none" style="color:rgba(5,150,105,0.07);transform:rotate(20deg)">🌱</div>
+        <div class="absolute -bottom-4 -left-2 text-[70px] leading-none pointer-events-none select-none" style="color:rgba(5,150,105,0.06);transform:rotate(-15deg)">🌾</div>
         <!-- Header — wordmark + 1-line helper, no emoji, no Add button -->
-        <div class="px-4 pt-4 pb-2" style="background:#FFFFFF">
+        <div class="relative px-4 pt-4 pb-2">
           <div class="text-[16px] text-[#0F172A] font-extrabold tracking-tight">Select your crop</div>
-          <div class="text-[11.5px] text-[#64748B] mt-0.5">Tap all crops you grow · see relevant products</div>
+          <div class="text-[11.5px] text-[#047857] font-semibold mt-0.5">Tap all crops you grow · see relevant products</div>
         </div>
 
         <!-- Inline scrollable chip picker — populated by JS from CROP_META · "More" chip pinned at end for the full 20+ crop catalog -->
-        <div class="overflow-x-auto scroll-x pt-1 pb-3">
+        <div class="relative overflow-x-auto scroll-x pt-1 pb-3">
           <div id="cropInlinePicker" class="flex gap-2 px-4 min-w-max"></div>
         </div>
 
-        <!-- "View Products" CTA — opens the full shop filtered by selected crops (text adjusts when exactly one crop is active) -->
-        <div class="px-4 pb-4">
-          <a id="cropViewMore" href="shop.html" class="nu flex items-center justify-center gap-1.5 bg-white rounded-xl py-2.5 text-[13.5px] font-bold text-emerald-700" style="border:1.5px solid rgba(14,122,78,0.4)">
-            View Products <i class="fa-solid fa-arrow-right text-[11px]"></i>
+        <!-- "View Products" CTA — disabled-looking when 0 crops selected, vivid emerald + pulse when one or more is selected -->
+        <div class="relative px-4 pb-4">
+          <a id="cropViewMore" href="shop.html" class="nu flex items-center justify-center gap-1.5 rounded-xl py-3 text-[14px] font-extrabold transition-all" style="background:#FFFFFF;color:#94A3B8;border:1.5px dashed #CBD5E1">
+            <span id="cropCtaLabel">Select crop above to view products</span>
+            <i class="fa-solid fa-arrow-right text-[11px]"></i>
           </a>
         </div>
 
@@ -1554,25 +1563,27 @@
       closeModalFn();
     });
 
-    // Shop-by-Crop inline picker — every crop in CROP_META is a chip · multi-select · ✓ tick badge · "More" chip at end for full 20+ crop catalog · CTA opens shop with selected filter (no inline product grid)
+    // Shop-by-Crop inline picker — every crop in CROP_META is a chip · multi-select · ✓ tick badge · "More" chip at end · bigger crisp photos (w=200&q=85, 56x56 circle) · stateful CTA that visually changes when crops are selected so the affordance is obvious
     (function(){
       const UNS = 'https://images.unsplash.com/';
+      const Q   = '?w=200&h=200&q=85&fit=crop&crop=focalpoint&fp-x=0.5&fp-y=0.5&auto=format';
 
       const CROP_META = {
-        tomato:    { label:'Tomato',    emoji:'🍅', bg:'#FEE2E2', img: UNS + 'photo-1592924357228-91a4daadcfea?w=128&q=80&fit=crop' },
-        chilli:    { label:'Chilli',    emoji:'🌶️', bg:'#FFEDD5', img: UNS + 'photo-1583852048850-31c0d0e7cdde?w=128&q=80&fit=crop' },
-        wheat:     { label:'Wheat',     emoji:'🌾', bg:'#FEF3C7', img: UNS + 'photo-1574226516831-e1dff420e562?w=128&q=80&fit=crop' },
-        maize:     { label:'Maize',     emoji:'🌽', bg:'#FEF9C3', img: UNS + 'photo-1551754655-cd27e38d2076?w=128&q=80&fit=crop' },
-        cotton:    { label:'Cotton',    emoji:'☁️', bg:'#F1F5F9', img: UNS + 'photo-1591885503007-9b80d9c89a52?w=128&q=80&fit=crop' },
-        sugarcane: { label:'Sugarcane', emoji:'🎋', bg:'#DCFCE7', img: UNS + 'photo-1597106776019-b4ecc878c202?w=128&q=80&fit=crop' },
-        paddy:     { label:'Paddy',     emoji:'🌱', bg:'#ECFDF5', img: UNS + 'photo-1568347877321-f8935c7dc5a8?w=128&q=80&fit=crop' },
-        onion:     { label:'Onion',     emoji:'🧅', bg:'#FCE7F3', img: UNS + 'photo-1618512496248-a07fe83aa8cb?w=128&q=80&fit=crop' },
-        potato:    { label:'Potato',    emoji:'🥔', bg:'#FEF3C7', img: UNS + 'photo-1518977676601-b53f82aba655?w=128&q=80&fit=crop' },
+        tomato:    { label:'Tomato',    emoji:'🍅', bg:'#FEE2E2', img: UNS + 'photo-1592924357228-91a4daadcfea' + Q },
+        chilli:    { label:'Chilli',    emoji:'🌶️', bg:'#FFEDD5', img: UNS + 'photo-1583852048850-31c0d0e7cdde' + Q },
+        wheat:     { label:'Wheat',     emoji:'🌾', bg:'#FEF3C7', img: UNS + 'photo-1574226516831-e1dff420e562' + Q },
+        maize:     { label:'Maize',     emoji:'🌽', bg:'#FEF9C3', img: UNS + 'photo-1551754655-cd27e38d2076' + Q },
+        cotton:    { label:'Cotton',    emoji:'☁️', bg:'#F1F5F9', img: UNS + 'photo-1591885503007-9b80d9c89a52' + Q },
+        sugarcane: { label:'Sugarcane', emoji:'🎋', bg:'#DCFCE7', img: UNS + 'photo-1597106776019-b4ecc878c202' + Q },
+        paddy:     { label:'Paddy',     emoji:'🌱', bg:'#ECFDF5', img: UNS + 'photo-1568347877321-f8935c7dc5a8' + Q },
+        onion:     { label:'Onion',     emoji:'🧅', bg:'#FCE7F3', img: UNS + 'photo-1618512496248-a07fe83aa8cb' + Q },
+        potato:    { label:'Potato',    emoji:'🥔', bg:'#FEF3C7', img: UNS + 'photo-1518977676601-b53f82aba655' + Q },
       };
 
-      const picker = document.getElementById('cropInlinePicker');
-      const cta    = document.getElementById('cropViewMore');
-      if (!picker || !cta) return;
+      const picker   = document.getElementById('cropInlinePicker');
+      const cta      = document.getElementById('cropViewMore');
+      const ctaLabel = document.getElementById('cropCtaLabel');
+      if (!picker || !cta || !ctaLabel) return;
 
       const selected = new Set();
 
@@ -1582,27 +1593,28 @@
           const sel = selected.has(key);
           const borderColor = sel ? '#059669' : '#E5E7EB';
           const tileBg      = sel ? '#ECFDF5' : '#FFFFFF';
-          const shadow      = sel ? '0 6px 14px -4px rgba(5,150,105,0.32)' : '0 1px 3px rgba(0,0,0,0.05)';
+          const shadow      = sel ? '0 8px 18px -4px rgba(5,150,105,0.4)' : '0 1px 3px rgba(0,0,0,0.05)';
           const labelColor  = sel ? '#047857' : '#0F172A';
           const tick        = sel
-            ? '<span class="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center" style="background:#059669;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff">'
-              + '<i class="fa-solid fa-check text-white text-[9px]"></i></span>'
+            ? '<span class="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full flex items-center justify-center" style="background:#059669;box-shadow:0 2px 8px rgba(5,150,105,0.55);border:2px solid #fff">'
+              + '<i class="fa-solid fa-check text-white text-[10px]"></i></span>'
             : '';
+          // Real crop photo in 56x56 circle, with soft inner ring for depth
           return '<button type="button" data-crop-key="'+key+'" class="relative flex-shrink-0 flex flex-col items-center gap-1.5 px-2.5 py-2 rounded-xl transition-all"'
-            + ' style="background:'+tileBg+';border:1.5px solid '+borderColor+';box-shadow:'+shadow+';min-width:70px">'
-            + '<div class="w-10 h-10 rounded-full overflow-hidden" style="background:'+m.bg+'">'
-            + '<img src="'+m.img+'" class="w-full h-full object-cover" onerror="cropFallback(this,\''+m.emoji+'\',20)"/>'
+            + ' style="background:'+tileBg+';border:1.5px solid '+borderColor+';box-shadow:'+shadow+';min-width:80px">'
+            + '<div class="w-14 h-14 rounded-full overflow-hidden" style="background:'+m.bg+';box-shadow:inset 0 0 0 2px rgba(255,255,255,0.5),0 2px 6px rgba(0,0,0,0.08)">'
+            + '<img src="'+m.img+'" class="w-full h-full object-cover" onerror="cropFallback(this,\''+m.emoji+'\',28)"/>'
             + '</div>'
-            + '<div class="text-[11.5px] font-bold leading-none whitespace-nowrap" style="color:'+labelColor+'">'+m.label+'</div>'
+            + '<div class="text-[12px] font-bold leading-none whitespace-nowrap" style="color:'+labelColor+'">'+m.label+'</div>'
             + tick
             + '</button>';
         }).join('');
-        // "More" chip pinned at the end — opens the full crop catalog (modal) since there are 20+ crops in reality
-        const moreChip = '<a href="shop.html?pick=crop" data-crop-more="1" class="flex-shrink-0 flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-xl transition-all"'
-          + ' style="background:#ECFDF5;border:1.5px dashed #10B981;min-width:70px;color:#059669">'
-          + '<div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#D1FAE5">'
-          + '<i class="fa-solid fa-plus text-[16px]"></i></div>'
-          + '<div class="text-[11.5px] font-bold leading-none">More</div>'
+        // "More" chip pinned at the end — opens the full crop catalog since there are 20+ crops in reality
+        const moreChip = '<a href="shop.html?pick=crop" data-crop-more="1" class="flex-shrink-0 flex flex-col items-center justify-center gap-1.5 px-3 py-2 rounded-xl transition-all"'
+          + ' style="background:#ECFDF5;border:1.5px dashed #10B981;min-width:80px;color:#059669">'
+          + '<div class="w-14 h-14 rounded-full flex items-center justify-center" style="background:#D1FAE5">'
+          + '<i class="fa-solid fa-plus text-[22px]"></i></div>'
+          + '<div class="text-[12px] font-bold leading-none">More</div>'
           + '</a>';
         picker.innerHTML = chips + moreChip;
         // Wire toggle handlers (More chip is a link, no handler)
@@ -1616,19 +1628,34 @@
         });
       }
 
+      // Stateful CTA — when nothing is picked it looks like a passive hint (grey dashed);
+      // once any crop is selected it transforms into a vivid emerald button with a soft pulse
+      // so the user clearly sees "tap this to see products for the crops I picked"
       function updateCTA(){
+        if (selected.size === 0) {
+          cta.style.background = '#FFFFFF';
+          cta.style.color = '#94A3B8';
+          cta.style.border = '1.5px dashed #CBD5E1';
+          cta.style.boxShadow = 'none';
+          cta.style.animation = 'none';
+          ctaLabel.textContent = 'Select crop above to view products';
+          cta.href = 'javascript:void(0)';
+          return;
+        }
+        cta.style.background = 'linear-gradient(135deg,#047857 0%,#10B981 100%)';
+        cta.style.color = '#FFFFFF';
+        cta.style.border = '1.5px solid #047857';
+        cta.style.boxShadow = '0 8px 20px -6px rgba(5,150,105,0.55),0 2px 6px rgba(0,0,0,0.08)';
+        cta.style.animation = 'cropCtaPulse 1.8s ease-in-out infinite';
         if (selected.size === 1) {
           const onlyKey = Array.from(selected)[0];
           const m = CROP_META[onlyKey];
-          cta.innerHTML = 'View '+m.label+' Products <i class="fa-solid fa-arrow-right text-[11px]"></i>';
+          ctaLabel.textContent = 'View '+m.label+' Products';
           cta.href = 'shop.html?crop='+onlyKey;
-        } else if (selected.size > 1) {
-          const keys = Array.from(selected).join(',');
-          cta.innerHTML = 'View Products ('+selected.size+' crops) <i class="fa-solid fa-arrow-right text-[11px]"></i>';
-          cta.href = 'shop.html?crops='+keys;
         } else {
-          cta.innerHTML = 'View Products <i class="fa-solid fa-arrow-right text-[11px]"></i>';
-          cta.href = 'shop.html';
+          const keys = Array.from(selected).join(',');
+          ctaLabel.textContent = 'View Products · '+selected.size+' crops';
+          cta.href = 'shop.html?crops='+keys;
         }
       }
 

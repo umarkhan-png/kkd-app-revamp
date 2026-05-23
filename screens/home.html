@@ -374,7 +374,7 @@
               <div class="text-[14.5px] font-bold text-[#0F172A] truncate">Humic + Fulvic 98</div>
               <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Humic 12% + Fulvic 8%</div>
             </div>
-            <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full mt-1.5" style="background:#FFE08A;color:#5C3F00;border:1px solid #D4A537">1L · Bio-stimulant</span>
+            <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">1 L</div>
             <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
               <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹376</span>
               <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹520</span>
@@ -406,7 +406,7 @@
               <div class="text-[14.5px] font-bold text-[#0F172A] truncate">Chakrawarti ZC</div>
               <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Chloran. + Lambda-Cy. ZC</div>
             </div>
-            <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full mt-1.5" style="background:#FFE08A;color:#5C3F00;border:1px solid #D4A537">100ml · Insecticide</span>
+            <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
             <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
               <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹358</span>
               <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹495</span>
@@ -438,7 +438,7 @@
               <div class="text-[14.5px] font-bold text-[#0F172A] truncate">Chakraveer 18.5%</div>
               <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Chlorantraniliprole 18.5% SC</div>
             </div>
-            <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full mt-1.5" style="background:#FFE08A;color:#5C3F00;border:1px solid #D4A537">100ml · Insecticide</span>
+            <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
             <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
               <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹440</span>
               <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹610</span>
@@ -470,7 +470,7 @@
               <div class="text-[14.5px] font-bold text-[#0F172A] truncate">Antivirus</div>
               <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Anti-viral biostimulant</div>
             </div>
-            <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full mt-1.5" style="background:#FFE08A;color:#5C3F00;border:1px solid #D4A537">100ml · Viricide</span>
+            <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
             <div class="flex items-baseline gap-1.5 mt-1.5">
               <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹327</span>
             </div>
@@ -1590,12 +1590,12 @@
 
       // Each product carries the list of crops it suits — grid filters by union of selected crops (dedup-by-name)
       const PRODUCTS = [
-        { n:'Chakrawarti ZC',  t:'Chloran. + Lambda-Cy. ZC', p:'₹358', mrp:'₹495', off:28, img:'Chakrawarti_2.webp',                                          pk:'100ml × 20', cat:'Insecticide',  crops:['tomato','chilli','wheat','cotton','paddy','maize'] },
-        { n:'Antivirus',       t:'Anti-viral biostimulant',  p:'₹327', mrp:'',     off:0,  img:'AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp',         pk:'100ml × 12', cat:'Viricide',     crops:['tomato','chilli'] },
-        { n:'NPK 19-19-19',    t:'Water-soluble Fertilizer', p:'₹289', mrp:'₹340', off:15, img:'NPK_19-19-19_Front.webp',                                     pk:'1kg × 10',   cat:'Fertilizer',   crops:['tomato','chilli','wheat','maize','cotton','sugarcane','paddy','onion','potato'] },
-        { n:'Triple Attack',   t:'Imida + Mancozeb + NPK',   p:'₹712', mrp:'₹910', off:22, img:'Triple_attack_1_2.webp',                                      pk:'Combo · 3-in-1', cat:'Combo',    crops:['tomato','chilli','cotton','maize'] },
-        { n:'Imida 30.5% SC',  t:'Imidacloprid 30.5% SC',    p:'₹280', mrp:'₹400', off:30, img:'IMIDA_4.webp',                                                pk:'250ml × 20', cat:'Insecticide',  crops:['wheat','cotton','paddy','onion','potato','sugarcane'] },
-        { n:'Bhumiraja Myco',  t:'Humic Acid + Mycorrhiza',  p:'₹364', mrp:'₹520', off:30, img:'Bhumiraja_2_1.webp',                                          pk:'500g × 12',  cat:'Biostimulant', crops:['onion','potato','sugarcane','wheat','maize','paddy'] },
+        { n:'Chakrawarti ZC',  t:'Chloran. + Lambda-Cy. ZC', p:'₹358', mrp:'₹495', off:28, img:'Chakrawarti_2.webp',                                          pk:'100 ml', cat:'Insecticide',  crops:['tomato','chilli','wheat','cotton','paddy','maize'] },
+        { n:'Antivirus',       t:'Anti-viral biostimulant',  p:'₹327', mrp:'',     off:0,  img:'AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp',         pk:'100 ml', cat:'Viricide',     crops:['tomato','chilli'] },
+        { n:'NPK 19-19-19',    t:'Water-soluble Fertilizer', p:'₹289', mrp:'₹340', off:15, img:'NPK_19-19-19_Front.webp',                                     pk:'1 kg',   cat:'Fertilizer',   crops:['tomato','chilli','wheat','maize','cotton','sugarcane','paddy','onion','potato'] },
+        { n:'Triple Attack',   t:'Imida + Mancozeb + NPK',   p:'₹712', mrp:'₹910', off:22, img:'Triple_attack_1_2.webp',                                      pk:'Combo',  cat:'Combo',        crops:['tomato','chilli','cotton','maize'] },
+        { n:'Imida 30.5% SC',  t:'Imidacloprid 30.5% SC',    p:'₹280', mrp:'₹400', off:30, img:'IMIDA_4.webp',                                                pk:'250 ml', cat:'Insecticide',  crops:['wheat','cotton','paddy','onion','potato','sugarcane'] },
+        { n:'Bhumiraja Myco',  t:'Humic Acid + Mycorrhiza',  p:'₹364', mrp:'₹520', off:30, img:'Bhumiraja_2_1.webp',                                          pk:'500 g',  cat:'Biostimulant', crops:['onion','potato','sugarcane','wheat','maize','paddy'] },
       ];
 
       const picker  = document.getElementById('cropInlinePicker');
@@ -1661,7 +1661,7 @@
             + '<div class="text-[13px] font-bold text-[#0F172A] truncate">'+p.n+'</div>'
             + '<div class="text-[10.5px] mt-0.5 truncate" style="color:#94A3B8">'+p.t+'</div>'
             + '</div>'
-            + '<span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full mt-1.5" style="background:#FFE08A;color:#5C3F00;border:1px solid #D4A537">'+p.pk+'</span>'
+            + '<div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">'+p.pk+'</div>'
             + '<div class="flex items-baseline gap-1 mt-1.5 flex-wrap">'+priceBlock+'</div>'
             + '<button class="w-full mt-2 h-8 rounded-lg bg-emerald-600 text-white text-[12px] font-semibold">Add</button>'
             + '</a>';

@@ -718,16 +718,42 @@
       </div>
     </section>
 
-    <!-- Select your crop · edge-to-edge bordered card -->
+    <!-- Select your crop · edge-to-edge · inline multi-select chip picker · always-visible View More CTA -->
     <section class="mt-8" style="order:3">
       <div class="overflow-hidden bg-white" style="border-top:1px solid #E2E8F0;border-bottom:1px solid #E2E8F0">
-        <!-- Header row — light, single line, less text -->
+        <!-- Header — wordmark + 1-line helper, no emoji, no Add button -->
+        <div class="px-4 pt-4 pb-2" style="background:#FFFFFF">
+          <div class="text-[16px] text-[#0F172A] font-extrabold tracking-tight">Select your crop</div>
+          <div class="text-[11.5px] text-[#64748B] mt-0.5">Tap all crops you grow · see relevant products</div>
+        </div>
+
+        <!-- Inline scrollable chip picker — populated by JS from CROP_META -->
+        <div class="overflow-x-auto scroll-x pt-1 pb-3">
+          <div id="cropInlinePicker" class="flex gap-2 px-4 min-w-max"></div>
+        </div>
+
+        <!-- Aggregate product grid (dedup-by-name across selected crops) — empty when no crop selected -->
+        <div id="cropGrid" class="grid grid-cols-2 gap-3 px-4"></div>
+
+        <!-- Always-visible "View More" CTA — text adjusts to crop name when exactly one is selected -->
+        <div class="px-4 mt-3 pb-4">
+          <a id="cropViewMore" href="shop.html" class="nu flex items-center justify-center gap-1.5 bg-white rounded-xl py-2.5 text-[13.5px] font-bold text-emerald-700" style="border:1.5px solid rgba(14,122,78,0.4)">
+            View More Products <i class="fa-solid fa-arrow-right text-[11px]"></i>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- LEGACY (kept in source per spec — not surfaced anywhere now that the inline picker replaces it) -->
+    <template data-legacy="shop-by-crop-old">
+      <div class="overflow-hidden bg-white" style="border-top:1px solid #E2E8F0;border-bottom:1px solid #E2E8F0">
         <div class="px-4 py-3 flex items-center justify-between" style="background:#FFFFFF">
           <div class="flex items-center gap-1.5">
             <span class="text-[18px] leading-none">🌾</span>
             <span class="text-[16px] text-[#0F172A] font-extrabold tracking-tight">Select your crop</span>
           </div>
-          <button id="addCropBtn" class="flex items-center gap-1 text-[12.5px] font-bold px-2.5 py-1 rounded-full" style="color:#059669;background:#ECFDF5;border:1px solid #BBF7D0">
+          <button id="addCropBtn_legacy" class="flex items-center gap-1 text-[12.5px] font-bold px-2.5 py-1 rounded-full" style="color:#059669;background:#ECFDF5;border:1px solid #BBF7D0">
             <i class="fa-solid fa-plus text-[10px]"></i>
             Add
           </button>
@@ -894,7 +920,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </template>
 
     <!-- HERO showcase · asymmetric magazine cards: tall solid color block on LEFT with all info, big product image floating on RIGHT overflowing the panel -->
     <section class="mt-6" style="order:5">
@@ -1544,6 +1570,120 @@
       if (firstPicked) selectCropTab(firstPicked);
       closeModalFn();
     });
+
+    // Shop-by-Crop inline picker — every crop in CROP_META is a chip · multi-select · ✓ tick badge · always-visible View More CTA
+    (function(){
+      const KKD_IMG = 'https://katyayanikrishidirect.com/cdn/shop/files/';
+      const UNS = 'https://images.unsplash.com/';
+
+      const CROP_META = {
+        tomato:    { label:'Tomato',    emoji:'🍅', bg:'#FEE2E2', img: UNS + 'photo-1592924357228-91a4daadcfea?w=128&q=80&fit=crop' },
+        chilli:    { label:'Chilli',    emoji:'🌶️', bg:'#FFEDD5', img: UNS + 'photo-1583852048850-31c0d0e7cdde?w=128&q=80&fit=crop' },
+        wheat:     { label:'Wheat',     emoji:'🌾', bg:'#FEF3C7', img: UNS + 'photo-1574226516831-e1dff420e562?w=128&q=80&fit=crop' },
+        maize:     { label:'Maize',     emoji:'🌽', bg:'#FEF9C3', img: UNS + 'photo-1551754655-cd27e38d2076?w=128&q=80&fit=crop' },
+        cotton:    { label:'Cotton',    emoji:'☁️', bg:'#F1F5F9', img: UNS + 'photo-1591885503007-9b80d9c89a52?w=128&q=80&fit=crop' },
+        sugarcane: { label:'Sugarcane', emoji:'🎋', bg:'#DCFCE7', img: UNS + 'photo-1597106776019-b4ecc878c202?w=128&q=80&fit=crop' },
+        paddy:     { label:'Paddy',     emoji:'🌱', bg:'#ECFDF5', img: UNS + 'photo-1568347877321-f8935c7dc5a8?w=128&q=80&fit=crop' },
+        onion:     { label:'Onion',     emoji:'🧅', bg:'#FCE7F3', img: UNS + 'photo-1618512496248-a07fe83aa8cb?w=128&q=80&fit=crop' },
+        potato:    { label:'Potato',    emoji:'🥔', bg:'#FEF3C7', img: UNS + 'photo-1518977676601-b53f82aba655?w=128&q=80&fit=crop' },
+      };
+
+      // Each product carries the list of crops it suits — grid filters by union of selected crops (dedup-by-name)
+      const PRODUCTS = [
+        { n:'Chakrawarti ZC',  t:'Chloran. + Lambda-Cy. ZC', p:'₹358', mrp:'₹495', off:28, img:'Chakrawarti_2.webp',                                          pk:'100ml × 20', cat:'Insecticide',  crops:['tomato','chilli','wheat','cotton','paddy','maize'] },
+        { n:'Antivirus',       t:'Anti-viral biostimulant',  p:'₹327', mrp:'',     off:0,  img:'AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp',         pk:'100ml × 12', cat:'Viricide',     crops:['tomato','chilli'] },
+        { n:'NPK 19-19-19',    t:'Water-soluble Fertilizer', p:'₹289', mrp:'₹340', off:15, img:'NPK_19-19-19_Front.webp',                                     pk:'1kg × 10',   cat:'Fertilizer',   crops:['tomato','chilli','wheat','maize','cotton','sugarcane','paddy','onion','potato'] },
+        { n:'Triple Attack',   t:'Imida + Mancozeb + NPK',   p:'₹712', mrp:'₹910', off:22, img:'Triple_attack_1_2.webp',                                      pk:'Combo · 3-in-1', cat:'Combo',    crops:['tomato','chilli','cotton','maize'] },
+        { n:'Imida 30.5% SC',  t:'Imidacloprid 30.5% SC',    p:'₹280', mrp:'₹400', off:30, img:'IMIDA_4.webp',                                                pk:'250ml × 20', cat:'Insecticide',  crops:['wheat','cotton','paddy','onion','potato','sugarcane'] },
+        { n:'Bhumiraja Myco',  t:'Humic Acid + Mycorrhiza',  p:'₹364', mrp:'₹520', off:30, img:'Bhumiraja_2_1.webp',                                          pk:'500g × 12',  cat:'Biostimulant', crops:['onion','potato','sugarcane','wheat','maize','paddy'] },
+      ];
+
+      const picker  = document.getElementById('cropInlinePicker');
+      const grid    = document.getElementById('cropGrid');
+      const cta     = document.getElementById('cropViewMore');
+      if (!picker || !grid || !cta) return;
+
+      const selected = new Set();
+
+      function renderPicker(){
+        picker.innerHTML = Object.keys(CROP_META).map(function(key){
+          const m = CROP_META[key];
+          const sel = selected.has(key);
+          const borderColor = sel ? '#059669' : '#E5E7EB';
+          const tileBg      = sel ? '#ECFDF5' : '#FFFFFF';
+          const shadow      = sel ? '0 6px 14px -4px rgba(5,150,105,0.32)' : '0 1px 3px rgba(0,0,0,0.05)';
+          const labelColor  = sel ? '#047857' : '#0F172A';
+          const tick        = sel
+            ? '<span class="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center" style="background:#059669;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff">'
+              + '<i class="fa-solid fa-check text-white text-[9px]"></i></span>'
+            : '';
+          return '<button type="button" data-crop-key="'+key+'" class="relative flex-shrink-0 flex flex-col items-center gap-1.5 px-2.5 py-2 rounded-xl transition-all"'
+            + ' style="background:'+tileBg+';border:1.5px solid '+borderColor+';box-shadow:'+shadow+';min-width:70px">'
+            + '<div class="w-10 h-10 rounded-full overflow-hidden" style="background:'+m.bg+'">'
+            + '<img src="'+m.img+'" class="w-full h-full object-cover" onerror="cropFallback(this,\''+m.emoji+'\',20)"/>'
+            + '</div>'
+            + '<div class="text-[11.5px] font-bold leading-none whitespace-nowrap" style="color:'+labelColor+'">'+m.label+'</div>'
+            + tick
+            + '</button>';
+        }).join('');
+        // Wire toggle handlers
+        picker.querySelectorAll('[data-crop-key]').forEach(function(btn){
+          btn.addEventListener('click', function(){
+            const k = btn.dataset.cropKey;
+            if (selected.has(k)) selected.delete(k); else selected.add(k);
+            renderPicker();
+            renderGrid();
+            updateCTA();
+          });
+        });
+      }
+
+      function renderGrid(){
+        if (selected.size === 0) { grid.innerHTML = ''; return; }
+        const seen = new Set();
+        const matches = [];
+        PRODUCTS.forEach(function(p){
+          if (seen.has(p.n)) return;
+          const hit = p.crops.some(function(c){ return selected.has(c); });
+          if (hit) { seen.add(p.n); matches.push(p); }
+        });
+        grid.innerHTML = matches.map(function(p){
+          const priceBlock = p.mrp
+            ? '<span class="text-[16px] font-extrabold tnum text-[#0F172A]">'+p.p+'</span>'
+              + '<span class="text-[11px] text-[#94A3B8] line-through tnum">'+p.mrp+'</span>'
+              + '<span class="text-[10px] font-extrabold" style="color:#047857">'+p.off+'% off</span>'
+            : '<span class="text-[16px] font-extrabold tnum text-[#0F172A]">'+p.p+'</span>';
+          return '<a href="pdp.html" class="nu rounded-xl p-2.5" style="background:#FFFFFF;border:1px solid #E5E7EB">'
+            + '<div class="aspect-square rounded-lg flex items-center justify-center p-2 mb-2 relative" style="background:#F8FAFC">'
+            + '<img src="'+KKD_IMG+p.img+'" class="img-blend max-h-full object-contain"/>'
+            + '</div>'
+            + '<div class="leading-tight">'
+            + '<div class="text-[13px] font-bold text-[#0F172A] truncate">'+p.n+'</div>'
+            + '<div class="text-[10.5px] mt-0.5 truncate" style="color:#94A3B8">'+p.t+'</div>'
+            + '</div>'
+            + '<span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full mt-1.5" style="background:#FFE08A;color:#5C3F00;border:1px solid #D4A537">'+p.pk+'</span>'
+            + '<div class="flex items-baseline gap-1 mt-1.5 flex-wrap">'+priceBlock+'</div>'
+            + '<button class="w-full mt-2 h-8 rounded-lg bg-emerald-600 text-white text-[12px] font-semibold">Add</button>'
+            + '</a>';
+        }).join('');
+      }
+
+      function updateCTA(){
+        if (selected.size === 1) {
+          const onlyKey = Array.from(selected)[0];
+          const m = CROP_META[onlyKey];
+          cta.innerHTML = 'View More '+m.label+' Products <i class="fa-solid fa-arrow-right text-[11px]"></i>';
+          cta.href = 'shop.html?crop='+onlyKey;
+        } else {
+          cta.innerHTML = 'View More Products <i class="fa-solid fa-arrow-right text-[11px]"></i>';
+          cta.href = 'shop.html';
+        }
+      }
+
+      renderPicker();
+      renderGrid();
+      updateCTA();
+    })();
 
     // Mega Mela carousel — 3 slides, auto-rotate every 4s, touch pauses
     (function(){

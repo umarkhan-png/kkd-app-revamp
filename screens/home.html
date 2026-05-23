@@ -10,7 +10,7 @@
 <style>
   * { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; letter-spacing: -0.01em; }
   html, body { margin: 0; padding: 0; }
-  body { background: #FFFFFF; color: #0F172A; padding-bottom: 68px; }
+  body { background: #FFFFFF; color: #0F172A; padding-bottom: 68px; overflow-x: hidden; }
   .tnum { font-variant-numeric: tabular-nums; }
   a.nu { text-decoration: none; color: inherit; }
   .scroll-x { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
@@ -357,7 +357,7 @@
 
     <!-- ⚡ FLASH DEALS · KKD style with extra visual flair · price/MRP/OFF% prominent · wider cards so text doesn't truncate -->
     <section class="mt-6">
-      <div class="px-4 py-4 relative" style="background:linear-gradient(135deg,#EA580C 0%,#F59E0B 35%,#FBBF24 70%,#FDE68A 100%);overflow:visible">
+      <div class="py-4 relative overflow-hidden" style="background:linear-gradient(135deg,#EA580C 0%,#F59E0B 35%,#FBBF24 70%,#FDE68A 100%)">
         <!-- Tadakta-hua: deep amber-orange base + diagonal shimmer stripes + 3 glow orbs + 5 floating sparkles + vignette -->
         <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(45deg,rgba(255,255,255,0.15) 0,rgba(255,255,255,0.15) 2px,transparent 2px,transparent 14px)"></div>
         <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(-45deg,rgba(124,45,18,0.08) 0,rgba(124,45,18,0.08) 1px,transparent 1px,transparent 22px)"></div>
@@ -373,8 +373,8 @@
         <div class="absolute -bottom-2 left-2 text-[60px] font-black pointer-events-none select-none leading-none" style="color:rgba(255,255,255,0.18);text-shadow:0 0 30px rgba(255,255,255,0.3);transform:rotate(-12deg)">⚡</div>
         <div class="absolute -top-2 right-2 text-[50px] font-black pointer-events-none select-none leading-none" style="color:rgba(255,255,255,0.16);text-shadow:0 0 24px rgba(255,255,255,0.25);transform:rotate(18deg)">⚡</div>
 
-        <!-- Header: emerald deal pill + appealing 3-box countdown clock -->
-        <div class="relative flex items-center justify-between mb-3">
+        <!-- Header: emerald deal pill + appealing 3-box countdown clock — wrapped in its own px-4 so the wrapper itself can be full-bleed (no horizontal padding) and the scroll container below can reach the right viewport edge naturally -->
+        <div class="relative flex items-center justify-between mb-3 px-4">
           <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-[12px] font-extrabold tracking-[0.12em] text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%);box-shadow:0 4px 10px -2px rgba(5,150,105,0.5)">⚡ FLASH DEALS</span>
           <!-- Countdown clock: 3 separate dark tiles for H : M : S with amber digits + glow -->
           <div class="flex items-center gap-1">
@@ -386,9 +386,9 @@
           </div>
         </div>
 
-        <!-- Horizontal-scroll cards — extends past the section's right px-4 padding so the 3rd card peeks all the way to the viewport's right edge (no trailing gutter) -->
-        <div class="overflow-x-auto scroll-x relative" style="margin-left:-4px;margin-right:-16px">
-          <div class="flex gap-2.5 px-1 pb-1">
+        <!-- Horizontal-scroll cards — wrapper is full-bleed now (no horizontal padding) so the scroll container naturally reaches the viewport's right edge · padding-left:16 gives the first card a 16px gap from the left -->
+        <div class="overflow-x-auto scroll-x relative" style="padding-left:16px">
+          <div class="flex gap-2.5 pb-1">
 
             <!-- Card 1 · Chakrawarti -->
             <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:160px;border:1px solid #E5E7EB;box-shadow:0 2px 10px rgba(15,23,42,0.06)">
@@ -957,8 +957,8 @@
             <div class="w-12 h-12 rounded-lg flex items-center justify-center text-[12px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0">+2</div>
           </div>
           <div class="flex-1"></div>
-          <a href="cart.html?reorder=last" class="nu inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[12.5px] font-semibold text-white flex-shrink-0 bg-emerald-600">
-            <i class="fa-solid fa-arrow-rotate-left text-[10px]"></i> Reorder
+          <a href="cart.html?reorder=last" class="nu inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[12.5px] font-semibold flex-shrink-0 bg-emerald-600" style="color:#FFFFFF">
+            <i class="fa-solid fa-arrow-rotate-left text-[10px]" style="color:#FFFFFF"></i> Reorder
           </a>
         </div>
       </div>

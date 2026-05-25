@@ -109,6 +109,43 @@
     50%      { box-shadow: 0 6px 22px -2px rgba(16,185,129,.8),  0 0 0 7px rgba(16,185,129,.1), inset 0 1px 0 rgba(255,255,255,.18); }
   }
 
+  /* ===== END-OF-PAGE state — user has scrolled to the bottom and risks feeling direction-less ===== */
+  /* Expert FAB expands to a near-full-width banner (16px margins on each side, not edge-to-edge) so it becomes the obvious next step */
+  body.at-end .expert-fab {
+    left: 16px !important;
+    right: 16px !important;
+    max-width: none !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 10px 14px !important;
+    border-radius: 16px !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+  }
+  body.at-end .expert-fab .expert-photo { width: 44px !important; height: 44px !important; }
+  body.at-end .expert-fab .expert-text { opacity: 1 !important; max-width: 100% !important; pointer-events: auto !important; flex: 1; }
+  body.at-end .expert-fab .expert-text > span:first-child { font-size: 14px; }
+  body.at-end .expert-fab .expert-sub { display: block !important; font-size: 11px !important; }
+  body.at-end .expert-fab::after {
+    content: "→"; margin-left: auto; font-size: 18px; font-weight: 800; color: #FFFFFF;
+  }
+  /* Sticky categories grow back to full size at end + brief highlight pulse to draw the eye */
+  body.at-end .cat-circle { width: 56px !important; height: 56px !important; border-width: 1.5px !important; }
+  body.at-end .cat-label  { font-size: 13px !important; }
+  body.at-end .cat-emoji  { font-size: 28px !important; }
+  body.at-end .cat-svg    { width: 32px !important; height: 32px !important; }
+  body.at-end .cat-tile   { width: 80px !important; gap: 8px !important; animation: catEndPulse 1.4s ease-out; }
+  body.at-end .sticky-cats { padding-top: 12px !important; padding-bottom: 12px !important; }
+  body.at-end .sticky-cats > div { gap: 0 !important; padding: 0 16px !important; }
+  @keyframes catEndPulse {
+    0%   { transform: scale(1); filter: drop-shadow(0 0 0 rgba(5,150,105,0)); }
+    35%  { transform: scale(1.08); filter: drop-shadow(0 4px 10px rgba(5,150,105,0.4)); }
+    65%  { transform: scale(0.98); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(5,150,105,0)); }
+  }
+  /* End-of-page "what's next" hint — only fades in when body.at-end is active */
+  body.at-end #endHint { opacity: 1 !important; pointer-events: auto !important; }
+
   /* Flash sale ⚡ icon pulse */
   @keyframes flashPulse {
     0%, 100% { transform: scale(1) rotate(-3deg); opacity: 1; }
@@ -1258,6 +1295,15 @@
       </div>
     </section>
 
+    <!-- End-of-page "what's next" hint — fades in only when body.at-end · gives the user a direction (Back to top) without taking screen space normally -->
+    <div id="endHint" class="px-4 mt-2 mb-2 flex items-center justify-center gap-2 text-[12px] font-semibold" style="color:#64748B;opacity:0;transition:opacity .4s ease;pointer-events:none">
+      <i class="fa-solid fa-circle-info text-[11px]" style="color:#059669"></i>
+      <span>Looking for more? Tap a category above</span>
+      <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="nu inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0">
+        <i class="fa-solid fa-arrow-up text-[9px]"></i> Top
+      </button>
+    </div>
+
     <!-- Brand illustration footer — top 60px fades from transparent so the image's grey-cream sky blends smoothly into the white app bg above (no harsh seam) · zero bottom margin so it sits flush against the nav bar -->
     <section style="background:#FFFFFF;line-height:0;margin-top:24px">
       <img src="../assets/brand-illustration.png" class="w-full block" alt="Katyayani Krishi Direct · Direct from Manufacturer · Crafted for Better Farming" style="-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 60px,#000 100%);mask-image:linear-gradient(180deg,transparent 0%,#000 60px,#000 100%);display:block;margin-bottom:-1px"/>
@@ -1394,7 +1440,7 @@
     }
     if(input) type();
 
-    // Categories compact proportionally on scroll + cart bar shrinks to center pill on scroll
+    // Categories compact proportionally on scroll + cart bar shrinks to center pill on scroll + at-end state expands the Ask Expert FAB and restores categories so the user has direction at the bottom of the page
     window.addEventListener('scroll', () => {
       const y = window.scrollY;
       if (y > 40) document.body.classList.add('scrolled');
@@ -1409,6 +1455,9 @@
         if (y > 120) fab.classList.add('compact');
         else fab.classList.remove('compact');
       }
+      // End-of-page detection — within ~120px of the bottom counts as "at end" so the transition kicks in just before the final pixel
+      const atEnd = (window.innerHeight + y) >= (document.documentElement.scrollHeight - 120);
+      document.body.classList.toggle('at-end', atEnd);
     });
 
     // 3 themes · tap Deliver-to to switch

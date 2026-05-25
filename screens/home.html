@@ -161,6 +161,13 @@
   .sticky-status { position: sticky; top: 0; z-index: 70; background: transparent; transition: background .2s ease, box-shadow .2s ease; }
   body.scrolled .sticky-status { background: #FFFFFF; box-shadow: 0 1px 0 rgba(15,23,42,0.04); }
   .sticky-actions { position: sticky; top: 32px; z-index: 60; background: #FFFFFF; }
+  /* Delivery tile compact state — when body.scrolled, sub-line hides, icon + paddings shrink so it doesn't eat too much height while staying frozen below the categories */
+  .delivery-tile { transition: padding .25s ease; }
+  body.scrolled .delivery-tile { padding-top: 4px; padding-bottom: 4px; }
+  body.scrolled .delivery-tile .dt-icon { width: 26px; height: 26px; }
+  body.scrolled .delivery-tile .dt-icon i { font-size: 12px !important; }
+  body.scrolled .delivery-tile .dt-sub { display: none; }
+  body.scrolled .delivery-tile .dt-content > div:first-child { font-size: 11.5px; }
   .sticky-search { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s; }
   .sticky-cats { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s; }
 
@@ -388,6 +395,18 @@
     </div>
   </div>
 
+  <!-- Delivery status tile — sits inside sticky-actions so it pins below the sticky categories on scroll · compact-wrapped layout when body.scrolled is set (sub-line hides, icon shrinks, padding tightens) -->
+  <a href="track-order.html" id="deliveryTile" class="nu delivery-tile flex items-center gap-2.5 px-4 py-2.5" style="background:linear-gradient(90deg,#ECFDF5 0%,#D1FAE5 60%,#A7F3D0 100%);border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0">
+    <div class="dt-icon flex-shrink-0 rounded-full flex items-center justify-center" style="background:#059669;color:#FFFFFF;width:34px;height:34px">
+      <i class="fa-solid fa-truck-fast text-[14px]" style="color:#FFFFFF"></i>
+    </div>
+    <div class="flex-1 min-w-0 leading-tight dt-content">
+      <div class="text-[12.5px] font-extrabold truncate" style="color:#065F46">Arriving Thursday · #KKD-26194</div>
+      <div class="text-[10.5px] font-semibold dt-sub mt-0.5" style="color:#047857">3 items · Out for delivery soon</div>
+    </div>
+    <i class="fa-solid fa-chevron-right text-[12px] flex-shrink-0" style="color:#047857"></i>
+  </a>
+
   </div><!-- /sticky-actions -->
 
   <main>
@@ -428,6 +447,33 @@
           <i class="fa-solid fa-arrow-right text-[14px] flex-shrink-0" style="color:#78350F"></i>
         </div>
       </a>
+    </section>
+
+    <!-- User input widget — quick poll-style question that captures profile data inline · this is the pattern: 1 question, 4 chip options, tap to select, persists to localStorage so it doesn't re-ask · more questions can be added by extending the data-q attribute -->
+    <section class="mt-4 px-4">
+      <div class="rounded-2xl p-4 relative" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 2px 10px -4px rgba(5,150,105,0.18)">
+        <div class="flex items-start gap-2 mb-1">
+          <i class="fa-solid fa-circle-question text-[16px] flex-shrink-0 mt-0.5" style="color:#059669"></i>
+          <div class="flex-1 min-w-0">
+            <div class="text-[14.5px] font-extrabold text-[#0F172A]">How many acres of land do you farm?</div>
+            <div class="text-[11.5px] mt-0.5" style="color:#64748B">Helps us suggest the right product pack sizes</div>
+          </div>
+        </div>
+        <div id="acreOptions" class="flex flex-wrap gap-2 mt-3" data-q="acres">
+          <button class="acre-opt nu px-3 py-2 rounded-lg text-[12.5px] font-semibold flex items-center gap-1.5" data-val="lt1" style="background:#F8FAFC;color:#0F172A;border:1.5px solid #E5E7EB">
+            <i class="fa-solid fa-seedling text-[10px]" style="color:#64748B"></i> &lt; 1 acre
+          </button>
+          <button class="acre-opt nu px-3 py-2 rounded-lg text-[12.5px] font-semibold flex items-center gap-1.5" data-val="1-5" style="background:#F8FAFC;color:#0F172A;border:1.5px solid #E5E7EB">
+            <i class="fa-solid fa-tractor text-[10px]" style="color:#64748B"></i> 1 – 5 acres
+          </button>
+          <button class="acre-opt nu px-3 py-2 rounded-lg text-[12.5px] font-semibold flex items-center gap-1.5" data-val="5-10" style="background:#F8FAFC;color:#0F172A;border:1.5px solid #E5E7EB">
+            <i class="fa-solid fa-warehouse text-[10px]" style="color:#64748B"></i> 5 – 10 acres
+          </button>
+          <button class="acre-opt nu px-3 py-2 rounded-lg text-[12.5px] font-semibold flex items-center gap-1.5" data-val="gt10" style="background:#F8FAFC;color:#0F172A;border:1.5px solid #E5E7EB">
+            <i class="fa-solid fa-mountain-sun text-[10px]" style="color:#64748B"></i> 10+ acres
+          </button>
+        </div>
+      </div>
     </section>
 
     <!-- ⚡ FLASH DEALS · KKD style with extra visual flair · price/MRP/OFF% prominent · wider cards so text doesn't truncate -->
@@ -848,7 +894,7 @@
         <div class="absolute -bottom-4 -left-2 text-[70px] leading-none pointer-events-none select-none" style="color:rgba(5,150,105,0.06);transform:rotate(-15deg)">🌾</div>
         <!-- Header — wordmark only (subtitle dropped per spec) -->
         <div class="relative px-4 pt-4 pb-2">
-          <div class="text-[16px] text-[#0F172A] font-extrabold tracking-tight">Select your crop</div>
+          <div class="text-[16px] text-[#0F172A] font-extrabold tracking-tight">Shop by Crop</div>
         </div>
 
         <!-- Inline scrollable chip picker — populated by JS from CROP_META · "More" chip pinned at end for the full 20+ crop catalog -->
@@ -1550,9 +1596,8 @@
         { cls:'style-rain',     href:'shop.html?weather=rain', icon:'fa-cloud-rain', iconColor:'#2563EB', textColor:'#1E40AF', chevColor:'#1D4ED8',
           html:'<strong>Rain expected</strong> · 8 mm in 24 hrs · Hold spray for today' },
         { cls:'style-festival', href:'shop.html',              icon:'fa-gifts',     iconColor:'#DC2626', textColor:'#7F1D1D', chevColor:'#B91C1C',
-          html:'<strong>Christmas offer</strong> · 20% off + free gift on ₹999+' },
-        { cls:'style-order',    href:'track-order.html',       icon:'fa-truck-fast',iconColor:'#059669', textColor:'#065F46', chevColor:'#047857',
-          html:'<strong>Arriving Thursday</strong> · #KKD-26194 · 3 items' }
+          html:'<strong>Christmas offer</strong> · 20% off + free gift on ₹999+' }
+        // 'style-order' (delivery status) removed — moved out into its own dedicated tile that pins below the sticky categories on scroll
       ];
       let i = 0;
       function apply(s){
@@ -1770,6 +1815,35 @@
       closeModalFn();
     });
 
+    // Inline poll-style input widgets — tap a chip option, it goes emerald-selected + persists the answer to localStorage so we don't re-prompt next visit · single-select within each [data-q] group
+    (function(){
+      document.querySelectorAll('[data-q]').forEach(function(group){
+        const qKey = 'kkd.q.' + group.dataset.q;
+        const saved = localStorage.getItem(qKey);
+        group.querySelectorAll('button[data-val]').forEach(function(btn){
+          if (btn.dataset.val === saved) paint(btn, true);
+          btn.addEventListener('click', function(){
+            group.querySelectorAll('button[data-val]').forEach(b => paint(b, false));
+            paint(btn, true);
+            localStorage.setItem(qKey, btn.dataset.val);
+          });
+        });
+      });
+      function paint(btn, on){
+        if (on) {
+          btn.style.background = '#ECFDF5';
+          btn.style.borderColor = '#059669';
+          btn.style.color = '#047857';
+          const i = btn.querySelector('i'); if (i) i.style.color = '#059669';
+        } else {
+          btn.style.background = '#F8FAFC';
+          btn.style.borderColor = '#E5E7EB';
+          btn.style.color = '#0F172A';
+          const i = btn.querySelector('i'); if (i) i.style.color = '#64748B';
+        }
+      }
+    })();
+
     // Shop-by-Crop inline picker — every crop in CROP_META is a chip · multi-select · ✓ tick badge · "More" chip at end · bigger crisp photos (w=200&q=85, 56x56 circle) · stateful CTA that visually changes when crops are selected so the affordance is obvious
     (function(){
       const UNS = 'https://images.unsplash.com/';
@@ -1807,21 +1881,25 @@
               + '<i class="fa-solid fa-check text-white text-[10px]"></i></span>'
             : '';
           // Real crop photo in 56x56 circle, with soft inner ring for depth
-          return '<button type="button" data-crop-key="'+key+'" class="relative flex-shrink-0 flex flex-col items-center gap-1.5 px-2.5 py-2 rounded-xl transition-all"'
-            + ' style="background:'+tileBg+';border:1.5px solid '+borderColor+';box-shadow:'+shadow+';min-width:80px">'
-            + '<div class="w-14 h-14 rounded-full overflow-hidden" style="background:'+m.bg+';box-shadow:inset 0 0 0 2px rgba(255,255,255,0.5),0 2px 6px rgba(0,0,0,0.08)">'
-            + '<img src="'+m.img+'" class="w-full h-full object-cover" onerror="cropFallback(this,\''+m.emoji+'\',28)"/>'
+          return '<button type="button" data-crop-key="'+key+'" class="relative flex-shrink-0 rounded-xl overflow-hidden transition-all"'
+            + ' style="background:'+tileBg+';border:1.5px solid '+borderColor+';box-shadow:'+shadow+';width:84px;height:100px;display:flex;flex-direction:column">'
+            + '<div class="w-full" style="height:78px;background:'+m.bg+';overflow:hidden;flex-shrink:0">'
+            + '<img src="'+m.img+'" class="w-full h-full object-cover" style="display:block" onerror="cropFallback(this,\''+m.emoji+'\',34)"/>'
             + '</div>'
-            + '<div class="text-[12px] font-bold leading-none whitespace-nowrap" style="color:'+labelColor+'">'+m.label+'</div>'
+            + '<div class="flex-1 flex items-center justify-center px-1" style="background:'+tileBg+'">'
+            + '<span class="text-[11.5px] font-bold leading-none whitespace-nowrap" style="color:'+labelColor+'">'+m.label+'</span>'
+            + '</div>'
             + tick
             + '</button>';
         }).join('');
-        // "More" chip pinned at the end — opens the full crop catalog since there are 20+ crops in reality
-        const moreChip = '<a href="shop.html?pick=crop" data-crop-more="1" class="flex-shrink-0 flex flex-col items-center justify-center gap-1.5 px-3 py-2 rounded-xl transition-all"'
-          + ' style="background:#ECFDF5;border:1.5px dashed #10B981;min-width:80px;color:#059669">'
-          + '<div class="w-14 h-14 rounded-full flex items-center justify-center" style="background:#D1FAE5">'
-          + '<i class="fa-solid fa-plus text-[22px]"></i></div>'
-          + '<div class="text-[12px] font-bold leading-none">More</div>'
+        // "More" chip pinned at the end — same square tile shape as crop tiles, opens the full crop catalog
+        const moreChip = '<a href="shop.html?pick=crop" data-crop-more="1" class="flex-shrink-0 rounded-xl overflow-hidden transition-all"'
+          + ' style="background:#ECFDF5;border:1.5px dashed #10B981;color:#059669;width:84px;height:100px;display:flex;flex-direction:column">'
+          + '<div class="w-full flex items-center justify-center" style="height:78px;background:#D1FAE5;flex-shrink:0">'
+          + '<i class="fa-solid fa-plus text-[28px]"></i></div>'
+          + '<div class="flex-1 flex items-center justify-center" style="background:#ECFDF5">'
+          + '<span class="text-[11.5px] font-bold leading-none">More</span>'
+          + '</div>'
           + '</a>';
         picker.innerHTML = chips + moreChip;
         // Wire toggle handlers (More chip is a link, no handler)

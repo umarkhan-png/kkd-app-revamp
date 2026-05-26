@@ -20,9 +20,9 @@
 
   /* 3 themes · switched by tapping Deliver-to */
   .top-theme { transition: background .6s ease; position: relative; overflow: clip; }
-  /* Default: bold KKD emerald — fully filled top header · no fade to white · text + icons flip to white via .top-theme[data-theme="green"] descendant rules below */
+  /* Default: bold KKD emerald — first 36px is solid #047857 so the sticky system status row blends seamlessly with the top of the parent (no visible seam between the two backgrounds at scenario-1 / not-scrolled state) · below 36px the gradient transitions to lighter emerald */
   .top-theme[data-theme="green"] {
-    background: linear-gradient(180deg, #047857 0%, #059669 55%, #0E7A4E 100%);
+    background: linear-gradient(180deg, #047857 0px, #047857 36px, #059669 50%, #0E7A4E 100%);
   }
   /* When the top is filled with bold emerald, the system-status row + address row text/icons must read white instead of the dark slate defaults */
   .top-theme[data-theme="green"] .sticky-status { color: #FFFFFF; }
@@ -34,9 +34,9 @@
   .top-theme[data-theme="green"] #addressBtn .text-\[\#94A3B8\] { color: rgba(255,255,255,0.85) !important; }
   .top-theme[data-theme="green"] #addressBtn .text-\[\#0F172A\] { color: #FFFFFF !important; }
   .top-theme[data-theme="green"] #addressBtn .text-\[\#64748B\] { color: rgba(255,255,255,0.85) !important; }
-  /* Rain: soft sky → white */
+  /* Rain: solid soft blue for the first 36px (matches sticky-status), then transitions to white */
   .top-theme[data-theme="rain"] {
-    background: linear-gradient(180deg,#DBEAFE 0%,#EFF6FF 40%,#FFFFFF 95%);
+    background: linear-gradient(180deg,#DBEAFE 0px,#DBEAFE 36px,#EFF6FF 50%,#FFFFFF 95%);
   }
   /* Festival (Christmas): red/green/gold soft top band + cool snowy base */
   .top-theme[data-theme="festival"] {
@@ -171,8 +171,8 @@
   /* Sticky system status row only — pins at viewport top on scroll with the active theme color (time / wifi / battery sit on theme-filled band) · the address row below it scrolls away normally with the rest of top-theme content */
   .sticky-status { position: sticky; top: 0; z-index: 70; transition: box-shadow .2s ease; }
   body.scrolled .sticky-status { box-shadow: 0 1px 0 rgba(0,0,0,0.06); }
-  .top-theme[data-theme="green"]    .sticky-status { background: linear-gradient(180deg, #047857 0%, #059669 100%); }
-  .top-theme[data-theme="rain"]     .sticky-status { background: linear-gradient(180deg, #DBEAFE 0%, #EFF6FF 100%); }
+  .top-theme[data-theme="green"]    .sticky-status { background: #047857; }
+  .top-theme[data-theme="rain"]     .sticky-status { background: #DBEAFE; }
   .top-theme[data-theme="festival"] .sticky-status {
     background:
       radial-gradient(ellipse 70% 100% at 15% 50%, rgba(220,38,38,0.55), transparent 70%),

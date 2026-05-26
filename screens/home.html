@@ -20,9 +20,9 @@
 
   /* 3 themes · switched by tapping Deliver-to */
   .top-theme { transition: background .6s ease; position: relative; overflow: clip; }
-  /* Default: bold KKD emerald — first 36px is solid #047857 so the sticky system status row blends seamlessly with the top of the parent (no visible seam between the two backgrounds at scenario-1 / not-scrolled state) · below 36px the gradient transitions to lighter emerald */
+  /* Default: bold KKD emerald — solid #047857 spans the FULL sticky-status (~32px) + address row (~60px) + a bit of banner padding so the entire top "info area" reads as one uniform emerald block · only past 110px the gradient starts transitioning to the lighter stops */
   .top-theme[data-theme="green"] {
-    background: linear-gradient(180deg, #047857 0px, #047857 36px, #059669 50%, #0E7A4E 100%);
+    background: linear-gradient(180deg, #047857 0px, #047857 110px, #059669 60%, #0E7A4E 100%);
   }
   /* When the top is filled with bold emerald, the system-status row + address row text/icons must read white instead of the dark slate defaults */
   .top-theme[data-theme="green"] .sticky-status { color: #FFFFFF; }
@@ -34,9 +34,9 @@
   .top-theme[data-theme="green"] #addressBtn .text-\[\#94A3B8\] { color: rgba(255,255,255,0.85) !important; }
   .top-theme[data-theme="green"] #addressBtn .text-\[\#0F172A\] { color: #FFFFFF !important; }
   .top-theme[data-theme="green"] #addressBtn .text-\[\#64748B\] { color: rgba(255,255,255,0.85) !important; }
-  /* Rain: solid soft blue for the first 36px (matches sticky-status), then transitions to white */
+  /* Rain: solid soft blue for the full sticky-status + address-row area, transitions after */
   .top-theme[data-theme="rain"] {
-    background: linear-gradient(180deg,#DBEAFE 0px,#DBEAFE 36px,#EFF6FF 50%,#FFFFFF 95%);
+    background: linear-gradient(180deg,#DBEAFE 0px,#DBEAFE 110px,#EFF6FF 60%,#FFFFFF 95%);
   }
   /* Festival (Christmas): red/green/gold soft top band + cool snowy base */
   .top-theme[data-theme="festival"] {

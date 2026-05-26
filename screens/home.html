@@ -155,8 +155,7 @@
     6% { transform: scale(1.18); filter: drop-shadow(0 6px 16px rgba(5,150,105,0.6)); }
     12% { transform: scale(1.08); filter: drop-shadow(0 4px 10px rgba(5,150,105,0.35)); }
   }
-  /* End-of-page "what's next" hint — only fades in when body.at-end is active */
-  body.at-end #endHint { opacity: 1 !important; pointer-events: auto !important; }
+  /* Jump-to-top · always visible above the brand illustration footer (no longer gated by body.at-end) */
 
   /* Flash sale ⚡ icon pulse */
   @keyframes flashPulse {
@@ -1475,7 +1474,8 @@
     </section>
 
     <!-- End-of-page · simple Jump-to-top button, no long hint text · sits a bit lower (mt-10) so it has breathing room from the section above -->
-    <div id="endHint" class="px-4 mt-10 mb-3 flex items-center justify-center" style="opacity:0;transition:opacity .4s ease;pointer-events:none">
+    <!-- Jump-to-top · always visible, sits just above the KKD brand illustration -->
+    <div id="endHint" class="px-4 mt-10 mb-4 flex items-center justify-center">
       <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="nu inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12.5px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0;box-shadow:0 2px 8px -3px rgba(5,150,105,0.25)">
         <i class="fa-solid fa-arrow-up text-[11px]" style="color:#047857"></i> Jump to top
       </button>

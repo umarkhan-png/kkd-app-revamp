@@ -168,14 +168,18 @@
     50%      { transform: scale(1.02); box-shadow: 0 10px 26px -6px rgba(5,150,105,0.7),0 3px 8px rgba(0,0,0,0.1); }
   }
 
-  /* Status bar — transparent at top (top-theme gradient shows through); turns white only when scrolled · this is the pre-v103 original behavior (info bar scrolls away with content; only the system status bar pins) */
-  .sticky-status { position: sticky; top: 0; z-index: 70; background: transparent; transition: background .2s ease, box-shadow .2s ease; }
-  body.scrolled .sticky-status { background: #FFFFFF; box-shadow: 0 1px 0 rgba(15,23,42,0.04); }
-  body.scrolled .top-theme[data-theme="green"] .sticky-status { color: #0F172A; }
-  body.scrolled .top-theme[data-theme="green"] .sticky-status svg path,
-  body.scrolled .top-theme[data-theme="green"] .sticky-status svg rect { stroke: #0F172A !important; }
-  body.scrolled .top-theme[data-theme="green"] .sticky-status svg rect[fill] { fill: #0F172A; }
-  body.scrolled .top-theme[data-theme="green"] .sticky-status svg rect[stroke][stroke-width][fill="none"] { fill: none; }
+  /* Sticky system status bar — always filled with the active theme color so the OS status bar (time/battery/wifi) sits on a clean theme band instead of seeing app content scroll under it · no white-on-scroll fallback, the theme color persists */
+  .sticky-status { position: sticky; top: 0; z-index: 70; transition: box-shadow .2s ease; }
+  body.scrolled .sticky-status { box-shadow: 0 1px 0 rgba(0,0,0,0.06); }
+  .top-theme[data-theme="green"]    .sticky-status { background: linear-gradient(180deg, #047857 0%, #059669 100%); }
+  .top-theme[data-theme="rain"]     .sticky-status { background: linear-gradient(180deg, #DBEAFE 0%, #EFF6FF 100%); }
+  .top-theme[data-theme="festival"] .sticky-status {
+    background:
+      radial-gradient(ellipse 70% 100% at 15% 50%, rgba(220,38,38,0.55), transparent 70%),
+      radial-gradient(ellipse 70% 100% at 50% 50%, rgba(251,191,36,0.55), transparent 70%),
+      radial-gradient(ellipse 70% 100% at 85% 50%, rgba(21,128,61,0.55), transparent 70%),
+      #FFFFFF;
+  }
   .sticky-actions { position: sticky; top: 32px; z-index: 60; background: #FFFFFF; }
   /* Delivery tile compact state — when body.scrolled, sub-line hides, icon + paddings shrink so it doesn't eat too much height while staying frozen below the categories */
   .delivery-tile { transition: padding .25s ease; }

@@ -1439,6 +1439,29 @@
     </span>
   </a>
 
+  <!-- All-crops bottom-sheet modal — opens when "More" chip in Shop-by-Crop is tapped · 3-col grid of every crop in CROP_META · each tile toggles the corresponding crop selection in the inline picker · close via backdrop tap, X button, or Done button -->
+  <div id="cropSheet" class="fixed inset-0 z-[90]" style="display:none">
+    <div id="cropSheetBackdrop" class="absolute inset-0" style="background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
+    <div id="cropSheetPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:78vh;transform:translateY(100%);transition:transform .3s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
+      <div class="flex-shrink-0 pt-2.5 pb-2 px-5">
+        <div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div>
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-[17px] font-extrabold text-[#0F172A]">All Crops</div>
+            <div class="text-[11.5px] mt-0.5" style="color:#64748B">Tap all crops you grow</div>
+          </div>
+          <button id="cropSheetClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9">
+            <i class="fa-solid fa-xmark text-[14px]" style="color:#475569"></i>
+          </button>
+        </div>
+      </div>
+      <div id="cropSheetGrid" class="grid grid-cols-3 gap-2.5 px-5 py-3 overflow-y-auto" style="flex:1"></div>
+      <div class="flex-shrink-0 px-5 py-3" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)">
+        <button id="cropSheetDone" class="w-full h-12 rounded-xl text-white text-[14px] font-extrabold" style="background:#059669">Done</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Bottom nav — Home / Category / Crop / Profile -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white flex justify-around items-center px-2 py-2 z-50" style="height:68px;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04)">
     <a href="home.html" class="nu flex flex-col items-center gap-1">
@@ -1910,17 +1933,17 @@
             + '</div>'
             + '</button>';
         }).join('');
-        // "More" chip pinned at the end — same square tile shape as crop tiles, opens the full crop catalog
-        const moreChip = '<a href="shop.html?pick=crop" data-crop-more="1" class="flex-shrink-0 rounded-xl overflow-hidden transition-all"'
-          + ' style="background:#ECFDF5;border:1.5px dashed #10B981;color:#059669;width:84px;height:100px;display:flex;flex-direction:column">'
-          + '<div class="w-full flex items-center justify-center" style="height:78px;background:#D1FAE5;flex-shrink:0">'
+        // "More" chip — white tile (matches the rest of the row visually) · taps open the all-crops bottom-sheet modal instead of navigating away
+        const moreChip = '<button type="button" id="cropMoreBtn" class="flex-shrink-0 rounded-xl overflow-hidden transition-all"'
+          + ' style="background:#FFFFFF;border:1.5px solid #E5E7EB;color:#059669;width:84px;height:100px;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(0,0,0,0.05)">'
+          + '<div class="w-full flex items-center justify-center" style="height:78px;background:#FFFFFF;flex-shrink:0">'
           + '<i class="fa-solid fa-plus text-[28px]"></i></div>'
-          + '<div class="flex-1 flex items-center justify-center" style="background:#ECFDF5">'
+          + '<div class="flex-1 flex items-center justify-center" style="background:#FFFFFF">'
           + '<span class="text-[11.5px] font-bold leading-none">More</span>'
           + '</div>'
-          + '</a>';
+          + '</button>';
         picker.innerHTML = chips + moreChip;
-        // Wire toggle handlers (More chip is a link, no handler)
+        // Wire toggle handlers
         picker.querySelectorAll('[data-crop-key]').forEach(function(btn){
           btn.addEventListener('click', function(){
             const k = btn.dataset.cropKey;
@@ -1929,7 +1952,69 @@
             updateCTA();
           });
         });
+        const moreBtn = document.getElementById('cropMoreBtn');
+        if (moreBtn) moreBtn.addEventListener('click', openSheet);
       }
+
+      // Bottom-sheet modal — full grid of every crop, taps toggle the same selected Set as the inline picker
+      const sheet     = document.getElementById('cropSheet');
+      const sheetBg   = document.getElementById('cropSheetBackdrop');
+      const sheetPnl  = document.getElementById('cropSheetPanel');
+      const sheetGrid = document.getElementById('cropSheetGrid');
+      const sheetX    = document.getElementById('cropSheetClose');
+      const sheetDone = document.getElementById('cropSheetDone');
+
+      function renderSheet(){
+        if (!sheetGrid) return;
+        sheetGrid.innerHTML = Object.keys(CROP_META).map(function(key){
+          const m = CROP_META[key];
+          const sel = selected.has(key);
+          const borderColor = sel ? '#059669' : '#E5E7EB';
+          const shadow      = sel ? '0 6px 14px -4px rgba(5,150,105,0.32)' : '0 1px 3px rgba(0,0,0,0.05)';
+          const labelColor  = sel ? '#047857' : '#0F172A';
+          const tick = sel
+            ? '<span class="absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center" style="background:#059669;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff;z-index:2"><i class="fa-solid fa-check text-white text-[9px]"></i></span>'
+            : '';
+          return '<button type="button" data-sheet-crop="'+key+'" class="rounded-xl overflow-hidden transition-all"'
+            + ' style="background:#FFFFFF;border:1.5px solid '+borderColor+';box-shadow:'+shadow+';height:120px;display:flex;flex-direction:column">'
+            + '<div class="relative w-full" style="height:90px;background:'+m.bg+';overflow:hidden;flex-shrink:0">'
+            + '<img src="'+m.img+'" class="w-full h-full object-cover" style="display:block" onerror="cropFallback(this,\''+m.emoji+'\',38)"/>'
+            + tick
+            + '</div>'
+            + '<div class="flex-1 flex items-center justify-center px-1">'
+            + '<span class="text-[12.5px] font-bold leading-none" style="color:'+labelColor+'">'+m.label+'</span>'
+            + '</div>'
+            + '</button>';
+        }).join('');
+        sheetGrid.querySelectorAll('[data-sheet-crop]').forEach(function(btn){
+          btn.addEventListener('click', function(){
+            const k = btn.dataset.sheetCrop;
+            if (selected.has(k)) selected.delete(k); else selected.add(k);
+            renderSheet();
+            renderPicker();
+            updateCTA();
+          });
+        });
+      }
+
+      function openSheet(){
+        if (!sheet) return;
+        renderSheet();
+        sheet.style.display = 'block';
+        requestAnimationFrame(function(){
+          sheetBg.style.opacity = '1';
+          sheetPnl.style.transform = 'translateY(0)';
+        });
+      }
+      function closeSheet(){
+        if (!sheet) return;
+        sheetBg.style.opacity = '0';
+        sheetPnl.style.transform = 'translateY(100%)';
+        setTimeout(function(){ sheet.style.display = 'none'; }, 280);
+      }
+      if (sheetBg)   sheetBg.addEventListener('click', closeSheet);
+      if (sheetX)    sheetX.addEventListener('click', closeSheet);
+      if (sheetDone) sheetDone.addEventListener('click', closeSheet);
 
       // Stateful CTA — when nothing is picked it looks like a passive hint (grey dashed);
       // once any crop is selected it transforms into a vivid emerald button with a soft pulse

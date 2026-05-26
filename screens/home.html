@@ -90,13 +90,13 @@
     display: inline-flex; align-items: center; gap: 10px;
     padding: 6px 18px 6px 6px;
     border-radius: 9999px;
-    background: linear-gradient(135deg, #047857 0%, #059669 35%, #10B981 65%, #34D399 100%);
+    background: linear-gradient(145deg,#10B981,#065F46);
     text-decoration: none; color: #FFFFFF;
     animation: expertFabPulse 2.8s ease-in-out infinite;
     transition: bottom .3s ease, padding .3s ease, max-width .3s ease, width .3s ease, height .3s ease;
     overflow: visible;
     max-width: 240px;
-    box-shadow: 0 8px 22px -6px rgba(5,150,105,.55), inset 0 1px 0 rgba(255,255,255,.25);
+    box-shadow: 0 6px 18px -4px rgba(16,185,129,.55), inset 0 1px 0 rgba(255,255,255,.18);
   }
   .expert-fab .expert-photo-wrap { position: relative; flex-shrink: 0; }
   .expert-fab .expert-photo { width: 42px; height: 42px; border-radius: 999px; object-fit: cover; border: 2px solid #FFFFFF; display: block; }
@@ -1213,49 +1213,46 @@
       </div>
     </section>
 
-    <!-- Featured · richer multi-layer backgrounds (gradient + soft diagonal stripe + 2 glow orbs) · cleaner content hierarchy (single top badge, big name, sub, bold use-case line, price block + shop pill, rating chip in corner) · NO crop tag chips · all text white/gold on the gradient, no white slab -->
+    <!-- Featured · richer multi-layer backgrounds · cleaner content hierarchy · disease line + use-in-crops line stacked under the name (no chips) · price LEFT + Shop pill RIGHT on a single bottom row · everything in one column without wrapping -->
     <section class="mt-8">
       <div class="overflow-x-auto scroll-x" style="scroll-snap-type:x mandatory;scroll-padding-left:16px">
         <div class="flex gap-4 pb-2" style="padding-left:16px;padding-right:16px">
 
-          <!-- Card 1 · Chakrawarti (emerald) -->
           <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:280px;height:300px;scroll-snap-align:start;background:linear-gradient(155deg,#022C22 0%,#047857 40%,#059669 80%,#10B981 100%);box-shadow:0 14px 30px -10px rgba(4,78,57,0.45)">
-            <!-- subtle diagonal stripe pattern for texture -->
             <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(135deg,rgba(255,255,255,0.04) 0,rgba(255,255,255,0.04) 1px,transparent 1px,transparent 14px)"></div>
-            <!-- amber glow orb top-right · creates focal warmth behind product -->
             <div class="absolute pointer-events-none" style="top:-20px;right:-30px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.28) 0%,transparent 65%)"></div>
-            <!-- emerald halo bottom-left for depth -->
             <div class="absolute pointer-events-none" style="bottom:-30px;left:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,0.55) 0%,transparent 70%)"></div>
-            <!-- rating chip corner top-right · single small element -->
             <span class="absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
               <i class="fa-solid fa-star text-[8px]" style="color:#FBBF24"></i> 4.8
             </span>
-            <!-- product image right · larger, more dramatic -->
             <img src="../assets/Chakrawarti_nobg.png" class="absolute" style="right:-18px;bottom:0;max-height:85%;max-width:52%;filter:drop-shadow(0 18px 30px rgba(0,0,0,0.5))"/>
-            <!-- content -->
             <div class="relative p-4 flex flex-col justify-between h-full" style="width:60%">
               <div>
                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FBBF24;color:#78350F"><i class="fa-solid fa-crown text-[8px]"></i> BESTSELLER</span>
                 <div class="text-[22px] font-extrabold leading-[1.02] mt-3 text-white">Chakrawarti<br/>ZC</div>
-                <div class="text-[11px] mt-1 leading-tight" style="color:rgba(255,255,255,0.7)">Chloran. + Lambda-Cy.</div>
+                <div class="text-[10.5px] mt-1 leading-tight" style="color:rgba(255,255,255,0.7)">Chloran. + Lambda-Cy.</div>
               </div>
               <div>
-                <div class="text-[11.5px] font-extrabold leading-snug mb-2.5" style="color:#FBBF24">
-                  Kills aphid, whitefly &amp; thrips fast
+                <div class="text-[11px] font-extrabold leading-snug" style="color:#FBBF24">
+                  <i class="fa-solid fa-shield-virus text-[9px]"></i> Kills aphid &middot; whitefly &middot; thrips
                 </div>
-                <div class="flex items-baseline gap-1.5">
-                  <span class="text-[20px] font-extrabold tnum text-white">&#8377;358</span>
-                  <span class="text-[11.5px] line-through" style="color:rgba(255,255,255,0.55)">&#8377;495</span>
+                <div class="text-[10px] font-semibold leading-snug mt-0.5 mb-2" style="color:rgba(255,255,255,0.78)">
+                  <i class="fa-solid fa-seedling text-[9px]"></i> For Tomato &amp; Chilli
                 </div>
-                <div class="flex items-center justify-between mt-2">
-                  <span class="text-[10.5px] font-extrabold" style="color:#FBBF24">28% OFF</span>
-                  <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11.5px] font-extrabold" style="background:#FFFFFF;color:#064E3B">Shop now <i class="fa-solid fa-arrow-right text-[9px]" style="color:#064E3B"></i></button>
+                <div class="flex items-end justify-between">
+                  <div>
+                    <div class="flex items-baseline gap-1.5">
+                      <span class="text-[20px] font-extrabold tnum text-white">&#8377;358</span>
+                      <span class="text-[11.5px] line-through" style="color:rgba(255,255,255,0.55)">&#8377;495</span>
+                    </div>
+                    <div class="text-[10px] font-extrabold mt-0.5" style="color:#FBBF24">28% OFF</div>
+                  </div>
+                  <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11.5px] font-extrabold whitespace-nowrap" style="background:#FFFFFF;color:#064E3B">Shop <i class="fa-solid fa-arrow-right text-[9px]" style="color:#064E3B"></i></button>
                 </div>
               </div>
             </div>
           </a>
 
-          <!-- Card 2 · Antivirus (violet) -->
           <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:280px;height:300px;scroll-snap-align:start;background:linear-gradient(155deg,#1E1B4B 0%,#4338CA 40%,#6D28D9 80%,#8B5CF6 100%);box-shadow:0 14px 30px -10px rgba(49,46,129,0.45)">
             <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(135deg,rgba(255,255,255,0.04) 0,rgba(255,255,255,0.04) 1px,transparent 1px,transparent 14px)"></div>
             <div class="absolute pointer-events-none" style="top:-20px;right:-30px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.22) 0%,transparent 65%)"></div>
@@ -1268,24 +1265,29 @@
               <div>
                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FCE7F3;color:#9D174D"><i class="fa-solid fa-sparkles text-[8px]"></i> NEW</span>
                 <div class="text-[22px] font-extrabold leading-[1.02] mt-3 text-white">Antivirus</div>
-                <div class="text-[11px] mt-1 leading-tight" style="color:rgba(255,255,255,0.7)">Anti-viral biostimulant</div>
+                <div class="text-[10.5px] mt-1 leading-tight" style="color:rgba(255,255,255,0.7)">Anti-viral biostimulant</div>
               </div>
               <div>
-                <div class="text-[11.5px] font-extrabold leading-snug mb-2.5" style="color:#FBBF24">
-                  Stops yellow-leaf &amp; mosaic virus
+                <div class="text-[11px] font-extrabold leading-snug" style="color:#FBBF24">
+                  <i class="fa-solid fa-shield-virus text-[9px]"></i> Stops yellow-leaf &amp; mosaic virus
                 </div>
-                <div class="flex items-baseline gap-1.5">
-                  <span class="text-[20px] font-extrabold tnum text-white">&#8377;327</span>
+                <div class="text-[10px] font-semibold leading-snug mt-0.5 mb-2" style="color:rgba(255,255,255,0.78)">
+                  <i class="fa-solid fa-seedling text-[9px]"></i> For Tomato &amp; Chilli
                 </div>
-                <div class="flex items-center justify-between mt-2">
-                  <span class="text-[10.5px] font-extrabold" style="color:#FBBF24">Best in class</span>
-                  <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11.5px] font-extrabold" style="background:#FFFFFF;color:#4338CA">Shop now <i class="fa-solid fa-arrow-right text-[9px]" style="color:#4338CA"></i></button>
+                <div class="flex items-end justify-between">
+                  <div>
+                    <div class="flex items-baseline gap-1.5">
+                      <span class="text-[20px] font-extrabold tnum text-white">&#8377;327</span>
+                      
+                    </div>
+                    <div class="text-[10px] font-extrabold mt-0.5" style="color:#FBBF24">Best in class</div>
+                  </div>
+                  <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11.5px] font-extrabold whitespace-nowrap" style="background:#FFFFFF;color:#4338CA">Shop <i class="fa-solid fa-arrow-right text-[9px]" style="color:#4338CA"></i></button>
                 </div>
               </div>
             </div>
           </a>
 
-          <!-- Card 3 · Humic + Fulvic 98 (teal) -->
           <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:280px;height:300px;scroll-snap-align:start;background:linear-gradient(155deg,#042F2E 0%,#115E59 40%,#0F766E 80%,#14B8A6 100%);box-shadow:0 14px 30px -10px rgba(19,78,74,0.45)">
             <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(135deg,rgba(255,255,255,0.04) 0,rgba(255,255,255,0.04) 1px,transparent 1px,transparent 14px)"></div>
             <div class="absolute pointer-events-none" style="top:-20px;right:-30px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.22) 0%,transparent 65%)"></div>
@@ -1298,19 +1300,24 @@
               <div>
                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FBBF24;color:#78350F"><i class="fa-solid fa-fire text-[8px]"></i> HOT DEAL</span>
                 <div class="text-[20px] font-extrabold leading-[1.02] mt-3 text-white">Humic +<br/>Fulvic 98</div>
-                <div class="text-[11px] mt-1 leading-tight" style="color:rgba(255,255,255,0.7)">Humic 12% + Fulvic 8%</div>
+                <div class="text-[10.5px] mt-1 leading-tight" style="color:rgba(255,255,255,0.7)">Humic 12% + Fulvic 8%</div>
               </div>
               <div>
-                <div class="text-[11.5px] font-extrabold leading-snug mb-2.5" style="color:#FBBF24">
-                  Wakes tired soil &amp; boosts roots
+                <div class="text-[11px] font-extrabold leading-snug" style="color:#FBBF24">
+                  <i class="fa-solid fa-shield-virus text-[9px]"></i> Wakes tired soil &amp; boosts roots
                 </div>
-                <div class="flex items-baseline gap-1.5">
-                  <span class="text-[20px] font-extrabold tnum text-white">&#8377;376</span>
-                  <span class="text-[11.5px] line-through" style="color:rgba(255,255,255,0.55)">&#8377;520</span>
+                <div class="text-[10px] font-semibold leading-snug mt-0.5 mb-2" style="color:rgba(255,255,255,0.78)">
+                  <i class="fa-solid fa-seedling text-[9px]"></i> For all crops
                 </div>
-                <div class="flex items-center justify-between mt-2">
-                  <span class="text-[10.5px] font-extrabold" style="color:#FBBF24">28% OFF</span>
-                  <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11.5px] font-extrabold" style="background:#FFFFFF;color:#134E4A">Shop now <i class="fa-solid fa-arrow-right text-[9px]" style="color:#134E4A"></i></button>
+                <div class="flex items-end justify-between">
+                  <div>
+                    <div class="flex items-baseline gap-1.5">
+                      <span class="text-[20px] font-extrabold tnum text-white">&#8377;376</span>
+                      <span class="text-[11.5px] line-through" style="color:rgba(255,255,255,0.55)">&#8377;520</span>
+                    </div>
+                    <div class="text-[10px] font-extrabold mt-0.5" style="color:#FBBF24">28% OFF</div>
+                  </div>
+                  <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11.5px] font-extrabold whitespace-nowrap" style="background:#FFFFFF;color:#134E4A">Shop <i class="fa-solid fa-arrow-right text-[9px]" style="color:#134E4A"></i></button>
                 </div>
               </div>
             </div>
@@ -1322,17 +1329,17 @@
 
     <!-- User input widget — compact poll · headline only (no subtitle) · 4 icon-less chip buttons in a single row · coin reward chip shows what user earns · winning gesture (coin pop + check) fires on tap -->
     <section id="acresWidget" class="mt-4 px-4">
-      <div class="rounded-xl p-3 relative overflow-hidden" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15)">
-        <button id="acresClose" class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0;z-index:5" aria-label="Dismiss">
-          <i class="fa-solid fa-xmark text-[11px]" style="color:#475569"></i>
-        </button>
-        <!-- Headline row · question + reward coin -->
-        <div class="flex items-center gap-1.5 pr-7">
+      <div class="rounded-xl p-3.5 relative overflow-hidden" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15)">
+        <!-- Headline row · question + reward coin + close X — all aligned inline on one row, no overlap, no congestion -->
+        <div class="flex items-center gap-2">
           <i class="fa-solid fa-circle-question text-[14px] flex-shrink-0" style="color:#059669"></i>
           <div class="flex-1 min-w-0 text-[13.5px] font-extrabold text-[#0F172A] leading-tight">How many acres of land do you farm?</div>
           <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[10.5px] font-extrabold flex-shrink-0" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#78350F">
             <i class="fa-solid fa-coins text-[9px]"></i> +20
           </span>
+          <button id="acresClose" class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style="background:#F1F5F9;border:0" aria-label="Dismiss">
+            <i class="fa-solid fa-xmark text-[10px]" style="color:#475569"></i>
+          </button>
         </div>
         <!-- 4 chips in a single row (no icons, no wrap) · equal flex distribution so they fit -->
         <div id="acreRow" class="flex gap-1.5 mt-2.5" data-q="acres">

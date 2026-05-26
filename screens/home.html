@@ -136,22 +136,28 @@
   body.at-end .expert-fab .expert-text > span:first-child { font-size: 14px; }
   body.at-end .expert-fab .expert-sub { display: block !important; font-size: 11px !important; }
   body.at-end .expert-fab::after { content: "→"; margin-left: auto; font-size: 18px; font-weight: 800; color: #FFFFFF; }
-  /* Sticky categories grow back to full size at end + brief highlight pulse to draw the eye */
-  body.at-end .cat-circle { width: 56px !important; height: 56px !important; border-width: 1.5px !important; }
-  body.at-end .cat-label  { font-size: 13px !important; }
-  body.at-end .cat-emoji  { font-size: 28px !important; }
-  body.at-end .cat-svg    { width: 32px !important; height: 32px !important; }
-  body.at-end .cat-tile   { width: 80px !important; gap: 8px !important; animation: catEndPulse 1.4s ease-out; }
-  body.at-end .sticky-cats { padding-top: 12px !important; padding-bottom: 12px !important; }
+  /* Sticky categories grow BIGGER at end + continuous spotlight animation that auto-cycles through the 5 categories (one highlighted at a time) */
+  body.at-end .cat-circle { width: 64px !important; height: 64px !important; border-width: 1.5px !important; }
+  body.at-end .cat-label  { font-size: 13.5px !important; }
+  body.at-end .cat-emoji  { font-size: 32px !important; }
+  body.at-end .cat-svg    { width: 36px !important; height: 36px !important; }
+  body.at-end .cat-tile   { width: 88px !important; gap: 8px !important; animation: catEndCycle 5s ease-in-out infinite; }
+  body.at-end .cat-tile:nth-child(1) { animation-delay: 0s; }
+  body.at-end .cat-tile:nth-child(2) { animation-delay: 1s; }
+  body.at-end .cat-tile:nth-child(3) { animation-delay: 2s; }
+  body.at-end .cat-tile:nth-child(4) { animation-delay: 3s; }
+  body.at-end .cat-tile:nth-child(5) { animation-delay: 4s; }
+  body.at-end .sticky-cats { padding-top: 14px !important; padding-bottom: 14px !important; }
   body.at-end .sticky-cats > div { gap: 0 !important; padding: 0 16px !important; }
-  @keyframes catEndPulse {
-    0%   { transform: scale(1); filter: drop-shadow(0 0 0 rgba(5,150,105,0)); }
-    35%  { transform: scale(1.08); filter: drop-shadow(0 4px 10px rgba(5,150,105,0.4)); }
-    65%  { transform: scale(0.98); }
-    100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(5,150,105,0)); }
+  /* Continuous spotlight cycle — each tile is highlighted for ~1s, then rests for 4s while others rotate */
+  @keyframes catEndCycle {
+    0%, 18%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(5,150,105,0)); }
+    6% { transform: scale(1.18); filter: drop-shadow(0 6px 16px rgba(5,150,105,0.6)); }
+    12% { transform: scale(1.08); filter: drop-shadow(0 4px 10px rgba(5,150,105,0.35)); }
   }
-  /* End-of-page "what's next" hint — only fades in when body.at-end is active */
+  /* End-of-page "what's next" hint + scroll-to-top FAB — only fade in when body.at-end is active */
   body.at-end #endHint { opacity: 1 !important; pointer-events: auto !important; }
+  body.at-end #scrollTopBtn { opacity: 1 !important; pointer-events: auto !important; transform: translateY(0) !important; }
 
   /* Flash sale ⚡ icon pulse */
   @keyframes flashPulse {
@@ -1484,13 +1490,10 @@
       </div>
     </section>
 
-    <!-- End-of-page "what's next" hint — fades in only when body.at-end · gives the user a direction (Back to top) without taking screen space normally -->
+    <!-- End-of-page "what's next" hint — inline tip · fades in only when body.at-end -->
     <div id="endHint" class="px-4 mt-2 mb-2 flex items-center justify-center gap-2 text-[12px] font-semibold" style="color:#64748B;opacity:0;transition:opacity .4s ease;pointer-events:none">
       <i class="fa-solid fa-circle-info text-[11px]" style="color:#059669"></i>
       <span>Looking for more? Tap a category above</span>
-      <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="nu inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0">
-        <i class="fa-solid fa-arrow-up text-[9px]"></i> Top
-      </button>
     </div>
 
     <!-- Brand illustration footer — top 60px fades from transparent so the image's grey-cream sky blends smoothly into the white app bg above (no harsh seam) · zero bottom margin so it sits flush against the nav bar -->
@@ -1499,6 +1502,11 @@
     </section>
 
   </main>
+
+  <!-- Scroll-to-top FAB — fixed bottom-LEFT of viewport · visible only when body.at-end (user reached page bottom) · always reachable regardless of inline content, never covered by the Ask Expert banner on the right -->
+  <button type="button" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed flex items-center justify-center rounded-full" style="left:16px;bottom:96px;width:44px;height:44px;background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 6px 18px -4px rgba(5,150,105,0.35);color:#059669;z-index:48;opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;transform:translateY(20px)">
+    <i class="fa-solid fa-arrow-up text-[16px]" style="color:#059669"></i>
+  </button>
 
   <!-- Floating cart bar — hidden by default, full-width on add, shrinks to center pill on scroll -->
   <a href="cart.html" id="cartBar" class="nu cart-fab items-center justify-between px-4 py-3 rounded-2xl shadow-lg" style="background:#0F172A;color:#fff;display:none">

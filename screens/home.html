@@ -270,7 +270,8 @@
     <button id="addressBtn" class="flex items-center gap-2.5 min-w-0 flex-1 text-left relative z-10" style="background:transparent;border:0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(255,255,255,0.2)">
       <img src="../assets/kkd-logo.png" alt="KKD" class="flex-shrink-0" style="width:36px;height:36px;border-radius:9px;object-fit:cover"/>
       <div class="leading-tight min-w-0">
-        <div id="greetLabel" class="text-[11px] font-semibold text-[#94A3B8] uppercase tracking-wide" style="transition:opacity .35s ease,transform .35s ease;display:inline-block">Hey! Sagar</div>
+        <!-- Greeting · scrolls upward continuously (current text exits up, new text enters from below) · normal Title-Case ("Hey! Sagar"), no all-caps -->
+        <div style="overflow:hidden;height:14px;line-height:14px"><div id="greetLabel" class="text-[11px] font-semibold text-[#94A3B8] tracking-wide" style="transition:transform .45s cubic-bezier(.5,0,.3,1),opacity .35s ease;display:block">Hey! Sagar</div></div>
         <div class="flex items-center gap-1 text-[16px] font-bold text-[#0F172A] mt-0.5">
           Indore 452001
           <i class="fa-solid fa-chevron-down text-[10px] text-[#64748B] ml-0.5"></i>
@@ -505,37 +506,26 @@
             </div>
           </div>
         </div>
-        <!-- STATE B · SPEND · hidden by default, revealed once user earns coins · header turns gold, CTA reads 'Shop now' and links to categories.html -->
+        <!-- STATE B · SPEND · revealed once user earns coins · clean emerald wallet treatment (no yellow) · prompts the user to spend the FULL wallet balance (not just the freshly-earned chunk) · no step-progress bar since onboarding is complete -->
         <div class="ob-state-shop" style="display:none">
-          <div class="flex items-center gap-1.5 px-3.5 py-2" style="background:linear-gradient(90deg,#FEF3C7 0%,#FDE68A 100%);border-bottom:1px solid #FCD34D">
-            <i class="fa-solid fa-circle-check text-[11px]" style="color:#92400E"></i>
-            <span class="text-[10px] font-extrabold tracking-[0.14em] uppercase" style="color:#92400E">Coins earned</span>
-            <span class="text-[10px]" style="color:#B45309">·</span>
-            <span class="text-[10.5px] font-bold" style="color:#78350F">Ready to use</span>
-            <span class="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold" style="background:#FFFFFF;color:#78350F;border:1px solid #FBBF24">
-              <i class="fa-solid fa-coins text-[9px]" style="color:#F59E0B"></i> +50
+          <div class="flex items-center gap-1.5 px-3.5 py-2" style="background:#ECFDF5;border-bottom:1px solid #BBF7D0">
+            <i class="fa-solid fa-circle-check text-[11px]" style="color:#047857"></i>
+            <span class="text-[10px] font-extrabold tracking-[0.14em] uppercase" style="color:#047857">Wallet ready</span>
+            <span class="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold" style="background:#FFFFFF;color:#047857;border:1px solid #BBF7D0">
+              <i class="fa-solid fa-coins text-[9px]" style="color:#F59E0B"></i> <span id="obWalletChip">270</span> coins
             </span>
           </div>
-          <div class="px-3.5 pt-3 flex items-center gap-3">
-            <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#F59E0B 0%,#FBBF24 100%);box-shadow:0 4px 12px -2px rgba(245,158,11,0.4)">
-              <i class="fa-solid fa-bag-shopping text-[18px]" style="color:#FFFFFF"></i>
+          <div class="px-3.5 py-3.5 flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%);box-shadow:0 4px 12px -2px rgba(5,150,105,0.4)">
+              <i class="fa-solid fa-wallet text-[18px]" style="color:#FFFFFF"></i>
             </div>
             <div class="flex-1 leading-tight min-w-0">
-              <div class="text-[15px] font-extrabold truncate" style="color:#0F172A">Use your 50 coins</div>
-              <div class="text-[11px] font-semibold mt-0.5 truncate" style="color:#64748B">Save up to ₹50 on your next order</div>
+              <div class="text-[15px] font-extrabold truncate" style="color:#0F172A">Use your <span id="obWalletAmt">270</span> coins</div>
+              <div class="text-[11px] font-semibold mt-0.5 truncate" style="color:#64748B">Save ₹<span id="obWalletAmt2">270</span> on your next order</div>
             </div>
-            <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF">
+            <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF;box-shadow:0 3px 8px -2px rgba(5,150,105,0.4)">
               Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i>
             </span>
-          </div>
-          <div class="px-3.5 py-3">
-            <div class="flex gap-1">
-              <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-              <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-              <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-              <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
-              <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
-            </div>
           </div>
         </div>
       </button>
@@ -1764,28 +1754,34 @@
     }
     if(input) type();
 
-    // Greeting label · flips between "Hey! Sagar" (start) and "Deliver to" every 5s · 3 full cycles, final state "Deliver to"
+    // Greeting label · flips between "Hey! Sagar" and "Deliver to" every 5s in a single upward direction · current text slides UP out of the clip-mask, new text enters from BELOW and rolls UP into place · 3 full cycles, final resting state "Deliver to"
     (function(){
       const el = document.getElementById('greetLabel');
       if (!el) return;
       const states = ['Hey! Sagar', 'Deliver to'];
-      let idx = 0;        // 0 = greeting, 1 = label
+      let idx = 0;
       let flips = 0;
-      const TOTAL_FLIPS = 5; // start at greeting → flip 5 times so we land on "Deliver to" for the 3rd time
+      const TOTAL_FLIPS = 5;
       const INTERVAL = 5000;
       const t = setInterval(function(){
         idx = (idx + 1) % 2;
         flips++;
+        // Slide current text up & fade out
+        el.style.transform = 'translateY(-100%)';
         el.style.opacity = '0';
-        el.style.transform = 'translateY(-4px)';
         setTimeout(function(){
+          // Snap to below the viewport (with transition off) then swap text
+          el.style.transition = 'none';
+          el.style.transform = 'translateY(100%)';
           el.textContent = states[idx];
-          el.style.transform = 'translateY(4px)';
+          // Force reflow, then restore transition and slide up to neutral
+          void el.offsetHeight;
+          el.style.transition = 'transform .45s cubic-bezier(.5,0,.3,1), opacity .35s ease';
           requestAnimationFrame(function(){
-            el.style.opacity = '1';
             el.style.transform = 'translateY(0)';
+            el.style.opacity = '1';
           });
-        }, 360);
+        }, 450);
         if (flips >= TOTAL_FLIPS) clearInterval(t);
       }, INTERVAL);
     })();
@@ -2278,6 +2274,17 @@
       // Onboarding tile click → opens the same All-Crops bottom-sheet modal so user can add crops directly
       const obTile = document.getElementById('onboardingTile');
       // Tile is dual-state: STATE A opens the crop sheet so user can earn coins · STATE B (already earned) routes to categories.html so user can spend them
+      function syncWalletAmt(){
+        const balEl = document.getElementById('coinBalance');
+        const total = balEl ? (parseInt(balEl.textContent, 10) || 0) : 0;
+        // Tile must reflect the FULL wallet, not just the freshly-earned chunk
+        const chip = document.getElementById('obWalletChip');
+        const amt  = document.getElementById('obWalletAmt');
+        const amt2 = document.getElementById('obWalletAmt2');
+        if (chip) chip.textContent = total;
+        if (amt)  amt.textContent  = total;
+        if (amt2) amt2.textContent = total;
+      }
       function applyOnboardingState(){
         if (!obTile) return;
         const earnEl = obTile.querySelector('.ob-state-earn');
@@ -2285,6 +2292,7 @@
         if (localStorage.getItem('kkd.coins.firstCrop') === '1') {
           if (earnEl) earnEl.style.display = 'none';
           if (shopEl) shopEl.style.display = 'block';
+          syncWalletAmt();
         } else {
           if (earnEl) earnEl.style.display = 'block';
           if (shopEl) shopEl.style.display = 'none';
@@ -2298,7 +2306,7 @@
           openSheet();
         }
       });
-      // After the first-crop celebration finishes, swap to the spend state with a soft fade
+      // After the first-crop celebration finishes, swap to the spend state with a soft fade · sync wallet figures from the live pill balance
       window.addEventListener('kkd:firstCropEarned', function(){
         if (!obTile) return;
         const earnEl = obTile.querySelector('.ob-state-earn');
@@ -2308,6 +2316,7 @@
         earnEl.style.opacity = '0';
         setTimeout(function(){
           earnEl.style.display = 'none';
+          syncWalletAmt();
           shopEl.style.display = 'block';
           shopEl.style.opacity = '0';
           shopEl.style.transition = 'opacity .35s ease';

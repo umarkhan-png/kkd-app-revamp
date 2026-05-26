@@ -112,26 +112,8 @@
     50%      { box-shadow: 0 6px 22px -2px rgba(16,185,129,.8),  0 0 0 7px rgba(16,185,129,.1), inset 0 1px 0 rgba(255,255,255,.18); }
   }
 
-  /* ===== END-OF-PAGE state — user has scrolled to the bottom and risks feeling direction-less ===== */
-  /* Expert FAB expands to a near-full-width banner (16px margins on each side, not edge-to-edge) so it becomes the obvious next step */
-  body.at-end .expert-fab {
-    left: 16px !important;
-    right: 16px !important;
-    max-width: none !important;
-    width: auto !important;
-    height: auto !important;
-    padding: 10px 14px !important;
-    border-radius: 16px !important;
-    justify-content: flex-start !important;
-    gap: 12px !important;
-  }
-  body.at-end .expert-fab .expert-photo { width: 44px !important; height: 44px !important; }
-  body.at-end .expert-fab .expert-text { opacity: 1 !important; max-width: 100% !important; pointer-events: auto !important; flex: 1; }
-  body.at-end .expert-fab .expert-text > span:first-child { font-size: 14px; }
-  body.at-end .expert-fab .expert-sub { display: block !important; font-size: 11px !important; }
-  body.at-end .expert-fab::after {
-    content: "→"; margin-left: auto; font-size: 18px; font-weight: 800; color: #FFFFFF;
-  }
+  /* ===== END-OF-PAGE state — user reached bottom · hide the Ask Expert FAB so the brand illustration footer is fully visible */
+  body.at-end .expert-fab { opacity: 0 !important; pointer-events: none !important; transform: translateY(20px); }
   /* Sticky categories grow back to full size at end + brief highlight pulse to draw the eye */
   body.at-end .cat-circle { width: 56px !important; height: 56px !important; border-width: 1.5px !important; }
   body.at-end .cat-label  { font-size: 13px !important; }
@@ -242,7 +224,7 @@
   <span class="snow-flake" style="left:94%;animation-delay:.4s;font-size:11px">❄</span>
 
   <!-- System status bar — sticky at viewport top with theme color fill · only this strip pins on scroll, the address row below scrolls away with normal flow -->
-  <div class="sticky-status flex items-center justify-between px-4 pt-3 pb-2 text-[12px] font-semibold text-[#0F172A]">
+  <div class="sticky-status flex items-center justify-between px-4 pt-2 pb-1 text-[12px] font-semibold text-[#0F172A]">
     <span>9:41</span>
     <div class="flex items-center gap-1.5">
       <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
@@ -251,8 +233,8 @@
     </div>
   </div>
 
-  <!-- Info bar: address (tap to change theme) + coin + profile -->
-  <div class="flex items-center justify-between px-4 pt-2 pb-3 relative">
+  <!-- Info bar: address (tap to change theme) + coin + profile · tightened top padding so the gap above the KKD logo doesn't read as wasted space -->
+  <div class="flex items-center justify-between px-4 pt-1 pb-2.5 relative">
     <button id="addressBtn" class="flex items-center gap-2.5 min-w-0 flex-1 text-left relative z-10" style="background:transparent;border:0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(255,255,255,0.2)">
       <img src="../assets/kkd-logo.png" alt="KKD" class="flex-shrink-0" style="width:36px;height:36px;border-radius:9px;object-fit:cover"/>
       <div class="leading-tight min-w-0">
@@ -1602,9 +1584,9 @@
       <i class="fa-solid fa-grip text-[20px]"></i>
       <span class="text-[12.5px] font-semibold">Category</span>
     </a>
-    <a href="my-crop.html" class="nu flex flex-col items-center gap-1" style="color:#94A3B8">
-      <i class="fa-solid fa-wheat-awn text-[20px]"></i>
-      <span class="text-[12.5px] font-semibold">Crop</span>
+    <a href="orders.html" class="nu flex flex-col items-center gap-1" style="color:#94A3B8">
+      <i class="fa-solid fa-box text-[20px]"></i>
+      <span class="text-[12.5px] font-semibold">Orders</span>
     </a>
     <a href="account.html" class="nu flex flex-col items-center gap-1" style="color:#94A3B8">
       <i class="fa-solid fa-user text-[20px]"></i>

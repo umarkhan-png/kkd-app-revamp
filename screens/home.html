@@ -470,39 +470,72 @@
 
   <main>
 
-    <!-- Onboarding progress tile · simplified · header band (earn coins + step) · task row (icon + headline + emerald coin chip + Start CTA) · progress bar at bottom · no yellow tints, no extra subtitle, no 'tap to pick' hint -->
+    <!-- Onboarding progress tile · two states · STATE A "earn" (default) prompts user to add first crop to earn coins · STATE B "spend" (after they've earned) pushes them to spend the coins · the JS toggles visibility based on localStorage('kkd.coins.firstCrop') -->
     <section class="mt-3 px-4">
       <button type="button" id="onboardingTile" class="w-full text-left rounded-2xl relative overflow-hidden block" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 4px 14px -6px rgba(5,150,105,0.18);cursor:pointer">
-        <!-- Top header band · emerald-light bg · just label + step counter, no gold chip -->
-        <div class="flex items-center gap-1.5 px-3.5 py-2" style="background:#ECFDF5;border-bottom:1px solid #BBF7D0">
-          <i class="fa-solid fa-trophy text-[11px]" style="color:#047857"></i>
-          <span class="text-[10px] font-extrabold tracking-[0.14em] uppercase" style="color:#047857">Earn coins</span>
-          <span class="text-[10px]" style="color:#94A3B8">·</span>
-          <span class="text-[10.5px] font-bold" style="color:#0F172A">Step 3 of 5</span>
-        </div>
-        <!-- Task row · icon + headline + emerald coin chip + Start arrow -->
-        <div class="px-3.5 pt-3 flex items-center gap-3">
-          <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#059669 0%,#10B981 100%);box-shadow:0 4px 12px -2px rgba(5,150,105,0.4)">
-            <i class="fa-solid fa-wheat-awn text-[20px]" style="color:#FFFFFF"></i>
+        <!-- STATE A · EARN -->
+        <div class="ob-state-earn">
+          <div class="flex items-center gap-1.5 px-3.5 py-2" style="background:#ECFDF5;border-bottom:1px solid #BBF7D0">
+            <i class="fa-solid fa-trophy text-[11px]" style="color:#047857"></i>
+            <span class="text-[10px] font-extrabold tracking-[0.14em] uppercase" style="color:#047857">Earn coins</span>
+            <span class="text-[10px]" style="color:#94A3B8">·</span>
+            <span class="text-[10.5px] font-bold" style="color:#0F172A">Step 3 of 5</span>
           </div>
-          <div class="flex-1 leading-tight min-w-0">
-            <div class="text-[15px] font-extrabold truncate" style="color:#0F172A">Add your first crop</div>
-            <div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-[10.5px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0">
-              <i class="fa-solid fa-coins text-[9px]" style="color:#F59E0B"></i> Get 50 coins
+          <div class="px-3.5 pt-3 flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#059669 0%,#10B981 100%);box-shadow:0 4px 12px -2px rgba(5,150,105,0.4)">
+              <i class="fa-solid fa-wheat-awn text-[20px]" style="color:#FFFFFF"></i>
+            </div>
+            <div class="flex-1 leading-tight min-w-0">
+              <div class="text-[15px] font-extrabold truncate" style="color:#0F172A">Add your first crop</div>
+              <div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-[10.5px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0">
+                <i class="fa-solid fa-coins text-[9px]" style="color:#F59E0B"></i> Get 50 coins
+              </div>
+            </div>
+            <span class="inline-flex items-center gap-1 text-[12px] font-extrabold flex-shrink-0" style="color:#059669">
+              Start <i class="fa-solid fa-arrow-right text-[10px]" style="color:#059669"></i>
+            </span>
+          </div>
+          <div class="px-3.5 py-3">
+            <div class="flex gap-1">
+              <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+              <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+              <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
+              <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
+              <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
             </div>
           </div>
-          <span class="inline-flex items-center gap-1 text-[12px] font-extrabold flex-shrink-0" style="color:#059669">
-            Start <i class="fa-solid fa-arrow-right text-[10px]" style="color:#059669"></i>
-          </span>
         </div>
-        <!-- Bottom · 5-segment progress (2 filled, 3 empty) -->
-        <div class="px-3.5 py-3">
-          <div class="flex gap-1">
-            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-            <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
-            <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
-            <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
+        <!-- STATE B · SPEND · hidden by default, revealed once user earns coins · header turns gold, CTA reads 'Shop now' and links to categories.html -->
+        <div class="ob-state-shop" style="display:none">
+          <div class="flex items-center gap-1.5 px-3.5 py-2" style="background:linear-gradient(90deg,#FEF3C7 0%,#FDE68A 100%);border-bottom:1px solid #FCD34D">
+            <i class="fa-solid fa-circle-check text-[11px]" style="color:#92400E"></i>
+            <span class="text-[10px] font-extrabold tracking-[0.14em] uppercase" style="color:#92400E">Coins earned</span>
+            <span class="text-[10px]" style="color:#B45309">·</span>
+            <span class="text-[10.5px] font-bold" style="color:#78350F">Ready to use</span>
+            <span class="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold" style="background:#FFFFFF;color:#78350F;border:1px solid #FBBF24">
+              <i class="fa-solid fa-coins text-[9px]" style="color:#F59E0B"></i> +50
+            </span>
+          </div>
+          <div class="px-3.5 pt-3 flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#F59E0B 0%,#FBBF24 100%);box-shadow:0 4px 12px -2px rgba(245,158,11,0.4)">
+              <i class="fa-solid fa-bag-shopping text-[18px]" style="color:#FFFFFF"></i>
+            </div>
+            <div class="flex-1 leading-tight min-w-0">
+              <div class="text-[15px] font-extrabold truncate" style="color:#0F172A">Use your 50 coins</div>
+              <div class="text-[11px] font-semibold mt-0.5 truncate" style="color:#64748B">Save up to ₹50 on your next order</div>
+            </div>
+            <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF">
+              Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i>
+            </span>
+          </div>
+          <div class="px-3.5 py-3">
+            <div class="flex gap-1">
+              <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+              <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+              <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+              <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
+              <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
+            </div>
           </div>
         </div>
       </button>
@@ -2252,7 +2285,43 @@
 
       // Onboarding tile click → opens the same All-Crops bottom-sheet modal so user can add crops directly
       const obTile = document.getElementById('onboardingTile');
-      if (obTile) obTile.addEventListener('click', function(){ openSheet(); });
+      // Tile is dual-state: STATE A opens the crop sheet so user can earn coins · STATE B (already earned) routes to categories.html so user can spend them
+      function applyOnboardingState(){
+        if (!obTile) return;
+        const earnEl = obTile.querySelector('.ob-state-earn');
+        const shopEl = obTile.querySelector('.ob-state-shop');
+        if (localStorage.getItem('kkd.coins.firstCrop') === '1') {
+          if (earnEl) earnEl.style.display = 'none';
+          if (shopEl) shopEl.style.display = 'block';
+        } else {
+          if (earnEl) earnEl.style.display = 'block';
+          if (shopEl) shopEl.style.display = 'none';
+        }
+      }
+      applyOnboardingState();
+      if (obTile) obTile.addEventListener('click', function(){
+        if (localStorage.getItem('kkd.coins.firstCrop') === '1') {
+          window.location.href = 'categories.html';
+        } else {
+          openSheet();
+        }
+      });
+      // After the first-crop celebration finishes, swap to the spend state with a soft fade
+      window.addEventListener('kkd:firstCropEarned', function(){
+        if (!obTile) return;
+        const earnEl = obTile.querySelector('.ob-state-earn');
+        const shopEl = obTile.querySelector('.ob-state-shop');
+        if (!earnEl || !shopEl) return;
+        earnEl.style.transition = 'opacity .35s ease';
+        earnEl.style.opacity = '0';
+        setTimeout(function(){
+          earnEl.style.display = 'none';
+          shopEl.style.display = 'block';
+          shopEl.style.opacity = '0';
+          shopEl.style.transition = 'opacity .35s ease';
+          requestAnimationFrame(function(){ shopEl.style.opacity = '1'; });
+        }, 350);
+      });
 
       // Bottom-sheet modal — full grid of every crop, taps toggle the same selected Set as the inline picker
       const sheet     = document.getElementById('cropSheet');
@@ -2394,7 +2463,11 @@
             const eased = 1 - Math.pow(1 - t, 3);
             bal.textContent = String(Math.round(from + (to - from) * eased));
             if (t < 1) requestAnimationFrame(tick);
-            else bal.textContent = String(to);
+            else {
+              bal.textContent = String(to);
+              // Coins have landed → tell the onboarding tile to flip into "Use coins · Shop now" mode
+              setTimeout(function(){ window.dispatchEvent(new CustomEvent('kkd:firstCropEarned')); }, 400);
+            }
           }
           requestAnimationFrame(tick);
         }

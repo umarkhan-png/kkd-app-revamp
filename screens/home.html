@@ -408,50 +408,40 @@
   </div>
 
   <!-- Delivery status tile — richer informative layout (partner-app pattern) · status pulse + order summary + product thumbs + progress bar + Track button · taps open the detailed delivery modal · compact state on scroll keeps just status row + Track button -->
-  <button type="button" id="deliveryTile" class="delivery-tile w-full text-left px-4 py-2.5" style="background:#ECFDF5;border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0;border-left:0;border-right:0;cursor:pointer">
+  <button type="button" id="deliveryTile" class="delivery-tile w-full text-left px-4 py-2" style="background:#ECFDF5;border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0;border-left:0;border-right:0;cursor:pointer">
     <!-- Status row -->
-    <div class="flex items-center justify-between mb-2.5 dt-statusrow">
+    <div class="flex items-center justify-between mb-1 dt-statusrow">
       <div class="flex items-center gap-2 min-w-0">
         <span class="relative flex items-center justify-center flex-shrink-0">
           <span class="block w-2 h-2 rounded-full" style="background:#059669"></span>
           <span class="absolute inset-0 w-2 h-2 rounded-full" style="background:#059669;animation:dtPulse 1.6s ease-out infinite"></span>
         </span>
         <span class="text-[11px] font-extrabold uppercase tracking-wider truncate" style="color:#047857">Out for Delivery</span>
-        <span class="text-[10.5px] font-semibold flex-shrink-0" style="color:#64748B">· Arriving by <span style="color:#0F172A;font-weight:800">5:00 PM</span></span>
+        <span class="text-[10.5px] font-semibold flex-shrink-0" style="color:#64748B">· ETA <span style="color:#0F172A;font-weight:800">5:00 PM</span></span>
       </div>
       <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF">
         Track <i class="fa-solid fa-arrow-right text-[9px]" style="color:#FFFFFF"></i>
       </span>
     </div>
-    <!-- Icon-based progress track — stage icons (filled = done, ring = current, faded = upcoming) + live truck position · much more intuitive than abstract dots -->
+    <!-- Compact order info row · ID + amount + items + placed date -->
+    <div class="flex items-center gap-1.5 text-[10.5px] mb-1.5 dt-detail" style="color:#64748B">
+      <span class="font-extrabold" style="color:#0F172A">#KKD-26194</span>
+      <span>·</span>
+      <span class="font-extrabold tnum" style="color:#0F172A">&#8377;2,140</span>
+      <span>·</span>
+      <span class="font-semibold">3 items</span>
+      <span>·</span>
+      <span class="font-semibold">Placed 22 May</span>
+    </div>
+    <!-- Compact icon-based progress · smaller icons + tighter spacing -->
     <div class="dt-detail relative">
       <div class="flex items-center justify-between relative">
-        <!-- horizontal track line (behind icons) -->
-        <div class="absolute left-3 right-3 top-1/2 -translate-y-1/2 h-1 rounded-full" style="background:#A7F3D0"></div>
-        <div class="absolute left-3 top-1/2 -translate-y-1/2 h-1 rounded-full" style="background:#059669;width:calc(66.66% - 24px)"></div>
-        <!-- Stage 1: Placed (done) -->
-        <div class="relative z-10 flex flex-col items-center" style="width:24px">
-          <div class="w-6 h-6 rounded-full flex items-center justify-center" style="background:#059669"><i class="fa-solid fa-check text-white text-[10px]"></i></div>
-        </div>
-        <!-- Stage 2: Packed (done) -->
-        <div class="relative z-10 flex flex-col items-center" style="width:24px">
-          <div class="w-6 h-6 rounded-full flex items-center justify-center" style="background:#059669"><i class="fa-solid fa-check text-white text-[10px]"></i></div>
-        </div>
-        <!-- Stage 3: Out for delivery (current — bouncing truck) -->
-        <div class="relative z-10 flex flex-col items-center" style="width:28px">
-          <div class="w-7 h-7 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:2px solid #059669;box-shadow:0 0 0 4px rgba(5,150,105,0.18);animation:dtTruckBounce 1.4s ease-in-out infinite"><i class="fa-solid fa-truck-fast text-[12px]" style="color:#047857"></i></div>
-        </div>
-        <!-- Stage 4: Delivered (upcoming) -->
-        <div class="relative z-10 flex flex-col items-center" style="width:24px">
-          <div class="w-6 h-6 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:2px solid #A7F3D0"><i class="fa-solid fa-house text-[10px]" style="color:#94A3B8"></i></div>
-        </div>
-      </div>
-      <!-- Labels under each stage -->
-      <div class="flex items-center justify-between mt-1.5 text-[9.5px] font-semibold">
-        <span style="color:#047857;width:24px;text-align:center">Placed</span>
-        <span style="color:#047857;width:24px;text-align:center">Packed</span>
-        <span style="color:#047857;font-weight:800;width:28px;text-align:center">On way</span>
-        <span style="color:#94A3B8;width:24px;text-align:center">Home</span>
+        <div class="absolute left-2.5 right-2.5 top-1/2 -translate-y-1/2 h-[3px] rounded-full" style="background:#A7F3D0"></div>
+        <div class="absolute left-2.5 top-1/2 -translate-y-1/2 h-[3px] rounded-full" style="background:#059669;width:calc(66.66% - 20px)"></div>
+        <div class="relative z-10 flex items-center justify-center rounded-full" style="width:20px;height:20px;background:#059669"><i class="fa-solid fa-check text-white text-[9px]"></i></div>
+        <div class="relative z-10 flex items-center justify-center rounded-full" style="width:20px;height:20px;background:#059669"><i class="fa-solid fa-check text-white text-[9px]"></i></div>
+        <div class="relative z-10 flex items-center justify-center rounded-full" style="width:22px;height:22px;background:#FFFFFF;border:2px solid #059669;box-shadow:0 0 0 3px rgba(5,150,105,0.18);animation:dtTruckBounce 1.4s ease-in-out infinite"><i class="fa-solid fa-truck-fast text-[10px]" style="color:#047857"></i></div>
+        <div class="relative z-10 flex items-center justify-center rounded-full" style="width:20px;height:20px;background:#FFFFFF;border:2px solid #A7F3D0"><i class="fa-solid fa-house text-[9px]" style="color:#94A3B8"></i></div>
       </div>
     </div>
   </button>

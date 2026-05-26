@@ -265,7 +265,7 @@
   <!-- Info bar: address (tap to change theme) + coin + profile -->
   <div class="flex items-center justify-between px-4 pt-2 pb-3 relative">
     <button id="addressBtn" class="flex items-center gap-2.5 min-w-0 flex-1 text-left relative z-10" style="background:transparent;border:0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(255,255,255,0.2)">
-      <img src="../assets/kkd-logo.png" alt="KKD" class="flex-shrink-0" style="width:42px;height:42px;border-radius:10px;object-fit:cover"/>
+      <img src="../assets/kkd-logo.png" alt="KKD" class="flex-shrink-0" style="width:36px;height:36px;border-radius:9px;object-fit:cover"/>
       <div class="leading-tight min-w-0">
         <div class="text-[11px] font-semibold text-[#94A3B8] uppercase tracking-wide">Deliver to</div>
         <div class="flex items-center gap-1 text-[16px] font-bold text-[#0F172A] mt-0.5">
@@ -1901,39 +1901,33 @@
 
     // Shop-by-Crop inline picker — every crop in CROP_META is a chip · multi-select · ✓ tick badge · "More" chip at end · bigger crisp photos (w=200&q=85, 56x56 circle) · stateful CTA that visually changes when crops are selected so the affordance is obvious
     (function(){
-      // Pexels CDN for 6 crops where prior Unsplash IDs were either 404 or framed as landscapes (not close-ups) · routed via images.weserv.nl proxy with smart-attention crop + white bg fill so any edge artifacts get cleaned up · onion + potato kept on the working Unsplash URLs the user confirmed look right · wheat keeps the working Unsplash close-up from v98
-      const UNS = 'https://images.unsplash.com/';
-      const Q   = '?w=400&h=400&q=85&fit=crop&crop=center&auto=format';
-      const PEX = 'images.pexels.com/photos/';
-      function pex(id){ return 'https://images.weserv.nl/?url=' + encodeURIComponent(PEX + id + '/pexels-photo-' + id + '.jpeg?auto=compress&w=400') + '&w=240&h=240&fit=cover&a=attention&bg=white&we=1'; }
-      function uns(id){ return 'https://images.weserv.nl/?url=' + encodeURIComponent('images.unsplash.com/photo-' + id + '?w=400&h=400&fit=crop') + '&w=240&h=240&fit=cover&a=attention&bg=white&we=1'; }
-
-      // Full 23-crop list per user's "My Farm" reference screen · ordered alphabetically except the most popular Indian crops (tomato/chilli/wheat etc) get earlier slots for the inline picker · all photos curl-verified at commit time
+      // Local crop photos cropped from a single curated reference image · 24 JPGs at assets/crops/<key>.jpg (240x240 center-crop) · no CDN / proxy dependency, always loads
+      const CROP_IMG = '../assets/crops/';
       const CROP_META = {
-        tomato:        { label:'Tomato',        emoji:'🍅', bg:'#FEE2E2', img: pex('533280') },
-        chilli:        { label:'Chilli',        emoji:'🌶️', bg:'#FFEDD5', img: pex('1313267') },
-        wheat:         { label:'Wheat',         emoji:'🌾', bg:'#FEF3C7', img: uns('1574323347407-f5e1ad6d020b') },
-        maize:         { label:'Maize',         emoji:'🌽', bg:'#FEF9C3', img: pex('547263') },
-        onion:         { label:'Onion',         emoji:'🧅', bg:'#FCE7F3', img: UNS + 'photo-1618512496248-a07fe83aa8cb' + Q },
-        potato:        { label:'Potato',        emoji:'🥔', bg:'#FEF3C7', img: UNS + 'photo-1518977676601-b53f82aba655' + Q },
-        sugarcane:     { label:'Sugarcane',     emoji:'🎋', bg:'#DCFCE7', img: pex('1342988') },
-        banana:        { label:'Banana',        emoji:'🍌', bg:'#FEF9C3', img: pex('1093038') },
-        mango:         { label:'Mango',         emoji:'🥭', bg:'#FED7AA', img: pex('2294471') },
-        grapes:        { label:'Grapes',        emoji:'🍇', bg:'#F3E8FF', img: pex('4022082') },
-        orange:        { label:'Orange',        emoji:'🍊', bg:'#FFEDD5', img: pex('2255935') },
-        watermelon:    { label:'Watermelon',    emoji:'🍉', bg:'#FECACA', img: pex('1414815') },
-        papaya:        { label:'Papaya',        emoji:'🥭', bg:'#FED7AA', img: pex('5837750') },
-        pomegranate:   { label:'Pomegranate',   emoji:'🍎', bg:'#FEE2E2', img: pex('5945736') },
-        brinjal:       { label:'Brinjal',       emoji:'🍆', bg:'#EDE9FE', img: pex('321551') },
-        cauliflower:   { label:'Cauliflower',   emoji:'🥦', bg:'#FEF3C7', img: pex('5057481') },
-        cabbage:       { label:'Cabbage',       emoji:'🥬', bg:'#DCFCE7', img: pex('1656669') },
-        okra:          { label:'Okra',          emoji:'🌿', bg:'#DCFCE7', img: pex('4187609') },
-        garlic:        { label:'Garlic',        emoji:'🧄', bg:'#F5F5F4', img: pex('1340116') },
-        cumin:         { label:'Cumin',         emoji:'🌱', bg:'#FEF3C7', img: pex('4198015') },
-        cardamom:      { label:'Cardamom',      emoji:'🌿', bg:'#D1FAE5', img: pex('5908158') },
-        chickpea:      { label:'Chickpea',      emoji:'🫘', bg:'#FEF3C7', img: pex('4198972') },
-        soyabean:      { label:'Soyabean',      emoji:'🫘', bg:'#DCFCE7', img: pex('1199957') },
-        blackgram:     { label:'Black Gram',    emoji:'🫘', bg:'#E5E7EB', img: pex('7195747') },
+        tomato:        { label:'Tomato',        emoji:'🍅', bg:'#FEE2E2', img: CROP_IMG + 'tomato.jpg' },
+        chilli:        { label:'Chilli',        emoji:'🌶', bg:'#FFEDD5', img: CROP_IMG + 'chilli.jpg' },
+        wheat:         { label:'Wheat',         emoji:'🌾', bg:'#FEF3C7', img: CROP_IMG + 'wheat.jpg' },
+        maize:         { label:'Maize',         emoji:'🌽', bg:'#FEF9C3', img: CROP_IMG + 'maize.jpg' },
+        onion:         { label:'Onion',         emoji:'🧅', bg:'#FCE7F3', img: CROP_IMG + 'onion.jpg' },
+        potato:        { label:'Potato',        emoji:'🥔', bg:'#FEF3C7', img: CROP_IMG + 'potato.jpg' },
+        sugarcane:     { label:'Sugarcane',     emoji:'🎋', bg:'#DCFCE7', img: CROP_IMG + 'sugarcane.jpg' },
+        banana:        { label:'Banana',        emoji:'🍌', bg:'#FEF9C3', img: CROP_IMG + 'banana.jpg' },
+        mango:         { label:'Mango',         emoji:'🥭', bg:'#FED7AA', img: CROP_IMG + 'mango.jpg' },
+        grapes:        { label:'Grapes',        emoji:'🍇', bg:'#F3E8FF', img: CROP_IMG + 'grapes.jpg' },
+        orange:        { label:'Orange',        emoji:'🍊', bg:'#FFEDD5', img: CROP_IMG + 'orange.jpg' },
+        watermelon:    { label:'Watermelon',    emoji:'🍉', bg:'#FECACA', img: CROP_IMG + 'watermelon.jpg' },
+        papaya:        { label:'Papaya',        emoji:'🥭', bg:'#FED7AA', img: CROP_IMG + 'papaya.jpg' },
+        pomegranate:   { label:'Pomegranate',   emoji:'🍎', bg:'#FEE2E2', img: CROP_IMG + 'pomegranate.jpg' },
+        brinjal:       { label:'Brinjal',       emoji:'🍆', bg:'#EDE9FE', img: CROP_IMG + 'brinjal.jpg' },
+        cauliflower:   { label:'Cauliflower',   emoji:'🥦', bg:'#FEF3C7', img: CROP_IMG + 'cauliflower.jpg' },
+        cabbage:       { label:'Cabbage',       emoji:'🥬', bg:'#DCFCE7', img: CROP_IMG + 'cabbage.jpg' },
+        okra:          { label:'Okra',          emoji:'🌿', bg:'#DCFCE7', img: CROP_IMG + 'okra.jpg' },
+        garlic:        { label:'Garlic',        emoji:'🧄', bg:'#F5F5F4', img: CROP_IMG + 'garlic.jpg' },
+        cumin:         { label:'Cumin',         emoji:'🌱', bg:'#FEF3C7', img: CROP_IMG + 'cumin.jpg' },
+        cardamom:      { label:'Cardamom',      emoji:'🌿', bg:'#D1FAE5', img: CROP_IMG + 'cardamom.jpg' },
+        chickpea:      { label:'Chickpea',      emoji:'🫘', bg:'#FEF3C7', img: CROP_IMG + 'chickpea.jpg' },
+        soyabean:      { label:'Soyabean',      emoji:'🫘', bg:'#DCFCE7', img: CROP_IMG + 'soyabean.jpg' },
+        blackgram:     { label:'Black Gram',    emoji:'🫘', bg:'#E5E7EB', img: CROP_IMG + 'blackgram.jpg' },
       };
 
       const picker   = document.getElementById('cropInlinePicker');

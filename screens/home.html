@@ -450,47 +450,54 @@
 
   <main>
 
-    <!-- Onboarding progress tile · clean white card with emerald accents · gold coin badge stays gold (universal coin recognition) · intuitive at-a-glance: trophy icon -> what's next -> how many coins -> visual progress -->
+    <!-- Onboarding progress tile · intuitive task card · 'EARN COIN' header band with step progress + reward · big task area with icon + label + CTA pill that says exactly what tapping does · tapping anywhere opens the All-Crops bottom-sheet modal so user can add crops right away -->
     <section class="mt-3 px-4">
-      <a href="onboarding.html?step=3" class="nu block rounded-2xl p-3.5 relative overflow-hidden" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 4px 14px -6px rgba(5,150,105,0.18)">
-        <!-- Subtle emerald accent ring top-right -->
-        <div class="absolute -top-8 -right-8 w-24 h-24 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(5,150,105,0.08) 0%,transparent 65%)"></div>
-        <!-- Top row: emerald task icon + headline · gold coin chip on the right -->
-        <div class="relative flex items-center gap-3">
+      <button type="button" id="onboardingTile" class="w-full text-left rounded-2xl relative overflow-hidden block" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 4px 14px -6px rgba(5,150,105,0.18);cursor:pointer">
+        <!-- Top header band — earn coins progress + reward · sets context: "this card earns you coins" -->
+        <div class="flex items-center justify-between px-3.5 py-2" style="background:linear-gradient(90deg,#ECFDF5 0%,#D1FAE5 100%);border-bottom:1px solid #BBF7D0">
+          <div class="flex items-center gap-1.5">
+            <i class="fa-solid fa-trophy text-[11px]" style="color:#F59E0B"></i>
+            <span class="text-[10px] font-extrabold tracking-[0.14em] uppercase" style="color:#047857">Earn coins</span>
+            <span class="text-[10px]" style="color:#94A3B8">·</span>
+            <span class="text-[10.5px] font-bold" style="color:#0F172A">Step 3 of 5</span>
+          </div>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-extrabold" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#78350F">
+            <i class="fa-solid fa-coins text-[10px]"></i> 100 earned
+          </span>
+        </div>
+        <!-- Task body — clear visual hierarchy: WHAT to do + WHY + reward + CTA -->
+        <div class="p-3.5 flex items-center gap-3">
           <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#059669 0%,#10B981 100%);box-shadow:0 4px 12px -2px rgba(5,150,105,0.4)">
             <i class="fa-solid fa-wheat-awn text-[20px]" style="color:#FFFFFF"></i>
           </div>
           <div class="flex-1 leading-tight min-w-0">
-            <div class="flex items-center gap-1.5 mb-0.5">
-              <i class="fa-solid fa-bolt text-[10px]" style="color:#F59E0B"></i>
-              <span class="text-[9.5px] font-extrabold tracking-[0.14em] uppercase" style="color:#047857">Next step</span>
-            </div>
             <div class="text-[14.5px] font-extrabold truncate" style="color:#0F172A">Add your first crop</div>
-            <div class="text-[11px] font-semibold mt-0.5 truncate" style="color:#64748B">Get personalized product picks</div>
+            <div class="text-[11.5px] font-semibold mt-0.5" style="color:#64748B">Get product picks tailored to your farm</div>
           </div>
-          <span class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[12px] font-extrabold flex-shrink-0" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#78350F;box-shadow:0 3px 8px -1px rgba(217,119,6,0.4)">
-            <i class="fa-solid fa-coins text-[11px]"></i> +50
+          <span class="inline-flex flex-col items-center justify-center flex-shrink-0 rounded-xl px-2.5 py-1.5" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#78350F;box-shadow:0 3px 8px -1px rgba(217,119,6,0.4)">
+            <span class="text-[10px] font-extrabold uppercase tracking-wide leading-none">Get</span>
+            <span class="inline-flex items-center gap-0.5 text-[14px] font-extrabold leading-none mt-0.5">
+              <i class="fa-solid fa-coins text-[11px]"></i> 50
+            </span>
           </span>
         </div>
-        <!-- 5-segment progress: 2 filled, 1 current (animated), 2 empty · emerald-themed -->
-        <div class="relative flex gap-1 mt-3">
-          <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-          <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-          <div class="flex-1 h-1.5 rounded-full overflow-hidden" style="background:#D1FAE5"><div class="h-full" style="background:#059669;width:50%;animation:progFill 2s ease-in-out infinite"></div></div>
-          <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
-          <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
-        </div>
-        <!-- Footer row: progress text + arrow -->
-        <div class="relative flex items-center justify-between mt-2">
-          <div class="flex items-center gap-1.5">
-            <i class="fa-solid fa-circle-check text-[10px]" style="color:#059669"></i>
-            <span class="text-[11px] font-bold" style="color:#0F172A">Step 3 of 5</span>
-            <span class="text-[11px]" style="color:#94A3B8">·</span>
-            <span class="text-[11px] font-bold" style="color:#047857">100 coins earned</span>
+        <!-- Bottom: 5-segment progress + CTA hint · progress shows where user is, CTA says what happens on tap -->
+        <div class="px-3.5 pb-3 -mt-1">
+          <div class="flex gap-1 mb-2">
+            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+            <div class="flex-1 h-1.5 rounded-full overflow-hidden" style="background:#D1FAE5"><div class="h-full" style="background:#059669;width:50%;animation:progFill 2s ease-in-out infinite"></div></div>
+            <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
+            <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
           </div>
-          <i class="fa-solid fa-arrow-right text-[12px]" style="color:#059669"></i>
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-semibold" style="color:#64748B">Tap to pick your crops</span>
+            <span class="inline-flex items-center gap-1 text-[11.5px] font-extrabold" style="color:#059669">
+              Start <i class="fa-solid fa-arrow-right text-[10px]" style="color:#059669"></i>
+            </span>
+          </div>
         </div>
-      </a>
+      </button>
     </section>
 
 
@@ -2117,6 +2124,10 @@
         const moreBtn = document.getElementById('cropMoreBtn');
         if (moreBtn) moreBtn.addEventListener('click', openSheet);
       }
+
+      // Onboarding tile click → opens the same All-Crops bottom-sheet modal so user can add crops directly
+      const obTile = document.getElementById('onboardingTile');
+      if (obTile) obTile.addEventListener('click', function(){ openSheet(); });
 
       // Bottom-sheet modal — full grid of every crop, taps toggle the same selected Set as the inline picker
       const sheet     = document.getElementById('cropSheet');

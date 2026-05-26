@@ -84,24 +84,24 @@
   }
   .top-theme:not([data-theme="festival"]) .snow-flake { display: none; }
 
-  /* Ask Expert FAB — default = extended pill with photo + text; on scroll = compact circle */
+  /* Ask Expert FAB — default = extended pill with photo + text; on scroll = compact circle · richer multi-stop gradient + oval (fully-pill) shape · roomier padding so 'Ask Expert' + 'Free agronomist call' aren't congested */
   .expert-fab {
     position: fixed; right: 12px; bottom: 84px; z-index: 46;
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 5px 14px 5px 5px;
-    border-radius: 999px;
-    background: linear-gradient(145deg,#10B981,#065F46);
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 6px 18px 6px 6px;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #047857 0%, #059669 35%, #10B981 65%, #34D399 100%);
     text-decoration: none; color: #FFFFFF;
     animation: expertFabPulse 2.8s ease-in-out infinite;
     transition: bottom .3s ease, padding .3s ease, max-width .3s ease, width .3s ease, height .3s ease;
     overflow: visible;
-    max-width: 220px;
-    box-shadow: 0 6px 18px -4px rgba(16,185,129,.55), inset 0 1px 0 rgba(255,255,255,.18);
+    max-width: 240px;
+    box-shadow: 0 8px 22px -6px rgba(5,150,105,.55), inset 0 1px 0 rgba(255,255,255,.25);
   }
   .expert-fab .expert-photo-wrap { position: relative; flex-shrink: 0; }
-  .expert-fab .expert-photo { width: 40px; height: 40px; border-radius: 999px; object-fit: cover; border: 2px solid #FFFFFF; display: block; }
+  .expert-fab .expert-photo { width: 42px; height: 42px; border-radius: 999px; object-fit: cover; border: 2px solid #FFFFFF; display: block; }
   .expert-fab .expert-video-badge { display: flex; position: absolute; bottom: -2px; right: -2px; width: 22px; height: 22px; border-radius: 999px; background: #DC2626; border: 2px solid #FFFFFF; align-items: center; justify-content: center; color: #FFFFFF; font-size: 9px; box-shadow: 0 2px 6px rgba(220,38,38,0.4); }
-  .expert-fab .expert-text  { display: flex; flex-direction: column; line-height: 1.1; transition: opacity .25s ease, max-width .25s ease; overflow: hidden; max-width: 160px; }
+  .expert-fab .expert-text  { display: flex; flex-direction: column; line-height: 1.25; gap: 2px; transition: opacity .25s ease, max-width .25s ease; overflow: hidden; max-width: 160px; }
   .expert-fab .expert-sub   { display: block; }
   .expert-fab.lifted { bottom: 156px; }
   /* Compact = clean circle: 60x60 + smart floating "Ask Expert" chip to its LEFT (pseudo-element) */
@@ -1329,32 +1329,35 @@
       </div>
     </section>
 
-    <!-- User input widget — compact poll-style question card · close X dismisses + persists kkd.q.acres.dismissed so it stays hidden · much tighter padding/typography than before -->
+    <!-- User input widget — compact poll · headline only (no subtitle) · 4 icon-less chip buttons in a single row · coin reward chip shows what user earns · winning gesture (coin pop + check) fires on tap -->
     <section id="acresWidget" class="mt-4 px-4">
-      <div class="rounded-xl p-3 relative" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15)">
-        <button id="acresClose" class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0" aria-label="Dismiss">
+      <div class="rounded-xl p-3 relative overflow-hidden" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15)">
+        <button id="acresClose" class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0;z-index:5" aria-label="Dismiss">
           <i class="fa-solid fa-xmark text-[11px]" style="color:#475569"></i>
         </button>
-        <div class="flex items-start gap-1.5 pr-7">
-          <i class="fa-solid fa-circle-question text-[14px] flex-shrink-0 mt-0.5" style="color:#059669"></i>
-          <div class="flex-1 min-w-0">
-            <div class="text-[13.5px] font-extrabold text-[#0F172A] leading-tight">How many acres of land do you farm?</div>
-            <div class="text-[11px] mt-0.5 leading-tight" style="color:#64748B">Helps us suggest the right pack sizes</div>
-          </div>
+        <!-- Headline row · question + reward coin -->
+        <div class="flex items-center gap-1.5 pr-7">
+          <i class="fa-solid fa-circle-question text-[14px] flex-shrink-0" style="color:#059669"></i>
+          <div class="flex-1 min-w-0 text-[13.5px] font-extrabold text-[#0F172A] leading-tight">How many acres of land do you farm?</div>
+          <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[10.5px] font-extrabold flex-shrink-0" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#78350F">
+            <i class="fa-solid fa-coins text-[9px]"></i> +20
+          </span>
         </div>
-        <div class="flex flex-wrap gap-1.5 mt-2.5" data-q="acres">
-          <button class="acre-opt nu px-2.5 py-1.5 rounded-lg text-[12px] font-semibold flex items-center gap-1" data-val="lt1" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">
-            <i class="fa-solid fa-seedling text-[9px]" style="color:#64748B"></i> &lt; 1 acre
-          </button>
-          <button class="acre-opt nu px-2.5 py-1.5 rounded-lg text-[12px] font-semibold flex items-center gap-1" data-val="1-5" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">
-            <i class="fa-solid fa-tractor text-[9px]" style="color:#64748B"></i> 1 – 5 acres
-          </button>
-          <button class="acre-opt nu px-2.5 py-1.5 rounded-lg text-[12px] font-semibold flex items-center gap-1" data-val="5-10" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">
-            <i class="fa-solid fa-warehouse text-[9px]" style="color:#64748B"></i> 5 – 10 acres
-          </button>
-          <button class="acre-opt nu px-2.5 py-1.5 rounded-lg text-[12px] font-semibold flex items-center gap-1" data-val="gt10" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">
-            <i class="fa-solid fa-mountain-sun text-[9px]" style="color:#64748B"></i> 10+ acres
-          </button>
+        <!-- 4 chips in a single row (no icons, no wrap) · equal flex distribution so they fit -->
+        <div id="acreRow" class="flex gap-1.5 mt-2.5" data-q="acres">
+          <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-semibold text-center" data-val="lt1" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">&lt;&nbsp;1</button>
+          <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-semibold text-center" data-val="1-5" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">1&ndash;5</button>
+          <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-semibold text-center" data-val="5-10" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">5&ndash;10</button>
+          <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-semibold text-center" data-val="gt10" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">10+</button>
+        </div>
+        <!-- Winning flyaway coin (hidden by default, animates on answer) -->
+        <span id="acresCoinPop" class="absolute inline-flex items-center justify-center rounded-full pointer-events-none" style="top:8px;right:34px;width:28px;height:28px;background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#78350F;font-weight:900;font-size:10px;opacity:0;transform:translateY(0) scale(.6)">+20</span>
+        <!-- Success ribbon (hidden by default, slides in after answer) -->
+        <div id="acresSuccess" class="absolute inset-0 flex items-center justify-center pointer-events-none" style="opacity:0;background:linear-gradient(135deg,rgba(5,150,105,0.95) 0%,rgba(16,185,129,0.95) 100%);transition:opacity .4s ease;backdrop-filter:blur(2px)">
+          <div class="flex items-center gap-2 text-white">
+            <i class="fa-solid fa-circle-check text-[20px]" style="color:#FFFFFF"></i>
+            <span class="text-[14px] font-extrabold">+20 coins earned!</span>
+          </div>
         </div>
       </div>
     </section>
@@ -2062,12 +2065,28 @@
         group.querySelectorAll('button[data-val]').forEach(function(btn){
           if (btn.dataset.val === saved) paint(btn, true);
           btn.addEventListener('click', function(){
+            const firstAnswer = !localStorage.getItem(qKey);
             group.querySelectorAll('button[data-val]').forEach(b => paint(b, false));
             paint(btn, true);
             localStorage.setItem(qKey, btn.dataset.val);
+            if (firstAnswer && group.dataset.q === 'acres') celebrateAcres();
           });
         });
       });
+      function celebrateAcres(){
+        const pop = document.getElementById('acresCoinPop');
+        const ribbon = document.getElementById('acresSuccess');
+        if (pop) {
+          pop.style.transition = 'transform .9s cubic-bezier(.2,.7,.3,1), opacity .9s ease';
+          pop.style.opacity = '1';
+          pop.style.transform = 'translateY(-30px) scale(1.4)';
+          setTimeout(function(){ pop.style.opacity = '0'; }, 900);
+        }
+        if (ribbon) {
+          setTimeout(function(){ ribbon.style.opacity = '1'; }, 250);
+          setTimeout(function(){ ribbon.style.opacity = '0'; }, 1700);
+        }
+      }
       function paint(btn, on){
         if (on) {
           btn.style.background = '#ECFDF5';

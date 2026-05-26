@@ -20,9 +20,11 @@
 
   /* 3 themes · switched by tapping Deliver-to */
   .top-theme { transition: background .6s ease; position: relative; overflow: hidden; }
-  /* Default: KKD emerald primary gradient → fades to white before the text-heavy address row so dark text stays readable */
+  /* Default: soft brand-tinted top — subtle mint wash that fades to white, no harsh emerald banding · uses a radial ellipse anchored top-center for a softer focal feel than a flat linear gradient */
   .top-theme[data-theme="green"] {
-    background: linear-gradient(180deg,#10B981 0%,#34D399 14%,#6EE7B7 30%,#A7F3D0 50%,#D1FAE5 70%,#ECFDF5 85%,#FFFFFF 100%);
+    background:
+      radial-gradient(ellipse 130% 70% at 50% 0%, #A7F3D0 0%, #D1FAE5 30%, #ECFDF5 60%, transparent 95%),
+      #FFFFFF;
   }
   /* Rain: soft sky → white */
   .top-theme[data-theme="rain"] {
@@ -249,8 +251,8 @@
 
   <!-- Info bar: address (tap to change theme) + coin + profile -->
   <div class="flex items-center justify-between px-4 pt-2 pb-3 relative">
-    <button id="addressBtn" class="flex items-center gap-2 min-w-0 flex-1 text-left" style="background:transparent;border:0">
-      <i class="fa-solid fa-location-dot text-emerald-600 text-[16px]"></i>
+    <button id="addressBtn" class="flex items-center gap-2.5 min-w-0 flex-1 text-left" style="background:transparent;border:0">
+      <img src="../assets/kkd-logo.png" alt="KKD" class="flex-shrink-0" style="width:38px;height:38px;border-radius:10px;object-fit:cover;background:#FFFFFF;box-shadow:0 1px 3px rgba(15,23,42,0.12);border:1px solid rgba(255,255,255,0.8)"/>
       <div class="leading-tight min-w-0">
         <div class="text-[11px] font-semibold text-[#94A3B8] uppercase tracking-wide">Deliver to</div>
         <div class="flex items-center gap-1 text-[16px] font-bold text-[#0F172A] mt-0.5">

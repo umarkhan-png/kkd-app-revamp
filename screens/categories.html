@@ -1,62 +1,370 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Categories</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
-<style>*{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}.hi{font-family:'Noto Sans Devanagari',sans-serif}html,body{margin:0;padding:0}body{min-height:100vh;background:#fff;color:#0F172A}.img-blend{mix-blend-mode:multiply}</style></head>
-<body class="min-h-screen pb-[88px]">
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0}
+  body{min-height:100vh;background:#FAFAF7;color:#0F172A}
+  .img-blend{mix-blend-mode:multiply}
+  .tnum{font-variant-numeric:tabular-nums}
+  .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .scroll-x::-webkit-scrollbar{display:none}
+  .scroll-x{scrollbar-width:none}
+  /* Top main-cat circles · home-page style */
+  .cat-circle{width:54px;height:54px;border-radius:50%;background:#FFFFFF;border:1.5px solid #E5E7EB;display:flex;align-items:center;justify-content:center;transition:all .2s ease}
+  .cat-tile[aria-pressed="true"] .cat-circle{border-color:#059669;background:#ECFDF5;box-shadow:0 4px 12px -3px rgba(5,150,105,0.3)}
+  .cat-tile[aria-pressed="true"] .cat-label{color:#047857}
+  .cat-emoji{font-size:24px;line-height:1}
+  /* Left sub-cat rail */
+  .subcat-btn{display:block;width:100%;text-align:center;padding:14px 6px;font-size:11.5px;font-weight:600;color:#475569;border-left:3px solid transparent;background:transparent;transition:all .15s ease;line-height:1.25;cursor:pointer}
+  .subcat-btn[aria-pressed="true"]{background:#FFFFFF;color:#047857;border-left-color:#059669;font-weight:800}
+  .subcat-btn:not([aria-pressed="true"]):hover{background:rgba(5,150,105,0.04)}
+  .subcat-ic{display:block;font-size:20px;margin-bottom:4px;line-height:1}
+  /* Filter pills */
+  .filter-pill{display:inline-flex;align-items:center;gap:4px;height:30px;padding:0 10px;border-radius:999px;background:#FFFFFF;border:1px solid #E5E7EB;font-size:11.5px;font-weight:600;color:#475569;white-space:nowrap;flex-shrink:0;cursor:pointer;transition:all .15s ease}
+  .filter-pill[aria-pressed="true"]{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
+  .filter-pill .dot{width:5px;height:5px;border-radius:50%;background:#059669;margin-left:2px;display:none}
+  .filter-pill[aria-pressed="true"] .dot{display:inline-block}
+  /* Product card · compact horizontal · bestseller-pattern */
+  .pcard{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;display:flex;box-shadow:0 1px 3px rgba(15,23,42,0.04);transition:transform .15s ease,box-shadow .2s ease}
+  .pcard:active{transform:scale(.98)}
+  .pcard-img{width:100px;height:auto;background:#F8FAFC;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
+  .pcard-img img{max-width:84%;max-height:80%;object-fit:contain}
+  .pcard-body{flex:1;padding:8px 10px;min-width:0;display:flex;flex-direction:column;justify-content:space-between;gap:4px}
+  .pname{font-size:13px;font-weight:800;color:#0F172A;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .psub{font-size:10px;color:#94A3B8;font-weight:600;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ptarget{display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:800;color:#047857;background:#ECFDF5;border:1px solid #BBF7D0;border-radius:999px;padding:1px 7px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pprice{font-size:15px;font-weight:900;color:#0F172A;line-height:1}
+  .pmrp{font-size:10.5px;color:#94A3B8;text-decoration:line-through;font-weight:600;line-height:1}
+  .poff{font-size:9.5px;color:#047857;font-weight:800}
+  .padd{height:30px;padding:0 12px;background:#059669;color:#FFFFFF;font-size:12px;font-weight:800;border-radius:8px;border:0;flex-shrink:0;cursor:pointer;transition:transform .15s ease,background .15s ease}
+  .padd:active{transform:scale(.94)}
+  .padd.in-cart{background:#FFFFFF;color:#047857;border:1.5px solid #059669;padding:0 4px;display:inline-flex;align-items:center;gap:0;height:30px}
+  .qty-btn{width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;color:#047857;background:transparent;border:0;font-size:14px;font-weight:900;cursor:pointer}
+  .qty-num{min-width:18px;text-align:center;font-size:12.5px;font-weight:900}
+  /* Cart fab */
+  #cartBar{position:fixed;left:16px;right:16px;bottom:18px;z-index:80;background:#0F172A;color:#FFFFFF;display:none;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:18px;box-shadow:0 14px 30px -10px rgba(0,0,0,0.35);text-decoration:none;animation:cartIn .35s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes cartIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+  /* Sticky stack */
+  .stk-main{position:sticky;top:0;z-index:30;background:#FFFFFF;border-bottom:1px solid #F1F5F9}
+  .stk-filter{position:sticky;top:96px;z-index:25;background:#FAFAF7;border-bottom:1px solid #F1F5F9}
+</style></head>
+<body>
 
-<div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
-
-<div class="px-4 pt-4 flex items-center gap-3"><button onclick="history.back()" class="w-10 h-10 rounded-full border border-[#EEE5D8] flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="hi text-[20px] font-extrabold">श्रेणियाँ</div></div>
-
-<!-- Category big cards -->
-<div class="px-4 mt-5 space-y-3">
-
-  <a href="shop.html" class="block rounded-2xl p-4 flex items-center gap-4 overflow-hidden relative" style="background:linear-gradient(115deg,#FFF4E4 0%,#FFE0B5 100%)">
-    <div class="flex-1">
-      <div class="hi text-[19px] font-extrabold leading-tight">कीटनाशक</div>
-      <div class="text-[12px] text-[#8B4500]/70 mt-0.5">Pesticides · 8 SKUs</div>
-      <div class="text-[10.5px] text-[#8B4500] font-semibold mt-1">From ₹296</div>
+  <!-- System status -->
+  <div class="px-4 pt-3 flex items-center justify-between text-[11px] font-bold">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
     </div>
-    <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend w-[110px] h-[110px] object-contain"/>
+  </div>
+
+  <!-- Header -->
+  <div class="px-4 pt-3 pb-3 flex items-center gap-3">
+    <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB">
+      <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
+    </button>
+    <div class="flex-1">
+      <h1 class="text-[19px] font-extrabold leading-tight" style="color:#0F172A">Shop by Category</h1>
+      <p class="text-[11px] font-semibold" style="color:#94A3B8">Direct from manufacturer</p>
+    </div>
+  </div>
+
+  <!-- TOP: Main 5 categories · same lineup as homepage -->
+  <div class="stk-main">
+    <div class="flex gap-2.5 px-4 py-2.5 scroll-x">
+      <button data-cat="pesticide" aria-pressed="true" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:68px;background:transparent;border:0;cursor:pointer">
+        <div class="cat-circle"><span class="cat-emoji">🐛</span></div>
+        <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Pesticide</span>
+      </button>
+      <button data-cat="fungicide" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:68px;background:transparent;border:0;cursor:pointer">
+        <div class="cat-circle"><span class="cat-emoji">🍂</span></div>
+        <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Fungicide</span>
+      </button>
+      <button data-cat="fertilizer" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:68px;background:transparent;border:0;cursor:pointer">
+        <div class="cat-circle"><span class="cat-emoji">🌱</span></div>
+        <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Fertilizer</span>
+      </button>
+      <button data-cat="herbicide" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:68px;background:transparent;border:0;cursor:pointer">
+        <div class="cat-circle"><span class="cat-emoji">🌾</span></div>
+        <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Herbicide</span>
+      </button>
+      <button data-cat="combo" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:68px;background:transparent;border:0;cursor:pointer">
+        <div class="cat-circle"><span class="cat-emoji">📦</span></div>
+        <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Combo</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- FILTER row -->
+  <div class="stk-filter">
+    <div class="flex gap-1.5 px-3 py-2 scroll-x items-center">
+      <span class="text-[11px] font-bold flex-shrink-0 mr-1" style="color:#475569"><i class="fa-solid fa-sliders text-[10px]"></i></span>
+      <button class="filter-pill" aria-pressed="false" data-filter="sort">Sort <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+      <button class="filter-pill" aria-pressed="false" data-filter="crop">Crop <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+      <button class="filter-pill" aria-pressed="false" data-filter="brand">Brand <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+      <button class="filter-pill" aria-pressed="false" data-filter="price">Price <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+      <button class="filter-pill" aria-pressed="false" data-filter="instock">In stock<span class="dot"></span></button>
+      <button class="filter-pill" aria-pressed="false" data-filter="discount">Discount<span class="dot"></span></button>
+    </div>
+  </div>
+
+  <!-- TWO-COLUMN body -->
+  <div class="flex" style="min-height:60vh">
+    <!-- LEFT: sub-categories of the active main category -->
+    <aside id="subRail" class="flex-shrink-0" style="width:96px;background:#F1F5F9;border-right:1px solid #E5E7EB"></aside>
+
+    <!-- RIGHT: product cards · same compact horizontal card style as homepage bestseller -->
+    <main class="flex-1 min-w-0 p-3">
+      <div id="subCrumb" class="text-[11px] font-bold mb-2 px-1" style="color:#64748B"></div>
+      <div id="productList" class="space-y-2.5"></div>
+    </main>
+  </div>
+
+  <!-- Floating cart bar -->
+  <a href="cart.html" id="cartBar">
+    <div class="flex items-center gap-3 min-w-0">
+      <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:#059669">
+        <i class="fa-solid fa-bag-shopping text-white text-[14px]"></i>
+      </div>
+      <div class="flex items-baseline gap-1.5 min-w-0">
+        <span class="text-[17px] font-extrabold tnum">₹<span id="cartTotal">0</span></span>
+        <span class="text-[11.5px] font-medium whitespace-nowrap" style="color:rgba(255,255,255,0.7)"><span id="cartCount">0</span> item</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5 text-[12.5px] font-bold flex-shrink-0">
+      <span>View cart</span>
+      <i class="fa-solid fa-arrow-right text-[10px]"></i>
+    </div>
   </a>
 
-  <a href="shop.html" class="block rounded-2xl p-4 flex items-center gap-4 overflow-hidden relative" style="background:linear-gradient(115deg,#DCEEDB 0%,#B7E0B5 100%)">
-    <div class="flex-1">
-      <div class="hi text-[19px] font-extrabold leading-tight">उर्वरक</div>
-      <div class="text-[12px] text-[#064E3B]/70 mt-0.5">Fertilizers · 5 SKUs</div>
-      <div class="text-[10.5px] text-[#064E3B] font-semibold mt-1">From ₹330</div>
-    </div>
-    <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend w-[110px] h-[110px] object-contain"/>
-  </a>
+  <script>
+    // Category → sub-categories + product catalog
+    const CATS = {
+      pesticide: {
+        label: 'Pesticide',
+        subs: [
+          { key:'all',         icon:'🐛', label:'All' },
+          { key:'aphid',       icon:'🦟', label:'Aphid' },
+          { key:'whitefly',    icon:'🪰', label:'Whitefly' },
+          { key:'thrips',      icon:'🐜', label:'Thrips' },
+          { key:'caterpillar', icon:'🐛', label:'Caterpillar' },
+          { key:'mite',        icon:'🕷️', label:'Mites' }
+        ]
+      },
+      fungicide: {
+        label: 'Fungicide',
+        subs: [
+          { key:'all',           icon:'🍂', label:'All' },
+          { key:'mildew',        icon:'⚪', label:'Powdery mildew' },
+          { key:'leafspot',      icon:'🍃', label:'Leaf spot' },
+          { key:'blight',        icon:'🟤', label:'Blight' },
+          { key:'rust',          icon:'🟧', label:'Rust' },
+          { key:'rootrot',       icon:'🌿', label:'Root rot' }
+        ]
+      },
+      fertilizer: {
+        label: 'Fertilizer',
+        subs: [
+          { key:'all',     icon:'🌱', label:'All' },
+          { key:'npk',     icon:'🧪', label:'NPK' },
+          { key:'micro',   icon:'💧', label:'Micronutrient' },
+          { key:'bio',     icon:'🌿', label:'Bio-fert' },
+          { key:'soil',    icon:'🪨', label:'Soil booster' }
+        ]
+      },
+      herbicide: {
+        label: 'Herbicide',
+        subs: [
+          { key:'all',       icon:'🌾', label:'All' },
+          { key:'selective', icon:'🎯', label:'Selective' },
+          { key:'nonsel',    icon:'⚡', label:'Non-selective' },
+          { key:'pre',       icon:'🌱', label:'Pre-emergent' }
+        ]
+      },
+      combo: {
+        label: 'Combo',
+        subs: [
+          { key:'all',    icon:'📦', label:'All' },
+          { key:'crop',   icon:'🌾', label:'Crop combo' },
+          { key:'stage',  icon:'📅', label:'Stage combo' },
+          { key:'saver',  icon:'💰', label:'Value pack' }
+        ]
+      }
+    };
 
-  <a href="shop.html" class="block rounded-2xl p-4 flex items-center gap-4 overflow-hidden relative" style="background:linear-gradient(115deg,#E8EFF8 0%,#C6D7EF 100%)">
-    <div class="flex-1">
-      <div class="hi text-[19px] font-extrabold leading-tight">फफूंदनाशक</div>
-      <div class="text-[12px] text-[#1565C0]/70 mt-0.5">Fungicides · 2 SKUs</div>
-      <div class="text-[10.5px] text-[#1565C0] font-semibold mt-1">From ₹310</div>
-    </div>
-    <img src="https://katyayanikrishidirect.com/cdn/shop/files/AZODHARMA_3.webp" class="img-blend w-[110px] h-[110px] object-contain"/>
-  </a>
+    const PRODUCTS = [
+      // PESTICIDES
+      { cat:'pesticide', subs:['aphid','whitefly','thrips'], name:'Chakrawarti ZC', sub:'100 ml · Chloran. + Lambda-Cy.', target:'Kills aphid · whitefly', price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'pesticide', subs:['aphid','whitefly'],          name:'Antivirus',       sub:'250 ml · Biostimulant',         target:'Stops leaf-virus',     price:327, mrp:425, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'pesticide', subs:['caterpillar','thrips'],      name:'Indoxa Strike',   sub:'100 ml · Indoxacarb 15.8%',     target:'Kills caterpillar',     price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'pesticide', subs:['mite','aphid'],              name:'Mitex Pro',       sub:'100 ml · Fenazaquin 10%',       target:'Kills red mites',       price:296, mrp:390, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'pesticide', subs:['whitefly'],                  name:'White-Out 5G',    sub:'500 g · Acetamiprid 20%',       target:'Wipes out whitefly',    price:445, mrp:595, img:'../assets/Chakrawarti_nobg.png' },
 
-  <a href="shop.html" class="block rounded-2xl p-4 flex items-center gap-4 overflow-hidden relative" style="background:linear-gradient(115deg,#FFF8E0 0%,#FFE7B0 100%)">
-    <div class="flex-1">
-      <div class="hi text-[19px] font-extrabold leading-tight">बायो-स्टिमुलेंट</div>
-      <div class="text-[12px] text-[#78350F]/70 mt-0.5">Biostimulants · 2 SKUs</div>
-      <div class="text-[10.5px] text-[#78350F] font-semibold mt-1">From ₹334</div>
-    </div>
-    <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend w-[110px] h-[110px] object-contain"/>
-  </a>
+      // FUNGICIDES
+      { cat:'fungicide', subs:['mildew','leafspot'],         name:'Azodharma',       sub:'100 ml · Azoxystrobin 23%',     target:'Stops powdery mildew',  price:310, mrp:420, img:'../assets/Humic_nobg.png' },
+      { cat:'fungicide', subs:['blight','leafspot'],         name:'Blightguard',     sub:'250 g · Mancozeb 75%',          target:'Stops late blight',     price:285, mrp:380, img:'../assets/Humic_nobg.png' },
+      { cat:'fungicide', subs:['rust'],                      name:'Rustaway',        sub:'100 g · Tebuconazole 25%',      target:'Removes leaf-rust',     price:362, mrp:490, img:'../assets/Humic_nobg.png' },
+      { cat:'fungicide', subs:['rootrot'],                   name:'RootShield',      sub:'500 ml · Trichoderma 1%',       target:'Protects roots',        price:248, mrp:340, img:'../assets/Humic_nobg.png' },
 
-  <a href="shop.html" class="block rounded-2xl p-4 flex items-center gap-4 overflow-hidden relative" style="background:linear-gradient(115deg,#FFE3DC 0%,#FFC9B9 100%)">
-    <div class="flex-1">
-      <div class="hi text-[19px] font-extrabold leading-tight">वायरस-नाशक</div>
-      <div class="text-[12px] text-[#A33A1A]/70 mt-0.5">Viricides · 1 SKU</div>
-      <div class="text-[10.5px] text-[#A33A1A] font-semibold mt-1">From ₹327</div>
-    </div>
-    <img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" class="img-blend w-[110px] h-[110px] object-contain"/>
-  </a>
+      // FERTILIZERS
+      { cat:'fertilizer', subs:['npk'],                      name:'NPK 19-19-19',    sub:'1 kg · Water-soluble',          target:'Balanced growth',       price:330, mrp:445, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['bio'],                      name:'Humic + Fulvic',  sub:'1 L · Humic 12% + Fulvic 8%',   target:'Boosts roots & soil',   price:376, mrp:520, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['micro'],                    name:'Micro-Max',       sub:'500 g · Multi-micronutrient',   target:'Fills nutrient gaps',   price:289, mrp:395, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['soil','bio'],               name:'Soil-Revive',     sub:'1 kg · Vermi + Humic',          target:'Wakes tired soil',      price:415, mrp:560, img:'../assets/Humic_nobg.png' },
 
-</div>
+      // HERBICIDES
+      { cat:'herbicide', subs:['selective'],                 name:'WeedClear-S',     sub:'500 ml · 2,4-D Amine 58%',      target:'Kills broadleaf weeds', price:298, mrp:399, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'herbicide', subs:['nonsel'],                    name:'Glypho-Power',    sub:'1 L · Glyphosate 41%',          target:'Clears any green weed', price:368, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'herbicide', subs:['pre'],                       name:'Pre-Lock 40',     sub:'1 L · Pendimethalin 30%',       target:'Stops weeds at root',   price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
 
+      // COMBOS
+      { cat:'combo', subs:['crop'],                          name:'Tomato Combo',    sub:'3-pack · Spray + feed',         target:'Full-stage Tomato kit', price:849, mrp:1180, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'combo', subs:['crop'],                          name:'Chilli Combo',    sub:'3-pack · Spray + feed',         target:'Full-stage Chilli kit', price:799, mrp:1100, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'combo', subs:['stage'],                         name:'Flowering Kit',   sub:'2-pack · Foliar + root',        target:'For flowering stage',   price:599, mrp:820, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'combo', subs:['saver'],                         name:'Saver-5',         sub:'5-pack mixed',                  target:'Save ₹450',             price:1149, mrp:1599, img:'../assets/AntiVirus_nobg.png' }
+    ];
+
+    const cart = new Map();
+    let activeCat = 'pesticide';
+    let activeSub = 'all';
+
+    // Wire top-row main categories
+    document.querySelectorAll('[data-cat]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed','false'));
+        btn.setAttribute('aria-pressed','true');
+        activeCat = btn.dataset.cat;
+        activeSub = 'all';
+        renderSubs();
+        renderProducts();
+      });
+    });
+
+    function renderSubs(){
+      const rail = document.getElementById('subRail');
+      const cat = CATS[activeCat];
+      rail.innerHTML = cat.subs.map(s =>
+        '<button class="subcat-btn" data-sub="'+s.key+'" aria-pressed="'+(s.key===activeSub?'true':'false')+'">'
+        + '<span class="subcat-ic">'+s.icon+'</span>'
+        + s.label
+        + '</button>'
+      ).join('');
+      rail.querySelectorAll('[data-sub]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeSub = btn.dataset.sub;
+          rail.querySelectorAll('[data-sub]').forEach(b => b.setAttribute('aria-pressed','false'));
+          btn.setAttribute('aria-pressed','true');
+          renderProducts();
+        });
+      });
+    }
+
+    function renderProducts(){
+      const list = document.getElementById('productList');
+      const crumb = document.getElementById('subCrumb');
+      const subLabel = CATS[activeCat].subs.find(s => s.key === activeSub).label;
+      crumb.textContent = CATS[activeCat].label + (activeSub==='all' ? ' · All products' : ' · ' + subLabel);
+
+      const filtered = PRODUCTS.filter(p => p.cat === activeCat && (activeSub === 'all' || p.subs.includes(activeSub)));
+      if (!filtered.length) {
+        list.innerHTML = '<div class="text-center py-10 text-[12.5px] font-semibold" style="color:#94A3B8"><i class="fa-regular fa-face-frown text-[22px] block mb-2"></i>No products in this section yet</div>';
+        return;
+      }
+      const off = (p) => Math.round(((p.mrp - p.price) / p.mrp) * 100);
+      list.innerHTML = filtered.map((p, i) => {
+        const id = p.cat + '-' + i;
+        const qty = cart.get(id) ? cart.get(id).qty : 0;
+        return '<a href="pdp.html" class="pcard" data-card="'+id+'">'
+          + '<div class="pcard-img"><img src="'+p.img+'" class="img-blend"/></div>'
+          + '<div class="pcard-body">'
+            + '<div>'
+              + '<div class="pname">'+p.name+'</div>'
+              + '<div class="psub">'+p.sub+'</div>'
+            + '</div>'
+            + '<div class="ptarget"><i class="fa-solid fa-shield-virus text-[8.5px]"></i>'+p.target+'</div>'
+            + '<div class="flex items-end justify-between gap-2">'
+              + '<div class="leading-tight">'
+                + '<div class="flex items-baseline gap-1.5"><span class="pprice tnum">₹'+p.price+'</span><span class="pmrp tnum">₹'+p.mrp+'</span></div>'
+                + '<div class="poff">'+off(p)+'% off</div>'
+              + '</div>'
+              + renderAdd(id, p, qty)
+            + '</div>'
+          + '</div>'
+          + '</a>';
+      }).join('');
+      list.querySelectorAll('.padd-action').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const id = btn.dataset.id;
+          const act = btn.dataset.act;
+          const item = filtered[parseInt(btn.dataset.idx,10)];
+          handleCart(id, item, act);
+        });
+      });
+    }
+
+    function renderAdd(id, p, qty){
+      if (qty > 0) {
+        return '<div class="padd in-cart">'
+          + '<button class="qty-btn padd-action" data-id="'+id+'" data-idx="'+productIndex(id)+'" data-act="dec">−</button>'
+          + '<span class="qty-num">'+qty+'</span>'
+          + '<button class="qty-btn padd-action" data-id="'+id+'" data-idx="'+productIndex(id)+'" data-act="inc">+</button>'
+        + '</div>';
+      }
+      return '<button class="padd padd-action" data-id="'+id+'" data-idx="'+productIndex(id)+'" data-act="inc">Add</button>';
+    }
+
+    function productIndex(id){
+      // recompute filtered index
+      const filtered = PRODUCTS.filter(p => p.cat === activeCat && (activeSub === 'all' || p.subs.includes(activeSub)));
+      return filtered.findIndex((_, i) => (activeCat + '-' + i) === id);
+    }
+
+    function handleCart(id, item, act){
+      const entry = cart.get(id) || { qty:0, price:item.price, name:item.name };
+      if (act === 'inc') entry.qty++;
+      else if (act === 'dec') entry.qty--;
+      if (entry.qty <= 0) cart.delete(id);
+      else cart.set(id, entry);
+      renderProducts();
+      renderCart();
+    }
+
+    function renderCart(){
+      const bar = document.getElementById('cartBar');
+      let total = 0, count = 0;
+      cart.forEach(e => { total += e.qty * e.price; count += e.qty; });
+      if (count === 0) {
+        bar.style.display = 'none';
+        return;
+      }
+      bar.style.display = 'flex';
+      document.getElementById('cartTotal').textContent = total;
+      document.getElementById('cartCount').textContent = count + (count > 1 ? ' items' : ' item');
+    }
+
+    // Wire filter pills · pure visual toggle for prototype
+    document.querySelectorAll('[data-filter]').forEach(p => {
+      p.addEventListener('click', () => {
+        const pressed = p.getAttribute('aria-pressed') === 'true';
+        p.setAttribute('aria-pressed', pressed ? 'false' : 'true');
+      });
+    });
+
+    // Pre-select via ?cat= query param so home-page tile taps land on the right section
+    const qp = new URLSearchParams(location.search);
+    if (qp.get('cat') && CATS[qp.get('cat')]) {
+      activeCat = qp.get('cat');
+      document.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === activeCat ? 'true' : 'false'));
+    }
+
+    renderSubs();
+    renderProducts();
+  </script>
 </body></html>

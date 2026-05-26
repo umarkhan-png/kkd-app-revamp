@@ -166,11 +166,12 @@
   .sticky-actions { position: sticky; top: 32px; z-index: 60; background: #FFFFFF; }
   /* Delivery tile compact state — when body.scrolled, sub-line hides, icon + paddings shrink so it doesn't eat too much height while staying frozen below the categories */
   .delivery-tile { transition: padding .25s ease; }
-  body.scrolled .delivery-tile { padding-top: 4px; padding-bottom: 4px; }
-  body.scrolled .delivery-tile .dt-icon { width: 26px; height: 26px; }
-  body.scrolled .delivery-tile .dt-icon i { font-size: 12px !important; }
-  body.scrolled .delivery-tile .dt-sub { display: none; }
-  body.scrolled .delivery-tile .dt-content > div:first-child { font-size: 11.5px; }
+  .delivery-tile .dt-statusrow { margin-bottom: 8px; }
+  body.scrolled .delivery-tile { padding-top: 5px; padding-bottom: 5px; }
+  body.scrolled .delivery-tile .dt-statusrow { margin-bottom: 0; }
+  body.scrolled .delivery-tile .dt-detail { display: none; }
+  /* Pulsing dot for live status */
+  @keyframes dtPulse { 0% { transform: scale(1); opacity: 0.75; } 100% { transform: scale(2.4); opacity: 0; } }
   .sticky-search { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s; }
   .sticky-cats { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: padding .25s; }
 
@@ -398,17 +399,54 @@
     </div>
   </div>
 
-  <!-- Delivery status tile — sits inside sticky-actions so it pins below the sticky categories on scroll · compact-wrapped layout when body.scrolled is set (sub-line hides, icon shrinks, padding tightens) -->
-  <a href="track-order.html" id="deliveryTile" class="nu delivery-tile flex items-center gap-2.5 px-4 py-2.5" style="background:linear-gradient(90deg,#ECFDF5 0%,#D1FAE5 60%,#A7F3D0 100%);border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0">
-    <div class="dt-icon flex-shrink-0 rounded-full flex items-center justify-center" style="background:#059669;color:#FFFFFF;width:34px;height:34px">
-      <i class="fa-solid fa-truck-fast text-[14px]" style="color:#FFFFFF"></i>
+  <!-- Delivery status tile — richer informative layout (partner-app pattern) · status pulse + order summary + product thumbs + progress bar + Track button · taps open the detailed delivery modal · compact state on scroll keeps just status row + Track button -->
+  <button type="button" id="deliveryTile" class="delivery-tile w-full text-left px-4 py-2.5" style="background:linear-gradient(90deg,#ECFDF5 0%,#D1FAE5 60%,#A7F3D0 100%);border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0;border-left:0;border-right:0;cursor:pointer">
+    <!-- Status row -->
+    <div class="flex items-center justify-between mb-2 dt-statusrow">
+      <div class="flex items-center gap-2 min-w-0">
+        <span class="relative flex items-center justify-center flex-shrink-0">
+          <span class="block w-2 h-2 rounded-full" style="background:#059669"></span>
+          <span class="absolute inset-0 w-2 h-2 rounded-full" style="background:#059669;animation:dtPulse 1.6s ease-out infinite"></span>
+        </span>
+        <span class="text-[11px] font-extrabold uppercase tracking-wider truncate" style="color:#047857">Out for Delivery</span>
+        <span class="text-[10.5px] font-semibold flex-shrink-0" style="color:#64748B">· ETA <span style="color:#0F172A">5:00 PM</span></span>
+      </div>
+      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF">
+        Track <i class="fa-solid fa-arrow-right text-[9px]" style="color:#FFFFFF"></i>
+      </span>
     </div>
-    <div class="flex-1 min-w-0 leading-tight dt-content">
-      <div class="text-[12.5px] font-extrabold truncate" style="color:#065F46">Arriving Thursday · #KKD-26194</div>
-      <div class="text-[10.5px] font-semibold dt-sub mt-0.5" style="color:#047857">3 items · Out for delivery soon</div>
+    <!-- Order summary + thumbs (hidden on scroll-compact) -->
+    <div class="flex items-center gap-2.5 mb-2 dt-detail">
+      <div class="flex flex-shrink-0" style="margin-right:-4px">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);margin-right:-6px;z-index:3"><img src="../assets/Chakrawarti_nobg.png" class="w-6 h-6 object-contain"/></div>
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);margin-right:-6px;z-index:2"><img src="../assets/Humic_nobg.png" class="w-6 h-6 object-contain"/></div>
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-extrabold" style="background:#FFFFFF;color:#047857;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);z-index:1">+1</div>
+      </div>
+      <div class="flex-1 min-w-0 leading-tight">
+        <div class="text-[12.5px] font-extrabold truncate" style="color:#0F172A">#KKD-26194 · ₹2,140</div>
+        <div class="text-[10.5px] font-semibold truncate" style="color:#64748B">3 items · Arriving today</div>
+      </div>
     </div>
-    <i class="fa-solid fa-chevron-right text-[12px] flex-shrink-0" style="color:#047857"></i>
-  </a>
+    <!-- Progress bar (4 stages) (hidden on scroll-compact) -->
+    <div class="dt-detail">
+      <div class="flex items-center gap-1">
+        <div class="flex-1 h-1 rounded-full" style="background:#059669"></div>
+        <div class="w-1.5 h-1.5 rounded-full" style="background:#059669"></div>
+        <div class="flex-1 h-1 rounded-full" style="background:#059669"></div>
+        <div class="w-1.5 h-1.5 rounded-full" style="background:#059669"></div>
+        <div class="flex-1 h-1 rounded-full" style="background:#059669"></div>
+        <div class="w-1.5 h-1.5 rounded-full ring-2" style="background:#059669;--tw-ring-color:rgba(5,150,105,0.25)"></div>
+        <div class="flex-1 h-1 rounded-full" style="background:#A7F3D0"></div>
+        <div class="w-1.5 h-1.5 rounded-full" style="background:#A7F3D0"></div>
+      </div>
+      <div class="flex justify-between mt-1 text-[9.5px] font-semibold" style="color:#64748B">
+        <span style="color:#047857">Placed</span>
+        <span style="color:#047857">Packed</span>
+        <span style="color:#047857;font-weight:800">Out</span>
+        <span>Delivered</span>
+      </div>
+    </div>
+  </button>
 
   </div><!-- /sticky-actions -->
 
@@ -1432,6 +1470,105 @@
     </span>
   </a>
 
+  <!-- Delivery detail bottom-sheet modal — opens when delivery tile is tapped · timeline + items + delivery person + map placeholder -->
+  <div id="trackSheet" class="fixed inset-0 z-[90]" style="display:none">
+    <div id="trackSheetBackdrop" class="absolute inset-0" style="background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
+    <div id="trackSheetPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:88vh;transform:translateY(100%);transition:transform .3s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
+      <div class="flex-shrink-0 pt-2.5 pb-3 px-5">
+        <div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div>
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-[17px] font-extrabold text-[#0F172A]">Track order</div>
+            <div class="text-[11.5px] mt-0.5" style="color:#64748B">#KKD-26194 · ₹2,140 · 3 items</div>
+          </div>
+          <button id="trackSheetClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9">
+            <i class="fa-solid fa-xmark text-[14px]" style="color:#475569"></i>
+          </button>
+        </div>
+      </div>
+      <div class="overflow-y-auto px-5" style="flex:1">
+        <!-- Live status banner -->
+        <div class="rounded-xl p-3 mb-4 flex items-center gap-3" style="background:linear-gradient(135deg,#ECFDF5 0%,#D1FAE5 100%);border:1px solid #BBF7D0">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:#059669">
+            <i class="fa-solid fa-truck-fast text-[16px]" style="color:#FFFFFF"></i>
+          </div>
+          <div class="flex-1 leading-tight">
+            <div class="text-[13.5px] font-extrabold" style="color:#047857">Out for delivery</div>
+            <div class="text-[11.5px] font-semibold" style="color:#065F46">Arriving today by 5:00 PM</div>
+          </div>
+          <span class="text-[10.5px] font-extrabold uppercase tracking-wider px-2 py-1 rounded-md" style="background:#FFFFFF;color:#047857;border:1px solid #BBF7D0">Live</span>
+        </div>
+        <!-- Timeline -->
+        <div class="text-[12px] font-extrabold uppercase tracking-wider mb-3" style="color:#64748B">Order timeline</div>
+        <div class="relative pl-7 pb-2" style="border-left:2px dashed #BBF7D0;margin-left:8px">
+          <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full flex items-center justify-center" style="background:#059669;border:2px solid #FFFFFF;box-shadow:0 0 0 2px #BBF7D0"><i class="fa-solid fa-check text-white text-[8px]"></i></div>
+          <div class="text-[13px] font-extrabold text-[#0F172A]">Order placed</div>
+          <div class="text-[11px]" style="color:#64748B">22 May, 11:42 AM</div>
+          <div class="text-[11px] mt-1" style="color:#475569">Payment received · UPI ₹2,140</div>
+        </div>
+        <div class="relative pl-7 pb-2" style="border-left:2px dashed #BBF7D0;margin-left:8px">
+          <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full flex items-center justify-center" style="background:#059669;border:2px solid #FFFFFF;box-shadow:0 0 0 2px #BBF7D0"><i class="fa-solid fa-check text-white text-[8px]"></i></div>
+          <div class="text-[13px] font-extrabold text-[#0F172A]">Packed at warehouse</div>
+          <div class="text-[11px]" style="color:#64748B">23 May, 09:15 AM</div>
+          <div class="text-[11px] mt-1" style="color:#475569">Quality checked &middot; Sealed by Katyayani Indore</div>
+        </div>
+        <div class="relative pl-7 pb-2" style="border-left:2px dashed #059669;margin-left:8px">
+          <div class="absolute -left-[10px] top-0 w-5 h-5 rounded-full flex items-center justify-center" style="background:#059669;border:2px solid #FFFFFF;box-shadow:0 0 0 3px rgba(5,150,105,0.25);animation:dtPulse 1.6s ease-out infinite"><i class="fa-solid fa-truck-fast text-white text-[9px]"></i></div>
+          <div class="text-[13px] font-extrabold" style="color:#047857">Out for delivery <span class="text-[10px] font-bold uppercase ml-1 px-1.5 py-0.5 rounded" style="background:#059669;color:#FFFFFF">Now</span></div>
+          <div class="text-[11px]" style="color:#64748B">Today, 02:45 PM</div>
+          <div class="text-[11px] mt-1" style="color:#475569">Suresh Yadav (rider) · arriving by 5:00 PM</div>
+          <a href="tel:+919999999999" class="inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-1 rounded-md text-[11px] font-extrabold" style="background:#FFFFFF;color:#047857;border:1px solid #BBF7D0"><i class="fa-solid fa-phone text-[9px]" style="color:#059669"></i> Call rider</a>
+        </div>
+        <div class="relative pl-7" style="margin-left:8px">
+          <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full" style="background:#FFFFFF;border:2px solid #CBD5E1"></div>
+          <div class="text-[13px] font-bold" style="color:#94A3B8">Delivered</div>
+          <div class="text-[11px]" style="color:#94A3B8">Expected today by 5:00 PM</div>
+        </div>
+        <!-- Delivery address -->
+        <div class="text-[12px] font-extrabold uppercase tracking-wider mb-3 mt-5" style="color:#64748B">Delivery address</div>
+        <div class="rounded-xl p-3 flex items-start gap-2.5" style="background:#F8FAFC;border:1px solid #E5E7EB">
+          <i class="fa-solid fa-location-dot text-[14px] mt-1 flex-shrink-0" style="color:#059669"></i>
+          <div class="flex-1 leading-tight">
+            <div class="text-[12.5px] font-extrabold text-[#0F172A]">Home · Indore 452001</div>
+            <div class="text-[11px] mt-0.5" style="color:#64748B">Plot 14, Khasra Road, Vijay Nagar, Indore, MP</div>
+          </div>
+        </div>
+        <!-- Items -->
+        <div class="text-[12px] font-extrabold uppercase tracking-wider mb-3 mt-5" style="color:#64748B">Items (3)</div>
+        <div class="space-y-2 mb-5">
+          <div class="rounded-xl p-2.5 flex items-center gap-2.5" style="background:#FFFFFF;border:1px solid #E5E7EB">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#F8FAFC"><img src="../assets/Chakrawarti_nobg.png" class="w-10 h-10 object-contain"/></div>
+            <div class="flex-1 min-w-0 leading-tight">
+              <div class="text-[12.5px] font-extrabold truncate text-[#0F172A]">Chakrawarti ZC</div>
+              <div class="text-[11px] truncate" style="color:#64748B">100 ml · Qty 2</div>
+            </div>
+            <div class="text-[13px] font-extrabold tnum text-[#0F172A]">&#8377;716</div>
+          </div>
+          <div class="rounded-xl p-2.5 flex items-center gap-2.5" style="background:#FFFFFF;border:1px solid #E5E7EB">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#F8FAFC"><img src="../assets/Humic_nobg.png" class="w-10 h-10 object-contain"/></div>
+            <div class="flex-1 min-w-0 leading-tight">
+              <div class="text-[12.5px] font-extrabold truncate text-[#0F172A]">Humic + Fulvic 98</div>
+              <div class="text-[11px] truncate" style="color:#64748B">1 L · Qty 1</div>
+            </div>
+            <div class="text-[13px] font-extrabold tnum text-[#0F172A]">&#8377;376</div>
+          </div>
+          <div class="rounded-xl p-2.5 flex items-center gap-2.5" style="background:#FFFFFF;border:1px solid #E5E7EB">
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#F8FAFC"><img src="../assets/AntiVirus_nobg.png" class="w-10 h-10 object-contain"/></div>
+            <div class="flex-1 min-w-0 leading-tight">
+              <div class="text-[12.5px] font-extrabold truncate text-[#0F172A]">Antivirus</div>
+              <div class="text-[11px] truncate" style="color:#64748B">100 ml · Qty 3</div>
+            </div>
+            <div class="text-[13px] font-extrabold tnum text-[#0F172A]">&#8377;981</div>
+          </div>
+        </div>
+      </div>
+      <div class="flex-shrink-0 px-5 py-3 flex gap-2" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)">
+        <a href="help.html" class="nu flex-1 h-12 rounded-xl flex items-center justify-center text-[13px] font-extrabold" style="background:#F1F5F9;color:#0F172A">Need help?</a>
+        <a href="track-order.html" class="nu flex-1 h-12 rounded-xl flex items-center justify-center gap-1.5 text-[13px] font-extrabold" style="background:#059669;color:#FFFFFF">View full <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i></a>
+      </div>
+    </div>
+  </div>
+
   <!-- All-crops bottom-sheet modal — opens when "More" chip in Shop-by-Crop is tapped · 3-col grid of every crop in CROP_META · each tile toggles the corresponding crop selection in the inline picker · close via backdrop tap, X button, or Done button -->
   <div id="cropSheet" class="fixed inset-0 z-[90]" style="display:none">
     <div id="cropSheetBackdrop" class="absolute inset-0" style="background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
@@ -2071,6 +2208,31 @@
 
       renderPicker();
       updateCTA();
+    })();
+
+    // Delivery tile tap → opens detailed track-order bottom-sheet
+    (function(){
+      const tile  = document.getElementById('deliveryTile');
+      const sheet = document.getElementById('trackSheet');
+      const bg    = document.getElementById('trackSheetBackdrop');
+      const pnl   = document.getElementById('trackSheetPanel');
+      const close = document.getElementById('trackSheetClose');
+      if (!tile || !sheet) return;
+      function open(){
+        sheet.style.display = 'block';
+        requestAnimationFrame(function(){
+          bg.style.opacity = '1';
+          pnl.style.transform = 'translateY(0)';
+        });
+      }
+      function dismiss(){
+        bg.style.opacity = '0';
+        pnl.style.transform = 'translateY(100%)';
+        setTimeout(function(){ sheet.style.display = 'none'; }, 280);
+      }
+      tile.addEventListener('click', open);
+      if (bg)    bg.addEventListener('click', dismiss);
+      if (close) close.addEventListener('click', dismiss);
     })();
 
     // Mega Mela carousel — 3 slides, auto-rotate every 4s, touch pauses

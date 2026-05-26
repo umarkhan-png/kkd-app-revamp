@@ -408,40 +408,51 @@
   </div>
 
   <!-- Delivery status tile — richer informative layout (partner-app pattern) · status pulse + order summary + product thumbs + progress bar + Track button · taps open the detailed delivery modal · compact state on scroll keeps just status row + Track button -->
-  <button type="button" id="deliveryTile" class="delivery-tile w-full text-left px-4 py-2" style="background:#ECFDF5;border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0;border-left:0;border-right:0;cursor:pointer">
-    <!-- Status row -->
-    <div class="flex items-center justify-between mb-1 dt-statusrow">
-      <div class="flex items-center gap-2 min-w-0">
-        <span class="relative flex items-center justify-center flex-shrink-0">
-          <span class="block w-2 h-2 rounded-full" style="background:#059669"></span>
-          <span class="absolute inset-0 w-2 h-2 rounded-full" style="background:#059669;animation:dtPulse 1.6s ease-out infinite"></span>
-        </span>
-        <span class="text-[11px] font-extrabold uppercase tracking-wider truncate" style="color:#047857">Out for Delivery</span>
-        <span class="text-[10.5px] font-semibold flex-shrink-0" style="color:#64748B">· ETA <span style="color:#0F172A;font-weight:800">5:00 PM</span></span>
+  <button type="button" id="deliveryTile" class="delivery-tile w-full text-left px-4 py-2.5" style="background:#ECFDF5;border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0;border-left:0;border-right:0;cursor:pointer">
+    <!-- Hero row · big animated truck icon + status copy (farmer-friendly Hindi 'Aaj' instead of jargon 'ETA') + Track button -->
+    <div class="flex items-center gap-2.5 dt-statusrow">
+      <!-- Animated truck icon on the left as a visual anchor -->
+      <div class="flex-shrink-0 rounded-full flex items-center justify-center" style="width:36px;height:36px;background:#059669;box-shadow:0 0 0 4px rgba(5,150,105,0.18);animation:dtTruckBounce 1.4s ease-in-out infinite">
+        <i class="fa-solid fa-truck-fast text-[15px]" style="color:#FFFFFF"></i>
       </div>
-      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF">
+      <!-- Status text · arrival time is the BIGGEST font because that's what the farmer needs to know -->
+      <div class="flex-1 min-w-0 leading-tight">
+        <div class="flex items-center gap-1.5">
+          <span class="relative flex items-center justify-center" style="width:6px;height:6px">
+            <span class="block w-1.5 h-1.5 rounded-full" style="background:#059669"></span>
+            <span class="absolute inset-0 w-1.5 h-1.5 rounded-full" style="background:#059669;animation:dtPulse 1.6s ease-out infinite"></span>
+          </span>
+          <span class="text-[10.5px] font-extrabold uppercase tracking-wider" style="color:#047857">Out for Delivery</span>
+        </div>
+        <div class="text-[14.5px] font-extrabold mt-0.5" style="color:#0F172A">Aaj 5:00 PM tak <span style="color:#64748B;font-weight:600;font-size:11.5px">aa jayega</span></div>
+      </div>
+      <!-- Track button -->
+      <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF">
         Track <i class="fa-solid fa-arrow-right text-[9px]" style="color:#FFFFFF"></i>
       </span>
     </div>
-    <!-- Compact order info row · ID + amount + items + placed date -->
-    <div class="flex items-center gap-1.5 text-[10.5px] mb-1.5 dt-detail" style="color:#64748B">
-      <span class="font-extrabold" style="color:#0F172A">#KKD-26194</span>
-      <span>·</span>
-      <span class="font-extrabold tnum" style="color:#0F172A">&#8377;2,140</span>
-      <span>·</span>
-      <span class="font-semibold">3 items</span>
-      <span>·</span>
-      <span class="font-semibold">Placed 22 May</span>
-    </div>
-    <!-- Compact icon-based progress · smaller icons + tighter spacing -->
-    <div class="dt-detail relative">
-      <div class="flex items-center justify-between relative">
-        <div class="absolute left-2.5 right-2.5 top-1/2 -translate-y-1/2 h-[3px] rounded-full" style="background:#A7F3D0"></div>
-        <div class="absolute left-2.5 top-1/2 -translate-y-1/2 h-[3px] rounded-full" style="background:#059669;width:calc(66.66% - 20px)"></div>
-        <div class="relative z-10 flex items-center justify-center rounded-full" style="width:20px;height:20px;background:#059669"><i class="fa-solid fa-check text-white text-[9px]"></i></div>
-        <div class="relative z-10 flex items-center justify-center rounded-full" style="width:20px;height:20px;background:#059669"><i class="fa-solid fa-check text-white text-[9px]"></i></div>
-        <div class="relative z-10 flex items-center justify-center rounded-full" style="width:22px;height:22px;background:#FFFFFF;border:2px solid #059669;box-shadow:0 0 0 3px rgba(5,150,105,0.18);animation:dtTruckBounce 1.4s ease-in-out infinite"><i class="fa-solid fa-truck-fast text-[10px]" style="color:#047857"></i></div>
-        <div class="relative z-10 flex items-center justify-center rounded-full" style="width:20px;height:20px;background:#FFFFFF;border:2px solid #A7F3D0"><i class="fa-solid fa-house text-[9px]" style="color:#94A3B8"></i></div>
+    <!-- Compact order line + tighter progress bar — single dt-detail block, less vertical space -->
+    <div class="dt-detail mt-2">
+      <!-- Order info -->
+      <div class="flex items-center gap-1.5 text-[11px] mb-2" style="color:#64748B">
+        <span class="font-extrabold" style="color:#0F172A">#KKD-26194</span>
+        <span>·</span>
+        <span class="font-extrabold tnum" style="color:#0F172A">&#8377;2,140</span>
+        <span>·</span>
+        <span class="font-semibold">3 items</span>
+        <span class="font-semibold">·</span>
+        <span class="font-semibold">22 May</span>
+      </div>
+      <!-- Progress: thin track + 4 small icons -->
+      <div class="relative">
+        <div class="flex items-center justify-between relative">
+          <div class="absolute left-2 right-2 top-1/2 -translate-y-1/2 h-[3px] rounded-full" style="background:#A7F3D0"></div>
+          <div class="absolute left-2 top-1/2 -translate-y-1/2 h-[3px] rounded-full" style="background:#059669;width:calc(66.66% - 16px)"></div>
+          <div class="relative z-10 flex items-center justify-center rounded-full" style="width:18px;height:18px;background:#059669"><i class="fa-solid fa-check text-white text-[8px]"></i></div>
+          <div class="relative z-10 flex items-center justify-center rounded-full" style="width:18px;height:18px;background:#059669"><i class="fa-solid fa-check text-white text-[8px]"></i></div>
+          <div class="relative z-10 flex items-center justify-center rounded-full" style="width:20px;height:20px;background:#FFFFFF;border:2px solid #059669;box-shadow:0 0 0 2px rgba(5,150,105,0.18)"><i class="fa-solid fa-truck-fast text-[9px]" style="color:#047857"></i></div>
+          <div class="relative z-10 flex items-center justify-center rounded-full" style="width:18px;height:18px;background:#FFFFFF;border:2px solid #A7F3D0"><i class="fa-solid fa-house text-[8px]" style="color:#94A3B8"></i></div>
+        </div>
       </div>
     </div>
   </button>

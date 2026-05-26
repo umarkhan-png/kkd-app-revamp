@@ -168,22 +168,19 @@
     50%      { transform: scale(1.02); box-shadow: 0 10px 26px -6px rgba(5,150,105,0.7),0 3px 8px rgba(0,0,0,0.1); }
   }
 
-  /* Sticky header wrapper · holds system status row + info bar (KKD logo + Deliver to + coin) · stays pinned at viewport top on scroll with the active theme color so the info bar never disappears AND never reveals scrolling content underneath · matches the parent .top-theme gradient so when NOT scrolled it visually continues the top section seamlessly */
-  .sticky-header { position: sticky; top: 0; z-index: 65; transition: box-shadow .2s ease; }
-  body.scrolled .sticky-header { box-shadow: 0 1px 0 rgba(0,0,0,0.06); }
-  .top-theme[data-theme="green"]    .sticky-header { background: linear-gradient(180deg, #047857 0%, #059669 55%, #0E7A4E 100%); }
-  .top-theme[data-theme="rain"]     .sticky-header { background: linear-gradient(180deg, #DBEAFE 0%, #EFF6FF 60%, #F0F9FF 100%); }
-  .top-theme[data-theme="festival"] .sticky-header {
+  /* Sticky system status row only — pins at viewport top on scroll with the active theme color (time / wifi / battery sit on theme-filled band) · the address row below it scrolls away normally with the rest of top-theme content */
+  .sticky-status { position: sticky; top: 0; z-index: 70; transition: box-shadow .2s ease; }
+  body.scrolled .sticky-status { box-shadow: 0 1px 0 rgba(0,0,0,0.06); }
+  .top-theme[data-theme="green"]    .sticky-status { background: linear-gradient(180deg, #047857 0%, #059669 100%); }
+  .top-theme[data-theme="rain"]     .sticky-status { background: linear-gradient(180deg, #DBEAFE 0%, #EFF6FF 100%); }
+  .top-theme[data-theme="festival"] .sticky-status {
     background:
-      radial-gradient(ellipse 180px 90px at 10% 5%, rgba(220,38,38,.40), transparent 70%),
-      radial-gradient(ellipse 180px 80px at 35% 8%, rgba(21,128,61,.38), transparent 70%),
-      radial-gradient(ellipse 180px 90px at 60% 4%, rgba(251,191,36,.40), transparent 70%),
-      radial-gradient(ellipse 180px 80px at 88% 8%, rgba(220,38,38,.36), transparent 70%),
-      linear-gradient(180deg,#F0FDF4 0%,#F8FAFC 55%,#FFFFFF 100%);
+      radial-gradient(ellipse 70% 100% at 15% 50%, rgba(220,38,38,0.55), transparent 70%),
+      radial-gradient(ellipse 70% 100% at 50% 50%, rgba(251,191,36,0.55), transparent 70%),
+      radial-gradient(ellipse 70% 100% at 85% 50%, rgba(21,128,61,0.55), transparent 70%),
+      #FFFFFF;
   }
-  /* sticky-status itself is no longer independently sticky — the outer .sticky-header carries the pinning · drop its own bg, it inherits the wrapper's theme color */
-  .sticky-status { background: transparent; }
-  .sticky-actions { position: sticky; top: 96px; z-index: 60; background: #FFFFFF; }
+  .sticky-actions { position: sticky; top: 32px; z-index: 60; background: #FFFFFF; }
   /* Delivery tile compact state — when body.scrolled, sub-line hides, icon + paddings shrink so it doesn't eat too much height while staying frozen below the categories */
   .delivery-tile { transition: padding .25s ease; }
   body.scrolled .delivery-tile { padding-top: 4px; padding-bottom: 4px; }
@@ -260,9 +257,7 @@
   <span class="snow-flake" style="left:86%;animation-delay:1.7s;font-size:14px">❅</span>
   <span class="snow-flake" style="left:94%;animation-delay:.4s;font-size:11px">❄</span>
 
-  <!-- Sticky header — system status row + info bar (KKD logo + Deliver to + coin) · pinned at viewport top on scroll with the active theme color · when NOT scrolled it visually continues the top-theme gradient seamlessly (same color) so the user doesn't see a separation -->
-  <div class="sticky-header">
-  <!-- Status bar -->
+  <!-- System status bar — sticky at viewport top with theme color fill · only this strip pins on scroll, the address row below scrolls away with normal flow -->
   <div class="sticky-status flex items-center justify-between px-4 pt-3 pb-2 text-[12px] font-semibold text-[#0F172A]">
     <span>9:41</span>
     <div class="flex items-center gap-1.5">
@@ -291,7 +286,6 @@
       </div>
     </div>
   </div>
-  </div><!-- /sticky-header -->
 
   <!-- Top status banner — auto-rotates rain → christmas → order every 4s (in-place text swap) -->
   <a href="#" id="topStatusBanner" class="theme-banner rain-banner nu" style="flex-wrap:nowrap;transition:opacity .3s ease">

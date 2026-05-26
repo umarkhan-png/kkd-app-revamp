@@ -6,54 +6,95 @@
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   html,body{margin:0;padding:0}
-  body{min-height:100vh;background:#FAFAF7;color:#0F172A}
+  /* Single white surface · no competing tints between body, sticky bars, main column · only the left sub-rail carries a faint grey so it visually separates */
+  body{min-height:100vh;background:#FFFFFF;color:#0F172A;padding-bottom:88px}
   .img-blend{mix-blend-mode:multiply}
   .tnum{font-variant-numeric:tabular-nums}
   .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .scroll-x::-webkit-scrollbar{display:none}
   .scroll-x{scrollbar-width:none}
-  /* Top main-cat circles · home-page style */
-  .cat-circle{width:54px;height:54px;border-radius:50%;background:#FFFFFF;border:1.5px solid #E5E7EB;display:flex;align-items:center;justify-content:center;transition:all .2s ease}
-  .cat-tile[aria-pressed="true"] .cat-circle{border-color:#059669;background:#ECFDF5;box-shadow:0 4px 12px -3px rgba(5,150,105,0.3)}
-  .cat-tile[aria-pressed="true"] .cat-label{color:#047857}
-  .cat-emoji{font-size:24px;line-height:1}
-  /* Left sub-cat rail · compact · thumbnail + 2-line label · narrow rail (92px) leaves more room for the product grid */
-  .subcat-btn{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;text-align:center;padding:9px 3px;font-size:10px;font-weight:600;color:#475569;border-left:3px solid transparent;background:transparent;transition:all .15s ease;line-height:1.12;cursor:pointer}
+
+  /* Top main-cat circles · home-page parity · uniform 72px circle, 36px SVG, emoji 34px · selected = solid emerald fill with white-tinted icon + emerald label */
+  .cat-tile{transition:transform .15s ease}
+  .cat-tile:active{transform:scale(.96)}
+  .cat-circle{width:72px;height:72px;border-radius:9999px;background:#F1F5F9;border:1.5px solid #E2E8F0;display:flex;align-items:center;justify-content:center;transition:all .25s ease}
+  .cat-emoji{font-size:34px;line-height:1}
+  .cat-svg{width:36px;height:36px;display:block}
+  .cat-tile[aria-pressed="true"] .cat-circle{background:linear-gradient(135deg,#047857 0%,#10B981 100%);border-color:#047857;box-shadow:0 8px 18px -4px rgba(5,150,105,0.45),0 0 0 4px rgba(5,150,105,0.12)}
+  .cat-tile[aria-pressed="true"] .cat-emoji{filter:drop-shadow(0 1px 1px rgba(0,0,0,0.25))}
+  .cat-tile[aria-pressed="true"] .cat-label{color:#047857;font-weight:800}
+  /* Selected SVG: invert dark strokes to white-ish for legibility on emerald fill */
+  .cat-tile[aria-pressed="true"] .cat-svg [fill="#22C55E"],
+  .cat-tile[aria-pressed="true"] .cat-svg [fill="#16A34A"],
+  .cat-tile[aria-pressed="true"] .cat-svg [fill="#15803D"]{fill:#FFFFFF}
+  .cat-tile[aria-pressed="true"] .cat-svg [stroke="#15803D"]{stroke:#FFFFFF}
+
+  /* Left sub-cat rail · subtle grey separator · compact thumbnail + wrapping label */
+  .subcat-btn{display:flex;flex-direction:column;align-items:center;gap:5px;width:100%;text-align:center;padding:11px 4px;font-size:10.5px;font-weight:600;color:#475569;border-left:3px solid transparent;background:transparent;transition:all .15s ease;line-height:1.15;cursor:pointer}
   .subcat-btn[aria-pressed="true"]{background:#FFFFFF;color:#047857;border-left-color:#059669;font-weight:800}
   .subcat-btn:not([aria-pressed="true"]):hover{background:rgba(5,150,105,0.04)}
-  .subcat-ic{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;font-size:17px;line-height:1;border:1px solid rgba(15,23,42,0.06);box-shadow:0 1px 3px rgba(15,23,42,0.05)}
+  .subcat-ic{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;font-size:19px;line-height:1;border:1px solid rgba(15,23,42,0.06);box-shadow:0 1px 3px rgba(15,23,42,0.05)}
   .subcat-btn[aria-pressed="true"] .subcat-ic{box-shadow:0 4px 10px -2px rgba(5,150,105,0.35);transform:scale(1.04)}
-  /* Filter pills */
-  .filter-pill{display:inline-flex;align-items:center;gap:4px;height:30px;padding:0 10px;border-radius:999px;background:#FFFFFF;border:1px solid #E5E7EB;font-size:11.5px;font-weight:600;color:#475569;white-space:nowrap;flex-shrink:0;cursor:pointer;transition:all .15s ease}
+
+  /* Filter pills · roomier · taller · tap opens a bottom modal */
+  .filter-pill{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:999px;background:#FFFFFF;border:1px solid #E2E8F0;font-size:12.5px;font-weight:600;color:#334155;white-space:nowrap;flex-shrink:0;cursor:pointer;transition:all .15s ease;box-shadow:0 1px 2px rgba(15,23,42,0.04)}
+  .filter-pill:active{transform:scale(.97)}
   .filter-pill[aria-pressed="true"]{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
-  .filter-pill .dot{width:5px;height:5px;border-radius:50%;background:#059669;margin-left:2px;display:none}
+  .filter-pill .dot{width:6px;height:6px;border-radius:50%;background:#059669;display:none}
   .filter-pill[aria-pressed="true"] .dot{display:inline-block}
-  /* Product card · cleaner · taller image · trimmed body (name + size chip + price·mrp · Add) · no off% line so the card breathes · 2-col grid via parent */
-  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .pcard{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06);transition:transform .15s ease,box-shadow .2s ease;text-decoration:none;color:#0F172A}
+
+  /* Product card · matches home most-selling typography exactly · taller image, name 14px, technical sub 11px, size chip 10.5px, price 17px, MRP-strike 11.5px, h-9 Add */
+  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .pcard{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06);transition:transform .15s ease;text-decoration:none;color:#0F172A}
   .pcard:active{transform:scale(.98)}
-  .pcard-img{width:100%;height:128px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;position:relative;padding:10px;flex-shrink:0}
+  .pcard-img{width:100%;height:130px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;position:relative;padding:12px;flex-shrink:0}
   .pcard-img img{max-width:88%;max-height:100%;object-fit:contain}
-  .pcard-star{position:absolute;top:6px;right:6px;display:inline-flex;align-items:center;gap:2px;background:#FFFFFF;color:#475569;font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
-  .pcard-body{padding:8px 9px 9px;display:flex;flex-direction:column;gap:4px}
-  .pname{font-size:13px;font-weight:800;color:#0F172A;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .psize{display:inline-flex;align-self:flex-start;background:#F1F5F9;color:#475569;font-size:9.5px;font-weight:700;padding:1px 7px;border-radius:5px}
-  .pprice-row{display:flex;align-items:baseline;gap:5px}
-  .pprice{font-size:15px;font-weight:900;color:#0F172A;line-height:1}
-  .pmrp{font-size:10.5px;color:#94A3B8;text-decoration:line-through;font-weight:600;line-height:1}
-  .padd{height:30px;width:100%;background:#059669;color:#FFFFFF;font-size:12.5px;font-weight:800;border-radius:8px;border:0;cursor:pointer;transition:transform .15s ease,background .15s ease;margin-top:3px}
+  .pcard-star{position:absolute;top:8px;right:8px;display:inline-flex;align-items:center;gap:2px;background:#FFFFFF;color:#475569;font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:5px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+  .pcard-body{padding:10px 10px 10px}
+  .pname{font-size:14px;font-weight:700;color:#0F172A;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .psub{font-size:11px;color:#94A3B8;font-weight:500;line-height:1.2;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .psize{display:inline-flex;align-self:flex-start;background:#F1F5F9;color:#475569;font-size:10.5px;font-weight:600;padding:1px 8px;border-radius:5px;margin-top:6px}
+  .pprice-row{display:flex;align-items:baseline;gap:6px;margin-top:6px}
+  .pprice{font-size:17px;font-weight:800;color:#0F172A;line-height:1}
+  .pmrp{font-size:11.5px;color:#94A3B8;text-decoration:line-through;font-weight:500;line-height:1}
+  .padd{height:36px;width:100%;background:#059669;color:#FFFFFF;font-size:12.5px;font-weight:600;border-radius:8px;border:0;cursor:pointer;transition:transform .15s ease;margin-top:8px}
   .padd:active{transform:scale(.96)}
-  .padd.in-cart{background:#FFFFFF;color:#047857;border:1.5px solid #059669;display:inline-flex;align-items:center;justify-content:space-between;padding:0 6px;gap:0}
-  .qty-btn{width:26px;height:28px;display:inline-flex;align-items:center;justify-content:center;color:#047857;background:transparent;border:0;font-size:15px;font-weight:900;cursor:pointer}
-  .qty-num{flex:1;text-align:center;font-size:13px;font-weight:900}
-  /* Cart fab */
-  #cartBar{position:fixed;left:16px;right:16px;bottom:84px;z-index:80;background:#0F172A;color:#FFFFFF;display:none;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:18px;box-shadow:0 14px 30px -10px rgba(0,0,0,0.35);text-decoration:none;animation:cartIn .35s cubic-bezier(.34,1.56,.64,1)}
+  .padd.in-cart{background:#059669;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:space-between;padding:0 4px;gap:0}
+  .padd.in-cart .qty-btn{color:#FFFFFF}
+  .qty-btn{width:34px;height:36px;display:inline-flex;align-items:center;justify-content:center;color:#FFFFFF;background:transparent;border:0;font-size:18px;font-weight:700;cursor:pointer}
+  .qty-num{flex:1;text-align:center;font-size:14px;font-weight:700}
+
+  /* Cart bar · full-width by default · on scroll shrinks to a centred pill (matches home pattern) */
+  #cartBar{position:fixed;left:12px;right:12px;bottom:84px;z-index:80;background:#0F172A;color:#FFFFFF;display:none;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:18px;box-shadow:0 14px 30px -10px rgba(0,0,0,0.35);text-decoration:none;animation:cartIn .35s cubic-bezier(.34,1.56,.64,1);transition:left .3s ease,right .3s ease,padding .3s ease,border-radius .3s ease,transform .3s ease,max-width .3s ease}
+  #cartBar.compact{left:50%!important;right:auto!important;transform:translateX(-50%);padding:8px 16px!important;border-radius:999px!important;gap:10px;max-width:92%}
+  #cartBar.compact .cart-view-label{display:none}
+  #cartBar.compact .cart-summary{gap:8px!important}
   @keyframes cartIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-  /* Sticky stack */
+
+  /* Sticky stack · pure white so it doesn't read as a separate panel */
   .stk-main{position:sticky;top:0;z-index:30;background:#FFFFFF;border-bottom:1px solid #F1F5F9}
-  .stk-filter{position:sticky;top:96px;z-index:25;background:#FAFAF7;border-bottom:1px solid #F1F5F9}
+  .stk-filter{position:sticky;z-index:25;background:#FFFFFF;border-bottom:1px solid #F1F5F9}
+
+  /* Bottom sheet modal */
+  .sheet-wrap{position:fixed;inset:0;z-index:95;display:none}
+  .sheet-wrap.open{display:block}
+  .sheet-bg{position:absolute;inset:0;background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease}
+  .sheet-wrap.open .sheet-bg{opacity:1}
+  .sheet-panel{position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);max-height:78vh;display:flex;flex-direction:column;box-shadow:0 -10px 32px rgba(0,0,0,0.18)}
+  .sheet-wrap.open .sheet-panel{transform:translateY(0)}
+  .sheet-handle{width:40px;height:4px;border-radius:999px;background:#E2E8F0;margin:10px auto 0}
+  .sheet-row{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-top:1px solid #F1F5F9;font-size:14px;font-weight:600;color:#0F172A;cursor:pointer}
+  .sheet-row:first-of-type{border-top:0}
+  .sheet-row.selected{color:#047857;font-weight:800}
+  .sheet-row .check{width:20px;height:20px;border-radius:50%;border:1.5px solid #CBD5E1;display:flex;align-items:center;justify-content:center}
+  .sheet-row.selected .check{background:#059669;border-color:#059669}
+  .sheet-row.selected .check i{color:#FFFFFF;font-size:10px}
+  .sheet-section-title{padding:14px 20px 6px;font-size:11px;font-weight:800;color:#94A3B8;text-transform:uppercase;letter-spacing:.08em}
+  .sheet-chips{display:flex;gap:8px;flex-wrap:wrap;padding:4px 20px 14px}
+  .sheet-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:#F8FAFC;border:1px solid #E2E8F0;font-size:12px;font-weight:600;color:#475569;cursor:pointer;transition:all .15s ease}
+  .sheet-chip.on{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
 </style></head>
-<body class="pb-[88px]">
+<body>
 
   <!-- System status -->
   <div class="px-4 pt-3 flex items-center justify-between text-[11px] font-bold">
@@ -65,7 +106,7 @@
     </div>
   </div>
 
-  <!-- Header · title only, no subtitle -->
+  <!-- Header · title only -->
   <div class="px-4 pt-3 pb-3 flex items-center gap-3">
     <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB">
       <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
@@ -73,56 +114,107 @@
     <h1 class="text-[20px] font-extrabold leading-tight" style="color:#0F172A">Shop by Category</h1>
   </div>
 
-  <!-- TOP: Main 5 categories · Pesticide / Fungicide / Fertilizer / Herbicide / Herbi-Mix (label 'Herbicide & other Products' in the rail) -->
+  <!-- TOP: Main 5 categories · SAME SVG illustrations as homepage · selected = solid emerald circle -->
   <div class="stk-main">
-    <div class="flex gap-2.5 px-4 py-2.5 scroll-x">
-      <button data-cat="pesticide" aria-pressed="true" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px;background:transparent;border:0;cursor:pointer">
+    <div class="flex gap-3 px-4 py-3 scroll-x">
+      <button data-cat="pesticide" aria-pressed="true" class="cat-tile flex-shrink-0 flex flex-col items-center gap-2" style="width:80px;background:transparent;border:0;cursor:pointer">
         <div class="cat-circle"><span class="cat-emoji">🐛</span></div>
-        <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Pesticide</span>
+        <span class="cat-label text-[13px] font-semibold text-center leading-tight" style="color:#0F172A">Pesticide</span>
       </button>
-      <button data-cat="fungicide" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px;background:transparent;border:0;cursor:pointer">
-        <div class="cat-circle"><span class="cat-emoji">🍂</span></div>
-        <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Fungicide</span>
+      <button data-cat="fungicide" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-2" style="width:80px;background:transparent;border:0;cursor:pointer">
+        <div class="cat-circle">
+          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="fungus on leaf">
+            <path d="M18 3 C8 6 4 16 6 26 C7 30 11 33 18 33 C25 33 29 30 30 26 C32 16 28 6 18 3 Z" fill="#22C55E"/>
+            <line x1="18" y1="5" x2="18" y2="32" stroke="#15803D" stroke-width="1.2" stroke-linecap="round"/>
+            <circle cx="12" cy="14" r="2"   fill="#7C2D12"/>
+            <circle cx="24" cy="12" r="1.6" fill="#78350F"/>
+            <circle cx="13" cy="24" r="2.2" fill="#7C2D12"/>
+            <circle cx="24" cy="23" r="1.8" fill="#78350F"/>
+            <circle cx="19" cy="18" r="1.4" fill="#92400E"/>
+          </svg>
+        </div>
+        <span class="cat-label text-[13px] font-semibold text-center leading-tight" style="color:#0F172A">Fungicide</span>
       </button>
-      <button data-cat="fertilizer" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px;background:transparent;border:0;cursor:pointer">
-        <div class="cat-circle"><span class="cat-emoji">🌱</span></div>
-        <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Fertilizer</span>
+      <button data-cat="fertilizer" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-2" style="width:80px;background:transparent;border:0;cursor:pointer">
+        <div class="cat-circle">
+          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="growing plant with fertilizer granules">
+            <path d="M3 30 Q18 26 33 30 L33 33 L3 33 Z" fill="#92400E"/>
+            <path d="M18 30 L18 6" stroke="#15803D" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M18 24 C12 23 8 20 6 16 C10 16 14 18 18 22" fill="#22C55E"/>
+            <path d="M18 24 C24 23 28 20 30 16 C26 16 22 18 18 22" fill="#22C55E"/>
+            <path d="M18 16 C13 14 10 11 9 7 C13 8 16 11 18 14" fill="#22C55E"/>
+            <path d="M18 16 C23 14 26 11 27 7 C23 8 20 11 18 14" fill="#22C55E"/>
+            <circle cx="18" cy="5" r="2.2" fill="#22C55E"/>
+            <g stroke="#FBBF24" stroke-width="1.3" stroke-linecap="round"><path d="M27 4 L27 1.5"/><path d="M25.5 2.7 L28.5 2.7"/></g>
+            <circle cx="6"  cy="29" r="1.4" fill="#D9A441"/>
+            <circle cx="11" cy="28" r="1.2" fill="#FBBF24"/>
+            <circle cx="25" cy="28" r="1.2" fill="#D9A441"/>
+            <circle cx="30" cy="29" r="1.4" fill="#FBBF24"/>
+          </svg>
+        </div>
+        <span class="cat-label text-[13px] font-semibold text-center leading-tight" style="color:#0F172A">Fertilizer</span>
       </button>
-      <button data-cat="herbicide" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px;background:transparent;border:0;cursor:pointer">
-        <div class="cat-circle"><span class="cat-emoji">🌾</span></div>
-        <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Herbicide</span>
+      <button data-cat="herbicide" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-2" style="width:80px;background:transparent;border:0;cursor:pointer">
+        <div class="cat-circle">
+          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="grass tuft">
+            <g fill="#15803D">
+              <path d="M16 33 C13 24 9 16 5 9 C10 16 14 24 17 33 Z"/>
+              <path d="M16.5 33 C16 22 16 12 15 2 C17 12 17.5 22 17.5 33 Z"/>
+              <path d="M20 33 C23 24 27 16 31 9 C26 16 22 24 19 33 Z"/>
+              <path d="M19.5 33 C19 22 20 12 21 2 C20 12 20.5 22 20.5 33 Z"/>
+            </g>
+            <g fill="#22C55E">
+              <path d="M17.25 33 C16.5 21 17.5 10 18 0 C18.5 10 19.5 21 18.75 33 Z"/>
+              <path d="M17 33 C16 24 14 16 11 8 C14 16 15.5 24 18 33 Z"/>
+              <path d="M19 33 C20 24 22 16 25 8 C22 16 20.5 24 18 33 Z"/>
+            </g>
+            <g fill="#16A34A">
+              <path d="M14 33 C13.5 24 13 16 12 7 C14 16 14.5 24 15 33 Z"/>
+              <path d="M22 33 C22.5 24 23 16 24 7 C22 16 21.5 24 21 33 Z"/>
+            </g>
+          </svg>
+        </div>
+        <span class="cat-label text-[13px] font-semibold text-center leading-tight" style="color:#0F172A">Herbicide</span>
       </button>
-      <button data-cat="combo" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px;background:transparent;border:0;cursor:pointer">
-        <div class="cat-circle"><span class="cat-emoji">📦</span></div>
-        <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Combo</span>
+      <button data-cat="combo" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-2" style="width:80px;background:transparent;border:0;cursor:pointer">
+        <div class="cat-circle">
+          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="combo stacked packages">
+            <rect x="3" y="22" width="30" height="11" rx="1.5" fill="#2563EB"/>
+            <line x1="18" y1="22" x2="18" y2="33" stroke="#1E40AF" stroke-width="1"/>
+            <line x1="3" y1="27" x2="33" y2="27" stroke="#1E40AF" stroke-width="1"/>
+            <rect x="6" y="13" width="24" height="10" rx="1.5" fill="#F59E0B"/>
+            <line x1="18" y1="13" x2="18" y2="23" stroke="#B45309" stroke-width="1"/>
+            <line x1="6" y1="18" x2="30" y2="18" stroke="#B45309" stroke-width="1"/>
+            <rect x="10" y="4" width="16" height="10" rx="1.5" fill="#10B981"/>
+            <line x1="18" y1="4" x2="18" y2="14" stroke="#047857" stroke-width="1"/>
+            <line x1="10" y1="9" x2="26" y2="9" stroke="#047857" stroke-width="1"/>
+          </svg>
+        </div>
+        <span class="cat-label text-[13px] font-semibold text-center leading-tight" style="color:#0F172A">Combo</span>
       </button>
     </div>
   </div>
 
-  <!-- FILTER row · compact · 3 essentials only (Sort · Filter · Price) so the strip doesn't feel congested -->
+  <!-- FILTER row · 3 roomy pills · tapping Sort or Filter opens a bottom-sheet modal -->
   <div class="stk-filter">
-    <div class="flex gap-2 px-3 py-1.5 items-center">
-      <button class="filter-pill" aria-pressed="false" data-filter="sort"><i class="fa-solid fa-arrow-down-wide-short text-[9px]"></i> Sort <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
-      <button class="filter-pill" aria-pressed="false" data-filter="filter"><i class="fa-solid fa-sliders text-[9px]"></i> Filter <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
-      <button class="filter-pill" aria-pressed="false" data-filter="price">Price <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+    <div class="flex gap-2 px-4 py-2.5 items-center">
+      <button class="filter-pill" id="filterSortBtn" data-modal="sort"><i class="fa-solid fa-arrow-down-wide-short text-[10px]"></i> Sort <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+      <button class="filter-pill" id="filterFilterBtn" data-modal="filter"><i class="fa-solid fa-sliders text-[10px]"></i> Filter <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+      <button class="filter-pill" data-modal="filter">Price <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
     </div>
   </div>
 
   <!-- TWO-COLUMN body -->
   <div class="flex" style="min-height:60vh">
-    <!-- LEFT: sub-categories of the active main category -->
-    <aside id="subRail" class="flex-shrink-0" style="width:92px;background:#F1F5F9;border-right:1px solid #E5E7EB"></aside>
-
-    <!-- RIGHT: product cards · same compact horizontal card style as homepage bestseller -->
+    <aside id="subRail" class="flex-shrink-0" style="width:96px;background:#F8FAFC;border-right:1px solid #E5E7EB"></aside>
     <main class="flex-1 min-w-0 p-3">
-      <div id="subCrumb" class="text-[11px] font-bold mb-2 px-1" style="color:#64748B"></div>
       <div id="productList" class="pgrid"></div>
     </main>
   </div>
 
-  <!-- Floating cart bar -->
+  <!-- Floating cart bar · full-width by default, shrinks to centre pill on scroll -->
   <a href="cart.html" id="cartBar">
-    <div class="flex items-center gap-3 min-w-0">
+    <div class="cart-summary flex items-center gap-3 min-w-0">
       <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:#059669">
         <i class="fa-solid fa-bag-shopping text-white text-[14px]"></i>
       </div>
@@ -131,13 +223,13 @@
         <span class="text-[11.5px] font-medium whitespace-nowrap" style="color:rgba(255,255,255,0.7)"><span id="cartCount">0</span> item</span>
       </div>
     </div>
-    <div class="flex items-center gap-1.5 text-[12.5px] font-bold flex-shrink-0">
+    <div class="cart-view-label flex items-center gap-1.5 text-[12.5px] font-bold flex-shrink-0">
       <span>View cart</span>
       <i class="fa-solid fa-arrow-right text-[10px]"></i>
     </div>
   </a>
 
-  <!-- Bottom nav — Home / Category(active) / Orders / Profile -->
+  <!-- Bottom nav · Category active -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white flex justify-around items-center px-2 py-2 z-50" style="height:68px;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04)">
     <a href="home.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none">
       <i class="fa-solid fa-house text-[20px]"></i>
@@ -157,8 +249,55 @@
     </a>
   </nav>
 
+  <!-- SORT bottom sheet -->
+  <div id="sortSheet" class="sheet-wrap" aria-hidden="true">
+    <div class="sheet-bg" data-sheet-close="sort"></div>
+    <div class="sheet-panel">
+      <div class="sheet-handle"></div>
+      <div class="px-5 py-3 flex items-center justify-between">
+        <div class="text-[16px] font-extrabold">Sort by</div>
+        <button data-sheet-close="sort" class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[12px]"></i></button>
+      </div>
+      <div id="sortOptions"></div>
+    </div>
+  </div>
+
+  <!-- FILTER bottom sheet -->
+  <div id="filterSheet" class="sheet-wrap" aria-hidden="true">
+    <div class="sheet-bg" data-sheet-close="filter"></div>
+    <div class="sheet-panel">
+      <div class="sheet-handle"></div>
+      <div class="px-5 py-3 flex items-center justify-between">
+        <div class="text-[16px] font-extrabold">Filter</div>
+        <button data-sheet-close="filter" class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[12px]"></i></button>
+      </div>
+      <div class="sheet-section-title">Price range</div>
+      <div class="sheet-chips" data-filter-group="price">
+        <button class="sheet-chip" data-val="0-300">Under ₹300</button>
+        <button class="sheet-chip" data-val="300-600">₹300 – ₹600</button>
+        <button class="sheet-chip" data-val="600-1000">₹600 – ₹1000</button>
+        <button class="sheet-chip" data-val="1000+">₹1000 &amp; above</button>
+      </div>
+      <div class="sheet-section-title">Brand</div>
+      <div class="sheet-chips" data-filter-group="brand">
+        <button class="sheet-chip" data-val="katyayani">Katyayani</button>
+        <button class="sheet-chip" data-val="bayer">Bayer</button>
+        <button class="sheet-chip" data-val="syngenta">Syngenta</button>
+        <button class="sheet-chip" data-val="upl">UPL</button>
+      </div>
+      <div class="sheet-section-title">Availability</div>
+      <div class="sheet-chips" data-filter-group="avail">
+        <button class="sheet-chip" data-val="instock">In stock</button>
+        <button class="sheet-chip" data-val="discount">On discount</button>
+      </div>
+      <div class="px-5 pt-3 pb-5 flex gap-2" style="border-top:1px solid #F1F5F9">
+        <button id="filterClear" class="flex-1 h-11 rounded-xl text-[13px] font-extrabold" style="background:#FFFFFF;border:1.5px solid #E5E7EB;color:#475569">Clear all</button>
+        <button data-sheet-close="filter" class="flex-1 h-11 rounded-xl text-[13px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0">Apply</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Category → sub-categories + product catalog · subcategories carry an emoji + tinted bg pair that renders as a small image thumbnail in the left rail
     const CATS = {
       pesticide: {
         label: 'Pesticide',
@@ -213,64 +352,69 @@
     };
 
     const PRODUCTS = [
-      // PESTICIDE
-      { cat:'pesticide', subs:['bio'],            name:'Neem-Shield Bio',  sub:'500 ml · Azadirachtin 1500ppm',  target:'Bio-control · aphid · whitefly', price:285, mrp:380, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'pesticide', subs:['bio'],            name:'Beauveria-Plus',   sub:'250 g · Beauveria bassiana',     target:'Bio-kills caterpillar',           price:325, mrp:435, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'pesticide', subs:['chem'],           name:'Chakrawarti ZC',   sub:'100 ml · Chloran. + Lambda-Cy.', target:'Kills aphid · whitefly',          price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
-      { cat:'pesticide', subs:['chem'],           name:'Indoxa Strike',    sub:'100 ml · Indoxacarb 15.8%',      target:'Kills caterpillar',               price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
-      { cat:'pesticide', subs:['chem'],           name:'White-Out 5G',     sub:'500 g · Acetamiprid 20%',        target:'Wipes out whitefly',              price:445, mrp:595, img:'../assets/Chakrawarti_nobg.png' },
-      { cat:'pesticide', subs:['organic'],        name:'PongamiaGuard',    sub:'500 ml · Pongamia oil 95%',      target:'Organic · sucking pests',         price:268, mrp:360, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'pesticide', subs:['organic'],        name:'Karanj-Power',     sub:'1 L · Karanja oil',              target:'Organic broad-spectrum',          price:312, mrp:420, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'pesticide', subs:['pest'],           name:'GarlicChilli Mix', sub:'500 ml · Garlic + chilli extract', target:'Organic pest repellent',         price:198, mrp:280, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'pesticide', subs:['pest'],           name:'PheroTrap-Pack',   sub:'10 traps · Pheromone lure',      target:'Traps moths · borers',            price:425, mrp:560, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'pesticide', subs:['bio'],            name:'Neem-Shield Bio',  sub:'Azadirachtin 1500 ppm',  size:'500 ml', target:'aphid · whitefly',   price:285, mrp:380, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'pesticide', subs:['bio'],            name:'Beauveria-Plus',   sub:'Beauveria bassiana',     size:'250 g',  target:'caterpillar',        price:325, mrp:435, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'pesticide', subs:['chem'],           name:'Chakrawarti ZC',   sub:'Chlorantraniliprole + Lambda-Cy.', size:'100 ml', target:'aphid · whitefly', price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'pesticide', subs:['chem'],           name:'Indoxa Strike',    sub:'Indoxacarb 15.8% SC',    size:'100 ml', target:'caterpillar',        price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'pesticide', subs:['chem'],           name:'White-Out 5G',     sub:'Acetamiprid 20% SP',     size:'500 g',  target:'whitefly',           price:445, mrp:595, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'pesticide', subs:['organic'],        name:'PongamiaGuard',    sub:'Pongamia oil 95%',       size:'500 ml', target:'sucking pests',      price:268, mrp:360, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'pesticide', subs:['organic'],        name:'Karanj-Power',     sub:'Karanja oil',            size:'1 L',    target:'broad-spectrum',     price:312, mrp:420, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'pesticide', subs:['pest'],           name:'GarlicChilli Mix', sub:'Garlic + Chilli extract',size:'500 ml', target:'pest repellent',     price:198, mrp:280, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'pesticide', subs:['pest'],           name:'PheroTrap-Pack',   sub:'Pheromone lure',         size:'10 traps', target:'moths · borers',   price:425, mrp:560, img:'../assets/AntiVirus_nobg.png' },
 
-      // FUNGICIDE
-      { cat:'fungicide', subs:['bio'],            name:'Trichoderma Bio',  sub:'1 kg · Trichoderma viride',      target:'Bio · root rot · wilt',           price:248, mrp:340, img:'../assets/Humic_nobg.png' },
-      { cat:'fungicide', subs:['bio'],            name:'PseudoShield',     sub:'500 g · Pseudomonas fluorescens',target:'Bio · soil-borne fungi',          price:285, mrp:385, img:'../assets/Humic_nobg.png' },
-      { cat:'fungicide', subs:['chem'],           name:'Azodharma',        sub:'100 ml · Azoxystrobin 23%',      target:'Stops powdery mildew',            price:310, mrp:420, img:'../assets/Humic_nobg.png' },
-      { cat:'fungicide', subs:['chem'],           name:'Blightguard',      sub:'250 g · Mancozeb 75%',           target:'Stops late blight',               price:285, mrp:380, img:'../assets/Humic_nobg.png' },
-      { cat:'fungicide', subs:['chem'],           name:'Rustaway',         sub:'100 g · Tebuconazole 25%',       target:'Removes leaf-rust',               price:362, mrp:490, img:'../assets/Humic_nobg.png' },
-      { cat:'fungicide', subs:['chemins'],        name:'Chakrawarti ZC',   sub:'100 ml · Chloran. + Lambda-Cy.', target:'Also stops sucking pests',        price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'fungicide', subs:['bio'],            name:'Trichoderma Bio',  sub:'Trichoderma viride',     size:'1 kg',   target:'root rot · wilt',    price:248, mrp:340, img:'../assets/Humic_nobg.png' },
+      { cat:'fungicide', subs:['bio'],            name:'PseudoShield',     sub:'Pseudomonas fluorescens',size:'500 g',  target:'soil-borne fungi',   price:285, mrp:385, img:'../assets/Humic_nobg.png' },
+      { cat:'fungicide', subs:['chem'],           name:'Azodharma',        sub:'Azoxystrobin 23% SC',    size:'100 ml', target:'powdery mildew',     price:310, mrp:420, img:'../assets/Humic_nobg.png' },
+      { cat:'fungicide', subs:['chem'],           name:'Blightguard',      sub:'Mancozeb 75% WP',        size:'250 g',  target:'late blight',        price:285, mrp:380, img:'../assets/Humic_nobg.png' },
+      { cat:'fungicide', subs:['chem'],           name:'Rustaway',         sub:'Tebuconazole 25% EC',    size:'100 g',  target:'leaf-rust',          price:362, mrp:490, img:'../assets/Humic_nobg.png' },
+      { cat:'fungicide', subs:['chemins'],        name:'Chakrawarti ZC',   sub:'Chlorantraniliprole + Lambda-Cy.', size:'100 ml', target:'sucking pests', price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
 
-      // FERTILIZER
-      { cat:'fertilizer', subs:['bio'],           name:'Humic + Fulvic',   sub:'1 L · Humic 12% + Fulvic 8%',    target:'Bio · boosts roots & soil',       price:376, mrp:520, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['bio'],           name:'Azotobacter Plus', sub:'1 kg · N-fixing bacteria',       target:'Bio nitrogen supply',             price:285, mrp:395, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['chemins'],       name:'Antivirus',        sub:'250 ml · Biostimulant',          target:'Stops leaf-virus',                price:327, mrp:425, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'fertilizer', subs:['hydro'],         name:'HydroGrow A+B',    sub:'2× 1 L · A + B nutrient set',    target:'For hydroponics',                 price:599, mrp:799, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['hydro'],         name:'pH Balancer Kit',  sub:'500 ml · pH Up + Down',          target:'Holds hydroponic pH',             price:325, mrp:425, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['manure'],        name:'Vermi-Gold',       sub:'5 kg · Vermicompost',            target:'Enriches tired soil',             price:385, mrp:520, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['manure'],        name:'NeemKhali',        sub:'5 kg · Neem cake',               target:'Manure + pest deterrent',         price:415, mrp:560, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['micro'],         name:'Micro-Max',        sub:'500 g · Multi-micronutrient',    target:'Fills nutrient gaps',             price:289, mrp:395, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['micro'],         name:'Chelated-Zn',      sub:'500 g · Zn-EDTA 12%',            target:'Cures zinc deficiency',           price:325, mrp:445, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['npk'],           name:'NPK 19-19-19',     sub:'1 kg · Water-soluble',           target:'Balanced growth',                 price:330, mrp:445, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['npk'],           name:'NPK 12-61-0',      sub:'1 kg · Mono Ammonium Phosphate', target:'Boosts flowering',                price:348, mrp:465, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['organic'],       name:'CowDung-Compost',  sub:'10 kg · Organic compost',        target:'Organic soil food',               price:225, mrp:320, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['organic'],       name:'BoneMeal-Org',     sub:'5 kg · Phosphorus-rich',         target:'Organic P & Ca',                  price:298, mrp:410, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['other'],         name:'Silicon-Boost',    sub:'500 ml · Soluble silica',        target:'Strengthens stem walls',          price:268, mrp:360, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['pgr'],           name:'GA-3 Spray',       sub:'5 g · Gibberellic Acid 0.001%',  target:'Boosts fruit size',               price:185, mrp:260, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['pgr'],           name:'Cytokinin-Plus',   sub:'100 ml · 6-BAP based',           target:'Branching · flowering',           price:412, mrp:560, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['bio'],           name:'Humic + Fulvic',   sub:'Humic 12% + Fulvic 8%',  size:'1 L',    target:'roots & soil',       price:376, mrp:520, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['bio'],           name:'Azotobacter Plus', sub:'N-fixing bacteria',      size:'1 kg',   target:'bio nitrogen',       price:285, mrp:395, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['chemins'],       name:'Antivirus',        sub:'Anti-viral biostimulant',size:'250 ml', target:'leaf-virus',         price:327, mrp:425, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'fertilizer', subs:['hydro'],         name:'HydroGrow A+B',    sub:'A + B nutrient set',     size:'2× 1 L', target:'hydroponics',        price:599, mrp:799, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['hydro'],         name:'pH Balancer Kit',  sub:'pH Up + Down',           size:'500 ml', target:'hydroponic pH',      price:325, mrp:425, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['manure'],        name:'Vermi-Gold',       sub:'Vermicompost',           size:'5 kg',   target:'tired soil',         price:385, mrp:520, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['manure'],        name:'NeemKhali',        sub:'Neem cake',              size:'5 kg',   target:'manure + pest',      price:415, mrp:560, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['micro'],         name:'Micro-Max',        sub:'Multi-micronutrient',    size:'500 g',  target:'nutrient gaps',      price:289, mrp:395, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['micro'],         name:'Chelated-Zn',      sub:'Zn-EDTA 12%',            size:'500 g',  target:'zinc deficiency',    price:325, mrp:445, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['npk'],           name:'NPK 19-19-19',     sub:'Water-soluble',          size:'1 kg',   target:'balanced growth',    price:330, mrp:445, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['npk'],           name:'NPK 12-61-0',      sub:'Mono Ammonium Phosphate',size:'1 kg',   target:'flowering',          price:348, mrp:465, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['organic'],       name:'CowDung-Compost',  sub:'Organic compost',        size:'10 kg',  target:'soil food',          price:225, mrp:320, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['organic'],       name:'BoneMeal-Org',     sub:'Phosphorus-rich',        size:'5 kg',   target:'P & Ca',             price:298, mrp:410, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['other'],         name:'Silicon-Boost',    sub:'Soluble silica',         size:'500 ml', target:'stem strength',      price:268, mrp:360, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['pgr'],           name:'GA-3 Spray',       sub:'Gibberellic Acid 0.001%',size:'5 g',    target:'fruit size',         price:185, mrp:260, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['pgr'],           name:'Cytokinin-Plus',   sub:'6-BAP based',            size:'100 ml', target:'branching',          price:412, mrp:560, img:'../assets/Humic_nobg.png' },
 
-      // HERBICIDE
-      { cat:'herbicide',  subs:['herb'],          name:'Glypho-Power',     sub:'1 L · Glyphosate 41%',           target:'Clears any green weed',           price:368, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
-      { cat:'herbicide',  subs:['herb'],          name:'WeedClear-S',      sub:'500 ml · 2,4-D Amine 58%',       target:'Kills broadleaf weeds',           price:298, mrp:399, img:'../assets/Chakrawarti_nobg.png' },
-      { cat:'herbicide',  subs:['herb'],          name:'Pre-Lock 40',      sub:'1 L · Pendimethalin 30%',        target:'Stops weeds at root',             price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
-      { cat:'herbicide',  subs:['herb'],          name:'Atrazine-50',      sub:'500 g · Atrazine 50% WP',        target:'Selective for maize',             price:285, mrp:385, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'herbicide',  subs:['herb'],          name:'Glypho-Power',     sub:'Glyphosate 41% SL',      size:'1 L',    target:'green weed',         price:368, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'herbicide',  subs:['herb'],          name:'WeedClear-S',      sub:'2,4-D Amine 58%',        size:'500 ml', target:'broadleaf weed',     price:298, mrp:399, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'herbicide',  subs:['herb'],          name:'Pre-Lock 40',      sub:'Pendimethalin 30%',      size:'1 L',    target:'weed at root',       price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'herbicide',  subs:['herb'],          name:'Atrazine-50',      sub:'Atrazine 50% WP',        size:'500 g',  target:'maize selective',    price:285, mrp:385, img:'../assets/Chakrawarti_nobg.png' },
 
-      // COMBO
-      { cat:'combo',      subs:['crop'],          name:'Tomato Combo',     sub:'3-pack · Spray + feed',          target:'Full-stage Tomato kit',           price:849,  mrp:1180, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'combo',      subs:['crop'],          name:'Chilli Combo',     sub:'3-pack · Spray + feed',          target:'Full-stage Chilli kit',           price:799,  mrp:1100, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'combo',      subs:['crop'],          name:'Wheat Combo',      sub:'2-pack · Foliar spray',          target:'Wheat protection kit',            price:629,  mrp:880,  img:'../assets/Chakrawarti_nobg.png' },
-      { cat:'combo',      subs:['stage'],         name:'Flowering Kit',    sub:'2-pack · Foliar + root',         target:'For flowering stage',             price:599,  mrp:820,  img:'../assets/AntiVirus_nobg.png' },
-      { cat:'combo',      subs:['stage'],         name:'Vegetative Kit',   sub:'2-pack · Growth booster',        target:'For vegetative stage',            price:549,  mrp:760,  img:'../assets/Humic_nobg.png' },
-      { cat:'combo',      subs:['saver'],         name:'Saver-5 Pack',     sub:'5-pack · Mixed essentials',      target:'Save ₹450',                       price:1149, mrp:1599, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'combo',      subs:['saver'],         name:'Mega Combo-10',    sub:'10-pack · Mixed essentials',     target:'Save ₹900',                       price:2099, mrp:2999, img:'../assets/Chakrawarti_nobg.png' }
+      { cat:'combo',      subs:['crop'],          name:'Tomato Combo',     sub:'Spray + feed',           size:'3-pack', target:'Tomato kit',         price:849,  mrp:1180, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'combo',      subs:['crop'],          name:'Chilli Combo',     sub:'Spray + feed',           size:'3-pack', target:'Chilli kit',         price:799,  mrp:1100, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'combo',      subs:['crop'],          name:'Wheat Combo',      sub:'Foliar spray',           size:'2-pack', target:'Wheat protection',   price:629,  mrp:880,  img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'combo',      subs:['stage'],         name:'Flowering Kit',    sub:'Foliar + root',          size:'2-pack', target:'flowering stage',    price:599,  mrp:820,  img:'../assets/AntiVirus_nobg.png' },
+      { cat:'combo',      subs:['stage'],         name:'Vegetative Kit',   sub:'Growth booster',         size:'2-pack', target:'vegetative stage',   price:549,  mrp:760,  img:'../assets/Humic_nobg.png' },
+      { cat:'combo',      subs:['saver'],         name:'Saver-5 Pack',     sub:'Mixed essentials',       size:'5-pack', target:'save ₹450',          price:1149, mrp:1599, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'combo',      subs:['saver'],         name:'Mega Combo-10',    sub:'Mixed essentials',       size:'10-pack',target:'save ₹900',          price:2099, mrp:2999, img:'../assets/Chakrawarti_nobg.png' }
+    ];
+
+    const SORT_OPTIONS = [
+      { key:'pop',      label:'Popularity' },
+      { key:'lowhigh',  label:'Price · Low to High' },
+      { key:'highlow',  label:'Price · High to Low' },
+      { key:'newest',   label:'Newest first' },
+      { key:'rating',   label:'Top rated' }
     ];
 
     const cart = new Map();
     let activeCat = 'pesticide';
     let activeSub = 'all';
+    let activeSort = 'pop';
+    const filters = { price:null, brand:null, avail:new Set() };
 
-    // Wire top-row main categories
+    // Main-cat tile clicks
     document.querySelectorAll('[data-cat]').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed','false'));
@@ -301,23 +445,29 @@
       });
     }
 
+    function applyFilters(list){
+      let out = list.slice();
+      if (filters.price) {
+        const [lo, hi] = filters.price === '1000+' ? [1000, Infinity] : filters.price.split('-').map(Number);
+        out = out.filter(p => p.price >= lo && p.price <= hi);
+      }
+      if (filters.avail.has('discount')) out = out.filter(p => p.mrp > p.price);
+      if (activeSort === 'lowhigh') out.sort((a,b)=>a.price-b.price);
+      else if (activeSort === 'highlow') out.sort((a,b)=>b.price-a.price);
+      return out;
+    }
+
     function renderProducts(){
       const list = document.getElementById('productList');
-      const crumb = document.getElementById('subCrumb');
-      const subLabel = CATS[activeCat].subs.find(s => s.key === activeSub).label;
-      crumb.textContent = CATS[activeCat].label + (activeSub==='all' ? ' · All products' : ' · ' + subLabel);
-
-      const filtered = PRODUCTS.filter(p => p.cat === activeCat && (activeSub === 'all' || p.subs.includes(activeSub)));
+      let filtered = PRODUCTS.filter(p => p.cat === activeCat && (activeSub === 'all' || p.subs.includes(activeSub)));
+      filtered = applyFilters(filtered);
       if (!filtered.length) {
-        list.innerHTML = '<div class="text-center py-10 text-[12.5px] font-semibold" style="color:#94A3B8"><i class="fa-regular fa-face-frown text-[22px] block mb-2"></i>No products in this section yet</div>';
+        list.innerHTML = '<div style="grid-column:1/-1" class="text-center py-10 text-[12.5px] font-semibold text-[#94A3B8]"><i class="fa-regular fa-face-frown text-[22px] block mb-2"></i>No products match</div>';
         return;
       }
-      // Extract size hint from sub line (first token before ' ·') for the size chip
-      const sizeOf = (p) => (p.sub.split('·')[0] || '').trim();
-      // Deterministic star rating per product so it doesn't flicker on re-render
       const rating = (p) => (4.5 + ((p.name.length * 7) % 5) / 10).toFixed(1);
       list.innerHTML = filtered.map((p, i) => {
-        const id = p.cat + '-' + i;
+        const id = p.cat + '-' + activeSub + '-' + i;
         const qty = cart.get(id) ? cart.get(id).qty : 0;
         return '<a href="pdp.html" class="pcard" data-card="'+id+'">'
           + '<div class="pcard-img">'
@@ -326,7 +476,8 @@
           + '</div>'
           + '<div class="pcard-body">'
             + '<div class="pname">'+p.name+'</div>'
-            + '<span class="psize">'+sizeOf(p)+'</span>'
+            + '<div class="psub">'+p.sub+'</div>'
+            + '<span class="psize">'+p.size+'</span>'
             + '<div class="pprice-row">'
               + '<span class="pprice tnum">₹'+p.price+'</span>'
               + '<span class="pmrp tnum">₹'+p.mrp+'</span>'
@@ -337,31 +488,29 @@
       }).join('');
       list.querySelectorAll('.padd-action').forEach(btn => {
         btn.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
+          e.preventDefault(); e.stopPropagation();
           const id = btn.dataset.id;
-          const act = btn.dataset.act;
           const item = filtered[parseInt(btn.dataset.idx,10)];
-          handleCart(id, item, act);
+          handleCart(id, item, btn.dataset.act);
         });
       });
     }
 
     function renderAdd(id, p, qty){
+      const idx = filteredIndex(id);
       if (qty > 0) {
         return '<div class="padd in-cart">'
-          + '<button class="qty-btn padd-action" data-id="'+id+'" data-idx="'+productIndex(id)+'" data-act="dec">−</button>'
+          + '<button class="qty-btn padd-action" data-id="'+id+'" data-idx="'+idx+'" data-act="dec">−</button>'
           + '<span class="qty-num">'+qty+'</span>'
-          + '<button class="qty-btn padd-action" data-id="'+id+'" data-idx="'+productIndex(id)+'" data-act="inc">+</button>'
+          + '<button class="qty-btn padd-action" data-id="'+id+'" data-idx="'+idx+'" data-act="inc">+</button>'
         + '</div>';
       }
-      return '<button class="padd padd-action" data-id="'+id+'" data-idx="'+productIndex(id)+'" data-act="inc">Add</button>';
+      return '<button class="padd padd-action" data-id="'+id+'" data-idx="'+idx+'" data-act="inc">Add</button>';
     }
-
-    function productIndex(id){
-      // recompute filtered index
-      const filtered = PRODUCTS.filter(p => p.cat === activeCat && (activeSub === 'all' || p.subs.includes(activeSub)));
-      return filtered.findIndex((_, i) => (activeCat + '-' + i) === id);
+    function filteredIndex(id){
+      let arr = PRODUCTS.filter(p => p.cat === activeCat && (activeSub === 'all' || p.subs.includes(activeSub)));
+      arr = applyFilters(arr);
+      return arr.findIndex((_, i) => (activeCat + '-' + activeSub + '-' + i) === id);
     }
 
     function handleCart(id, item, act){
@@ -378,31 +527,115 @@
       const bar = document.getElementById('cartBar');
       let total = 0, count = 0;
       cart.forEach(e => { total += e.qty * e.price; count += e.qty; });
-      if (count === 0) {
-        bar.style.display = 'none';
-        return;
-      }
+      if (count === 0) { bar.style.display = 'none'; return; }
       bar.style.display = 'flex';
       document.getElementById('cartTotal').textContent = total;
       document.getElementById('cartCount').textContent = count + (count > 1 ? ' items' : ' item');
     }
 
-    // Wire filter pills · pure visual toggle for prototype
-    document.querySelectorAll('[data-filter]').forEach(p => {
-      p.addEventListener('click', () => {
-        const pressed = p.getAttribute('aria-pressed') === 'true';
-        p.setAttribute('aria-pressed', pressed ? 'false' : 'true');
-      });
+    // Cart wrap-on-scroll · matches home pattern
+    window.addEventListener('scroll', () => {
+      const bar = document.getElementById('cartBar');
+      if (!bar || bar.style.display === 'none') return;
+      if (window.scrollY > 80) bar.classList.add('compact');
+      else bar.classList.remove('compact');
     });
 
-    // Pre-select via ?cat= query param so home-page tile taps land on the right section
+    // ----- Bottom-sheet modals (Sort + Filter) -----
+    function openSheet(name){
+      const el = document.getElementById(name + 'Sheet');
+      if (el) el.classList.add('open');
+    }
+    function closeSheet(name){
+      const el = document.getElementById(name + 'Sheet');
+      if (el) el.classList.remove('open');
+    }
+    document.querySelectorAll('[data-modal]').forEach(btn => {
+      btn.addEventListener('click', () => openSheet(btn.dataset.modal));
+    });
+    document.querySelectorAll('[data-sheet-close]').forEach(el => {
+      el.addEventListener('click', () => closeSheet(el.dataset.sheetClose));
+    });
+
+    // Sort modal options
+    function renderSortOptions(){
+      const wrap = document.getElementById('sortOptions');
+      wrap.innerHTML = SORT_OPTIONS.map(o =>
+        '<div class="sheet-row '+(o.key===activeSort?'selected':'')+'" data-sort="'+o.key+'">'
+          + '<span>'+o.label+'</span>'
+          + '<span class="check"><i class="fa-solid fa-check"></i></span>'
+        + '</div>'
+      ).join('');
+      wrap.querySelectorAll('[data-sort]').forEach(row => {
+        row.addEventListener('click', () => {
+          activeSort = row.dataset.sort;
+          renderSortOptions();
+          updateFilterDots();
+          renderProducts();
+          closeSheet('sort');
+        });
+      });
+    }
+
+    // Filter modal chips (price + brand + avail)
+    document.querySelectorAll('[data-filter-group] .sheet-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const group = chip.closest('[data-filter-group]').dataset.filterGroup;
+        const val = chip.dataset.val;
+        if (group === 'avail') {
+          if (filters.avail.has(val)) filters.avail.delete(val); else filters.avail.add(val);
+        } else {
+          // single-select for price + brand
+          if (filters[group] === val) filters[group] = null;
+          else filters[group] = val;
+        }
+        syncFilterUI();
+        updateFilterDots();
+        renderProducts();
+      });
+    });
+    function syncFilterUI(){
+      document.querySelectorAll('[data-filter-group]').forEach(group => {
+        const g = group.dataset.filterGroup;
+        group.querySelectorAll('.sheet-chip').forEach(chip => {
+          const v = chip.dataset.val;
+          const on = g === 'avail' ? filters.avail.has(v) : filters[g] === v;
+          chip.classList.toggle('on', on);
+        });
+      });
+    }
+    document.getElementById('filterClear').addEventListener('click', () => {
+      filters.price = null; filters.brand = null; filters.avail = new Set();
+      syncFilterUI();
+      updateFilterDots();
+      renderProducts();
+    });
+    function updateFilterDots(){
+      const sortBtn = document.getElementById('filterSortBtn');
+      const filtBtn = document.getElementById('filterFilterBtn');
+      if (sortBtn) sortBtn.setAttribute('aria-pressed', activeSort !== 'pop' ? 'true' : 'false');
+      const anyFilter = !!filters.price || !!filters.brand || filters.avail.size > 0;
+      if (filtBtn) filtBtn.setAttribute('aria-pressed', anyFilter ? 'true' : 'false');
+    }
+
+    // Pre-select via ?cat= query param so home tile taps land on the right section
     const qp = new URLSearchParams(location.search);
     if (qp.get('cat') && CATS[qp.get('cat')]) {
       activeCat = qp.get('cat');
       document.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === activeCat ? 'true' : 'false'));
     }
 
+    // Compute sticky-filter offset based on header + main-cat heights so it pins right under them
+    function alignStickyFilter(){
+      const stkMain = document.querySelector('.stk-main');
+      const stkFilter = document.querySelector('.stk-filter');
+      if (stkMain && stkFilter) stkFilter.style.top = stkMain.offsetHeight + 'px';
+    }
+    window.addEventListener('resize', alignStickyFilter);
+
     renderSubs();
     renderProducts();
+    renderSortOptions();
+    alignStickyFilter();
   </script>
 </body></html>

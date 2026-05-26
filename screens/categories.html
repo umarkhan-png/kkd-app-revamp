@@ -27,23 +27,26 @@
   .filter-pill[aria-pressed="true"]{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
   .filter-pill .dot{width:5px;height:5px;border-radius:50%;background:#059669;margin-left:2px;display:none}
   .filter-pill[aria-pressed="true"] .dot{display:inline-block}
-  /* Product card · compact horizontal · bestseller-pattern */
-  .pcard{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;display:flex;box-shadow:0 1px 3px rgba(15,23,42,0.04);transition:transform .15s ease,box-shadow .2s ease}
+  /* Product card · vertical · most-selling pattern (no top 'bought last week' strip) · 2-column grid via parent */
+  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .pcard{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06);transition:transform .15s ease,box-shadow .2s ease;text-decoration:none;color:#0F172A}
   .pcard:active{transform:scale(.98)}
-  .pcard-img{width:100px;height:auto;background:#F8FAFC;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
-  .pcard-img img{max-width:84%;max-height:80%;object-fit:contain}
-  .pcard-body{flex:1;padding:8px 10px;min-width:0;display:flex;flex-direction:column;justify-content:space-between;gap:4px}
-  .pname{font-size:13px;font-weight:800;color:#0F172A;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pcard-img{width:100%;height:118px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;position:relative;padding:10px;flex-shrink:0}
+  .pcard-img img{max-width:84%;max-height:100%;object-fit:contain}
+  .pcard-star{position:absolute;top:6px;right:6px;display:inline-flex;align-items:center;gap:2px;background:#FFFFFF;color:#475569;font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+  .pcard-body{padding:9px 10px 10px;display:flex;flex-direction:column;gap:5px}
+  .pname{font-size:13px;font-weight:800;color:#0F172A;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .psub{font-size:10px;color:#94A3B8;font-weight:600;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .ptarget{display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:800;color:#047857;background:#ECFDF5;border:1px solid #BBF7D0;border-radius:999px;padding:1px 7px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .psize{display:inline-flex;align-self:flex-start;background:#F1F5F9;color:#475569;font-size:9.5px;font-weight:700;padding:1px 7px;border-radius:5px}
+  .pprice-row{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px}
   .pprice{font-size:15px;font-weight:900;color:#0F172A;line-height:1}
   .pmrp{font-size:10.5px;color:#94A3B8;text-decoration:line-through;font-weight:600;line-height:1}
-  .poff{font-size:9.5px;color:#047857;font-weight:800}
-  .padd{height:30px;padding:0 12px;background:#059669;color:#FFFFFF;font-size:12px;font-weight:800;border-radius:8px;border:0;flex-shrink:0;cursor:pointer;transition:transform .15s ease,background .15s ease}
-  .padd:active{transform:scale(.94)}
-  .padd.in-cart{background:#FFFFFF;color:#047857;border:1.5px solid #059669;padding:0 4px;display:inline-flex;align-items:center;gap:0;height:30px}
-  .qty-btn{width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;color:#047857;background:transparent;border:0;font-size:14px;font-weight:900;cursor:pointer}
-  .qty-num{min-width:18px;text-align:center;font-size:12.5px;font-weight:900}
+  .poff{font-size:10px;color:#047857;font-weight:800;line-height:1}
+  .padd{height:32px;width:100%;background:#059669;color:#FFFFFF;font-size:12.5px;font-weight:800;border-radius:8px;border:0;cursor:pointer;transition:transform .15s ease,background .15s ease;margin-top:2px}
+  .padd:active{transform:scale(.96)}
+  .padd.in-cart{background:#FFFFFF;color:#047857;border:1.5px solid #059669;display:inline-flex;align-items:center;justify-content:space-between;padding:0 6px;gap:0}
+  .qty-btn{width:26px;height:28px;display:inline-flex;align-items:center;justify-content:center;color:#047857;background:transparent;border:0;font-size:15px;font-weight:900;cursor:pointer}
+  .qty-num{flex:1;text-align:center;font-size:13px;font-weight:900}
   /* Cart fab */
   #cartBar{position:fixed;left:16px;right:16px;bottom:84px;z-index:80;background:#0F172A;color:#FFFFFF;display:none;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:18px;box-shadow:0 14px 30px -10px rgba(0,0,0,0.35);text-decoration:none;animation:cartIn .35s cubic-bezier(.34,1.56,.64,1)}
   @keyframes cartIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
@@ -121,7 +124,7 @@
     <!-- RIGHT: product cards · same compact horizontal card style as homepage bestseller -->
     <main class="flex-1 min-w-0 p-3">
       <div id="subCrumb" class="text-[11px] font-bold mb-2 px-1" style="color:#64748B"></div>
-      <div id="productList" class="space-y-2.5"></div>
+      <div id="productList" class="pgrid"></div>
     </main>
   </div>
 
@@ -296,24 +299,28 @@
         return;
       }
       const off = (p) => Math.round(((p.mrp - p.price) / p.mrp) * 100);
+      // Extract size hint from sub line (first token before ' ·') for the size chip
+      const sizeOf = (p) => (p.sub.split('·')[0] || '').trim();
+      // Deterministic star rating per product so it doesn't flicker on re-render
+      const rating = (p) => (4.5 + ((p.name.length * 7) % 5) / 10).toFixed(1);
       list.innerHTML = filtered.map((p, i) => {
         const id = p.cat + '-' + i;
         const qty = cart.get(id) ? cart.get(id).qty : 0;
         return '<a href="pdp.html" class="pcard" data-card="'+id+'">'
-          + '<div class="pcard-img"><img src="'+p.img+'" class="img-blend"/></div>'
+          + '<div class="pcard-img">'
+            + '<img src="'+p.img+'" class="img-blend"/>'
+            + '<span class="pcard-star"><i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>'+rating(p)+'</span>'
+          + '</div>'
           + '<div class="pcard-body">'
-            + '<div>'
-              + '<div class="pname">'+p.name+'</div>'
-              + '<div class="psub">'+p.sub+'</div>'
+            + '<div class="pname">'+p.name+'</div>'
+            + '<div class="psub">'+(p.sub.split('·')[1] ? p.sub.split('·')[1].trim() : p.sub)+'</div>'
+            + '<span class="psize">'+sizeOf(p)+'</span>'
+            + '<div class="pprice-row">'
+              + '<span class="pprice tnum">₹'+p.price+'</span>'
+              + '<span class="pmrp tnum">₹'+p.mrp+'</span>'
+              + '<span class="poff">'+off(p)+'% off</span>'
             + '</div>'
-            + '<div class="ptarget"><i class="fa-solid fa-shield-virus text-[8.5px]"></i>'+p.target+'</div>'
-            + '<div class="flex items-end justify-between gap-2">'
-              + '<div class="leading-tight">'
-                + '<div class="flex items-baseline gap-1.5"><span class="pprice tnum">₹'+p.price+'</span><span class="pmrp tnum">₹'+p.mrp+'</span></div>'
-                + '<div class="poff">'+off(p)+'% off</div>'
-              + '</div>'
-              + renderAdd(id, p, qty)
-            + '</div>'
+            + renderAdd(id, p, qty)
           + '</div>'
           + '</a>';
       }).join('');

@@ -270,7 +270,7 @@
     <button id="addressBtn" class="flex items-center gap-2.5 min-w-0 flex-1 text-left relative z-10" style="background:transparent;border:0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(255,255,255,0.2)">
       <img src="../assets/kkd-logo.png" alt="KKD" class="flex-shrink-0" style="width:36px;height:36px;border-radius:9px;object-fit:cover"/>
       <div class="leading-tight min-w-0">
-        <div class="text-[11px] font-semibold text-[#94A3B8] uppercase tracking-wide">Deliver to</div>
+        <div id="greetLabel" class="text-[11px] font-semibold text-[#94A3B8] uppercase tracking-wide" style="transition:opacity .35s ease,transform .35s ease;display:inline-block">Hey! Sagar</div>
         <div class="flex items-center gap-1 text-[16px] font-bold text-[#0F172A] mt-0.5">
           Indore 452001
           <i class="fa-solid fa-chevron-down text-[10px] text-[#64748B] ml-0.5"></i>
@@ -1738,6 +1738,32 @@
       setTimeout(type, speed);
     }
     if(input) type();
+
+    // Greeting label · flips between "Hey! Sagar" (start) and "Deliver to" every 5s · 3 full cycles, final state "Deliver to"
+    (function(){
+      const el = document.getElementById('greetLabel');
+      if (!el) return;
+      const states = ['Hey! Sagar', 'Deliver to'];
+      let idx = 0;        // 0 = greeting, 1 = label
+      let flips = 0;
+      const TOTAL_FLIPS = 5; // start at greeting → flip 5 times so we land on "Deliver to" for the 3rd time
+      const INTERVAL = 5000;
+      const t = setInterval(function(){
+        idx = (idx + 1) % 2;
+        flips++;
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-4px)';
+        setTimeout(function(){
+          el.textContent = states[idx];
+          el.style.transform = 'translateY(4px)';
+          requestAnimationFrame(function(){
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+          });
+        }, 360);
+        if (flips >= TOTAL_FLIPS) clearInterval(t);
+      }, INTERVAL);
+    })();
 
     // Categories compact proportionally on scroll + cart bar shrinks to center pill on scroll + at-end state expands the Ask Expert FAB and restores categories so the user has direction at the bottom of the page
     window.addEventListener('scroll', () => {

@@ -1205,7 +1205,7 @@
       </div>
     </section>
 
-    <!-- Featured · NO badge tags (BESTSELLER/NEW/HOT removed) · single-line product names with auto-shrink font · cleaner content stack (name+sub, disease+crops, price+strike+OFF chip + full-width Shop pill below) · richer multi-layer backgrounds kept -->
+    <!-- Featured · wider text column (68%) · smaller floating product image (40% max-w, more pulled-out) · names guaranteed single-line via whitespace-nowrap · disease line shortened + nowrap so it never breaks · larger readable type · OFF chip sits as small superscript-like badge tucked right next to strike-MRP (saves a row) -->
     <section class="mt-8">
       <div class="overflow-x-auto scroll-x" style="scroll-snap-type:x mandatory;scroll-padding-left:16px">
         <div class="flex gap-4 pb-2" style="padding-left:16px;padding-right:16px">
@@ -1217,30 +1217,27 @@
             <span class="absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
               <i class="fa-solid fa-star text-[8px]" style="color:#FBBF24"></i> 4.8
             </span>
-            <img src="../assets/Chakrawarti_nobg.png" class="absolute" style="right:-18px;bottom:0;max-height:78%;max-width:48%;filter:drop-shadow(0 18px 30px rgba(0,0,0,0.5))"/>
-            <div class="relative p-4 flex flex-col justify-between h-full" style="width:62%">
-              <!-- TOP · single-line name + chemistry sub -->
+            <img src="../assets/Chakrawarti_nobg.png" class="absolute" style="right:-14px;bottom:6px;max-height:62%;max-width:40%;filter:drop-shadow(0 18px 30px rgba(0,0,0,0.5))"/>
+            <div class="relative p-4 flex flex-col justify-between h-full" style="width:68%">
               <div>
-                <div class="font-extrabold leading-[1.1] mt-2 text-white" style="font-size:20px">Chakrawarti ZC</div>
-                <div class="text-[10.5px] mt-1 leading-tight" style="color:rgba(255,255,255,0.7)">Chloran. + Lambda-Cy.</div>
+                <div class="font-extrabold leading-none mt-2 text-white whitespace-nowrap" style="font-size:22px">Chakrawarti ZC</div>
+                <div class="text-[11px] mt-1.5 leading-tight whitespace-nowrap overflow-hidden text-ellipsis" style="color:rgba(255,255,255,0.72)">Chloran. + Lambda-Cy.</div>
               </div>
-              <!-- MIDDLE · disease line + crops line · proper margin to breathe -->
               <div class="-my-1">
-                <div class="text-[11.5px] font-extrabold leading-snug" style="color:#FBBF24">
-                  <i class="fa-solid fa-shield-virus text-[10px]"></i> Kills aphid &middot; whitefly &middot; thrips
+                <div class="text-[12.5px] font-extrabold leading-snug whitespace-nowrap" style="color:#FBBF24">
+                  <i class="fa-solid fa-shield-virus text-[11px]"></i> Kills sucking pests
                 </div>
-                <div class="text-[10.5px] font-semibold leading-snug mt-1.5" style="color:rgba(255,255,255,0.78)">
-                  <i class="fa-solid fa-seedling text-[10px]"></i> Tomato, Chilli, Brinjal
+                <div class="text-[11.5px] font-semibold leading-snug mt-1.5 whitespace-nowrap" style="color:rgba(255,255,255,0.82)">
+                  <i class="fa-solid fa-seedling text-[10.5px]"></i> Tomato, Chilli, Brinjal
                 </div>
               </div>
-              <!-- BOTTOM · price row (price + strike + OFF chip inline) + Shop pill below -->
               <div>
-                <div class="flex items-center gap-1.5 mb-2 flex-wrap">
-                  <span class="text-[22px] font-extrabold tnum text-white leading-none">&#8377;358</span>
-                  <span class="text-[12px] line-through" style="color:rgba(255,255,255,0.5)">&#8377;495</span>
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold ml-1" style="background:#FBBF24;color:#78350F">28% OFF</span>
+                <div class="flex items-baseline gap-1.5 mb-2 flex-nowrap whitespace-nowrap">
+                  <span class="text-[24px] font-extrabold tnum text-white leading-none">&#8377;358</span>
+                  <span class="text-[12px] line-through tnum" style="color:rgba(255,255,255,0.55)">&#8377;495</span>
+                  <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-extrabold leading-none" style="background:#FBBF24;color:#78350F">28% OFF</span>
                 </div>
-                <button class="w-full inline-flex items-center justify-center gap-1 px-3 py-2 rounded-full text-[12px] font-extrabold" style="background:#FFFFFF;color:#064E3B">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#064E3B"></i></button>
+                <button class="w-full inline-flex items-center justify-center gap-1 px-3 py-2 rounded-full text-[13px] font-extrabold whitespace-nowrap" style="background:#FFFFFF;color:#064E3B">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#064E3B"></i></button>
               </div>
             </div>
           </a>
@@ -1252,30 +1249,27 @@
             <span class="absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
               <i class="fa-solid fa-star text-[8px]" style="color:#FBBF24"></i> 4.9
             </span>
-            <img src="../assets/AntiVirus_nobg.png" class="absolute" style="right:-18px;bottom:0;max-height:78%;max-width:48%;filter:drop-shadow(0 18px 30px rgba(0,0,0,0.5))"/>
-            <div class="relative p-4 flex flex-col justify-between h-full" style="width:62%">
-              <!-- TOP · single-line name + chemistry sub -->
+            <img src="../assets/AntiVirus_nobg.png" class="absolute" style="right:-14px;bottom:6px;max-height:62%;max-width:40%;filter:drop-shadow(0 18px 30px rgba(0,0,0,0.5))"/>
+            <div class="relative p-4 flex flex-col justify-between h-full" style="width:68%">
               <div>
-                <div class="font-extrabold leading-[1.1] mt-2 text-white" style="font-size:22px">Antivirus</div>
-                <div class="text-[10.5px] mt-1 leading-tight" style="color:rgba(255,255,255,0.7)">Anti-viral biostimulant</div>
+                <div class="font-extrabold leading-none mt-2 text-white whitespace-nowrap" style="font-size:22px">Antivirus</div>
+                <div class="text-[11px] mt-1.5 leading-tight whitespace-nowrap overflow-hidden text-ellipsis" style="color:rgba(255,255,255,0.72)">Anti-viral biostimulant</div>
               </div>
-              <!-- MIDDLE · disease line + crops line · proper margin to breathe -->
               <div class="-my-1">
-                <div class="text-[11.5px] font-extrabold leading-snug" style="color:#FBBF24">
-                  <i class="fa-solid fa-shield-virus text-[10px]"></i> Stops yellow-leaf &amp; mosaic virus
+                <div class="text-[12.5px] font-extrabold leading-snug whitespace-nowrap" style="color:#FBBF24">
+                  <i class="fa-solid fa-shield-virus text-[11px]"></i> Stops leaf-virus
                 </div>
-                <div class="text-[10.5px] font-semibold leading-snug mt-1.5" style="color:rgba(255,255,255,0.78)">
-                  <i class="fa-solid fa-seedling text-[10px]"></i> Tomato, Chilli, Papaya
+                <div class="text-[11.5px] font-semibold leading-snug mt-1.5 whitespace-nowrap" style="color:rgba(255,255,255,0.82)">
+                  <i class="fa-solid fa-seedling text-[10.5px]"></i> Tomato, Chilli, Papaya
                 </div>
               </div>
-              <!-- BOTTOM · price row (price + strike + OFF chip inline) + Shop pill below -->
               <div>
-                <div class="flex items-center gap-1.5 mb-2 flex-wrap">
-                  <span class="text-[22px] font-extrabold tnum text-white leading-none">&#8377;327</span>
-                  
-                  
+                <div class="flex items-baseline gap-1.5 mb-2 flex-nowrap whitespace-nowrap">
+                  <span class="text-[24px] font-extrabold tnum text-white leading-none">&#8377;327</span>
+                  <span class="text-[12px] line-through tnum" style="color:rgba(255,255,255,0.55)">&#8377;425</span>
+                  <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-extrabold leading-none" style="background:#FBBF24;color:#78350F">23% OFF</span>
                 </div>
-                <button class="w-full inline-flex items-center justify-center gap-1 px-3 py-2 rounded-full text-[12px] font-extrabold" style="background:#FFFFFF;color:#4338CA">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#4338CA"></i></button>
+                <button class="w-full inline-flex items-center justify-center gap-1 px-3 py-2 rounded-full text-[13px] font-extrabold whitespace-nowrap" style="background:#FFFFFF;color:#4338CA">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#4338CA"></i></button>
               </div>
             </div>
           </a>
@@ -1287,30 +1281,27 @@
             <span class="absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
               <i class="fa-solid fa-star text-[8px]" style="color:#FBBF24"></i> 4.7
             </span>
-            <img src="../assets/Humic_nobg.png" class="absolute" style="right:-18px;bottom:0;max-height:78%;max-width:48%;filter:drop-shadow(0 18px 30px rgba(0,0,0,0.5))"/>
-            <div class="relative p-4 flex flex-col justify-between h-full" style="width:62%">
-              <!-- TOP · single-line name + chemistry sub -->
+            <img src="../assets/Humic_nobg.png" class="absolute" style="right:-14px;bottom:6px;max-height:62%;max-width:40%;filter:drop-shadow(0 18px 30px rgba(0,0,0,0.5))"/>
+            <div class="relative p-4 flex flex-col justify-between h-full" style="width:68%">
               <div>
-                <div class="font-extrabold leading-[1.1] mt-2 text-white" style="font-size:18px">Humic + Fulvic 98</div>
-                <div class="text-[10.5px] mt-1 leading-tight" style="color:rgba(255,255,255,0.7)">Humic 12% + Fulvic 8%</div>
+                <div class="font-extrabold leading-none mt-2 text-white whitespace-nowrap" style="font-size:22px">Humic + Fulvic</div>
+                <div class="text-[11px] mt-1.5 leading-tight whitespace-nowrap overflow-hidden text-ellipsis" style="color:rgba(255,255,255,0.72)">Humic 12% + Fulvic 8%</div>
               </div>
-              <!-- MIDDLE · disease line + crops line · proper margin to breathe -->
               <div class="-my-1">
-                <div class="text-[11.5px] font-extrabold leading-snug" style="color:#FBBF24">
-                  <i class="fa-solid fa-shield-virus text-[10px]"></i> Wakes tired soil &amp; boosts roots
+                <div class="text-[12.5px] font-extrabold leading-snug whitespace-nowrap" style="color:#FBBF24">
+                  <i class="fa-solid fa-shield-virus text-[11px]"></i> Boosts roots &amp; soil
                 </div>
-                <div class="text-[10.5px] font-semibold leading-snug mt-1.5" style="color:rgba(255,255,255,0.78)">
-                  <i class="fa-solid fa-seedling text-[10px]"></i> Works on all crops
+                <div class="text-[11.5px] font-semibold leading-snug mt-1.5 whitespace-nowrap" style="color:rgba(255,255,255,0.82)">
+                  <i class="fa-solid fa-seedling text-[10.5px]"></i> Works on all crops
                 </div>
               </div>
-              <!-- BOTTOM · price row (price + strike + OFF chip inline) + Shop pill below -->
               <div>
-                <div class="flex items-center gap-1.5 mb-2 flex-wrap">
-                  <span class="text-[22px] font-extrabold tnum text-white leading-none">&#8377;376</span>
-                  <span class="text-[12px] line-through" style="color:rgba(255,255,255,0.5)">&#8377;520</span>
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold ml-1" style="background:#FBBF24;color:#78350F">28% OFF</span>
+                <div class="flex items-baseline gap-1.5 mb-2 flex-nowrap whitespace-nowrap">
+                  <span class="text-[24px] font-extrabold tnum text-white leading-none">&#8377;376</span>
+                  <span class="text-[12px] line-through tnum" style="color:rgba(255,255,255,0.55)">&#8377;520</span>
+                  <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-extrabold leading-none" style="background:#FBBF24;color:#78350F">28% OFF</span>
                 </div>
-                <button class="w-full inline-flex items-center justify-center gap-1 px-3 py-2 rounded-full text-[12px] font-extrabold" style="background:#FFFFFF;color:#134E4A">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#134E4A"></i></button>
+                <button class="w-full inline-flex items-center justify-center gap-1 px-3 py-2 rounded-full text-[13px] font-extrabold whitespace-nowrap" style="background:#FFFFFF;color:#134E4A">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#134E4A"></i></button>
               </div>
             </div>
           </a>
@@ -1319,10 +1310,9 @@
       </div>
     </section>
 
-    <!-- User input widget — compact poll · headline only (no subtitle) · 4 icon-less chip buttons in a single row · coin reward chip shows what user earns · winning gesture (coin pop + check) fires on tap -->
-    <section id="acresWidget" class="mt-4 px-4">
-      <div class="rounded-xl p-3.5 relative overflow-hidden" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15)">
-        <!-- Headline row · question + reward coin + close X — all aligned inline on one row, no overlap, no congestion -->
+    <!-- User input widget — compact poll · headline + 4 chips · on first tap fires a proper celebration (multiple flying coins + sparkles + scale-pop ribbon) then collapses the widget out (height + opacity → 0) so it's removed from view -->
+    <section id="acresWidget" class="mt-4 px-4" style="transition:max-height .55s ease,opacity .35s ease,margin .55s ease,padding .55s ease;max-height:200px;overflow:hidden">
+      <div id="acresCard" class="rounded-xl p-3.5 relative overflow-hidden" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15);transition:transform .35s cubic-bezier(.34,1.56,.64,1)">
         <div class="flex items-center gap-2">
           <i class="fa-solid fa-circle-question text-[14px] flex-shrink-0" style="color:#059669"></i>
           <div class="flex-1 min-w-0 text-[13.5px] font-extrabold text-[#0F172A] leading-tight">How many acres of land do you farm?</div>
@@ -1333,20 +1323,21 @@
             <i class="fa-solid fa-xmark text-[10px]" style="color:#475569"></i>
           </button>
         </div>
-        <!-- 4 chips in a single row (no icons, no wrap) · equal flex distribution so they fit -->
         <div id="acreRow" class="flex gap-1.5 mt-2.5" data-q="acres">
           <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-semibold text-center" data-val="lt1" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">&lt;&nbsp;1</button>
           <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-semibold text-center" data-val="1-5" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">1&ndash;5</button>
           <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-semibold text-center" data-val="5-10" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">5&ndash;10</button>
           <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-semibold text-center" data-val="gt10" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">10+</button>
         </div>
-        <!-- Winning flyaway coin (hidden by default, animates on answer) -->
-        <span id="acresCoinPop" class="absolute inline-flex items-center justify-center rounded-full pointer-events-none" style="top:8px;right:34px;width:28px;height:28px;background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#78350F;font-weight:900;font-size:10px;opacity:0;transform:translateY(0) scale(.6)">+20</span>
-        <!-- Success ribbon (hidden by default, slides in after answer) -->
-        <div id="acresSuccess" class="absolute inset-0 flex items-center justify-center pointer-events-none" style="opacity:0;background:linear-gradient(135deg,rgba(5,150,105,0.95) 0%,rgba(16,185,129,0.95) 100%);transition:opacity .4s ease;backdrop-filter:blur(2px)">
+        <!-- Flying coin burst container (multiple spawned at runtime) -->
+        <div id="acresBurst" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+        <!-- Success overlay · scale-pop + emoji confetti -->
+        <div id="acresSuccess" class="absolute inset-0 flex items-center justify-center pointer-events-none" style="opacity:0;transform:scale(.85);transition:opacity .35s ease,transform .45s cubic-bezier(.34,1.56,.64,1);background:linear-gradient(135deg,rgba(5,150,105,0.96) 0%,rgba(16,185,129,0.96) 100%);backdrop-filter:blur(2px)">
           <div class="flex items-center gap-2 text-white">
-            <i class="fa-solid fa-circle-check text-[20px]" style="color:#FFFFFF"></i>
-            <span class="text-[14px] font-extrabold">+20 coins earned!</span>
+            <span class="text-[22px]" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25))">🎉</span>
+            <i class="fa-solid fa-circle-check text-[22px]" style="color:#FFFFFF"></i>
+            <span class="text-[15px] font-extrabold">+20 coins earned!</span>
+            <span class="text-[22px]" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25))">🪙</span>
           </div>
         </div>
       </div>
@@ -1476,12 +1467,10 @@
       </div>
     </section>
 
-    <!-- End-of-page "what's next" hint + Top pill — back to the inline format (per user) · mt bumped a bit so it sits slightly lower from the section above -->
-    <div id="endHint" class="px-4 mt-5 mb-3 flex items-center justify-center gap-2 text-[12px] font-semibold" style="color:#64748B;opacity:0;transition:opacity .4s ease;pointer-events:none">
-      <i class="fa-solid fa-circle-info text-[11px]" style="color:#059669"></i>
-      <span>Looking for more? Tap a category above</span>
-      <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="nu inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0">
-        <i class="fa-solid fa-arrow-up text-[9px]" style="color:#047857"></i> Top
+    <!-- End-of-page · simple Jump-to-top button, no long hint text · sits a bit lower (mt-10) so it has breathing room from the section above -->
+    <div id="endHint" class="px-4 mt-10 mb-3 flex items-center justify-center" style="opacity:0;transition:opacity .4s ease;pointer-events:none">
+      <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="nu inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12.5px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0;box-shadow:0 2px 8px -3px rgba(5,150,105,0.25)">
+        <i class="fa-solid fa-arrow-up text-[11px]" style="color:#047857"></i> Jump to top
       </button>
     </div>
 
@@ -2064,17 +2053,62 @@
         });
       });
       function celebrateAcres(){
-        const pop = document.getElementById('acresCoinPop');
+        const burst = document.getElementById('acresBurst');
         const ribbon = document.getElementById('acresSuccess');
-        if (pop) {
-          pop.style.transition = 'transform .9s cubic-bezier(.2,.7,.3,1), opacity .9s ease';
-          pop.style.opacity = '1';
-          pop.style.transform = 'translateY(-30px) scale(1.4)';
-          setTimeout(function(){ pop.style.opacity = '0'; }, 900);
+        const card = document.getElementById('acresCard');
+        const widget = document.getElementById('acresWidget');
+        // Card scale-pop
+        if (card) {
+          card.style.transform = 'scale(1.04)';
+          setTimeout(function(){ if(card) card.style.transform = 'scale(1)'; }, 360);
         }
+        // Spawn 8 coins flying upward+outward from center with stagger
+        if (burst) {
+          const symbols = ['🪙','🪙','🎉','🪙','🎉','🪙','🪙','🎉'];
+          for (let i = 0; i < 8; i++) {
+            const coin = document.createElement('span');
+            coin.textContent = symbols[i];
+            const angle = (-90 + (i - 3.5) * 14) * Math.PI / 180;
+            const dist = 60 + Math.random() * 30;
+            const tx = Math.cos(angle) * dist;
+            const ty = Math.sin(angle) * dist - 20;
+            coin.style.cssText = 'position:absolute;left:50%;top:50%;font-size:'+(16+Math.random()*8)+'px;transform:translate(-50%,-50%) scale(.4);opacity:0;transition:transform .9s cubic-bezier(.2,.7,.3,1), opacity .9s ease;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2))';
+            burst.appendChild(coin);
+            setTimeout(function(){
+              coin.style.opacity = '1';
+              coin.style.transform = 'translate(calc(-50% + '+tx+'px), calc(-50% + '+ty+'px)) scale(1.2) rotate('+(Math.random()*360)+'deg)';
+            }, 20 + i * 35);
+            setTimeout(function(){ coin.style.opacity = '0'; }, 700 + i * 35);
+            setTimeout(function(){ if(coin && coin.parentNode) coin.parentNode.removeChild(coin); }, 1100 + i * 35);
+          }
+        }
+        // Ribbon pop in then fade
         if (ribbon) {
-          setTimeout(function(){ ribbon.style.opacity = '1'; }, 250);
-          setTimeout(function(){ ribbon.style.opacity = '0'; }, 1700);
+          setTimeout(function(){
+            ribbon.style.opacity = '1';
+            ribbon.style.transform = 'scale(1)';
+          }, 200);
+          setTimeout(function(){
+            ribbon.style.opacity = '0';
+            ribbon.style.transform = 'scale(.95)';
+          }, 1500);
+        }
+        // After celebration: collapse + remove widget so question disappears
+        if (widget) {
+          setTimeout(function(){
+            widget.style.maxHeight = widget.scrollHeight + 'px';
+            // force reflow then collapse
+            void widget.offsetHeight;
+            widget.style.maxHeight = '0px';
+            widget.style.opacity = '0';
+            widget.style.marginTop = '0px';
+            widget.style.paddingTop = '0px';
+            widget.style.paddingBottom = '0px';
+          }, 1900);
+          setTimeout(function(){
+            widget.style.display = 'none';
+            localStorage.setItem('kkd.q.acres.dismissed', '1');
+          }, 2500);
         }
       }
       function paint(btn, on){

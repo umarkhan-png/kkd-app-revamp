@@ -1,453 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-  <link rel="manifest" href="/katyayani-partner-app-prototype/manifest.json">
-  <meta name="theme-color" content="#047857">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="KT Partner">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Orders</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Orders</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
-<style>
-  * { font-family: 'Poppins', sans-serif; -webkit-font-smoothing: antialiased; }
-  html, body { background: #fff; margin: 0; padding: 0; overflow: hidden; }
-  .device { width: 100%; background: #fff; overflow: hidden; position: relative; height: 100vh; }
-  .scroll-area { height: 100vh; overflow-y: auto; padding-bottom: calc(80px + env(safe-area-inset-bottom, 20px)); }
-  .scroll-area::-webkit-scrollbar { display: none; }
-  .brand-font { font-family: 'Poppins', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
-  @media screen and (max-width: 499px) {
-    .device { width: 100vw !important; height: 100vh !important; margin: 0 !important;
-              border-radius: 0 !important; border: none !important; }
-    .scroll-area { height: 100vh !important; }
-  }
+<style>*{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}.hi{font-family:'Noto Sans Devanagari',sans-serif}html,body{margin:0;padding:0}body{min-height:100vh;background:#FDF8EE;color:#0F172A}.tnum{font-variant-numeric:tabular-nums}.img-blend{mix-blend-mode:multiply}.scrollx{overflow-x:auto;scrollbar-width:none}.scrollx::-webkit-scrollbar{display:none}.chip.active{background:#0F172A;color:#fff;border-color:#0F172A}</style></head>
+<body class="min-h-screen pb-[88px]">
 
-  @media screen and (min-width: 500px) {
-    html, body { background: #1a1a1a; overflow: auto; }
-    .device { width: 390px; height: 780px; margin: 24px auto; border-radius: 36px; border: 8px solid #111; box-shadow: 0 30px 80px rgba(0,0,0,.4); }
-    .scroll-area { height: 780px; }
-  }
-</style>
-<style>
-@media screen and (max-width: 499px) {
-  .scroll-area { padding-top: env(safe-area-inset-top, 24px) !important; }
-  .device { box-sizing: border-box; }
-}
-</style>
-</head>
-<body>
-  <div class="device bg-[#F8FAFC]">
-    <div class="scroll-area">
+<div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
 
-      <!-- HEADER -->
-      <div class="px-4 pt-7 pb-3 flex items-center gap-3 bg-white sticky top-0 z-20 border-b border-[#E5E7EB]">
-        <a href="profile.html" class="w-9 h-9 rounded-full border border-[#E5E7EB] flex items-center justify-center">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="#0F172A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <div class="flex-1">
-          <div class="brand-font text-[20px] text-[#0F172A]">My Orders</div>
-          <div class="text-[12px] text-[#64748B]">12 orders this month</div>
+<div class="px-4 pt-4 flex items-center justify-between"><div><div class="hi text-[22px] font-extrabold leading-none">मेरे ऑर्डर</div><div class="text-[11px] text-[#64748B] mt-1">12 orders · Lifetime ₹14,820</div></div><button class="w-10 h-10 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg></button></div>
+
+<!-- Status chips -->
+<div class="scrollx flex gap-2 px-4 mt-4 pb-2"><button class="chip active flex-shrink-0 h-9 px-3.5 rounded-full border border-[#E5E7EB] text-[12px] font-bold bg-white">All (12)</button><button class="chip flex-shrink-0 h-9 px-3.5 rounded-full border border-[#E5E7EB] text-[12px] font-bold bg-white">In Transit (2)</button><button class="chip flex-shrink-0 h-9 px-3.5 rounded-full border border-[#E5E7EB] text-[12px] font-bold bg-white">Delivered (9)</button><button class="chip flex-shrink-0 h-9 px-3.5 rounded-full border border-[#E5E7EB] text-[12px] font-bold bg-white">Cancelled (1)</button></div>
+
+<!-- Order cards -->
+<div class="px-4 mt-2 space-y-3">
+
+  <a href="order-details.html" class="block bg-white border border-[#E5E7EB] rounded-2xl overflow-hidden">
+    <div class="p-3.5">
+      <div class="flex items-center justify-between mb-2.5"><div class="flex items-center gap-2"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FFF7ED] text-[#9A3412] text-[10px] font-bold"><span class="w-1.5 h-1.5 rounded-full bg-[#9A3412] animate-pulse"></span>In Transit</span><span class="text-[10.5px] text-[#64748B]">Tue 19 May</span></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div class="flex items-center gap-2.5">
+        <div class="flex -space-x-3">
+          <div class="w-12 h-12 rounded-lg bg-[#F8FAFC] border-2 border-white flex items-center justify-center p-1"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full"/></div>
+          <div class="w-12 h-12 rounded-lg bg-[#F8FAFC] border-2 border-white flex items-center justify-center p-1"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full"/></div>
+          <div class="w-12 h-12 rounded-lg bg-[#F8FAFC] border-2 border-white flex items-center justify-center text-[10px] font-bold text-[#64748B]">+1</div>
         </div>
-        <button class="w-9 h-9 rounded-full border border-[#E5E7EB] flex items-center justify-center">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#0F172A" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="#0F172A" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-
-      <!-- TABS -->
-      <div class="bg-white border-b border-[#E5E7EB] flex sticky top-[60px] z-10">
-        <button class="flex-1 text-center py-3 text-[14px] font-semibold text-[#047857] border-b-2 border-[#047857]">All (12)</button>
-        <button class="flex-1 text-center py-3 text-[14px] font-medium text-[#64748B]">In Transit (3)</button>
-        <button class="flex-1 text-center py-3 text-[14px] font-medium text-[#64748B]">Delivered (9)</button>
-      </div>
-
-      <div class="p-3 space-y-3">
-
-        <!-- In Transit -->
-        <a href="order-tracking.html" class="block bg-white border border-[#E5E7EB] rounded-lg p-3.5">
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-1.5">
-              <div class="relative flex items-center justify-center">
-                <span class="w-1.5 h-1.5 bg-[#FBBF24] rounded-full"></span>
-                <span class="absolute w-1.5 h-1.5 bg-[#FBBF24] rounded-full animate-ping"></span>
-              </div>
-              <span class="text-[11px] font-semibold text-[#78350F] uppercase tracking-wider">In Transit</span>
-            </div>
-            <span class="text-[12px] text-[#64748B]">14 Apr 2026</span>
-          </div>
-          <div class="text-[12px] text-[#64748B] mb-2">#KAT-2026-04-1284</div>
-          <div class="flex gap-2 mb-3">
-            <div class="w-[52px] h-[52px] bg-[#F8FAFC] rounded-lg flex items-center justify-center"><img src="https://katyayanikrishidirect.com/cdn/shop/files/IMIDA_4.webp" class="w-10 h-10 object-contain"></div>
-            <div class="w-[52px] h-[52px] bg-[#F8FAFC] rounded-lg flex items-center justify-center"><img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" class="w-10 h-10 object-contain"></div>
-            <div class="w-[52px] h-[52px] bg-[#F8FAFC] rounded-lg flex items-center justify-center"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="w-10 h-10 object-contain"></div>
-          </div>
-          <div class="border-t border-[#E5E7EB] pt-3 flex items-center justify-between">
-            <div class="leading-tight">
-              <div class="text-[18px] font-black text-[#0F172A] leading-none">₹1,430</div>
-              <div class="text-[12px] text-[#059669] font-semibold mt-0.5">Profit ₹512</div>
-            </div>
-            <div class="flex items-center gap-1 text-[13px] font-semibold text-[#047857]">
-              Arriving tomorrow
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#047857" stroke-width="2.5" stroke-linecap="round"/></svg>
-            </div>
-          </div>
-          <!-- COD pending strip — merged inside the order card -->
-          <div class="mt-3 -mx-3.5 -mb-3.5 px-3.5 py-2.5 flex items-center gap-2 rounded-b-2xl" style="background:linear-gradient(90deg,#FEF3C7,#FEF3C7);border-top:1px dashed rgba(212,165,55,.45)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#78350F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20"/></svg>
-            <div class="flex-1 leading-tight text-[12px] text-[#78350F]">
-              Pay <b class="text-[#78350F]">₹1,430</b> COD now — earn <b class="text-[#FBBF24]">+50 🪙 coins</b>
-            </div>
-            <button onclick="event.preventDefault();event.stopPropagation();openCodPay('KAT-2026-04-1284',1430)" class="text-[11px] font-black text-white bg-[#059669] px-2.5 py-1 rounded-lg uppercase tracking-wider flex-shrink-0">Pay Now</button>
-          </div>
-        </a>
-
-        <!-- Delivered -->
-        <div class="bg-white border border-[#E5E7EB] rounded-lg overflow-hidden">
-          <a href="order-details.html?id=KAT-2026-04-1198" class="block p-3.5 pb-3">
-            <div class="flex items-center justify-between mb-2">
-              <div class="flex items-center gap-1.5">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#059669" stroke-width="2"/><path d="M8 12l3 3 5-6" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <span class="text-[11px] font-semibold text-[#059669] uppercase tracking-wider">Delivered</span>
-              </div>
-              <div class="flex items-center gap-1 text-[12px] text-[#64748B]">
-                <span>10 Apr</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/></svg>
-              </div>
-            </div>
-            <div class="text-[12px] text-[#64748B] mb-2">#KAT-2026-04-1198</div>
-            <div class="flex gap-2 mb-3">
-              <div class="w-[52px] h-[52px] bg-[#F8FAFC] rounded-lg flex items-center justify-center"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" class="w-10 h-10 object-contain"></div>
-              <div class="w-[52px] h-[52px] bg-[#F8FAFC] rounded-lg flex items-center justify-center"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhannat_2.webp" class="w-10 h-10 object-contain"></div>
-            </div>
-            <div class="border-t border-[#E5E7EB] pt-3 flex items-center justify-between">
-              <div class="leading-tight">
-                <div class="text-[18px] font-black text-[#0F172A] leading-none">₹698</div>
-                <div class="text-[12px] text-[#059669] font-semibold mt-0.5">Profit ₹262</div>
-              </div>
-              <div class="flex items-center gap-1 text-[12px] font-semibold text-[#FBBF24]">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="#FBBF24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.77 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
-                Rate products
-              </div>
-            </div>
-          </a>
-          <div class="px-3.5 pb-3.5 pt-0 grid grid-cols-3 gap-2">
-            <button onclick="openRbModal()" class="bg-[#059669] text-white text-center text-[12px] font-semibold uppercase tracking-wider py-2 rounded-lg">Reorder</button>
-            <a href="#" class="border border-[#E5E7EB] text-[#0F172A] text-center text-[12px] font-semibold uppercase tracking-wider py-2 rounded-lg">Invoice</a>
-            <a href="return-request.html" class="border border-[#E5E7EB] text-[#0F172A] text-center text-[12px] font-semibold uppercase tracking-wider py-2 rounded-lg">Return</a>
-          </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-[12.5px] font-bold">3 items · <span class="tnum">₹1,900</span></div>
+          <div class="text-[10.5px] text-[#64748B] mt-0.5">#KKD-26194-7821</div>
         </div>
-
-        <div class="bg-white border border-[#E5E7EB] rounded-lg overflow-hidden">
-          <a href="order-details.html?id=KAT-2026-04-1102" class="block p-3.5 pb-3">
-            <div class="flex items-center justify-between mb-2">
-              <div class="flex items-center gap-1.5">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#059669" stroke-width="2"/><path d="M8 12l3 3 5-6" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <span class="text-[11px] font-semibold text-[#059669] uppercase tracking-wider">Delivered</span>
-              </div>
-              <div class="flex items-center gap-1 text-[12px] text-[#64748B]">
-                <span>5 Apr</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round"/></svg>
-              </div>
-            </div>
-            <div class="text-[12px] text-[#64748B] mb-2">#KAT-2026-04-1102</div>
-            <div class="flex gap-2 mb-3">
-              <div class="w-[52px] h-[52px] bg-[#F8FAFC] rounded-lg flex items-center justify-center"><img src="https://katyayanikrishidirect.com/cdn/shop/files/AZODHARMA_3.webp" class="w-10 h-10 object-contain"></div>
-              <div class="w-[52px] h-[52px] bg-[#F8FAFC] rounded-lg flex items-center justify-center"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp" class="w-10 h-10 object-contain"></div>
-              <div class="w-[52px] h-[52px] bg-[#F8FAFC] rounded-lg flex items-center justify-center"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK00-52-34Front_a003f055-4bcd-49ed-ab41-c3de4e8cf1ea.webp" class="w-10 h-10 object-contain"></div>
-            </div>
-            <div class="border-t border-[#E5E7EB] pt-3 flex items-center justify-between">
-              <div class="leading-tight">
-                <div class="text-[18px] font-black text-[#0F172A] leading-none">₹1,279</div>
-                <div class="text-[12px] text-[#059669] font-semibold mt-0.5">Profit ₹423</div>
-              </div>
-              <div class="flex items-center gap-1 text-[12px] font-semibold text-[#059669]">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#059669" stroke-width="2"/><path d="M8 12l3 3 5-6" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Rated 4.5
-              </div>
-            </div>
-          </a>
-          <div class="px-3.5 pb-3.5 pt-0 grid grid-cols-3 gap-2">
-            <button onclick="openRbModal()" class="bg-[#059669] text-white text-center text-[12px] font-semibold uppercase tracking-wider py-2 rounded-lg">Reorder</button>
-            <a href="#" class="border border-[#E5E7EB] text-[#0F172A] text-center text-[12px] font-semibold uppercase tracking-wider py-2 rounded-lg">Invoice</a>
-            <a href="return-request.html" class="border border-[#E5E7EB] text-[#0F172A] text-center text-[12px] font-semibold uppercase tracking-wider py-2 rounded-lg">Return</a>
-          </div>
-        </div>
-
       </div>
     </div>
+    <div class="border-t border-dashed border-[#E5E7EB] px-3.5 py-2.5 flex items-center justify-between bg-[#FFF7ED]/30"><span class="text-[11px] font-bold text-[#9A3412]">Out for delivery · ETA Thu</span><span class="text-[10.5px] font-bold text-[#047857] uppercase tracking-wide">Track</span></div>
+  </a>
 
-    <!-- Bottom nav: Home / Explore / Business / Orders / Account -->
-    <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-[#E5E7EB]" style="padding-bottom:env(safe-area-inset-bottom,20px);">
-      <div class="grid grid-cols-5 py-2">
-        <a href="home.html" class="flex flex-col items-center gap-1 mt-1.5">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5c0-1 .4-1.9 1.2-2.5l5.5-4.3c.8-.6 1.8-.6 2.6 0l5.5 4.3c.8.6 1.2 1.5 1.2 2.5v7.3c0 1.5-1.2 2.7-2.7 2.7H6.7A2.7 2.7 0 014 18.8z"/><path d="M9.5 21.5v-5c0-.8.7-1.5 1.5-1.5h2c.8 0 1.5.7 1.5 1.5v5"/></svg>
-          <span class="text-[12px] font-medium text-[#94A3B8]">Home</span>
-        </a>
-        <a href="explore.html" class="flex flex-col items-center gap-1 mt-1.5">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>
-          <span class="text-[12px] font-medium text-[#94A3B8]">Explore</span>
-        </a>
-        <a href="business.html" class="flex flex-col items-center gap-1 mt-1.5">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-          <span class="text-[12px] font-medium text-[#94A3B8]">Business</span>
-        </a>
-        <div class="flex flex-col items-center gap-1 relative">
-          <div class="absolute top-0 w-8 h-[2.5px] bg-[#047857] rounded-full"></div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="mt-1.5" stroke="#047857" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5c0-.7.4-1.3 1-1.6l6-3a2.2 2.2 0 012 0l6 3c.6.3 1 .9 1 1.6v7c0 .7-.4 1.3-1 1.6l-6 3a2.2 2.2 0 01-2 0l-6-3c-.6-.3-1-.9-1-1.6z"/><path d="M4 8.5l8 4 8-4M12 12.5v10"/></svg>
-          <span class="text-[12px] font-semibold text-[#047857]">Orders</span>
-        </div>
-        <a href="profile.html" class="flex flex-col items-center gap-1 mt-1.5">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
-          <span class="text-[12px] font-medium text-[#94A3B8]">Account</span>
-        </a>
-      </div>
+  <a href="order-details.html" class="block bg-white border border-[#E5E7EB] rounded-2xl p-3.5">
+    <div class="flex items-center justify-between mb-2.5"><div class="flex items-center gap-2"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#ECFDF5] text-[#059669] text-[10px] font-bold"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 13l5 5L20 7"/></svg>Delivered</span><span class="text-[10.5px] text-[#64748B]">12 May</span></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    <div class="flex items-center gap-2.5">
+      <div class="w-12 h-12 rounded-lg bg-[#F8FAFC] flex items-center justify-center p-1"><img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" class="img-blend max-h-full"/></div>
+      <div class="flex-1 min-w-0"><div class="text-[12.5px] font-bold">Chakraveer + 1 more</div><div class="text-[10.5px] text-[#64748B] mt-0.5">2 items · <span class="tnum">₹880</span></div></div>
+      <button class="text-[10.5px] font-extrabold text-[#047857] uppercase tracking-wide border border-[#047857]/30 rounded-full px-3 py-1.5">Reorder</button>
     </div>
-  <!-- COD Pay sheet (inside .device for proper bounding) -->
-  <div id="codSheetBd" class="hidden absolute inset-0 bg-black/50 z-40" onclick="closeCodPay()"></div>
-  <div id="codSheet" class="hidden absolute left-0 right-0 bottom-0 z-50 bg-white rounded-t-[24px]" style="box-shadow:0 -8px 30px rgba(0,0,0,.2)">
-    <div class="px-5 pt-3 pb-5" style="padding-bottom:max(16px,env(safe-area-inset-bottom,16px))">
-      <div class="mx-auto w-10 h-1 rounded-full bg-[#E5E7EB] mb-3"></div>
-      <div class="flex items-center justify-between mb-4">
-        <div class="leading-tight">
-          <div class="text-[16px] font-bold text-[#0F172A]">Pay now</div>
-          <div class="text-[11px] text-[#64748B] mt-0.5">Order <span id="codOrderId" class="font-semibold text-[#0F172A]">—</span></div>
-        </div>
-        <button onclick="closeCodPay()" class="text-[20px] text-[#94A3B8] leading-none">×</button>
-      </div>
-      <!-- Editable amount -->
-      <div class="text-[11px] font-semibold text-[#64748B] mb-1.5 uppercase tracking-wider">Amount to pay</div>
-      <div class="flex items-center gap-2 bg-[#FEF3C7] border-2 border-[#FBBF24]/40 rounded-lg px-3 py-2.5">
-        <span class="text-[22px] font-black text-[#78350F]">₹</span>
-        <input id="codAmountInput" type="number" inputmode="numeric" class="flex-1 text-[22px] font-black text-[#78350F] bg-transparent focus:outline-none w-0" oninput="updateCodCashback()">
-        <button onclick="setCodFull()" class="text-[11px] font-bold text-[#059669] bg-[#ECFDF5] px-2 py-1 rounded uppercase tracking-wider whitespace-nowrap">Full</button>
-      </div>
-      <div class="flex items-center justify-between text-[11px] mt-1.5">
-        <span class="text-[#64748B]">Total COD: <span class="font-semibold text-[#0F172A]" id="codTotal">—</span></span>
-        <span class="text-[#FBBF24] font-semibold">Earn <span id="codCoins">+0 🪙</span></span>
-      </div>
-      <div id="codAmountErr" class="hidden text-[11px] text-[#E23744] mt-1">Amount cannot exceed total COD</div>
-      <div class="rounded-lg bg-[#FEF3C7] border border-[#FBBF24]/30 px-2.5 py-2 mt-3 mb-4 flex items-center gap-1.5">
-        <span class="text-[15px]">🪙</span>
-        <div class="text-[12px] text-[#78350F] leading-tight"><b>1 coin per ₹50</b> · credited after delivery</div>
-      </div>
-      <button id="codPayBtn" onclick="closeCodPay()" class="w-full bg-[#059669] text-white text-center py-3 rounded-lg text-[15px] font-black uppercase tracking-wider">Pay <span id="codPayBtnAmt">₹—</span></button>
-    </div>
-  </div>
+  </a>
 
-  <!-- Recently bought / Reorder MODAL — qty + skip + distributor unlock + Reorder & Checkout -->
-  <div id="rbBackdrop" class="absolute inset-0 bg-black/45 z-[80] opacity-0 pointer-events-none transition-opacity duration-250" onclick="closeRbModal()"></div>
-  <div id="rbSheet" class="absolute left-0 right-0 bottom-0 z-[81] bg-white rounded-t-[24px] flex flex-col" style="transform:translateY(100%);transition:transform .32s cubic-bezier(0.32,0.72,0,1);max-height:88%;box-shadow:0 -10px 32px rgba(0,0,0,.18)">
-    <div class="flex-shrink-0 pt-2 pb-3 px-4 border-b border-[#E5E7EB]">
-      <div class="mx-auto w-10 h-1 rounded-full bg-[#E5E7EB] mb-3"></div>
-      <div class="flex items-center justify-between">
-        <div>
-          <div class="brand-font text-[18px] text-[#0F172A]">Reorder this order</div>
-          <div id="rbModalSummary" class="text-[11px] text-[#94A3B8] mt-0.5">3 items &middot; ₹11,310</div>
-        </div>
-        <button onclick="closeRbModal()" class="w-8 h-8 rounded-full bg-[#F8FAFC] border border-[#E5E7EB] flex items-center justify-center" aria-label="Close">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#0F172A" stroke-width="2.4" stroke-linecap="round"/></svg>
-        </button>
-      </div>
+  <a href="order-details.html" class="block bg-white border border-[#E5E7EB] rounded-2xl p-3.5">
+    <div class="flex items-center justify-between mb-2.5"><div class="flex items-center gap-2"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#ECFDF5] text-[#059669] text-[10px] font-bold"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 13l5 5L20 7"/></svg>Delivered</span><span class="text-[10.5px] text-[#64748B]">28 Apr</span></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    <div class="flex items-center gap-2.5">
+      <div class="w-12 h-12 rounded-lg bg-[#F8FAFC] flex items-center justify-center p-1"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend max-h-full"/></div>
+      <div class="flex-1 min-w-0"><div class="text-[12.5px] font-bold">NPK 19-19-19</div><div class="text-[10.5px] text-[#64748B] mt-0.5">1 item · <span class="tnum">₹330</span></div></div>
+      <button class="text-[10.5px] font-extrabold text-[#047857] uppercase tracking-wide border border-[#047857]/30 rounded-full px-3 py-1.5">Reorder</button>
     </div>
-    <div id="rbList" class="flex-1 overflow-y-auto" style="scrollbar-width:none"></div>
-    <div id="rbDistBar" class="flex-shrink-0 px-4 border-t border-[rgba(212,165,55,.35)] relative overflow-hidden" style="background:#FEF3C7">
-      <div id="rbDistLockedView" class="py-2">
-        <div class="flex items-center gap-1.5 mb-1">
-          <div class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#FBBF24,#D97706);box-shadow:0 1px 3px rgba(212,165,55,.3)">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="10" rx="2" stroke="white" stroke-width="2.6"/><path d="M8 11V7a4 4 0 018 0v4" stroke="white" stroke-width="2.6"/></svg>
-          </div>
-          <div id="rbDistText" class="text-[11px] font-normal leading-tight flex-1" style="color:#78350F">Add <b style="font-weight:700;color:#78350F">4 cases</b> or worth <b style="font-weight:700;color:#78350F">₹28,690</b> or <b style="font-weight:700;color:#78350F">15 kg</b> to unlock <b style="font-weight:700;color:#78350F">distributor price</b></div>
-        </div>
-        <div class="h-1 bg-white/70 rounded-full overflow-hidden">
-          <div id="rbDistFill" class="h-full rounded-full" style="width:28%;background:linear-gradient(90deg,#FBBF24,#FDE68A,#FBBF24);background-size:200% 100%;animation:unlockShimmer 2s linear infinite;transition:width .6s cubic-bezier(.4,0,.2,1)"></div>
-        </div>
-      </div>
-      <div id="rbDistUnlockedView" class="hidden text-center py-2">
-        <div class="text-[11px] font-black uppercase tracking-[0.12em] leading-none" style="color:#78350F;text-shadow:0 1px 0 rgba(255,255,255,0.6)">Distributor Price Unlocked</div>
-        <div class="text-[10px] font-medium leading-none pt-0.5" id="rbDistSavingLine" style="color:#92400E">You saved <b style="font-weight:700;color:#78350F">₹0</b> on this order</div>
-      </div>
+  </a>
+
+  <a href="order-details.html" class="block bg-white border border-[#E5E7EB] rounded-2xl p-3.5">
+    <div class="flex items-center justify-between mb-2.5"><div class="flex items-center gap-2"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FFE3DC] text-[#A33A1A] text-[10px] font-bold">Refunded</span><span class="text-[10.5px] text-[#64748B]">10 Apr</span></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    <div class="flex items-center gap-2.5">
+      <div class="w-12 h-12 rounded-lg bg-[#F8FAFC] flex items-center justify-center p-1"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp" class="img-blend max-h-full"/></div>
+      <div class="flex-1 min-w-0"><div class="text-[12.5px] font-bold">Triple Attack Liquid</div><div class="text-[10.5px] text-[#64748B] mt-0.5">Refund completed · <span class="tnum">₹509</span></div></div>
     </div>
-    <div class="flex-shrink-0 border-t border-[#E5E7EB] px-4 pt-3" style="padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px)">
-      <div class="flex items-center gap-2">
-        <div class="flex-1 leading-tight">
-          <div class="text-[11px] text-[#94A3B8]">Total</div>
-          <div id="rbModalTotal" class="text-[18px] font-extrabold text-[#0F172A]">₹11,310</div>
-        </div>
-        <a id="rbModalReorderBtn" href="checkout.html" class="bg-[#059669] text-white text-[14px] font-bold px-5 py-3 rounded-lg uppercase tracking-wider flex items-center gap-2">
-          Reorder &amp; Checkout
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </div>
-    </div>
-  </div>
+  </a>
 
-  </div><!-- /.device -->
+</div>
 
-  <div class="text-center text-white/60 text-xs pb-6">Orders · <a href="profile.html" class="underline">Profile</a> · <a href="order-tracking.html" class="underline">Tracking</a> · <a href="../index.html" class="underline">All</a></div>
-  <script>
-  var _codTotal = 0;
-  function openCodPay(orderId, amount){
-    _codTotal = Number(amount) || 0;
-    document.getElementById('codOrderId').textContent = orderId;
-    document.getElementById('codTotal').textContent = '₹' + _codTotal.toLocaleString('en-IN');
-    document.getElementById('codAmountInput').value = _codTotal;
-    updateCodCashback();
-    document.getElementById('codSheetBd').classList.remove('hidden');
-    document.getElementById('codSheet').classList.remove('hidden');
-  }
-  function closeCodPay(){
-    document.getElementById('codSheetBd').classList.add('hidden');
-    document.getElementById('codSheet').classList.add('hidden');
-  }
-  function setCodFull(){
-    document.getElementById('codAmountInput').value = _codTotal;
-    updateCodCashback();
-  }
-  function updateCodCashback(){
-    var input = document.getElementById('codAmountInput');
-    var amt = Number(input.value) || 0;
-    var err = document.getElementById('codAmountErr');
-    var btn = document.getElementById('codPayBtn');
-    var btnAmt = document.getElementById('codPayBtnAmt');
-    if (amt > _codTotal) {
-      err.classList.remove('hidden');
-      btn.style.opacity = '.55'; btn.style.pointerEvents = 'none';
-    } else if (amt <= 0) {
-      err.classList.add('hidden');
-      btn.style.opacity = '.55'; btn.style.pointerEvents = 'none';
-    } else {
-      err.classList.add('hidden');
-      btn.style.opacity = '1'; btn.style.pointerEvents = 'auto';
-    }
-    var coins = Math.floor(Math.min(amt, _codTotal) / 50);
-    document.getElementById('codCoins').textContent = '+' + coins + ' 🪙';
-    btnAmt.textContent = '₹' + (amt > 0 ? amt.toLocaleString('en-IN') : '—');
-  }
+<!-- Bottom nav -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg flex justify-around items-center px-2 py-2 z-50" style="height:64px;font-family:'Inter',system-ui,sans-serif">
+  <a href="home.html" style="text-decoration:none" class="flex flex-col items-center" data-tab="home">
+    <i class="fa-solid fa-house text-[18px] mb-1" style="color:#9CA3AF"></i>
+    <span class="text-[11px] font-semibold" style="color:#9CA3AF">Home</span>
+  </a>
+  <a href="my-crop.html" style="text-decoration:none" class="flex flex-col items-center" data-tab="crops">
+    <i class="fa-solid fa-wheat-awn text-[18px] mb-1" style="color:#9CA3AF"></i>
+    <span class="text-[11px] font-semibold" style="color:#9CA3AF">Crops</span>
+  </a>
+  <a href="shop.html" style="text-decoration:none" class="flex flex-col items-center" data-tab="news">
+    <i class="fa-solid fa-newspaper text-[18px] mb-1" style="color:#9CA3AF"></i>
+    <span class="text-[11px] font-semibold" style="color:#9CA3AF">News</span>
+  </a>
+  <a href="advisory.html" style="text-decoration:none" class="flex flex-col items-center" data-tab="advisor">
+    <i class="fa-solid fa-headset text-[18px] mb-1" style="color:#9CA3AF"></i>
+    <span class="text-[11px] font-semibold" style="color:#9CA3AF">Advisor</span>
+  </a>
+</nav>
 
-  // ==== Recently bought / Reorder modal (mirrors home.html) ====
-  var RB_ITEMS = [
-    {id:'imida', name:'Imida 30.5% SC',  pack:'250 ml × 20', price:2880, mrp:4000, margin:30, weight:5,  img:'IMIDA_4.webp',                qty:1},
-    {id:'npk',   name:'NPK 19-19-19',    pack:'1 kg × 25',   price:3150, mrp:4500, margin:28, weight:25, img:'NPK_19-19-19_Front.webp',     qty:1},
-    {id:'chakra',name:'Chakraveer 18.5%',pack:'100 ml × 12', price:5280, mrp:7440, margin:32, weight:1.2,img:'ChakraveerNewMockup.webp',    qty:1}
-  ];
-  var RB_SKIPPED = {};
-  var RB_BASE_IMG = 'https://katyayanikrishidirect.com/cdn/shop/files/';
-  var RB_UNLOCK_CASES = 5, RB_UNLOCK_VALUE = 40000, RB_UNLOCK_WEIGHT = 20, RB_SAVE_PER_CASE = 12;
-  function rbActive(){ return RB_ITEMS.filter(function(p){return !RB_SKIPPED[p.id];}); }
-  function rbTotal(){ return rbActive().reduce(function(s,p){return s + p.price * (p.qty||1);}, 0); }
-  function rbWeight(){ return rbActive().reduce(function(s,p){return s + p.weight * (p.qty||1);}, 0); }
-  function rbMaxCases(){ return rbActive().reduce(function(m,p){return Math.max(m, p.qty||1);}, 0); }
-  function rbUpdateSummary(){
-    var active = rbActive(), sum = rbTotal(), weight = rbWeight(), maxCases = rbMaxCases();
-    var fmt = active.length + ' item' + (active.length !== 1 ? 's' : '') + ' · ₹' + sum.toLocaleString('en-IN');
-    var totalFmt = '₹' + sum.toLocaleString('en-IN');
-    var ms = document.getElementById('rbModalSummary'); if (ms) ms.textContent = fmt;
-    var t = document.getElementById('rbModalTotal'); if (t) t.textContent = totalFmt;
-    var b = document.getElementById('rbModalReorderBtn');
-    if (b) { b.style.opacity = active.length === 0 ? '0.4' : '1'; b.style.pointerEvents = active.length === 0 ? 'none' : ''; }
-    var unlocked = (maxCases >= RB_UNLOCK_CASES) || (sum >= RB_UNLOCK_VALUE) || (weight >= RB_UNLOCK_WEIGHT);
-    var pct = Math.round(Math.max(Math.min(100, maxCases/RB_UNLOCK_CASES*100), Math.min(100, sum/RB_UNLOCK_VALUE*100), Math.min(100, weight/RB_UNLOCK_WEIGHT*100)));
-    var fill = document.getElementById('rbDistFill');
-    var lockedView = document.getElementById('rbDistLockedView');
-    var unlockedView = document.getElementById('rbDistUnlockedView');
-    var savingLine = document.getElementById('rbDistSavingLine');
-    var txt = document.getElementById('rbDistText');
-    if (fill) fill.style.width = pct + '%';
-    if (unlocked) {
-      if (lockedView) lockedView.classList.add('hidden');
-      if (unlockedView) unlockedView.classList.remove('hidden');
-      if (savingLine) {
-        var saved = Math.round(sum * RB_SAVE_PER_CASE / 100);
-        savingLine.innerHTML = 'You saved <b style="font-weight:700;color:#78350F">₹' + saved.toLocaleString('en-IN') + '</b> on this order';
-      }
-    } else {
-      if (lockedView) lockedView.classList.remove('hidden');
-      if (unlockedView) unlockedView.classList.add('hidden');
-      if (txt) {
-        var remCases = Math.max(0, RB_UNLOCK_CASES - maxCases);
-        var remValue = Math.max(0, RB_UNLOCK_VALUE - sum);
-        var remWeight = Math.max(0, RB_UNLOCK_WEIGHT - weight);
-        txt.innerHTML =
-          'Add <b style="font-weight:700;color:#78350F">' + remCases + ' case' + (remCases === 1 ? '' : 's') + '</b>' +
-          ' or worth <b style="font-weight:700;color:#78350F">₹' + remValue.toLocaleString('en-IN') + '</b>' +
-          ' or <b style="font-weight:700;color:#78350F">' + remWeight.toFixed(0) + ' kg</b>' +
-          ' to unlock <b style="font-weight:700;color:#78350F">distributor price</b>';
-      }
-    }
-  }
-  function renderRbList(){
-    var html = RB_ITEMS.map(function(p){
-      var skipped = !!RB_SKIPPED[p.id];
-      var rowSkipStyle = skipped ? 'opacity:0.45' : '';
-      var imgFilter = skipped ? 'filter:grayscale(1)' : '';
-      var qty = p.qty || 1;
-      var lineTotal = p.price * qty;
-      return '<div data-id="'+p.id+'" class="px-4 py-3.5 border-b border-[#E5E7EB] flex gap-3" style="'+rowSkipStyle+'">' +
-        '<div class="w-[72px] h-[88px] bg-[#F8FAFC] rounded-lg flex items-center justify-center flex-shrink-0">' +
-          '<img src="'+RB_BASE_IMG+p.img+'" class="h-full w-full object-contain p-1" style="'+imgFilter+'">' +
-        '</div>' +
-        '<div class="flex-1 leading-tight min-w-0">' +
-          '<div class="flex items-start justify-between gap-2">' +
-            '<div class="text-[15px] font-semibold text-[#0F172A] truncate">'+p.name+'</div>' +
-            '<button onclick="toggleRbSkip(\''+p.id+'\')" class="p-0.5 flex-shrink-0" aria-label="' + (skipped ? 'Add back' : 'Skip') + '">' +
-              (skipped
-                ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#059669" stroke-width="2.4" stroke-linecap="round"/></svg>'
-                : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2M10 11v6M14 11v6M5 6l1 14a2 2 0 002 2h8a2 2 0 002-2l1-14" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>') +
-            '</button>' +
-          '</div>' +
-          '<div class="text-[12px] text-[#64748B] mt-0.5">'+p.pack+' · Margin '+p.margin+'%</div>' +
-          '<div class="flex items-center gap-1.5 mt-1.5">' +
-            '<span class="text-[16px] font-semibold text-[#0F172A]">₹'+p.price.toLocaleString('en-IN')+'</span>' +
-            '<span class="text-[12px] text-[#94A3B8] line-through">₹'+p.mrp.toLocaleString('en-IN')+'</span>' +
-            '<span class="text-[9px] font-semibold text-[#059669] bg-[#ECFDF5] px-1.5 py-0.5 rounded">'+p.margin+'% OFF</span>' +
-          '</div>' +
-          '<div class="flex items-center justify-between mt-2' + (skipped ? ' pointer-events-none' : '') + '">' +
-            '<div class="qty-pill">' +
-              '<button onclick="rbAdjQty(\''+p.id+'\',-1)">−</button>' +
-              '<span>'+qty+'</span>' +
-              '<button onclick="rbAdjQty(\''+p.id+'\',1)">+</button>' +
-            '</div>' +
-            '<div class="text-[17px] font-semibold text-[#0F172A]">₹'+lineTotal.toLocaleString('en-IN')+'</div>' +
-          '</div>' +
-        '</div>' +
-        '</div>';
-    }).join('');
-    html += '<div class="px-4 py-3"><a href="categories.html" class="flex items-center justify-center gap-1.5 py-2.5 rounded-lg border-[1.5px] border-dashed border-[#047857] bg-[#ECFDF5] text-[#047857] text-[13px] font-bold uppercase tracking-wider">' +
-      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#047857" stroke-width="2.6" stroke-linecap="round"/></svg>' +
-      'Add more products' +
-      '</a></div>';
-    document.getElementById('rbList').innerHTML = html;
-  }
-  function rbAdjQty(id, delta){
-    var p = RB_ITEMS.find(function(x){return x.id === id;});
-    if (!p) return;
-    p.qty = Math.max(1, (p.qty || 1) + delta);
-    renderRbList();
-    rbUpdateSummary();
-  }
-  function toggleRbSkip(id){
-    RB_SKIPPED[id] = !RB_SKIPPED[id];
-    renderRbList();
-    rbUpdateSummary();
-  }
-  function openRbModal(){
-    location.href = 'cart.html';
-  }
-  function closeRbModal(){
-    document.getElementById('rbBackdrop').style.opacity = '0';
-    document.getElementById('rbBackdrop').style.pointerEvents = 'none';
-    document.getElementById('rbSheet').style.transform = 'translateY(100%)';
-  }
-  </script>
-  <style>
-  .qty-pill { border:1px solid #047857; border-radius:999px; display:inline-flex; align-items:center; overflow:hidden; background:#fff; }
-  .qty-pill button { width:28px; height:28px; color:#047857; font-weight:600; font-size:16px; }
-  .qty-pill span { width:30px; text-align:center; font-weight:600; color:#0F172A; font-size:13px; }
-  @keyframes unlockShimmer { 0% { background-position:200% 50%; } 100% { background-position:-200% 50%; } }
-  </style>
-  <script>if("serviceWorker"in navigator){navigator.serviceWorker.register("/katyayani-partner-app-prototype/sw.js")}</script>
-<script>(function(){if(window.innerWidth>=768)return;document.body.style.cssText="background:#fff;margin:0;padding:0;overflow:hidden";var d=document.querySelector(".device");if(d)d.style.cssText="width:100vw;height:100vh;margin:0;border-radius:0;border:none;box-shadow:none;background:#fff;overflow:hidden;position:relative";var s=document.querySelector(".scroll-area");if(s){s.style.height="100vh";s.style.paddingTop="env(safe-area-inset-top,24px)";}})();</script>
-</body>
-</html>
+</body></html>

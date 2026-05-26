@@ -1185,113 +1185,105 @@
       </div>
     </section>
 
-    <!-- Featured · fully-colored cards · NO white panel · disease/crop chips + use-case highlight + big product image on right · everything readable in white text on the gradient · 3 cards (emerald / violet / teal) -->
+    <!-- Featured · richer multi-layer backgrounds (gradient + soft diagonal stripe + 2 glow orbs) · cleaner content hierarchy (single top badge, big name, sub, bold use-case line, price block + shop pill, rating chip in corner) · NO crop tag chips · all text white/gold on the gradient, no white slab -->
     <section class="mt-8">
       <div class="overflow-x-auto scroll-x" style="scroll-snap-type:x mandatory;scroll-padding-left:16px">
         <div class="flex gap-4 pb-2" style="padding-left:16px;padding-right:16px">
 
-          <!-- Card 1 · Chakrawarti (emerald) · TARGETS: aphid, whitefly, thrips · BEST FOR: tomato, chilli -->
-          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:280px;height:300px;scroll-snap-align:start;background:linear-gradient(155deg,#064E3B 0%,#059669 60%,#10B981 100%);box-shadow:0 12px 28px -10px rgba(4,78,57,0.4)">
-            <!-- decorative blobs -->
-            <div class="absolute -top-12 -right-12 w-40 h-40 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(251,191,36,0.18) 0%,transparent 65%)"></div>
-            <div class="absolute -bottom-10 -left-10 w-32 h-32 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(16,185,129,0.4) 0%,transparent 65%)"></div>
-            <!-- product photo right -->
-            <img src="../assets/Chakrawarti_nobg.png" class="absolute" style="right:-12px;bottom:8px;max-height:75%;max-width:50%;filter:drop-shadow(0 16px 26px rgba(0,0,0,0.4))"/>
+          <!-- Card 1 · Chakrawarti (emerald) -->
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:280px;height:300px;scroll-snap-align:start;background:linear-gradient(155deg,#022C22 0%,#047857 40%,#059669 80%,#10B981 100%);box-shadow:0 14px 30px -10px rgba(4,78,57,0.45)">
+            <!-- subtle diagonal stripe pattern for texture -->
+            <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(135deg,rgba(255,255,255,0.04) 0,rgba(255,255,255,0.04) 1px,transparent 1px,transparent 14px)"></div>
+            <!-- amber glow orb top-right · creates focal warmth behind product -->
+            <div class="absolute pointer-events-none" style="top:-20px;right:-30px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.28) 0%,transparent 65%)"></div>
+            <!-- emerald halo bottom-left for depth -->
+            <div class="absolute pointer-events-none" style="bottom:-30px;left:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,0.55) 0%,transparent 70%)"></div>
+            <!-- rating chip corner top-right · single small element -->
+            <span class="absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
+              <i class="fa-solid fa-star text-[8px]" style="color:#FBBF24"></i> 4.8
+            </span>
+            <!-- product image right · larger, more dramatic -->
+            <img src="../assets/Chakrawarti_nobg.png" class="absolute" style="right:-18px;bottom:0;max-height:85%;max-width:52%;filter:drop-shadow(0 18px 30px rgba(0,0,0,0.5))"/>
             <!-- content -->
-            <div class="relative p-3.5 flex flex-col justify-between h-full" style="width:62%">
-              <!-- TOP: badge + name + rating -->
+            <div class="relative p-4 flex flex-col justify-between h-full" style="width:60%">
               <div>
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FBBF24;color:#78350F"><i class="fa-solid fa-crown text-[8px]"></i> BESTSELLER</span>
-                  <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9.5px] font-bold" style="background:rgba(255,255,255,0.2);color:#FFFFFF;backdrop-filter:blur(4px)"><i class="fa-solid fa-star text-[7.5px]" style="color:#FBBF24"></i> 4.8 · 240</span>
-                </div>
-                <div class="text-[20px] font-extrabold leading-[1.05] mt-2 text-white">Chakrawarti<br/>ZC</div>
-                <div class="text-[10.5px] mt-0.5 leading-tight" style="color:rgba(255,255,255,0.75)">Chloran. + Lambda-Cy.</div>
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FBBF24;color:#78350F"><i class="fa-solid fa-crown text-[8px]"></i> BESTSELLER</span>
+                <div class="text-[22px] font-extrabold leading-[1.02] mt-3 text-white">Chakrawarti<br/>ZC</div>
+                <div class="text-[11px] mt-1 leading-tight" style="color:rgba(255,255,255,0.7)">Chloran. + Lambda-Cy.</div>
               </div>
-              <!-- MIDDLE: highlights · disease + crops in clear chips -->
-              <div class="mt-2">
-                <div class="text-[10.5px] font-extrabold mt-1 mb-1.5 leading-tight" style="color:#FBBF24">
-                  <i class="fa-solid fa-shield-virus text-[10px]"></i> Aphid · Whitefly · Thrips killer
+              <div>
+                <div class="text-[11.5px] font-extrabold leading-snug mb-2.5" style="color:#FBBF24">
+                  Kills aphid, whitefly &amp; thrips fast
                 </div>
-                <div class="flex flex-wrap gap-1">
-                  <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9.5px] font-bold" style="background:rgba(255,255,255,0.22);color:#FFFFFF">🍅 Tomato</span>
-                  <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9.5px] font-bold" style="background:rgba(255,255,255,0.22);color:#FFFFFF">🌶️ Chilli</span>
-                </div>
-              </div>
-              <!-- BOTTOM: price + CTA -->
-              <div class="mt-2">
                 <div class="flex items-baseline gap-1.5">
                   <span class="text-[20px] font-extrabold tnum text-white">&#8377;358</span>
-                  <span class="text-[11.5px] line-through" style="color:rgba(255,255,255,0.6)">&#8377;495</span>
-                  <span class="text-[10px] font-extrabold ml-0.5" style="color:#FBBF24">28% OFF</span>
+                  <span class="text-[11.5px] line-through" style="color:rgba(255,255,255,0.55)">&#8377;495</span>
                 </div>
-                <button class="inline-flex items-center gap-1.5 mt-2 px-3.5 py-1.5 rounded-full text-[12px] font-extrabold" style="background:#FFFFFF;color:#064E3B">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#064E3B"></i></button>
+                <div class="flex items-center justify-between mt-2">
+                  <span class="text-[10.5px] font-extrabold" style="color:#FBBF24">28% OFF</span>
+                  <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11.5px] font-extrabold" style="background:#FFFFFF;color:#064E3B">Shop now <i class="fa-solid fa-arrow-right text-[9px]" style="color:#064E3B"></i></button>
+                </div>
               </div>
             </div>
           </a>
 
-          <!-- Card 2 · Antivirus (indigo/violet) · TARGETS: yellow-leaf, mosaic virus · BEST FOR: tomato, chilli -->
-          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:280px;height:300px;scroll-snap-align:start;background:linear-gradient(155deg,#312E81 0%,#6D28D9 60%,#7C3AED 100%);box-shadow:0 12px 28px -10px rgba(49,46,129,0.4)">
-            <div class="absolute -top-12 -right-12 w-40 h-40 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(251,191,36,0.18) 0%,transparent 65%)"></div>
-            <div class="absolute -bottom-10 -left-10 w-32 h-32 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(124,58,237,0.4) 0%,transparent 65%)"></div>
-            <img src="../assets/AntiVirus_nobg.png" class="absolute" style="right:-12px;bottom:8px;max-height:75%;max-width:50%;filter:drop-shadow(0 16px 26px rgba(0,0,0,0.4))"/>
-            <div class="relative p-3.5 flex flex-col justify-between h-full" style="width:62%">
+          <!-- Card 2 · Antivirus (violet) -->
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:280px;height:300px;scroll-snap-align:start;background:linear-gradient(155deg,#1E1B4B 0%,#4338CA 40%,#6D28D9 80%,#8B5CF6 100%);box-shadow:0 14px 30px -10px rgba(49,46,129,0.45)">
+            <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(135deg,rgba(255,255,255,0.04) 0,rgba(255,255,255,0.04) 1px,transparent 1px,transparent 14px)"></div>
+            <div class="absolute pointer-events-none" style="top:-20px;right:-30px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.22) 0%,transparent 65%)"></div>
+            <div class="absolute pointer-events-none" style="bottom:-30px;left:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,0.55) 0%,transparent 70%)"></div>
+            <span class="absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
+              <i class="fa-solid fa-star text-[8px]" style="color:#FBBF24"></i> 4.9
+            </span>
+            <img src="../assets/AntiVirus_nobg.png" class="absolute" style="right:-18px;bottom:0;max-height:85%;max-width:52%;filter:drop-shadow(0 18px 30px rgba(0,0,0,0.5))"/>
+            <div class="relative p-4 flex flex-col justify-between h-full" style="width:60%">
               <div>
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FCE7F3;color:#9D174D"><i class="fa-solid fa-sparkles text-[8px]"></i> NEW</span>
-                  <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9.5px] font-bold" style="background:rgba(255,255,255,0.2);color:#FFFFFF;backdrop-filter:blur(4px)"><i class="fa-solid fa-star text-[7.5px]" style="color:#FBBF24"></i> 4.9 · 180</span>
-                </div>
-                <div class="text-[20px] font-extrabold leading-[1.05] mt-2 text-white">Antivirus</div>
-                <div class="text-[10.5px] mt-0.5 leading-tight" style="color:rgba(255,255,255,0.75)">Anti-viral biostimulant</div>
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FCE7F3;color:#9D174D"><i class="fa-solid fa-sparkles text-[8px]"></i> NEW</span>
+                <div class="text-[22px] font-extrabold leading-[1.02] mt-3 text-white">Antivirus</div>
+                <div class="text-[11px] mt-1 leading-tight" style="color:rgba(255,255,255,0.7)">Anti-viral biostimulant</div>
               </div>
-              <div class="mt-2">
-                <div class="text-[10.5px] font-extrabold mt-1 mb-1.5 leading-tight" style="color:#FBBF24">
-                  <i class="fa-solid fa-shield-virus text-[10px]"></i> Yellow-leaf · Mosaic · Curl virus
+              <div>
+                <div class="text-[11.5px] font-extrabold leading-snug mb-2.5" style="color:#FBBF24">
+                  Stops yellow-leaf &amp; mosaic virus
                 </div>
-                <div class="flex flex-wrap gap-1">
-                  <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9.5px] font-bold" style="background:rgba(255,255,255,0.22);color:#FFFFFF">🍅 Tomato</span>
-                  <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9.5px] font-bold" style="background:rgba(255,255,255,0.22);color:#FFFFFF">🌶️ Chilli</span>
-                </div>
-              </div>
-              <div class="mt-2">
                 <div class="flex items-baseline gap-1.5">
                   <span class="text-[20px] font-extrabold tnum text-white">&#8377;327</span>
-                  <span class="text-[10px] font-extrabold ml-0.5" style="color:#FBBF24">Best in class</span>
                 </div>
-                <button class="inline-flex items-center gap-1.5 mt-2 px-3.5 py-1.5 rounded-full text-[12px] font-extrabold" style="background:#FFFFFF;color:#4338CA">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#4338CA"></i></button>
+                <div class="flex items-center justify-between mt-2">
+                  <span class="text-[10.5px] font-extrabold" style="color:#FBBF24">Best in class</span>
+                  <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11.5px] font-extrabold" style="background:#FFFFFF;color:#4338CA">Shop now <i class="fa-solid fa-arrow-right text-[9px]" style="color:#4338CA"></i></button>
+                </div>
               </div>
             </div>
           </a>
 
-          <!-- Card 3 · Humic + Fulvic 98 (teal) · BENEFIT: tired soil + roots · ALL CROPS -->
-          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:280px;height:300px;scroll-snap-align:start;background:linear-gradient(155deg,#134E4A 0%,#0F766E 60%,#0D9488 100%);box-shadow:0 12px 28px -10px rgba(19,78,74,0.4)">
-            <div class="absolute -top-12 -right-12 w-40 h-40 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(251,191,36,0.18) 0%,transparent 65%)"></div>
-            <div class="absolute -bottom-10 -left-10 w-32 h-32 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(13,148,136,0.4) 0%,transparent 65%)"></div>
-            <img src="../assets/Humic_nobg.png" class="absolute" style="right:-12px;bottom:8px;max-height:75%;max-width:50%;filter:drop-shadow(0 16px 26px rgba(0,0,0,0.4))"/>
-            <div class="relative p-3.5 flex flex-col justify-between h-full" style="width:62%">
+          <!-- Card 3 · Humic + Fulvic 98 (teal) -->
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:280px;height:300px;scroll-snap-align:start;background:linear-gradient(155deg,#042F2E 0%,#115E59 40%,#0F766E 80%,#14B8A6 100%);box-shadow:0 14px 30px -10px rgba(19,78,74,0.45)">
+            <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(135deg,rgba(255,255,255,0.04) 0,rgba(255,255,255,0.04) 1px,transparent 1px,transparent 14px)"></div>
+            <div class="absolute pointer-events-none" style="top:-20px;right:-30px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.22) 0%,transparent 65%)"></div>
+            <div class="absolute pointer-events-none" style="bottom:-30px;left:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(20,184,166,0.55) 0%,transparent 70%)"></div>
+            <span class="absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
+              <i class="fa-solid fa-star text-[8px]" style="color:#FBBF24"></i> 4.7
+            </span>
+            <img src="../assets/Humic_nobg.png" class="absolute" style="right:-18px;bottom:0;max-height:85%;max-width:52%;filter:drop-shadow(0 18px 30px rgba(0,0,0,0.5))"/>
+            <div class="relative p-4 flex flex-col justify-between h-full" style="width:60%">
               <div>
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FBBF24;color:#78350F"><i class="fa-solid fa-fire text-[8px]"></i> HOT DEAL</span>
-                  <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9.5px] font-bold" style="background:rgba(255,255,255,0.2);color:#FFFFFF;backdrop-filter:blur(4px)"><i class="fa-solid fa-star text-[7.5px]" style="color:#FBBF24"></i> 4.7 · 340</span>
-                </div>
-                <div class="text-[18px] font-extrabold leading-[1.05] mt-2 text-white">Humic +<br/>Fulvic 98</div>
-                <div class="text-[10.5px] mt-0.5 leading-tight" style="color:rgba(255,255,255,0.75)">Humic 12% + Fulvic 8%</div>
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FBBF24;color:#78350F"><i class="fa-solid fa-fire text-[8px]"></i> HOT DEAL</span>
+                <div class="text-[20px] font-extrabold leading-[1.02] mt-3 text-white">Humic +<br/>Fulvic 98</div>
+                <div class="text-[11px] mt-1 leading-tight" style="color:rgba(255,255,255,0.7)">Humic 12% + Fulvic 8%</div>
               </div>
-              <div class="mt-2">
-                <div class="text-[10.5px] font-extrabold mt-1 mb-1.5 leading-tight" style="color:#FBBF24">
-                  <i class="fa-solid fa-leaf text-[10px]"></i> Tired soil · Strong roots · More yield
+              <div>
+                <div class="text-[11.5px] font-extrabold leading-snug mb-2.5" style="color:#FBBF24">
+                  Wakes tired soil &amp; boosts roots
                 </div>
-                <div class="flex flex-wrap gap-1">
-                  <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9.5px] font-bold" style="background:rgba(255,255,255,0.22);color:#FFFFFF">🌱 All crops</span>
-                </div>
-              </div>
-              <div class="mt-2">
                 <div class="flex items-baseline gap-1.5">
                   <span class="text-[20px] font-extrabold tnum text-white">&#8377;376</span>
-                  <span class="text-[11.5px] line-through" style="color:rgba(255,255,255,0.6)">&#8377;520</span>
-                  <span class="text-[10px] font-extrabold ml-0.5" style="color:#FBBF24">28% OFF</span>
+                  <span class="text-[11.5px] line-through" style="color:rgba(255,255,255,0.55)">&#8377;520</span>
                 </div>
-                <button class="inline-flex items-center gap-1.5 mt-2 px-3.5 py-1.5 rounded-full text-[12px] font-extrabold" style="background:#FFFFFF;color:#134E4A">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#134E4A"></i></button>
+                <div class="flex items-center justify-between mt-2">
+                  <span class="text-[10.5px] font-extrabold" style="color:#FBBF24">28% OFF</span>
+                  <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11.5px] font-extrabold" style="background:#FFFFFF;color:#134E4A">Shop now <i class="fa-solid fa-arrow-right text-[9px]" style="color:#134E4A"></i></button>
+                </div>
               </div>
             </div>
           </a>

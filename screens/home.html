@@ -250,7 +250,7 @@
   <span class="snow-flake" style="left:94%;animation-delay:.4s;font-size:11px">❄</span>
 
   <!-- System status bar — sticky at viewport top with theme color fill · only this strip pins on scroll, the address row below scrolls away with normal flow -->
-  <div class="sticky-status flex items-center justify-between px-4 pt-2 pb-2 text-[12px] font-semibold text-[#0F172A]">
+  <div class="sticky-status flex items-center justify-between px-4 pt-3 pb-2.5 text-[12px] font-semibold text-[#0F172A]">
     <span>9:41</span>
     <div class="flex items-center gap-1.5">
       <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
@@ -259,8 +259,8 @@
     </div>
   </div>
 
-  <!-- Info bar: address (tap to change theme) + coin + profile · slight breathing space below the system status row -->
-  <div class="flex items-center justify-between px-4 pt-2 pb-3 relative">
+  <!-- Info bar: address (tap to change theme) + coin + profile · breathing space below the system status row + below the row -->
+  <div class="flex items-center justify-between px-4 pt-3 pb-4 relative">
     <button id="addressBtn" class="flex items-center gap-2.5 min-w-0 flex-1 text-left relative z-10" style="background:transparent;border:0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(255,255,255,0.2)">
       <img src="../assets/kkd-logo.png" alt="KKD" class="flex-shrink-0" style="width:36px;height:36px;border-radius:9px;object-fit:cover"/>
       <div class="leading-tight min-w-0">
@@ -408,51 +408,47 @@
   </div>
 
   <!-- Delivery status tile — richer informative layout (partner-app pattern) · status pulse + order summary + product thumbs + progress bar + Track button · taps open the detailed delivery modal · compact state on scroll keeps just status row + Track button -->
-  <button type="button" id="deliveryTile" class="delivery-tile w-full text-left px-4 py-2.5" style="background:#ECFDF5;border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0;border-left:0;border-right:0;cursor:pointer">
-    <!-- Hero row · big animated truck icon + status copy (farmer-friendly Hindi 'Aaj' instead of jargon 'ETA') + Track button -->
-    <div class="flex items-center gap-2.5 dt-statusrow">
-      <!-- Animated truck icon on the left as a visual anchor -->
-      <div class="flex-shrink-0 rounded-full flex items-center justify-center" style="width:36px;height:36px;background:#059669;box-shadow:0 0 0 4px rgba(5,150,105,0.18);animation:dtTruckBounce 1.4s ease-in-out infinite">
-        <i class="fa-solid fa-truck-fast text-[15px]" style="color:#FFFFFF"></i>
+  <button type="button" id="deliveryTile" class="delivery-tile w-full text-left px-4 py-3" style="background:#ECFDF5;border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0;border-left:0;border-right:0;cursor:pointer">
+    <!-- Hero row · static truck icon + 2-line status copy in English + Track button · no animations -->
+    <div class="flex items-center gap-3 dt-statusrow">
+      <div class="flex-shrink-0 rounded-full flex items-center justify-center" style="width:38px;height:38px;background:#059669">
+        <i class="fa-solid fa-truck-fast text-[16px]" style="color:#FFFFFF"></i>
       </div>
-      <!-- Status text · arrival time is the BIGGEST font because that's what the farmer needs to know -->
       <div class="flex-1 min-w-0 leading-tight">
-        <div class="flex items-center gap-1.5">
-          <span class="relative flex items-center justify-center" style="width:6px;height:6px">
-            <span class="block w-1.5 h-1.5 rounded-full" style="background:#059669"></span>
-            <span class="absolute inset-0 w-1.5 h-1.5 rounded-full" style="background:#059669;animation:dtPulse 1.6s ease-out infinite"></span>
-          </span>
-          <span class="text-[10.5px] font-extrabold uppercase tracking-wider" style="color:#047857">Out for Delivery</span>
-        </div>
-        <div class="text-[14.5px] font-extrabold mt-0.5" style="color:#0F172A">Aaj 5:00 PM tak <span style="color:#64748B;font-weight:600;font-size:11.5px">aa jayega</span></div>
+        <div class="text-[10.5px] font-extrabold uppercase tracking-wider" style="color:#047857">Out for Delivery</div>
+        <div class="text-[14.5px] font-extrabold mt-0.5" style="color:#0F172A">Arriving today by 5:00 PM</div>
       </div>
-      <!-- Track button -->
       <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF">
         Track <i class="fa-solid fa-arrow-right text-[9px]" style="color:#FFFFFF"></i>
       </span>
     </div>
-    <!-- Compact order line + tighter progress bar — single dt-detail block, less vertical space -->
-    <div class="dt-detail mt-2">
-      <!-- Order info -->
-      <div class="flex items-center gap-1.5 text-[11px] mb-2" style="color:#64748B">
-        <span class="font-extrabold" style="color:#0F172A">#KKD-26194</span>
-        <span>·</span>
-        <span class="font-extrabold tnum" style="color:#0F172A">&#8377;2,140</span>
-        <span>·</span>
-        <span class="font-semibold">3 items</span>
-        <span class="font-semibold">·</span>
-        <span class="font-semibold">22 May</span>
-      </div>
-      <!-- Progress: thin track + 4 small icons -->
-      <div class="relative">
-        <div class="flex items-center justify-between relative">
-          <div class="absolute left-2 right-2 top-1/2 -translate-y-1/2 h-[3px] rounded-full" style="background:#A7F3D0"></div>
-          <div class="absolute left-2 top-1/2 -translate-y-1/2 h-[3px] rounded-full" style="background:#059669;width:calc(66.66% - 16px)"></div>
-          <div class="relative z-10 flex items-center justify-center rounded-full" style="width:18px;height:18px;background:#059669"><i class="fa-solid fa-check text-white text-[8px]"></i></div>
-          <div class="relative z-10 flex items-center justify-center rounded-full" style="width:18px;height:18px;background:#059669"><i class="fa-solid fa-check text-white text-[8px]"></i></div>
-          <div class="relative z-10 flex items-center justify-center rounded-full" style="width:20px;height:20px;background:#FFFFFF;border:2px solid #059669;box-shadow:0 0 0 2px rgba(5,150,105,0.18)"><i class="fa-solid fa-truck-fast text-[9px]" style="color:#047857"></i></div>
-          <div class="relative z-10 flex items-center justify-center rounded-full" style="width:18px;height:18px;background:#FFFFFF;border:2px solid #A7F3D0"><i class="fa-solid fa-house text-[8px]" style="color:#94A3B8"></i></div>
+    <!-- Order info + progress · all static, no animations -->
+    <div class="dt-detail mt-2.5">
+      <div class="flex items-center justify-between text-[11px] mb-2.5">
+        <div class="flex items-center gap-1.5 min-w-0">
+          <span class="font-extrabold" style="color:#0F172A">#KKD-26194</span>
+          <span style="color:#94A3B8">·</span>
+          <span class="font-extrabold tnum" style="color:#0F172A">&#8377;2,140</span>
         </div>
+        <div class="flex items-center gap-1.5" style="color:#64748B">
+          <span class="font-semibold">3 items</span>
+          <span style="color:#94A3B8">·</span>
+          <span class="font-semibold">Placed 22 May</span>
+        </div>
+      </div>
+      <div class="flex items-center justify-between relative">
+        <div class="absolute left-2 right-2 top-1/2 -translate-y-1/2 h-[3px] rounded-full" style="background:#A7F3D0"></div>
+        <div class="absolute left-2 top-1/2 -translate-y-1/2 h-[3px] rounded-full" style="background:#059669;width:calc(66.66% - 16px)"></div>
+        <div class="relative z-10 flex items-center justify-center rounded-full" style="width:18px;height:18px;background:#059669"><i class="fa-solid fa-check text-white text-[8px]"></i></div>
+        <div class="relative z-10 flex items-center justify-center rounded-full" style="width:18px;height:18px;background:#059669"><i class="fa-solid fa-check text-white text-[8px]"></i></div>
+        <div class="relative z-10 flex items-center justify-center rounded-full" style="width:20px;height:20px;background:#FFFFFF;border:2px solid #059669"><i class="fa-solid fa-truck-fast text-[9px]" style="color:#047857"></i></div>
+        <div class="relative z-10 flex items-center justify-center rounded-full" style="width:18px;height:18px;background:#FFFFFF;border:2px solid #A7F3D0"><i class="fa-solid fa-house text-[8px]" style="color:#94A3B8"></i></div>
+      </div>
+      <div class="flex items-center justify-between mt-1.5 text-[9.5px] font-semibold">
+        <span style="color:#047857">Placed</span>
+        <span style="color:#047857">Packed</span>
+        <span style="color:#047857;font-weight:800">On the way</span>
+        <span style="color:#94A3B8">Delivered</span>
       </div>
     </div>
   </button>
@@ -461,52 +457,27 @@
 
   <main>
 
-    <!-- Onboarding progress tile · intuitive task card · 'EARN COIN' header band with step progress + reward · big task area with icon + label + CTA pill that says exactly what tapping does · tapping anywhere opens the All-Crops bottom-sheet modal so user can add crops right away -->
+    <!-- Onboarding tile · single clear row · what to do + reward + tap target · no progress animation, no header band, just one focused task card -->
     <section class="mt-3 px-4">
-      <button type="button" id="onboardingTile" class="w-full text-left rounded-2xl relative overflow-hidden block" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 4px 14px -6px rgba(5,150,105,0.18);cursor:pointer">
-        <!-- Top header band — earn coins progress + reward · sets context: "this card earns you coins" -->
-        <div class="flex items-center justify-between px-3.5 py-2" style="background:linear-gradient(90deg,#ECFDF5 0%,#D1FAE5 100%);border-bottom:1px solid #BBF7D0">
-          <div class="flex items-center gap-1.5">
-            <i class="fa-solid fa-trophy text-[11px]" style="color:#F59E0B"></i>
-            <span class="text-[10px] font-extrabold tracking-[0.14em] uppercase" style="color:#047857">Earn coins</span>
-            <span class="text-[10px]" style="color:#94A3B8">·</span>
-            <span class="text-[10.5px] font-bold" style="color:#0F172A">Step 3 of 5</span>
-          </div>
-          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-extrabold" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#78350F">
-            <i class="fa-solid fa-coins text-[10px]"></i> 100 earned
-          </span>
+      <button type="button" id="onboardingTile" class="w-full text-left rounded-2xl relative flex items-center gap-3 p-3.5" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 4px 14px -6px rgba(5,150,105,0.18);cursor:pointer">
+        <!-- Task icon -->
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#059669 0%,#10B981 100%);box-shadow:0 4px 12px -2px rgba(5,150,105,0.4)">
+          <i class="fa-solid fa-wheat-awn text-[20px]" style="color:#FFFFFF"></i>
         </div>
-        <!-- Task body — clear visual hierarchy: WHAT to do + WHY + reward + CTA -->
-        <div class="p-3.5 flex items-center gap-3">
-          <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#059669 0%,#10B981 100%);box-shadow:0 4px 12px -2px rgba(5,150,105,0.4)">
-            <i class="fa-solid fa-wheat-awn text-[20px]" style="color:#FFFFFF"></i>
+        <!-- Content -->
+        <div class="flex-1 leading-tight min-w-0">
+          <div class="flex items-center gap-1.5 mb-1">
+            <i class="fa-solid fa-coins text-[10px]" style="color:#F59E0B"></i>
+            <span class="text-[9.5px] font-extrabold tracking-[0.14em] uppercase" style="color:#047857">Earn 50 coins</span>
+            <span class="text-[9.5px]" style="color:#CBD5E1">·</span>
+            <span class="text-[10px] font-bold" style="color:#64748B">3 of 5</span>
           </div>
-          <div class="flex-1 leading-tight min-w-0">
-            <div class="text-[14.5px] font-extrabold truncate" style="color:#0F172A">Add your first crop</div>
-            <div class="text-[11.5px] font-semibold mt-0.5" style="color:#64748B">Get product picks tailored to your farm</div>
-          </div>
-          <span class="inline-flex flex-col items-center justify-center flex-shrink-0 rounded-xl px-2.5 py-1.5" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#78350F;box-shadow:0 3px 8px -1px rgba(217,119,6,0.4)">
-            <span class="text-[10px] font-extrabold uppercase tracking-wide leading-none">Get</span>
-            <span class="inline-flex items-center gap-0.5 text-[14px] font-extrabold leading-none mt-0.5">
-              <i class="fa-solid fa-coins text-[11px]"></i> 50
-            </span>
-          </span>
+          <div class="text-[14.5px] font-extrabold" style="color:#0F172A">Add your first crop</div>
+          <div class="text-[11.5px] font-semibold truncate" style="color:#64748B">Get picks tailored to your farm</div>
         </div>
-        <!-- Bottom: 5-segment progress + CTA hint · progress shows where user is, CTA says what happens on tap -->
-        <div class="px-3.5 pb-3 -mt-1">
-          <div class="flex gap-1 mb-2">
-            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-            <div class="flex-1 h-1.5 rounded-full overflow-hidden" style="background:#D1FAE5"><div class="h-full" style="background:#059669;width:50%;animation:progFill 2s ease-in-out infinite"></div></div>
-            <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
-            <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-[11px] font-semibold" style="color:#64748B">Tap to pick your crops</span>
-            <span class="inline-flex items-center gap-1 text-[11.5px] font-extrabold" style="color:#059669">
-              Start <i class="fa-solid fa-arrow-right text-[10px]" style="color:#059669"></i>
-            </span>
-          </div>
+        <!-- CTA arrow -->
+        <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background:#059669">
+          <i class="fa-solid fa-arrow-right text-[12px]" style="color:#FFFFFF"></i>
         </div>
       </button>
     </section>

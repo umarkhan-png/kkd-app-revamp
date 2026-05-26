@@ -17,33 +17,31 @@
   .cat-tile[aria-pressed="true"] .cat-circle{border-color:#059669;background:#ECFDF5;box-shadow:0 4px 12px -3px rgba(5,150,105,0.3)}
   .cat-tile[aria-pressed="true"] .cat-label{color:#047857}
   .cat-emoji{font-size:24px;line-height:1}
-  /* Left sub-cat rail · each sub-cat shows a small colored 'image' thumbnail (emoji on tinted circle) above its label */
-  .subcat-btn{display:flex;flex-direction:column;align-items:center;gap:5px;width:100%;text-align:center;padding:11px 4px;font-size:10.5px;font-weight:600;color:#475569;border-left:3px solid transparent;background:transparent;transition:all .15s ease;line-height:1.15;cursor:pointer}
+  /* Left sub-cat rail · compact · thumbnail + 2-line label · narrow rail (92px) leaves more room for the product grid */
+  .subcat-btn{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;text-align:center;padding:9px 3px;font-size:10px;font-weight:600;color:#475569;border-left:3px solid transparent;background:transparent;transition:all .15s ease;line-height:1.12;cursor:pointer}
   .subcat-btn[aria-pressed="true"]{background:#FFFFFF;color:#047857;border-left-color:#059669;font-weight:800}
   .subcat-btn:not([aria-pressed="true"]):hover{background:rgba(5,150,105,0.04)}
-  .subcat-ic{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:10px;font-size:20px;line-height:1;border:1px solid rgba(15,23,42,0.06);box-shadow:0 1px 3px rgba(15,23,42,0.05)}
+  .subcat-ic{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;font-size:17px;line-height:1;border:1px solid rgba(15,23,42,0.06);box-shadow:0 1px 3px rgba(15,23,42,0.05)}
   .subcat-btn[aria-pressed="true"] .subcat-ic{box-shadow:0 4px 10px -2px rgba(5,150,105,0.35);transform:scale(1.04)}
   /* Filter pills */
   .filter-pill{display:inline-flex;align-items:center;gap:4px;height:30px;padding:0 10px;border-radius:999px;background:#FFFFFF;border:1px solid #E5E7EB;font-size:11.5px;font-weight:600;color:#475569;white-space:nowrap;flex-shrink:0;cursor:pointer;transition:all .15s ease}
   .filter-pill[aria-pressed="true"]{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
   .filter-pill .dot{width:5px;height:5px;border-radius:50%;background:#059669;margin-left:2px;display:none}
   .filter-pill[aria-pressed="true"] .dot{display:inline-block}
-  /* Product card · vertical · most-selling pattern (no top 'bought last week' strip) · 2-column grid via parent */
+  /* Product card · cleaner · taller image · trimmed body (name + size chip + price·mrp · Add) · no off% line so the card breathes · 2-col grid via parent */
   .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .pcard{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06);transition:transform .15s ease,box-shadow .2s ease;text-decoration:none;color:#0F172A}
   .pcard:active{transform:scale(.98)}
-  .pcard-img{width:100%;height:118px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;position:relative;padding:10px;flex-shrink:0}
-  .pcard-img img{max-width:84%;max-height:100%;object-fit:contain}
+  .pcard-img{width:100%;height:128px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;position:relative;padding:10px;flex-shrink:0}
+  .pcard-img img{max-width:88%;max-height:100%;object-fit:contain}
   .pcard-star{position:absolute;top:6px;right:6px;display:inline-flex;align-items:center;gap:2px;background:#FFFFFF;color:#475569;font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
-  .pcard-body{padding:9px 10px 10px;display:flex;flex-direction:column;gap:5px}
+  .pcard-body{padding:8px 9px 9px;display:flex;flex-direction:column;gap:4px}
   .pname{font-size:13px;font-weight:800;color:#0F172A;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .psub{font-size:10px;color:#94A3B8;font-weight:600;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .psize{display:inline-flex;align-self:flex-start;background:#F1F5F9;color:#475569;font-size:9.5px;font-weight:700;padding:1px 7px;border-radius:5px}
-  .pprice-row{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px}
+  .pprice-row{display:flex;align-items:baseline;gap:5px}
   .pprice{font-size:15px;font-weight:900;color:#0F172A;line-height:1}
   .pmrp{font-size:10.5px;color:#94A3B8;text-decoration:line-through;font-weight:600;line-height:1}
-  .poff{font-size:10px;color:#047857;font-weight:800;line-height:1}
-  .padd{height:32px;width:100%;background:#059669;color:#FFFFFF;font-size:12.5px;font-weight:800;border-radius:8px;border:0;cursor:pointer;transition:transform .15s ease,background .15s ease;margin-top:2px}
+  .padd{height:30px;width:100%;background:#059669;color:#FFFFFF;font-size:12.5px;font-weight:800;border-radius:8px;border:0;cursor:pointer;transition:transform .15s ease,background .15s ease;margin-top:3px}
   .padd:active{transform:scale(.96)}
   .padd.in-cart{background:#FFFFFF;color:#047857;border:1.5px solid #059669;display:inline-flex;align-items:center;justify-content:space-between;padding:0 6px;gap:0}
   .qty-btn{width:26px;height:28px;display:inline-flex;align-items:center;justify-content:center;color:#047857;background:transparent;border:0;font-size:15px;font-weight:900;cursor:pointer}
@@ -67,15 +65,12 @@
     </div>
   </div>
 
-  <!-- Header -->
+  <!-- Header · title only, no subtitle -->
   <div class="px-4 pt-3 pb-3 flex items-center gap-3">
     <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB">
       <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
     </button>
-    <div class="flex-1">
-      <h1 class="text-[19px] font-extrabold leading-tight" style="color:#0F172A">Shop by Category</h1>
-      <p class="text-[11px] font-semibold" style="color:#94A3B8">Direct from manufacturer</p>
-    </div>
+    <h1 class="text-[20px] font-extrabold leading-tight" style="color:#0F172A">Shop by Category</h1>
   </div>
 
   <!-- TOP: Main 5 categories · Pesticide / Fungicide / Fertilizer / Herbicide / Herbi-Mix (label 'Herbicide & other Products' in the rail) -->
@@ -97,30 +92,26 @@
         <div class="cat-circle"><span class="cat-emoji">🌾</span></div>
         <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Herbicide</span>
       </button>
-      <button data-cat="herbimix" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px;background:transparent;border:0;cursor:pointer">
+      <button data-cat="combo" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px;background:transparent;border:0;cursor:pointer">
         <div class="cat-circle"><span class="cat-emoji">📦</span></div>
-        <span class="cat-label text-[10.5px] font-bold leading-tight" style="color:#0F172A">Herbi-Mix</span>
+        <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Combo</span>
       </button>
     </div>
   </div>
 
-  <!-- FILTER row -->
+  <!-- FILTER row · compact · 3 essentials only (Sort · Filter · Price) so the strip doesn't feel congested -->
   <div class="stk-filter">
-    <div class="flex gap-1.5 px-3 py-2 scroll-x items-center">
-      <span class="text-[11px] font-bold flex-shrink-0 mr-1" style="color:#475569"><i class="fa-solid fa-sliders text-[10px]"></i></span>
-      <button class="filter-pill" aria-pressed="false" data-filter="sort">Sort <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
-      <button class="filter-pill" aria-pressed="false" data-filter="crop">Crop <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
-      <button class="filter-pill" aria-pressed="false" data-filter="brand">Brand <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+    <div class="flex gap-2 px-3 py-1.5 items-center">
+      <button class="filter-pill" aria-pressed="false" data-filter="sort"><i class="fa-solid fa-arrow-down-wide-short text-[9px]"></i> Sort <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+      <button class="filter-pill" aria-pressed="false" data-filter="filter"><i class="fa-solid fa-sliders text-[9px]"></i> Filter <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
       <button class="filter-pill" aria-pressed="false" data-filter="price">Price <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
-      <button class="filter-pill" aria-pressed="false" data-filter="instock">In stock<span class="dot"></span></button>
-      <button class="filter-pill" aria-pressed="false" data-filter="discount">Discount<span class="dot"></span></button>
     </div>
   </div>
 
   <!-- TWO-COLUMN body -->
   <div class="flex" style="min-height:60vh">
     <!-- LEFT: sub-categories of the active main category -->
-    <aside id="subRail" class="flex-shrink-0" style="width:110px;background:#F1F5F9;border-right:1px solid #E5E7EB"></aside>
+    <aside id="subRail" class="flex-shrink-0" style="width:92px;background:#F1F5F9;border-right:1px solid #E5E7EB"></aside>
 
     <!-- RIGHT: product cards · same compact horizontal card style as homepage bestseller -->
     <main class="flex-1 min-w-0 p-3">
@@ -210,13 +201,13 @@
           { key:'herb', icon:'🌾', bg:'#FEF3C7', label:'Herbicides' }
         ]
       },
-      herbimix: {
-        label: 'Herbicide & other Products',
+      combo: {
+        label: 'Combo',
         subs: [
-          { key:'all',     icon:'📦', bg:'#F1F5F9', label:'All' },
-          { key:'chemins', icon:'🧪', bg:'#DBEAFE', label:'Chemical Insecticides' },
-          { key:'herb',    icon:'🌾', bg:'#FEF3C7', label:'Herbicides' },
-          { key:'lab',     icon:'🧬', bg:'#E9D5FF', label:'Lab-Grade' }
+          { key:'all',    icon:'📦', bg:'#F1F5F9', label:'All' },
+          { key:'crop',   icon:'🌾', bg:'#FEF3C7', label:'Crop Combo' },
+          { key:'stage',  icon:'📅', bg:'#FDE68A', label:'Stage Combo' },
+          { key:'saver',  icon:'💰', bg:'#DCFCE7', label:'Value Pack' }
         ]
       }
     };
@@ -265,13 +256,14 @@
       { cat:'herbicide',  subs:['herb'],          name:'Pre-Lock 40',      sub:'1 L · Pendimethalin 30%',        target:'Stops weeds at root',             price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
       { cat:'herbicide',  subs:['herb'],          name:'Atrazine-50',      sub:'500 g · Atrazine 50% WP',        target:'Selective for maize',             price:285, mrp:385, img:'../assets/Chakrawarti_nobg.png' },
 
-      // HERBI-MIX (Herbicide & other Products)
-      { cat:'herbimix',   subs:['chemins'],       name:'Indoxa Strike',    sub:'100 ml · Indoxacarb 15.8%',      target:'Kills caterpillar',               price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
-      { cat:'herbimix',   subs:['chemins'],       name:'Acephate-75',      sub:'500 g · Acephate 75% SP',        target:'Broad-spectrum insecticide',      price:298, mrp:395, img:'../assets/Chakrawarti_nobg.png' },
-      { cat:'herbimix',   subs:['herb'],          name:'Glypho-Power',     sub:'1 L · Glyphosate 41%',           target:'Clears any green weed',           price:368, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
-      { cat:'herbimix',   subs:['herb'],          name:'WeedClear-S',      sub:'500 ml · 2,4-D Amine 58%',       target:'Kills broadleaf weeds',           price:298, mrp:399, img:'../assets/Chakrawarti_nobg.png' },
-      { cat:'herbimix',   subs:['lab'],           name:'NPK Tester Pro',   sub:'1 kit · Lab-grade soil test',    target:'Lab-grade analysis',              price:1499, mrp:1899, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'herbimix',   subs:['lab'],           name:'pH/EC Meter',      sub:'1 device · Digital probe',       target:'Lab-grade pH + EC',               price:1199, mrp:1599, img:'../assets/AntiVirus_nobg.png' }
+      // COMBO
+      { cat:'combo',      subs:['crop'],          name:'Tomato Combo',     sub:'3-pack · Spray + feed',          target:'Full-stage Tomato kit',           price:849,  mrp:1180, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'combo',      subs:['crop'],          name:'Chilli Combo',     sub:'3-pack · Spray + feed',          target:'Full-stage Chilli kit',           price:799,  mrp:1100, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'combo',      subs:['crop'],          name:'Wheat Combo',      sub:'2-pack · Foliar spray',          target:'Wheat protection kit',            price:629,  mrp:880,  img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'combo',      subs:['stage'],         name:'Flowering Kit',    sub:'2-pack · Foliar + root',         target:'For flowering stage',             price:599,  mrp:820,  img:'../assets/AntiVirus_nobg.png' },
+      { cat:'combo',      subs:['stage'],         name:'Vegetative Kit',   sub:'2-pack · Growth booster',        target:'For vegetative stage',            price:549,  mrp:760,  img:'../assets/Humic_nobg.png' },
+      { cat:'combo',      subs:['saver'],         name:'Saver-5 Pack',     sub:'5-pack · Mixed essentials',      target:'Save ₹450',                       price:1149, mrp:1599, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'combo',      subs:['saver'],         name:'Mega Combo-10',    sub:'10-pack · Mixed essentials',     target:'Save ₹900',                       price:2099, mrp:2999, img:'../assets/Chakrawarti_nobg.png' }
     ];
 
     const cart = new Map();
@@ -320,7 +312,6 @@
         list.innerHTML = '<div class="text-center py-10 text-[12.5px] font-semibold" style="color:#94A3B8"><i class="fa-regular fa-face-frown text-[22px] block mb-2"></i>No products in this section yet</div>';
         return;
       }
-      const off = (p) => Math.round(((p.mrp - p.price) / p.mrp) * 100);
       // Extract size hint from sub line (first token before ' ·') for the size chip
       const sizeOf = (p) => (p.sub.split('·')[0] || '').trim();
       // Deterministic star rating per product so it doesn't flicker on re-render
@@ -335,12 +326,10 @@
           + '</div>'
           + '<div class="pcard-body">'
             + '<div class="pname">'+p.name+'</div>'
-            + '<div class="psub">'+(p.sub.split('·')[1] ? p.sub.split('·')[1].trim() : p.sub)+'</div>'
             + '<span class="psize">'+sizeOf(p)+'</span>'
             + '<div class="pprice-row">'
               + '<span class="pprice tnum">₹'+p.price+'</span>'
               + '<span class="pmrp tnum">₹'+p.mrp+'</span>'
-              + '<span class="poff">'+off(p)+'% off</span>'
             + '</div>'
             + renderAdd(id, p, qty)
           + '</div>'

@@ -17,11 +17,12 @@
   .cat-tile[aria-pressed="true"] .cat-circle{border-color:#059669;background:#ECFDF5;box-shadow:0 4px 12px -3px rgba(5,150,105,0.3)}
   .cat-tile[aria-pressed="true"] .cat-label{color:#047857}
   .cat-emoji{font-size:24px;line-height:1}
-  /* Left sub-cat rail */
-  .subcat-btn{display:block;width:100%;text-align:center;padding:14px 6px;font-size:11.5px;font-weight:600;color:#475569;border-left:3px solid transparent;background:transparent;transition:all .15s ease;line-height:1.25;cursor:pointer}
+  /* Left sub-cat rail · each sub-cat shows a small colored 'image' thumbnail (emoji on tinted circle) above its label */
+  .subcat-btn{display:flex;flex-direction:column;align-items:center;gap:5px;width:100%;text-align:center;padding:11px 4px;font-size:10.5px;font-weight:600;color:#475569;border-left:3px solid transparent;background:transparent;transition:all .15s ease;line-height:1.15;cursor:pointer}
   .subcat-btn[aria-pressed="true"]{background:#FFFFFF;color:#047857;border-left-color:#059669;font-weight:800}
   .subcat-btn:not([aria-pressed="true"]):hover{background:rgba(5,150,105,0.04)}
-  .subcat-ic{display:block;font-size:20px;margin-bottom:4px;line-height:1}
+  .subcat-ic{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:10px;font-size:20px;line-height:1;border:1px solid rgba(15,23,42,0.06);box-shadow:0 1px 3px rgba(15,23,42,0.05)}
+  .subcat-btn[aria-pressed="true"] .subcat-ic{box-shadow:0 4px 10px -2px rgba(5,150,105,0.35);transform:scale(1.04)}
   /* Filter pills */
   .filter-pill{display:inline-flex;align-items:center;gap:4px;height:30px;padding:0 10px;border-radius:999px;background:#FFFFFF;border:1px solid #E5E7EB;font-size:11.5px;font-weight:600;color:#475569;white-space:nowrap;flex-shrink:0;cursor:pointer;transition:all .15s ease}
   .filter-pill[aria-pressed="true"]{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
@@ -77,28 +78,28 @@
     </div>
   </div>
 
-  <!-- TOP: Main 5 categories · same lineup as homepage -->
+  <!-- TOP: Main 5 categories · Pesticide / Fungicide / Fertilizer / Herbicide / Herbi-Mix (label 'Herbicide & other Products' in the rail) -->
   <div class="stk-main">
     <div class="flex gap-2.5 px-4 py-2.5 scroll-x">
-      <button data-cat="pesticide" aria-pressed="true" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:68px;background:transparent;border:0;cursor:pointer">
+      <button data-cat="pesticide" aria-pressed="true" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px;background:transparent;border:0;cursor:pointer">
         <div class="cat-circle"><span class="cat-emoji">🐛</span></div>
         <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Pesticide</span>
       </button>
-      <button data-cat="fungicide" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:68px;background:transparent;border:0;cursor:pointer">
+      <button data-cat="fungicide" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px;background:transparent;border:0;cursor:pointer">
         <div class="cat-circle"><span class="cat-emoji">🍂</span></div>
         <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Fungicide</span>
       </button>
-      <button data-cat="fertilizer" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:68px;background:transparent;border:0;cursor:pointer">
+      <button data-cat="fertilizer" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px;background:transparent;border:0;cursor:pointer">
         <div class="cat-circle"><span class="cat-emoji">🌱</span></div>
         <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Fertilizer</span>
       </button>
-      <button data-cat="herbicide" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:68px;background:transparent;border:0;cursor:pointer">
+      <button data-cat="herbicide" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px;background:transparent;border:0;cursor:pointer">
         <div class="cat-circle"><span class="cat-emoji">🌾</span></div>
         <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Herbicide</span>
       </button>
-      <button data-cat="combo" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:68px;background:transparent;border:0;cursor:pointer">
+      <button data-cat="herbimix" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-1.5" style="width:72px;background:transparent;border:0;cursor:pointer">
         <div class="cat-circle"><span class="cat-emoji">📦</span></div>
-        <span class="cat-label text-[11.5px] font-bold leading-tight" style="color:#0F172A">Combo</span>
+        <span class="cat-label text-[10.5px] font-bold leading-tight" style="color:#0F172A">Herbi-Mix</span>
       </button>
     </div>
   </div>
@@ -119,7 +120,7 @@
   <!-- TWO-COLUMN body -->
   <div class="flex" style="min-height:60vh">
     <!-- LEFT: sub-categories of the active main category -->
-    <aside id="subRail" class="flex-shrink-0" style="width:96px;background:#F1F5F9;border-right:1px solid #E5E7EB"></aside>
+    <aside id="subRail" class="flex-shrink-0" style="width:110px;background:#F1F5F9;border-right:1px solid #E5E7EB"></aside>
 
     <!-- RIGHT: product cards · same compact horizontal card style as homepage bestseller -->
     <main class="flex-1 min-w-0 p-3">
@@ -166,90 +167,111 @@
   </nav>
 
   <script>
-    // Category → sub-categories + product catalog
+    // Category → sub-categories + product catalog · subcategories carry an emoji + tinted bg pair that renders as a small image thumbnail in the left rail
     const CATS = {
       pesticide: {
         label: 'Pesticide',
         subs: [
-          { key:'all',         icon:'🐛', label:'All' },
-          { key:'aphid',       icon:'🦟', label:'Aphid' },
-          { key:'whitefly',    icon:'🪰', label:'Whitefly' },
-          { key:'thrips',      icon:'🐜', label:'Thrips' },
-          { key:'caterpillar', icon:'🐛', label:'Caterpillar' },
-          { key:'mite',        icon:'🕷️', label:'Mites' }
+          { key:'all',     icon:'🐛', bg:'#FEE2E2', label:'All' },
+          { key:'bio',     icon:'🐞', bg:'#DCFCE7', label:'Bio Insecticides' },
+          { key:'chem',    icon:'🧪', bg:'#DBEAFE', label:'Chemical Insecticides' },
+          { key:'organic', icon:'🌿', bg:'#D1FAE5', label:'Organic Insecticides' },
+          { key:'pest',    icon:'🦗', bg:'#FEF3C7', label:'Organic Pest Control' }
         ]
       },
       fungicide: {
         label: 'Fungicide',
         subs: [
-          { key:'all',           icon:'🍂', label:'All' },
-          { key:'mildew',        icon:'⚪', label:'Powdery mildew' },
-          { key:'leafspot',      icon:'🍃', label:'Leaf spot' },
-          { key:'blight',        icon:'🟤', label:'Blight' },
-          { key:'rust',          icon:'🟧', label:'Rust' },
-          { key:'rootrot',       icon:'🌿', label:'Root rot' }
+          { key:'all',      icon:'🍂', bg:'#FED7AA', label:'All' },
+          { key:'bio',      icon:'🍃', bg:'#DCFCE7', label:'Bio Fungicide' },
+          { key:'chem',     icon:'🧴', bg:'#E0E7FF', label:'Chemical Fungicide' },
+          { key:'chemins',  icon:'🧪', bg:'#DBEAFE', label:'Chemical Insecticides' }
         ]
       },
       fertilizer: {
         label: 'Fertilizer',
         subs: [
-          { key:'all',     icon:'🌱', label:'All' },
-          { key:'npk',     icon:'🧪', label:'NPK' },
-          { key:'micro',   icon:'💧', label:'Micronutrient' },
-          { key:'bio',     icon:'🌿', label:'Bio-fert' },
-          { key:'soil',    icon:'🪨', label:'Soil booster' }
+          { key:'all',     icon:'🌱', bg:'#DCFCE7', label:'All' },
+          { key:'bio',     icon:'🌿', bg:'#D1FAE5', label:'Bio Fertilizer' },
+          { key:'chemins', icon:'🧪', bg:'#DBEAFE', label:'Chemical Insecticides' },
+          { key:'hydro',   icon:'💧', bg:'#CFFAFE', label:'Hydroponic Nutrients' },
+          { key:'manure',  icon:'🟫', bg:'#FDE68A', label:'Manures & Soil' },
+          { key:'micro',   icon:'⚛️', bg:'#E9D5FF', label:'Micronutrient Fertilizer' },
+          { key:'npk',     icon:'🧫', bg:'#FBCFE8', label:'NPK Fertilizer' },
+          { key:'organic', icon:'🍃', bg:'#D1FAE5', label:'Organic Fertilizer' },
+          { key:'other',   icon:'📦', bg:'#F1F5F9', label:'Other Fertilizer' },
+          { key:'pgr',     icon:'📈', bg:'#FFEDD5', label:'Plant Growth Regulator' }
         ]
       },
       herbicide: {
         label: 'Herbicide',
         subs: [
-          { key:'all',       icon:'🌾', label:'All' },
-          { key:'selective', icon:'🎯', label:'Selective' },
-          { key:'nonsel',    icon:'⚡', label:'Non-selective' },
-          { key:'pre',       icon:'🌱', label:'Pre-emergent' }
+          { key:'all',  icon:'🌾', bg:'#FEF3C7', label:'All' },
+          { key:'herb', icon:'🌾', bg:'#FEF3C7', label:'Herbicides' }
         ]
       },
-      combo: {
-        label: 'Combo',
+      herbimix: {
+        label: 'Herbicide & other Products',
         subs: [
-          { key:'all',    icon:'📦', label:'All' },
-          { key:'crop',   icon:'🌾', label:'Crop combo' },
-          { key:'stage',  icon:'📅', label:'Stage combo' },
-          { key:'saver',  icon:'💰', label:'Value pack' }
+          { key:'all',     icon:'📦', bg:'#F1F5F9', label:'All' },
+          { key:'chemins', icon:'🧪', bg:'#DBEAFE', label:'Chemical Insecticides' },
+          { key:'herb',    icon:'🌾', bg:'#FEF3C7', label:'Herbicides' },
+          { key:'lab',     icon:'🧬', bg:'#E9D5FF', label:'Lab-Grade' }
         ]
       }
     };
 
     const PRODUCTS = [
-      // PESTICIDES
-      { cat:'pesticide', subs:['aphid','whitefly','thrips'], name:'Chakrawarti ZC', sub:'100 ml · Chloran. + Lambda-Cy.', target:'Kills aphid · whitefly', price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
-      { cat:'pesticide', subs:['aphid','whitefly'],          name:'Antivirus',       sub:'250 ml · Biostimulant',         target:'Stops leaf-virus',     price:327, mrp:425, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'pesticide', subs:['caterpillar','thrips'],      name:'Indoxa Strike',   sub:'100 ml · Indoxacarb 15.8%',     target:'Kills caterpillar',     price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
-      { cat:'pesticide', subs:['mite','aphid'],              name:'Mitex Pro',       sub:'100 ml · Fenazaquin 10%',       target:'Kills red mites',       price:296, mrp:390, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'pesticide', subs:['whitefly'],                  name:'White-Out 5G',    sub:'500 g · Acetamiprid 20%',       target:'Wipes out whitefly',    price:445, mrp:595, img:'../assets/Chakrawarti_nobg.png' },
+      // PESTICIDE
+      { cat:'pesticide', subs:['bio'],            name:'Neem-Shield Bio',  sub:'500 ml · Azadirachtin 1500ppm',  target:'Bio-control · aphid · whitefly', price:285, mrp:380, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'pesticide', subs:['bio'],            name:'Beauveria-Plus',   sub:'250 g · Beauveria bassiana',     target:'Bio-kills caterpillar',           price:325, mrp:435, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'pesticide', subs:['chem'],           name:'Chakrawarti ZC',   sub:'100 ml · Chloran. + Lambda-Cy.', target:'Kills aphid · whitefly',          price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'pesticide', subs:['chem'],           name:'Indoxa Strike',    sub:'100 ml · Indoxacarb 15.8%',      target:'Kills caterpillar',               price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'pesticide', subs:['chem'],           name:'White-Out 5G',     sub:'500 g · Acetamiprid 20%',        target:'Wipes out whitefly',              price:445, mrp:595, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'pesticide', subs:['organic'],        name:'PongamiaGuard',    sub:'500 ml · Pongamia oil 95%',      target:'Organic · sucking pests',         price:268, mrp:360, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'pesticide', subs:['organic'],        name:'Karanj-Power',     sub:'1 L · Karanja oil',              target:'Organic broad-spectrum',          price:312, mrp:420, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'pesticide', subs:['pest'],           name:'GarlicChilli Mix', sub:'500 ml · Garlic + chilli extract', target:'Organic pest repellent',         price:198, mrp:280, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'pesticide', subs:['pest'],           name:'PheroTrap-Pack',   sub:'10 traps · Pheromone lure',      target:'Traps moths · borers',            price:425, mrp:560, img:'../assets/AntiVirus_nobg.png' },
 
-      // FUNGICIDES
-      { cat:'fungicide', subs:['mildew','leafspot'],         name:'Azodharma',       sub:'100 ml · Azoxystrobin 23%',     target:'Stops powdery mildew',  price:310, mrp:420, img:'../assets/Humic_nobg.png' },
-      { cat:'fungicide', subs:['blight','leafspot'],         name:'Blightguard',     sub:'250 g · Mancozeb 75%',          target:'Stops late blight',     price:285, mrp:380, img:'../assets/Humic_nobg.png' },
-      { cat:'fungicide', subs:['rust'],                      name:'Rustaway',        sub:'100 g · Tebuconazole 25%',      target:'Removes leaf-rust',     price:362, mrp:490, img:'../assets/Humic_nobg.png' },
-      { cat:'fungicide', subs:['rootrot'],                   name:'RootShield',      sub:'500 ml · Trichoderma 1%',       target:'Protects roots',        price:248, mrp:340, img:'../assets/Humic_nobg.png' },
+      // FUNGICIDE
+      { cat:'fungicide', subs:['bio'],            name:'Trichoderma Bio',  sub:'1 kg · Trichoderma viride',      target:'Bio · root rot · wilt',           price:248, mrp:340, img:'../assets/Humic_nobg.png' },
+      { cat:'fungicide', subs:['bio'],            name:'PseudoShield',     sub:'500 g · Pseudomonas fluorescens',target:'Bio · soil-borne fungi',          price:285, mrp:385, img:'../assets/Humic_nobg.png' },
+      { cat:'fungicide', subs:['chem'],           name:'Azodharma',        sub:'100 ml · Azoxystrobin 23%',      target:'Stops powdery mildew',            price:310, mrp:420, img:'../assets/Humic_nobg.png' },
+      { cat:'fungicide', subs:['chem'],           name:'Blightguard',      sub:'250 g · Mancozeb 75%',           target:'Stops late blight',               price:285, mrp:380, img:'../assets/Humic_nobg.png' },
+      { cat:'fungicide', subs:['chem'],           name:'Rustaway',         sub:'100 g · Tebuconazole 25%',       target:'Removes leaf-rust',               price:362, mrp:490, img:'../assets/Humic_nobg.png' },
+      { cat:'fungicide', subs:['chemins'],        name:'Chakrawarti ZC',   sub:'100 ml · Chloran. + Lambda-Cy.', target:'Also stops sucking pests',        price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
 
-      // FERTILIZERS
-      { cat:'fertilizer', subs:['npk'],                      name:'NPK 19-19-19',    sub:'1 kg · Water-soluble',          target:'Balanced growth',       price:330, mrp:445, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['bio'],                      name:'Humic + Fulvic',  sub:'1 L · Humic 12% + Fulvic 8%',   target:'Boosts roots & soil',   price:376, mrp:520, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['micro'],                    name:'Micro-Max',       sub:'500 g · Multi-micronutrient',   target:'Fills nutrient gaps',   price:289, mrp:395, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['soil','bio'],               name:'Soil-Revive',     sub:'1 kg · Vermi + Humic',          target:'Wakes tired soil',      price:415, mrp:560, img:'../assets/Humic_nobg.png' },
+      // FERTILIZER
+      { cat:'fertilizer', subs:['bio'],           name:'Humic + Fulvic',   sub:'1 L · Humic 12% + Fulvic 8%',    target:'Bio · boosts roots & soil',       price:376, mrp:520, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['bio'],           name:'Azotobacter Plus', sub:'1 kg · N-fixing bacteria',       target:'Bio nitrogen supply',             price:285, mrp:395, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['chemins'],       name:'Antivirus',        sub:'250 ml · Biostimulant',          target:'Stops leaf-virus',                price:327, mrp:425, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'fertilizer', subs:['hydro'],         name:'HydroGrow A+B',    sub:'2× 1 L · A + B nutrient set',    target:'For hydroponics',                 price:599, mrp:799, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['hydro'],         name:'pH Balancer Kit',  sub:'500 ml · pH Up + Down',          target:'Holds hydroponic pH',             price:325, mrp:425, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['manure'],        name:'Vermi-Gold',       sub:'5 kg · Vermicompost',            target:'Enriches tired soil',             price:385, mrp:520, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['manure'],        name:'NeemKhali',        sub:'5 kg · Neem cake',               target:'Manure + pest deterrent',         price:415, mrp:560, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['micro'],         name:'Micro-Max',        sub:'500 g · Multi-micronutrient',    target:'Fills nutrient gaps',             price:289, mrp:395, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['micro'],         name:'Chelated-Zn',      sub:'500 g · Zn-EDTA 12%',            target:'Cures zinc deficiency',           price:325, mrp:445, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['npk'],           name:'NPK 19-19-19',     sub:'1 kg · Water-soluble',           target:'Balanced growth',                 price:330, mrp:445, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['npk'],           name:'NPK 12-61-0',      sub:'1 kg · Mono Ammonium Phosphate', target:'Boosts flowering',                price:348, mrp:465, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['organic'],       name:'CowDung-Compost',  sub:'10 kg · Organic compost',        target:'Organic soil food',               price:225, mrp:320, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['organic'],       name:'BoneMeal-Org',     sub:'5 kg · Phosphorus-rich',         target:'Organic P & Ca',                  price:298, mrp:410, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['other'],         name:'Silicon-Boost',    sub:'500 ml · Soluble silica',        target:'Strengthens stem walls',          price:268, mrp:360, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['pgr'],           name:'GA-3 Spray',       sub:'5 g · Gibberellic Acid 0.001%',  target:'Boosts fruit size',               price:185, mrp:260, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['pgr'],           name:'Cytokinin-Plus',   sub:'100 ml · 6-BAP based',           target:'Branching · flowering',           price:412, mrp:560, img:'../assets/Humic_nobg.png' },
 
-      // HERBICIDES
-      { cat:'herbicide', subs:['selective'],                 name:'WeedClear-S',     sub:'500 ml · 2,4-D Amine 58%',      target:'Kills broadleaf weeds', price:298, mrp:399, img:'../assets/Chakrawarti_nobg.png' },
-      { cat:'herbicide', subs:['nonsel'],                    name:'Glypho-Power',    sub:'1 L · Glyphosate 41%',          target:'Clears any green weed', price:368, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
-      { cat:'herbicide', subs:['pre'],                       name:'Pre-Lock 40',     sub:'1 L · Pendimethalin 30%',       target:'Stops weeds at root',   price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
+      // HERBICIDE
+      { cat:'herbicide',  subs:['herb'],          name:'Glypho-Power',     sub:'1 L · Glyphosate 41%',           target:'Clears any green weed',           price:368, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'herbicide',  subs:['herb'],          name:'WeedClear-S',      sub:'500 ml · 2,4-D Amine 58%',       target:'Kills broadleaf weeds',           price:298, mrp:399, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'herbicide',  subs:['herb'],          name:'Pre-Lock 40',      sub:'1 L · Pendimethalin 30%',        target:'Stops weeds at root',             price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'herbicide',  subs:['herb'],          name:'Atrazine-50',      sub:'500 g · Atrazine 50% WP',        target:'Selective for maize',             price:285, mrp:385, img:'../assets/Chakrawarti_nobg.png' },
 
-      // COMBOS
-      { cat:'combo', subs:['crop'],                          name:'Tomato Combo',    sub:'3-pack · Spray + feed',         target:'Full-stage Tomato kit', price:849, mrp:1180, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'combo', subs:['crop'],                          name:'Chilli Combo',    sub:'3-pack · Spray + feed',         target:'Full-stage Chilli kit', price:799, mrp:1100, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'combo', subs:['stage'],                         name:'Flowering Kit',   sub:'2-pack · Foliar + root',        target:'For flowering stage',   price:599, mrp:820, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'combo', subs:['saver'],                         name:'Saver-5',         sub:'5-pack mixed',                  target:'Save ₹450',             price:1149, mrp:1599, img:'../assets/AntiVirus_nobg.png' }
+      // HERBI-MIX (Herbicide & other Products)
+      { cat:'herbimix',   subs:['chemins'],       name:'Indoxa Strike',    sub:'100 ml · Indoxacarb 15.8%',      target:'Kills caterpillar',               price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'herbimix',   subs:['chemins'],       name:'Acephate-75',      sub:'500 g · Acephate 75% SP',        target:'Broad-spectrum insecticide',      price:298, mrp:395, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'herbimix',   subs:['herb'],          name:'Glypho-Power',     sub:'1 L · Glyphosate 41%',           target:'Clears any green weed',           price:368, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'herbimix',   subs:['herb'],          name:'WeedClear-S',      sub:'500 ml · 2,4-D Amine 58%',       target:'Kills broadleaf weeds',           price:298, mrp:399, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'herbimix',   subs:['lab'],           name:'NPK Tester Pro',   sub:'1 kit · Lab-grade soil test',    target:'Lab-grade analysis',              price:1499, mrp:1899, img:'../assets/AntiVirus_nobg.png' },
+      { cat:'herbimix',   subs:['lab'],           name:'pH/EC Meter',      sub:'1 device · Digital probe',       target:'Lab-grade pH + EC',               price:1199, mrp:1599, img:'../assets/AntiVirus_nobg.png' }
     ];
 
     const cart = new Map();
@@ -273,8 +295,8 @@
       const cat = CATS[activeCat];
       rail.innerHTML = cat.subs.map(s =>
         '<button class="subcat-btn" data-sub="'+s.key+'" aria-pressed="'+(s.key===activeSub?'true':'false')+'">'
-        + '<span class="subcat-ic">'+s.icon+'</span>'
-        + s.label
+        + '<span class="subcat-ic" style="background:'+(s.bg||'#F1F5F9')+'">'+s.icon+'</span>'
+        + '<span>'+s.label+'</span>'
         + '</button>'
       ).join('');
       rail.querySelectorAll('[data-sub]').forEach(btn => {

@@ -1890,16 +1890,32 @@
       function pex(id){ return 'https://images.weserv.nl/?url=' + encodeURIComponent(PEX + id + '/pexels-photo-' + id + '.jpeg?auto=compress&w=400') + '&w=240&h=240&fit=cover&a=attention&bg=white&we=1'; }
       function uns(id){ return 'https://images.weserv.nl/?url=' + encodeURIComponent('images.unsplash.com/photo-' + id + '?w=400&h=400&fit=crop') + '&w=240&h=240&fit=cover&a=attention&bg=white&we=1'; }
 
+      // Full 23-crop list per user's "My Farm" reference screen · ordered alphabetically except the most popular Indian crops (tomato/chilli/wheat etc) get earlier slots for the inline picker · all photos curl-verified at commit time
       const CROP_META = {
-        tomato:    { label:'Tomato',    emoji:'🍅', bg:'#FEE2E2', img: pex('533280') },
-        chilli:    { label:'Chilli',    emoji:'🌶️', bg:'#FFEDD5', img: pex('1313267') },
-        wheat:     { label:'Wheat',     emoji:'🌾', bg:'#FEF3C7', img: uns('1574323347407-f5e1ad6d020b') },
-        maize:     { label:'Maize',     emoji:'🌽', bg:'#FEF9C3', img: pex('547263') },
-        cotton:    { label:'Cotton',    emoji:'☁️', bg:'#F1F5F9', img: pex('102104') },
-        sugarcane: { label:'Sugarcane', emoji:'🎋', bg:'#DCFCE7', img: pex('1342988') },
-        paddy:     { label:'Paddy',     emoji:'🌱', bg:'#ECFDF5', img: pex('1029615') },
-        onion:     { label:'Onion',     emoji:'🧅', bg:'#FCE7F3', img: UNS + 'photo-1618512496248-a07fe83aa8cb' + Q },
-        potato:    { label:'Potato',    emoji:'🥔', bg:'#FEF3C7', img: UNS + 'photo-1518977676601-b53f82aba655' + Q },
+        tomato:        { label:'Tomato',        emoji:'🍅', bg:'#FEE2E2', img: pex('533280') },
+        chilli:        { label:'Chilli',        emoji:'🌶️', bg:'#FFEDD5', img: pex('1313267') },
+        wheat:         { label:'Wheat',         emoji:'🌾', bg:'#FEF3C7', img: uns('1574323347407-f5e1ad6d020b') },
+        maize:         { label:'Maize',         emoji:'🌽', bg:'#FEF9C3', img: pex('547263') },
+        onion:         { label:'Onion',         emoji:'🧅', bg:'#FCE7F3', img: UNS + 'photo-1618512496248-a07fe83aa8cb' + Q },
+        potato:        { label:'Potato',        emoji:'🥔', bg:'#FEF3C7', img: UNS + 'photo-1518977676601-b53f82aba655' + Q },
+        sugarcane:     { label:'Sugarcane',     emoji:'🎋', bg:'#DCFCE7', img: pex('1342988') },
+        banana:        { label:'Banana',        emoji:'🍌', bg:'#FEF9C3', img: pex('1093038') },
+        mango:         { label:'Mango',         emoji:'🥭', bg:'#FED7AA', img: pex('2294471') },
+        grapes:        { label:'Grapes',        emoji:'🍇', bg:'#F3E8FF', img: pex('4022082') },
+        orange:        { label:'Orange',        emoji:'🍊', bg:'#FFEDD5', img: pex('2255935') },
+        watermelon:    { label:'Watermelon',    emoji:'🍉', bg:'#FECACA', img: pex('1414815') },
+        papaya:        { label:'Papaya',        emoji:'🥭', bg:'#FED7AA', img: pex('5837750') },
+        pomegranate:   { label:'Pomegranate',   emoji:'🍎', bg:'#FEE2E2', img: pex('5945736') },
+        brinjal:       { label:'Brinjal',       emoji:'🍆', bg:'#EDE9FE', img: pex('321551') },
+        cauliflower:   { label:'Cauliflower',   emoji:'🥦', bg:'#FEF3C7', img: pex('5057481') },
+        cabbage:       { label:'Cabbage',       emoji:'🥬', bg:'#DCFCE7', img: pex('1656669') },
+        okra:          { label:'Okra',          emoji:'🌿', bg:'#DCFCE7', img: pex('4187609') },
+        garlic:        { label:'Garlic',        emoji:'🧄', bg:'#F5F5F4', img: pex('1340116') },
+        cumin:         { label:'Cumin',         emoji:'🌱', bg:'#FEF3C7', img: pex('4198015') },
+        cardamom:      { label:'Cardamom',      emoji:'🌿', bg:'#D1FAE5', img: pex('5908158') },
+        chickpea:      { label:'Chickpea',      emoji:'🫘', bg:'#FEF3C7', img: pex('4198972') },
+        soyabean:      { label:'Soyabean',      emoji:'🫘', bg:'#DCFCE7', img: pex('1199957') },
+        blackgram:     { label:'Black Gram',    emoji:'🫘', bg:'#E5E7EB', img: pex('7195747') },
       };
 
       const picker   = document.getElementById('cropInlinePicker');

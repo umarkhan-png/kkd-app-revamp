@@ -168,10 +168,15 @@
     50%      { transform: scale(1.02); box-shadow: 0 10px 26px -6px rgba(5,150,105,0.7),0 3px 8px rgba(0,0,0,0.1); }
   }
 
-  /* Sticky header wraps system status + KKD info bar so the branded header stays pinned on scroll instead of disappearing · gets the emerald theme fill so the brand identity holds visually · sticky-status inside it is no longer sticky/white on its own */
-  .sticky-header { position: sticky; top: 0; z-index: 65; background: linear-gradient(180deg, #047857 0%, #059669 60%, #0E7A4E 100%); box-shadow: 0 1px 0 rgba(0,0,0,0.04); }
-  .sticky-status { background: transparent; }
-  .sticky-actions { position: sticky; top: 96px; z-index: 60; background: #FFFFFF; }
+  /* Status bar — transparent at top (top-theme gradient shows through); turns white only when scrolled · this is the pre-v103 original behavior (info bar scrolls away with content; only the system status bar pins) */
+  .sticky-status { position: sticky; top: 0; z-index: 70; background: transparent; transition: background .2s ease, box-shadow .2s ease; }
+  body.scrolled .sticky-status { background: #FFFFFF; box-shadow: 0 1px 0 rgba(15,23,42,0.04); }
+  body.scrolled .top-theme[data-theme="green"] .sticky-status { color: #0F172A; }
+  body.scrolled .top-theme[data-theme="green"] .sticky-status svg path,
+  body.scrolled .top-theme[data-theme="green"] .sticky-status svg rect { stroke: #0F172A !important; }
+  body.scrolled .top-theme[data-theme="green"] .sticky-status svg rect[fill] { fill: #0F172A; }
+  body.scrolled .top-theme[data-theme="green"] .sticky-status svg rect[stroke][stroke-width][fill="none"] { fill: none; }
+  .sticky-actions { position: sticky; top: 32px; z-index: 60; background: #FFFFFF; }
   /* Delivery tile compact state — when body.scrolled, sub-line hides, icon + paddings shrink so it doesn't eat too much height while staying frozen below the categories */
   .delivery-tile { transition: padding .25s ease; }
   body.scrolled .delivery-tile { padding-top: 4px; padding-bottom: 4px; }
@@ -248,8 +253,6 @@
   <span class="snow-flake" style="left:86%;animation-delay:1.7s;font-size:14px">❅</span>
   <span class="snow-flake" style="left:94%;animation-delay:.4s;font-size:11px">❄</span>
 
-  <!-- Sticky header wrapper · system status row + info bar (KKD logo + Deliver to + coin) · stays pinned at the top with the emerald theme fill so the brand identity remains visible on scroll instead of disappearing -->
-  <div class="sticky-header">
   <!-- Status bar (sticky) -->
   <div class="sticky-status flex items-center justify-between px-4 pt-3 pb-2 text-[12px] font-semibold text-[#0F172A]">
     <span>9:41</span>
@@ -279,7 +282,6 @@
       </div>
     </div>
   </div>
-  </div><!-- /sticky-header -->
 
   <!-- Top status banner — auto-rotates rain → christmas → order every 4s (in-place text swap) -->
   <a href="#" id="topStatusBanner" class="theme-banner rain-banner nu" style="flex-wrap:nowrap;transition:opacity .3s ease">
@@ -463,32 +465,6 @@
       </a>
     </section>
 
-    <!-- User input widget — quick poll-style question that captures profile data inline · this is the pattern: 1 question, 4 chip options, tap to select, persists to localStorage so it doesn't re-ask · more questions can be added by extending the data-q attribute -->
-    <section class="mt-4 px-4">
-      <div class="rounded-2xl p-4 relative" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 2px 10px -4px rgba(5,150,105,0.18)">
-        <div class="flex items-start gap-2 mb-1">
-          <i class="fa-solid fa-circle-question text-[16px] flex-shrink-0 mt-0.5" style="color:#059669"></i>
-          <div class="flex-1 min-w-0">
-            <div class="text-[14.5px] font-extrabold text-[#0F172A]">How many acres of land do you farm?</div>
-            <div class="text-[11.5px] mt-0.5" style="color:#64748B">Helps us suggest the right product pack sizes</div>
-          </div>
-        </div>
-        <div id="acreOptions" class="flex flex-wrap gap-2 mt-3" data-q="acres">
-          <button class="acre-opt nu px-3 py-2 rounded-lg text-[12.5px] font-semibold flex items-center gap-1.5" data-val="lt1" style="background:#F8FAFC;color:#0F172A;border:1.5px solid #E5E7EB">
-            <i class="fa-solid fa-seedling text-[10px]" style="color:#64748B"></i> &lt; 1 acre
-          </button>
-          <button class="acre-opt nu px-3 py-2 rounded-lg text-[12.5px] font-semibold flex items-center gap-1.5" data-val="1-5" style="background:#F8FAFC;color:#0F172A;border:1.5px solid #E5E7EB">
-            <i class="fa-solid fa-tractor text-[10px]" style="color:#64748B"></i> 1 – 5 acres
-          </button>
-          <button class="acre-opt nu px-3 py-2 rounded-lg text-[12.5px] font-semibold flex items-center gap-1.5" data-val="5-10" style="background:#F8FAFC;color:#0F172A;border:1.5px solid #E5E7EB">
-            <i class="fa-solid fa-warehouse text-[10px]" style="color:#64748B"></i> 5 – 10 acres
-          </button>
-          <button class="acre-opt nu px-3 py-2 rounded-lg text-[12.5px] font-semibold flex items-center gap-1.5" data-val="gt10" style="background:#F8FAFC;color:#0F172A;border:1.5px solid #E5E7EB">
-            <i class="fa-solid fa-mountain-sun text-[10px]" style="color:#64748B"></i> 10+ acres
-          </button>
-        </div>
-      </div>
-    </section>
 
     <!-- ⚡ FLASH DEALS · KKD style with extra visual flair · price/MRP/OFF% prominent · wider cards so text doesn't truncate -->
     <section class="mt-6">
@@ -1269,6 +1245,36 @@
       </div>
     </section>
 
+    <!-- User input widget — compact poll-style question card · close X dismisses + persists kkd.q.acres.dismissed so it stays hidden · much tighter padding/typography than before -->
+    <section id="acresWidget" class="mt-4 px-4">
+      <div class="rounded-xl p-3 relative" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15)">
+        <button id="acresClose" class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0" aria-label="Dismiss">
+          <i class="fa-solid fa-xmark text-[11px]" style="color:#475569"></i>
+        </button>
+        <div class="flex items-start gap-1.5 pr-7">
+          <i class="fa-solid fa-circle-question text-[14px] flex-shrink-0 mt-0.5" style="color:#059669"></i>
+          <div class="flex-1 min-w-0">
+            <div class="text-[13.5px] font-extrabold text-[#0F172A] leading-tight">How many acres of land do you farm?</div>
+            <div class="text-[11px] mt-0.5 leading-tight" style="color:#64748B">Helps us suggest the right pack sizes</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-1.5 mt-2.5" data-q="acres">
+          <button class="acre-opt nu px-2.5 py-1.5 rounded-lg text-[12px] font-semibold flex items-center gap-1" data-val="lt1" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">
+            <i class="fa-solid fa-seedling text-[9px]" style="color:#64748B"></i> &lt; 1 acre
+          </button>
+          <button class="acre-opt nu px-2.5 py-1.5 rounded-lg text-[12px] font-semibold flex items-center gap-1" data-val="1-5" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">
+            <i class="fa-solid fa-tractor text-[9px]" style="color:#64748B"></i> 1 – 5 acres
+          </button>
+          <button class="acre-opt nu px-2.5 py-1.5 rounded-lg text-[12px] font-semibold flex items-center gap-1" data-val="5-10" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">
+            <i class="fa-solid fa-warehouse text-[9px]" style="color:#64748B"></i> 5 – 10 acres
+          </button>
+          <button class="acre-opt nu px-2.5 py-1.5 rounded-lg text-[12px] font-semibold flex items-center gap-1" data-val="gt10" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">
+            <i class="fa-solid fa-mountain-sun text-[9px]" style="color:#64748B"></i> 10+ acres
+          </button>
+        </div>
+      </div>
+    </section>
+
     <!-- Most Selling in Indore — Bestseller-style tiles (grey image area edge-to-edge) + Flash-Sale-style emerald top strip carrying the "X bought last week" social-proof badge -->
     <section class="mt-8">
       <div class="px-4 mb-3">
@@ -1852,8 +1858,21 @@
       closeModalFn();
     });
 
-    // Inline poll-style input widgets — tap a chip option, it goes emerald-selected + persists the answer to localStorage so we don't re-prompt next visit · single-select within each [data-q] group
+    // Inline poll-style input widgets — tap a chip option, it goes emerald-selected + persists the answer to localStorage so we don't re-prompt next visit · single-select within each [data-q] group · close X dismisses + persists kkd.q.<key>.dismissed so the widget stays hidden across visits
     (function(){
+      // Acres widget — stay hidden if previously dismissed
+      const acresWidget = document.getElementById('acresWidget');
+      if (acresWidget && localStorage.getItem('kkd.q.acres.dismissed') === '1') {
+        acresWidget.style.display = 'none';
+      }
+      const acresClose = document.getElementById('acresClose');
+      if (acresClose && acresWidget) {
+        acresClose.addEventListener('click', function(e){
+          e.stopPropagation();
+          acresWidget.style.display = 'none';
+          localStorage.setItem('kkd.q.acres.dismissed', '1');
+        });
+      }
       document.querySelectorAll('[data-q]').forEach(function(group){
         const qKey = 'kkd.q.' + group.dataset.q;
         const saved = localStorage.getItem(qKey);

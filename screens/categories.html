@@ -6,8 +6,9 @@
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   html,body{margin:0;padding:0}
-  /* Single white surface · no competing tints between body, sticky bars, main column · only the left sub-rail carries a faint grey so it visually separates */
-  body{min-height:100vh;background:#FFFFFF;color:#0F172A;padding-bottom:88px}
+  /* Page is locked to viewport height · only the product column (and the sub-rail) scrolls · everything above stays fixed in view */
+  html,body{height:100%}
+  body{background:#FFFFFF;color:#0F172A;display:flex;flex-direction:column;overflow:hidden}
   .img-blend{mix-blend-mode:multiply}
   .tnum{font-variant-numeric:tabular-nums}
   .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -17,9 +18,10 @@
   /* Top main-cat circles · home-page parity · uniform 72px circle, 36px SVG, emoji 34px · selected = solid emerald fill with white-tinted icon + emerald label */
   .cat-tile{transition:transform .15s ease}
   .cat-tile:active{transform:scale(.96)}
-  .cat-circle{width:72px;height:72px;border-radius:9999px;background:#F1F5F9;border:1.5px solid #E2E8F0;display:flex;align-items:center;justify-content:center;transition:all .25s ease}
+  .cat-circle{width:72px;height:72px;border-radius:9999px;background:#F1F5F9;border:1.5px solid #E2E8F0;display:flex;align-items:center;justify-content:center;transition:all .35s ease}
   .cat-emoji{font-size:34px;line-height:1}
   .cat-svg{width:36px;height:36px;display:block}
+  .cat-label{transition:color .35s ease}
   .cat-tile[aria-pressed="true"] .cat-circle{background:linear-gradient(135deg,#047857 0%,#10B981 100%);border-color:#047857;box-shadow:0 8px 18px -4px rgba(5,150,105,0.45),0 0 0 4px rgba(5,150,105,0.12)}
   .cat-tile[aria-pressed="true"] .cat-emoji{filter:drop-shadow(0 1px 1px rgba(0,0,0,0.25))}
   .cat-tile[aria-pressed="true"] .cat-label{color:#047857;font-weight:800}
@@ -29,11 +31,26 @@
   .cat-tile[aria-pressed="true"] .cat-svg [fill="#15803D"]{fill:#FFFFFF}
   .cat-tile[aria-pressed="true"] .cat-svg [stroke="#15803D"]{stroke:#FFFFFF}
 
-  /* Left sub-cat rail · subtle grey separator · compact thumbnail + wrapping label */
-  .subcat-btn{display:flex;flex-direction:column;align-items:center;gap:5px;width:100%;text-align:center;padding:11px 4px;font-size:10.5px;font-weight:600;color:#475569;border-left:3px solid transparent;background:transparent;transition:all .15s ease;line-height:1.15;cursor:pointer}
+  /* End-of-list state · the top category section fills with solid emerald to redirect the user's focus back up · labels flip to white, unselected circles tint to white-on-emerald, selected stays prominent on top */
+  .stk-main{transition:background .45s ease}
+  body.at-end .stk-main{background:linear-gradient(180deg,#047857 0%,#059669 60%,#10B981 100%);border-bottom-color:transparent}
+  body.at-end .cat-label{color:#FFFFFF}
+  body.at-end .cat-tile[aria-pressed="false"] .cat-circle{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.3);box-shadow:none}
+  body.at-end .cat-tile[aria-pressed="false"] .cat-svg [fill="#22C55E"],
+  body.at-end .cat-tile[aria-pressed="false"] .cat-svg [fill="#16A34A"],
+  body.at-end .cat-tile[aria-pressed="false"] .cat-svg [fill="#15803D"]{fill:#FFFFFF}
+  body.at-end .cat-tile[aria-pressed="false"] .cat-svg [stroke="#15803D"]{stroke:#FFFFFF}
+  body.at-end .cat-tile[aria-pressed="true"] .cat-circle{background:#FFFFFF;border-color:#FFFFFF;box-shadow:0 10px 24px -4px rgba(0,0,0,0.25)}
+  body.at-end .cat-tile[aria-pressed="true"] .cat-svg [fill="#22C55E"],
+  body.at-end .cat-tile[aria-pressed="true"] .cat-svg [fill="#16A34A"],
+  body.at-end .cat-tile[aria-pressed="true"] .cat-svg [fill="#15803D"]{fill:#15803D}
+  body.at-end .cat-tile[aria-pressed="true"] .cat-svg [stroke="#15803D"]{stroke:#15803D}
+
+  /* Left sub-cat rail · subtle grey separator · slightly larger label (11.5px) and thumbnail (42px) for legibility */
+  .subcat-btn{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;text-align:center;padding:12px 4px;font-size:11.5px;font-weight:600;color:#475569;border-left:3px solid transparent;background:transparent;transition:all .15s ease;line-height:1.2;cursor:pointer}
   .subcat-btn[aria-pressed="true"]{background:#FFFFFF;color:#047857;border-left-color:#059669;font-weight:800}
   .subcat-btn:not([aria-pressed="true"]):hover{background:rgba(5,150,105,0.04)}
-  .subcat-ic{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;font-size:19px;line-height:1;border:1px solid rgba(15,23,42,0.06);box-shadow:0 1px 3px rgba(15,23,42,0.05)}
+  .subcat-ic{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:10px;font-size:20px;line-height:1;border:1px solid rgba(15,23,42,0.06);box-shadow:0 1px 3px rgba(15,23,42,0.05)}
   .subcat-btn[aria-pressed="true"] .subcat-ic{box-shadow:0 4px 10px -2px rgba(5,150,105,0.35);transform:scale(1.04)}
 
   /* Filter pills · roomier · taller · tap opens a bottom modal */
@@ -64,16 +81,23 @@
   .qty-btn{width:34px;height:36px;display:inline-flex;align-items:center;justify-content:center;color:#FFFFFF;background:transparent;border:0;font-size:18px;font-weight:700;cursor:pointer}
   .qty-num{flex:1;text-align:center;font-size:14px;font-weight:700}
 
-  /* Cart bar · full-width by default · on scroll shrinks to a centred pill (matches home pattern) */
+  /* Cart bar · full-width by default · on scroll (of the product column) shrinks to a centred pill (matches home pattern) */
   #cartBar{position:fixed;left:12px;right:12px;bottom:84px;z-index:80;background:#0F172A;color:#FFFFFF;display:none;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:18px;box-shadow:0 14px 30px -10px rgba(0,0,0,0.35);text-decoration:none;animation:cartIn .35s cubic-bezier(.34,1.56,.64,1);transition:left .3s ease,right .3s ease,padding .3s ease,border-radius .3s ease,transform .3s ease,max-width .3s ease}
   #cartBar.compact{left:50%!important;right:auto!important;transform:translateX(-50%);padding:8px 16px!important;border-radius:999px!important;gap:10px;max-width:92%}
   #cartBar.compact .cart-view-label{display:none}
   #cartBar.compact .cart-summary{gap:8px!important}
   @keyframes cartIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 
-  /* Sticky stack · pure white so it doesn't read as a separate panel */
-  .stk-main{position:sticky;top:0;z-index:30;background:#FFFFFF;border-bottom:1px solid #F1F5F9}
-  .stk-filter{position:sticky;z-index:25;background:#FFFFFF;border-bottom:1px solid #F1F5F9}
+  /* Top stack · static (no longer sticky since the page itself is locked) */
+  .stk-main{background:#FFFFFF;border-bottom:1px solid #F1F5F9;flex-shrink:0}
+  .stk-filter{background:#FFFFFF;border-bottom:1px solid #F1F5F9;flex-shrink:0}
+
+  /* Two-column body · flex:1 of the viewport-height column · each pane scrolls independently */
+  .cat-body{flex:1;display:flex;min-height:0}
+  .cat-body aside{overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .cat-body main{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:160px}
+  .cat-body aside::-webkit-scrollbar,
+  .cat-body main::-webkit-scrollbar{width:0;display:none}
 
   /* Bottom sheet modal */
   .sheet-wrap{position:fixed;inset:0;z-index:95;display:none}
@@ -106,12 +130,15 @@
     </div>
   </div>
 
-  <!-- Header · title only -->
-  <div class="px-4 pt-3 pb-3 flex items-center gap-3">
+  <!-- Header · back · title · search · all in one row -->
+  <div class="px-4 pt-3 pb-3 flex items-center gap-3" style="flex-shrink:0">
     <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB">
       <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
     </button>
-    <h1 class="text-[20px] font-extrabold leading-tight" style="color:#0F172A">Shop by Category</h1>
+    <h1 class="flex-1 text-[20px] font-extrabold leading-tight" style="color:#0F172A">Shop by Category</h1>
+    <a href="search.html" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB;text-decoration:none">
+      <i class="fa-solid fa-magnifying-glass text-[14px]" style="color:#0F172A"></i>
+    </a>
   </div>
 
   <!-- TOP: Main 5 categories · SAME SVG illustrations as homepage · selected = solid emerald circle -->
@@ -204,10 +231,10 @@
     </div>
   </div>
 
-  <!-- TWO-COLUMN body -->
-  <div class="flex" style="min-height:60vh">
-    <aside id="subRail" class="flex-shrink-0" style="width:96px;background:#F8FAFC;border-right:1px solid #E5E7EB"></aside>
-    <main class="flex-1 min-w-0 p-3">
+  <!-- TWO-COLUMN body · flex:1 of viewport · each pane scrolls independently -->
+  <div class="cat-body">
+    <aside id="subRail" class="flex-shrink-0" style="width:100px;background:#F8FAFC;border-right:1px solid #E5E7EB"></aside>
+    <main id="productMain" class="flex-1 min-w-0 p-3">
       <div id="productList" class="pgrid"></div>
     </main>
   </div>
@@ -414,13 +441,16 @@
     let activeSort = 'pop';
     const filters = { price:null, brand:null, avail:new Set() };
 
-    // Main-cat tile clicks
+    // Main-cat tile clicks · also clear the at-end green-fill if user is switching from a fully-scrolled state
     document.querySelectorAll('[data-cat]').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed','false'));
         btn.setAttribute('aria-pressed','true');
         activeCat = btn.dataset.cat;
         activeSub = 'all';
+        document.body.classList.remove('at-end');
+        const pm = document.getElementById('productMain');
+        if (pm) pm.scrollTop = 0;
         renderSubs();
         renderProducts();
       });
@@ -533,12 +563,18 @@
       document.getElementById('cartCount').textContent = count + (count > 1 ? ' items' : ' item');
     }
 
-    // Cart wrap-on-scroll · matches home pattern
-    window.addEventListener('scroll', () => {
+    // The page is locked; only the product column scrolls · listen on that element instead of window · also toggles body.at-end for the green-fill category section when user hits the bottom
+    const productMain = document.getElementById('productMain');
+    productMain.addEventListener('scroll', () => {
       const bar = document.getElementById('cartBar');
-      if (!bar || bar.style.display === 'none') return;
-      if (window.scrollY > 80) bar.classList.add('compact');
-      else bar.classList.remove('compact');
+      if (bar && bar.style.display !== 'none') {
+        if (productMain.scrollTop > 80) bar.classList.add('compact');
+        else bar.classList.remove('compact');
+      }
+      // Near the end of the product list · light up the category section green so the user gets pulled back up
+      const distFromBottom = productMain.scrollHeight - (productMain.scrollTop + productMain.clientHeight);
+      if (distFromBottom < 80) document.body.classList.add('at-end');
+      else document.body.classList.remove('at-end');
     });
 
     // ----- Bottom-sheet modals (Sort + Filter) -----
@@ -625,17 +661,8 @@
       document.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === activeCat ? 'true' : 'false'));
     }
 
-    // Compute sticky-filter offset based on header + main-cat heights so it pins right under them
-    function alignStickyFilter(){
-      const stkMain = document.querySelector('.stk-main');
-      const stkFilter = document.querySelector('.stk-filter');
-      if (stkMain && stkFilter) stkFilter.style.top = stkMain.offsetHeight + 'px';
-    }
-    window.addEventListener('resize', alignStickyFilter);
-
     renderSubs();
     renderProducts();
     renderSortOptions();
-    alignStickyFilter();
   </script>
 </body></html>

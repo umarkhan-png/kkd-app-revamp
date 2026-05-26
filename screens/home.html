@@ -1859,19 +1859,21 @@
 
     // Shop-by-Crop inline picker — every crop in CROP_META is a chip · multi-select · ✓ tick badge · "More" chip at end · bigger crisp photos (w=200&q=85, 56x56 circle) · stateful CTA that visually changes when crops are selected so the affordance is obvious
     (function(){
-      // All photos resolved through images.weserv.nl which proxies + center-crops + applies a white bg fill so any dark edges from the source get neutralized · &we=1 strips webp passthrough so older browsers still work · onion + potato URLs kept as-is since user confirmed those already look right
+      // Pexels CDN for 6 crops where prior Unsplash IDs were either 404 or framed as landscapes (not close-ups) · routed via images.weserv.nl proxy with smart-attention crop + white bg fill so any edge artifacts get cleaned up · onion + potato kept on the working Unsplash URLs the user confirmed look right · wheat keeps the working Unsplash close-up from v98
       const UNS = 'https://images.unsplash.com/';
       const Q   = '?w=400&h=400&q=85&fit=crop&crop=center&auto=format';
-      function tile(src){ return 'https://images.weserv.nl/?url=' + encodeURIComponent(src.replace('https://','')) + '&w=240&h=240&fit=cover&a=attention&bg=white&we=1'; }
+      const PEX = 'images.pexels.com/photos/';
+      function pex(id){ return 'https://images.weserv.nl/?url=' + encodeURIComponent(PEX + id + '/pexels-photo-' + id + '.jpeg?auto=compress&w=400') + '&w=240&h=240&fit=cover&a=attention&bg=white&we=1'; }
+      function uns(id){ return 'https://images.weserv.nl/?url=' + encodeURIComponent('images.unsplash.com/photo-' + id + '?w=400&h=400&fit=crop') + '&w=240&h=240&fit=cover&a=attention&bg=white&we=1'; }
 
       const CROP_META = {
-        tomato:    { label:'Tomato',    emoji:'🍅', bg:'#FEE2E2', img: tile(UNS + 'photo-1546470427-227df1e3fe7d' + Q) },
-        chilli:    { label:'Chilli',    emoji:'🌶️', bg:'#FFEDD5', img: tile(UNS + 'photo-1599987662083-b7d5e6ab17d3' + Q) },
-        wheat:     { label:'Wheat',     emoji:'🌾', bg:'#FEF3C7', img: tile(UNS + 'photo-1574323347407-f5e1ad6d020b' + Q) },
-        maize:     { label:'Maize',     emoji:'🌽', bg:'#FEF9C3', img: tile(UNS + 'photo-1601493700631-2b16ec4b4716' + Q) },
-        cotton:    { label:'Cotton',    emoji:'☁️', bg:'#F1F5F9', img: tile(UNS + 'photo-1564013434775-f71db0030976' + Q) },
-        sugarcane: { label:'Sugarcane', emoji:'🎋', bg:'#DCFCE7', img: tile(UNS + 'photo-1610499611100-d7a7a8a89776' + Q) },
-        paddy:     { label:'Paddy',     emoji:'🌱', bg:'#ECFDF5', img: tile(UNS + 'photo-1604742763100-1aaccc0e8b65' + Q) },
+        tomato:    { label:'Tomato',    emoji:'🍅', bg:'#FEE2E2', img: pex('533280') },
+        chilli:    { label:'Chilli',    emoji:'🌶️', bg:'#FFEDD5', img: pex('1313267') },
+        wheat:     { label:'Wheat',     emoji:'🌾', bg:'#FEF3C7', img: uns('1574323347407-f5e1ad6d020b') },
+        maize:     { label:'Maize',     emoji:'🌽', bg:'#FEF9C3', img: pex('547263') },
+        cotton:    { label:'Cotton',    emoji:'☁️', bg:'#F1F5F9', img: pex('102104') },
+        sugarcane: { label:'Sugarcane', emoji:'🎋', bg:'#DCFCE7', img: pex('1342988') },
+        paddy:     { label:'Paddy',     emoji:'🌱', bg:'#ECFDF5', img: pex('1029615') },
         onion:     { label:'Onion',     emoji:'🧅', bg:'#FCE7F3', img: UNS + 'photo-1618512496248-a07fe83aa8cb' + Q },
         potato:    { label:'Potato',    emoji:'🥔', bg:'#FEF3C7', img: UNS + 'photo-1518977676601-b53f82aba655' + Q },
       };

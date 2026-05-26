@@ -179,6 +179,8 @@
   body.scrolled .delivery-tile { padding-top: 5px; padding-bottom: 5px; }
   body.scrolled .delivery-tile .dt-statusrow { margin-bottom: 0; }
   body.scrolled .delivery-tile .dt-detail { display: none; }
+  /* On scroll-compact, surface the order ID inline next to the status pill so the user still knows which order is moving */
+  body.scrolled .delivery-tile .dt-compact-id { display: inline !important; }
   /* Pulsing dot for live status */
   @keyframes dtPulse { 0% { transform: scale(1); opacity: 0.75; } 100% { transform: scale(2.4); opacity: 0; } }
   /* Truck icon bounce for current stage */
@@ -277,9 +279,9 @@
       </div>
     </button>
     <div class="flex items-center gap-2 flex-shrink-0">
-      <div class="flex items-center gap-1.5 h-10 px-3 rounded-full" style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgba(15,23,42,0.04)">
-        <i class="fa-solid fa-coins text-[14px]" style="color:#D9A441"></i>
-        <span class="text-[14px] font-extrabold tnum" style="color:#0F172A">220</span>
+      <div id="coinPill" class="flex items-center gap-1.5 h-10 px-3 rounded-full relative" style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgba(15,23,42,0.04);transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .35s ease,border-color .35s ease">
+        <i id="coinIcon" class="fa-solid fa-coins text-[14px]" style="color:#D9A441;transition:transform .35s cubic-bezier(.34,1.56,.64,1)"></i>
+        <span id="coinBalance" class="text-[14px] font-extrabold tnum" style="color:#0F172A">220</span>
       </div>
     </div>
   </div>
@@ -412,9 +414,9 @@
     </div>
   </div>
 
-  <!-- Delivery status tile — richer informative layout (partner-app pattern) · status pulse + order summary + product thumbs + progress bar + Track button · taps open the detailed delivery modal · compact state on scroll keeps just status row + Track button -->
-  <button type="button" id="deliveryTile" class="delivery-tile w-full text-left px-4 py-2.5" style="background:linear-gradient(90deg,#ECFDF5 0%,#D1FAE5 60%,#A7F3D0 100%);border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0;border-left:0;border-right:0;cursor:pointer">
-    <!-- Status row -->
+  <!-- Delivery status tile — solid light green (no gradient) · roomier horizontal padding (px-5) so contents aren't congested at edges · 'Out' stage is prominently amplified (bigger pulse + bolder label) · upcoming segment uses a clearly visible emerald-light color (not background-blending) · scroll-compact adds order ID inline alongside the status -->
+  <button type="button" id="deliveryTile" class="delivery-tile w-full text-left px-5 py-2.5" style="background:#D1FAE5;border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0;border-left:0;border-right:0;cursor:pointer">
+    <!-- Status row · always visible · compact mode also shows order ID inline -->
     <div class="flex items-center justify-between mb-2 dt-statusrow">
       <div class="flex items-center gap-2 min-w-0">
         <span class="relative flex items-center justify-center flex-shrink-0">
@@ -422,6 +424,7 @@
           <span class="absolute inset-0 w-2 h-2 rounded-full" style="background:#059669;animation:dtPulse 1.6s ease-out infinite"></span>
         </span>
         <span class="text-[11px] font-extrabold uppercase tracking-wider truncate" style="color:#047857">Out for Delivery</span>
+        <span class="dt-compact-id text-[11px] font-extrabold flex-shrink-0" style="color:#0F172A;display:none">· #KKD-26194</span>
       </div>
       <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF">
         Track <i class="fa-solid fa-arrow-right text-[9px]" style="color:#FFFFFF"></i>
@@ -439,23 +442,27 @@
         <div class="text-[10.5px] font-semibold truncate" style="color:#64748B">3 items · Arriving today by 5:00 PM</div>
       </div>
     </div>
-    <!-- Progress bar (4 stages) (hidden on scroll-compact) -->
+    <!-- Progress bar (4 stages) (hidden on scroll-compact) · Out stage AMPLIFIED · upcoming segment in mid-emerald so it stays readable on the light-green bg -->
     <div class="dt-detail">
       <div class="flex items-center gap-1">
-        <div class="flex-1 h-1 rounded-full" style="background:#059669"></div>
-        <div class="w-1.5 h-1.5 rounded-full" style="background:#059669"></div>
-        <div class="flex-1 h-1 rounded-full" style="background:#059669"></div>
-        <div class="w-1.5 h-1.5 rounded-full" style="background:#059669"></div>
-        <div class="flex-1 h-1 rounded-full" style="background:#059669"></div>
-        <div class="w-1.5 h-1.5 rounded-full ring-2" style="background:#059669;--tw-ring-color:rgba(5,150,105,0.25)"></div>
-        <div class="flex-1 h-1 rounded-full" style="background:#A7F3D0"></div>
-        <div class="w-1.5 h-1.5 rounded-full" style="background:#A7F3D0"></div>
+        <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+        <div class="w-2 h-2 rounded-full" style="background:#059669"></div>
+        <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+        <div class="w-2 h-2 rounded-full" style="background:#059669"></div>
+        <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+        <!-- Current 'Out' marker · enlarged, white halo, pulse ring -->
+        <span class="relative flex items-center justify-center flex-shrink-0" style="width:14px;height:14px">
+          <span class="absolute w-4 h-4 rounded-full" style="background:rgba(5,150,105,0.25);animation:dtPulse 1.4s ease-out infinite"></span>
+          <span class="relative w-3.5 h-3.5 rounded-full" style="background:#047857;border:2px solid #FFFFFF;box-shadow:0 1px 4px rgba(4,120,87,0.6)"></span>
+        </span>
+        <div class="flex-1 h-1.5 rounded-full" style="background:#6EE7B7"></div>
+        <div class="w-2 h-2 rounded-full" style="background:#6EE7B7"></div>
       </div>
-      <div class="flex justify-between mt-1 text-[9.5px] font-semibold" style="color:#64748B">
+      <div class="flex justify-between mt-1.5 text-[9.5px] font-semibold">
         <span style="color:#047857">Placed</span>
         <span style="color:#047857">Packed</span>
-        <span style="color:#047857;font-weight:800">Out</span>
-        <span>Delivered</span>
+        <span class="dt-stage-current" style="color:#064E3B;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;font-size:10.5px">Out</span>
+        <span style="color:#64748B">Delivered</span>
       </div>
     </div>
   </button>
@@ -2279,7 +2286,93 @@
       }
       if (sheetBg)   sheetBg.addEventListener('click', closeSheet);
       if (sheetX)    sheetX.addEventListener('click', closeSheet);
-      if (sheetDone) sheetDone.addEventListener('click', closeSheet);
+      if (sheetDone) sheetDone.addEventListener('click', function(){
+        // First-crop reward · only fires once per device · flies coins from the tile up to the top coin pill + animates count
+        if (selected.size > 0 && !localStorage.getItem('kkd.coins.firstCrop')) {
+          localStorage.setItem('kkd.coins.firstCrop', '1');
+          closeSheet();
+          setTimeout(function(){ celebrateFirstCrop(); }, 260);
+        } else {
+          closeSheet();
+        }
+      });
+
+      // First-crop celebration · coins fly from onboarding tile to the top coin pill, then the count animates up by 50
+      function celebrateFirstCrop(){
+        const tile = document.getElementById('onboardingTile');
+        const pill = document.getElementById('coinPill');
+        const icon = document.getElementById('coinIcon');
+        const bal  = document.getElementById('coinBalance');
+        if (!tile || !pill || !bal) return;
+        const tRect = tile.getBoundingClientRect();
+        const pRect = pill.getBoundingClientRect();
+        const startX = tRect.left + tRect.width * 0.5;
+        const startY = tRect.top + tRect.height * 0.4;
+        const endX = pRect.left + pRect.width * 0.35;
+        const endY = pRect.top + pRect.height * 0.5;
+
+        // Spawn 7 coins with stagger, fly along a slight arc to the coin pill
+        const COINS = 7;
+        for (let i = 0; i < COINS; i++) {
+          const coin = document.createElement('span');
+          coin.textContent = '🪙';
+          coin.style.cssText = 'position:fixed;left:'+startX+'px;top:'+startY+'px;z-index:200;font-size:'+(18+Math.random()*6)+'px;pointer-events:none;transform:translate(-50%,-50%) scale(.4);opacity:0;transition:transform .85s cubic-bezier(.5,-0.2,.4,1.2), opacity .85s ease;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25))';
+          document.body.appendChild(coin);
+          const jitterX = (Math.random() - 0.5) * 30;
+          const jitterY = (Math.random() - 0.5) * 14;
+          setTimeout(function(){
+            coin.style.opacity = '1';
+            coin.style.transform = 'translate(calc(-50% + '+(endX - startX + jitterX)+'px), calc(-50% + '+(endY - startY + jitterY)+'px)) scale(1) rotate('+(Math.random()*540)+'deg)';
+          }, 30 + i * 70);
+          // Arrival: ping the pill + start incrementing the count when first coin lands
+          setTimeout(function(){
+            coin.style.opacity = '0';
+            coin.style.transform = 'translate(calc(-50% + '+(endX - startX)+'px), calc(-50% + '+(endY - startY)+'px)) scale(.5)';
+            pingPill();
+            if (i === 0) startCountUp();
+          }, 30 + i * 70 + 750);
+          setTimeout(function(){ if (coin.parentNode) coin.parentNode.removeChild(coin); }, 30 + i * 70 + 1100);
+        }
+
+        // Tile flash (a brief emerald glow on the source so the user sees what just paid out)
+        tile.style.transition = 'box-shadow .4s ease, transform .4s ease';
+        const prevShadow = tile.style.boxShadow;
+        tile.style.boxShadow = '0 0 0 4px rgba(5,150,105,0.35), 0 12px 30px -6px rgba(5,150,105,0.4)';
+        tile.style.transform = 'scale(1.015)';
+        setTimeout(function(){
+          tile.style.boxShadow = prevShadow;
+          tile.style.transform = 'scale(1)';
+        }, 700);
+
+        function pingPill(){
+          if (!pill) return;
+          pill.style.transform = 'scale(1.12)';
+          pill.style.borderColor = '#F59E0B';
+          pill.style.boxShadow = '0 0 0 4px rgba(245,158,11,0.18), 0 4px 12px rgba(245,158,11,0.3)';
+          if (icon) icon.style.transform = 'rotate(-12deg) scale(1.2)';
+          setTimeout(function(){
+            pill.style.transform = 'scale(1)';
+            pill.style.borderColor = '#E2E8F0';
+            pill.style.boxShadow = '0 1px 2px rgba(15,23,42,0.04)';
+            if (icon) icon.style.transform = '';
+          }, 220);
+        }
+        function startCountUp(){
+          const from = parseInt(bal.textContent, 10) || 0;
+          const to = from + 50;
+          const dur = 700;
+          const start = performance.now();
+          function tick(now){
+            const t = Math.min(1, (now - start) / dur);
+            // easeOutCubic so it feels punchy then settles
+            const eased = 1 - Math.pow(1 - t, 3);
+            bal.textContent = String(Math.round(from + (to - from) * eased));
+            if (t < 1) requestAnimationFrame(tick);
+            else bal.textContent = String(to);
+          }
+          requestAnimationFrame(tick);
+        }
+      }
 
       // Stateful CTA — when nothing is picked it looks like a passive hint (grey dashed);
       // once any crop is selected it transforms into a vivid emerald button with a soft pulse

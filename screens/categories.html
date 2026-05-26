@@ -31,20 +31,30 @@
   .cat-tile[aria-pressed="true"] .cat-svg [fill="#15803D"]{fill:#FFFFFF}
   .cat-tile[aria-pressed="true"] .cat-svg [stroke="#15803D"]{stroke:#FFFFFF}
 
-  /* End-of-list state · the top category section fills with solid emerald to redirect the user's focus back up · labels flip to white, unselected circles tint to white-on-emerald, selected stays prominent on top */
-  .stk-main{transition:background .45s ease}
-  body.at-end .stk-main{background:linear-gradient(180deg,#047857 0%,#059669 60%,#10B981 100%);border-bottom-color:transparent}
-  body.at-end .cat-label{color:#FFFFFF}
-  body.at-end .cat-tile[aria-pressed="false"] .cat-circle{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.3);box-shadow:none}
-  body.at-end .cat-tile[aria-pressed="false"] .cat-svg [fill="#22C55E"],
-  body.at-end .cat-tile[aria-pressed="false"] .cat-svg [fill="#16A34A"],
-  body.at-end .cat-tile[aria-pressed="false"] .cat-svg [fill="#15803D"]{fill:#FFFFFF}
-  body.at-end .cat-tile[aria-pressed="false"] .cat-svg [stroke="#15803D"]{stroke:#FFFFFF}
-  body.at-end .cat-tile[aria-pressed="true"] .cat-circle{background:#FFFFFF;border-color:#FFFFFF;box-shadow:0 10px 24px -4px rgba(0,0,0,0.25)}
-  body.at-end .cat-tile[aria-pressed="true"] .cat-svg [fill="#22C55E"],
-  body.at-end .cat-tile[aria-pressed="true"] .cat-svg [fill="#16A34A"],
-  body.at-end .cat-tile[aria-pressed="true"] .cat-svg [fill="#15803D"]{fill:#15803D}
-  body.at-end .cat-tile[aria-pressed="true"] .cat-svg [stroke="#15803D"]{stroke:#15803D}
+  /* Permanent emerald top-section · status bar, header and the main-category row sit on a single solid emerald gradient (no scroll-trigger animation) · keeps the user oriented to "Shop by Category" at all times */
+  .top-emerald{background:linear-gradient(180deg,#047857 0%,#059669 55%,#10B981 100%);color:#FFFFFF;flex-shrink:0}
+  /* Status bar SVGs: flip to white (over inline attributes) */
+  .top-emerald .sys-row svg path{stroke:#FFFFFF !important}
+  .top-emerald .sys-row svg rect[stroke]{stroke:#FFFFFF !important}
+  .top-emerald .sys-row svg rect[fill="#0F172A"]{fill:#FFFFFF !important}
+  /* Header buttons + title turn white on the emerald fill */
+  .top-emerald .top-btn{background:rgba(255,255,255,0.18) !important;border-color:rgba(255,255,255,0.28) !important}
+  .top-emerald .top-btn i{color:#FFFFFF !important}
+  .top-emerald h1{color:#FFFFFF !important}
+  /* Main-category row on top of the emerald fill · labels white · unselected circles get a translucent white pill · selected pops as a solid white disc with the emerald icon */
+  .stk-main{background:transparent;border-bottom:1px solid rgba(255,255,255,0.12)}
+  .cat-label{color:#FFFFFF}
+  .cat-tile[aria-pressed="false"] .cat-circle{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.3);box-shadow:none}
+  .cat-tile[aria-pressed="false"] .cat-svg [fill="#22C55E"],
+  .cat-tile[aria-pressed="false"] .cat-svg [fill="#16A34A"],
+  .cat-tile[aria-pressed="false"] .cat-svg [fill="#15803D"]{fill:#FFFFFF}
+  .cat-tile[aria-pressed="false"] .cat-svg [stroke="#15803D"]{stroke:#FFFFFF}
+  .cat-tile[aria-pressed="true"] .cat-circle{background:#FFFFFF;border-color:#FFFFFF;box-shadow:0 10px 24px -4px rgba(0,0,0,0.25)}
+  .cat-tile[aria-pressed="true"] .cat-svg [fill="#22C55E"],
+  .cat-tile[aria-pressed="true"] .cat-svg [fill="#16A34A"],
+  .cat-tile[aria-pressed="true"] .cat-svg [fill="#15803D"]{fill:#15803D}
+  .cat-tile[aria-pressed="true"] .cat-svg [stroke="#15803D"]{stroke:#15803D}
+  .cat-tile[aria-pressed="true"] .cat-label{color:#FFFFFF;font-weight:800}
 
   /* Left sub-cat rail · subtle grey separator · slightly larger label (11.5px) and thumbnail (42px) for legibility */
   .subcat-btn{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;text-align:center;padding:12px 4px;font-size:11.5px;font-weight:600;color:#475569;border-left:3px solid transparent;background:transparent;transition:all .15s ease;line-height:1.2;cursor:pointer}
@@ -88,8 +98,8 @@
   #cartBar.compact .cart-summary{gap:8px!important}
   @keyframes cartIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 
-  /* Top stack · static (no longer sticky since the page itself is locked) */
-  .stk-main{background:#FFFFFF;border-bottom:1px solid #F1F5F9;flex-shrink:0}
+  /* Top stack · static (no longer sticky since the page itself is locked) · stk-main lives inside .top-emerald so its bg is transparent; only the filter row keeps a white surface */
+  .stk-main{flex-shrink:0}
   .stk-filter{background:#FFFFFF;border-bottom:1px solid #F1F5F9;flex-shrink:0}
 
   /* Two-column body · flex:1 of the viewport-height column · each pane scrolls independently */
@@ -120,29 +130,32 @@
 </style></head>
 <body>
 
-  <!-- System status -->
-  <div class="px-4 pt-3 flex items-center justify-between text-[11px] font-bold">
-    <span>9:41</span>
-    <div class="flex items-center gap-1.5">
-      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
-      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
-      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
+  <!-- One emerald container covers status bar, header AND the top category row -->
+  <div class="top-emerald">
+
+    <!-- System status -->
+    <div class="sys-row px-4 pt-3 flex items-center justify-between text-[11px] font-bold">
+      <span>9:41</span>
+      <div class="flex items-center gap-1.5">
+        <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+        <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+        <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
+      </div>
     </div>
-  </div>
 
-  <!-- Header · back · title · search · all in one row -->
-  <div class="px-4 pt-3 pb-3 flex items-center gap-3" style="flex-shrink:0">
-    <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB">
-      <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
-    </button>
-    <h1 class="flex-1 text-[20px] font-extrabold leading-tight" style="color:#0F172A">Shop by Category</h1>
-    <a href="search.html" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB;text-decoration:none">
-      <i class="fa-solid fa-magnifying-glass text-[14px]" style="color:#0F172A"></i>
-    </a>
-  </div>
+    <!-- Header · back · title · search · all in one row -->
+    <div class="px-4 pt-3 pb-3 flex items-center gap-3" style="flex-shrink:0">
+      <button onclick="history.back()" class="top-btn w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB">
+        <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
+      </button>
+      <h1 class="flex-1 text-[20px] font-extrabold leading-tight" style="color:#0F172A">Shop by Category</h1>
+      <a href="search.html" class="top-btn w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB;text-decoration:none">
+        <i class="fa-solid fa-magnifying-glass text-[14px]" style="color:#0F172A"></i>
+      </a>
+    </div>
 
-  <!-- TOP: Main 5 categories · SAME SVG illustrations as homepage · selected = solid emerald circle -->
-  <div class="stk-main">
+    <!-- TOP: Main 5 categories · SAME SVG illustrations as homepage -->
+    <div class="stk-main">
     <div class="flex gap-3 px-4 py-3 scroll-x">
       <button data-cat="pesticide" aria-pressed="true" class="cat-tile flex-shrink-0 flex flex-col items-center gap-2" style="width:80px;background:transparent;border:0;cursor:pointer">
         <div class="cat-circle"><span class="cat-emoji">🐛</span></div>
@@ -220,7 +233,9 @@
         <span class="cat-label text-[13px] font-semibold text-center leading-tight" style="color:#0F172A">Combo</span>
       </button>
     </div>
-  </div>
+    </div><!-- /.stk-main -->
+
+  </div><!-- /.top-emerald -->
 
   <!-- FILTER row · 3 roomy pills · tapping Sort or Filter opens a bottom-sheet modal -->
   <div class="stk-filter">
@@ -441,14 +456,13 @@
     let activeSort = 'pop';
     const filters = { price:null, brand:null, avail:new Set() };
 
-    // Main-cat tile clicks · also clear the at-end green-fill if user is switching from a fully-scrolled state
+    // Main-cat tile clicks · resets product scroll back to top
     document.querySelectorAll('[data-cat]').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed','false'));
         btn.setAttribute('aria-pressed','true');
         activeCat = btn.dataset.cat;
         activeSub = 'all';
-        document.body.classList.remove('at-end');
         const pm = document.getElementById('productMain');
         if (pm) pm.scrollTop = 0;
         renderSubs();
@@ -563,7 +577,7 @@
       document.getElementById('cartCount').textContent = count + (count > 1 ? ' items' : ' item');
     }
 
-    // The page is locked; only the product column scrolls · listen on that element instead of window · also toggles body.at-end for the green-fill category section when user hits the bottom
+    // The page is locked; only the product column scrolls · listen on that element instead of window for cart-bar wrap behaviour
     const productMain = document.getElementById('productMain');
     productMain.addEventListener('scroll', () => {
       const bar = document.getElementById('cartBar');
@@ -571,10 +585,6 @@
         if (productMain.scrollTop > 80) bar.classList.add('compact');
         else bar.classList.remove('compact');
       }
-      // Near the end of the product list · light up the category section green so the user gets pulled back up
-      const distFromBottom = productMain.scrollHeight - (productMain.scrollTop + productMain.clientHeight);
-      if (distFromBottom < 80) document.body.classList.add('at-end');
-      else document.body.classList.remove('at-end');
     });
 
     // ----- Bottom-sheet modals (Sort + Filter) -----

@@ -62,9 +62,10 @@
   /* Top status banner — always visible inside top-theme, JS swaps content + style classes */
   .theme-banner { display: flex; align-items: center; gap: 8px; padding: 9px 16px; font-size: 12.5px; font-weight: 600; border-top: 1px solid; }
   #topStatusBanner               { border-color: #BFDBFE; }
-  #topStatusBanner.style-rain    { background: linear-gradient(90deg, rgba(59,130,246,.16) 0%, rgba(96,165,250,.10) 60%, rgba(147,197,253,.08) 100%); }
-  #topStatusBanner.style-festival{ background: linear-gradient(90deg, rgba(220,38,38,.18) 0%, rgba(251,191,36,.16) 45%, rgba(21,128,61,.18) 100%); border-color: #FECACA; }
-  #topStatusBanner.style-order   { background: linear-gradient(90deg, rgba(16,185,129,.18) 0%, rgba(110,231,183,.14) 60%, rgba(167,243,208,.10) 100%); border-color: #BBF7D0; }
+  /* Opaque banner bgs — earlier these were semi-transparent (.10-.18 alpha) which let the parent show through; now the parent is solid emerald, so the banner needs its own solid bg so it looks the same as it did before (light blue for rain, light red-gold for Christmas) */
+  #topStatusBanner.style-rain    { background: linear-gradient(90deg, #DBEAFE 0%, #EFF6FF 60%, #F0F9FF 100%); }
+  #topStatusBanner.style-festival{ background: linear-gradient(90deg, #FEE2E2 0%, #FEF3C7 45%, #DCFCE7 100%); border-color: #FECACA; }
+  #topStatusBanner.style-order   { background: linear-gradient(90deg, #D1FAE5 0%, #ECFDF5 60%, #F0FDF4 100%); border-color: #BBF7D0; }
   .top-theme[data-theme="festival"] .festival-banner {
     display: flex; color: #7F1D1D; border-color: #FECACA;
     background: linear-gradient(90deg, rgba(220,38,38,.18) 0%, rgba(251,191,36,.16) 45%, rgba(21,128,61,.18) 100%);
@@ -1893,20 +1894,20 @@
           const tileBg      = sel ? '#ECFDF5' : '#FFFFFF';
           const shadow      = sel ? '0 8px 18px -4px rgba(5,150,105,0.4)' : '0 1px 3px rgba(0,0,0,0.05)';
           const labelColor  = sel ? '#047857' : '#0F172A';
+          // Tick lives INSIDE the image area at top-right so the outer overflow:hidden doesn't clip it
           const tick        = sel
-            ? '<span class="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full flex items-center justify-center" style="background:#059669;box-shadow:0 2px 8px rgba(5,150,105,0.55);border:2px solid #fff">'
-              + '<i class="fa-solid fa-check text-white text-[10px]"></i></span>'
+            ? '<span class="absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center" style="background:#059669;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff;z-index:2">'
+              + '<i class="fa-solid fa-check text-white text-[9px]"></i></span>'
             : '';
-          // Real crop photo in 56x56 circle, with soft inner ring for depth
-          return '<button type="button" data-crop-key="'+key+'" class="relative flex-shrink-0 rounded-xl overflow-hidden transition-all"'
+          return '<button type="button" data-crop-key="'+key+'" class="flex-shrink-0 rounded-xl overflow-hidden transition-all"'
             + ' style="background:'+tileBg+';border:1.5px solid '+borderColor+';box-shadow:'+shadow+';width:84px;height:100px;display:flex;flex-direction:column">'
-            + '<div class="w-full" style="height:78px;background:'+m.bg+';overflow:hidden;flex-shrink:0">'
+            + '<div class="relative w-full" style="height:78px;background:'+m.bg+';overflow:hidden;flex-shrink:0">'
             + '<img src="'+m.img+'" class="w-full h-full object-cover" style="display:block" onerror="cropFallback(this,\''+m.emoji+'\',34)"/>'
+            + tick
             + '</div>'
             + '<div class="flex-1 flex items-center justify-center px-1" style="background:'+tileBg+'">'
             + '<span class="text-[11.5px] font-bold leading-none whitespace-nowrap" style="color:'+labelColor+'">'+m.label+'</span>'
             + '</div>'
-            + tick
             + '</button>';
         }).join('');
         // "More" chip pinned at the end — same square tile shape as crop tiles, opens the full crop catalog

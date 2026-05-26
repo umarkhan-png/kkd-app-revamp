@@ -266,8 +266,8 @@
   <!-- Info bar: address (tap to change theme) + coin + profile -->
   <div class="flex items-center justify-between px-4 pt-2 pb-3 relative">
     <button id="addressBtn" class="flex items-center gap-2.5 min-w-0 flex-1 text-left relative z-10" style="background:transparent;border:0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(255,255,255,0.2)">
-      <span class="flex-shrink-0 flex items-center justify-center" style="width:44px;height:44px;background:#FFFFFF;border-radius:12px;box-shadow:0 2px 6px rgba(15,23,42,0.16);padding:5px">
-        <img src="../assets/kkd-logo.png" alt="KKD" style="width:100%;height:100%;object-fit:contain"/>
+      <span class="flex-shrink-0 flex items-center justify-center" style="width:44px;height:44px;background:#FFFFFF;border-radius:12px;box-shadow:0 2px 6px rgba(15,23,42,0.16);padding:6px" aria-label="KKD">
+        <span style="display:block;width:100%;height:100%;background-color:#059669;-webkit-mask-image:url('../assets/kkd-logo.png');mask-image:url('../assets/kkd-logo.png');-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center"></span>
       </span>
       <div class="leading-tight min-w-0">
         <div class="text-[11px] font-semibold text-[#94A3B8] uppercase tracking-wide">Deliver to</div>
@@ -1946,8 +1946,12 @@
 
       const selected = new Set();
 
+      const INLINE_COUNT = 8;
       function renderPicker(){
-        const chips = Object.keys(CROP_META).map(function(key){
+        const allKeys = Object.keys(CROP_META);
+        const inlineKeys = allKeys.slice(0, INLINE_COUNT);
+        const hiddenCount = allKeys.length - inlineKeys.length;
+        const chips = inlineKeys.map(function(key){
           const m = CROP_META[key];
           const sel = selected.has(key);
           const borderColor = sel ? '#059669' : '#E5E7EB';
@@ -1970,13 +1974,16 @@
             + '</div>'
             + '</button>';
         }).join('');
-        // "More" chip — white tile (matches the rest of the row visually) · taps open the all-crops bottom-sheet modal instead of navigating away
+        // "More" chip — white tile with light-emerald image area + solid emerald + circle, then bottom carries a 2-line stack: small "+N more" count line above the bold "All crops" label
         const moreChip = '<button type="button" id="cropMoreBtn" class="flex-shrink-0 rounded-xl overflow-hidden transition-all"'
-          + ' style="background:#FFFFFF;border:1.5px solid #E5E7EB;color:#059669;width:84px;height:100px;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(0,0,0,0.05)">'
-          + '<div class="w-full flex items-center justify-center" style="height:78px;background:#FFFFFF;flex-shrink:0">'
-          + '<i class="fa-solid fa-plus text-[28px]"></i></div>'
-          + '<div class="flex-1 flex items-center justify-center" style="background:#FFFFFF">'
-          + '<span class="text-[11.5px] font-bold leading-none">More</span>'
+          + ' style="background:#FFFFFF;border:1.5px solid #E5E7EB;width:84px;height:100px;display:flex;flex-direction:column;box-shadow:0 2px 8px -2px rgba(15,23,42,0.08)">'
+          + '<div class="w-full flex items-center justify-center" style="height:56px;background:#ECFDF5;flex-shrink:0">'
+          + '<div class="rounded-full flex items-center justify-center" style="width:36px;height:36px;background:#059669;box-shadow:0 4px 10px -2px rgba(5,150,105,0.45)">'
+          + '<i class="fa-solid fa-plus text-[14px]" style="color:#FFFFFF"></i></div>'
+          + '</div>'
+          + '<div class="flex-1 flex flex-col items-center justify-center" style="background:#FFFFFF;gap:1px">'
+          + '<span class="text-[9.5px] font-semibold leading-none" style="color:#94A3B8">+' + hiddenCount + ' more</span>'
+          + '<span class="text-[11.5px] font-extrabold leading-none mt-1" style="color:#0F172A">All crops</span>'
           + '</div>'
           + '</button>';
         picker.innerHTML = chips + moreChip;

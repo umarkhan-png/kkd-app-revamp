@@ -111,6 +111,46 @@
   .sheet-chips{display:flex;gap:8px;flex-wrap:wrap;padding:4px 20px 14px}
   .sheet-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:#F8FAFC;border:1px solid #E2E8F0;font-size:12px;font-weight:600;color:#475569;cursor:pointer;transition:all .15s ease}
   .sheet-chip.on{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
+
+  /* Sort modal · vertical row list · icon + label on the left, radio circle on the right · selected row paints icon/label emerald + fills the circle */
+  .sort-row{display:flex;align-items:center;gap:14px;padding:18px 20px;border-bottom:1px solid #F1F5F9;cursor:pointer;background:#FFFFFF;transition:background .15s ease}
+  .sort-row:active{background:#F8FAFC}
+  .sort-row .sort-ic{width:24px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#94A3B8;flex-shrink:0}
+  .sort-row .sort-lbl{flex:1;font-size:15.5px;font-weight:600;color:#0F172A;line-height:1.2}
+  .sort-row .sort-radio{width:22px;height:22px;border-radius:50%;border:1.5px solid #CBD5E1;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s ease}
+  .sort-row.on .sort-ic{color:#059669}
+  .sort-row.on .sort-lbl{color:#047857;font-weight:800}
+  .sort-row.on .sort-radio{border-color:#059669}
+  .sort-row.on .sort-radio::after{content:'';width:11px;height:11px;border-radius:50%;background:#059669}
+
+  /* Filter modal · LEFT rail tabs · single column of section names · active tab gets emerald left-border + bold emerald label + white background so it stands out from the unselected greys */
+  .filter-tab{display:block;width:100%;text-align:left;padding:18px 16px;font-size:14px;font-weight:600;color:#475569;background:transparent;border:0;border-left:3px solid transparent;cursor:pointer;transition:all .15s ease}
+  .filter-tab.on{color:#047857;font-weight:800;background:#FFFFFF;border-left-color:#059669}
+  .filter-tab .ft-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#059669;margin-left:6px;vertical-align:middle;opacity:0}
+  .filter-tab.has-active .ft-dot{opacity:1}
+
+  /* Filter modal · RIGHT pane · section title + option rows with a coloured icon tile, label, and radio circle · matches the Filters screenshot exactly */
+  .fpane-title{padding:18px 20px 10px;font-size:11.5px;font-weight:800;color:#94A3B8;text-transform:uppercase;letter-spacing:.12em}
+  .fopt-row{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid #F1F5F9;cursor:pointer;background:#FFFFFF;transition:background .15s ease}
+  .fopt-row:active{background:#F8FAFC}
+  .fopt-row .fopt-ic{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .fopt-row .fopt-lbl{flex:1;font-size:15px;font-weight:600;color:#0F172A;line-height:1.2}
+  .fopt-row .fopt-radio{width:22px;height:22px;border-radius:50%;border:1.5px solid #CBD5E1;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s ease}
+  .fopt-row.on .fopt-lbl{color:#047857;font-weight:800}
+  .fopt-row.on .fopt-radio{background:#059669;border-color:#059669}
+  .fopt-row.on .fopt-radio::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;color:#FFFFFF;font-size:11px}
+
+  /* Quick-filter strip · always-visible pill row below the Sort/Filter pills · each pill carries a count chip · active pill gets the emerald fill so the user can see at a glance which quick filters are on */
+  .qfilter{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:999px;background:#FFFFFF;border:1.5px solid #E5E7EB;font-size:12.5px;font-weight:700;color:#475569;white-space:nowrap;flex-shrink:0;cursor:pointer;transition:all .15s ease}
+  .qfilter:active{transform:scale(.97)}
+  .qfilter.on{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
+  .qfilter .qcount{display:inline-flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:#94A3B8;padding:0 2px}
+  .qfilter.on .qcount{color:#059669}
+
+  /* Applied-filter chip row · accumulates every active filter (sort + quick + sidebar) · each chip carries a leading dot + label + × to remove that single filter without opening the modal */
+  .achip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 6px 0 12px;border-radius:999px;background:#ECFDF5;border:1px solid #BBF7D0;font-size:12px;font-weight:700;color:#047857;white-space:nowrap;flex-shrink:0;margin-right:8px}
+  .achip .achip-close{width:20px;height:20px;border-radius:50%;background:#059669;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:center;font-size:9px;border:0;cursor:pointer}
+  .achip-clear{display:inline-flex;align-items:center;gap:4px;height:30px;padding:0 10px;border-radius:999px;background:transparent;color:#94A3B8;font-size:12px;font-weight:700;border:0;cursor:pointer;flex-shrink:0}
 </style></head>
 <body>
 
@@ -216,13 +256,16 @@
     </div>
   </div><!-- /.stk-main -->
 
-  <!-- FILTER row · 3 roomy pills · tapping Sort or Filter opens a bottom-sheet modal -->
+  <!-- FILTER row · Sort + Filter pills only (Price pill removed) · followed by horizontal quick-filter strip and (when filters are applied) a chip row showing each active filter with a removable × -->
   <div class="stk-filter">
     <div class="flex gap-2 px-4 py-2.5 items-center">
       <button class="filter-pill" id="filterSortBtn" data-modal="sort"><i class="fa-solid fa-arrow-down-wide-short text-[10px]"></i> Sort <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
       <button class="filter-pill" id="filterFilterBtn" data-modal="filter"><i class="fa-solid fa-sliders text-[10px]"></i> Filter <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
-      <button class="filter-pill" data-modal="filter">Price <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
     </div>
+    <!-- Quick-filter pill strip · always visible · taps toggle the matching filter and surface a chip in the applied row below -->
+    <div id="quickFilterStrip" class="flex gap-2 px-4 pb-2.5 scroll-x" style="overflow-x:auto"></div>
+    <!-- Applied-filter chip row · accumulates every filter the user has switched on (Sort, Category, Crop, Class, Margin, Stock, Rating, Pack Size, Quick filters) · each chip carries an × to remove that specific filter -->
+    <div id="appliedChipRow" class="px-4 pb-2 scroll-x" style="display:none;overflow-x:auto"></div>
   </div>
 
   <!-- TWO-COLUMN body · flex:1 of viewport · each pane scrolls independently -->
@@ -270,16 +313,16 @@
     </a>
   </nav>
 
-  <!-- SORT bottom sheet -->
+  <!-- SORT bottom sheet · vertical list · each row has icon + label + radio circle on the right · selected row is emerald · price options removed per spec, only Margin / Top Rated / Bestsellers / Newest first remain -->
   <div id="sortSheet" class="sheet-wrap" aria-hidden="true">
     <div class="sheet-bg" data-sheet-close="sort"></div>
     <div class="sheet-panel">
       <div class="sheet-handle"></div>
-      <div class="px-5 py-3 flex items-center justify-between">
-        <div class="text-[16px] font-extrabold">Sort by</div>
-        <button data-sheet-close="sort" class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[12px]"></i></button>
+      <div class="px-5 py-3 flex items-center justify-between" style="border-bottom:1px solid #F1F5F9">
+        <div class="text-[18px] font-extrabold">Sort by</div>
+        <button data-sheet-close="sort" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #E2E8F0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
       </div>
-      <div id="sortOptions"></div>
+      <div id="sortOptions" class="overflow-y-auto" style="max-height:60vh"></div>
     </div>
   </div>
 
@@ -303,37 +346,24 @@
     </div>
   </div>
 
-  <!-- FILTER bottom sheet -->
+  <!-- FILTER bottom sheet · left-tab sidebar (Category, Crop, Class, Margin, Stock, Rating, Pack Size — Price removed per spec) · right pane shows each section's options with coloured icon tile + label + radio circle -->
   <div id="filterSheet" class="sheet-wrap" aria-hidden="true">
     <div class="sheet-bg" data-sheet-close="filter"></div>
-    <div class="sheet-panel">
+    <div class="sheet-panel" style="max-height:88vh">
       <div class="sheet-handle"></div>
-      <div class="px-5 py-3 flex items-center justify-between">
-        <div class="text-[16px] font-extrabold">Filter</div>
-        <button data-sheet-close="filter" class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[12px]"></i></button>
+      <div class="px-5 py-3 flex items-center justify-between" style="border-bottom:1px solid #F1F5F9;flex-shrink:0">
+        <div class="text-[20px] font-extrabold">Filters</div>
+        <button data-sheet-close="filter" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #E2E8F0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
       </div>
-      <div class="sheet-section-title">Price range</div>
-      <div class="sheet-chips" data-filter-group="price">
-        <button class="sheet-chip" data-val="0-300">Under ₹300</button>
-        <button class="sheet-chip" data-val="300-600">₹300 – ₹600</button>
-        <button class="sheet-chip" data-val="600-1000">₹600 – ₹1000</button>
-        <button class="sheet-chip" data-val="1000+">₹1000 &amp; above</button>
+      <div class="flex" style="flex:1;min-height:0">
+        <!-- Left tab rail · selected tab has an emerald left-border + emerald label so it reads as the active section -->
+        <div id="filterTabs" class="flex-shrink-0" style="width:108px;background:#F8FAFC;overflow-y:auto;border-right:1px solid #F1F5F9"></div>
+        <!-- Right pane · header + options for the active tab -->
+        <div id="filterPane" style="flex:1;min-width:0;overflow-y:auto"></div>
       </div>
-      <div class="sheet-section-title">Brand</div>
-      <div class="sheet-chips" data-filter-group="brand">
-        <button class="sheet-chip" data-val="katyayani">Katyayani</button>
-        <button class="sheet-chip" data-val="bayer">Bayer</button>
-        <button class="sheet-chip" data-val="syngenta">Syngenta</button>
-        <button class="sheet-chip" data-val="upl">UPL</button>
-      </div>
-      <div class="sheet-section-title">Availability</div>
-      <div class="sheet-chips" data-filter-group="avail">
-        <button class="sheet-chip" data-val="instock">In stock</button>
-        <button class="sheet-chip" data-val="discount">On discount</button>
-      </div>
-      <div class="px-5 pt-3 pb-5 flex gap-2" style="border-top:1px solid #F1F5F9">
-        <button id="filterClear" class="flex-1 h-11 rounded-xl text-[13px] font-extrabold" style="background:#FFFFFF;border:1.5px solid #E5E7EB;color:#475569">Clear all</button>
-        <button data-sheet-close="filter" class="flex-1 h-11 rounded-xl text-[13px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0">Apply</button>
+      <div class="px-5 pt-3 pb-5 flex gap-2" style="border-top:1px solid #F1F5F9;flex-shrink:0">
+        <button id="filterClear" class="flex-1 h-12 rounded-xl text-[14px] font-extrabold" style="background:#FFFFFF;border:1.5px solid #E5E7EB;color:#475569">Clear all</button>
+        <button data-sheet-close="filter" class="flex-1 h-12 rounded-xl text-[14px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0">Apply</button>
       </div>
     </div>
   </div>
@@ -444,21 +474,83 @@
       { cat:'combo',      subs:['saver'],         name:'Mega Combo-10',    sub:'Mixed essentials',       size:'10-pack',target:'save ₹900',          price:2099, mrp:2999, img:'../assets/Chakrawarti_nobg.png' }
     ];
 
+    // Sort options · Price options removed per spec · Margin uses the off-percentage on each product (computed from mrp/price) · Bestsellers + Newest are visual stand-ins
     const SORT_OPTIONS = [
-      { key:'pop',      label:'Popularity' },
-      { key:'lowhigh',  label:'Price · Low to High' },
-      { key:'highlow',  label:'Price · High to Low' },
-      { key:'newest',   label:'Newest first' },
-      { key:'rating',   label:'Top rated' }
+      { key:'pop',          label:'Popularity',        icon:'fa-fire',                color:'#F97316' },
+      { key:'margin-high',  label:'Margin — High to Low', icon:'fa-arrow-down-wide-short', color:'#059669' },
+      { key:'margin-low',   label:'Margin — Low to High', icon:'fa-arrow-up-wide-short',   color:'#059669' },
+      { key:'rating',       label:'Top Rated',         icon:'fa-star',                color:'#F59E0B' },
+      { key:'bestsellers',  label:'Bestsellers',       icon:'fa-bolt',                color:'#F59E0B' },
+      { key:'newest',       label:'Newest first',      icon:'fa-sparkles',            color:'#8B5CF6' }
+    ];
+
+    // Filter modal · LEFT tab rail definitions · each tab carries its own option set rendered in the right pane · Price section intentionally absent per spec · Margin/Stock/Rating/Pack Size added to mirror the reference UI
+    const FILTER_SECTIONS = [
+      { key:'category', label:'Category', title:'Product Category', multi:false, opts:[
+        { val:'pesticide',  label:'Pesticide',    icon:'fa-bug',         color:'#DC2626', bg:'#FEE2E2' },
+        { val:'fertilizer', label:'Fertilizer',   icon:'fa-lightbulb',   color:'#CA8A04', bg:'#FEF9C3' },
+        { val:'fungicide',  label:'Fungicide',    icon:'fa-leaf',        color:'#7C3AED', bg:'#EDE9FE' },
+        { val:'herbicide',  label:'Herbicide',    icon:'fa-feather',     color:'#DC2626', bg:'#FECACA' },
+        { val:'combo',      label:'Combo Packs',  icon:'fa-box-archive', color:'#2563EB', bg:'#DBEAFE' }
+      ] },
+      { key:'crop', label:'Crop', title:'Crop', multi:true, opts:[
+        { val:'tomato', label:'Tomato', emoji:'🍅', bg:'#FEE2E2' },
+        { val:'chilli', label:'Chilli', emoji:'🌶',  bg:'#FFEDD5' },
+        { val:'wheat',  label:'Wheat',  emoji:'🌾', bg:'#FEF3C7' },
+        { val:'maize',  label:'Maize',  emoji:'🌽', bg:'#FEF9C3' },
+        { val:'onion',  label:'Onion',  emoji:'🧅', bg:'#FCE7F3' },
+        { val:'potato', label:'Potato', emoji:'🥔', bg:'#FEF3C7' }
+      ] },
+      { key:'klass', label:'Class', title:'Product Class', multi:true, opts:[
+        { val:'organic',  label:'Organic',  icon:'fa-seedling',  color:'#16A34A', bg:'#DCFCE7' },
+        { val:'bio',      label:'Bio',      icon:'fa-bacterium', color:'#0891B2', bg:'#CFFAFE' },
+        { val:'chemical', label:'Chemical', icon:'fa-flask',     color:'#2563EB', bg:'#DBEAFE' }
+      ] },
+      { key:'margin', label:'Margin', title:'Discount % (Margin)', multi:false, opts:[
+        { val:'low',  label:'Up to 20%',    icon:'fa-percent', color:'#CA8A04', bg:'#FEF3C7' },
+        { val:'mid',  label:'20% – 30%',    icon:'fa-percent', color:'#D97706', bg:'#FDE68A' },
+        { val:'high', label:'30% & above',  icon:'fa-percent', color:'#BE185D', bg:'#FBCFE8' }
+      ] },
+      { key:'stock', label:'Stock', title:'Availability', multi:true, opts:[
+        { val:'instock', label:'In stock', icon:'fa-circle-check', color:'#16A34A', bg:'#DCFCE7' }
+      ] },
+      { key:'rating', label:'Rating', title:'Customer Rating', multi:false, opts:[
+        { val:'4plus', label:'4★ & above', icon:'fa-star', color:'#F59E0B', bg:'#FEF3C7' },
+        { val:'3plus', label:'3★ & above', icon:'fa-star', color:'#F59E0B', bg:'#FEF3C7' }
+      ] },
+      { key:'packSize', label:'Pack Size', title:'Pack Size', multi:true, opts:[
+        { val:'small',  label:'Small · ≤ 250',          icon:'fa-circle',  color:'#16A34A', bg:'#DCFCE7' },
+        { val:'medium', label:'Medium · 250 – 1000',    icon:'fa-circle',  color:'#CA8A04', bg:'#FEF3C7' },
+        { val:'large',  label:'Large · 1000+',          icon:'fa-circle',  color:'#2563EB', bg:'#DBEAFE' }
+      ] }
+    ];
+
+    // Quick-filter strip · always visible · count is computed live from PRODUCTS so the chips never go stale
+    const QUICK_FILTERS = [
+      { key:'bestsellers',  label:'Bestsellers' },
+      { key:'new-arrivals', label:'New Arrivals' },
+      { key:'top-rated',    label:'Top Rated' },
+      { key:'on-offers',    label:'On Offers' }
     ];
 
     const cart = new Map();
     let activeCat = 'pesticide';
     let activeSub = 'all';
     let activeSort = 'pop';
-    const filters = { price:null, brand:null, avail:new Set() };
+    let activeFilterTab = 'category';
+    // Multi-select filters use Set, single-select use null|val. Quick is its own Set so it can persist across the tab UI without polluting the sidebar state
+    const filters = {
+      category: new Set(),
+      crop:     new Set(),
+      klass:    new Set(),
+      margin:   null,
+      stock:    new Set(),
+      rating:   null,
+      packSize: new Set(),
+      quick:    new Set()
+    };
 
-    // Main-cat tile clicks · resets product scroll back to top
+    // Main-cat tile clicks · resets product scroll back to top + refreshes quick-filter counts since they're scoped to the active cat/sub
     document.querySelectorAll('[data-cat]').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed','false'));
@@ -469,6 +561,7 @@
         if (pm) pm.scrollTop = 0;
         renderSubs();
         renderProducts();
+        if (typeof renderQuickFilters === 'function') renderQuickFilters();
       });
     });
 
@@ -487,20 +580,80 @@
           rail.querySelectorAll('[data-sub]').forEach(b => b.setAttribute('aria-pressed','false'));
           btn.setAttribute('aria-pressed','true');
           renderProducts();
+          if (typeof renderQuickFilters === 'function') renderQuickFilters();
         });
       });
     }
 
+    // Helper: pull the integer portion of a size string ('250 ml', '1 kg', '500 g / 1 L' → 250 / 1000 / 500) for the Pack-Size filter buckets
+    function sizeNum(p){
+      const m = (p.size || '').match(/(\d+(?:\.\d+)?)\s*(ml|g|kg|l)/i);
+      if (!m) return 0;
+      let n = parseFloat(m[1]);
+      const u = m[2].toLowerCase();
+      if (u === 'kg' || u === 'l') n *= 1000;
+      return n;
+    }
+    function offPct(p){ return p.mrp > 0 ? Math.round((p.mrp - p.price) / p.mrp * 100) : 0; }
+    function productRating(p){ return (4.5 + ((p.name.length * 7) % 5) / 10); }
+    // Class mapping · category subs ('chem', 'organic', 'bio', 'chemins') → user-facing class filter values
+    function productKlass(p){
+      const set = new Set();
+      (p.subs || []).forEach(s => {
+        if (s === 'organic') set.add('organic');
+        if (s === 'bio') set.add('bio');
+        if (s === 'chem' || s === 'chemins') set.add('chemical');
+      });
+      return set;
+    }
+
     function applyFilters(list){
       let out = list.slice();
-      if (filters.price) {
-        const [lo, hi] = filters.price === '1000+' ? [1000, Infinity] : filters.price.split('-').map(Number);
-        out = out.filter(p => p.price >= lo && p.price <= hi);
+      // Sidebar · Category multi-select overrides nothing (top tab still narrows the base list, this is additive within that)
+      if (filters.category.size) out = out.filter(p => filters.category.has(p.cat));
+      if (filters.klass.size) out = out.filter(p => { const k = productKlass(p); for (const v of filters.klass) if (k.has(v)) return true; return false; });
+      if (filters.rating) {
+        const min = filters.rating === '4plus' ? 4 : 3;
+        out = out.filter(p => productRating(p) >= min);
       }
-      if (filters.avail.has('discount')) out = out.filter(p => p.mrp > p.price);
-      if (activeSort === 'lowhigh') out.sort((a,b)=>a.price-b.price);
-      else if (activeSort === 'highlow') out.sort((a,b)=>b.price-a.price);
+      if (filters.packSize.size) {
+        out = out.filter(p => {
+          const n = sizeNum(p);
+          if (!n) return false;
+          if (filters.packSize.has('small')  && n <= 250)              return true;
+          if (filters.packSize.has('medium') && n > 250 && n <= 1000)  return true;
+          if (filters.packSize.has('large')  && n > 1000)              return true;
+          return false;
+        });
+      }
+      if (filters.margin) {
+        out = out.filter(p => {
+          const o = offPct(p);
+          if (filters.margin === 'low')  return o <= 20;
+          if (filters.margin === 'mid')  return o > 20 && o <= 30;
+          if (filters.margin === 'high') return o > 30;
+          return true;
+        });
+      }
+      // Quick filters · On Offers re-uses the margin>0 check; Top Rated reuses 4★+; Bestsellers + New Arrivals are visual-only here
+      if (filters.quick.has('on-offers')) out = out.filter(p => p.mrp > p.price);
+      if (filters.quick.has('top-rated')) out = out.filter(p => productRating(p) >= 4.5);
+      // Sort
+      if (activeSort === 'margin-high')      out.sort((a,b) => offPct(b) - offPct(a));
+      else if (activeSort === 'margin-low')  out.sort((a,b) => offPct(a) - offPct(b));
+      else if (activeSort === 'rating')      out.sort((a,b) => productRating(b) - productRating(a));
+      else if (activeSort === 'newest')      out.reverse();
+      // pop + bestsellers · keep base order (PRODUCTS is already in popularity order)
       return out;
+    }
+    // Live counts for the quick-filter chip badges · computed against the currently active main category + sub so counts narrow with the user's navigation
+    function quickCount(key){
+      const base = PRODUCTS.filter(p => p.cat === activeCat && (activeSub === 'all' || p.subs.includes(activeSub)));
+      if (key === 'bestsellers')  return base.length;
+      if (key === 'new-arrivals') return Math.max(1, Math.round(base.length * 0.18));
+      if (key === 'top-rated')    return base.filter(p => productRating(p) >= 4.5).length;
+      if (key === 'on-offers')    return base.filter(p => p.mrp > p.price).length;
+      return 0;
     }
 
     function renderProducts(){
@@ -612,19 +765,22 @@
       el.addEventListener('click', () => closeSheet(el.dataset.sheetClose));
     });
 
-    // Sort modal options
+    // Sort modal · renders the new icon + label + radio row UI · selected sort row paints emerald and fills the radio
     function renderSortOptions(){
       const wrap = document.getElementById('sortOptions');
-      wrap.innerHTML = SORT_OPTIONS.map(o =>
-        '<div class="sheet-row '+(o.key===activeSort?'selected':'')+'" data-sort="'+o.key+'">'
-          + '<span>'+o.label+'</span>'
-          + '<span class="check"><i class="fa-solid fa-check"></i></span>'
-        + '</div>'
-      ).join('');
+      wrap.innerHTML = SORT_OPTIONS.map(o => {
+        const on = o.key === activeSort;
+        return '<div class="sort-row '+(on?'on':'')+'" data-sort="'+o.key+'">'
+          + '<span class="sort-ic"><i class="fa-solid '+o.icon+'" style="'+(on?'':'color:'+o.color)+'"></i></span>'
+          + '<span class="sort-lbl">'+o.label+'</span>'
+          + '<span class="sort-radio"></span>'
+          + '</div>';
+      }).join('');
       wrap.querySelectorAll('[data-sort]').forEach(row => {
         row.addEventListener('click', () => {
           activeSort = row.dataset.sort;
           renderSortOptions();
+          renderAppliedChips();
           updateFilterDots();
           renderProducts();
           closeSheet('sort');
@@ -632,44 +788,155 @@
       });
     }
 
-    // Filter modal chips (price + brand + avail)
-    document.querySelectorAll('[data-filter-group] .sheet-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        const group = chip.closest('[data-filter-group]').dataset.filterGroup;
-        const val = chip.dataset.val;
-        if (group === 'avail') {
-          if (filters.avail.has(val)) filters.avail.delete(val); else filters.avail.add(val);
-        } else {
-          // single-select for price + brand
-          if (filters[group] === val) filters[group] = null;
-          else filters[group] = val;
-        }
-        syncFilterUI();
-        updateFilterDots();
-        renderProducts();
-      });
-    });
-    function syncFilterUI(){
-      document.querySelectorAll('[data-filter-group]').forEach(group => {
-        const g = group.dataset.filterGroup;
-        group.querySelectorAll('.sheet-chip').forEach(chip => {
-          const v = chip.dataset.val;
-          const on = g === 'avail' ? filters.avail.has(v) : filters[g] === v;
-          chip.classList.toggle('on', on);
+    // Filter modal · LEFT rail tabs (one per FILTER_SECTIONS entry) · clicking a tab swaps the right pane
+    function renderFilterTabs(){
+      const rail = document.getElementById('filterTabs');
+      rail.innerHTML = FILTER_SECTIONS.map(s => {
+        const f = filters[s.key];
+        const hasActive = (f instanceof Set) ? f.size > 0 : !!f;
+        return '<button class="filter-tab '+(s.key===activeFilterTab?'on':'')+(hasActive?' has-active':'')+'" data-ftab="'+s.key+'">'+s.label+'<span class="ft-dot"></span></button>';
+      }).join('');
+      rail.querySelectorAll('[data-ftab]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeFilterTab = btn.dataset.ftab;
+          renderFilterTabs();
+          renderFilterPane();
         });
       });
     }
-    document.getElementById('filterClear').addEventListener('click', () => {
-      filters.price = null; filters.brand = null; filters.avail = new Set();
-      syncFilterUI();
+
+    // Filter modal · RIGHT pane · section title + option rows (icon tile + label + radio circle) · uses the same icon+bg as the screenshot reference
+    function renderFilterPane(){
+      const pane = document.getElementById('filterPane');
+      const section = FILTER_SECTIONS.find(s => s.key === activeFilterTab) || FILTER_SECTIONS[0];
+      const state = filters[section.key];
+      const isOn = (val) => section.multi ? state.has(val) : state === val;
+      const ic = (o) => o.emoji
+        ? '<div class="fopt-ic" style="background:'+o.bg+';font-size:20px">'+o.emoji+'</div>'
+        : '<div class="fopt-ic" style="background:'+o.bg+'"><i class="fa-solid '+o.icon+'" style="color:'+o.color+'"></i></div>';
+      pane.innerHTML = '<div class="fpane-title">'+section.title+'</div>'
+        + section.opts.map(o =>
+            '<div class="fopt-row '+(isOn(o.val)?'on':'')+'" data-fopt="'+section.key+'" data-fval="'+o.val+'">'
+            + ic(o)
+            + '<span class="fopt-lbl">'+o.label+'</span>'
+            + '<span class="fopt-radio"></span>'
+            + '</div>'
+          ).join('');
+      pane.querySelectorAll('[data-fopt]').forEach(row => {
+        row.addEventListener('click', () => {
+          const k = row.dataset.fopt; const v = row.dataset.fval;
+          const sec = FILTER_SECTIONS.find(s => s.key === k);
+          if (sec.multi) {
+            if (filters[k].has(v)) filters[k].delete(v); else filters[k].add(v);
+          } else {
+            filters[k] = filters[k] === v ? null : v;
+          }
+          renderFilterTabs();
+          renderFilterPane();
+          renderAppliedChips();
+          renderQuickFilters();
+          updateFilterDots();
+          renderProducts();
+        });
+      });
+    }
+
+    // Quick-filter strip · always-visible pill row below the Sort/Filter pills · taps toggle the matching filter and the chip appears in the applied row
+    function renderQuickFilters(){
+      const strip = document.getElementById('quickFilterStrip');
+      if (!strip) return;
+      strip.innerHTML = QUICK_FILTERS.map(q => {
+        const on = filters.quick.has(q.key);
+        return '<button class="qfilter '+(on?'on':'')+'" data-qfilter="'+q.key+'">'+q.label+' <span class="qcount">'+quickCount(q.key)+'</span></button>';
+      }).join('');
+      strip.querySelectorAll('[data-qfilter]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const k = btn.dataset.qfilter;
+          if (filters.quick.has(k)) filters.quick.delete(k); else filters.quick.add(k);
+          renderQuickFilters();
+          renderAppliedChips();
+          updateFilterDots();
+          renderProducts();
+        });
+      });
+    }
+
+    // Applied-filter chip row · accumulates every active filter (sort + quick + sidebar) · each chip has × to remove · a "Clear all" tail button wipes everything in one tap
+    function renderAppliedChips(){
+      const row = document.getElementById('appliedChipRow');
+      const chips = [];
+      if (activeSort !== 'pop') {
+        const so = SORT_OPTIONS.find(s => s.key === activeSort);
+        if (so) chips.push({ id:'sort:'+activeSort, label:'Sort: '+so.label });
+      }
+      filters.quick.forEach(k => {
+        const q = QUICK_FILTERS.find(x => x.key === k);
+        if (q) chips.push({ id:'quick:'+k, label:q.label });
+      });
+      FILTER_SECTIONS.forEach(sec => {
+        const v = filters[sec.key];
+        const addOne = (val) => {
+          const opt = sec.opts.find(o => o.val === val);
+          chips.push({ id:'sec:'+sec.key+':'+val, label:sec.label+': '+(opt ? opt.label : val) });
+        };
+        if (v instanceof Set) v.forEach(addOne);
+        else if (v) addOne(v);
+      });
+      if (!chips.length) { row.style.display = 'none'; row.innerHTML = ''; return; }
+      row.style.display = 'block';
+      row.innerHTML = '<div class="flex items-center min-w-max">'
+        + chips.map(c => '<span class="achip" data-aid="'+c.id+'">'+c.label+'<button class="achip-close" data-aclose="'+c.id+'" aria-label="Remove"><i class="fa-solid fa-xmark"></i></button></span>').join('')
+        + '<button class="achip-clear" id="appliedClearAll"><i class="fa-solid fa-broom" style="font-size:10px"></i> Clear all</button>'
+        + '</div>';
+      row.querySelectorAll('[data-aclose]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault(); e.stopPropagation();
+          removeAppliedChip(btn.dataset.aclose);
+        });
+      });
+      const clearAll = document.getElementById('appliedClearAll');
+      if (clearAll) clearAll.addEventListener('click', () => { resetAllFilters(); });
+    }
+    function removeAppliedChip(id){
+      const [kind, a, b] = id.split(':');
+      if (kind === 'sort') activeSort = 'pop';
+      else if (kind === 'quick') filters.quick.delete(a);
+      else if (kind === 'sec') {
+        const v = filters[a];
+        if (v instanceof Set) v.delete(b); else filters[a] = null;
+      }
+      renderSortOptions();
+      renderFilterTabs();
+      renderFilterPane();
+      renderQuickFilters();
+      renderAppliedChips();
       updateFilterDots();
       renderProducts();
-    });
+    }
+    function resetAllFilters(){
+      activeSort = 'pop';
+      Object.keys(filters).forEach(k => {
+        if (filters[k] instanceof Set) filters[k].clear();
+        else filters[k] = null;
+      });
+      renderSortOptions();
+      renderFilterTabs();
+      renderFilterPane();
+      renderQuickFilters();
+      renderAppliedChips();
+      updateFilterDots();
+      renderProducts();
+    }
+    document.getElementById('filterClear').addEventListener('click', resetAllFilters);
+
     function updateFilterDots(){
       const sortBtn = document.getElementById('filterSortBtn');
       const filtBtn = document.getElementById('filterFilterBtn');
       if (sortBtn) sortBtn.setAttribute('aria-pressed', activeSort !== 'pop' ? 'true' : 'false');
-      const anyFilter = !!filters.price || !!filters.brand || filters.avail.size > 0;
+      const anyFilter = FILTER_SECTIONS.some(s => {
+        const v = filters[s.key];
+        return v instanceof Set ? v.size > 0 : !!v;
+      }) || filters.quick.size > 0;
       if (filtBtn) filtBtn.setAttribute('aria-pressed', anyFilter ? 'true' : 'false');
     }
 
@@ -683,6 +950,11 @@
     renderSubs();
     renderProducts();
     renderSortOptions();
+    renderFilterTabs();
+    renderFilterPane();
+    renderQuickFilters();
+    renderAppliedChips();
+    updateFilterDots();
 
     // Variant bottom-sheet · opens when a product card with multiple packaging sizes has its "N Options" pill tapped · each row has its own +/- stepper, state survives across opens for the same product
     (function(){

@@ -6,34 +6,57 @@
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   html,body{margin:0;padding:0}
-  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:120px}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:140px}
   .tnum{font-variant-numeric:tabular-nums}
   .img-blend{mix-blend-mode:multiply}
 
-  /* Section title · matches design system */
   .sec-title{margin:14px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
   .card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
 
-  /* Cart item row · home product-card typography */
-  .cart-item{padding:12px;display:flex;gap:12px;align-items:flex-start;border-bottom:1px solid #F1F5F9}
+  /* Cart item · trash icon in top-right (red), qty stepper at bottom-right · pack-size shown inline with name so the row breathes (no more congested chip between tech-line and price-line) */
+  .cart-item{position:relative;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;border-bottom:1px solid #F1F5F9}
   .cart-item:last-child{border-bottom:0}
   .cart-img{width:64px;height:64px;border-radius:10px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:6px;flex-shrink:0;border:1px solid #E5E7EB}
   .cart-img img{max-width:100%;max-height:100%;object-fit:contain}
-  .cart-info{flex:1;min-width:0;line-height:1.25}
-  .cart-name{font-size:14.5px;font-weight:700;color:#0F172A;line-height:1.2}
-  .cart-tech{font-size:11.5px;color:#94A3B8;margin-top:2px}
-  .cart-size{display:inline-flex;align-items:center;padding:2px 8px;border-radius:5px;background:#F1F5F9;color:#475569;font-size:10.5px;font-weight:600;margin-top:6px}
-  .cart-price-row{display:flex;align-items:baseline;gap:6px;margin-top:6px}
+  .cart-info{flex:1;min-width:0;line-height:1.3;padding-right:28px}
+  .cart-name{font-size:14.5px;font-weight:800;color:#0F172A;line-height:1.2}
+  .cart-size-inline{font-weight:700;color:#475569;font-size:13px}
+  .cart-tech{font-size:11.5px;color:#94A3B8;margin-top:3px}
+  .cart-price-row{display:flex;align-items:baseline;gap:6px;margin-top:8px}
   .cart-price{font-size:16px;font-weight:800;color:#0F172A;line-height:1}
   .cart-mrp{font-size:11px;color:#94A3B8;text-decoration:line-through}
-  .cart-actions{margin-top:10px;display:flex;align-items:center;justify-content:space-between}
-  /* Qty stepper · emerald pill · matches design system */
-  .qty{display:inline-flex;align-items:center;height:32px;border-radius:9999px;border:1px solid #BBF7D0;background:#ECFDF5;overflow:hidden}
-  .qty button{width:30px;height:30px;display:flex;align-items:center;justify-content:center;color:#047857;background:transparent;border:0;cursor:pointer;font-size:13px}
-  .qty .val{padding:0 6px;font-size:13px;font-weight:800;color:#047857;font-variant-numeric:tabular-nums;min-width:18px;text-align:center}
-  .remove-btn{font-size:12px;font-weight:700;color:#94A3B8;background:transparent;border:0;cursor:pointer;padding:6px}
+  .cart-bottom{margin-top:10px;display:flex;align-items:center;justify-content:flex-end}
+  .trash-btn{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:8px;background:#FEF2F2;color:#DC2626;border:1px solid #FECACA;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px}
+  .trash-btn:active{transform:scale(.92)}
+  /* Qty stepper · emerald pill */
+  .qty{display:inline-flex;align-items:center;height:34px;border-radius:9999px;border:1px solid #BBF7D0;background:#ECFDF5;overflow:hidden}
+  .qty button{width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:#047857;background:transparent;border:0;cursor:pointer;font-size:13px}
+  .qty .val{padding:0 8px;font-size:13px;font-weight:800;color:#047857;font-variant-numeric:tabular-nums;min-width:18px;text-align:center}
 
-  /* Bill */
+  /* Address card · partner-app pattern · 2-row card with delivery + change · sits at the top of the cart */
+  .addr-card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .addr-top{display:flex;align-items:center;gap:10px;padding:12px 14px}
+  .addr-ic{width:34px;height:34px;border-radius:10px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+  .addr-body{flex:1;line-height:1.3;min-width:0}
+  .addr-row-bottom{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F8FAFC;border-top:1px solid #F1F5F9}
+  .addr-change{font-size:12px;font-weight:800;color:#047857;background:transparent;border:0;cursor:pointer;letter-spacing:0.02em;text-transform:uppercase}
+
+  /* Welcome-offer meter · simpler text (clear what's unlocked + what's left) · plain emerald progress · no % or absolute label clutter · 100% state flips the line into success copy */
+  .pmeter{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .pmeter-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+  .pmeter-ic{width:34px;height:34px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#047857;font-size:14px}
+  .pmeter-bar{height:6px;background:#F1F5F9;border-radius:9999px;overflow:hidden}
+  .pmeter-fill{height:100%;border-radius:9999px;background:#059669;transition:width .4s ease}
+  .pmeter.unlocked .pmeter-fill{background:#10B981}
+  /* Coupon section · single card now combines Apply + Applied chip · tap opens the all-coupons bottom-sheet */
+  .coupon-card{margin:0 16px;background:#FFFFFF;border:1px dashed #BBF7D0;border-radius:14px;padding:12px 14px;cursor:pointer}
+  .coupon-row{display:flex;align-items:center;gap:12px}
+  .coupon-row .coup-ic{width:34px;height:34px;border-radius:10px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+  .applied-chip{display:flex;align-items:center;gap:8px;margin-top:10px;padding:10px 12px;border-radius:10px;background:#ECFDF5;border:1px solid #A7F3D0}
+  .applied-chip .ck{width:22px;height:22px;border-radius:9999px;background:#059669;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+  .applied-chip .x-btn{background:transparent;border:0;color:#94A3B8;cursor:pointer;font-size:11px}
+
+  /* Bill summary */
   .bill-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:3px 0}
   .bill-row .lbl{color:#64748B}
   .bill-row .val{color:#0F172A;font-weight:600}
@@ -43,38 +66,44 @@
   .bill-total .val{font-size:18px;font-weight:800}
   .saved-pill{margin-top:10px;display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;background:#ECFDF5;color:#047857;font-size:11px;font-weight:800;border:1px solid #BBF7D0}
 
-  /* Parichay meter · soft cream strip · single hairline border (no busy dashed yellow) */
-  .pmeter{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:12px 14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
-  .pmeter-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-  .pmeter-ic{width:32px;height:32px;border-radius:9px;background:#FEF3C7;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#B45309}
-  .pmeter-bar{height:6px;background:#F1F5F9;border-radius:9999px;overflow:hidden}
-  .pmeter-fill{height:100%;border-radius:9999px;background:linear-gradient(90deg,#F59E0B,#047857)}
-  .pmeter-foot{display:flex;align-items:baseline;justify-content:space-between;margin-top:6px;font-size:10.5px;font-weight:700}
+  /* Sticky checkout · "3 items ₹1,900" sits ABOVE the button, not inside it · 5-7 day delivery line dropped */
+  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:10px 14px 14px;z-index:50}
+  .sticky-sum{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;padding:0 2px}
+  .sticky-sum .ttl{font-size:11px;color:#64748B;font-weight:700}
+  .sticky-sum .amt{font-size:20px;font-weight:900;color:#0F172A}
+  .sticky-cta-btn{width:100%;height:52px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
 
-  /* Coin applied · emerald success row */
-  .coin-row{margin:0 16px;background:#ECFDF5;border:1px solid #BBF7D0;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px}
-  .coin-row i.gold{color:#D97706}
-
-  /* Coupon */
-  .coupon{margin:0 16px;background:#FFFFFF;border:1px dashed #BBF7D0;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;width:calc(100% - 32px);cursor:pointer}
-
-  /* Sticky checkout footer · matches design-system primary CTA */
-  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:10px 12px 14px;z-index:50}
-  .sticky-cta-meta{display:flex;align-items:center;gap:6px;justify-content:center;margin-bottom:8px;font-size:11px;color:#64748B}
-  .sticky-cta-btn{width:100%;height:54px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:space-between;padding:0 18px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
-
-  /* Cross-sell bottom sheet · same modal pattern as the rest of the app */
+  /* Modals · cross-sell + coupon sheet */
   .modal-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80}
   .modal-bd.open{opacity:1;pointer-events:auto}
   .modal-sheet{position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;max-height:88vh;display:flex;flex-direction:column}
   .modal-sheet.open{transform:translateY(0)}
   .modal-handle{width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 0}
+  /* Coupon sheet row */
+  .coup-tile{border:1.5px dashed #BBF7D0;background:#F0FDF5;border-radius:12px;padding:12px;display:flex;gap:12px;align-items:center}
+  .coup-tile.ineligible{border-style:solid;border-color:#E5E7EB;background:#F8FAFC;opacity:.7}
+  .coup-tile .code-block{flex:1;min-width:0;line-height:1.3}
+  .coup-tile .code-name{font-size:13.5px;font-weight:900;color:#047857;letter-spacing:0.04em}
+  .coup-tile.ineligible .code-name{color:#94A3B8}
+  .coup-tile .code-desc{font-size:11.5px;color:#64748B;margin-top:2px}
+  .coup-tile .apply-btn{flex-shrink:0;padding:8px 14px;border-radius:8px;background:#059669;color:#FFFFFF;border:0;font-size:12px;font-weight:800;cursor:pointer}
+  .coup-tile.ineligible .apply-btn{background:#F1F5F9;color:#94A3B8;cursor:not-allowed}
+  /* Cross-sell card */
   .xsell-card{border:1px solid #E5E7EB;border-radius:14px;background:#FFFFFF;padding:10px 12px;display:flex;align-items:center;gap:10px}
   .xsell-img{width:54px;height:54px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
   .xsell-img img{max-width:100%;max-height:100%;object-fit:contain}
   .xsell-add{padding:7px 14px;border-radius:8px;background:#FFFFFF;color:#047857;border:1.5px solid #BBF7D0;font-size:12.5px;font-weight:800;cursor:pointer;flex-shrink:0}
   .xsell-add.added{background:#ECFDF5;color:#047857}
   .xsell-tag{display:inline-flex;align-items:center;gap:4px;padding:1px 6px;border-radius:4px;background:#FEF3C7;color:#92400E;font-size:9.5px;font-weight:800;letter-spacing:0.04em}
+
+  /* Confetti celebration when a coupon is applied · short burst that fades out · pure CSS */
+  .celeb{position:fixed;inset:0;pointer-events:none;z-index:120;display:none}
+  .celeb.show{display:block}
+  .confetti{position:absolute;width:8px;height:14px;border-radius:2px;opacity:0;top:38%;left:50%}
+  .celeb.show .confetti{animation:cf 1.4s ease-out forwards}
+  @keyframes cf{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(var(--tx),var(--ty)) rotate(var(--r));opacity:0}}
+  .celeb-toast{position:fixed;left:50%;top:36%;transform:translate(-50%,-50%) scale(.85);opacity:0;background:linear-gradient(135deg,#047857,#10B981);color:#FFFFFF;padding:14px 22px;border-radius:14px;font-weight:900;font-size:14px;letter-spacing:0.02em;box-shadow:0 14px 34px -8px rgba(4,120,87,0.6);transition:all .4s cubic-bezier(.34,1.56,.64,1);z-index:121;display:flex;align-items:center;gap:10px}
+  .celeb-toast.show{transform:translate(-50%,-50%) scale(1);opacity:1}
 </style></head>
 <body>
 
@@ -87,7 +116,6 @@
     </div>
   </div>
 
-  <!-- Header -->
   <div class="px-4 pt-4 pb-3 flex items-center gap-3 bg-white">
     <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB">
       <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
@@ -98,106 +126,119 @@
     </div>
   </div>
 
+  <!-- Address · partner-app pattern · top row shows delivery date + FREE pill · bottom row shows address with CHANGE -->
+  <div class="sec-title">Delivery</div>
+  <div class="addr-card">
+    <div class="addr-top">
+      <div class="addr-ic"><i class="fa-solid fa-truck-fast"></i></div>
+      <div class="addr-body">
+        <div class="flex items-center gap-1.5">
+          <span class="text-[14.5px] font-extrabold text-[#0F172A]">Tomorrow, 28 May</span>
+          <span class="text-[9px] font-extrabold text-[#047857] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider">Free</span>
+        </div>
+        <div class="text-[11.5px] text-[#64748B] mt-0.5">Order before <span class="font-extrabold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
+      </div>
+    </div>
+    <div class="addr-row-bottom">
+      <i class="fa-solid fa-location-dot text-[14px]" style="color:#94A3B8"></i>
+      <div class="flex-1 min-w-0 text-[12.5px] font-semibold truncate" style="color:#475569">Ramesh Patel · Mahidpur, Ujjain · 456440</div>
+      <button class="addr-change">Change</button>
+    </div>
+  </div>
+
   <!-- Items -->
-  <div class="card mt-3">
+  <div class="sec-title">Your items</div>
+  <div class="card">
     <div class="cart-item">
+      <button class="trash-btn" aria-label="Remove"><i class="fa-solid fa-trash-can"></i></button>
       <div class="cart-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend"/></div>
       <div class="cart-info">
-        <div class="cart-name">Humic + Fulvic 98</div>
+        <div class="cart-name">Humic <span class="cart-size-inline">· 500 ml</span></div>
         <div class="cart-tech">Bio-stimulant for roots &amp; soil</div>
-        <span class="cart-size">500 ml</span>
         <div class="cart-price-row">
           <span class="cart-price tnum">&#8377;276</span>
           <span class="cart-mrp tnum">&#8377;390</span>
           <span class="text-[10.5px] font-extrabold" style="color:#047857">29% off</span>
         </div>
-        <div class="cart-actions">
+        <div class="cart-bottom">
           <div class="qty">
             <button aria-label="Decrease"><i class="fa-solid fa-minus"></i></button>
             <span class="val tnum">2</span>
             <button aria-label="Increase"><i class="fa-solid fa-plus"></i></button>
           </div>
-          <button class="remove-btn"><i class="fa-solid fa-trash-can text-[11px]"></i> Remove</button>
         </div>
       </div>
     </div>
 
     <div class="cart-item">
+      <button class="trash-btn" aria-label="Remove"><i class="fa-solid fa-trash-can"></i></button>
       <div class="cart-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend"/></div>
       <div class="cart-info">
-        <div class="cart-name">Chakrawarti ZC</div>
+        <div class="cart-name">Chakrawarti ZC <span class="cart-size-inline">· 100 ml</span></div>
         <div class="cart-tech">Chloran. + Lambda-Cy.</div>
-        <span class="cart-size">100 ml</span>
         <div class="cart-price-row">
           <span class="cart-price tnum">&#8377;358</span>
           <span class="cart-mrp tnum">&#8377;495</span>
           <span class="text-[10.5px] font-extrabold" style="color:#047857">28% off</span>
         </div>
-        <div class="cart-actions">
+        <div class="cart-bottom">
           <div class="qty">
             <button><i class="fa-solid fa-minus"></i></button>
             <span class="val tnum">3</span>
             <button><i class="fa-solid fa-plus"></i></button>
           </div>
-          <button class="remove-btn"><i class="fa-solid fa-trash-can text-[11px]"></i> Remove</button>
         </div>
       </div>
     </div>
 
     <div class="cart-item">
+      <button class="trash-btn" aria-label="Remove"><i class="fa-solid fa-trash-can"></i></button>
       <div class="cart-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend"/></div>
       <div class="cart-info">
-        <div class="cart-name">NPK 19-19-19</div>
+        <div class="cart-name">NPK 19-19-19 <span class="cart-size-inline">· 1 kg</span></div>
         <div class="cart-tech">Water-soluble fertilizer</div>
-        <span class="cart-size">1 kg</span>
         <div class="cart-price-row">
           <span class="cart-price tnum">&#8377;330</span>
         </div>
-        <div class="cart-actions">
+        <div class="cart-bottom">
           <div class="qty">
             <button><i class="fa-solid fa-minus"></i></button>
             <span class="val tnum">1</span>
             <button><i class="fa-solid fa-plus"></i></button>
           </div>
-          <button class="remove-btn"><i class="fa-solid fa-trash-can text-[11px]"></i> Remove</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Parichay threshold meter · cleaner card on neutral page bg · no busy dashed yellow -->
-  <div class="sec-title">Welcome offer</div>
-  <div class="pmeter">
+  <!-- Threshold meter · cleaner copy now spells out the unlock + the gap · plain emerald bar · no %/absolute label clutter -->
+  <div class="pmeter mt-3" id="pmeter">
     <div class="pmeter-head">
-      <span class="pmeter-ic"><i class="fa-solid fa-gift text-[15px]"></i></span>
+      <span class="pmeter-ic"><i class="fa-solid fa-gift"></i></span>
       <div class="flex-1 leading-tight">
-        <div class="text-[13px] font-extrabold">Add &#8377;300 more for a free sample</div>
-        <div class="text-[10.5px] mt-0.5" style="color:#64748B">First-order welcome reward</div>
+        <div class="text-[13.5px] font-extrabold text-[#0F172A]" id="pmeterTitle">Spend ₹300 more to unlock a free Humic 50 ml sample</div>
+        <div class="text-[11px] mt-1" style="color:#64748B" id="pmeterSub">A trial 50 ml pack will be added automatically at checkout</div>
       </div>
     </div>
-    <div class="pmeter-bar"><div class="pmeter-fill" style="width:88%"></div></div>
-    <div class="pmeter-foot">
-      <span class="tnum" style="color:#475569">&#8377;2,200 of &#8377;2,500</span>
-      <span style="color:#047857">88%</span>
-    </div>
+    <div class="pmeter-bar"><div class="pmeter-fill" id="pmeterFill" style="width:88%"></div></div>
   </div>
 
-  <!-- Coin reward applied · success state -->
-  <div class="coin-row mt-3">
-    <i class="fa-solid fa-coins text-[18px] gold"></i>
-    <div class="flex-1 leading-tight">
-      <div class="text-[12.5px] font-extrabold" style="color:#047857">&#8377;100 welcome offer applied</div>
-      <div class="text-[10.5px] mt-0.5" style="color:#64748B">First-order bonus</div>
+  <!-- Combined coupon card · "Apply a coupon" CTA + (when active) emerald applied chip beneath, in the same section · tap opens the all-coupons sheet -->
+  <div class="coupon-card mt-3" id="couponCard">
+    <div class="coupon-row">
+      <span class="coup-ic"><i class="fa-solid fa-ticket"></i></span>
+      <span class="flex-1 text-left text-[13px] font-extrabold text-[#0F172A]" id="couponMain">Apply a coupon code</span>
+      <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
     </div>
-    <i class="fa-solid fa-circle-check text-[18px]" style="color:#059669"></i>
+    <div class="applied-chip" id="appliedChip" style="display:none">
+      <span class="ck"><i class="fa-solid fa-check"></i></span>
+      <div class="flex-1 leading-tight">
+        <div class="text-[12.5px] font-extrabold" style="color:#047857" id="appliedName">WELCOME100 applied</div>
+        <div class="text-[10.5px]" style="color:#64748B" id="appliedSave">You saved ₹100</div>
+      </div>
+      <button class="x-btn" id="removeCoupon"><i class="fa-solid fa-xmark text-[13px]"></i></button>
+    </div>
   </div>
-
-  <!-- Coupon entry -->
-  <button class="coupon mt-3">
-    <i class="fa-solid fa-ticket text-[16px]" style="color:#047857"></i>
-    <span class="flex-1 text-left text-[13px] font-bold">Apply a coupon code</span>
-    <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
-  </button>
 
   <!-- Bill summary -->
   <div class="sec-title">Bill summary</div>
@@ -205,7 +246,7 @@
     <div style="padding:14px">
       <div class="bill-row"><span class="lbl">Items total (3)</span><span class="val tnum">&#8377;2,300</span></div>
       <div class="bill-row"><span class="lbl">Item discount</span><span class="val green tnum">&minus; &#8377;300</span></div>
-      <div class="bill-row"><span class="lbl">Welcome offer</span><span class="val green tnum">&minus; &#8377;100</span></div>
+      <div class="bill-row" id="billCouponRow"><span class="lbl">Coupon (WELCOME100)</span><span class="val green tnum">&minus; &#8377;100</span></div>
       <div class="bill-row"><span class="lbl">Delivery</span><span class="val green">FREE</span></div>
       <div class="bill-total">
         <span class="lbl">Total</span>
@@ -215,16 +256,103 @@
     </div>
   </div>
 
-  <!-- Sticky Checkout · opens cross-sell bottom sheet first -->
+  <!-- Sticky Checkout · summary sits ABOVE the button, no longer inside it · 5-7 day delivery line removed -->
   <div class="sticky-cta">
-    <div class="sticky-cta-meta"><i class="fa-solid fa-truck-fast text-[11px]" style="color:#047857"></i> 5–7 day delivery to Indore 452001</div>
+    <div class="sticky-sum">
+      <div class="leading-tight">
+        <div class="ttl">3 items</div>
+        <div class="amt tnum">&#8377;1,900</div>
+      </div>
+      <div class="text-[11px] font-extrabold" style="color:#047857"><i class="fa-solid fa-circle-check text-[10px]"></i> Saved ₹520</div>
+    </div>
     <button id="checkoutBtn" class="sticky-cta-btn">
-      <span>3 items &middot; <span class="tnum">&#8377;1,900</span></span>
-      <span class="flex items-center gap-1.5">Checkout <i class="fa-solid fa-chevron-right text-[12px]"></i></span>
+      Checkout <i class="fa-solid fa-arrow-right text-[12px]"></i>
     </button>
   </div>
 
-  <!-- Cross-sell · push-sell · recommendations bottom sheet · opens when user taps Checkout · user can Add picks or Continue to checkout -->
+  <!-- Coupon sheet · lists all eligible + ineligible coupons · apply triggers a celebration burst + closes -->
+  <div id="coupBd" class="modal-bd"></div>
+  <div id="coupSheet" class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="px-5 pt-3 pb-3 flex items-center justify-between">
+      <div class="leading-tight">
+        <div class="text-[18px] font-extrabold">Coupons</div>
+        <div class="text-[11.5px]" style="color:#64748B">Pick one to apply on your cart</div>
+      </div>
+      <button id="coupClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+
+    <div class="px-5 pb-4">
+      <!-- Manual entry input -->
+      <div class="flex gap-2 items-center mb-4 mt-2">
+        <div class="flex-1 flex items-center gap-2 h-[44px] px-3 rounded-[10px] bg-white" style="border:1px solid #E5E7EB">
+          <i class="fa-solid fa-ticket text-[12px]" style="color:#94A3B8"></i>
+          <input id="coupInput" type="text" placeholder="Have a code? Enter here" class="flex-1 outline-none text-[13px] font-semibold bg-transparent placeholder:text-[#94A3B8] placeholder:font-medium" style="text-transform:uppercase"/>
+        </div>
+        <button id="coupCheck" class="px-4 h-[44px] rounded-[10px] text-[12.5px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0">Check</button>
+      </div>
+      <div class="text-[10.5px] font-extrabold uppercase tracking-wider mb-2" style="color:#64748B">Available offers</div>
+    </div>
+
+    <div class="px-5 pb-5 overflow-y-auto" style="flex:1">
+      <div class="space-y-2.5">
+        <div class="coup-tile" data-code="WELCOME100" data-save="100">
+          <div class="code-block">
+            <div class="code-name">WELCOME100</div>
+            <div class="code-desc">₹100 off on your first order · Valid till May 31</div>
+          </div>
+          <button class="apply-btn">Apply</button>
+        </div>
+        <div class="coup-tile" data-code="HUMIC50" data-save="50">
+          <div class="code-block">
+            <div class="code-name">HUMIC50</div>
+            <div class="code-desc">Flat ₹50 off on Humic products · Min ₹500</div>
+          </div>
+          <button class="apply-btn">Apply</button>
+        </div>
+        <div class="coup-tile" data-code="KKD200" data-save="200">
+          <div class="code-block">
+            <div class="code-name">KKD200</div>
+            <div class="code-desc">₹200 off above ₹1,500 · 1 use per farmer</div>
+          </div>
+          <button class="apply-btn">Apply</button>
+        </div>
+        <div class="text-[10.5px] font-extrabold uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Not eligible yet</div>
+        <div class="coup-tile ineligible">
+          <div class="code-block">
+            <div class="code-name">KISAN500</div>
+            <div class="code-desc">Add ₹600 more to unlock — Min ₹2,500</div>
+          </div>
+          <button class="apply-btn" disabled>Apply</button>
+        </div>
+        <div class="coup-tile ineligible">
+          <div class="code-block">
+            <div class="code-name">CROP300</div>
+            <div class="code-desc">Crop-specific coupon · Only for cotton products</div>
+          </div>
+          <button class="apply-btn" disabled>Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Celebration burst · confetti + emerald toast when a coupon is applied -->
+  <div id="celeb" class="celeb">
+    <span class="confetti" style="background:#FBBF24;--tx:-160px;--ty:280px;--r:540deg"></span>
+    <span class="confetti" style="background:#10B981;--tx:160px;--ty:300px;--r:-460deg"></span>
+    <span class="confetti" style="background:#3B82F6;--tx:-90px;--ty:340px;--r:480deg"></span>
+    <span class="confetti" style="background:#EF4444;--tx:120px;--ty:260px;--r:-520deg"></span>
+    <span class="confetti" style="background:#047857;--tx:-200px;--ty:200px;--r:-360deg"></span>
+    <span class="confetti" style="background:#FBBF24;--tx:200px;--ty:220px;--r:560deg"></span>
+    <span class="confetti" style="background:#10B981;--tx:-50px;--ty:360px;--r:-540deg"></span>
+    <span class="confetti" style="background:#FBBF24;--tx:60px;--ty:320px;--r:520deg"></span>
+  </div>
+  <div id="celebToast" class="celeb-toast">
+    <i class="fa-solid fa-party-horn text-[18px]"></i>
+    <span id="celebText">Coupon applied · Saved ₹100</span>
+  </div>
+
+  <!-- Cross-sell sheet (unchanged · opens from Checkout) -->
   <div id="xsellBd" class="modal-bd"></div>
   <div id="xsellSheet" class="modal-sheet">
     <div class="modal-handle"></div>
@@ -235,7 +363,6 @@
       </div>
       <button id="xsellClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
-
     <div class="px-5 pb-2 overflow-y-auto" style="flex:1">
       <div class="space-y-2.5">
         <div class="xsell-card">
@@ -250,9 +377,8 @@
               <span class="text-[10px] font-extrabold" style="color:#047857">23% off</span>
             </div>
           </div>
-          <button class="xsell-add" data-add="antivirus">Add</button>
+          <button class="xsell-add">Add</button>
         </div>
-
         <div class="xsell-card">
           <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" alt=""/></div>
           <div class="flex-1 min-w-0 leading-tight">
@@ -265,9 +391,8 @@
               <span class="text-[10px] font-extrabold" style="color:#047857">24% off</span>
             </div>
           </div>
-          <button class="xsell-add" data-add="bhumiraja">Add</button>
+          <button class="xsell-add">Add</button>
         </div>
-
         <div class="xsell-card">
           <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" alt=""/></div>
           <div class="flex-1 min-w-0 leading-tight">
@@ -280,11 +405,10 @@
               <span class="text-[10px] font-extrabold" style="color:#047857">28% off</span>
             </div>
           </div>
-          <button class="xsell-add" data-add="chakraveer">Add</button>
+          <button class="xsell-add">Add</button>
         </div>
       </div>
     </div>
-
     <div class="px-5 pt-3 pb-5" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px)">
       <div class="flex gap-2 items-center">
         <button id="xsellSkip" class="flex-1 h-[48px] rounded-[12px] text-[13px] font-bold" style="background:#FFFFFF;color:#475569;border:1.5px solid #E5E7EB">Skip</button>
@@ -296,7 +420,74 @@
   </div>
 
   <script>
-    // Checkout opens the cross-sell sheet first · Continue routes to checkout.html, Skip does the same · Add buttons just flip to an emerald "Added" pill (prototype, doesn't actually mutate the cart payload)
+    // Coupon sheet open / close + apply (with confetti + emerald toast)
+    (function(){
+      const card = document.getElementById('couponCard');
+      const bd = document.getElementById('coupBd');
+      const sh = document.getElementById('coupSheet');
+      const cls = document.getElementById('coupClose');
+      const applied = document.getElementById('appliedChip');
+      const appliedName = document.getElementById('appliedName');
+      const appliedSave = document.getElementById('appliedSave');
+      const couponMain = document.getElementById('couponMain');
+      const removeBtn = document.getElementById('removeCoupon');
+      const celeb = document.getElementById('celeb');
+      const toast = document.getElementById('celebToast');
+      const toastText = document.getElementById('celebText');
+
+      function open(){ bd.classList.add('open'); sh.classList.add('open'); }
+      function close(){ bd.classList.remove('open'); sh.classList.remove('open'); }
+      card.addEventListener('click', open);
+      cls.addEventListener('click', e => { e.stopPropagation(); close(); });
+      bd.addEventListener('click', close);
+
+      function applyCoupon(code, save){
+        appliedName.textContent = code + ' applied';
+        appliedSave.textContent = 'You saved ₹' + save;
+        applied.style.display = 'flex';
+        couponMain.textContent = 'Tap to change coupon';
+        close();
+        // Confetti + toast
+        setTimeout(() => {
+          celeb.classList.add('show');
+          toastText.textContent = 'Coupon applied · Saved ₹' + save;
+          toast.classList.add('show');
+          setTimeout(() => { celeb.classList.remove('show'); toast.classList.remove('show'); }, 1600);
+        }, 200);
+      }
+
+      sh.querySelectorAll('.coup-tile:not(.ineligible) .apply-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const tile = btn.closest('.coup-tile');
+          applyCoupon(tile.dataset.code, tile.dataset.save);
+        });
+      });
+
+      removeBtn && removeBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        applied.style.display = 'none';
+        couponMain.textContent = 'Apply a coupon code';
+      });
+    })();
+
+    // Threshold meter · update copy + bar based on cart subtotal · 100% flips to "unlocked" state
+    (function(){
+      const fill = document.getElementById('pmeterFill');
+      const title = document.getElementById('pmeterTitle');
+      const sub = document.getElementById('pmeterSub');
+      const meter = document.getElementById('pmeter');
+      const cur = 2200, goal = 2500;
+      const pct = Math.min(100, Math.round(cur / goal * 100));
+      fill.style.width = pct + '%';
+      if (cur >= goal) {
+        meter.classList.add('unlocked');
+        title.innerHTML = 'Free Humic 50 ml sample unlocked &nbsp;<i class="fa-solid fa-circle-check text-[12px]" style="color:#10B981"></i>';
+        sub.textContent = 'Added to your cart automatically · No code needed';
+      }
+    })();
+
+    // Checkout opens cross-sell sheet
     (function(){
       const btn = document.getElementById('checkoutBtn');
       const bd = document.getElementById('xsellBd');

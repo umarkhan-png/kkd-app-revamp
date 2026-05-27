@@ -51,6 +51,20 @@
   .video-card .play svg{margin-left:3px}
   .video-card .label{position:absolute;bottom:10px;left:12px;color:#FFFFFF;font-weight:800;font-size:12px;text-shadow:0 1px 4px rgba(0,0,0,0.35)}
   .video-card .duration{position:absolute;top:10px;right:10px;background:rgba(15,23,42,0.7);color:#FFFFFF;font-weight:700;font-size:10px;padding:3px 7px;border-radius:9999px}
+  /* Delivery card · partner-app pattern · 2-row card with delivery date + change-address row · sits below trust badges */
+  .deliv-card{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .deliv-top{display:flex;align-items:center;gap:10px;padding:12px 14px}
+  .deliv-ic{width:32px;height:32px;border-radius:10px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+  .deliv-chips{display:flex;gap:8px;padding:0 14px 12px}
+  .deliv-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:9999px;background:#ECFDF5;border:1px solid #A7F3D0;font-size:10.5px;font-weight:800;color:#047857}
+  .deliv-bottom{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F8FAFC;border-top:1px solid #F1F5F9}
+  .deliv-change{font-size:12px;font-weight:800;color:#047857;background:transparent;border:0;cursor:pointer;letter-spacing:0.02em;text-transform:uppercase}
+  /* Collapsible details card (partner-app style) · used for Product description + Ratings section */
+  details.kkd-collapse{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden}
+  details.kkd-collapse > summary{list-style:none;cursor:pointer;padding:14px;display:flex;align-items:center;justify-content:space-between}
+  details.kkd-collapse > summary::-webkit-details-marker{display:none}
+  details.kkd-collapse[open] .chev{transform:rotate(180deg)}
+  .chev{transition:transform .2s ease;color:#64748B}
   /* Trust badge · Flipkart-style 3-column with bigger emerald icon panel · chevron suggests tap for details */
   .trust-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
   .trust-cell{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:6px 4px}
@@ -201,15 +215,50 @@
   </div>
 </div>
 
-<!-- Product description -->
+<!-- Delivery card · partner-app style · delivery estimate + free pill, fulfillment chips, address + CHANGE row -->
+<div class="px-4 mt-5">
+  <div class="deliv-card">
+    <div class="deliv-top">
+      <span class="deliv-ic"><i class="fa-solid fa-truck-fast"></i></span>
+      <div class="flex-1 leading-tight">
+        <div class="flex items-center gap-1.5">
+          <span class="text-[14.5px] font-extrabold text-[#0F172A]">Tomorrow, 28 May</span>
+          <span class="text-[9px] font-extrabold text-[#047857] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider">Free</span>
+        </div>
+        <div class="text-[11.5px] mt-0.5" style="color:#64748B">Order before <span class="font-extrabold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
+      </div>
+    </div>
+    <div class="deliv-chips">
+      <span class="deliv-chip"><i class="fa-solid fa-box text-[9px]"></i> Packed in 2 hrs</span>
+      <span class="deliv-chip"><i class="fa-solid fa-shield-halved text-[9px]"></i> COD available</span>
+    </div>
+    <div class="deliv-bottom">
+      <i class="fa-solid fa-location-dot text-[14px]" style="color:#94A3B8"></i>
+      <div class="flex-1 min-w-0 text-[12.5px] font-semibold truncate" style="color:#475569">Mahidpur, Ujjain · 456440</div>
+      <button class="deliv-change">Change</button>
+    </div>
+  </div>
+</div>
+
+<!-- Product description · partner-app collapsible card · drops the 3 benefit bullets · short paragraph + a 3-column key-facts grid (acts in / residual / safe for) -->
 <div class="px-4 mt-6">
-  <div class="text-[16px] font-extrabold mb-2 text-[#0F172A]">Product description</div>
-  <p class="text-[12.5px] leading-relaxed text-[#334155]">Activated Humic + Fulvic 98 is a concentrated bio-stimulant that improves root growth, soil structure and nutrient uptake. The 98% active fraction means a little goes a long way — works across cereals, vegetables, pulses and orchard crops, and is safe to tank-mix with most fertilizers.</p>
-  <ul class="mt-3 space-y-1.5 text-[12.5px] text-[#334155]">
-    <li class="flex gap-2"><span class="text-[#059669] font-extrabold">✓</span><span>Stronger roots and better water absorption</span></li>
-    <li class="flex gap-2"><span class="text-[#059669] font-extrabold">✓</span><span>Greener, fuller leaves within 10–15 days</span></li>
-    <li class="flex gap-2"><span class="text-[#059669] font-extrabold">✓</span><span>Improves soil microbe activity over the season</span></li>
-  </ul>
+  <details class="kkd-collapse" open>
+    <summary>
+      <div class="leading-tight">
+        <div class="text-[15px] font-extrabold text-[#0F172A]">Product description</div>
+        <div class="text-[11.5px] mt-0.5" style="color:#64748B">Composition · Mode · Crop fit</div>
+      </div>
+      <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </summary>
+    <div class="px-4 pb-4">
+      <p class="text-[12.5px] leading-relaxed" style="color:#475569">A concentrated <span class="font-extrabold text-[#0F172A]">bio-stimulant</span> with <span class="font-extrabold text-[#0F172A]">Humic 80% + Fulvic 18%</span>. Improves root growth, soil structure and nutrient uptake. The 98% active fraction means a little goes a long way — works across cereals, vegetables, pulses and orchard crops, and is safe to tank-mix with most fertilizers.</p>
+      <div class="mt-3 pt-3 border-t border-[#F1F5F9] grid grid-cols-3 divide-x divide-[#F1F5F9]">
+        <div class="text-center"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:#64748B">Acts in</div><div class="text-[14px] font-extrabold text-[#0F172A] mt-0.5">5–7 days</div></div>
+        <div class="text-center"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:#64748B">Residual</div><div class="text-[14px] font-extrabold text-[#0F172A] mt-0.5">30 days</div></div>
+        <div class="text-center"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:#64748B">Crop safe</div><div class="text-[14px] font-extrabold mt-0.5" style="color:#047857">All</div></div>
+      </div>
+    </div>
+  </details>
 </div>
 
 <!-- How to use -->
@@ -235,50 +284,112 @@
   </div>
 </div>
 
-<!-- Testimonial video -->
-<div class="px-4 mt-6">
-  <div class="text-[16px] font-extrabold mb-2 text-[#0F172A]">Farmer testimonial</div>
-  <a href="#" class="video-card aspect-[16/9] block">
-    <img src="https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=800&q=80" class="poster" alt="Farmer testimonial video"/>
-    <span class="duration">0:48</span>
-    <span class="play"><svg width="22" height="22" viewBox="0 0 24 24" fill="#059669"><path d="M8 5v14l11-7z"/></svg></span>
-    <span class="label">Ramesh, Indore · Tomato result in 15 days</span>
-  </a>
+<!-- Farmer testimonials · partner-app pattern · horizontal scroll of vertical video tiles (152x200) with farmer photo poster + name + crop/location + caption -->
+<div class="mt-6">
+  <div class="px-4 flex items-baseline justify-between mb-3">
+    <div>
+      <div class="text-[15px] font-extrabold text-[#0F172A]">Farmer testimonials</div>
+      <div class="text-[11.5px] mt-0.5" style="color:#64748B">Real results from verified buyers</div>
+    </div>
+    <a href="#" class="text-[12px] font-extrabold" style="color:#047857">SEE ALL</a>
+  </div>
+  <div class="overflow-x-auto scrollx -mx-1 px-4">
+    <div class="flex gap-3 min-w-max">
+      <div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">
+        <img src="https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=400&q=80" class="w-full h-full object-cover" style="opacity:.55"/>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <div class="w-11 h-11 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="text-white text-[10px] font-extrabold text-center px-2">Ramesh Patel</div>
+          <div class="text-[9px] text-center" style="color:rgba(255,255,255,0.7)">Tomato · Indore</div>
+        </div>
+        <div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-semibold leading-tight">"Tomato result in 15 days"</div></div>
+      </div>
+      <div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">
+        <img src="https://images.unsplash.com/photo-1572177812156-58036aae439c?w=400&q=80" class="w-full h-full object-cover" style="opacity:.55"/>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <div class="w-11 h-11 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="text-white text-[10px] font-extrabold text-center px-2">Mohan Verma</div>
+          <div class="text-[9px] text-center" style="color:rgba(255,255,255,0.7)">Cotton · Khandwa</div>
+        </div>
+        <div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-semibold leading-tight">"Yield up by 20%"</div></div>
+      </div>
+      <div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">
+        <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=400&q=80" class="w-full h-full object-cover" style="opacity:.55"/>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <div class="w-11 h-11 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg></div>
+          <div class="text-white text-[10px] font-extrabold text-center px-2">Balram Kushwaha</div>
+          <div class="text-[9px] text-center" style="color:rgba(255,255,255,0.7)">Wheat · Sehore</div>
+        </div>
+        <div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-semibold leading-tight">"Used for 2 seasons"</div></div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- Ratings & reviews -->
-<div class="px-4 mt-6">
-  <div class="text-[16px] font-extrabold mb-3 text-[#0F172A]">Ratings &amp; reviews</div>
-  <div class="border border-[#E5E7EB] rounded-2xl p-4">
-    <div class="flex items-center gap-4">
-      <div class="text-center">
-        <div class="text-[34px] font-black leading-none tnum text-[#0F172A]">4.6</div>
-        <div class="text-[#FBBF24] text-[13px] tracking-[2px] leading-none mt-1">★★★★★</div>
-        <div class="text-[10.5px] font-bold text-[#64748B] mt-1.5">2,020 reviews</div>
-      </div>
-      <div class="flex-1 space-y-1.5">
-        <div class="flex items-center gap-2"><span class="text-[10px] font-bold text-[#64748B] w-3">5</span><div class="bar-track"><div class="bar-fill" style="width:72%"></div></div><span class="text-[10px] font-bold text-[#64748B] w-8 text-right tnum">1,454</span></div>
-        <div class="flex items-center gap-2"><span class="text-[10px] font-bold text-[#64748B] w-3">4</span><div class="bar-track"><div class="bar-fill" style="width:18%"></div></div><span class="text-[10px] font-bold text-[#64748B] w-8 text-right tnum">364</span></div>
-        <div class="flex items-center gap-2"><span class="text-[10px] font-bold text-[#64748B] w-3">3</span><div class="bar-track"><div class="bar-fill" style="width:6%"></div></div><span class="text-[10px] font-bold text-[#64748B] w-8 text-right tnum">121</span></div>
-        <div class="flex items-center gap-2"><span class="text-[10px] font-bold text-[#64748B] w-3">2</span><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div><span class="text-[10px] font-bold text-[#64748B] w-8 text-right tnum">41</span></div>
-        <div class="flex items-center gap-2"><span class="text-[10px] font-bold text-[#64748B] w-3">1</span><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div><span class="text-[10px] font-bold text-[#64748B] w-8 text-right tnum">40</span></div>
-      </div>
+<!-- Ratings & reviews · partner-app pattern · edge-to-edge tinted bg · header with VIEW ALL · score card · filter pills · review card -->
+<div class="mt-6 py-5 px-4" style="background:#F8FAFC;border-top:1px solid #F1F5F9;border-bottom:1px solid #F1F5F9">
+  <div class="flex items-center justify-between mb-3">
+    <div>
+      <div class="text-[15px] font-extrabold text-[#0F172A]">Ratings &amp; reviews</div>
+      <div class="text-[11.5px] mt-0.5" style="color:#64748B">From verified buyers only</div>
     </div>
-
-    <div class="mt-4 pt-4 border-t border-dashed border-[#E5E7EB]">
-      <div class="flex items-start gap-3">
-        <img src="https://images.unsplash.com/photo-1627638458498-71e9fdf12a05?w=200&q=80" class="w-10 h-10 rounded-full object-cover flex-shrink-0"/>
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center justify-between"><div class="text-[13px] font-bold">Ramesh Patel</div><span class="text-[10px] font-bold text-[#059669]">✓ Verified buyer</span></div>
-          <div class="flex items-center gap-1.5"><span class="text-[#FBBF24] text-[12px]">★★★★★</span><span class="text-[10px] text-[#64748B]">·  Indore, MP · 12 days ago</span></div>
-          <p class="text-[12.5px] mt-1.5 text-[#0F172A] leading-snug">Used on tomato — saw results in 15 days. Leaves are shinier and stronger. Will order again.</p>
-          <div class="mt-2 flex gap-2"><img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=200&q=80" class="w-14 h-14 rounded-lg object-cover"/><img src="https://images.unsplash.com/photo-1591857177580-dc82b9ac4e1e?w=200&q=80" class="w-14 h-14 rounded-lg object-cover"/></div>
-        </div>
-      </div>
-    </div>
-
-    <button class="mt-4 w-full h-10 rounded-lg border border-[#059669] text-[#059669] text-[12.5px] font-extrabold">View all 2,020 reviews</button>
+    <a href="#" class="text-[12px] font-extrabold" style="color:#047857">VIEW ALL (2,020)</a>
   </div>
+  <div class="bg-white border border-[#E5E7EB] rounded-[12px] p-4">
+    <div class="flex items-center gap-4">
+      <div class="text-center flex-shrink-0">
+        <div class="text-[30px] font-black leading-none tnum text-[#0F172A]">4.6</div>
+        <div class="text-[#FBBF24] text-[12px] mt-1 tracking-wider">★★★★★</div>
+        <div class="text-[9px] mt-0.5" style="color:#64748B">2,020 ratings</div>
+      </div>
+      <div class="flex-1 space-y-1">
+        <div class="flex items-center gap-2 text-[9.5px]"><span class="w-4" style="color:#64748B">5★</span><div class="bar-track" style="height:6px"><div class="h-full rounded-full" style="background:#059669;width:72%"></div></div><span class="w-8 text-right font-extrabold" style="color:#475569">72%</span></div>
+        <div class="flex items-center gap-2 text-[9.5px]"><span class="w-4" style="color:#64748B">4★</span><div class="bar-track" style="height:6px"><div class="h-full rounded-full" style="background:#10B981;width:18%"></div></div><span class="w-8 text-right font-extrabold" style="color:#475569">18%</span></div>
+        <div class="flex items-center gap-2 text-[9.5px]"><span class="w-4" style="color:#64748B">3★</span><div class="bar-track" style="height:6px"><div class="h-full rounded-full" style="background:#FBBF24;width:6%"></div></div><span class="w-8 text-right font-extrabold" style="color:#475569">6%</span></div>
+        <div class="flex items-center gap-2 text-[9.5px]"><span class="w-4" style="color:#64748B">2★</span><div class="bar-track" style="height:6px"><div class="h-full rounded-full" style="background:#F59E0B;width:2%"></div></div><span class="w-8 text-right font-extrabold" style="color:#475569">2%</span></div>
+        <div class="flex items-center gap-2 text-[9.5px]"><span class="w-4" style="color:#64748B">1★</span><div class="bar-track" style="height:6px"><div class="h-full rounded-full" style="background:#EF4444;width:2%"></div></div><span class="w-8 text-right font-extrabold" style="color:#475569">2%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter pills · horizontal scroll -->
+  <div class="mt-3 overflow-x-auto scrollx -mx-4 px-4">
+    <div class="flex gap-2 min-w-max">
+      <span class="text-white text-[11.5px] font-extrabold px-3 py-1.5 rounded-full" style="background:#0F172A">All (2,020)</span>
+      <span class="bg-white border border-[#E5E7EB] text-[11.5px] font-bold px-3 py-1.5 rounded-full" style="color:#64748B">Most helpful</span>
+      <span class="bg-white border border-[#E5E7EB] text-[11.5px] font-bold px-3 py-1.5 rounded-full" style="color:#64748B">With photos (412)</span>
+      <span class="bg-white border border-[#E5E7EB] text-[11.5px] font-bold px-3 py-1.5 rounded-full" style="color:#64748B">5★ only</span>
+      <span class="bg-white border border-[#E5E7EB] text-[11.5px] font-bold px-3 py-1.5 rounded-full" style="color:#64748B">Critical</span>
+    </div>
+  </div>
+
+  <!-- Review card · verified buyer signal + green Zomato-style rating chip + helpful/report row -->
+  <div class="mt-3 space-y-2.5">
+    <div class="bg-white border border-[#E5E7EB] rounded-[12px] p-3">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[13px] font-extrabold" style="color:#047857">R</div>
+        <div class="flex-1 leading-tight">
+          <span class="text-[13px] font-extrabold text-[#0F172A]">Ramesh Patel</span>
+          <div class="flex items-center gap-1 mt-0.5">
+            <div class="flex items-center gap-0.5 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded" style="background:#059669"><svg width="7" height="7" viewBox="0 0 24 24" fill="white"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg>5</div>
+            <span class="text-[9.5px]" style="color:#64748B">Indore · 12 days ago</span>
+          </div>
+        </div>
+        <span class="text-[9px] font-extrabold" style="color:#047857">✓ Verified</span>
+      </div>
+      <p class="text-[12.5px] mt-2 text-[#0F172A] leading-snug">Used on tomato — saw results in 15 days. Leaves are shinier and stronger. Will order again.</p>
+      <div class="mt-2 flex gap-2">
+        <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=200&q=80" class="w-14 h-14 rounded-lg object-cover"/>
+        <img src="https://images.unsplash.com/photo-1591857177580-dc82b9ac4e1e?w=200&q=80" class="w-14 h-14 rounded-lg object-cover"/>
+      </div>
+      <div class="mt-2.5 pt-2.5 border-t border-[#F1F5F9] flex items-center gap-4 text-[10.5px]" style="color:#64748B">
+        <button class="font-bold inline-flex items-center gap-1"><i class="fa-regular fa-thumbs-up"></i> Helpful (12)</button>
+        <button class="font-bold inline-flex items-center gap-1"><i class="fa-regular fa-flag"></i> Report</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="mt-3 w-full h-10 rounded-lg bg-white border border-[#059669] text-[#059669] text-[12.5px] font-extrabold">View all 2,020 reviews</button>
 </div>
 
 <!-- FAQ -->

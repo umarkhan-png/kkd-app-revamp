@@ -142,6 +142,12 @@
   .fopt-row.on .fopt-radio{background:#059669;border-color:#059669}
   .fopt-row.on .fopt-radio::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;color:#FFFFFF;font-size:11px}
 
+  /* Price number input · matches the existing form aesthetic · used above the slider for direct min/max entry */
+  .price-num-input{height:42px;padding:0 12px;border-radius:10px;border:1.5px solid #E5E7EB;background:#FFFFFF;font-size:15px;font-weight:800;color:#0F172A;outline:none;font-variant-numeric:tabular-nums;transition:border-color .15s ease}
+  .price-num-input:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.12)}
+  .price-num-input::-webkit-outer-spin-button,
+  .price-num-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .price-num-input{-moz-appearance:textfield}
   /* Price-range two-thumb slider · track is a thin grey bar with an emerald fill spanning the selected range · both <input type=range> elements overlay the same rail with thumbs surfaced via pointer-events */
   .price-slider{position:relative;height:32px;margin:6px 4px 0}
   .price-slider .ps-track{position:absolute;left:0;right:0;top:14px;height:4px;border-radius:999px;background:#E2E8F0}
@@ -151,9 +157,10 @@
   .price-slider .ps-input::-moz-range-thumb{pointer-events:auto;width:22px;height:22px;border-radius:50%;background:#FFFFFF;border:2.5px solid #059669;box-shadow:0 2px 6px rgba(5,150,105,0.35);cursor:pointer}
 
   /* Applied-filter chip row · accumulates every active filter (sort + quick + sidebar) · each chip carries a leading dot + label + × to remove that single filter without opening the modal */
-  .achip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 6px 0 12px;border-radius:999px;background:#ECFDF5;border:1px solid #BBF7D0;font-size:12px;font-weight:700;color:#047857;white-space:nowrap;flex-shrink:0;margin-right:8px}
+  .achip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 6px 0 12px;border-radius:999px;background:#ECFDF5;border:1px solid #BBF7D0;font-size:12px;font-weight:700;color:#047857;white-space:nowrap;flex-shrink:0}
   .achip .achip-close{width:20px;height:20px;border-radius:50%;background:#059669;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:center;font-size:9px;border:0;cursor:pointer}
   .achip-clear{display:inline-flex;align-items:center;gap:4px;height:30px;padding:0 10px;border-radius:999px;background:transparent;color:#94A3B8;font-size:12px;font-weight:700;border:0;cursor:pointer;flex-shrink:0}
+  .achip-divider{display:inline-block;width:1px;height:18px;background:#E2E8F0;margin:0 4px;flex-shrink:0}
 </style></head>
 <body>
 
@@ -259,16 +266,16 @@
     </div>
   </div><!-- /.stk-main -->
 
-  <!-- FILTER row · Sort + Filter pills with Crop + Rating quick-jump chips beside them (tap → opens the Filter sheet pre-pinned to that section) · below: applied-filter chip row that accumulates every active filter with × to remove -->
+  <!-- FILTER row · single horizontal scroll containing: Sort + Filter pills, Crop + Rating quick-jump chips, then any applied-filter chips that accumulate beside them (each with × to remove) -->
   <div class="stk-filter">
     <div class="flex gap-2 px-4 py-2.5 items-center scroll-x" style="overflow-x:auto">
-      <button class="filter-pill" id="filterSortBtn" data-modal="sort"><i class="fa-solid fa-arrow-down-wide-short text-[10px]"></i> Sort <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
-      <button class="filter-pill" id="filterFilterBtn" data-modal="filter"><i class="fa-solid fa-sliders text-[10px]"></i> Filter <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
-      <button class="filter-pill" data-jump-filter="crop"><i class="fa-solid fa-seedling text-[10px]" style="color:#059669"></i> Crop <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
-      <button class="filter-pill" data-jump-filter="rating"><i class="fa-solid fa-star text-[10px]" style="color:#F59E0B"></i> Rating <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+      <button class="filter-pill flex-shrink-0" id="filterSortBtn" data-modal="sort"><i class="fa-solid fa-arrow-down-wide-short text-[10px]"></i> Sort <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+      <button class="filter-pill flex-shrink-0" id="filterFilterBtn" data-modal="filter"><i class="fa-solid fa-sliders text-[10px]"></i> Filter <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+      <button class="filter-pill flex-shrink-0" data-jump-filter="crop"><i class="fa-solid fa-seedling text-[10px]" style="color:#059669"></i> Crop <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+      <button class="filter-pill flex-shrink-0" data-jump-filter="rating"><i class="fa-solid fa-star text-[10px]" style="color:#F59E0B"></i> Rating <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+      <!-- Applied-filter chips inline · accumulate beside the pills, divider sits between only when at least one chip is present -->
+      <div id="appliedChipRow" class="flex items-center gap-2" style="display:none"></div>
     </div>
-    <!-- Applied-filter chip row · accumulates every filter the user has switched on (Sort + sidebar) · each chip carries an × to remove that specific filter -->
-    <div id="appliedChipRow" class="px-4 pb-2 scroll-x" style="display:none;overflow-x:auto"></div>
   </div>
 
   <!-- TWO-COLUMN body · flex:1 of viewport · each pane scrolls independently -->
@@ -347,10 +354,10 @@
     </div>
   </div>
 
-  <!-- FILTER bottom sheet · left-tab sidebar (Category, Crop, Class, Margin, Stock, Rating, Pack Size — Price removed per spec) · right pane shows each section's options with coloured icon tile + label + radio circle -->
+  <!-- FILTER bottom sheet · LOCKED to 70vh so the sheet size never changes between sections (Price, Crop, Pack Size etc all share the same panel size · only the right pane scrolls) -->
   <div id="filterSheet" class="sheet-wrap" aria-hidden="true">
     <div class="sheet-bg" data-sheet-close="filter"></div>
-    <div class="sheet-panel" style="max-height:88vh">
+    <div class="sheet-panel" style="height:70vh;max-height:70vh">
       <div class="sheet-handle"></div>
       <div class="px-5 py-3 flex items-center justify-between" style="border-bottom:1px solid #F1F5F9;flex-shrink:0">
         <div class="text-[20px] font-extrabold">Filters</div>
@@ -359,7 +366,7 @@
       <div class="flex" style="flex:1;min-height:0">
         <!-- Left tab rail · selected tab has an emerald left-border + emerald label so it reads as the active section -->
         <div id="filterTabs" class="flex-shrink-0" style="width:108px;background:#F8FAFC;overflow-y:auto;border-right:1px solid #F1F5F9"></div>
-        <!-- Right pane · header + options for the active tab -->
+        <!-- Right pane · only this scrolls so the locked panel height stays consistent across sections -->
         <div id="filterPane" style="flex:1;min-width:0;overflow-y:auto"></div>
       </div>
       <div class="px-5 pt-3 pb-5 flex gap-2" style="border-top:1px solid #F1F5F9;flex-shrink:0">
@@ -426,7 +433,7 @@
     const PRODUCTS = [
       { cat:'pesticide', subs:['bio'],            name:'Neem-Shield Bio',  sub:'Azadirachtin 1500 ppm',  size:'500 ml', target:'aphid · whitefly',   price:285, mrp:380, img:'../assets/AntiVirus_nobg.png' },
       { cat:'pesticide', subs:['bio'],            name:'Beauveria-Plus',   sub:'Beauveria bassiana',     size:'250 g',  target:'caterpillar',        price:325, mrp:435, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'pesticide', subs:['chem'],           name:'Chakrawarti ZC',   sub:'Chlorantraniliprole + Lambda-Cy.', size:'100 ml / 250 ml', target:'aphid · whitefly', price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png',
+      { cat:'pesticide', subs:['chem'],           name:'Chakrawarti ZC',   sub:'Chlorantraniliprole + Lambda-Cy.', size:'100 ml', target:'aphid · whitefly', price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png',
         variants:[{size:'100 ml',price:358,mrp:495,off:28},{size:'250 ml',price:820,mrp:1175,off:30}] },
       { cat:'pesticide', subs:['chem'],           name:'Indoxa Strike',    sub:'Indoxacarb 15.8% SC',    size:'100 ml', target:'caterpillar',        price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
       { cat:'pesticide', subs:['chem'],           name:'White-Out 5G',     sub:'Acetamiprid 20% SP',     size:'500 g',  target:'whitefly',           price:445, mrp:595, img:'../assets/Chakrawarti_nobg.png' },
@@ -442,7 +449,7 @@
       { cat:'fungicide', subs:['chem'],           name:'Rustaway',         sub:'Tebuconazole 25% EC',    size:'100 g',  target:'leaf-rust',          price:362, mrp:490, img:'../assets/Humic_nobg.png' },
       { cat:'fungicide', subs:['chemins'],        name:'Chakrawarti ZC',   sub:'Chlorantraniliprole + Lambda-Cy.', size:'100 ml', target:'sucking pests', price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
 
-      { cat:'fertilizer', subs:['bio'],           name:'Humic + Fulvic',   sub:'Humic 12% + Fulvic 8%',  size:'500 ml / 1 L', target:'roots & soil',       price:210, mrp:290, img:'../assets/Humic_nobg.png',
+      { cat:'fertilizer', subs:['bio'],           name:'Humic + Fulvic',   sub:'Humic 12% + Fulvic 8%',  size:'500 ml', target:'roots & soil',       price:210, mrp:290, img:'../assets/Humic_nobg.png',
         variants:[{size:'500 ml',price:210,mrp:290,off:28},{size:'1 L',price:376,mrp:520,off:28}] },
       { cat:'fertilizer', subs:['bio'],           name:'Azotobacter Plus', sub:'N-fixing bacteria',      size:'1 kg',   target:'bio nitrogen',       price:285, mrp:395, img:'../assets/Humic_nobg.png' },
       { cat:'fertilizer', subs:['chemins'],       name:'Antivirus',        sub:'Anti-viral biostimulant',size:'250 ml', target:'leaf-virus',         price:327, mrp:425, img:'../assets/AntiVirus_nobg.png' },
@@ -452,7 +459,7 @@
       { cat:'fertilizer', subs:['manure'],        name:'NeemKhali',        sub:'Neem cake',              size:'5 kg',   target:'manure + pest',      price:415, mrp:560, img:'../assets/Humic_nobg.png' },
       { cat:'fertilizer', subs:['micro'],         name:'Micro-Max',        sub:'Multi-micronutrient',    size:'500 g',  target:'nutrient gaps',      price:289, mrp:395, img:'../assets/Humic_nobg.png' },
       { cat:'fertilizer', subs:['micro'],         name:'Chelated-Zn',      sub:'Zn-EDTA 12%',            size:'500 g',  target:'zinc deficiency',    price:325, mrp:445, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['npk'],           name:'NPK 19-19-19',     sub:'Water-soluble',          size:'500 g / 1 kg', target:'balanced growth',    price:185, mrp:250, img:'../assets/Humic_nobg.png',
+      { cat:'fertilizer', subs:['npk'],           name:'NPK 19-19-19',     sub:'Water-soluble',          size:'500 g', target:'balanced growth',    price:185, mrp:250, img:'../assets/Humic_nobg.png',
         variants:[{size:'500 g',price:185,mrp:250,off:26},{size:'1 kg',price:330,mrp:445,off:26}] },
       { cat:'fertilizer', subs:['npk'],           name:'NPK 12-61-0',      sub:'Mono Ammonium Phosphate',size:'1 kg',   target:'flowering',          price:348, mrp:465, img:'../assets/Humic_nobg.png' },
       { cat:'fertilizer', subs:['organic'],       name:'CowDung-Compost',  sub:'Organic compost',        size:'10 kg',  target:'soil food',          price:225, mrp:320, img:'../assets/Humic_nobg.png' },
@@ -523,7 +530,8 @@
         { val:'10kg',  label:'10 kg',   icon:'fa-box',           color:'#BE185D', bg:'#FBCFE8' }
       ] },
       { key:'stock', label:'Stock', title:'Availability', multi:true, opts:[
-        { val:'instock', label:'In stock', icon:'fa-circle-check', color:'#16A34A', bg:'#DCFCE7' }
+        { val:'instock',    label:'In stock',     icon:'fa-circle-check',  color:'#16A34A', bg:'#DCFCE7' },
+        { val:'outofstock', label:'Out of stock', icon:'fa-circle-xmark',  color:'#DC2626', bg:'#FEE2E2' }
       ] }
     ];
 
@@ -633,8 +641,9 @@
         const qty = cart.get(id) ? cart.get(id).qty : 0;
         const hasVariants = Array.isArray(p.variants) && p.variants.length > 1;
         const off = offPct(p);
+        const v0 = hasVariants ? p.variants[0] : null;
         const priceCell = hasVariants
-          ? '<div class="pprice-row"><span class="pprice tnum" style="font-size:13.5px;color:#0F172A;font-weight:700">from</span> <span class="pprice tnum">₹'+p.variants[0].price+'</span>'+(p.variants[0].off?'<span class="poff">'+p.variants[0].off+'% off</span>':'')+'</div>'
+          ? '<div class="pprice-row"><span class="pprice tnum">₹'+v0.price+'</span>'+(v0.mrp?'<span class="pmrp tnum">₹'+v0.mrp+'</span>':'')+(v0.off?'<span class="poff">'+v0.off+'% off</span>':'')+'</div>'
           : '<div class="pprice-row"><span class="pprice tnum">₹'+p.price+'</span><span class="pmrp tnum">₹'+p.mrp+'</span>'+(off>0?'<span class="poff">'+off+'% off</span>':'')+'</div>';
         return '<a href="pdp.html" class="pcard" data-card="'+id+'"'
           + (hasVariants ? ' data-variant-card data-product-name="'+p.name+'" data-product-tech="'+p.sub+'" data-product-img="'+p.img+'" data-variants=\''+JSON.stringify(p.variants).replace(/'/g,'&#39;')+'\'' : '')
@@ -801,14 +810,21 @@
       });
     }
 
-    // Price-range slider · two stacked <input type=range> thumbs · fill bar between them updates live · committing on `input` re-runs applyFilters
+    // Price-range slider · two-thumb slider with two number inputs above for direct entry · slider ↔ inputs are two-way bound so typing in a field moves the thumb and dragging the thumb updates the field
     function renderPriceSlider(pane, section){
       const cur = filters.price || { min:section.min, max:section.max };
       pane.innerHTML = '<div class="fpane-title">'+section.title+'</div>'
         + '<div class="px-5 pt-2 pb-5">'
-          + '<div class="flex items-center justify-between mb-3">'
-            + '<span class="text-[12.5px] font-bold" style="color:#475569">Min: <span id="pminLbl" class="font-extrabold text-[#0F172A]">₹'+cur.min+'</span></span>'
-            + '<span class="text-[12.5px] font-bold" style="color:#475569">Max: <span id="pmaxLbl" class="font-extrabold text-[#0F172A]">₹'+cur.max+'</span></span>'
+          + '<div class="flex items-center gap-2 mb-4">'
+            + '<div class="flex-1">'
+              + '<label class="text-[10.5px] font-bold tracking-wide" style="color:#94A3B8;letter-spacing:0.08em;text-transform:uppercase">Min ₹</label>'
+              + '<input type="number" id="pminInp" inputmode="numeric" value="'+cur.min+'" min="'+section.min+'" max="'+section.max+'" step="'+section.step+'" class="price-num-input mt-1 w-full">'
+            + '</div>'
+            + '<div class="text-[#94A3B8] font-bold pt-5">—</div>'
+            + '<div class="flex-1">'
+              + '<label class="text-[10.5px] font-bold tracking-wide" style="color:#94A3B8;letter-spacing:0.08em;text-transform:uppercase">Max ₹</label>'
+              + '<input type="number" id="pmaxInp" inputmode="numeric" value="'+cur.max+'" min="'+section.min+'" max="'+section.max+'" step="'+section.step+'" class="price-num-input mt-1 w-full">'
+            + '</div>'
           + '</div>'
           + '<div class="price-slider">'
             + '<div class="ps-track"></div>'
@@ -820,17 +836,22 @@
             + '<span>₹'+section.min+'</span><span>₹'+section.max+'</span>'
           + '</div>'
         + '</div>';
-      const minIn = pane.querySelector('#psMin');
-      const maxIn = pane.querySelector('#psMax');
-      const minL  = pane.querySelector('#pminLbl');
-      const maxL  = pane.querySelector('#pmaxLbl');
+      const minSl = pane.querySelector('#psMin');
+      const maxSl = pane.querySelector('#psMax');
+      const minIn = pane.querySelector('#pminInp');
+      const maxIn = pane.querySelector('#pmaxInp');
       const fill  = pane.querySelector('#psFill');
       const span  = section.max - section.min;
-      function paint(){
-        let lo = parseInt(minIn.value, 10), hi = parseInt(maxIn.value, 10);
-        if (lo > hi - section.step) { if (this === minIn) lo = hi - section.step; else hi = lo + section.step; minIn.value = lo; maxIn.value = hi; }
-        minL.textContent = '₹' + lo;
-        maxL.textContent = '₹' + hi;
+      function clamp(n){ return Math.max(section.min, Math.min(section.max, n)); }
+      function paint(source){
+        let lo = parseInt(minSl.value, 10), hi = parseInt(maxSl.value, 10);
+        if (lo > hi - section.step) {
+          if (source === 'min' || source === 'minIn') lo = hi - section.step;
+          else hi = lo + section.step;
+        }
+        minSl.value = lo; maxSl.value = hi;
+        if (source !== 'minIn') minIn.value = lo;
+        if (source !== 'maxIn') maxIn.value = hi;
         fill.style.left  = ((lo - section.min) / span * 100) + '%';
         fill.style.right = (100 - (hi - section.min) / span * 100) + '%';
         filters.price = (lo === section.min && hi === section.max) ? null : { min:lo, max:hi };
@@ -839,8 +860,21 @@
         updateFilterDots();
         renderProducts();
       }
-      minIn.addEventListener('input', paint);
-      maxIn.addEventListener('input', paint);
+      minSl.addEventListener('input', () => paint('min'));
+      maxSl.addEventListener('input', () => paint('max'));
+      // Number inputs · commit on input so the slider tracks in real-time · clamp + sync the corresponding slider thumb
+      minIn.addEventListener('input', () => {
+        const v = parseInt(minIn.value, 10);
+        if (isNaN(v)) return;
+        minSl.value = clamp(v);
+        paint('minIn');
+      });
+      maxIn.addEventListener('input', () => {
+        const v = parseInt(maxIn.value, 10);
+        if (isNaN(v)) return;
+        maxSl.value = clamp(v);
+        paint('maxIn');
+      });
       paint();
     }
 
@@ -866,11 +900,11 @@
         else if (v) addOne(v);
       });
       if (!chips.length) { row.style.display = 'none'; row.innerHTML = ''; return; }
-      row.style.display = 'block';
-      row.innerHTML = '<div class="flex items-center min-w-max">'
+      row.style.display = 'flex';
+      // Inline chips sit beside the Sort/Filter pills inside the same horizontal scroll · divider before the first chip separates them visually from the action pills
+      row.innerHTML = '<span class="achip-divider" aria-hidden="true"></span>'
         + chips.map(c => '<span class="achip" data-aid="'+c.id+'">'+c.label+'<button class="achip-close" data-aclose="'+c.id+'" aria-label="Remove"><i class="fa-solid fa-xmark"></i></button></span>').join('')
-        + '<button class="achip-clear" id="appliedClearAll"><i class="fa-solid fa-broom" style="font-size:10px"></i> Clear all</button>'
-        + '</div>';
+        + '<button class="achip-clear" id="appliedClearAll"><i class="fa-solid fa-broom" style="font-size:10px"></i> Clear all</button>';
       row.querySelectorAll('[data-aclose]').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault(); e.stopPropagation();

@@ -14,10 +14,10 @@
   body { min-height: 100vh; background:#F8F8F8; color:#0F172A; }
   .name-input { transition: border-color .15s ease, box-shadow .15s ease; }
   .name-input:focus-within { border-color:#047857; box-shadow:0 0 0 3px rgba(4,120,87,0.10); }
-  /* Back + Language pills · white floating elements (no grey-filled feel) · subtle shadow for elevation, no obvious slate border */
-  .back-btn { width:40px; height:40px; border-radius:50%; background:#FFFFFF; border:0; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 1px 3px rgba(15,23,42,0.06); }
+  /* Back + Language pills · white card style with hairline E5E7EB border + soft shadow (matches the rest of the design system) */
+  .back-btn { width:40px; height:40px; border-radius:50%; background:#FFFFFF; border:1px solid #E5E7EB; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 1px 3px rgba(15,23,42,0.04); }
   .back-btn i { font-size:14px; color:#0F172A; }
-  .lang-pill { display:inline-flex; align-items:center; gap:7px; padding:8px 14px; border-radius:9999px; background:#FFFFFF; border:0; color:#0F172A; font-size:13px; font-weight:700; text-decoration:none; box-shadow:0 1px 3px rgba(15,23,42,0.06); transition:transform .12s ease; }
+  .lang-pill { display:inline-flex; align-items:center; gap:7px; padding:8px 14px; border-radius:9999px; background:#FFFFFF; border:1px solid #E5E7EB; color:#0F172A; font-size:13px; font-weight:700; text-decoration:none; box-shadow:0 1px 3px rgba(15,23,42,0.04); transition:transform .12s ease; }
   .lang-pill:active { transform:scale(.97); }
   .lang-pill .chev { font-size:10px; color:#94A3B8; }
 </style>
@@ -52,11 +52,11 @@
 
   <!-- Inputs · First Name + Last Name -->
   <div class="px-6 mt-8 space-y-3">
-    <div class="name-input flex items-center gap-3 h-[58px] px-4 rounded-[12px] bg-white" style="box-shadow:0 1px 3px rgba(15,23,42,0.06);border:1px solid transparent">
+    <div class="name-input flex items-center gap-3 h-[58px] px-4 rounded-[12px] bg-white" style="box-shadow:0 1px 3px rgba(15,23,42,0.04);border:1px solid #E5E7EB">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 5-7 8-7s7 2 8 7"/></svg>
       <input id="firstName" type="text" placeholder="First name" autocomplete="given-name" class="flex-1 outline-none text-[18px] font-semibold bg-transparent placeholder:font-medium placeholder:text-[#CBD5E1]"/>
     </div>
-    <div class="name-input flex items-center gap-3 h-[58px] px-4 rounded-[12px] bg-white" style="box-shadow:0 1px 3px rgba(15,23,42,0.06);border:1px solid transparent">
+    <div class="name-input flex items-center gap-3 h-[58px] px-4 rounded-[12px] bg-white" style="box-shadow:0 1px 3px rgba(15,23,42,0.04);border:1px solid #E5E7EB">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 5-7 8-7s7 2 8 7"/></svg>
       <input id="lastName" type="text" placeholder="Last name" autocomplete="family-name" class="flex-1 outline-none text-[18px] font-semibold bg-transparent placeholder:font-medium placeholder:text-[#CBD5E1]"/>
     </div>

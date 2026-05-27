@@ -82,10 +82,17 @@
   .review-wrap textarea{width:100%;min-height:70px;padding:10px 12px;border-radius:10px;border:1px solid #E5E7EB;background:#FAFAFA;font-size:12.5px;font-family:inherit;color:#0F172A;outline:none;resize:none;box-sizing:border-box;transition:border-color .15s ease, background .15s ease}
   .review-wrap textarea:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.10);background:#FFFFFF}
   .review-wrap .review-hint{font-size:10.5px;color:#94A3B8;margin-top:4px}
-  /* Submit review button · sentence-case, outline emerald so it doesn't compete with the main sticky CTAs · disabled until the textarea has 3+ chars */
+  /* Submit review button · sentence-case, outline emerald so it doesn't compete with the main sticky CTAs · disabled until the textarea has 3+ chars · ENTIRELY hidden after submission (no lingering disabled state) */
   .review-submit{margin-top:8px;width:100%;height:40px;border-radius:10px;background:#FFFFFF;color:#047857;border:1.5px solid #BBF7D0;font-size:12.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all .15s ease}
   .review-submit:disabled{opacity:.55;cursor:not-allowed}
   .review-submit i{font-size:11px}
+  /* Submitted state · the wrap class flips on after submit · textarea reads as a read-only paragraph and a small badge says it's posted · the button is hidden entirely */
+  .review-wrap.submitted .review-submit{display:none}
+  .review-wrap.submitted .review-hint{display:none}
+  .review-wrap.submitted textarea{background:#F8FAFC;color:#0F172A;border-color:#E5E7EB;cursor:default}
+  .review-submitted-badge{display:none;align-items:center;gap:6px;margin-top:8px;font-size:11.5px;font-weight:700;color:#047857}
+  .review-wrap.submitted .review-submitted-badge{display:inline-flex}
+  .review-submitted-badge i{font-size:11px;color:#047857}
 
   /* Address */
   .addr{padding:14px;display:flex;gap:12px}
@@ -226,7 +233,8 @@
     </button>
     <div id="kebabMenu" class="kebab-menu">
       <button class="kebab-item danger only-transit" id="cancelOrderBtn"><i class="fa-solid fa-circle-xmark"></i> Cancel order</button>
-      <a href="#download-invoice" class="kebab-item"><i class="fa-solid fa-file-arrow-down"></i> Download invoice</a>
+      <!-- Download invoice only makes sense once the order is delivered (a transit order has no invoice yet) -->
+      <a href="#download-invoice" class="kebab-item only-delivered"><i class="fa-solid fa-file-arrow-down"></i> Download invoice</a>
       <a href="advisory.html" class="kebab-item"><i class="fa-solid fa-headset"></i> Contact support</a>
     </div>
   </div>
@@ -298,10 +306,7 @@
         <!-- Per-product rate · delivered only · coins are tied to RATING (chip makes this unambiguous) · review is optional with its own Submit -->
         <div class="rate-block only-delivered" data-rating-group="humic">
           <div class="rate-head">
-            <div class="leading-tight">
-              <div class="ltxt" data-rate-status>Rate this product</div>
-              <div class="lsub" data-rate-sub>Help other farmers choose better</div>
-            </div>
+            <div class="ltxt" data-rate-status>Rate this product</div>
             <span class="rate-coin-chip"><i class="fa-solid fa-coins"></i> +25 on rating</span>
           </div>
           <div class="rate-stars">
@@ -315,6 +320,7 @@
             <textarea data-review-text placeholder="Write a review (optional)…"></textarea>
             <div class="review-hint">Optional. Helps other farmers — no extra coins.</div>
             <button class="review-submit" data-review-submit disabled><i class="fa-solid fa-paper-plane"></i> Submit review</button>
+            <div class="review-submitted-badge" data-review-done><i class="fa-solid fa-circle-check"></i> Review submitted</div>
           </div>
         </div>
       </div>
@@ -334,10 +340,7 @@
         </div>
         <div class="rate-block only-delivered" data-rating-group="antivirus">
           <div class="rate-head">
-            <div class="leading-tight">
-              <div class="ltxt" data-rate-status>Rate this product</div>
-              <div class="lsub" data-rate-sub>Help other farmers choose better</div>
-            </div>
+            <div class="ltxt" data-rate-status>Rate this product</div>
             <span class="rate-coin-chip"><i class="fa-solid fa-coins"></i> +25 on rating</span>
           </div>
           <div class="rate-stars">
@@ -351,6 +354,7 @@
             <textarea data-review-text placeholder="Write a review (optional)…"></textarea>
             <div class="review-hint">Optional. Helps other farmers — no extra coins.</div>
             <button class="review-submit" data-review-submit disabled><i class="fa-solid fa-paper-plane"></i> Submit review</button>
+            <div class="review-submitted-badge" data-review-done><i class="fa-solid fa-circle-check"></i> Review submitted</div>
           </div>
         </div>
       </div>
@@ -795,18 +799,17 @@
           });
         });
 
-        // Gate the Submit review button on textarea content (>=3 chars)
+        // Gate the Submit review button on textarea content (>=3 chars) · once submitted, the wrap flips to view-only (no lingering disabled CTA, no helper line)
         if (text && submit) {
           text.addEventListener('input', () => {
             submit.disabled = (text.value || '').trim().length < 3;
           });
           submit.addEventListener('click', () => {
             if (submit.disabled) return;
-            submit.disabled = true;
-            submit.innerHTML = '<i class="fa-solid fa-circle-check"></i> Review submitted';
-            submit.style.background = '#ECFDF5';
-            submit.style.color = '#047857';
+            if (wrap) wrap.classList.add('submitted');
             text.setAttribute('readonly', 'readonly');
+            // Lock the stars too · post-submit the rating is final, no edits
+            stars.forEach(s => { s.style.pointerEvents = 'none'; });
           });
         }
       });

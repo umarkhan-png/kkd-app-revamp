@@ -1,50 +1,108 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Order Confirmed</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
-<style>*{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}.hi{font-family:'Noto Sans Devanagari',sans-serif}html,body{margin:0;padding:0}body{min-height:100vh;background:#fff;color:#0F172A}.tnum{font-variant-numeric:tabular-nums}@keyframes scale{0%{transform:scale(0.6);opacity:0}100%{transform:scale(1);opacity:1}}.pop{animation:scale .5s cubic-bezier(.34,1.56,.64,1) forwards}@keyframes confetti{0%{transform:translateY(-30px) rotate(0);opacity:1}100%{transform:translateY(280px) rotate(360deg);opacity:0}}.confetti{position:absolute;width:10px;height:14px;animation:confetti 2.4s linear infinite}.c1{left:10%;background:#F4A93C;animation-delay:0s}.c2{left:25%;background:#059669;animation-delay:.3s}.c3{left:45%;background:#1565C0;animation-delay:.5s}.c4{left:65%;background:#E23744;animation-delay:.2s}.c5{left:85%;background:#FBBF24;animation-delay:.4s}.hero-bg{background:radial-gradient(ellipse at top,#ECFDF5 0%,#fff 60%)}</style></head>
-<body class="min-h-screen pb-[110px]">
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:110px}
+  .tnum{font-variant-numeric:tabular-nums}
+  /* Pop-in for the success check */
+  @keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+  .pop{animation:pop .55s cubic-bezier(.34,1.56,.64,1) both}
+  /* Confetti */
+  @keyframes confetti{0%{transform:translateY(-30px) rotate(0);opacity:1}100%{transform:translateY(300px) rotate(360deg);opacity:0}}
+  .confetti{position:absolute;top:0;width:9px;height:13px;border-radius:2px;animation:confetti 2.6s linear infinite;pointer-events:none}
+  .c1{left:10%;background:#FBBF24;animation-delay:0s}
+  .c2{left:25%;background:#10B981;animation-delay:.3s}
+  .c3{left:45%;background:#3B82F6;animation-delay:.5s}
+  .c4{left:65%;background:#DC2626;animation-delay:.2s}
+  .c5{left:85%;background:#A78BFA;animation-delay:.4s}
 
-<div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
+  /* Status hero · emerald gradient · same identity as order-details delivered hero */
+  .hero{background:linear-gradient(180deg,#ECFDF5,#D1FAE5);border-bottom:1px solid #A7F3D0;padding:28px 16px 22px;text-align:center;position:relative;overflow:hidden}
 
-<div class="hero-bg pt-8 pb-6 relative">
-  <div class="confetti c1"></div><div class="confetti c2"></div><div class="confetti c3"></div><div class="confetti c4"></div><div class="confetti c5"></div>
-  <div class="flex flex-col items-center">
-    <div class="pop w-[100px] h-[100px] rounded-full flex items-center justify-center" style="background:radial-gradient(circle at 30% 30%,#48D068 0%,#059669 100%);box-shadow:0 12px 36px rgba(12,131,31,0.4)">
-      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l5 5L20 7"/></svg>
+  .sec-title{margin:14px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
+  .card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+
+  /* Sticky CTA · 2 buttons */
+  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:10px 12px 14px;display:flex;gap:10px;z-index:50}
+  .cta-out{flex:1;height:52px;border-radius:12px;background:#FFFFFF;color:#0F172A;border:1.5px solid #E5E7EB;font-size:13.5px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+  .cta-pri{flex:1.2;height:52px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:14.5px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+</style></head>
+<body>
+
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
     </div>
-    <div class="hi text-[26px] font-extrabold mt-5 leading-tight text-center px-6">Order Confirm हो गया</div>
-    <div class="text-[13px] text-[#64748B] mt-1.5">We'll get it to you in 5–7 days</div>
   </div>
-</div>
 
-<!-- Order ID + WhatsApp -->
-<div class="mx-4 -mt-3 bg-white border-2 border-[#047857]/20 rounded-2xl p-4 shadow-sm">
-  <div class="flex items-center justify-between mb-2.5"><div><div class="text-[10px] font-bold text-[#64748B] uppercase tracking-wider">Order ID</div><div class="text-[15px] font-extrabold tnum mt-0.5">#KKD-26194-7821</div></div><span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-[#ECFDF5] text-[#059669] text-[10px] font-bold"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round"><circle cx="12" cy="12" r="11"/><path d="M8 12l3 3 5-5"/></svg>Paid</span></div>
-  <div class="border-t border-dashed border-[#E5E7EB] pt-3 flex items-center gap-3">
-    <div class="w-9 h-9 rounded-full bg-[#25D366] flex items-center justify-center flex-shrink-0"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1l-1 1.2c-.2.2-.4.2-.6.1-.8-.3-1.6-.7-2.3-1.4-.5-.5-1-1.1-1.4-1.7-.1-.2-.1-.4.1-.5l.7-.8c.2-.2.3-.5.1-.7l-1-2.4c-.1-.3-.3-.4-.6-.4-1.4 0-2.6 1.2-2.6 2.6 0 4.1 6 8.1 8.6 8.1 1.4 0 2.6-1.2 2.6-2.6 0-.2-.1-.5-.1-.6zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.1-1.3c1.5.8 3.2 1.3 4.9 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg></div>
-    <div class="flex-1"><div class="text-[12.5px] font-bold">Updates on WhatsApp</div><div class="text-[10.5px] text-[#64748B]">98765 43210</div></div>
-    <span class="text-[10px] font-bold text-[#059669]">SENT ✓</span>
+  <!-- Success hero · confetti + emerald gradient + animated check -->
+  <div class="hero">
+    <div class="confetti c1"></div><div class="confetti c2"></div><div class="confetti c3"></div><div class="confetti c4"></div><div class="confetti c5"></div>
+    <div class="pop mx-auto" style="width:88px;height:88px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(5,150,105,0.35);box-shadow:0 8px 22px -8px rgba(5,150,105,0.4)">
+      <i class="fa-solid fa-circle-check text-[44px]" style="color:#047857"></i>
+    </div>
+    <h1 class="text-[24px] font-extrabold mt-4 leading-tight">Order placed</h1>
+    <p class="text-[13px] mt-1.5" style="color:#475569">We'll get it to your door in 5–7 days</p>
   </div>
-</div>
 
-<!-- Delivery card -->
-<div class="mx-4 mt-4 bg-white border border-[#E5E7EB] rounded-2xl p-4">
-  <div class="flex items-center gap-2 mb-2"><div class="w-9 h-9 rounded-lg bg-[#FFF7ED] flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A3412" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div><div class="text-[10px] uppercase tracking-wider text-[#64748B] font-bold">Delivers</div><div class="text-[13px] font-extrabold">Tue 19 May – Thu 21 May</div></div></div>
-  <div class="text-[11.5px] text-[#64748B] leading-snug">Plot 22, Bawadia, Indore — 452001 · MP</div>
-</div>
+  <!-- Order ID + WhatsApp confirmation card -->
+  <div class="card mt-3">
+    <div class="p-4 flex items-center justify-between gap-3" style="border-bottom:1px solid #F1F5F9">
+      <div class="leading-tight">
+        <div class="text-[10.5px] font-extrabold tracking-[0.06em] uppercase" style="color:#94A3B8">Order ID</div>
+        <div class="text-[14.5px] font-extrabold tnum mt-0.5">#KKD-26194-7821</div>
+      </div>
+      <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10.5px] font-extrabold" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-circle-check text-[10px]"></i> Payment received</span>
+    </div>
+    <div class="p-4 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:#25D366"><i class="fa-brands fa-whatsapp text-[18px]" style="color:#FFFFFF"></i></div>
+      <div class="flex-1 leading-tight">
+        <div class="text-[13px] font-extrabold">Updates on WhatsApp</div>
+        <div class="text-[11px]" style="color:#64748B">+91 98765 43210</div>
+      </div>
+      <span class="text-[10.5px] font-extrabold" style="color:#047857">Sent ✓</span>
+    </div>
+  </div>
 
-<!-- Scratch card teaser -->
-<div class="mx-4 mt-4 rounded-2xl p-4 flex items-center gap-3" style="background:linear-gradient(115deg,#FEF3C7 0%,#FFF7ED 100%);border:1px dashed #FBBF24;">
-  <div class="w-14 h-14 rounded-full flex items-center justify-center text-[28px]" style="background:radial-gradient(circle at 35% 35%,#FDE68A,#F4A93C 70%,#9A3412)">🎁</div>
-  <div class="flex-1"><div class="hi text-[13.5px] font-extrabold">Scratch करके पाओ extra</div><div class="text-[11px] text-[#806A45] mt-0.5">Win up to ₹200 cashback</div></div>
-  <button class="text-[11px] font-extrabold text-[#8B4500] uppercase">Scratch</button>
-</div>
+  <!-- Delivery ETA -->
+  <div class="card mt-3" style="margin-top:10px">
+    <div class="p-4 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#ECFDF5"><i class="fa-solid fa-calendar-day text-[15px]" style="color:#047857"></i></div>
+      <div class="flex-1 leading-tight">
+        <div class="text-[10.5px] font-extrabold uppercase tracking-[0.06em]" style="color:#94A3B8">Delivers</div>
+        <div class="text-[14px] font-extrabold mt-0.5">Tue 19 May &mdash; Thu 21 May</div>
+        <div class="text-[11.5px] mt-1" style="color:#64748B">Plot 22, Bawadia, Indore &mdash; 452001, MP</div>
+      </div>
+    </div>
+  </div>
 
-<!-- Sticky CTAs -->
-<div class="fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E7EB] px-4 py-3 flex items-center gap-2.5">
-  <button onclick="location.href='home.html'" class="flex-1 h-[52px] rounded-lg border-2 border-[#059669] text-[#059669] text-[14px] font-extrabold">Continue Shopping</button>
-  <button onclick="location.href='track-order.html'" class="flex-1 h-[52px] rounded-lg bg-[#059669] text-white text-[14px] font-extrabold">Track Order</button>
-</div>
+  <!-- Scratch card reward · subtle, on-brand · uses emerald + gold accent, not loud yellow -->
+  <div class="card mt-3" style="margin-top:10px">
+    <div class="p-4 flex items-center gap-3">
+      <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#FBBF24,#F59E0B);box-shadow:0 6px 14px -4px rgba(245,158,11,0.5)"><i class="fa-solid fa-gift text-[20px]" style="color:#FFFFFF"></i></div>
+      <div class="flex-1 leading-tight">
+        <div class="text-[13.5px] font-extrabold">Scratch &amp; win extra</div>
+        <div class="text-[11.5px] mt-1" style="color:#64748B">Up to &#8377;200 cashback waiting</div>
+      </div>
+      <button class="px-3 py-1.5 rounded-lg text-[11.5px] font-extrabold" style="background:#FEF3C7;color:#B45309;border:1px solid #FDE68A">Scratch</button>
+    </div>
+  </div>
+
+  <!-- Sticky bottom CTAs · Continue shopping + Track order · matches design system -->
+  <div class="sticky-cta">
+    <a href="home.html" class="cta-out">
+      <i class="fa-solid fa-house text-[12px]"></i> Continue shopping
+    </a>
+    <a href="track-order.html" class="cta-pri">
+      <i class="fa-solid fa-location-arrow text-[12px]"></i> Track order
+    </a>
+  </div>
 
 </body></html>

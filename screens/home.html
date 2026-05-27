@@ -2724,7 +2724,13 @@
             e.preventDefault(); e.stopPropagation();
             const key = btn.dataset.vsKey;
             const cur = cartQty[key] || 0;
-            cartQty[key] = btn.dataset.vsAct === 'inc' ? cur + 1 : Math.max(0, cur - 1);
+            const inc = btn.dataset.vsAct === 'inc';
+            cartQty[key] = inc ? cur + 1 : Math.max(0, cur - 1);
+            // Reflect the change on the home page's floating cart bar · bumpCart / unbumpCart are defined in the cart-bar block above
+            try {
+              if (inc && typeof bumpCart === 'function') bumpCart();
+              else if (!inc && typeof unbumpCart === 'function' && cur > 0) unbumpCart();
+            } catch (err) {}
             render();
           });
         });

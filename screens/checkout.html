@@ -1,96 +1,149 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Checkout</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
-<style>*{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}.hi{font-family:'Noto Sans Devanagari',sans-serif}html,body{margin:0;padding:0}body{min-height:100vh;background:#FFFFFF;color:#0F172A}.tnum{font-variant-numeric:tabular-nums}.pay{transition:all .15s}.pay.active{border-color:#059669;background:#ECFDF5}.pay.active .radio{background:#059669;border-color:#059669}.pay.active .radio::after{content:'';width:7px;height:7px;border-radius:999px;background:#fff}.radio{width:18px;height:18px;border-radius:999px;border:2px solid #C8C2B0;display:flex;align-items:center;justify-content:center}</style></head>
-<body class="min-h-screen pb-[110px]">
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:110px}
+  .tnum{font-variant-numeric:tabular-nums}
+  .sec-title{margin:16px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
+  .card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
 
-<div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
+  /* Payment option · neutral default, emerald accent when active */
+  .pay{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;border-bottom:1px solid #F1F5F9;transition:background .15s ease}
+  .pay:last-child{border-bottom:0}
+  .pay.active{background:#ECFDF5}
+  .pay-radio{width:20px;height:20px;border-radius:9999px;border:2px solid #CBD5E1;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s ease}
+  .pay.active .pay-radio{border-color:#059669;background:#059669}
+  .pay.active .pay-radio::after{content:'';width:8px;height:8px;border-radius:9999px;background:#FFFFFF}
+  .pay-ic{width:40px;height:40px;border-radius:10px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .pay-ic.indigo{background:#E0E7FF;color:#3730A3}
+  .pay-ic.amber{background:#FEF3C7;color:#B45309}
+  .pay-label{flex:1;line-height:1.25}
+  .pay-label .a{font-size:14px;font-weight:800;color:#0F172A}
+  .pay-label .b{font-size:11.5px;color:#64748B;margin-top:2px}
+  .pay-tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:9999px;font-size:10px;font-weight:800;background:#ECFDF5;color:#047857;margin-left:6px}
 
-<div class="px-4 pt-4 flex items-center gap-3"><button onclick="history.back()" class="w-10 h-10 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="hi text-[20px] font-extrabold">Checkout</div></div>
+  /* Bill · same pattern as cart */
+  .bill-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:3px 0}
+  .bill-row .lbl{color:#64748B}
+  .bill-row .val{color:#0F172A;font-weight:600}
+  .bill-row .val.green{color:#047857;font-weight:700}
+  .bill-total{border-top:1px dashed #CBD5E1;margin-top:8px;padding-top:10px;display:flex;align-items:baseline;justify-content:space-between}
+  .bill-total .lbl{font-size:14px;font-weight:800}
+  .bill-total .val{font-size:18px;font-weight:800}
 
-<!-- Address -->
-<div class="px-4 mt-5">
-  <div class="text-[11px] font-bold text-[#64748B] uppercase tracking-wider mb-2">Delivery Address</div>
-  <div class="bg-white border border-[#E5E7EB] rounded-2xl p-4">
-    <div class="flex items-start gap-3">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 mt-0.5"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>
-      <div class="flex-1">
-        <div class="flex items-center gap-2 mb-1"><span class="text-[13px] font-extrabold">Home</span><span class="text-[9px] font-bold bg-[#ECFDF5] text-[#059669] px-1.5 py-0.5 rounded">Default</span></div>
-        <div class="text-[13px] font-bold">Ramesh Patel · 98765 43210</div>
-        <div class="text-[12px] text-[#64748B] mt-0.5 leading-snug">Plot 22, Khasra No. 145<br/>Village Bawadia, Indore — 452001<br/>Madhya Pradesh</div>
-      </div>
-      <button onclick="location.href='addresses.html'" class="text-[11px] font-bold text-[#047857] uppercase">Change</button>
+  /* Sticky place-order CTA · matches design-system primary */
+  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:10px 12px 14px;z-index:50}
+  .place-btn{width:100%;height:54px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:space-between;padding:0 18px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+</style></head>
+<body>
+
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
     </div>
   </div>
-</div>
 
-<!-- Payment -->
-<div class="px-4 mt-5">
-  <div class="text-[11px] font-bold text-[#64748B] uppercase tracking-wider mb-2">Payment Method</div>
-  <div class="space-y-2.5">
-
-    <label class="pay active bg-white border-2 border-[#E5E7EB] rounded-2xl p-3.5 flex items-center gap-3 cursor-pointer">
-      <div class="radio"></div>
-      <div class="w-10 h-10 rounded-lg bg-[#ECFDF5] flex items-center justify-center flex-shrink-0">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 11h20"/></svg>
-      </div>
-      <div class="flex-1">
-        <div class="flex items-baseline gap-2"><span class="text-[14px] font-extrabold">Cash on Delivery</span><span class="hi text-[10px] text-[#64748B]">कैश</span></div>
-        <div class="text-[10.5px] text-[#64748B] mt-0.5">Pay when you receive the order</div>
-      </div>
-    </label>
-
-    <label class="pay bg-white border-2 border-[#E5E7EB] rounded-2xl p-3.5 flex items-center gap-3 cursor-pointer">
-      <div class="radio"></div>
-      <div class="w-10 h-10 rounded-lg bg-[#E8F2FB] flex items-center justify-center flex-shrink-0">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1565C0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 18h6"/></svg>
-      </div>
-      <div class="flex-1">
-        <div class="flex items-baseline gap-2"><span class="text-[14px] font-extrabold">UPI</span><span class="text-[10px] font-bold text-[#1565C0]">+ extra ₹50 off</span></div>
-        <div class="text-[10.5px] text-[#64748B] mt-0.5">PhonePe · GPay · Paytm · BHIM</div>
-      </div>
-    </label>
-
-    <label class="pay bg-white border-2 border-[#E5E7EB] rounded-2xl p-3.5 flex items-center gap-3 cursor-pointer">
-      <div class="radio"></div>
-      <div class="w-10 h-10 rounded-lg bg-[#FEF3C7] flex items-center justify-center flex-shrink-0">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#78350F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 3"/></svg>
-      </div>
-      <div class="flex-1">
-        <div class="text-[14px] font-extrabold">Partial Payment</div>
-        <div class="text-[10.5px] text-[#64748B] mt-0.5">₹500 now · balance on delivery</div>
-      </div>
-    </label>
-
+  <div class="px-4 pt-4 pb-3 flex items-center gap-3 bg-white">
+    <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB">
+      <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
+    </button>
+    <h1 class="text-[22px] font-extrabold leading-tight" style="color:#0F172A">Checkout</h1>
   </div>
-</div>
 
-<!-- EDD -->
-<div class="mx-4 mt-5 bg-white border border-[#E5E7EB] rounded-2xl p-3.5 flex items-center gap-3">
-  <div class="w-10 h-10 rounded-lg bg-[#FFF7ED] flex items-center justify-center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9A3412" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
-  <div class="flex-1">
-    <div class="text-[12.5px] font-extrabold">Delivers <span class="text-[#059669]">Tue, 19 May</span> – <span class="text-[#059669]">Thu, 21 May</span></div>
-    <div class="text-[10.5px] text-[#64748B] mt-0.5">Free delivery · Tracking on WhatsApp</div>
+  <!-- Address -->
+  <div class="sec-title">Delivery address</div>
+  <div class="card">
+    <div class="p-4 flex items-start gap-3">
+      <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#ECFDF5"><i class="fa-solid fa-house text-[15px]" style="color:#047857"></i></div>
+      <div class="flex-1 leading-tight">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-[13px] font-extrabold">Home</span>
+          <span class="inline-flex px-1.5 py-0.5 rounded text-[9.5px] font-extrabold" style="background:#ECFDF5;color:#047857">Default</span>
+        </div>
+        <div class="text-[12.5px] font-bold">Ramesh Patel &middot; +91 98765 43210</div>
+        <div class="text-[11.5px] mt-1" style="color:#64748B">Plot 22, Khasra No. 145<br/>Village Bawadia, Indore &mdash; 452001, Madhya Pradesh</div>
+      </div>
+      <a href="addresses.html" class="text-[11.5px] font-extrabold" style="color:#047857">Change</a>
+    </div>
   </div>
-</div>
 
-<!-- Bill summary -->
-<div class="mx-4 mt-4 bg-white border border-[#E5E7EB] rounded-2xl p-4">
-  <div class="space-y-2 text-[12.5px]">
-    <div class="flex justify-between"><span class="text-[#64748B]">Items (3)</span><span class="font-bold tnum">₹2,300</span></div>
-    <div class="flex justify-between"><span class="text-[#64748B]">Discount</span><span class="font-bold text-[#059669] tnum">−₹400</span></div>
-    <div class="flex justify-between"><span class="text-[#64748B]">Delivery</span><span class="font-bold text-[#059669]">FREE</span></div>
-    <div class="border-t border-dashed border-[#E5E7EB] pt-2 mt-2 flex justify-between"><span class="text-[14px] font-extrabold">Total to pay</span><span class="text-[20px] font-black tnum">₹1,900</span></div>
+  <!-- Payment method -->
+  <div class="sec-title">Payment method</div>
+  <div class="card">
+    <label class="pay active">
+      <span class="pay-radio"></span>
+      <span class="pay-ic indigo"><i class="fa-solid fa-mobile-screen text-[16px]"></i></span>
+      <span class="pay-label">
+        <span class="a">UPI <span class="pay-tag">Extra &#8377;50 off</span></span>
+        <span class="b">PhonePe &middot; GPay &middot; Paytm &middot; BHIM</span>
+      </span>
+    </label>
+    <label class="pay">
+      <span class="pay-radio"></span>
+      <span class="pay-ic"><i class="fa-solid fa-money-bill-wave text-[16px]"></i></span>
+      <span class="pay-label">
+        <span class="a">Cash on Delivery</span>
+        <span class="b">Pay in cash when the order arrives</span>
+      </span>
+    </label>
+    <label class="pay">
+      <span class="pay-radio"></span>
+      <span class="pay-ic amber"><i class="fa-solid fa-circle-half-stroke text-[16px]"></i></span>
+      <span class="pay-label">
+        <span class="a">Partial payment</span>
+        <span class="b">&#8377;500 advance now &middot; balance COD on delivery</span>
+      </span>
+    </label>
   </div>
-</div>
 
-<!-- Sticky place order -->
-<div class="fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E7EB] px-4 py-3">
-  <button onclick="location.href='order-success.html'" class="w-full h-[54px] rounded-lg bg-[#059669] text-white text-[15px] font-extrabold flex items-center justify-between px-4">
-    <span class="tnum">₹1,900</span>
-    <span class="flex items-center gap-1"><span class="hi">Order करें</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></span>
-  </button>
-</div>
+  <!-- Delivery ETA -->
+  <div class="card mt-3" style="margin-top:10px">
+    <div class="p-4 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#ECFDF5"><i class="fa-solid fa-truck-fast text-[15px]" style="color:#047857"></i></div>
+      <div class="flex-1 leading-tight">
+        <div class="text-[13px] font-extrabold">Delivers <span style="color:#047857">Tue 19 May &mdash; Thu 21 May</span></div>
+        <div class="text-[11.5px] mt-1" style="color:#64748B">Free delivery &middot; tracking on WhatsApp</div>
+      </div>
+    </div>
+  </div>
 
+  <!-- Bill summary -->
+  <div class="sec-title">Bill summary</div>
+  <div class="card">
+    <div style="padding:14px">
+      <div class="bill-row"><span class="lbl">Items (3)</span><span class="val tnum">&#8377;2,300</span></div>
+      <div class="bill-row"><span class="lbl">Discount</span><span class="val green tnum">&minus; &#8377;400</span></div>
+      <div class="bill-row"><span class="lbl">UPI extra off</span><span class="val green tnum">&minus; &#8377;50</span></div>
+      <div class="bill-row"><span class="lbl">Delivery</span><span class="val green">FREE</span></div>
+      <div class="bill-total">
+        <span class="lbl">Total to pay</span>
+        <span class="val tnum">&#8377;1,850</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky place-order -->
+  <div class="sticky-cta">
+    <button onclick="location.href='order-success.html'" class="place-btn">
+      <span class="tnum">&#8377;1,850</span>
+      <span class="flex items-center gap-1.5">Place order <i class="fa-solid fa-chevron-right text-[12px]"></i></span>
+    </button>
+  </div>
+
+  <script>
+    // Single-select payment radios
+    document.querySelectorAll('.pay').forEach(p => {
+      p.addEventListener('click', () => {
+        document.querySelectorAll('.pay').forEach(x => x.classList.remove('active'));
+        p.classList.add('active');
+      });
+    });
+  </script>
 </body></html>

@@ -178,7 +178,6 @@
   .cod-input-wrap:focus-within{border-color:#047857;box-shadow:0 0 0 3px rgba(4,120,87,0.12)}
   .cod-input-wrap .rs{font-size:22px;font-weight:900;color:#0F172A}
   .cod-input-wrap input{flex:1;font-size:22px;font-weight:900;color:#0F172A;background:transparent;outline:none;border:0;width:0;font-variant-numeric:tabular-nums}
-  .cod-full-btn{padding:6px 12px;border-radius:6px;background:#ECFDF5;color:#047857;font-size:11.5px;font-weight:800;border:0;cursor:pointer;flex-shrink:0}
   .cod-coin-strip{margin-top:10px;display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;background:#ECFDF5;border:1px solid #BBF7D0}
 
   /* State-conditional visibility */
@@ -538,7 +537,6 @@
       <div class="cod-input-wrap">
         <span class="rs">&#8377;</span>
         <input id="codAmtInput" type="number" inputmode="numeric" value="628"/>
-        <button id="codFullBtn" class="cod-full-btn">Full</button>
       </div>
       <div class="flex items-center justify-between text-[11.5px] mt-2">
         <span style="color:#64748B">Total COD: <b class="text-[#0F172A]" id="codTotalLbl">&#8377;628</b></span>
@@ -547,11 +545,11 @@
       <div id="codErr" class="text-[11px] font-bold" style="color:#DC2626;display:none;margin-top:4px">Amount cannot exceed total COD due</div>
       <div class="cod-coin-strip mt-3">
         <i class="fa-solid fa-coins text-[14px]" style="color:#F59E0B"></i>
-        <div class="text-[11.5px] leading-tight" style="color:#0F172A"><b>1 coin per &#8377;12.50</b> paid &middot; credited within 24 hours</div>
+        <div class="text-[11.5px] leading-tight" style="color:#0F172A"><b>1 coin = &#8377;1</b> in your wallet</div>
       </div>
     </div>
     <div class="px-5 pt-3 pb-5" style="padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">
-      <button id="codPayBtn" class="w-full h-[50px] rounded-[10px] text-[14.5px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px">
+      <button id="codPayBtn" class="w-full h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
         Pay <span id="codPayBtnAmt" class="tnum">&#8377;628</span> COD
       </button>
     </div>
@@ -672,7 +670,6 @@
       const codSheet  = document.getElementById('codSheet');
       const payCodBtn = document.getElementById('payCodBtn');
       const codAmtIn  = document.getElementById('codAmtInput');
-      const codFull   = document.getElementById('codFullBtn');
       const codClose  = document.getElementById('codClose');
       const codPayBtn = document.getElementById('codPayBtn');
       const codPayAmt = document.getElementById('codPayBtnAmt');
@@ -697,13 +694,12 @@
       if (payCodBtn) payCodBtn.addEventListener('click', () => { syncCod(); openSheet(codBd, codSheet); });
       if (codClose)  codClose.addEventListener('click', () => closeSheet(codBd, codSheet));
       if (codBd)     codBd.addEventListener('click', () => closeSheet(codBd, codSheet));
-      if (codFull)   codFull.addEventListener('click', () => { codAmtIn.value = codDue; paintCod(); });
       if (codAmtIn)  codAmtIn.addEventListener('input', paintCod);
       if (codPayBtn) codPayBtn.addEventListener('click', () => {
         const v = parseInt(codAmtIn.value, 10) || 0;
         if (v <= 0 || v > codDue) return;
         closeSheet(codBd, codSheet);
-        setTimeout(() => alert('COD payment of ₹' + v + ' recorded · ' + Math.round(v/12.5) + ' coins will credit within 24 hours.'), 240);
+        setTimeout(() => alert('COD payment of ₹' + v + ' recorded · ' + Math.round(v/12.5) + ' coins added to your wallet.'), 240);
       });
 
       // Help bottom sheet · opens from Need-help row OR the sticky Return CTA · the Return tile is gated to a 7-day window from delivery (auto-hides + shows expired-note past the window)

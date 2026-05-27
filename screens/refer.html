@@ -8,14 +8,57 @@
   html,body{margin:0;padding:0}
   body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:96px}
   .tnum{font-variant-numeric:tabular-nums}
-  .sec-title{margin:18px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
-  .card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
-  .step{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-bottom:1px solid #F1F5F9}
+  .card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .sec-title{margin:18px 16px 10px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
+  /* Hero · emerald gradient · expert/agronomist-style banner with confetti dots + glowing coin · drives the "share & earn" mood */
+  .hero{margin:8px 16px 0;border-radius:18px;padding:22px 18px 24px;color:#FFFFFF;background:linear-gradient(135deg,#047857 0%,#059669 50%,#10B981 100%);position:relative;overflow:hidden;box-shadow:0 10px 28px -10px rgba(4,120,87,0.55)}
+  .hero::before{content:"";position:absolute;top:-40px;right:-30px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.32) 0%,transparent 65%);pointer-events:none}
+  .hero::after{content:"";position:absolute;bottom:-50px;left:-20px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.18) 0%,transparent 70%);pointer-events:none}
+  .hero-illu{position:absolute;right:8px;bottom:8px;width:108px;height:108px;opacity:.92;pointer-events:none}
+  /* Code box · dashed-outline emerald-tint band, big tracked code + copy pill */
+  .code-row{display:flex;align-items:center;gap:10px;padding:14px;border:1.5px dashed #BBF7D0;background:#ECFDF5;border-radius:14px;margin:0 16px}
+  .code-row .lab{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#047857;line-height:1}
+  .code-row .cd{font-size:22px;font-weight:900;letter-spacing:0.14em;color:#0F172A;margin-top:6px}
+  .copy-btn{flex-shrink:0;width:40px;height:40px;border-radius:10px;background:#FFFFFF;border:1px solid #BBF7D0;color:#047857;display:flex;align-items:center;justify-content:center;font-size:15px}
+  /* Stats · 2-col card row · big number + thin sub-label · emerald accent on icon */
+  .stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px}
+  .stat-card{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .stat-ic{width:32px;height:32px;border-radius:9px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .stat-head{display:flex;align-items:center;gap:8px}
+  .stat-head .stat-title{font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
+  .stat-pair{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px}
+  .stat-pair > div{flex:1}
+  .stat-num{font-size:20px;font-weight:900;color:#0F172A}
+  .stat-sub{font-size:10.5px;font-weight:700;color:#94A3B8;margin-top:2px}
+  /* How-it-works · numbered emerald circles, white card */
+  .step{display:flex;align-items:flex-start;gap:12px;padding:14px;border-bottom:1px solid #F1F5F9}
   .step:last-child{border-bottom:0}
-  .step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#ECFDF5;color:#047857;font-size:12px;font-weight:800;flex-shrink:0}
-  .step-body{flex:1;line-height:1.3}
-  .step-title{font-size:13.5px;font-weight:700;color:#0F172A}
-  .step-sub{font-size:11.5px;color:#64748B;margin-top:2px}
+  .step-num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#047857,#10B981);color:#FFFFFF;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 10px -2px rgba(4,120,87,0.45)}
+  .step-title{font-size:13.5px;font-weight:700;color:#0F172A;line-height:1.3}
+  .step-sub{font-size:11.5px;color:#64748B;margin-top:2px;line-height:1.35}
+  /* Leaderboard · emerald gradient card · podium top 3 + ranked rows */
+  .board{margin:0 16px;border-radius:18px;padding:16px 12px 12px;background:linear-gradient(180deg,#065F46 0%,#047857 60%,#059669 100%);color:#FFFFFF;box-shadow:0 10px 26px -10px rgba(4,120,87,0.5)}
+  .board-title{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px;padding:0 4px}
+  .board-title .ic{width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:13px;color:#FBBF24}
+  .podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-top:18px;padding:0 4px}
+  .podium .slot{display:flex;flex-direction:column;align-items:center;flex:1;text-align:center}
+  .podium .av{width:58px;height:58px;border-radius:50%;background:#FFFFFF;color:#047857;font-weight:900;font-size:22px;display:flex;align-items:center;justify-content:center;border:3px solid #FBBF24;box-shadow:0 8px 18px -4px rgba(0,0,0,0.35)}
+  .podium .rk{margin-top:-12px;width:24px;height:24px;border-radius:50%;background:#FBBF24;color:#0F172A;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid #FFFFFF;z-index:2}
+  .podium .nm{font-size:12px;font-weight:800;margin-top:6px}
+  .podium .pt{font-size:11px;font-weight:700;color:rgba(255,255,255,0.78);margin-top:2px}
+  .podium .bar{margin-top:8px;width:100%;border-radius:12px 12px 0 0;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);border-bottom:0}
+  .podium .one .av{width:66px;height:66px;font-size:24px;border-color:#FCD34D}
+  .podium .one .bar{height:74px;background:rgba(251,191,36,0.22);border-color:rgba(251,191,36,0.4)}
+  .podium .two .bar{height:54px}
+  .podium .three .bar{height:42px}
+  /* Ranked list rows (4+) · white card with avatar circle, name, count + rank chip */
+  .rank-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #F1F5F9}
+  .rank-row:last-child{border-bottom:0}
+  .rank-row .rk-num{width:24px;text-align:center;font-size:12px;font-weight:800;color:#64748B}
+  .rank-row .av-sm{width:32px;height:32px;border-radius:50%;background:#ECFDF5;color:#047857;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .rank-row .nm{flex:1;font-size:13px;font-weight:700;color:#0F172A;text-transform:capitalize}
+  .rank-row .ct{font-size:12.5px;font-weight:800;color:#0F172A;tnum:1}
+  .rank-row .ic-ppl{font-size:10px;color:#059669;margin-left:4px}
 </style></head>
 <body>
 
@@ -28,32 +71,97 @@
     </div>
   </div>
 
-  <div class="px-4 pt-4 pb-3 flex items-center gap-3 bg-white">
-    <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB">
+  <!-- Top bar · plain white app-bar (matches the rest of the design system) -->
+  <div class="px-4 pt-4 pb-3 flex items-center gap-3" style="background:#F8F8F8">
+    <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center bg-white" style="border:1px solid #E5E7EB;box-shadow:0 1px 3px rgba(15,23,42,0.04)">
       <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
     </button>
-    <h1 class="flex-1 text-[22px] font-extrabold leading-tight">Refer &amp; earn</h1>
+    <h1 class="flex-1 text-[20px] font-extrabold leading-tight text-[#0F172A]">Refer &amp; earn</h1>
   </div>
 
-  <!-- Hero · gift + reward callout -->
-  <div class="card mt-3" style="margin-top:8px">
-    <div style="background:linear-gradient(135deg,#047857 0%,#10B981 100%);padding:22px 18px;color:#FFFFFF;text-align:center;position:relative;overflow:hidden">
-      <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.32) 0%,transparent 65%);pointer-events:none"></div>
-      <div class="text-[44px]" style="filter:drop-shadow(0 6px 12px rgba(0,0,0,0.25))">🎁</div>
-      <div class="text-[18px] font-extrabold mt-2 leading-tight">Earn &#8377;50 per friend</div>
-      <div class="text-[12.5px] mt-1" style="color:rgba(255,255,255,0.85)">Your friend gets &#8377;100 off their first order</div>
+  <!-- Hero · emerald gradient banner · headline + subline + inline illustration of phone+coins -->
+  <div class="hero">
+    <div class="relative" style="max-width:62%">
+      <div class="text-[11px] font-extrabold uppercase tracking-[0.16em]" style="color:#FCD34D">Share &amp; earn</div>
+      <div class="text-[22px] font-extrabold leading-tight mt-1.5">Earn 60 coins per friend</div>
+      <div class="text-[12.5px] mt-1.5" style="color:rgba(255,255,255,0.85)">They get ₹100 off their first order. You both win.</div>
     </div>
+    <!-- Inline SVG illustration · phone + coin stack + sparkle -->
+    <svg class="hero-illu" viewBox="0 0 120 120" fill="none">
+      <ellipse cx="60" cy="105" rx="46" ry="6" fill="rgba(0,0,0,0.18)"/>
+      <!-- Coin stack -->
+      <ellipse cx="38" cy="92" rx="22" ry="6" fill="#FBBF24" stroke="#B45309" stroke-width="1.5"/>
+      <ellipse cx="38" cy="82" rx="22" ry="6" fill="#FCD34D" stroke="#B45309" stroke-width="1.5"/>
+      <ellipse cx="38" cy="72" rx="22" ry="6" fill="#FBBF24" stroke="#B45309" stroke-width="1.5"/>
+      <text x="38" y="76" font-size="9" font-weight="800" text-anchor="middle" fill="#7C2D12">₹</text>
+      <!-- Phone -->
+      <rect x="64" y="20" width="44" height="74" rx="9" fill="#FFFFFF" stroke="#047857" stroke-width="2"/>
+      <rect x="68" y="26" width="36" height="58" rx="4" fill="#ECFDF5"/>
+      <circle cx="86" cy="35" r="6" fill="#047857"/>
+      <path d="M86 32v6M83 35h6" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
+      <rect x="72" y="46" width="28" height="3" rx="1.5" fill="#A7F3D0"/>
+      <rect x="72" y="53" width="20" height="3" rx="1.5" fill="#A7F3D0"/>
+      <rect x="72" y="64" width="28" height="9" rx="3" fill="#059669"/>
+      <text x="86" y="71" font-size="6" font-weight="800" text-anchor="middle" fill="#FFFFFF">SHARE</text>
+      <!-- Sparkles -->
+      <path d="M22 30l3 6 6 3-6 3-3 6-3-6-6-3 6-3z" fill="#FCD34D" opacity=".9"/>
+      <path d="M105 14l1.5 3 3 1.5-3 1.5L105 23l-1.5-3-3-1.5 3-1.5z" fill="#FFFFFF" opacity=".9"/>
+    </svg>
   </div>
 
-  <!-- Referral code -->
+  <!-- Referral code · dashed emerald-tint band · copy = icon-only button -->
   <div class="sec-title">Your code</div>
-  <div class="card">
-    <div style="padding:14px;display:flex;align-items:center;gap:10px">
-      <div class="flex-1 leading-tight">
-        <div class="text-[10.5px] font-extrabold uppercase tracking-[0.06em]" style="color:#94A3B8">Share this code</div>
-        <div class="text-[20px] font-extrabold tnum mt-1" style="color:#0F172A;letter-spacing:0.08em">RAMESH50</div>
+  <div class="code-row">
+    <div class="flex-1 leading-tight">
+      <div class="lab">Share this code</div>
+      <div class="cd tnum" id="refCode">KRIYUMT</div>
+    </div>
+    <button class="copy-btn" id="copyBtn" aria-label="Copy code"><i class="fa-solid fa-copy"></i></button>
+  </div>
+  <!-- Share row · primary Share + WhatsApp shortcut -->
+  <div class="mt-3 px-4 flex gap-2">
+    <button id="shareBtn" class="flex-1 h-[48px] rounded-[12px] text-white text-[14.5px] font-extrabold flex items-center justify-center gap-2" style="background:#059669;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+      <i class="fa-solid fa-share-nodes text-[13px]"></i> Share &amp; earn
+    </button>
+    <button class="w-[48px] h-[48px] rounded-[12px] flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB;color:#25D366;box-shadow:0 1px 3px rgba(15,23,42,0.04)" aria-label="Share on WhatsApp">
+      <i class="fa-brands fa-whatsapp text-[20px]"></i>
+    </button>
+  </div>
+
+  <!-- Stats · 2-card row · drops the orange tiles, uses the design-system white card + emerald accent -->
+  <div class="sec-title">Your progress</div>
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-head">
+        <div class="stat-ic"><i class="fa-solid fa-user-group"></i></div>
+        <div class="stat-title">Referrals</div>
       </div>
-      <button class="px-3 py-2 rounded-lg text-[12px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0"><i class="fa-solid fa-copy text-[11px]"></i> Copy</button>
+      <div class="stat-pair">
+        <div>
+          <div class="stat-num tnum">0</div>
+          <div class="stat-sub">Successful</div>
+        </div>
+        <div>
+          <div class="stat-num tnum" style="color:#B45309">0</div>
+          <div class="stat-sub">Pending</div>
+        </div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-head">
+        <div class="stat-ic"><i class="fa-solid fa-coins"></i></div>
+        <div class="stat-title">Earnings</div>
+      </div>
+      <div class="stat-pair">
+        <div>
+          <div class="stat-num tnum">0</div>
+          <div class="stat-sub">This month</div>
+        </div>
+        <div>
+          <div class="stat-num tnum">0</div>
+          <div class="stat-sub">Lifetime</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -62,32 +170,110 @@
   <div class="card">
     <div class="step">
       <div class="step-num">1</div>
-      <div class="step-body">
-        <div class="step-title">Share your code</div>
-        <div class="step-sub">Send via WhatsApp, SMS, or copy and share anywhere</div>
+      <div>
+        <div class="step-title">Invite a friend</div>
+        <div class="step-sub">Share your code over WhatsApp, SMS, or any app</div>
       </div>
     </div>
     <div class="step">
       <div class="step-num">2</div>
-      <div class="step-body">
-        <div class="step-title">Friend places their first order</div>
-        <div class="step-sub">They use your code at checkout and get &#8377;100 off</div>
+      <div>
+        <div class="step-title">Friend signs up &amp; places first order</div>
+        <div class="step-sub">They use your code at checkout — ₹100 off instantly</div>
       </div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
-      <div class="step-body">
-        <div class="step-title">You earn &#8377;50 coins</div>
-        <div class="step-sub">Credited within 24 hours of their order delivery</div>
+      <div>
+        <div class="step-title">You both earn rewards</div>
+        <div class="step-sub">60 coins credited to your wallet within 24 hours</div>
       </div>
     </div>
   </div>
 
-  <!-- Sticky share -->
-  <div class="fixed bottom-0 left-0 right-0 bg-white px-4 py-4" style="border-top:1px solid #F1F5F9">
-    <button class="w-full h-[52px] rounded-[12px] text-white text-[15px] font-extrabold flex items-center justify-center gap-2" style="background:#059669;border:0;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
-      <i class="fa-solid fa-share-nodes text-[13px]"></i> Share &amp; earn
-    </button>
+  <!-- Leaderboard · podium top 3 inside the emerald board + ranked list of 7 farmers below in a clean white card -->
+  <div class="sec-title">Leaderboard · This month</div>
+  <div class="board">
+    <div class="board-title">
+      <span class="ic"><i class="fa-solid fa-trophy"></i></span>
+      <span>Top referrers</span>
+    </div>
+    <div class="podium">
+      <div class="slot two">
+        <div class="av">S</div>
+        <div class="rk">2</div>
+        <div class="nm">Sumit</div>
+        <div class="pt tnum">1,611</div>
+        <div class="bar"></div>
+      </div>
+      <div class="slot one">
+        <div class="av">M</div>
+        <div class="rk" style="background:#FCD34D">1</div>
+        <div class="nm">Mithun</div>
+        <div class="pt tnum">2,211</div>
+        <div class="bar"></div>
+      </div>
+      <div class="slot three">
+        <div class="av">R</div>
+        <div class="rk" style="background:#FDBA74">3</div>
+        <div class="nm">Ravindra</div>
+        <div class="pt tnum">1,414</div>
+        <div class="bar"></div>
+      </div>
+    </div>
   </div>
+
+  <div class="card mt-3" style="margin-top:12px">
+    <div class="rank-row"><div class="rk-num tnum">4</div><div class="av-sm">S</div><div class="nm">sorabh</div><div class="ct tnum">1,181 <i class="fa-solid fa-user-plus ic-ppl"></i></div></div>
+    <div class="rank-row"><div class="rk-num tnum">5</div><div class="av-sm">A</div><div class="nm">ashish shakya</div><div class="ct tnum">1,175 <i class="fa-solid fa-user-plus ic-ppl"></i></div></div>
+    <div class="rank-row"><div class="rk-num tnum">6</div><div class="av-sm">S</div><div class="nm">shyam prajapati</div><div class="ct tnum">1,145 <i class="fa-solid fa-user-plus ic-ppl"></i></div></div>
+    <div class="rank-row"><div class="rk-num tnum">7</div><div class="av-sm">R</div><div class="nm">R Ravindra reddy</div><div class="ct tnum">1,066 <i class="fa-solid fa-user-plus ic-ppl"></i></div></div>
+    <div class="rank-row"><div class="rk-num tnum">8</div><div class="av-sm">D</div><div class="nm">ddcvvbb</div><div class="ct tnum">1,030 <i class="fa-solid fa-user-plus ic-ppl"></i></div></div>
+    <div class="rank-row"><div class="rk-num tnum">9</div><div class="av-sm">R</div><div class="nm">rohit</div><div class="ct tnum">995 <i class="fa-solid fa-user-plus ic-ppl"></i></div></div>
+    <div class="rank-row"><div class="rk-num tnum">10</div><div class="av-sm">N</div><div class="nm">niteshwar tiwari</div><div class="ct tnum">984 <i class="fa-solid fa-user-plus ic-ppl"></i></div></div>
+  </div>
+
+  <!-- Your rank · sticky-feel callout so the user always sees where they stand · sits below the list, not as a sticky bottom CTA -->
+  <div class="card mt-3" style="margin-top:12px;background:#ECFDF5;border-color:#A7F3D0">
+    <div class="rank-row" style="border-bottom:0">
+      <div class="rk-num tnum" style="color:#047857">82</div>
+      <div class="av-sm" style="background:#047857;color:#FFFFFF">Y</div>
+      <div class="nm" style="color:#047857">You</div>
+      <div class="ct tnum" style="color:#047857">0 <i class="fa-solid fa-user-plus ic-ppl"></i></div>
+    </div>
+  </div>
+
+  <script>
+    // Copy code · uses navigator.clipboard, falls back to execCommand
+    (function(){
+      const btn = document.getElementById('copyBtn');
+      const code = document.getElementById('refCode');
+      if (!btn || !code) return;
+      btn.addEventListener('click', async () => {
+        const text = code.textContent.trim();
+        try {
+          if (navigator.clipboard) { await navigator.clipboard.writeText(text); }
+          else {
+            const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t);
+          }
+          const old = btn.innerHTML;
+          btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+          setTimeout(() => { btn.innerHTML = old; }, 1400);
+        } catch (e) {}
+      });
+    })();
+
+    // Share via Web Share API · falls back silently when unsupported
+    (function(){
+      const btn = document.getElementById('shareBtn');
+      if (!btn) return;
+      btn.addEventListener('click', async () => {
+        const text = 'Use my code KRIYUMT on Katyayani Krishi Direct and get ₹100 off your first order. Download: https://kkd.app';
+        if (navigator.share) {
+          try { await navigator.share({ title: 'Katyayani Krishi Direct', text }); } catch (e) {}
+        }
+      });
+    })();
+  </script>
 
 </body></html>

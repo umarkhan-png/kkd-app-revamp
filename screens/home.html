@@ -186,6 +186,17 @@
   body.scrolled .delivery-tile .dt-detail { display: none; }
   /* On scroll-compact, surface the order ID inline next to the status pill so the user still knows which order is moving */
   body.scrolled .delivery-tile .dt-compact-id { display: inline !important; }
+  /* Delivery stack · horizontal scroll-snap carousel for 2+ in-progress orders · header + dots auto-hide in single-order mode and in compact (scrolled) state since the carousel header would steal too much height */
+  .delivery-scroller{ -webkit-overflow-scrolling:touch; }
+  .delivery-scroller::-webkit-scrollbar{ display:none; }
+  .delivery-card{ scroll-snap-stop:always; }
+  /* Single-order mode (set by JS): hide the swipe header + dots, no horizontal scrollbar artefacts */
+  .delivery-stack.single .ds-header,
+  .delivery-stack.single .ds-dots{ display:none !important; }
+  body.scrolled .delivery-stack .ds-header,
+  body.scrolled .delivery-stack .ds-dots{ display:none !important; }
+  .ds-dots .dot{ width:6px; height:6px; border-radius:9999px; background:#A7F3D0; transition: all .2s ease; }
+  .ds-dots .dot.on{ background:#047857; width:18px; }
   /* Pulsing dot for live status */
   @keyframes dtPulse { 0% { transform: scale(1); opacity: 0.75; } 100% { transform: scale(2.4); opacity: 0; } }
   /* Truck icon bounce for current stage */
@@ -425,58 +436,120 @@
     </div>
   </div>
 
-  <!-- Delivery status tile — solid light green (no gradient) · roomier horizontal padding (px-5) so contents aren't congested at edges · 'Out' stage is prominently amplified (bigger pulse + bolder label) · upcoming segment uses a clearly visible emerald-light color (not background-blending) · scroll-compact adds order ID inline alongside the status -->
-  <button type="button" id="deliveryTile" class="delivery-tile w-full text-left px-5 py-2.5" style="background:#D1FAE5;border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0;border-left:0;border-right:0;cursor:pointer">
-    <!-- Status row · always visible · compact mode also shows order ID inline -->
-    <div class="flex items-center justify-between mb-2 dt-statusrow">
-      <div class="flex items-center gap-2 min-w-0">
-        <span class="relative flex items-center justify-center flex-shrink-0">
-          <span class="block w-2 h-2 rounded-full" style="background:#059669"></span>
-          <span class="absolute inset-0 w-2 h-2 rounded-full" style="background:#059669;animation:dtPulse 1.6s ease-out infinite"></span>
-        </span>
-        <span class="text-[11px] font-extrabold uppercase tracking-wider truncate" style="color:#047857">Out for Delivery</span>
-        <span class="dt-compact-id text-[11px] font-extrabold flex-shrink-0" style="color:#0F172A;display:none">· #KKD-26194</span>
+  <!-- Delivery status stack · solid light green strip that holds 1..N ongoing orders · when more than one is live, the tiles become a horizontal scroll-snap carousel and a row of pagination dots pins below so the user can see all in-flight orders without leaving the home sticky header -->
+  <div id="deliveryStack" class="delivery-stack" style="background:#D1FAE5;border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0">
+    <!-- Multi-order header · only renders when 2+ tiles are present (toggled by JS via .multi class on the stack) · "Order 1 of N" + a swipe hint -->
+    <div class="ds-header dt-detail flex items-center justify-between px-5 pt-2">
+      <div class="flex items-center gap-1.5">
+        <i class="fa-solid fa-truck-fast text-[11px]" style="color:#047857"></i>
+        <span class="text-[10.5px] font-extrabold tracking-[0.14em] uppercase" style="color:#047857"><span id="dsIndex">1</span> of <span id="dsTotal">2</span> in-progress</span>
       </div>
-      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF">
-        Track <i class="fa-solid fa-arrow-right text-[9px]" style="color:#FFFFFF"></i>
-      </span>
+      <span class="text-[10px] font-bold flex items-center gap-1" style="color:#047857"><i class="fa-solid fa-angles-right text-[9px]"></i> swipe</span>
     </div>
-    <!-- Order summary + thumbs (hidden on scroll-compact) -->
-    <div class="flex items-center gap-2.5 mb-2 dt-detail">
-      <div class="flex flex-shrink-0" style="margin-right:-4px">
-        <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);margin-right:-6px;z-index:3"><img src="../assets/Chakrawarti_nobg.png" class="w-6 h-6 object-contain"/></div>
-        <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);margin-right:-6px;z-index:2"><img src="../assets/Humic_nobg.png" class="w-6 h-6 object-contain"/></div>
-        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-extrabold" style="background:#FFFFFF;color:#047857;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);z-index:1">+1</div>
-      </div>
-      <div class="flex-1 min-w-0 leading-tight">
-        <div class="text-[12.5px] font-extrabold truncate" style="color:#0F172A">#KKD-26194 · ₹2,140</div>
-        <div class="text-[10.5px] font-semibold truncate" style="color:#64748B">3 items · Arriving today by 5:00 PM</div>
-      </div>
+
+    <div id="deliveryScroller" class="delivery-scroller flex" style="overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none">
+      <!-- ORDER 1 · Out for Delivery -->
+      <button type="button" data-track-order="KKD-26194" class="delivery-tile delivery-card w-full flex-shrink-0 text-left px-5 py-2.5" style="scroll-snap-align:start;background:transparent;border:0;cursor:pointer">
+        <div class="flex items-center justify-between mb-2 dt-statusrow">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="relative flex items-center justify-center flex-shrink-0">
+              <span class="block w-2 h-2 rounded-full" style="background:#059669"></span>
+              <span class="absolute inset-0 w-2 h-2 rounded-full" style="background:#059669;animation:dtPulse 1.6s ease-out infinite"></span>
+            </span>
+            <span class="text-[11px] font-extrabold uppercase tracking-wider truncate" style="color:#047857">Out for Delivery</span>
+            <span class="dt-compact-id text-[11px] font-extrabold flex-shrink-0" style="color:#0F172A;display:none">· #KKD-26194</span>
+          </div>
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF">
+            Track <i class="fa-solid fa-arrow-right text-[9px]" style="color:#FFFFFF"></i>
+          </span>
+        </div>
+        <div class="flex items-center gap-2.5 mb-2 dt-detail">
+          <div class="flex flex-shrink-0" style="margin-right:-4px">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);margin-right:-6px;z-index:3"><img src="../assets/Chakrawarti_nobg.png" class="w-6 h-6 object-contain"/></div>
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);margin-right:-6px;z-index:2"><img src="../assets/Humic_nobg.png" class="w-6 h-6 object-contain"/></div>
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-extrabold" style="background:#FFFFFF;color:#047857;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);z-index:1">+1</div>
+          </div>
+          <div class="flex-1 min-w-0 leading-tight">
+            <div class="text-[12.5px] font-extrabold truncate" style="color:#0F172A">#KKD-26194 &middot; &#8377;2,140</div>
+            <div class="text-[10.5px] font-semibold truncate" style="color:#64748B">3 items &middot; Arriving today by 5:00 PM</div>
+          </div>
+        </div>
+        <div class="dt-detail">
+          <div class="flex items-center gap-1">
+            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+            <div class="w-2 h-2 rounded-full" style="background:#059669"></div>
+            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+            <div class="w-2 h-2 rounded-full" style="background:#059669"></div>
+            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+            <span class="relative flex items-center justify-center flex-shrink-0" style="width:14px;height:14px">
+              <span class="absolute w-4 h-4 rounded-full" style="background:rgba(5,150,105,0.25);animation:dtPulse 1.4s ease-out infinite"></span>
+              <span class="relative w-3.5 h-3.5 rounded-full" style="background:#047857;border:2px solid #FFFFFF;box-shadow:0 1px 4px rgba(4,120,87,0.6)"></span>
+            </span>
+            <div class="flex-1 h-1.5 rounded-full" style="background:#6EE7B7"></div>
+            <div class="w-2 h-2 rounded-full" style="background:#6EE7B7"></div>
+          </div>
+          <div class="flex justify-between mt-1.5 text-[9.5px] font-semibold">
+            <span style="color:#047857">Placed</span>
+            <span style="color:#047857">Packed</span>
+            <span class="dt-stage-current" style="color:#064E3B;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;font-size:10.5px">Out</span>
+            <span style="color:#64748B">Delivered</span>
+          </div>
+        </div>
+      </button>
+
+      <!-- ORDER 2 · Packed · second in-progress order · same structure, earlier stage so the progress bar shows a different milestone -->
+      <button type="button" data-track-order="KKD-26195" class="delivery-tile delivery-card w-full flex-shrink-0 text-left px-5 py-2.5" style="scroll-snap-align:start;background:transparent;border:0;cursor:pointer">
+        <div class="flex items-center justify-between mb-2 dt-statusrow">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="relative flex items-center justify-center flex-shrink-0">
+              <span class="block w-2 h-2 rounded-full" style="background:#0891B2"></span>
+              <span class="absolute inset-0 w-2 h-2 rounded-full" style="background:#0891B2;animation:dtPulse 1.6s ease-out infinite"></span>
+            </span>
+            <span class="text-[11px] font-extrabold uppercase tracking-wider truncate" style="color:#0E7490">Packed &middot; Dispatching</span>
+            <span class="dt-compact-id text-[11px] font-extrabold flex-shrink-0" style="color:#0F172A;display:none">&middot; #KKD-26195</span>
+          </div>
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold flex-shrink-0" style="background:#0891B2;color:#FFFFFF">
+            Track <i class="fa-solid fa-arrow-right text-[9px]" style="color:#FFFFFF"></i>
+          </span>
+        </div>
+        <div class="flex items-center gap-2.5 mb-2 dt-detail">
+          <div class="flex flex-shrink-0" style="margin-right:-4px">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);margin-right:-6px;z-index:3"><img src="../assets/AntiVirus_nobg.png" class="w-6 h-6 object-contain"/></div>
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);z-index:2"><img src="../assets/Humic_nobg.png" class="w-6 h-6 object-contain"/></div>
+          </div>
+          <div class="flex-1 min-w-0 leading-tight">
+            <div class="text-[12.5px] font-extrabold truncate" style="color:#0F172A">#KKD-26195 &middot; &#8377;1,290</div>
+            <div class="text-[10.5px] font-semibold truncate" style="color:#64748B">2 items &middot; Arriving 29 May by 6:00 PM</div>
+          </div>
+        </div>
+        <div class="dt-detail">
+          <div class="flex items-center gap-1">
+            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+            <div class="w-2 h-2 rounded-full" style="background:#059669"></div>
+            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+            <!-- Current 'Packed' marker · enlarged, cyan halo -->
+            <span class="relative flex items-center justify-center flex-shrink-0" style="width:14px;height:14px">
+              <span class="absolute w-4 h-4 rounded-full" style="background:rgba(8,145,178,0.25);animation:dtPulse 1.4s ease-out infinite"></span>
+              <span class="relative w-3.5 h-3.5 rounded-full" style="background:#0E7490;border:2px solid #FFFFFF;box-shadow:0 1px 4px rgba(8,145,178,0.6)"></span>
+            </span>
+            <div class="flex-1 h-1.5 rounded-full" style="background:#6EE7B7"></div>
+            <div class="w-2 h-2 rounded-full" style="background:#6EE7B7"></div>
+            <div class="flex-1 h-1.5 rounded-full" style="background:#6EE7B7"></div>
+            <div class="w-2 h-2 rounded-full" style="background:#6EE7B7"></div>
+          </div>
+          <div class="flex justify-between mt-1.5 text-[9.5px] font-semibold">
+            <span style="color:#047857">Placed</span>
+            <span class="dt-stage-current" style="color:#0E7490;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;font-size:10.5px">Packed</span>
+            <span style="color:#64748B">Out</span>
+            <span style="color:#64748B">Delivered</span>
+          </div>
+        </div>
+      </button>
     </div>
-    <!-- Progress bar (4 stages) (hidden on scroll-compact) · Out stage AMPLIFIED · upcoming segment in mid-emerald so it stays readable on the light-green bg -->
-    <div class="dt-detail">
-      <div class="flex items-center gap-1">
-        <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-        <div class="w-2 h-2 rounded-full" style="background:#059669"></div>
-        <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-        <div class="w-2 h-2 rounded-full" style="background:#059669"></div>
-        <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-        <!-- Current 'Out' marker · enlarged, white halo, pulse ring -->
-        <span class="relative flex items-center justify-center flex-shrink-0" style="width:14px;height:14px">
-          <span class="absolute w-4 h-4 rounded-full" style="background:rgba(5,150,105,0.25);animation:dtPulse 1.4s ease-out infinite"></span>
-          <span class="relative w-3.5 h-3.5 rounded-full" style="background:#047857;border:2px solid #FFFFFF;box-shadow:0 1px 4px rgba(4,120,87,0.6)"></span>
-        </span>
-        <div class="flex-1 h-1.5 rounded-full" style="background:#6EE7B7"></div>
-        <div class="w-2 h-2 rounded-full" style="background:#6EE7B7"></div>
-      </div>
-      <div class="flex justify-between mt-1.5 text-[9.5px] font-semibold">
-        <span style="color:#047857">Placed</span>
-        <span style="color:#047857">Packed</span>
-        <span class="dt-stage-current" style="color:#064E3B;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;font-size:10.5px">Out</span>
-        <span style="color:#64748B">Delivered</span>
-      </div>
-    </div>
-  </button>
+
+    <!-- Pagination dots · only show when there are 2+ tiles · index syncs with scroll position (JS) -->
+    <div id="deliveryDots" class="ds-dots dt-detail flex items-center justify-center gap-1.5 pb-2"></div>
+  </div>
 
   </div><!-- /sticky-actions -->
 
@@ -2689,14 +2762,55 @@
       }, true);
     })();
 
-    // Delivery tile tap → opens detailed track-order bottom-sheet
+    // Delivery stack · any in-progress tile tap → opens detailed track-order bottom-sheet · pagination dots auto-render based on tile count and stay in sync with the user's horizontal swipe position
     (function(){
-      const tile  = document.getElementById('deliveryTile');
-      const sheet = document.getElementById('trackSheet');
-      const bg    = document.getElementById('trackSheetBackdrop');
-      const pnl   = document.getElementById('trackSheetPanel');
-      const close = document.getElementById('trackSheetClose');
-      if (!tile || !sheet) return;
+      const stack    = document.getElementById('deliveryStack');
+      const scroller = document.getElementById('deliveryScroller');
+      const dots     = document.getElementById('deliveryDots');
+      const sheet    = document.getElementById('trackSheet');
+      const bg       = document.getElementById('trackSheetBackdrop');
+      const pnl      = document.getElementById('trackSheetPanel');
+      const close    = document.getElementById('trackSheetClose');
+      if (!stack || !scroller) return;
+
+      const tiles = Array.from(scroller.querySelectorAll('.delivery-card'));
+      const idxEl   = document.getElementById('dsIndex');
+      const totalEl = document.getElementById('dsTotal');
+
+      // Apply single/multi state · header + dots only meaningful when there are 2+ tiles
+      if (tiles.length <= 1) stack.classList.add('single');
+      if (totalEl) totalEl.textContent = tiles.length;
+
+      // Render the pagination dots
+      if (dots) {
+        dots.innerHTML = tiles.map(function(_, i){ return '<span class="dot'+(i===0?' on':'')+'" data-ds-dot="'+i+'"></span>'; }).join('');
+      }
+      function paintActive(i){
+        if (idxEl) idxEl.textContent = (i + 1);
+        if (!dots) return;
+        Array.from(dots.querySelectorAll('.dot')).forEach(function(d, k){ d.classList.toggle('on', k === i); });
+      }
+      // Sync dots to swipe position
+      let scrollT;
+      scroller.addEventListener('scroll', function(){
+        clearTimeout(scrollT);
+        scrollT = setTimeout(function(){
+          const w = scroller.clientWidth || 1;
+          const i = Math.round(scroller.scrollLeft / w);
+          paintActive(Math.max(0, Math.min(tiles.length - 1, i)));
+        }, 70);
+      });
+      // Tap a dot to jump
+      if (dots) {
+        dots.addEventListener('click', function(e){
+          const d = e.target.closest('[data-ds-dot]'); if (!d) return;
+          const i = parseInt(d.dataset.dsDot, 10) || 0;
+          const w = scroller.clientWidth || 1;
+          scroller.scrollTo({ left: i * w, behavior: 'smooth' });
+        });
+      }
+
+      if (!sheet) return;
       function open(){
         sheet.style.display = 'block';
         requestAnimationFrame(function(){
@@ -2709,7 +2823,7 @@
         pnl.style.transform = 'translateY(100%)';
         setTimeout(function(){ sheet.style.display = 'none'; }, 280);
       }
-      tile.addEventListener('click', open);
+      tiles.forEach(function(t){ t.addEventListener('click', open); });
       if (bg)    bg.addEventListener('click', dismiss);
       if (close) close.addEventListener('click', dismiss);
     })();

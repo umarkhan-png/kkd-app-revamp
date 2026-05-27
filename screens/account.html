@@ -45,33 +45,36 @@
     <h1 class="flex-1 text-[22px] font-extrabold leading-tight" style="color:#0F172A">Profile</h1>
   </div>
 
-  <!-- Profile card · NO emerald strip overlay (was visually swallowing the avatar) · clean layout: avatar + name + phone on the top row · Edit-profile pill top-right · divider · profile-completion meter · Member-since at the bottom -->
+  <!-- Profile card · avatar uses an emerald-tinted initials circle as the always-on default, photo loads on top and onerror-hides so the avatar never appears blank · single Edit pill top-right (the standalone Complete link is gone, the meter is now display-only) -->
   <div style="margin:8px 16px 0;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:16px;box-shadow:0 1px 3px rgba(15,23,42,0.04);overflow:hidden">
     <div class="p-4">
       <div class="flex items-center gap-3">
-        <img src="https://images.unsplash.com/photo-1627638458498-71e9fdf12a05?w=200&q=80" alt="" class="w-16 h-16 rounded-full object-cover flex-shrink-0" style="border:2px solid #BBF7D0"/>
+        <!-- Avatar · initials sit underneath, photo overlays · if the image URL 404s the onerror hides it and the initials read through -->
+        <div class="flex-shrink-0" style="position:relative;width:64px;height:64px;border-radius:50%;overflow:hidden;border:2px solid #BBF7D0;background:linear-gradient(135deg,#ECFDF5,#D1FAE5);display:flex;align-items:center;justify-content:center">
+          <span style="font-size:20px;font-weight:800;color:#047857;letter-spacing:-0.02em">RP</span>
+          <img src="https://images.unsplash.com/photo-1627638458498-71e9fdf12a05?w=200&q=80" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'"/>
+        </div>
         <div class="flex-1 min-w-0 leading-tight">
           <div class="text-[17px] font-extrabold">Ramesh Patel</div>
           <div class="text-[12px] mt-0.5" style="color:#64748B">+91 98765 43210</div>
         </div>
+        <!-- Single Edit pill · routes to edit-profile.html · acts as both Edit and Complete (the meter just reflects state) -->
         <a href="edit-profile.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11.5px] font-extrabold flex-shrink-0" style="background:#ECFDF5;color:#047857;text-decoration:none;border:1px solid #BBF7D0">
           <i class="fa-solid fa-pen-to-square text-[10px]"></i> Edit
         </a>
       </div>
 
-      <!-- Profile-completion meter -->
+      <!-- Profile-completion meter · display-only · helper line removed per spec -->
       <div class="mt-4 pt-4" style="border-top:1px solid #F1F5F9">
         <div class="flex items-baseline justify-between mb-1.5">
           <div class="text-[12.5px] font-extrabold" style="color:#0F172A">Profile <span style="color:#047857">75% complete</span></div>
-          <a href="edit-profile.html" class="text-[11px] font-extrabold uppercase tracking-wide" style="color:#047857;text-decoration:none">Complete</a>
         </div>
         <div style="height:6px;background:#F1F5F9;border-radius:9999px;overflow:hidden">
           <div style="height:100%;width:75%;background:linear-gradient(90deg,#047857,#10B981);border-radius:9999px"></div>
         </div>
-        <div class="text-[10.5px] mt-2" style="color:#64748B">Add email and address to unlock free delivery on bigger orders</div>
       </div>
 
-      <!-- Member since · sits at the bottom of the card as a small slate line -->
+      <!-- Member since · small slate line at the bottom -->
       <div class="mt-3 flex items-center gap-1.5 text-[10.5px] font-bold" style="color:#94A3B8">
         <i class="fa-regular fa-calendar text-[10px]"></i>
         <span>Member since Apr 2026</span>
@@ -92,6 +95,33 @@
       <span class="menu-ic"><i class="fa-solid fa-language"></i></span>
       <span class="menu-label">Language</span>
       <span class="menu-meta" id="profileLang">हिंदी</span>
+      <i class="fa-solid fa-chevron-right menu-chev"></i>
+    </a>
+  </div>
+
+  <!-- Rewards · refer + coin statement -->
+  <div class="sec-title">Rewards</div>
+  <div class="card">
+    <a href="refer.html" class="menu-row">
+      <span class="menu-ic" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-gift"></i></span>
+      <span class="menu-label">Refer &amp; earn</span>
+      <span class="menu-meta">&#8377;50 per friend</span>
+      <i class="fa-solid fa-chevron-right menu-chev"></i>
+    </a>
+    <a href="coins-statement.html" class="menu-row">
+      <span class="menu-ic" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-coins"></i></span>
+      <span class="menu-label">Coins statement</span>
+      <span class="menu-meta tnum">120 coins</span>
+      <i class="fa-solid fa-chevron-right menu-chev"></i>
+    </a>
+  </div>
+
+  <!-- Learn · know-your-app explainer -->
+  <div class="sec-title">Learn</div>
+  <div class="card">
+    <a href="know-your-app.html" class="menu-row">
+      <span class="menu-ic neutral"><i class="fa-solid fa-circle-info"></i></span>
+      <span class="menu-label">Know your app</span>
       <i class="fa-solid fa-chevron-right menu-chev"></i>
     </a>
   </div>
@@ -125,7 +155,7 @@
       <span class="menu-label">About Katyayani</span>
       <i class="fa-solid fa-chevron-right menu-chev"></i>
     </a>
-    <button id="signoutBtn" class="menu-row" style="width:100%;background:transparent;border:0;cursor:pointer">
+    <button id="signoutBtn" class="menu-row" style="width:100%;background:transparent;border:0;cursor:pointer;text-align:left">
       <span class="menu-ic danger"><i class="fa-solid fa-right-from-bracket"></i></span>
       <span class="menu-label" style="color:#DC2626">Sign out</span>
     </button>

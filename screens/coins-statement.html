@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Coins</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:32px}
+  .tnum{font-variant-numeric:tabular-nums}
+  .sec-title{margin:18px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
+  .card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .row{display:flex;align-items:center;gap:12px;padding:14px;border-bottom:1px solid #F1F5F9}
+  .row:last-child{border-bottom:0}
+  .row-ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+  .row-ic.earn{background:#ECFDF5;color:#047857}
+  .row-ic.spend{background:#FEE2E2;color:#DC2626}
+  .row-body{flex:1;min-width:0;line-height:1.25}
+  .row-title{font-size:13.5px;font-weight:700;color:#0F172A}
+  .row-sub{font-size:11px;color:#94A3B8;margin-top:2px}
+  .row-amt{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;flex-shrink:0}
+  .row-amt.earn{color:#047857}
+  .row-amt.spend{color:#DC2626}
+</style></head>
+<body>
+
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
+    </div>
+  </div>
+
+  <div class="px-4 pt-4 pb-3 flex items-center gap-3 bg-white">
+    <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB">
+      <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
+    </button>
+    <h1 class="flex-1 text-[22px] font-extrabold leading-tight">Coins</h1>
+  </div>
+
+  <!-- Balance hero -->
+  <div class="card mt-3" style="margin-top:8px">
+    <div style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);padding:18px 16px;display:flex;align-items:center;gap:14px">
+      <div class="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0" style="background:#FFFFFF;border:1.5px solid #FDE68A;box-shadow:0 6px 14px -4px rgba(245,158,11,0.35)">
+        <i class="fa-solid fa-coins text-[24px]" style="color:#D97706"></i>
+      </div>
+      <div class="leading-tight flex-1 min-w-0">
+        <div class="text-[10.5px] font-extrabold uppercase tracking-[0.06em]" style="color:#92400E">Available balance</div>
+        <div class="text-[28px] font-extrabold mt-0.5 tnum" style="color:#78350F">120 <span class="text-[14px] font-bold">coins</span></div>
+        <div class="text-[11.5px] font-bold mt-0.5" style="color:#92400E">Worth &#8377;120 &middot; 1 coin = &#8377;1</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent activity -->
+  <div class="sec-title">Recent activity</div>
+  <div class="card">
+    <div class="row">
+      <div class="row-ic earn"><i class="fa-solid fa-plus"></i></div>
+      <div class="row-body">
+        <div class="row-title">First-order bonus</div>
+        <div class="row-sub">8 Apr &middot; #KKD-26194-7821</div>
+      </div>
+      <div class="row-amt earn tnum">+100</div>
+    </div>
+    <div class="row">
+      <div class="row-ic earn"><i class="fa-solid fa-plus"></i></div>
+      <div class="row-body">
+        <div class="row-title">Enabled notifications</div>
+        <div class="row-sub">2 Apr</div>
+      </div>
+      <div class="row-amt earn tnum">+10</div>
+    </div>
+    <div class="row">
+      <div class="row-ic earn"><i class="fa-solid fa-plus"></i></div>
+      <div class="row-body">
+        <div class="row-title">Added first crop</div>
+        <div class="row-sub">1 Apr</div>
+      </div>
+      <div class="row-amt earn tnum">+50</div>
+    </div>
+    <div class="row">
+      <div class="row-ic spend"><i class="fa-solid fa-minus"></i></div>
+      <div class="row-body">
+        <div class="row-title">Redeemed at checkout</div>
+        <div class="row-sub">10 Apr &middot; #KKD-26194-7821</div>
+      </div>
+      <div class="row-amt spend tnum">&minus;40</div>
+    </div>
+  </div>
+
+  <div class="text-center text-[10.5px] mt-4" style="color:#94A3B8">Coins never expire &middot; redeem at checkout</div>
+
+</body></html>

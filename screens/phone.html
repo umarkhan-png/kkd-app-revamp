@@ -51,6 +51,38 @@
 
   .hero-tagline { position: relative; z-index: 2; text-align: center; }
 
+  /* Brand mark · 52px squircle with gold accent ring · same identity as splash, smaller scale · used in the hero top-right so KKD branding is anchored without dominating */
+  .brand-mark {
+    width: 52px; height: 52px;
+    border-radius: 16px;
+    background: #FFFFFF;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 22px -8px rgba(4,120,87,0.45), 0 4px 10px -4px rgba(251,191,36,0.35);
+    position: relative;
+  }
+  .brand-mark::after {
+    content: ""; position: absolute; inset: -2px;
+    border-radius: 18px;
+    border: 1.5px solid rgba(251,191,36,0.5);
+    pointer-events: none;
+  }
+  .brand-mark img { width: 40px; height: 40px; object-fit: contain; }
+
+  /* Selected-language chip · translucent white pill with the language label + 'Change' link · sits in the hero so the user can switch language without a back button */
+  .lang-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 12px; border-radius: 9999px;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.30);
+    backdrop-filter: blur(6px);
+    color: #FFFFFF; font-size: 11.5px; font-weight: 600;
+    text-decoration: none;
+    transition: background .15s ease;
+  }
+  .lang-chip:active { background: rgba(255,255,255,0.28); }
+  .lang-chip i { font-size: 11px; opacity: .85; }
+  .lang-chip b { font-weight: 800; color: #FBBF24; }
+
   /* Single prominent farmer-count stat callout · centred white pill with a coloured icon · replaces the pair of small chips, reads as a confident social-proof anchor */
   .hero-stat {
     display: inline-flex; align-items: center; gap: 10px;
@@ -82,18 +114,18 @@
     </div>
   </div>
 
-  <!-- Premium hero · subtle KKD logo top-left (brand cue without shouting) · curated product line-up · curiosity tagline · one prominent farmer-count stat callout -->
-  <section class="hero-card" style="padding-top:48px">
-    <!-- Back · sits over the gradient, white-tinted -->
-    <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);backdrop-filter:blur(6px);position:absolute;top:36px;left:16px;z-index:4" aria-label="Back">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    </button>
+  <!-- Premium hero · top-left language chip (with Change link) + top-right KKD brand-mark (52px squircle with gold accent ring, matches splash treatment) · no back button (user came from language step, onboarding is forward-only) -->
+  <section class="hero-card" style="padding-top:52px">
 
-    <!-- Subtle KKD brand mark · small white tile, top-right · brand cue without dominating -->
-    <div style="position:absolute;top:36px;right:16px;z-index:4">
-      <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#FFFFFF;box-shadow:0 6px 14px rgba(4,120,87,0.25)">
-        <img src="../assets/kkd-logo.png" alt="KKD" class="w-8 h-8 object-contain" onerror="this.style.display='none'"/>
-      </div>
+    <!-- Selected language chip · tapping routes back to the language picker so the user can switch without a Back button -->
+    <a href="language.html" class="lang-chip" style="position:absolute;top:36px;left:16px;z-index:4">
+      <i class="fa-solid fa-language"></i>
+      <span><span id="langCurrent" class="hi">हिंदी</span> &middot; <b>Change</b></span>
+    </a>
+
+    <!-- KKD brand-mark · 52px squircle with gold ring (same treatment as splash, scaled down) · prominent enough to anchor the brand, premium enough not to read as a 'small square' -->
+    <div class="brand-mark" style="position:absolute;top:30px;right:16px;z-index:4">
+      <img src="../assets/kkd-logo.png" alt="KKD" onerror="this.onerror=null;this.src='https://www.katyayaniorganics.com/wp-content/uploads/2022/06/cropped-logo-3.webp'"/>
     </div>
 
     <!-- Product line-up · three bottles, slightly fanned, soft drop-shadow -->
@@ -143,5 +175,15 @@
   </div>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script>
+    // Read the saved language code from the language picker and reflect it in the hero chip · falls back to Hindi if nothing was persisted
+    (function(){
+      const map = { hi:'हिंदी', en:'English', hien:'Hinglish', mr:'मराठी', gu:'ગુજરાતી', pa:'ਪੰਜਾਬੀ', te:'తెలుగు', ta:'தமிழ்', kn:'ಕನ್ನಡ', ml:'മലയാളം', od:'ଓଡ଼ିଆ', bn:'বাংলা' };
+      let code = 'hi';
+      try { code = localStorage.getItem('kkd.lang') || 'hi'; } catch (e) {}
+      const el = document.getElementById('langCurrent');
+      if (el && map[code]) el.textContent = map[code];
+    })();
+  </script>
 </body>
 </html>

@@ -283,6 +283,26 @@
     </div>
   </div>
 
+  <!-- Variant bottom-sheet · cards with 2+ packaging sizes route here · each row is its own +/- qty stepper -->
+  <div id="variantSheet" class="fixed inset-0" style="display:none;z-index:95">
+    <div id="variantSheetBackdrop" style="position:absolute;inset:0;background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
+    <div id="variantSheetPanel" style="position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;display:flex;flex-direction:column;max-height:78vh;transform:translateY(100%);transition:transform .3s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
+      <div style="padding:20px 20px 12px;border-bottom:1px solid #F1F5F9;display:flex;gap:12px;align-items:flex-start;flex-shrink:0">
+        <div style="width:48px;height:48px;border-radius:8px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex-shrink:0"><img id="vsImg" src="" style="width:40px;height:40px;object-fit:contain"/></div>
+        <div style="flex:1;min-width:0">
+          <div id="vsName" style="font-size:15.5px;font-weight:800;color:#0F172A;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Product</div>
+          <div id="vsTech" style="font-size:11.5px;color:#94A3B8;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+          <div style="font-size:10.5px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#047857;margin-top:4px">Choose packaging</div>
+        </div>
+        <button id="vsClose" style="width:36px;height:36px;border-radius:50%;background:#F1F5F9;border:0;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-xmark" style="font-size:14px;color:#475569"></i></button>
+      </div>
+      <div id="vsList" style="padding:0 20px;overflow-y:auto;flex:1"></div>
+      <div style="padding:12px 20px;border-top:1px solid #F1F5F9;flex-shrink:0;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)">
+        <button id="vsDone" style="width:100%;height:48px;border-radius:12px;background:#059669;color:#FFFFFF;font-size:14px;font-weight:800;border:0">Done</button>
+      </div>
+    </div>
+  </div>
+
   <!-- FILTER bottom sheet -->
   <div id="filterSheet" class="sheet-wrap" aria-hidden="true">
     <div class="sheet-bg" data-sheet-close="filter"></div>
@@ -375,7 +395,8 @@
     const PRODUCTS = [
       { cat:'pesticide', subs:['bio'],            name:'Neem-Shield Bio',  sub:'Azadirachtin 1500 ppm',  size:'500 ml', target:'aphid · whitefly',   price:285, mrp:380, img:'../assets/AntiVirus_nobg.png' },
       { cat:'pesticide', subs:['bio'],            name:'Beauveria-Plus',   sub:'Beauveria bassiana',     size:'250 g',  target:'caterpillar',        price:325, mrp:435, img:'../assets/AntiVirus_nobg.png' },
-      { cat:'pesticide', subs:['chem'],           name:'Chakrawarti ZC',   sub:'Chlorantraniliprole + Lambda-Cy.', size:'100 ml', target:'aphid · whitefly', price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
+      { cat:'pesticide', subs:['chem'],           name:'Chakrawarti ZC',   sub:'Chlorantraniliprole + Lambda-Cy.', size:'100 ml / 250 ml', target:'aphid · whitefly', price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png',
+        variants:[{size:'100 ml',price:358,mrp:495,off:28},{size:'250 ml',price:820,mrp:1175,off:30}] },
       { cat:'pesticide', subs:['chem'],           name:'Indoxa Strike',    sub:'Indoxacarb 15.8% SC',    size:'100 ml', target:'caterpillar',        price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
       { cat:'pesticide', subs:['chem'],           name:'White-Out 5G',     sub:'Acetamiprid 20% SP',     size:'500 g',  target:'whitefly',           price:445, mrp:595, img:'../assets/Chakrawarti_nobg.png' },
       { cat:'pesticide', subs:['organic'],        name:'PongamiaGuard',    sub:'Pongamia oil 95%',       size:'500 ml', target:'sucking pests',      price:268, mrp:360, img:'../assets/AntiVirus_nobg.png' },
@@ -390,7 +411,8 @@
       { cat:'fungicide', subs:['chem'],           name:'Rustaway',         sub:'Tebuconazole 25% EC',    size:'100 g',  target:'leaf-rust',          price:362, mrp:490, img:'../assets/Humic_nobg.png' },
       { cat:'fungicide', subs:['chemins'],        name:'Chakrawarti ZC',   sub:'Chlorantraniliprole + Lambda-Cy.', size:'100 ml', target:'sucking pests', price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
 
-      { cat:'fertilizer', subs:['bio'],           name:'Humic + Fulvic',   sub:'Humic 12% + Fulvic 8%',  size:'1 L',    target:'roots & soil',       price:376, mrp:520, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['bio'],           name:'Humic + Fulvic',   sub:'Humic 12% + Fulvic 8%',  size:'500 ml / 1 L', target:'roots & soil',       price:210, mrp:290, img:'../assets/Humic_nobg.png',
+        variants:[{size:'500 ml',price:210,mrp:290,off:28},{size:'1 L',price:376,mrp:520,off:28}] },
       { cat:'fertilizer', subs:['bio'],           name:'Azotobacter Plus', sub:'N-fixing bacteria',      size:'1 kg',   target:'bio nitrogen',       price:285, mrp:395, img:'../assets/Humic_nobg.png' },
       { cat:'fertilizer', subs:['chemins'],       name:'Antivirus',        sub:'Anti-viral biostimulant',size:'250 ml', target:'leaf-virus',         price:327, mrp:425, img:'../assets/AntiVirus_nobg.png' },
       { cat:'fertilizer', subs:['hydro'],         name:'HydroGrow A+B',    sub:'A + B nutrient set',     size:'2× 1 L', target:'hydroponics',        price:599, mrp:799, img:'../assets/Humic_nobg.png' },
@@ -399,7 +421,8 @@
       { cat:'fertilizer', subs:['manure'],        name:'NeemKhali',        sub:'Neem cake',              size:'5 kg',   target:'manure + pest',      price:415, mrp:560, img:'../assets/Humic_nobg.png' },
       { cat:'fertilizer', subs:['micro'],         name:'Micro-Max',        sub:'Multi-micronutrient',    size:'500 g',  target:'nutrient gaps',      price:289, mrp:395, img:'../assets/Humic_nobg.png' },
       { cat:'fertilizer', subs:['micro'],         name:'Chelated-Zn',      sub:'Zn-EDTA 12%',            size:'500 g',  target:'zinc deficiency',    price:325, mrp:445, img:'../assets/Humic_nobg.png' },
-      { cat:'fertilizer', subs:['npk'],           name:'NPK 19-19-19',     sub:'Water-soluble',          size:'1 kg',   target:'balanced growth',    price:330, mrp:445, img:'../assets/Humic_nobg.png' },
+      { cat:'fertilizer', subs:['npk'],           name:'NPK 19-19-19',     sub:'Water-soluble',          size:'500 g / 1 kg', target:'balanced growth',    price:185, mrp:250, img:'../assets/Humic_nobg.png',
+        variants:[{size:'500 g',price:185,mrp:250,off:26},{size:'1 kg',price:330,mrp:445,off:26}] },
       { cat:'fertilizer', subs:['npk'],           name:'NPK 12-61-0',      sub:'Mono Ammonium Phosphate',size:'1 kg',   target:'flowering',          price:348, mrp:465, img:'../assets/Humic_nobg.png' },
       { cat:'fertilizer', subs:['organic'],       name:'CowDung-Compost',  sub:'Organic compost',        size:'10 kg',  target:'soil food',          price:225, mrp:320, img:'../assets/Humic_nobg.png' },
       { cat:'fertilizer', subs:['organic'],       name:'BoneMeal-Org',     sub:'Phosphorus-rich',        size:'5 kg',   target:'P & Ca',             price:298, mrp:410, img:'../assets/Humic_nobg.png' },
@@ -492,7 +515,13 @@
       list.innerHTML = filtered.map((p, i) => {
         const id = p.cat + '-' + activeSub + '-' + i;
         const qty = cart.get(id) ? cart.get(id).qty : 0;
-        return '<a href="pdp.html" class="pcard" data-card="'+id+'">'
+        const hasVariants = Array.isArray(p.variants) && p.variants.length > 1;
+        const priceCell = hasVariants
+          ? '<div class="pprice-row"><span class="pprice tnum" style="font-size:13.5px;color:#0F172A;font-weight:700">from</span> <span class="pprice tnum">₹'+p.variants[0].price+'</span></div>'
+          : '<div class="pprice-row"><span class="pprice tnum">₹'+p.price+'</span><span class="pmrp tnum">₹'+p.mrp+'</span></div>';
+        return '<a href="pdp.html" class="pcard" data-card="'+id+'"'
+          + (hasVariants ? ' data-variant-card data-product-name="'+p.name+'" data-product-tech="'+p.sub+'" data-product-img="'+p.img+'" data-variants=\''+JSON.stringify(p.variants).replace(/'/g,'&#39;')+'\'' : '')
+          + '>'
           + '<div class="pcard-img">'
             + '<img src="'+p.img+'" class="img-blend"/>'
             + '<span class="pcard-star"><i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>'+rating(p)+'</span>'
@@ -501,10 +530,7 @@
             + '<div class="pname">'+p.name+'</div>'
             + '<div class="psub">'+p.sub+'</div>'
             + '<span class="psize">'+p.size+'</span>'
-            + '<div class="pprice-row">'
-              + '<span class="pprice tnum">₹'+p.price+'</span>'
-              + '<span class="pmrp tnum">₹'+p.mrp+'</span>'
-            + '</div>'
+            + priceCell
             + renderAdd(id, p, qty)
           + '</div>'
           + '</a>';
@@ -521,6 +547,10 @@
 
     function renderAdd(id, p, qty){
       const idx = filteredIndex(id);
+      // Products with 2+ packaging sizes show a "2 Options" pill that opens the variant sheet · Add/qty stepper only used for single-size SKUs
+      if (Array.isArray(p.variants) && p.variants.length > 1) {
+        return '<button class="padd variant-btn" style="background:#ECFDF5;color:#047857;border:1.5px solid #059669"><i class="fa-solid fa-layer-group" style="font-size:11px;margin-right:6px"></i>'+p.variants.length+' Options</button>';
+      }
       if (qty > 0) {
         return '<div class="padd in-cart">'
           + '<button class="qty-btn padd-action" data-id="'+id+'" data-idx="'+idx+'" data-act="dec">−</button>'
@@ -653,5 +683,87 @@
     renderSubs();
     renderProducts();
     renderSortOptions();
+
+    // Variant bottom-sheet · opens when a product card with multiple packaging sizes has its "N Options" pill tapped · each row has its own +/- stepper, state survives across opens for the same product
+    (function(){
+      const sheet   = document.getElementById('variantSheet');
+      const bg      = document.getElementById('variantSheetBackdrop');
+      const pnl     = document.getElementById('variantSheetPanel');
+      const list    = document.getElementById('vsList');
+      const imgEl   = document.getElementById('vsImg');
+      const nameEl  = document.getElementById('vsName');
+      const techEl  = document.getElementById('vsTech');
+      const closeBtn = document.getElementById('vsClose');
+      const doneBtn  = document.getElementById('vsDone');
+      if (!sheet) return;
+      const cartQty = {};
+      function variantKey(card, idx){ return (card.dataset.productName || 'p') + '__' + idx; }
+      function renderRow(card, v, idx){
+        const k = variantKey(card, idx);
+        const qty = cartQty[k] || 0;
+        const stepper = qty > 0
+          ? '<div style="height:36px;border-radius:8px;background:#059669;display:flex;align-items:center;justify-content:space-between;padding:0 4px;min-width:104px">'
+              + '<button data-vs-act="dec" data-vs-key="'+k+'" style="width:32px;height:36px;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:18px;font-weight:700;background:transparent;border:0">−</button>'
+              + '<span style="color:#FFFFFF;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums">'+qty+'</span>'
+              + '<button data-vs-act="inc" data-vs-key="'+k+'" style="width:32px;height:36px;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:18px;font-weight:700;background:transparent;border:0">+</button>'
+            + '</div>'
+          : '<button data-vs-act="inc" data-vs-key="'+k+'" style="height:36px;padding:0 20px;border-radius:8px;background:#059669;color:#FFFFFF;font-size:12.5px;font-weight:800;border:0;flex-shrink:0">Add</button>';
+        return '<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #F1F5F9">'
+          + '<div style="flex:1;min-width:0">'
+            + '<div style="font-size:14px;font-weight:800;color:#0F172A;line-height:1.15">'+v.size+'</div>'
+            + '<div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;flex-wrap:wrap">'
+              + '<span style="font-size:16px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums">₹'+v.price+'</span>'
+              + (v.mrp ? '<span style="font-size:11.5px;color:#94A3B8;text-decoration:line-through;font-variant-numeric:tabular-nums">₹'+v.mrp+'</span>' : '')
+              + (v.off ? '<span style="font-size:10.5px;font-weight:800;color:#047857">'+v.off+'% off</span>' : '')
+            + '</div>'
+          + '</div>'
+          + stepper
+        + '</div>';
+      }
+      function render(){
+        const card = sheet.__card;
+        if (!card) return;
+        let variants = [];
+        try { variants = JSON.parse(card.dataset.variants || '[]'); } catch (e) {}
+        list.innerHTML = variants.map(function(v, i){ return renderRow(card, v, i); }).join('');
+        list.querySelectorAll('[data-vs-act]').forEach(function(btn){
+          btn.addEventListener('click', function(e){
+            e.preventDefault(); e.stopPropagation();
+            const key = btn.dataset.vsKey;
+            const cur = cartQty[key] || 0;
+            cartQty[key] = btn.dataset.vsAct === 'inc' ? cur + 1 : Math.max(0, cur - 1);
+            render();
+          });
+        });
+      }
+      function openFor(card){
+        sheet.__card = card;
+        imgEl.src = card.dataset.productImg || '';
+        nameEl.textContent = card.dataset.productName || '';
+        techEl.textContent = card.dataset.productTech || '';
+        render();
+        sheet.style.display = 'block';
+        requestAnimationFrame(function(){
+          bg.style.opacity = '1';
+          pnl.style.transform = 'translateY(0)';
+        });
+      }
+      function close(){
+        bg.style.opacity = '0';
+        pnl.style.transform = 'translateY(100%)';
+        setTimeout(function(){ sheet.style.display = 'none'; }, 280);
+      }
+      bg.addEventListener('click', close);
+      closeBtn.addEventListener('click', close);
+      doneBtn.addEventListener('click', close);
+      document.addEventListener('click', function(e){
+        const btn = e.target.closest('.variant-btn');
+        if (!btn) return;
+        const card = btn.closest('[data-variant-card]');
+        if (!card) return;
+        e.preventDefault(); e.stopPropagation();
+        openFor(card);
+      }, true);
+    })();
   </script>
 </body></html>

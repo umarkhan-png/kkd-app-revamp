@@ -14,132 +14,83 @@
   body { min-height: 100vh; background: #FFFFFF; color: #0F172A; }
   .tnum { font-variant-numeric: tabular-nums; }
 
-  /* Premium hero · same emerald gradient + decoration treatment as phone screen · OTP-relevant security visual replaces the product line-up */
-  .hero-card {
-    position: relative; overflow: hidden;
-    background: linear-gradient(165deg, #022C22 0%, #047857 38%, #059669 72%, #10B981 100%);
-    border-radius: 0 0 28px 28px;
-    padding: 52px 20px 22px;
-    box-shadow: 0 12px 30px -12px rgba(4,120,87,0.5);
-  }
-  .hero-card::before {
-    content: ""; position: absolute; pointer-events: none;
-    top: -30px; right: -30px; width: 200px; height: 200px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(251,191,36,0.35) 0%, transparent 65%);
-  }
-  .hero-card::after {
-    content: ""; position: absolute; pointer-events: none;
-    bottom: -40px; left: -40px; width: 180px; height: 180px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(16,185,129,0.6) 0%, transparent 70%);
-  }
+  /* Top bar · KKD logo (image only, no white squircle backing) + language chip · neat and not heavy on the eye */
+  .topbar { padding: 12px 16px 4px; display: flex; align-items: center; justify-content: space-between; }
+  .brand-logo { display: inline-flex; align-items: center; gap: 8px; }
+  .brand-logo img { width: 34px; height: 34px; object-fit: contain; }
+  .brand-logo .name { font-size: 14px; font-weight: 900; color: #047857; letter-spacing: -0.01em; }
+  .lang-pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px; border-radius: 9999px; background: #ECFDF5; border: 1px solid #BBF7D0; color: #047857; font-size: 11.5px; font-weight: 700; text-decoration: none; }
+  .lang-pill i { font-size: 11px; }
+  .lang-pill b { font-weight: 800; color: #0F172A; }
 
-  /* Security shield · central hero element with a soft pulse · communicates trust/verification */
-  .shield {
-    position: relative; z-index: 2; margin: 8px auto 0;
-    width: 84px; height: 84px;
-    border-radius: 24px;
-    background: rgba(255,255,255,0.15);
-    border: 1.5px solid rgba(255,255,255,0.32);
-    display: flex; align-items: center; justify-content: center;
-    backdrop-filter: blur(6px);
-    animation: shieldPulse 2.6s ease-in-out infinite;
-  }
-  @keyframes shieldPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(251,191,36,0.0); }
-    50% { box-shadow: 0 0 0 12px rgba(251,191,36,0.18); }
-  }
-  .shield i { font-size: 36px; color: #FBBF24; }
-
-  .hero-tagline { position: relative; z-index: 2; text-align: center; }
-
-  /* Brand mark · 52px squircle with gold ring · identical to phone screen */
-  .brand-mark {
-    width: 52px; height: 52px;
-    border-radius: 16px;
-    background: #FFFFFF;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 10px 22px -8px rgba(4,120,87,0.45), 0 4px 10px -4px rgba(251,191,36,0.35);
-    position: relative;
-  }
-  .brand-mark::after {
-    content: ""; position: absolute; inset: -2px;
-    border-radius: 18px;
-    border: 1.5px solid rgba(251,191,36,0.5);
-    pointer-events: none;
-  }
-  .brand-mark img { width: 40px; height: 40px; object-fit: contain; }
-
-  /* Language chip · same pattern as phone */
-  .lang-chip {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 7px 12px; border-radius: 9999px;
-    background: rgba(255,255,255,0.18);
-    border: 1px solid rgba(255,255,255,0.30);
-    backdrop-filter: blur(6px);
-    color: #FFFFFF; font-size: 11.5px; font-weight: 600;
-    text-decoration: none;
-    transition: background .15s ease;
-  }
-  .lang-chip:active { background: rgba(255,255,255,0.28); }
-  .lang-chip i { font-size: 11px; opacity: .85; }
-  .lang-chip b { font-weight: 800; color: #FBBF24; }
-
-  /* OTP cell · airy 60px boxes with soft border + focus ring · filled state stays emerald */
+  /* OTP cell · airy 64px boxes with soft border + focus ring · filled state stays emerald */
   .otp-box { width: 64px; height: 68px; border: 2px solid #E5E7EB; border-radius: 14px; font-size: 30px; font-weight: 800; text-align: center; outline: none; background: #FFFFFF; transition: border-color .15s, background .15s, box-shadow .15s; font-variant-numeric: tabular-nums; color:#0F172A; }
   .otp-box.filled { border-color: #047857; background: #ECFDF5; }
   .otp-box.active { border-color: #059669; box-shadow: 0 0 0 3px rgba(5,150,105,0.15); }
 
-  /* Resend · small pill buttons surface only after the timer expires */
+  /* Resend pill buttons · only show after the timer expires · body class is `timer-done` (not `.resend-expired`, which used to share its name with the descendant class and made the body invisible when toggled) */
   .resend-btn { display:inline-flex; align-items:center; gap:6px; height:38px; padding:0 14px; border-radius:9999px; font-size:12.5px; font-weight:700; border:1.5px solid; transition:transform .12s ease; cursor:pointer; text-decoration:none; }
   .resend-btn:active { transform: scale(.97); }
   .resend-wa { background:#FFFFFF; color:#25D366; border-color:rgba(37,211,102,0.55); }
   .resend-sms{ background:#FFFFFF; color:#047857; border-color:rgba(4,120,87,0.35); }
   .resend-live    { display:flex; }
-  .resend-expired { display:none; }
-  body.resend-expired .resend-live { display: none; }
-  body.resend-expired .resend-expired { display: flex; }
+  .resend-options { display:none; }
+  body.timer-done .resend-live    { display:none; }
+  body.timer-done .resend-options { display:flex; }
+
+  /* Rotating fact/news strip · single card, 3-4 items auto-cycle every 4s · fades in/out · gives the user something to read while they wait for the OTP */
+  .fact-strip { margin: 16px; background:#FFFFFF; border:1px solid #E5E7EB; border-radius:14px; box-shadow:0 1px 3px rgba(15,23,42,0.04); overflow:hidden; position:relative; min-height:78px; }
+  .fact-item { display:flex; align-items:center; gap:12px; padding:14px; opacity:0; pointer-events:none; position:absolute; inset:0; transition:opacity .35s ease; }
+  .fact-item.on { opacity:1; pointer-events:auto; position:relative; }
+  .fact-ic { width:42px; height:42px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px; }
+  .fact-ic.emerald { background:#ECFDF5; color:#047857; }
+  .fact-ic.amber   { background:#FEF3C7; color:#B45309; }
+  .fact-ic.indigo  { background:#E0E7FF; color:#3730A3; }
+  .fact-ic.slate   { background:#F1F5F9; color:#475569; }
+  .fact-body { flex:1; line-height:1.3; min-width:0; }
+  .fact-tag { font-size:10px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:#94A3B8; }
+  .fact-headline { font-size:13.5px; font-weight:700; color:#0F172A; margin-top:1px; }
+  .fact-dots { position:absolute; bottom:8px; right:14px; display:flex; gap:5px; }
+  .fact-dots .d { width:5px; height:5px; border-radius:9999px; background:#E2E8F0; transition:all .25s ease; }
+  .fact-dots .d.on { width:18px; background:#047857; }
 </style>
 </head>
-<body class="min-h-screen pb-28 relative">
+<body class="min-h-screen pb-28">
 
-  <!-- Status bar · white-tinted since the hero band fills the top -->
-  <div class="flex items-center justify-between px-6 pt-3 text-[11px] font-bold" style="color:#FFFFFF;position:absolute;top:0;left:0;right:0;z-index:5">
+  <!-- Status bar -->
+  <div class="flex items-center justify-between px-6 pt-3 text-[11px] font-bold text-[#0F172A]">
     <span>9:41</span>
     <div class="flex items-center gap-1.5">
-      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/></svg>
-      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/></svg>
-      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#FFFFFF" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#FFFFFF"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#FFFFFF"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
     </div>
   </div>
 
-  <!-- Premium hero · same identity as phone screen · OTP-relevant content (shield icon + verify tagline + phone number being verified) replaces the product line-up -->
-  <section class="hero-card">
-    <!-- KKD brand-mark · top-LEFT (matches phone screen) · anchors the brand at the leading position -->
-    <div class="brand-mark" style="position:absolute;top:30px;left:16px;z-index:4">
+  <!-- Top bar · KKD logo (just the mark, no white square behind it) + language chip · clean and non-distracting -->
+  <div class="topbar">
+    <div class="brand-logo">
       <img src="../assets/kkd-logo.png" alt="KKD" onerror="this.onerror=null;this.src='https://www.katyayaniorganics.com/wp-content/uploads/2022/06/cropped-logo-3.webp'"/>
+      <span class="name">Katyayani</span>
     </div>
-
-    <!-- Language chip · top-RIGHT (matches phone screen) · routes back to language picker -->
-    <a href="language.html" class="lang-chip" style="position:absolute;top:36px;right:16px;z-index:4">
+    <a href="language.html" class="lang-pill">
       <i class="fa-solid fa-language"></i>
-      <span><span id="langCurrent" class="hi">हिंदी</span> &middot; <b>Change</b></span>
+      <b id="langCurrent" class="hi">हिंदी</b>
     </a>
+  </div>
 
-    <!-- Security shield · soft gold pulse · OTP-relevant visual -->
-    <div class="shield"><i class="fa-solid fa-shield-halved"></i></div>
-
-    <!-- Hero copy · verification-relevant, not product -->
-    <div class="hero-tagline" style="margin-top:16px">
-      <div class="text-[20px] font-extrabold leading-tight" style="color:#FFFFFF">Verify your number</div>
-      <div class="text-[12.5px] mt-1" style="color:rgba(255,255,255,0.85)">We sent a 4-digit code to <span class="font-bold" style="color:#FFFFFF">+91 98765 43210</span></div>
-      <a href="phone.html" class="inline-flex items-center gap-1.5 mt-2.5 px-2.5 py-1 rounded-full text-[10.5px] font-extrabold" style="background:rgba(255,255,255,0.95);color:#047857;text-decoration:none">
-        <i class="fa-solid fa-pen-to-square text-[9px]"></i> Change number
-      </a>
-    </div>
-  </section>
-
-  <!-- 4-digit OTP boxes · sits in the white area below the hero · auto-fill pill removed per spec -->
+  <!-- Heading + Mobile-number row · moved OUT of any hero band per spec · 'Code sent to' + 'Change' inline so the user sees their number cleanly -->
   <div class="px-6 mt-8">
+    <h1 class="text-[26px] font-extrabold leading-tight text-[#0F172A]">Enter OTP</h1>
+    <div class="flex items-center gap-2 mt-2">
+      <span class="text-[13px]" style="color:#64748B">Code sent to</span>
+      <span class="text-[13px] font-extrabold tnum">+91 98765 43210</span>
+      <a href="phone.html" class="text-[11.5px] font-extrabold uppercase tracking-wide" style="color:#047857;text-decoration:none">Change</a>
+    </div>
+  </div>
+
+  <!-- 4-digit OTP cells -->
+  <div class="px-6 mt-7">
     <div class="flex items-center justify-center gap-3">
       <input class="otp-box" maxlength="1" inputmode="numeric" autocomplete="one-time-code" data-otp="1"/>
       <input class="otp-box" maxlength="1" inputmode="numeric" data-otp="2"/>
@@ -148,14 +99,14 @@
     </div>
   </div>
 
-  <!-- Resend block · timer counts down for 30s · once expired, two compact pill buttons appear (WhatsApp + SMS) -->
-  <div class="px-6 mt-7 text-center">
-    <p class="text-[12.5px] text-[#64748B] mb-2.5">Didn't receive the code?</p>
+  <!-- Resend block · while live: 'Resend in MM:SS' · after expiry: two compact pill buttons (WhatsApp + SMS) · uses body.timer-done as the toggle (NOT .resend-expired which used to collide with the descendant class and blank the page) -->
+  <div class="px-6 mt-6 text-center">
+    <p class="text-[12.5px] mb-2.5" style="color:#64748B">Didn't receive the code?</p>
     <div class="resend-live flex items-center justify-center gap-1.5 text-[13px]">
-      <span class="text-[#94A3B8]">Resend in</span>
-      <span class="font-extrabold text-[#0F172A] tnum" id="resendTimer">00:30</span>
+      <span style="color:#94A3B8">Resend in</span>
+      <span class="font-extrabold tnum" style="color:#0F172A" id="resendTimer">00:30</span>
     </div>
-    <div class="resend-expired items-center justify-center gap-2 flex-wrap">
+    <div class="resend-options items-center justify-center gap-2 flex-wrap">
       <button class="resend-btn resend-wa">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="#25D366"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.7.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.8-.7-1.4-1.7-1.6-1.9-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.7-.9-2.3-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5 0 1.4 1 2.8 1.2 3 .1.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.7.4 3.3 1.2 4.7L2 22l5.5-1.2c1.4.7 2.9 1.1 4.5 1.1 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
         WhatsApp
@@ -167,7 +118,42 @@
     </div>
   </div>
 
-  <!-- Sticky CTA · matches design-system primary spec (52px, 12px radius, 15px font-extrabold, soft emerald glow) -->
+  <!-- Rotating fact / feature / news strip · auto-cycles every 4s · keeps the user engaged while they wait · replaces the emerald hero with deflecting shield animation -->
+  <div class="fact-strip" id="factStrip">
+    <div class="fact-item on" data-fact="0">
+      <span class="fact-ic emerald"><i class="fa-solid fa-truck-fast"></i></span>
+      <div class="fact-body">
+        <div class="fact-tag">Free delivery</div>
+        <div class="fact-headline">Free shipping on every order above &#8377;500</div>
+      </div>
+    </div>
+    <div class="fact-item" data-fact="1">
+      <span class="fact-ic amber"><i class="fa-solid fa-headset"></i></span>
+      <div class="fact-body">
+        <div class="fact-tag">Krishi Doctor</div>
+        <div class="fact-headline">Free expert calls in your language &middot; 7am to 10pm</div>
+      </div>
+    </div>
+    <div class="fact-item" data-fact="2">
+      <span class="fact-ic indigo"><i class="fa-solid fa-sparkles"></i></span>
+      <div class="fact-body">
+        <div class="fact-tag">Just launched</div>
+        <div class="fact-headline">Humic + Fulvic 98 &middot; for stronger roots &amp; soil</div>
+      </div>
+    </div>
+    <div class="fact-item" data-fact="3">
+      <span class="fact-ic slate"><i class="fa-solid fa-shield-halved"></i></span>
+      <div class="fact-body">
+        <div class="fact-tag">100% genuine</div>
+        <div class="fact-headline">CIB-CR licensed &middot; sealed straight from the factory</div>
+      </div>
+    </div>
+    <div class="fact-dots" id="factDots">
+      <span class="d on"></span><span class="d"></span><span class="d"></span><span class="d"></span>
+    </div>
+  </div>
+
+  <!-- Sticky CTA · design-system primary -->
   <div class="fixed bottom-0 left-0 right-0 bg-white px-6 py-4" style="border-top:0">
     <button onclick="location.href='name.html'" class="w-full h-[52px] rounded-[12px] text-white text-[15px] font-extrabold flex items-center justify-center gap-2" style="background:#059669;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
       Verify
@@ -176,7 +162,7 @@
   </div>
 
   <script>
-    // Reflect saved language in the hero chip
+    // Reflect saved language in the lang pill
     (function(){
       const map = { hi:'हिंदी', en:'English', hien:'Hinglish', mr:'मराठी', gu:'ગુજરાતી', pa:'ਪੰਜਾਬੀ', te:'తెలుగు', ta:'தமிழ்', kn:'ಕನ್ನಡ', ml:'മലയാളം', od:'ଓଡ଼ିଆ', bn:'বাংলা' };
       let code = 'hi';
@@ -185,19 +171,19 @@
       if (el && map[code]) el.textContent = map[code];
     })();
 
-    // Resend timer · counts down from 30 · ONE-SHOT (interval is cleared on hit-zero, never re-runs) so the screen doesn't drift to a blank state after sitting idle
+    // Resend timer · one-shot · on zero, flip body.timer-done so the resend pill buttons surface · we use 'timer-done' NOT 'resend-expired' because the descendant div has class .resend-expired/.resend-options and a body class with the same name as the descendant accidentally matches `.resend-expired { display:none }` on the body and blanks the page
     (function(){
       const t = document.getElementById('resendTimer');
       let s = 30;
       const iv = setInterval(() => {
         s -= 1;
-        if (s <= 0) { clearInterval(iv); document.body.classList.add('resend-expired'); return; }
+        if (s <= 0) { clearInterval(iv); document.body.classList.add('timer-done'); return; }
         const ss = s < 10 ? '0' + s : '' + s;
         if (t) t.textContent = '00:' + ss;
       }, 1000);
     })();
 
-    // OTP cell auto-advance · focus the first cell once on load (no autofocus attribute, no aggressive re-focus) so iframe / idle states stay stable
+    // OTP auto-advance · safe focus on load · backspace navigates back
     (function(){
       const cells = Array.from(document.querySelectorAll('[data-otp]'));
       cells.forEach((c, i) => {
@@ -211,8 +197,29 @@
           if (e.key === 'Backspace' && !c.value && i > 0) cells[i - 1].focus();
         });
       });
-      // One-time focus on load · wrapped in try so it never breaks the page if iframe focus is denied
       try { if (cells[0]) cells[0].focus({ preventScroll: true }); } catch (e) {}
+    })();
+
+    // Rotating fact strip · cycles every 4s · pauses on tap so the user can read
+    (function(){
+      const items = Array.from(document.querySelectorAll('.fact-item'));
+      const dots  = Array.from(document.querySelectorAll('#factDots .d'));
+      let i = 0, paused = false;
+      function go(next){
+        items[i].classList.remove('on');
+        if (dots[i]) dots[i].classList.remove('on');
+        i = next;
+        items[i].classList.add('on');
+        if (dots[i]) dots[i].classList.add('on');
+      }
+      const tick = setInterval(() => { if (!paused) go((i + 1) % items.length); }, 4000);
+      const strip = document.getElementById('factStrip');
+      if (strip) {
+        strip.addEventListener('touchstart', () => { paused = true; }, { passive: true });
+        strip.addEventListener('touchend',   () => { setTimeout(() => { paused = false; }, 1500); }, { passive: true });
+        strip.addEventListener('mousedown',  () => { paused = true; });
+        strip.addEventListener('mouseup',    () => { setTimeout(() => { paused = false; }, 1500); });
+      }
     })();
   </script>
 </body>

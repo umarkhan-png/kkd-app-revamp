@@ -13,7 +13,7 @@
   /* Sticky header */
   .top-stk{position:sticky;top:0;z-index:30;background:#FFFFFF;border-bottom:1px solid #F1F5F9}
 
-  /* Status hero · colour swaps via body.state-* */
+  /* Status hero */
   .hero{padding:22px 16px 18px;text-align:center;border-bottom:1px solid #E5E7EB;transition:all .25s ease}
   body.state-delivered .hero{background:linear-gradient(180deg,#ECFDF5,#D1FAE5);border-color:#A7F3D0}
   body.state-transit  .hero{background:linear-gradient(180deg,#FFF7ED,#FEF3C7);border-color:#FCD34D}
@@ -27,67 +27,51 @@
   .hero-sub{font-size:13px;color:#475569;margin-top:5px}
   .hero-sub b{color:#0F172A;font-weight:700}
 
-  /* Horizontal 4-step progress */
-  .prog-wrap{background:#FFFFFF;border-bottom:1px solid #F1F5F9;padding:14px 16px 12px}
-  .prog{display:flex;align-items:center;gap:4px}
-  .prog .seg{flex:1;height:4px;border-radius:999px;background:#E5E7EB;transition:background .25s ease}
-  .prog .dot{width:8px;height:8px;border-radius:50%;background:#E5E7EB;transition:background .25s ease}
-  .prog .dot.cur{background:#F59E0B;box-shadow:0 0 0 4px rgba(245,158,11,0.18);animation:pulseDot 1.6s ease-out infinite}
-  .prog .seg.on,.prog .dot.on{background:#059669}
-  @keyframes pulseDot{0%,100%{box-shadow:0 0 0 4px rgba(245,158,11,0.18)}50%{box-shadow:0 0 0 8px rgba(245,158,11,0.05)}}
-  .prog-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.04em}
-  .prog-labels span.done{color:#047857}
-  .prog-labels span.cur{color:#B45309}
-
-  /* Mini stats */
-  .stats{margin:12px 16px 0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:#E5E7EB;border-radius:12px;overflow:hidden;border:1px solid #E5E7EB}
-  .stats > div{background:#FFFFFF;padding:11px 6px;text-align:center;line-height:1.1}
-  .stats .lbl{font-size:9.5px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.04em}
-  .stats .val{font-size:17px;font-weight:900;color:#0F172A;margin-top:5px}
-  .stats .val.green{color:#047857}
-
   .sec-title{margin:18px 16px 8px;font-size:11px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
   .card{margin:0 16px 10px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden}
+  /* Products + Bill stacked tight · single visual group with hairline divider */
+  .card-stack > .card + .card{margin-top:0;border-top-width:0;border-top-left-radius:0;border-top-right-radius:0}
+  .card-stack > .card:not(:last-child){border-bottom-left-radius:0;border-bottom-right-radius:0}
+  .card-stack-divider{margin:0 16px;height:1px;background:#F1F5F9}
 
-  /* Product row */
-  .prod{padding:12px 12px 0}
-  .prod-top{display:flex;gap:12px}
+  /* Product row · qty × price on left, line total on right · no Reorder/Add buttons per product per spec */
+  .prod{padding:12px 12px 12px;display:flex;gap:12px;align-items:flex-start;border-bottom:1px dashed #F1F5F9}
+  .prod:last-child{border-bottom:0}
   .prod-img{width:64px;height:64px;border-radius:10px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:6px;flex-shrink:0;border:1px solid #E5E7EB;text-decoration:none}
   .prod-img img{max-width:100%;max-height:100%;object-fit:contain}
-  .prod-info{flex:1;min-width:0;line-height:1.2}
+  .prod-info{flex:1;min-width:0;line-height:1.25}
   .prod-name{font-size:14.5px;font-weight:700;color:#0F172A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;text-decoration:none}
   .prod-sub{font-size:11.5px;color:#94A3B8;margin-top:2px}
-  .prod-price{display:flex;align-items:baseline;gap:6px;margin-top:4px}
-  .prod-price .p{font-size:15px;font-weight:800;color:#0F172A}
-  .prod-price .m{font-size:11px;color:#94A3B8;text-decoration:line-through}
-  .prod-price .q{font-size:9.5px;font-weight:700;color:#047857;background:#ECFDF5;padding:1px 6px;border-radius:4px}
-  .prod-foot{padding:10px 12px 12px;margin-top:10px;border-top:1px dashed #E5E7EB;display:flex;align-items:center;justify-content:space-between;gap:10px}
-  .rate-row{display:flex;align-items:center;gap:6px}
+  .prod-line{display:flex;align-items:baseline;gap:6px;margin-top:6px;font-size:12.5px;color:#475569}
+  .prod-line .p{font-weight:800;color:#0F172A}
+  .prod-line .x{color:#94A3B8;font-weight:600}
+  .prod-total{flex-shrink:0;text-align:right;line-height:1.1}
+  .prod-total-amt{font-size:15.5px;font-weight:900;color:#0F172A}
+  .prod-total-lbl{font-size:9.5px;font-weight:800;letter-spacing:0.06em;color:#64748B;text-transform:uppercase;margin-bottom:3px}
+  /* Rating row · delivered only */
+  .rate-row-wrap{padding:10px 12px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#F8FAFC;border-top:1px solid #F1F5F9}
   .star-btn{background:transparent;border:0;padding:0;cursor:pointer;transition:transform .15s ease}
   .star-btn:active{transform:scale(.85)}
   .star-btn i{font-size:18px;color:#CBD5E1;transition:color .2s ease}
   .star-btn.on i{color:#F59E0B}
   .rate-label{font-size:12.5px;font-weight:700;color:#0F172A}
   .rate-bonus{font-size:9.5px;font-weight:700;color:#B45309;margin-top:1px}
-  .prod-reorder{display:flex;align-items:center;justify-content:space-between;background:#F8FAFC;border-top:1px solid #F1F5F9;padding:10px 12px;text-decoration:none}
-  .prod-reorder .l{font-size:12.5px;font-weight:700;color:#0F172A;display:inline-flex;align-items:center;gap:6px}
-  .prod-reorder .l i{color:#059669}
-  .prod-reorder b{font-size:12px;font-weight:800;color:#047857;letter-spacing:0.04em;text-transform:uppercase}
 
-  /* Address card */
+  /* Address */
   .addr{padding:14px;display:flex;gap:12px}
   .addr-ic{width:36px;height:36px;border-radius:50%;background:#ECFDF5;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#047857}
   .addr-body{flex:1;line-height:1.25}
   .addr-name{font-size:14px;font-weight:700;color:#0F172A}
   .addr-line{font-size:12px;color:#64748B;margin-top:2px}
 
-  /* Timeline */
+  /* Vertical timeline · sits above the Payment section */
   .tl{padding:14px}
   .tl-item{position:relative;padding-left:38px;padding-bottom:14px}
   .tl-item:last-child{padding-bottom:0}
   .tl-badge{position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:1;background:#E5E7EB;color:#94A3B8;font-size:11px}
   .tl-badge.done{background:#059669;color:#FFFFFF}
   .tl-badge.cur{background:#F59E0B;color:#FFFFFF;animation:pulseDot 1.6s ease-out infinite}
+  @keyframes pulseDot{0%,100%{box-shadow:0 0 0 4px rgba(245,158,11,0.18)}50%{box-shadow:0 0 0 8px rgba(245,158,11,0.05)}}
   .tl-line{position:absolute;left:12px;top:26px;bottom:0;width:2px;background:#E5E7EB;z-index:0}
   .tl-line.done{background:#059669}
   .tl-title{font-size:13px;font-weight:700;color:#0F172A}
@@ -95,7 +79,7 @@
   .tl-item.cur .tl-title{color:#B45309}
   .tl-item.upcoming .tl-title{color:#94A3B8}
 
-  /* Bill */
+  /* Bill · GST removed per spec */
   .bill{padding:14px}
   .bill-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:3px 0}
   .bill-row .lbl{color:#64748B}
@@ -105,13 +89,30 @@
   .bill-total .lbl{font-size:14px;font-weight:700;color:#0F172A}
   .bill-total .val{font-size:18px;font-weight:900;color:#0F172A}
 
-  /* Payment */
+  /* Payment · partial-paid layout with breakdown + Pay-remaining CTA · regular layout for fully paid */
   .pay-row{padding:14px;display:flex;align-items:center;gap:12px}
   .pay-ic{width:40px;height:40px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;color:#047857;flex-shrink:0}
   .pay-info{flex:1;line-height:1.2}
   .pay-info .a{font-size:14px;font-weight:700;color:#0F172A}
   .pay-info .b{font-size:11.5px;color:#64748B;margin-top:2px}
   .pay-inv-btn{padding:8px 12px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:8px;font-size:11.5px;font-weight:800;color:#0F172A;text-transform:uppercase;letter-spacing:0.04em;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+
+  /* Partial-paid · progress bar + breakdown rows + Pay Remaining CTA */
+  .partial{padding:14px}
+  .partial-head{display:flex;align-items:flex-start;gap:12px}
+  .partial-head .pay-ic{background:#FEF3C7;color:#B45309}
+  .partial-meta{flex:1;line-height:1.2}
+  .partial-meta .a{font-size:14px;font-weight:800;color:#0F172A}
+  .partial-meta .b{font-size:11.5px;color:#64748B;margin-top:2px}
+  .partial-bar{margin-top:12px;height:8px;background:#F1F5F9;border-radius:999px;overflow:hidden}
+  .partial-bar-fill{height:100%;background:linear-gradient(90deg,#047857,#10B981);border-radius:999px;transition:width .35s ease}
+  .partial-rows{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .partial-cell{background:#F8FAFC;border:1px solid #E5E7EB;border-radius:10px;padding:10px}
+  .partial-cell .lbl{font-size:10px;font-weight:800;letter-spacing:0.06em;color:#94A3B8;text-transform:uppercase}
+  .partial-cell .val{font-size:16px;font-weight:900;color:#0F172A;margin-top:3px}
+  .partial-cell.paid .val{color:#047857}
+  .partial-cell.due .val{color:#B45309}
+  .pay-remaining{margin-top:12px;width:100%;height:46px;border-radius:10px;background:#059669;color:#FFFFFF;font-size:13.5px;font-weight:800;border:0;letter-spacing:0.04em;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;cursor:pointer}
 
   /* Support */
   .support-row{padding:14px;display:flex;align-items:center;gap:12px;text-decoration:none}
@@ -120,20 +121,38 @@
   .support-row .info .a{font-size:13.5px;font-weight:700;color:#0F172A}
   .support-row .info .b{font-size:11.5px;color:#64748B;margin-top:2px}
 
-  /* COD pending banner (transit + COD) */
-  .cod-banner{margin:12px 16px 0;background:#FEF3C7;border:1px dashed #F59E0B;border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:10px}
-  .cod-banner-text{flex:1;font-size:12px;color:#78350F;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .cod-banner-text b{color:#0F172A;font-weight:900}
-  .cod-banner .btn{padding:7px 14px;background:#059669;color:#FFFFFF;border:0;border-radius:8px;font-size:11.5px;font-weight:800;letter-spacing:0.04em;text-decoration:none;flex-shrink:0}
+  /* Sticky bottom CTA · single Reorder button */
+  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:10px 12px;z-index:50;box-shadow:0 -4px 16px rgba(0,0,0,0.05)}
+  .cta-pri{width:100%;height:48px;border-radius:10px;background:#059669;color:#FFFFFF;border:0;font-size:14px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 6px 18px -4px rgba(5,150,105,0.45)}
 
-  /* Sticky bottom CTA */
-  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:10px 12px;display:flex;gap:10px;z-index:50;box-shadow:0 -4px 16px rgba(0,0,0,0.05)}
-  .cta-out{flex:1;height:44px;border-radius:10px;background:#FFFFFF;border:1px solid #E5E7EB;color:#0F172A;font-size:13.5px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
-  .cta-pri{flex:1.4;height:44px;border-radius:10px;background:#059669;color:#FFFFFF;border:0;font-size:13.5px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;box-shadow:0 6px 18px -4px rgba(5,150,105,0.45)}
+  /* Kebab dropdown */
+  .kebab-menu{position:absolute;top:48px;right:14px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:12px;box-shadow:0 12px 28px -6px rgba(15,23,42,0.18);min-width:180px;overflow:hidden;z-index:40;opacity:0;transform:translateY(-6px) scale(.98);pointer-events:none;transition:opacity .15s ease, transform .15s ease}
+  .kebab-menu.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+  .kebab-item{display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;background:transparent;border:0;text-align:left;font-size:13.5px;font-weight:600;color:#0F172A;cursor:pointer;text-decoration:none}
+  .kebab-item:hover{background:#F8FAFC}
+  .kebab-item.danger{color:#DC2626}
+  .kebab-item.danger i{color:#DC2626}
+  .kebab-item i{font-size:13px;color:#475569;width:18px;text-align:center}
+
+  /* Confirmation + Reason modals · shared backdrop + sheet pattern */
+  .modal-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80}
+  .modal-bd.open{opacity:1;pointer-events:auto}
+  .modal-sheet{position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;max-height:84vh;display:flex;flex-direction:column}
+  .modal-sheet.open{transform:translateY(0)}
+  .modal-handle{width:40px;height:4px;border-radius:999px;background:#E2E8F0;margin:10px auto 0}
+  .reason-opt{display:flex;align-items:center;gap:12px;padding:13px 20px;border-bottom:1px solid #F1F5F9;cursor:pointer;background:#FFFFFF}
+  .reason-opt:last-child{border-bottom:0}
+  .reason-opt .ric{width:22px;height:22px;border-radius:50%;border:1.5px solid #CBD5E1;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  .reason-opt.on .ric{background:#059669;border-color:#059669}
+  .reason-opt.on .ric::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;color:#FFFFFF;font-size:11px}
+  .reason-lbl{flex:1;font-size:14px;font-weight:600;color:#0F172A}
+  .reason-opt.on .reason-lbl{color:#047857}
 
   /* State-conditional visibility */
   body.state-transit  .only-delivered{display:none}
   body.state-delivered .only-transit{display:none}
+  body:not(.state-partial) .only-partial{display:none}
+  body.state-partial .only-fullpaid{display:none}
 </style></head>
 <body class="state-delivered">
 
@@ -147,8 +166,8 @@
     </div>
   </div>
 
-  <!-- Sticky header -->
-  <div class="top-stk px-4 pt-3 pb-3 flex items-center gap-3">
+  <!-- Sticky header · Share replaced with kebab · kebab dropdown lives in this row so it positions relative to the top -->
+  <div class="top-stk px-4 pt-3 pb-3 flex items-center gap-3 relative">
     <a href="orders.html" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB;text-decoration:none">
       <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
     </a>
@@ -156,9 +175,14 @@
       <h1 class="text-[17px] font-extrabold" style="color:#0F172A">Order Details</h1>
       <div class="text-[11.5px] font-semibold" style="color:#64748B" id="orderIdLabel">#KAT-2026-04-1198</div>
     </div>
-    <button class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB" aria-label="Share">
-      <i class="fa-solid fa-share-nodes text-[13px]" style="color:#0F172A"></i>
+    <button id="kebabBtn" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB" aria-label="More">
+      <i class="fa-solid fa-ellipsis-vertical text-[15px]" style="color:#0F172A"></i>
     </button>
+    <div id="kebabMenu" class="kebab-menu">
+      <button class="kebab-item danger only-transit" id="cancelOrderBtn"><i class="fa-solid fa-circle-xmark"></i> Cancel order</button>
+      <a href="#" class="kebab-item"><i class="fa-solid fa-file-arrow-down"></i> Download invoice</a>
+      <a href="advisory.html" class="kebab-item"><i class="fa-solid fa-headset"></i> Contact support</a>
+    </div>
   </div>
 
   <!-- Status hero -->
@@ -173,122 +197,7 @@
     <div class="hero-sub only-transit">Arriving tomorrow by <b>5:00 PM</b></div>
   </div>
 
-  <!-- Horizontal 4-step progress -->
-  <div class="prog-wrap">
-    <div class="prog" id="progBar">
-      <span class="seg" data-step="1"></span>
-      <span class="dot" data-step="1"></span>
-      <span class="seg" data-step="2"></span>
-      <span class="dot" data-step="2"></span>
-      <span class="seg" data-step="3"></span>
-      <span class="dot" data-step="3"></span>
-      <span class="seg" data-step="4"></span>
-      <span class="dot" data-step="4"></span>
-    </div>
-    <div class="prog-labels" id="progLabels">
-      <span data-label="1">Placed</span>
-      <span data-label="2">Packed</span>
-      <span data-label="3">Dispatched</span>
-      <span data-label="4">Delivered</span>
-    </div>
-  </div>
-
-  <!-- COD pending banner · transit only -->
-  <div class="cod-banner only-transit">
-    <i class="fa-solid fa-coins text-[16px]" style="color:#F59E0B"></i>
-    <div class="cod-banner-text">Pay <b>&#8377;1,430</b> COD &middot; earn <b style="color:#F59E0B">+50</b></div>
-    <a href="checkout.html?pay=cod" class="btn">PAY NOW</a>
-  </div>
-
-  <!-- Mini stats -->
-  <div class="stats">
-    <div>
-      <div class="lbl">Total Paid</div>
-      <div class="val tnum" id="statTotal">&#8377;698</div>
-    </div>
-    <div>
-      <div class="lbl"><span class="only-delivered">Coins Saved</span><span class="only-transit">Coins on Pay</span></div>
-      <div class="val green tnum"><span class="only-delivered">&#8377;50</span><span class="only-transit">+50</span></div>
-    </div>
-    <div>
-      <div class="lbl"><span class="only-delivered">Delivered In</span><span class="only-transit">Arriving</span></div>
-      <div class="val"><span class="only-delivered">2 days</span><span class="only-transit">Tomorrow</span></div>
-    </div>
-  </div>
-
-  <!-- Products -->
-  <div class="sec-title">2 products in this order</div>
-
-  <div class="card">
-    <div class="prod">
-      <div class="prod-top">
-        <a href="pdp.html" class="prod-img"><img src="../assets/Humic_nobg.png" class="img-blend" alt="Humic"/></a>
-        <div class="prod-info">
-          <a href="pdp.html" class="prod-name">Humic + Fulvic</a>
-          <div class="prod-sub">Humic 12% + Fulvic 8% &middot; 1 L</div>
-          <div class="prod-price">
-            <span class="p tnum">&#8377;376</span>
-            <span class="m tnum">&#8377;520</span>
-            <span class="q">Qty 1</span>
-          </div>
-        </div>
-      </div>
-      <!-- Rating row · delivered only -->
-      <div class="prod-foot only-delivered">
-        <div class="leading-tight">
-          <div class="rate-label" data-rate-status="humic">Tap stars to rate</div>
-          <div class="rate-bonus">Earn 25 coins on rating</div>
-        </div>
-        <div class="rate-row" data-rating-group="humic">
-          <button class="star-btn" data-val="1"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn" data-val="2"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn" data-val="3"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn" data-val="4"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn" data-val="5"><i class="fa-solid fa-star"></i></button>
-        </div>
-      </div>
-    </div>
-    <a href="cart.html?add=humic" class="prod-reorder">
-      <span class="l"><i class="fa-solid fa-arrow-rotate-left"></i> Reorder this item</span>
-      <b>Add &rarr;</b>
-    </a>
-  </div>
-
-  <div class="card">
-    <div class="prod">
-      <div class="prod-top">
-        <a href="pdp.html" class="prod-img"><img src="../assets/AntiVirus_nobg.png" class="img-blend" alt="Antivirus"/></a>
-        <div class="prod-info">
-          <a href="pdp.html" class="prod-name">Antivirus</a>
-          <div class="prod-sub">Anti-viral biostimulant &middot; 250 ml</div>
-          <div class="prod-price">
-            <span class="p tnum">&#8377;327</span>
-            <span class="m tnum">&#8377;425</span>
-            <span class="q">Qty 1</span>
-          </div>
-        </div>
-      </div>
-      <div class="prod-foot only-delivered">
-        <div class="leading-tight">
-          <div class="rate-label" data-rate-status="antivirus">Tap stars to rate</div>
-          <div class="rate-bonus">Earn 25 coins on rating</div>
-        </div>
-        <div class="rate-row" data-rating-group="antivirus">
-          <button class="star-btn" data-val="1"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn" data-val="2"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn" data-val="3"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn" data-val="4"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn" data-val="5"><i class="fa-solid fa-star"></i></button>
-        </div>
-      </div>
-    </div>
-    <a href="cart.html?add=antivirus" class="prod-reorder">
-      <span class="l"><i class="fa-solid fa-arrow-rotate-left"></i> Reorder this item</span>
-      <b>Add &rarr;</b>
-    </a>
-  </div>
-
-  <!-- Address -->
+  <!-- Delivery address -->
   <div class="sec-title only-delivered">Delivered to</div>
   <div class="sec-title only-transit">Delivering to</div>
   <div class="card">
@@ -302,7 +211,72 @@
     </div>
   </div>
 
-  <!-- Timeline -->
+  <!-- Products in order + Bill Summary kept together as one stacked card group · no Reorder/Add buttons per product · each product shows qty × price = line total -->
+  <div class="sec-title">2 products in this order</div>
+  <div class="card-stack">
+
+    <div class="card" style="margin-bottom:0">
+      <div class="prod">
+        <a href="pdp.html" class="prod-img"><img src="../assets/Humic_nobg.png" class="img-blend" alt="Humic"/></a>
+        <div class="prod-info">
+          <a href="pdp.html" class="prod-name">Humic + Fulvic</a>
+          <div class="prod-sub">Humic 12% + Fulvic 8% &middot; 1 L</div>
+          <div class="prod-line">
+            <span class="p tnum">&#8377;376</span>
+            <span class="x">&times; 1</span>
+          </div>
+        </div>
+        <div class="prod-total">
+          <div class="prod-total-lbl">Amount</div>
+          <div class="prod-total-amt tnum">&#8377;376</div>
+        </div>
+      </div>
+      <div class="prod">
+        <a href="pdp.html" class="prod-img"><img src="../assets/AntiVirus_nobg.png" class="img-blend" alt="Antivirus"/></a>
+        <div class="prod-info">
+          <a href="pdp.html" class="prod-name">Antivirus</a>
+          <div class="prod-sub">Anti-viral biostimulant &middot; 250 ml</div>
+          <div class="prod-line">
+            <span class="p tnum">&#8377;327</span>
+            <span class="x">&times; 1</span>
+          </div>
+        </div>
+        <div class="prod-total">
+          <div class="prod-total-lbl">Amount</div>
+          <div class="prod-total-amt tnum">&#8377;327</div>
+        </div>
+      </div>
+      <!-- Star-rating row · delivered only · single row under the product list since we no longer have per-product rating ribbons -->
+      <div class="rate-row-wrap only-delivered">
+        <div class="leading-tight">
+          <div class="rate-label" data-rate-status="order">Tap stars to rate this order</div>
+          <div class="rate-bonus">Earn 25 coins on rating</div>
+        </div>
+        <div class="rate-row flex items-center gap-1.5" data-rating-group="order">
+          <button class="star-btn" data-val="1"><i class="fa-solid fa-star"></i></button>
+          <button class="star-btn" data-val="2"><i class="fa-solid fa-star"></i></button>
+          <button class="star-btn" data-val="3"><i class="fa-solid fa-star"></i></button>
+          <button class="star-btn" data-val="4"><i class="fa-solid fa-star"></i></button>
+          <button class="star-btn" data-val="5"><i class="fa-solid fa-star"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-stack-divider"></div>
+
+    <!-- Bill Summary · GST removed per spec · sits flush below the products card so they read as one bill -->
+    <div class="card">
+      <div class="bill">
+        <div class="bill-row"><span class="lbl">Subtotal (2 items)</span><span class="val tnum">&#8377;703</span></div>
+        <div class="bill-row"><span class="lbl">Delivery fee</span><span class="val green">FREE</span></div>
+        <div class="bill-row"><span class="lbl"><i class="fa-solid fa-coins text-[11px]" style="color:#F59E0B"></i> Coins used (50)</span><span class="val green">&minus; &#8377;5</span></div>
+        <div class="bill-total"><span class="lbl">Total Amount</span><span class="val tnum" id="billTotal">&#8377;698</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Order Timeline · placed ABOVE the Payment section per spec -->
   <div class="sec-title">Order Timeline</div>
   <div class="card">
     <div class="tl">
@@ -310,7 +284,7 @@
         <div class="tl-badge done"><i class="fa-solid fa-receipt"></i></div>
         <div class="tl-line done"></div>
         <div class="tl-title">Order Placed</div>
-        <div class="tl-time">8 Apr, 2:15 PM &middot; UPI confirmed</div>
+        <div class="tl-time">8 Apr, 2:15 PM &middot; Advance paid</div>
       </div>
       <div class="tl-item done">
         <div class="tl-badge done"><i class="fa-solid fa-box-open"></i></div>
@@ -332,28 +306,42 @@
     </div>
   </div>
 
-  <!-- Bill summary -->
-  <div class="sec-title">Bill Summary</div>
-  <div class="card">
-    <div class="bill">
-      <div class="bill-row"><span class="lbl">Subtotal (2 items)</span><span class="val tnum">&#8377;703</span></div>
-      <div class="bill-row"><span class="lbl">Delivery fee</span><span class="val green">FREE</span></div>
-      <div class="bill-row"><span class="lbl">GST (18%)</span><span class="val">Included</span></div>
-      <div class="bill-row"><span class="lbl"><i class="fa-solid fa-coins text-[11px]" style="color:#F59E0B"></i> Coins used (50)</span><span class="val green">&minus; &#8377;5</span></div>
-      <div class="bill-total"><span class="lbl">Total Paid</span><span class="val tnum" id="billTotal">&#8377;698</span></div>
-    </div>
-  </div>
-
-  <!-- Payment -->
+  <!-- Payment · supports two presentations · fully paid (default) AND partial-paid (10% advance, balance due) · body.state-partial swaps which sub-block is shown -->
   <div class="sec-title">Payment</div>
   <div class="card">
-    <div class="pay-row">
+    <!-- Fully paid block · UPI / Cash · single line with Invoice action -->
+    <div class="pay-row only-fullpaid">
       <div class="pay-ic"><i class="fa-solid fa-mobile-screen text-[16px]"></i></div>
       <div class="pay-info">
         <div class="a"><span class="only-delivered">Paid via UPI</span><span class="only-transit">Pending &middot; Cash on Delivery</span></div>
-        <div class="b"><span class="only-delivered">HDFC ••7842 &middot; 8 Apr, 2:15 PM</span><span class="only-transit">Pay on delivery &middot; &#8377;1,430</span></div>
+        <div class="b"><span class="only-delivered">HDFC ••7842 &middot; 8 Apr, 2:15 PM</span><span class="only-transit">Pay on delivery &middot; &#8377;698</span></div>
       </div>
       <a href="#" class="pay-inv-btn only-delivered"><i class="fa-solid fa-file-arrow-down text-[11px]"></i> Invoice</a>
+    </div>
+    <!-- Partial-paid block · 10% advance taken, balance remaining · progress bar + paid/due breakdown + Pay Remaining CTA -->
+    <div class="partial only-partial">
+      <div class="partial-head">
+        <div class="pay-ic"><i class="fa-solid fa-clock-rotate-left text-[16px]"></i></div>
+        <div class="partial-meta">
+          <div class="a">10% advance paid &middot; balance pending</div>
+          <div class="b" id="partialMeta">&#8377;70 paid via UPI &middot; HDFC &bull;&bull;7842 &middot; 8 Apr, 2:15 PM</div>
+        </div>
+      </div>
+      <div class="partial-bar"><div class="partial-bar-fill" style="width:10%"></div></div>
+      <div class="partial-rows">
+        <div class="partial-cell paid">
+          <div class="lbl">Paid (10%)</div>
+          <div class="val tnum" id="partialPaid">&#8377;70</div>
+        </div>
+        <div class="partial-cell due">
+          <div class="lbl">Remaining</div>
+          <div class="val tnum" id="partialDue">&#8377;628</div>
+        </div>
+      </div>
+      <a href="checkout.html?pay=balance" class="pay-remaining">
+        <i class="fa-solid fa-credit-card text-[13px]"></i>
+        Pay remaining &#8377;<span id="partialDueInline">628</span>
+      </a>
     </div>
   </div>
 
@@ -368,53 +356,69 @@
     <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
   </a>
 
-  <!-- Sticky bottom · pair changes with state -->
+  <!-- Sticky bottom · single Reorder CTA per spec (Track Live + Cancel removed) -->
   <div class="sticky-cta">
-    <a class="cta-out only-delivered" href="order-details.html?return=1">
-      <i class="fa-solid fa-arrow-rotate-left text-[12px]"></i> Return
+    <a class="cta-pri" href="cart.html?reorder=1">
+      <i class="fa-solid fa-bag-shopping text-[13px]"></i> Reorder
     </a>
-    <a class="cta-pri only-delivered" href="cart.html?reorder=1">
-      <i class="fa-solid fa-bag-shopping text-[12px]"></i> Reorder All
-    </a>
-    <a class="cta-out only-transit" href="#" onclick="event.preventDefault();alert('Cancel-order flow not wired in this prototype.')">
-      <i class="fa-solid fa-xmark text-[13px]"></i> Cancel
-    </a>
-    <a class="cta-pri only-transit" href="track-order.html">
-      <i class="fa-solid fa-location-arrow text-[12px]"></i> Track Live
-    </a>
+  </div>
+
+  <!-- Cancel order · confirmation modal -->
+  <div id="cancelBd" class="modal-bd"></div>
+  <div id="cancelSheet" class="modal-sheet" style="padding:0 20px 20px">
+    <div class="modal-handle"></div>
+    <div style="padding-top:18px;text-align:center">
+      <div class="w-14 h-14 mx-auto rounded-full flex items-center justify-center mb-3" style="background:#FEF2F2;border:1.5px solid #FECACA">
+        <i class="fa-solid fa-triangle-exclamation text-[22px]" style="color:#DC2626"></i>
+      </div>
+      <div class="text-[20px] font-extrabold leading-tight">Cancel this order?</div>
+      <p class="text-[12.5px] mt-2 leading-relaxed" style="color:#64748B">Your advance payment will be refunded to the original source within 3–5 working days. This action can't be undone.</p>
+    </div>
+    <div class="flex gap-2 mt-5">
+      <button id="cancelBack" class="flex-1 h-[48px] rounded-[10px] text-[14px] font-extrabold" style="background:#FFFFFF;border:1.5px solid #E5E7EB;color:#0F172A">Keep order</button>
+      <button id="cancelConfirm" class="flex-1 h-[48px] rounded-[10px] text-[14px] font-extrabold" style="background:#DC2626;color:#FFFFFF;border:0">Yes, cancel</button>
+    </div>
+  </div>
+
+  <!-- Cancel order · reason modal -->
+  <div id="reasonBd" class="modal-bd"></div>
+  <div id="reasonSheet" class="modal-sheet" style="padding:0 0 20px">
+    <div class="modal-handle"></div>
+    <div class="px-5 pt-3 pb-2 flex items-center justify-between">
+      <div class="text-[18px] font-extrabold">Reason for cancellation</div>
+      <button id="reasonClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <p class="px-5 text-[12px]" style="color:#64748B">Help us improve. Pick the closest reason.</p>
+    <div class="mt-3" id="reasonList">
+      <div class="reason-opt"><span class="ric"></span><span class="reason-lbl">Ordered by mistake</span></div>
+      <div class="reason-opt"><span class="ric"></span><span class="reason-lbl">Found cheaper price elsewhere</span></div>
+      <div class="reason-opt"><span class="ric"></span><span class="reason-lbl">Wrong product / wrong pack size</span></div>
+      <div class="reason-opt"><span class="ric"></span><span class="reason-lbl">Delivery is too slow</span></div>
+      <div class="reason-opt"><span class="ric"></span><span class="reason-lbl">Need to change quantity / address</span></div>
+      <div class="reason-opt"><span class="ric"></span><span class="reason-lbl">Other</span></div>
+    </div>
+    <div class="px-5 pt-3">
+      <button id="reasonSubmit" class="w-full h-[48px] rounded-[10px] text-[14px] font-extrabold" style="background:#DC2626;color:#FFFFFF;border:0;opacity:.55" disabled>Submit cancellation</button>
+    </div>
   </div>
 
   <script>
     (function(){
       const qp = new URLSearchParams(location.search);
       const state = (qp.get('state') || 'delivered').toLowerCase();
+      const payment = (qp.get('payment') || '').toLowerCase();  // 'partial' = 10% advance
       const id    = qp.get('id') || 'KAT-2026-04-1198';
       document.body.classList.remove('state-delivered','state-transit');
       document.body.classList.add('state-' + (state === 'transit' ? 'transit' : 'delivered'));
+      // Partial-payment state · toggleable via ?payment=partial (or auto-on for transit since that's the realistic 10%-advance scenario)
+      const isPartial = payment === 'partial' || state === 'transit';
+      document.body.classList.toggle('state-partial', isPartial);
+
       const idLabel = document.getElementById('orderIdLabel');
       if (idLabel) idLabel.textContent = '#' + id;
 
-      const segs = document.querySelectorAll('#progBar .seg');
-      const dots = document.querySelectorAll('#progBar .dot');
-      const lbls = document.querySelectorAll('#progLabels span');
-      function paint(currentStep, isDelivered){
-        segs.forEach((s, i) => s.classList.toggle('on', (i + 1) < currentStep || (isDelivered && (i + 1) <= currentStep)));
-        dots.forEach((d, i) => {
-          d.classList.remove('on','cur');
-          const step = i + 1;
-          if (isDelivered || step < currentStep) d.classList.add('on');
-          else if (step === currentStep) d.classList.add('cur');
-        });
-        lbls.forEach((l, i) => {
-          l.classList.remove('done','cur');
-          const step = i + 1;
-          if (isDelivered || step < currentStep) l.classList.add('done');
-          else if (step === currentStep) l.classList.add('cur');
-        });
-      }
-
+      // For transit, mark the dispatch step as current and delivered as upcoming · totals tweak too
       if (state === 'transit') {
-        paint(3, false);
         const disp = document.getElementById('tlDispatch');
         const deliv = document.getElementById('tlDelivered');
         if (disp){
@@ -426,13 +430,74 @@
           deliv.classList.add('upcoming');
           const dt = document.getElementById('tlDeliveredTime'); if (dt) dt.textContent = 'Arriving tomorrow by 5:00 PM';
         }
-        const st = document.getElementById('statTotal'); if (st) st.textContent = '₹1,430';
         const bt = document.getElementById('billTotal'); if (bt) bt.textContent = '₹1,430';
-      } else {
-        paint(4, true);
+        // For transit-partial, the 10% advance + remaining math uses the 1,430 total
+        if (isPartial) {
+          const total = 1430;
+          const paid  = Math.round(total * 0.10);
+          const due   = total - paid;
+          const pp = document.getElementById('partialPaid'); if (pp) pp.textContent = '₹' + paid;
+          const pd = document.getElementById('partialDue');  if (pd) pd.textContent = '₹' + due;
+          const pi = document.getElementById('partialDueInline'); if (pi) pi.textContent = due;
+          const pm = document.getElementById('partialMeta'); if (pm) pm.textContent = '₹' + paid + ' paid via UPI · HDFC ••7842 · Today, 8:30 AM';
+          const pbf = document.querySelector('.partial-bar-fill'); if (pbf) pbf.style.width = '10%';
+        }
       }
 
-      // Star rating (delivered only)
+      // Kebab dropdown · tap toggles, outside tap closes
+      const kebabBtn = document.getElementById('kebabBtn');
+      const kebabMenu = document.getElementById('kebabMenu');
+      kebabBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        kebabMenu.classList.toggle('open');
+      });
+      document.addEventListener('click', (e) => {
+        if (!kebabMenu.contains(e.target) && e.target !== kebabBtn) kebabMenu.classList.remove('open');
+      });
+
+      // Cancel order flow · kebab item → confirmation modal → reason modal → toast (simulated)
+      const cancelBd = document.getElementById('cancelBd');
+      const cancelSheet = document.getElementById('cancelSheet');
+      const reasonBd = document.getElementById('reasonBd');
+      const reasonSheet = document.getElementById('reasonSheet');
+
+      function openSheet(bd, sheet){ bd.classList.add('open'); sheet.classList.add('open'); }
+      function closeSheet(bd, sheet){ bd.classList.remove('open'); sheet.classList.remove('open'); }
+
+      const cancelBtn = document.getElementById('cancelOrderBtn');
+      if (cancelBtn) cancelBtn.addEventListener('click', () => {
+        kebabMenu.classList.remove('open');
+        openSheet(cancelBd, cancelSheet);
+      });
+      document.getElementById('cancelBack').addEventListener('click', () => closeSheet(cancelBd, cancelSheet));
+      cancelBd.addEventListener('click', () => closeSheet(cancelBd, cancelSheet));
+      document.getElementById('cancelConfirm').addEventListener('click', () => {
+        closeSheet(cancelBd, cancelSheet);
+        setTimeout(() => openSheet(reasonBd, reasonSheet), 220);
+      });
+      document.getElementById('reasonClose').addEventListener('click', () => closeSheet(reasonBd, reasonSheet));
+      reasonBd.addEventListener('click', () => closeSheet(reasonBd, reasonSheet));
+
+      // Reason single-select · enables Submit when a reason is picked
+      let pickedReason = null;
+      const submitBtn = document.getElementById('reasonSubmit');
+      document.querySelectorAll('#reasonList .reason-opt').forEach(opt => {
+        opt.addEventListener('click', () => {
+          document.querySelectorAll('#reasonList .reason-opt').forEach(o => o.classList.remove('on'));
+          opt.classList.add('on');
+          pickedReason = opt.querySelector('.reason-lbl').textContent;
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '1';
+        });
+      });
+      submitBtn.addEventListener('click', () => {
+        if (!pickedReason) return;
+        closeSheet(reasonBd, reasonSheet);
+        // Simulated confirmation · in a real build this routes to a 'cancellation requested' state
+        setTimeout(() => alert('Cancellation requested · reason: ' + pickedReason), 240);
+      });
+
+      // Star rating
       document.querySelectorAll('[data-rating-group]').forEach(group => {
         const pid = group.getAttribute('data-rating-group');
         const stars = group.querySelectorAll('.star-btn');

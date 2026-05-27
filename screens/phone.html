@@ -40,19 +40,7 @@
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -1px 0 rgba(255,255,255,0.08);
     overflow:hidden;
   }
-  /* Drifting specular highlight · slow horizontal sheen that reads as light reflecting off water */
-  .hero-offer::before {
-    content:""; position:absolute; top:0; bottom:0; left:-30%; width:35%;
-    background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
-    transform: skewX(-18deg);
-    animation: heroShimmer 4.2s ease-in-out infinite;
-    pointer-events:none;
-  }
-  @keyframes heroShimmer {
-    0%   { left:-35%; opacity:0; }
-    35%  { opacity:1; }
-    100% { left:120%; opacity:0; }
-  }
+  /* Shimmer animation removed per spec · the glass layer remains as a static frosted look */
   .hero-offer i { font-size:11px; color:#FCD34D; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25)); }
   .hero-offer b { color:#FCD34D; font-weight:900; text-shadow:0 1px 2px rgba(0,0,0,0.18); }
 
@@ -204,6 +192,20 @@
     </div>
   </div>
 
+  <!-- Refer code · small inline link · expands to a referral input when tapped · low-stakes UX so first-time users don't get distracted -->
+  <div class="px-6 mt-3">
+    <button id="referToggle" class="text-[11.5px] font-bold inline-flex items-center gap-1.5" style="color:#047857">
+      <i class="fa-solid fa-ticket text-[10px]"></i> Have a referral code?
+    </button>
+    <div id="referBox" class="mt-2 hidden">
+      <div class="flex items-center gap-2 h-[44px] px-3 rounded-[10px] bg-white" style="border:1px solid #E5E7EB">
+        <i class="fa-solid fa-tag text-[11px]" style="color:#94A3B8"></i>
+        <input id="referCode" type="text" placeholder="Enter referral code" class="flex-1 outline-none text-[13px] font-semibold bg-transparent placeholder:text-[#94A3B8] placeholder:font-medium" style="text-transform:uppercase;letter-spacing:0.06em"/>
+        <button id="referApply" class="text-[11.5px] font-extrabold" style="color:#047857">Apply</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Terms -->
   <div class="px-6 mt-5 text-center">
     <p class="text-[11.5px] text-[#94A3B8] leading-relaxed">By continuing you agree to our <span class="font-bold" style="color:#047857">Terms</span> &amp; <span class="font-bold" style="color:#047857">Privacy Policy</span></p>
@@ -245,6 +247,24 @@
           paint(c);
           setTimeout(close, 180);
         });
+      });
+    })();
+
+    // Refer-code toggle · "Have a referral code?" expands the input row + persists the code so OTP / name screens can pre-fill it
+    (function(){
+      const tog = document.getElementById('referToggle');
+      const box = document.getElementById('referBox');
+      const apply = document.getElementById('referApply');
+      const input = document.getElementById('referCode');
+      if (!tog || !box) return;
+      try { const saved = localStorage.getItem('kkd.referCode'); if (saved && input) { input.value = saved; box.classList.remove('hidden'); } } catch (e) {}
+      tog.addEventListener('click', () => { box.classList.toggle('hidden'); if (!box.classList.contains('hidden') && input) input.focus(); });
+      apply && apply.addEventListener('click', () => {
+        const v = (input.value || '').trim().toUpperCase();
+        if (!v) return;
+        try { localStorage.setItem('kkd.referCode', v); } catch (e) {}
+        tog.innerHTML = '<i class="fa-solid fa-circle-check text-[10px]"></i> Code ' + v + ' applied';
+        box.classList.add('hidden');
       });
     })();
 

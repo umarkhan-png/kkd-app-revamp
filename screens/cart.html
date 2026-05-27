@@ -105,7 +105,11 @@
   .modal-handle{width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 0}
 
   /* Coupon tile · proper ticket shape · emerald discount stub on the left, code+description in middle, Apply on the right · dashed vertical divider between stub and body · CSS-only notch using two pseudo-elements positioned over the dashed line */
-  .coup-tile{position:relative;display:flex;align-items:stretch;background:#FFFFFF;border:1px solid #BBF7D0;border-radius:14px;overflow:hidden;min-height:88px;box-shadow:0 2px 8px -2px rgba(5,150,105,0.12)}
+  .coup-tile{position:relative;display:flex;align-items:stretch;background:#FFFFFF;border:1px solid #BBF7D0;border-radius:14px;overflow:visible;min-height:88px;box-shadow:0 2px 8px -2px rgba(5,150,105,0.12)}
+  /* Max-saving badge · floats above the tile that gives the highest discount · gold pill with a star */
+  .coup-tile .max-save{position:absolute;top:-8px;right:14px;z-index:3;display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#FBBF24,#F59E0B);color:#0F172A;font-size:9px;font-weight:900;letter-spacing:0.08em;padding:3px 9px;border-radius:9999px;box-shadow:0 4px 10px -2px rgba(245,158,11,0.5)}
+  .coup-tile .max-save i{font-size:8px}
+  .coup-stub{border-radius:14px 0 0 14px}
   .coup-stub{background:linear-gradient(160deg,#047857 0%,#10B981 100%);color:#FFFFFF;padding:12px 10px;min-width:86px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative}
   .coup-stub .amt{font-size:20px;font-weight:900;letter-spacing:-0.02em;line-height:1;font-variant-numeric:tabular-nums}
   .coup-stub .off-lbl{font-size:9.5px;font-weight:800;letter-spacing:0.12em;opacity:.9}
@@ -140,11 +144,11 @@
   .xsell-thresh .bar-wrap{position:relative;height:8px;margin-top:10px;background:#FFFFFF;border-radius:9999px;border:1px solid #A7F3D0;overflow:hidden}
   .xsell-thresh .fill{height:100%;background:linear-gradient(90deg,#10B981 0%,#047857 100%);border-radius:9999px;transition:width .4s ease}
 
-  /* Special-deal product card · the xsell-card itself becomes the appealing special-deal element · no separate FOMO header, no timer · the card gets a SPECIAL DEAL ribbon, a savings badge, and emerald-accent border so it reads as a high-value pick on its own */
-  .xsell-card{position:relative;border:1.5px solid #BBF7D0;border-radius:14px;background:linear-gradient(135deg,#FFFFFF 0%,#F0FDF4 100%);padding:14px 12px 12px;display:flex;align-items:center;gap:12px;overflow:hidden;box-shadow:0 4px 12px -6px rgba(5,150,105,0.18)}
-  .xsell-card::before{content:"SPECIAL DEAL";position:absolute;top:9px;left:-30px;background:linear-gradient(90deg,#047857,#10B981);color:#FFFFFF;font-size:8px;font-weight:900;letter-spacing:0.14em;padding:2px 32px;transform:rotate(-30deg);box-shadow:0 4px 8px -2px rgba(4,120,87,0.4);pointer-events:none}
-  .xsell-card .saving{position:absolute;top:8px;right:10px;font-size:9.5px;font-weight:900;color:#047857;background:#ECFDF5;border:1px solid #A7F3D0;padding:2px 7px;border-radius:9999px;letter-spacing:0.04em}
-  .xsell-img{width:62px;height:62px;border-radius:11px;background:#FFFFFF;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0;box-shadow:0 2px 6px rgba(15,23,42,0.06)}
+  /* Special-deal xsell card · CLEANED UP · drops the diagonal ribbon + the gradient bg in favour of a clean white card with hairline border · a single SAVE chip sits at the top-right · the eye lands on the image + name + price · primary ADD pill on the right */
+  .xsell-card{position:relative;border:1px solid #E5E7EB;border-radius:14px;background:#FFFFFF;padding:12px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .xsell-card .saving{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:900;color:#047857;background:#ECFDF5;border:1px solid #A7F3D0;padding:3px 8px;border-radius:9999px;letter-spacing:0.04em}
+  .xsell-card .saving i{font-size:8px}
+  .xsell-img{width:60px;height:60px;border-radius:11px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
   .xsell-img img{max-width:100%;max-height:100%;object-fit:contain}
 
   /* ===== Coupon-apply celebration · SOFTENED · drops the dark backdrop, the rotating sun-burst rays, the 12-piece confetti rain, the badge rotation/bounce · now: gentle dim overlay + a clean white card that fades + scales-in (no bounce), brief sparkle dots around the badge, smooth text fade · feels confident, not aggressive · ~1.8s total ===== */
@@ -183,7 +187,7 @@
     </button>
     <div class="flex-1 leading-tight">
       <h1 class="text-[22px] font-extrabold" style="color:#0F172A">Cart</h1>
-      <div class="text-[11.5px] text-[#64748B]" id="cartItemsCount">3 items</div>
+      <div class="text-[14px] font-extrabold" style="color:#047857" id="cartItemsCount">3 items · Saved ₹520</div>
     </div>
   </div>
 
@@ -313,7 +317,7 @@
     <div class="addr-row-bottom">
       <i class="fa-solid fa-location-dot text-[14px]" style="color:#94A3B8"></i>
       <div class="flex-1 min-w-0 text-[12.5px] font-medium truncate" style="color:#475569">Ramesh Patel · Mahidpur, Ujjain · 456440</div>
-      <button class="addr-change">Change</button>
+      <a href="addresses.html" class="addr-change">Change</a>
     </div>
   </div>
 
@@ -376,6 +380,7 @@
           <button class="apply-btn">Apply</button>
         </div>
         <div class="coup-tile" data-code="KKD200" data-save="200">
+          <span class="max-save"><i class="fa-solid fa-star"></i> MAX SAVING</span>
           <div class="coup-stub">
             <span class="amt">₹200</span>
             <span class="off-lbl">OFF</span>
@@ -452,40 +457,43 @@
 
       <div class="space-y-2.5">
         <div class="xsell-card">
-          <span class="saving">SAVE ₹98</span>
           <div class="xsell-img"><img src="../assets/AntiVirus_nobg.png" alt=""/></div>
-          <div class="flex-1 min-w-0 leading-tight" style="padding-left:6px">
-            <div class="text-[14px] font-extrabold mt-2">Antivirus <span class="font-medium" style="color:#94A3B8">· 250 ml</span></div>
-            <div class="flex items-baseline gap-1.5 mt-1">
-              <span class="text-[14px] font-extrabold tnum text-[#0F172A]">&#8377;327</span>
-              <span class="text-[10.5px] line-through tnum" style="color:#94A3B8">&#8377;425</span>
-              <span class="text-[10px] font-bold" style="color:#047857">23% off</span>
+          <div class="flex-1 min-w-0 leading-tight">
+            <div class="flex items-center gap-2"><span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹98</span></div>
+            <div class="text-[14px] font-extrabold mt-1.5 text-[#0F172A]">Antivirus</div>
+            <div class="text-[11px] font-medium" style="color:#94A3B8">250 ml</div>
+            <div class="flex items-baseline gap-1.5 mt-1.5">
+              <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;327</span>
+              <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;425</span>
+              <span class="text-[10.5px] font-bold" style="color:#047857">23% off</span>
             </div>
           </div>
           <button class="xsell-add">Add</button>
         </div>
         <div class="xsell-card">
-          <span class="saving">SAVE ₹75</span>
           <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" alt=""/></div>
-          <div class="flex-1 min-w-0 leading-tight" style="padding-left:6px">
-            <div class="text-[14px] font-extrabold mt-2">Bhumiraja <span class="font-medium" style="color:#94A3B8">· 1 kg</span></div>
-            <div class="flex items-baseline gap-1.5 mt-1">
-              <span class="text-[14px] font-extrabold tnum text-[#0F172A]">&#8377;245</span>
-              <span class="text-[10.5px] line-through tnum" style="color:#94A3B8">&#8377;320</span>
-              <span class="text-[10px] font-bold" style="color:#047857">24% off</span>
+          <div class="flex-1 min-w-0 leading-tight">
+            <div class="flex items-center gap-2"><span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹75</span></div>
+            <div class="text-[14px] font-extrabold mt-1.5 text-[#0F172A]">Bhumiraja</div>
+            <div class="text-[11px] font-medium" style="color:#94A3B8">1 kg</div>
+            <div class="flex items-baseline gap-1.5 mt-1.5">
+              <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;245</span>
+              <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;320</span>
+              <span class="text-[10.5px] font-bold" style="color:#047857">24% off</span>
             </div>
           </div>
           <button class="xsell-add">Add</button>
         </div>
         <div class="xsell-card">
-          <span class="saving">SAVE ₹170</span>
           <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" alt=""/></div>
-          <div class="flex-1 min-w-0 leading-tight" style="padding-left:6px">
-            <div class="text-[14px] font-extrabold mt-2">Chakraveer 18.5% <span class="font-medium" style="color:#94A3B8">· 100 ml</span></div>
-            <div class="flex items-baseline gap-1.5 mt-1">
-              <span class="text-[14px] font-extrabold tnum text-[#0F172A]">&#8377;440</span>
-              <span class="text-[10.5px] line-through tnum" style="color:#94A3B8">&#8377;610</span>
-              <span class="text-[10px] font-bold" style="color:#047857">28% off</span>
+          <div class="flex-1 min-w-0 leading-tight">
+            <div class="flex items-center gap-2"><span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹170</span></div>
+            <div class="text-[14px] font-extrabold mt-1.5 text-[#0F172A]">Chakraveer 18.5%</div>
+            <div class="text-[11px] font-medium" style="color:#94A3B8">100 ml</div>
+            <div class="flex items-baseline gap-1.5 mt-1.5">
+              <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;440</span>
+              <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;610</span>
+              <span class="text-[10.5px] font-bold" style="color:#047857">28% off</span>
             </div>
           </div>
           <button class="xsell-add">Add</button>
@@ -505,7 +513,7 @@
       function refreshCount(){
         const n = document.querySelectorAll('#cartList .cart-item').length;
         const lbl = document.getElementById('cartItemsCount');
-        if (lbl) lbl.textContent = n + (n === 1 ? ' item' : ' items');
+        if (lbl) lbl.textContent = n + (n === 1 ? ' item' : ' items') + ' · Saved ₹520';
         const sticky = document.querySelector('.sticky-sum .ttl');
         if (sticky) sticky.textContent = n + (n === 1 ? ' item' : ' items');
       }

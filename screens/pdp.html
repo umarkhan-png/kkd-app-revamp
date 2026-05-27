@@ -145,6 +145,7 @@
   <span class="absolute top-3 right-3 inline-flex items-center gap-1.5 bg-white/95 backdrop-blur px-2.5 py-1.5 rounded-full text-[13px] font-extrabold shadow-sm">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="#FBBF24"><path d="M12 .587l3.668 7.568L24 9.423l-6 5.85L19.336 24 12 19.897 4.664 24 6 15.273 0 9.423l8.332-1.268z"/></svg>
     <span class="text-[#0F172A] tnum">4.6</span>
+    <span class="font-medium tnum" style="color:#64748B">(2,020)</span>
   </span>
   <div id="imgDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
     <span class="pg-dot active"></span><span class="pg-dot"></span><span class="pg-dot"></span><span class="pg-dot"></span>
@@ -287,33 +288,12 @@
     <div class="deliv-bottom">
       <i class="fa-solid fa-location-dot text-[14px]" style="color:#94A3B8"></i>
       <div class="flex-1 min-w-0 text-[12.5px] font-semibold truncate" style="color:#475569">Mahidpur, Ujjain · 456440</div>
-      <button class="deliv-change">Change</button>
+      <a href="addresses.html" class="deliv-change">Change</a>
     </div>
   </div>
 </div>
 
-<!-- Product description -->
-<div class="px-4 mt-6">
-  <details class="kkd-collapse" open>
-    <summary>
-      <div class="leading-tight">
-        <div class="text-[15px] font-extrabold text-[#0F172A]">Product description</div>
-        <div class="text-[11.5px] mt-0.5" style="color:#64748B">Composition · Mode · Crop fit</div>
-      </div>
-      <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-    </summary>
-    <div class="px-4 pb-4">
-      <p class="text-[12.5px] leading-relaxed" style="color:#475569">A concentrated <span class="font-extrabold text-[#0F172A]">bio-stimulant</span> with <span class="font-extrabold text-[#0F172A]">Humic 80% + Fulvic 18%</span>. Improves root growth, soil structure and nutrient uptake. The 98% active fraction means a little goes a long way — works across cereals, vegetables, pulses and orchard crops, and is safe to tank-mix with most fertilizers.</p>
-      <div class="mt-3 pt-3 border-t border-[#F1F5F9] grid grid-cols-3 divide-x divide-[#F1F5F9]">
-        <div class="text-center"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:#64748B">Acts in</div><div class="text-[14px] font-extrabold text-[#0F172A] mt-0.5">5–7 days</div></div>
-        <div class="text-center"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:#64748B">Residual</div><div class="text-[14px] font-extrabold text-[#0F172A] mt-0.5">30 days</div></div>
-        <div class="text-center"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:#64748B">Crop safe</div><div class="text-[14px] font-extrabold mt-0.5" style="color:#047857">All</div></div>
-      </div>
-    </div>
-  </details>
-</div>
-
-<!-- How to use · video + tabs (renamed Technical / Dose / Disease) · sits directly under Product description per spec -->
+<!-- How to use · video + tabs (Technical / Dose / Disease) · NOW sits ABOVE Product description per new ordering: Delivery → How to use → Product description -->
 <div class="px-4 mt-4">
   <div class="text-[16px] font-extrabold mb-2 text-[#0F172A]">How to use</div>
   <a href="#" class="video-card aspect-[16/9] block">
@@ -369,6 +349,27 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- Product description · now sits AFTER How to use per new ordering -->
+<div class="px-4 mt-6">
+  <details class="kkd-collapse" open>
+    <summary>
+      <div class="leading-tight">
+        <div class="text-[15px] font-extrabold text-[#0F172A]">Product description</div>
+        <div class="text-[11.5px] mt-0.5" style="color:#64748B">Composition · Mode · Crop fit</div>
+      </div>
+      <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </summary>
+    <div class="px-4 pb-4">
+      <p class="text-[12.5px] leading-relaxed" style="color:#475569">A concentrated <span class="font-extrabold text-[#0F172A]">bio-stimulant</span> with <span class="font-extrabold text-[#0F172A]">Humic 80% + Fulvic 18%</span>. Improves root growth, soil structure and nutrient uptake. The 98% active fraction means a little goes a long way — works across cereals, vegetables, pulses and orchard crops, and is safe to tank-mix with most fertilizers.</p>
+      <div class="mt-3 pt-3 border-t border-[#F1F5F9] grid grid-cols-3 divide-x divide-[#F1F5F9]">
+        <div class="text-center"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:#64748B">Acts in</div><div class="text-[14px] font-extrabold text-[#0F172A] mt-0.5">5–7 days</div></div>
+        <div class="text-center"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:#64748B">Residual</div><div class="text-[14px] font-extrabold text-[#0F172A] mt-0.5">30 days</div></div>
+        <div class="text-center"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:#64748B">Crop safe</div><div class="text-[14px] font-extrabold mt-0.5" style="color:#047857">All</div></div>
+      </div>
+    </div>
+  </details>
 </div>
 
 <!-- Farmer testimonials -->

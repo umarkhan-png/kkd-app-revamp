@@ -76,6 +76,26 @@
   .pay-summary .val{font-size:14px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
   .pay-mode-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:9999px;background:#ECFDF5;border:1px solid #A7F3D0;color:#047857;font-size:10.5px;font-weight:800;margin-top:3px}
 
+  /* COD pay-now strip · only renders when the order was placed via COD or Partial · gradient amber band with the pending amount + a Pay-now CTA that gives bonus coins */
+  .cod-strip{margin:0 16px;border-radius:14px;padding:14px;background:linear-gradient(135deg,#FFFBEB 0%,#FEF3C7 100%);border:1px solid #FCD34D;display:flex;align-items:center;gap:12px;box-shadow:0 4px 14px -8px rgba(180,83,9,0.25);position:relative;overflow:hidden}
+  .cod-strip::before{content:"";position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,0.2) 0%,transparent 65%);pointer-events:none}
+  .cod-strip .ic{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#F59E0B,#B45309);color:#FFFFFF;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;box-shadow:0 6px 14px -4px rgba(180,83,9,0.4)}
+  .cod-strip .body{flex:1;min-width:0;line-height:1.2;position:relative;z-index:1}
+  .cod-strip .body .a{font-size:13px;font-weight:900;color:#0F172A;display:flex;align-items:center;gap:8px}
+  .cod-strip .body .amt{font-size:14px;font-weight:900;color:#B45309;font-variant-numeric:tabular-nums}
+  .cod-strip .body .b{font-size:11px;color:#78350F;margin-top:3px;font-weight:600}
+  .cod-strip .btn{flex-shrink:0;padding:9px 16px;border-radius:10px;background:#047857;color:#FFFFFF;font-size:12.5px;font-weight:900;letter-spacing:0.06em;text-transform:uppercase;border:0;cursor:pointer;box-shadow:0 6px 14px -4px rgba(4,120,87,0.4);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+
+  /* Welcome-back overlay · brief animated greeting for returning users · fades over the page for ~2.4s then dismisses */
+  .welback{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,0.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:welbackBd 2.4s ease-out forwards;pointer-events:none}
+  .welback.show{display:flex}
+  @keyframes welbackBd{0%{opacity:0}15%{opacity:1}80%{opacity:1}100%{opacity:0}}
+  .welback-card{background:linear-gradient(135deg,#047857 0%,#10B981 100%);color:#FFFFFF;padding:22px 30px;border-radius:18px;text-align:center;box-shadow:0 20px 50px -10px rgba(4,120,87,0.6);transform:scale(.9);opacity:0;animation:welbackCard 2.4s cubic-bezier(.22,1,.36,1) forwards;display:flex;align-items:center;gap:14px}
+  @keyframes welbackCard{0%{transform:scale(.9);opacity:0}18%{transform:scale(1);opacity:1}82%{transform:scale(1);opacity:1}100%{transform:scale(.96);opacity:0}}
+  .welback-card .ic{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:1.5px solid rgba(255,255,255,0.32)}
+  .welback-card .a{font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:#FCD34D}
+  .welback-card .b{font-size:20px;font-weight:900;margin-top:2px;letter-spacing:-0.01em}
+
   /* Reward strip · scratch card + coins earned · 2-col grid · feels like a celebration but stays on-brand */
   .reward-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px}
   .reward-tile{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:14px 12px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;box-shadow:0 1px 3px rgba(15,23,42,0.04);text-decoration:none;color:inherit;position:relative;overflow:hidden}
@@ -189,11 +209,21 @@
   <div class="card">
     <div class="pay-summary">
       <div class="leading-tight">
-        <div class="lbl">Paid via Pay Now</div>
-        <span class="pay-mode-chip"><i class="fa-solid fa-circle-check text-[9px]"></i> Payment received</span>
+        <div class="lbl" id="payMethodLbl">Paid via Pay Now</div>
+        <span class="pay-mode-chip" id="payStatus"><i class="fa-solid fa-circle-check text-[9px]"></i> Payment received</span>
       </div>
-      <div class="val tnum">₹1,805</div>
+      <div class="val tnum" id="payMethodAmt">₹1,805</div>
     </div>
+  </div>
+
+  <!-- COD pay-now strip · shows when payment is COD or Partial · lets the user clear the balance early and earn bonus coins · hidden by default · activates if URL has ?mode=cod or ?mode=partial -->
+  <div class="cod-strip mt-3" id="codStrip" style="display:none;margin-top:10px">
+    <span class="ic"><i class="fa-solid fa-wallet"></i></span>
+    <div class="body">
+      <div class="a">Pay COD now <span class="amt tnum" id="codStripAmt">₹1,900</span></div>
+      <div class="b">Skip cash, earn <span class="tnum">38 bonus coins</span></div>
+    </div>
+    <a href="#" class="btn" id="payCodBtn">Pay <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
   </div>
 
   <!-- Rewards · scratch card + coins earned · 2-col grid -->
@@ -241,5 +271,44 @@
       <i class="fa-solid fa-location-arrow text-[12px]"></i> Track order
     </a>
   </div>
+
+  <script>
+    // Read ?mode=paynow|partial|cod from the URL · shows the COD pay-now strip for cod + partial · updates the Payment summary line + amount accordingly
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      const mode = (params.get('mode') || 'paynow').toLowerCase();
+      const methodLbl = document.getElementById('payMethodLbl');
+      const methodAmt = document.getElementById('payMethodAmt');
+      const payStatus = document.getElementById('payStatus');
+      const codStrip = document.getElementById('codStrip');
+      const codAmt = document.getElementById('codStripAmt');
+      if (mode === 'cod') {
+        methodLbl && (methodLbl.textContent = 'Cash on Delivery');
+        methodAmt && (methodAmt.textContent = '₹1,900');
+        if (payStatus) { payStatus.style.background = '#FEF3C7'; payStatus.style.borderColor = '#FDE68A'; payStatus.style.color = '#B45309'; payStatus.innerHTML = '<i class="fa-solid fa-clock text-[9px]"></i> Pay on delivery'; }
+        codStrip && (codStrip.style.display = 'flex');
+        codAmt && (codAmt.textContent = '₹1,900');
+      } else if (mode === 'partial') {
+        methodLbl && (methodLbl.textContent = 'Partial · ₹475 paid · ₹1,425 due');
+        methodAmt && (methodAmt.textContent = '₹1,900');
+        if (payStatus) { payStatus.style.background = '#FEF3C7'; payStatus.style.borderColor = '#FDE68A'; payStatus.style.color = '#B45309'; payStatus.innerHTML = '<i class="fa-solid fa-circle-half-stroke text-[9px]"></i> Partial paid'; }
+        codStrip && (codStrip.style.display = 'flex');
+        codAmt && (codAmt.textContent = '₹1,425');
+      }
+    })();
+
+    // Welcome-back overlay · only renders when ?welcome=1 (typically appended by login flow for returning users) · brief 2.4s emerald card with the user's first name
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('welcome') !== '1') return;
+      let name = 'Sagar';
+      try { name = localStorage.getItem('kkd.firstName') || 'Sagar'; } catch (e) {}
+      const ov = document.createElement('div');
+      ov.className = 'welback show';
+      ov.innerHTML = '<div class="welback-card"><span class="ic"><i class="fa-solid fa-hand-sparkles"></i></span><div class="leading-tight text-left"><div class="a">Welcome back</div><div class="b">' + name + '!</div></div></div>';
+      document.body.appendChild(ov);
+      setTimeout(() => ov.remove(), 2500);
+    })();
+  </script>
 
 </body></html>

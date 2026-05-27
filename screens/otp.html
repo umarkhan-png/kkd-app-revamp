@@ -37,6 +37,14 @@
   body.timer-done .resend-live    { display:none; }
   body.timer-done .resend-options { display:flex; }
 
+  /* Language bottom-sheet · same pattern as phone.html · in-page modal, no full-page nav */
+  .modal-bd { position:fixed; inset:0; background:rgba(15,23,42,0.55); opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:80; }
+  .modal-bd.open { opacity:1; pointer-events:auto; }
+  .modal-sheet { position:fixed; left:0; right:0; bottom:0; background:#FFFFFF; border-radius:24px 24px 0 0; box-shadow:0 -8px 32px rgba(0,0,0,0.18); transform:translateY(100%); transition:transform .3s cubic-bezier(.32,.72,0,1); z-index:90; max-height:78vh; display:flex; flex-direction:column; }
+  .modal-sheet.open { transform:translateY(0); }
+  .lang-tile { background:#FFFFFF; border:1px solid #E5E7EB; border-radius:12px; padding:14px; text-align:left; cursor:pointer; transition:transform .12s ease, border-color .15s ease, background .15s ease; }
+  .lang-tile:active, .lang-tile.on { background:#ECFDF5; border-color:#047857; transform:scale(.98); }
+
   /* Rotating fact / news rotator · slide-up + fade transition (was a flat opacity swap that read as static text) · soft emerald accent dot pulses with each new item for motion */
   .fact-rotator { margin: 32px 24px 0; position:relative; min-height:46px; }
   .fact-item { display:flex; align-items:center; justify-content:center; gap:10px; opacity:0; transform:translateY(8px); pointer-events:none; position:absolute; inset:0; transition:opacity .45s ease, transform .45s cubic-bezier(.4,0,.2,1); text-align:center; }
@@ -64,10 +72,36 @@
     <button onclick="location.href='phone.html'" class="back-btn" aria-label="Back">
       <i class="fa-solid fa-arrow-left"></i>
     </button>
-    <a href="language.html" class="lang-pill">
+    <button id="langChipBtn" class="lang-pill" type="button">
       <span class="hi" id="langCurrent">हिंदी</span>
       <i class="fa-solid fa-chevron-down chev"></i>
-    </a>
+    </button>
+  </div>
+
+  <!-- Language picker bottom modal · same 12-language 2-col grid as phone.html · opens in place when the chip is tapped -->
+  <div id="langBd" class="modal-bd"></div>
+  <div id="langSheet" class="modal-sheet">
+    <div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 0"></div>
+    <div class="px-5 pt-3 pb-3 flex items-center justify-between" style="flex-shrink:0">
+      <div class="text-[18px] font-extrabold">Choose language</div>
+      <button id="langClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div class="px-5 pb-5 overflow-y-auto" style="flex:1">
+      <div class="grid grid-cols-2 gap-2.5">
+        <button class="lang-tile" data-code="hi"><div class="hi text-[18px] font-extrabold">हिंदी</div><div class="text-[11.5px] mt-0.5" style="color:#64748B">Hindi</div></button>
+        <button class="lang-tile" data-code="en"><div class="text-[18px] font-extrabold">English</div><div class="text-[11.5px] mt-0.5" style="color:#64748B">English</div></button>
+        <button class="lang-tile" data-code="hien"><div class="text-[18px] font-extrabold">Hinglish</div><div class="text-[11.5px] mt-0.5" style="color:#64748B">Hindi + English</div></button>
+        <button class="lang-tile" data-code="mr"><div class="hi text-[18px] font-extrabold">मराठी</div><div class="text-[11.5px] mt-0.5" style="color:#64748B">Marathi</div></button>
+        <button class="lang-tile" data-code="gu"><div class="text-[18px] font-extrabold">ગુજરાતી</div><div class="text-[11.5px] mt-0.5" style="color:#64748B">Gujarati</div></button>
+        <button class="lang-tile" data-code="pa"><div class="text-[18px] font-extrabold">ਪੰਜਾਬੀ</div><div class="text-[11.5px] mt-0.5" style="color:#64748B">Punjabi</div></button>
+        <button class="lang-tile" data-code="te"><div class="text-[18px] font-extrabold">తెలుగు</div><div class="text-[11.5px] mt-0.5" style="color:#64748B">Telugu</div></button>
+        <button class="lang-tile" data-code="ta"><div class="text-[18px] font-extrabold">தமிழ்</div><div class="text-[11.5px] mt-0.5" style="color:#64748B">Tamil</div></button>
+        <button class="lang-tile" data-code="kn"><div class="text-[18px] font-extrabold">ಕನ್ನಡ</div><div class="text-[11.5px] mt-0.5" style="color:#64748B">Kannada</div></button>
+        <button class="lang-tile" data-code="ml"><div class="text-[18px] font-extrabold">മലയാളം</div><div class="text-[11.5px] mt-0.5" style="color:#64748B">Malayalam</div></button>
+        <button class="lang-tile" data-code="od"><div class="text-[18px] font-extrabold">ଓଡ଼ିଆ</div><div class="text-[11.5px] mt-0.5" style="color:#64748B">Odia</div></button>
+        <button class="lang-tile" data-code="bn"><div class="text-[18px] font-extrabold">বাংলা</div><div class="text-[11.5px] mt-0.5" style="color:#64748B">Bengali</div></button>
+      </div>
+    </div>
   </div>
 
   <!-- Heading + Mobile-number row · moved OUT of any hero band per spec · 'Code sent to' + 'Change' inline so the user sees their number cleanly -->
@@ -128,6 +162,36 @@
   </div>
 
   <script>
+    // Language modal · chip taps open the bottom sheet, tile taps persist + close + update the chip · same pattern as phone.html
+    (function(){
+      const map = { hi:'हिंदी', en:'English', hien:'Hinglish', mr:'मराठी', gu:'ગુજરાતી', pa:'ਪੰਜਾਬੀ', te:'తెలుగు', ta:'தமிழ்', kn:'ಕನ್ನಡ', ml:'മലയാളം', od:'ଓଡ଼ିଆ', bn:'বাংলা' };
+      const chip = document.getElementById('langChipBtn');
+      const lbl  = document.getElementById('langCurrent');
+      const bd   = document.getElementById('langBd');
+      const sht  = document.getElementById('langSheet');
+      const cls  = document.getElementById('langClose');
+      function paint(code){
+        if (lbl && map[code]) lbl.textContent = map[code];
+        document.querySelectorAll('.lang-tile').forEach(t => t.classList.toggle('on', t.dataset.code === code));
+      }
+      let code = 'hi';
+      try { code = localStorage.getItem('kkd.lang') || 'hi'; } catch (e) {}
+      paint(code);
+      function open(){ bd.classList.add('open'); sht.classList.add('open'); }
+      function close(){ bd.classList.remove('open'); sht.classList.remove('open'); }
+      chip && chip.addEventListener('click', open);
+      cls && cls.addEventListener('click', close);
+      bd && bd.addEventListener('click', close);
+      document.querySelectorAll('.lang-tile').forEach(t => {
+        t.addEventListener('click', () => {
+          const c = t.dataset.code;
+          try { localStorage.setItem('kkd.lang', c); } catch (e) {}
+          paint(c);
+          setTimeout(close, 180);
+        });
+      });
+    })();
+
     // Reflect saved language in the lang pill
     (function(){
       const map = { hi:'हिंदी', en:'English', hien:'Hinglish', mr:'मराठी', gu:'ગુજરાતી', pa:'ਪੰਜਾਬੀ', te:'తెలుగు', ta:'தமிழ்', kn:'ಕನ್ನಡ', ml:'മലയാളം', od:'ଓଡ଼ିଆ', bn:'বাংলা' };

@@ -1359,10 +1359,10 @@
       </div>
     </section>
 
-    <!-- Featured · stacked layout · TOP: full product name (no ellipsis, wraps freely) + tech sub + rating chip · CENTER: large hero image · BOTTOM: disease + crop uses on left, Shop now CTA on right -->
+    <!-- Featured · stacked layout · TOP: full product name (no ellipsis, wraps freely) + tech sub + rating chip · CENTER: large hero image · BOTTOM: disease + crop uses on left, Shop now CTA on right · roomy trailing padding so the last card doesn't flush against the screen edge when scrolled to end -->
     <section class="mt-8">
       <div class="overflow-x-auto scroll-x" style="scroll-snap-type:x mandatory;scroll-padding-left:16px">
-        <div class="flex gap-4 pb-2" style="padding-left:16px;padding-right:16px">
+        <div class="flex gap-4 pb-2" style="padding-left:16px;padding-right:24px">
 
           <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative flex flex-col" style="width:300px;height:360px;scroll-snap-align:start;background:linear-gradient(155deg,#022C22 0%,#047857 40%,#059669 80%,#10B981 100%);box-shadow:0 14px 30px -10px rgba(4,78,57,0.45)">
             <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(135deg,rgba(255,255,255,0.04) 0,rgba(255,255,255,0.04) 1px,transparent 1px,transparent 14px)"></div>
@@ -1779,14 +1779,12 @@
     </div>
   </div>
 
-  <!-- Variant bottom-sheet · opens when a product card with multiple packaging sizes is tapped on its "2 Options" button · each row carries its own +/- qty stepper so users can mix sizes in one cart op -->
+  <!-- Variant bottom-sheet · opens when a product card with multiple packaging sizes is tapped on its "2 Options" button · each row carries its own thumbnail + +/- qty stepper so users can mix sizes in one cart op -->
   <div id="variantSheet" class="fixed inset-0 z-[95]" style="display:none">
     <div id="variantSheetBackdrop" class="absolute inset-0" style="background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
     <div id="variantSheetPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:78vh;transform:translateY(100%);transition:transform .3s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
       <div class="flex-shrink-0 px-5 pt-5 pb-4 flex items-start gap-3.5" style="border-bottom:1px solid #F1F5F9">
-        <!-- Larger packaging hero so the user sees the product they're sizing · grey shade matches the home-card thumbnail treatment -->
-        <div class="w-20 h-20 rounded-xl flex items-center justify-center flex-shrink-0" style="background:#F8FAFC;border:1px solid #E5E7EB"><img id="vsImg" src="" class="w-16 h-16 object-contain"/></div>
-        <div class="flex-1 min-w-0 pt-1">
+        <div class="flex-1 min-w-0">
           <div id="vsName" class="text-[16.5px] font-extrabold text-[#0F172A] leading-tight">Product</div>
           <div id="vsTech" class="text-[12px] mt-1 leading-snug" style="color:#94A3B8"></div>
         </div>
@@ -2656,7 +2654,6 @@
       const bg     = document.getElementById('variantSheetBackdrop');
       const pnl    = document.getElementById('variantSheetPanel');
       const list   = document.getElementById('vsList');
-      const imgEl  = document.getElementById('vsImg');
       const nameEl = document.getElementById('vsName');
       const techEl = document.getElementById('vsTech');
       const closeBtn = document.getElementById('vsClose');
@@ -2677,8 +2674,12 @@
               + '<button data-vs-act="inc" data-vs-key="'+k+'" class="w-8 h-9 flex items-center justify-center text-white text-[18px] font-bold">+</button>'
             + '</div>'
           : '<button data-vs-act="inc" data-vs-key="'+k+'" class="h-9 px-5 rounded-lg text-white text-[12.5px] font-extrabold flex-shrink-0" style="background:#059669">Add</button>';
-        // Pack-size now renders as the same grey badge used on the home product cards (psize style: F1F5F9 bg, slate text, small radius)
+        // Per-row product thumbnail · same grey card treatment as the home product-card image area · uses the card-level product image (single asset, per-variant images can plug in later via v.img)
+        const imgSrc = v.img || card.dataset.productImg || '';
+        const thumb = '<div class="w-14 h-14 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#F8FAFC;border:1px solid #E5E7EB"><img src="'+imgSrc+'" class="w-12 h-12 object-contain"/></div>';
+        // Pack-size renders as the same grey badge used on the home product cards (psize style: F1F5F9 bg, slate text, small radius)
         return '<div class="flex items-center gap-3 py-3" style="border-bottom:1px solid #F1F5F9">'
+          + thumb
           + '<div class="flex-1 min-w-0">'
             + '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold" style="background:#F1F5F9;color:#475569">'+v.size+'</span>'
             + '<div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">'
@@ -2708,7 +2709,6 @@
       }
       function openFor(card){
         sheet.__card = card;
-        imgEl.src = card.dataset.productImg || '';
         nameEl.textContent = card.dataset.productName || '';
         techEl.textContent = card.dataset.productTech || '';
         render();

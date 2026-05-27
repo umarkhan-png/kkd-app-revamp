@@ -17,12 +17,15 @@
   .pa { font-family: 'Noto Sans Gurmukhi', sans-serif; }
   .ml { font-family: 'Noto Sans Malayalam', sans-serif; }
   .od { font-family: 'Noto Sans Oriya', sans-serif; }
-  html, body { margin: 0; padding: 0; background:#FFFFFF; }
-  .lang-tile { transition: transform .12s ease, background .15s ease, border-color .15s ease; }
-  .lang-tile:active { transform: scale(.97); background:#ECFDF5; border-color:#047857; }
+  html, body { margin: 0; padding: 0; }
+  /* Page · off-white background like orders/category so the tiles stand off as clear cards · matches app design system, no warm-cream tint */
+  body { background:#F8F8F8; color:#0F172A; min-height:100vh; }
+  /* Tile · white card on the slate page · neutral border + soft shadow that mirrors home product-card aesthetic · NO cream/yellow borders */
+  .lang-tile { background:#FFFFFF; border:1px solid #E5E7EB; border-radius:14px; padding:16px; text-align:left; box-shadow:0 1px 3px rgba(15,23,42,0.04); transition: transform .12s ease, border-color .15s ease, box-shadow .15s ease; cursor:pointer; }
+  .lang-tile:active { transform: scale(.97); border-color:#047857; box-shadow:0 4px 14px -4px rgba(4,120,87,0.18); }
 </style>
 </head>
-<body class="min-h-screen pb-6 relative" style="color:#0F172A">
+<body class="min-h-screen pb-6 relative">
 
   <!-- Status bar -->
   <div class="flex items-center justify-between px-6 pt-3 text-[11px] font-bold text-[#0F172A]">
@@ -36,77 +39,76 @@
 
   <!-- Back -->
   <div class="px-6 pt-4">
-    <a href="splash.html" class="w-10 h-10 rounded-full border border-[#EEE5D8] flex items-center justify-center bg-white">
+    <a href="splash.html" class="w-10 h-10 rounded-full border border-[#E5E7EB] flex items-center justify-center bg-white">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     </a>
   </div>
 
   <!-- Title -->
   <div class="px-6 pt-3 pb-5">
-    <div class="hi text-[26px] font-extrabold leading-tight">अपनी भाषा चुनें</div>
-    <div class="text-[15px] font-medium text-[#64748B] mt-1">Choose your language</div>
+    <h1 class="text-[26px] font-extrabold leading-tight text-[#0F172A]">Choose your language</h1>
   </div>
 
-  <!-- 12-language grid · 2 columns · partner-app pattern · tap → confirmation modal -->
+  <!-- 12-language grid · 2 columns · tap → persist + jump to phone.html -->
   <div class="px-5">
     <div class="grid grid-cols-2 gap-3">
 
-      <button data-name="हिंदी" data-sub="Hindi" data-code="hi" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+      <button data-code="hi" class="lang-tile">
         <div class="hi text-[20px] font-extrabold">हिंदी</div>
         <div class="text-[12.5px] text-[#64748B] mt-0.5">Hindi</div>
       </button>
 
-      <button data-name="English" data-sub="English" data-code="en" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+      <button data-code="en" class="lang-tile">
         <div class="text-[20px] font-extrabold">English</div>
         <div class="text-[12.5px] text-[#64748B] mt-0.5">English</div>
       </button>
 
-      <button data-name="Hinglish" data-sub="English + Hindi" data-code="hien" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+      <button data-code="hien" class="lang-tile">
         <div class="text-[20px] font-extrabold">Hinglish</div>
         <div class="text-[12.5px] text-[#64748B] mt-0.5">English + Hindi</div>
       </button>
 
-      <button data-name="मराठी" data-sub="Marathi" data-code="mr" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+      <button data-code="mr" class="lang-tile">
         <div class="hi text-[20px] font-extrabold">मराठी</div>
         <div class="text-[12.5px] text-[#64748B] mt-0.5">Marathi</div>
       </button>
 
-      <button data-name="ગુજરાતી" data-sub="Gujarati" data-code="gu" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+      <button data-code="gu" class="lang-tile">
         <div class="gu text-[20px] font-extrabold">ગુજરાતી</div>
         <div class="text-[12.5px] text-[#64748B] mt-0.5">Gujarati</div>
       </button>
 
-      <button data-name="ਪੰਜਾਬੀ" data-sub="Punjabi" data-code="pa" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+      <button data-code="pa" class="lang-tile">
         <div class="pa text-[20px] font-extrabold">ਪੰਜਾਬੀ</div>
         <div class="text-[12.5px] text-[#64748B] mt-0.5">Punjabi</div>
       </button>
 
-      <button data-name="తెలుగు" data-sub="Telugu" data-code="te" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+      <button data-code="te" class="lang-tile">
         <div class="te text-[20px] font-extrabold">తెలుగు</div>
         <div class="text-[12.5px] text-[#64748B] mt-0.5">Telugu</div>
       </button>
 
-      <button data-name="தமிழ்" data-sub="Tamil" data-code="ta" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+      <button data-code="ta" class="lang-tile">
         <div class="ta text-[20px] font-extrabold">தமிழ்</div>
         <div class="text-[12.5px] text-[#64748B] mt-0.5">Tamil</div>
       </button>
 
-      <button data-name="ಕನ್ನಡ" data-sub="Kannada" data-code="kn" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+      <button data-code="kn" class="lang-tile">
         <div class="kn text-[20px] font-extrabold">ಕನ್ನಡ</div>
         <div class="text-[12.5px] text-[#64748B] mt-0.5">Kannada</div>
       </button>
 
-      <button data-name="മലയാളം" data-sub="Malayalam" data-code="ml" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+      <button data-code="ml" class="lang-tile">
         <div class="ml text-[20px] font-extrabold">മലയാളം</div>
         <div class="text-[12.5px] text-[#64748B] mt-0.5">Malayalam</div>
       </button>
 
-      <button data-name="ଓଡ଼ିଆ" data-sub="Odia" data-code="od" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+      <button data-code="od" class="lang-tile">
         <div class="od text-[20px] font-extrabold">ଓଡ଼ିଆ</div>
         <div class="text-[12.5px] text-[#64748B] mt-0.5">Odia</div>
       </button>
 
-      <button data-name="বাংলা" data-sub="Bengali" data-code="bn" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+      <button data-code="bn" class="lang-tile">
         <div class="bn text-[20px] font-extrabold">বাংলা</div>
         <div class="text-[12.5px] text-[#64748B] mt-0.5">Bengali</div>
       </button>
@@ -115,7 +117,7 @@
   </div>
 
   <script>
-    // Tap a language tile · persist the choice and jump straight to the phone screen (no confirmation modal per spec)
+    // Tap a tile · persist + jump straight to phone (no modal)
     document.querySelectorAll('.lang-tile').forEach(t => {
       t.addEventListener('click', () => {
         try { localStorage.setItem('kkd.lang', t.dataset.code); } catch(e) {}

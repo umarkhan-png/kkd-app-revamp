@@ -50,15 +50,28 @@
   .pay-banner-bonus{font-weight:800;color:#F59E0B}
   .pay-now-btn{flex-shrink:0;padding:7px 14px;background:#059669;color:#FFFFFF;border:0;border-radius:8px;font-size:11.5px;font-weight:800;letter-spacing:0.04em;cursor:pointer;text-decoration:none}
 
-  /* Action row · sits INSIDE the same card · 3-column grid, padded so buttons don't touch the card edges · matches partner-app order-card pattern · Reorder is filled emerald (primary), Invoice + Return are outline secondaries */
+  /* Action row · sits INSIDE the same card · 3-column grid, padded so buttons don't touch the card edges · Reorder is filled emerald (primary), Invoice + Return are SOFT outline secondaries (lighter slate text + 1px hairline border so they don't compete with the primary) */
   .ord-actions{padding:0 14px 14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-  .act-btn{height:38px;display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:10px;font-size:12px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;text-decoration:none;border:1.5px solid transparent;transition:transform .12s ease}
+  .act-btn{height:38px;display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:10px;font-size:12px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;text-decoration:none;border:1px solid transparent;transition:transform .12s ease;background:transparent}
   .act-btn:active{transform:scale(.97)}
   .act-btn i{font-size:11px}
   .act-btn.primary{background:#059669;color:#FFFFFF;border-color:#059669}
   .act-btn.primary i{color:#FFFFFF}
-  .act-btn.outline{background:#FFFFFF;color:#0F172A;border-color:#E5E7EB}
-  .act-btn.outline i{color:#475569}
+  .act-btn.outline{background:#FFFFFF;color:#475569;border-color:#E5E7EB;font-weight:600}
+  .act-btn.outline i{color:#94A3B8}
+
+  /* COD pay bottom sheet · same partner-app pattern as order-details · editable amount + Full shortcut + live coin calc */
+  .modal-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80}
+  .modal-bd.open{opacity:1;pointer-events:auto}
+  .modal-sheet{position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;max-height:88vh;display:flex;flex-direction:column}
+  .modal-sheet.open{transform:translateY(0)}
+  .modal-handle{width:40px;height:4px;border-radius:999px;background:#E2E8F0;margin:10px auto 0}
+  .cod-input-wrap{display:flex;align-items:center;gap:8px;background:#F8FAFC;border:1.5px solid #E5E7EB;border-radius:10px;padding:10px 14px;transition:border-color .15s ease}
+  .cod-input-wrap:focus-within{border-color:#047857;box-shadow:0 0 0 3px rgba(4,120,87,0.12)}
+  .cod-input-wrap .rs{font-size:22px;font-weight:900;color:#0F172A}
+  .cod-input-wrap input{flex:1;font-size:22px;font-weight:900;color:#0F172A;background:transparent;outline:none;border:0;width:0;font-variant-numeric:tabular-nums}
+  .cod-full-btn{padding:6px 10px;border-radius:6px;background:#ECFDF5;color:#047857;font-size:11px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;border:0;cursor:pointer;flex-shrink:0}
+  .cod-coin-strip{margin-top:10px;display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;background:#ECFDF5;border:1px solid #BBF7D0}
 </style></head>
 <body>
 
@@ -112,13 +125,13 @@
           <span class="ord-arrive">Arriving tomorrow <i class="fa-solid fa-chevron-right text-[11px]"></i></span>
         </div>
       </a>
-      <a href="checkout.html?pay=cod" class="pay-banner">
+      <button type="button" class="pay-banner cod-trigger" data-order="KAT-2026-04-1284" data-amount="1430" style="border:0;width:100%;text-align:left;cursor:pointer">
         <div class="pay-banner-text">
           <i class="fa-solid fa-coins text-[13px]" style="color:#F59E0B"></i>
           <span>Pay <span class="pay-banner-amt">&#8377;1,430</span> COD &middot; earn <span class="pay-banner-bonus">+50</span></span>
         </div>
         <span class="pay-now-btn">PAY NOW</span>
-      </a>
+      </button>
     </div>
 
     <!-- DELIVERED · #1198 -->
@@ -139,13 +152,12 @@
             <div class="ord-amt tnum">&#8377;698</div>
             <div class="ord-meta">2 items</div>
           </div>
-          <span class="ord-rate"><i class="fa-solid fa-star text-[12px]" style="color:#F59E0B"></i> Rate products</span>
         </div>
       </a>
       <div class="ord-actions">
         <a href="cart.html?reorder=1198" class="act-btn primary"><i class="fa-solid fa-arrow-rotate-left"></i> Reorder</a>
         <a href="order-details.html?invoice=1198" class="act-btn outline"><i class="fa-solid fa-file-lines"></i> Invoice</a>
-        <a href="order-details.html?return=1198" class="act-btn outline"><i class="fa-solid fa-rotate-left"></i> Return</a>
+        <a href="order-details.html?return=1198" class="act-btn outline"><i class="fa-solid fa-right-left"></i> Return</a>
       </div>
     </div>
 
@@ -168,13 +180,12 @@
             <div class="ord-amt tnum">&#8377;1,205</div>
             <div class="ord-meta">3 items</div>
           </div>
-          <span class="ord-rate"><i class="fa-solid fa-star text-[12px]" style="color:#F59E0B"></i> Rated 4.5</span>
         </div>
       </a>
       <div class="ord-actions">
         <a href="cart.html?reorder=1102" class="act-btn primary"><i class="fa-solid fa-arrow-rotate-left"></i> Reorder</a>
         <a href="order-details.html?invoice=1102" class="act-btn outline"><i class="fa-solid fa-file-lines"></i> Invoice</a>
-        <a href="order-details.html?return=1102" class="act-btn outline"><i class="fa-solid fa-rotate-left"></i> Return</a>
+        <a href="order-details.html?return=1102" class="act-btn outline"><i class="fa-solid fa-right-left"></i> Return</a>
       </div>
     </div>
 
@@ -200,6 +211,41 @@
     </a>
   </nav>
 
+  <!-- COD pay bottom sheet · partner-app pattern · editable amount, Full shortcut, live coin calc · same UX as order-details so the user experiences one consistent COD flow regardless of entry point -->
+  <div id="codBd" class="modal-bd"></div>
+  <div id="codSheet" class="modal-sheet" style="padding:0">
+    <div class="modal-handle"></div>
+    <div class="px-5 pt-3 pb-2 flex items-center justify-between">
+      <div class="leading-tight">
+        <div class="text-[17px] font-extrabold text-[#0F172A]">Pay COD amount</div>
+        <div class="text-[11.5px] font-semibold" style="color:#64748B">Order <span id="codOrderId" class="font-bold text-[#0F172A]">#</span></div>
+      </div>
+      <button id="codClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div class="px-5 pt-3">
+      <div class="text-[10.5px] font-extrabold tracking-[0.06em] uppercase mb-1.5" style="color:#94A3B8">Amount to pay</div>
+      <div class="cod-input-wrap">
+        <span class="rs">&#8377;</span>
+        <input id="codAmtInput" type="number" inputmode="numeric" value="0"/>
+        <button id="codFullBtn" class="cod-full-btn">Full</button>
+      </div>
+      <div class="flex items-center justify-between text-[11.5px] mt-2">
+        <span style="color:#64748B">Total COD: <b class="text-[#0F172A]" id="codTotalLbl">&#8377;0</b></span>
+        <span class="font-extrabold" style="color:#047857">Earn <span id="codCoinsLbl">+0</span> <i class="fa-solid fa-coins text-[10px]" style="color:#F59E0B"></i></span>
+      </div>
+      <div id="codErr" class="text-[11px] font-bold" style="color:#DC2626;display:none;margin-top:4px">Amount cannot exceed total COD due</div>
+      <div class="cod-coin-strip mt-3">
+        <i class="fa-solid fa-coins text-[14px]" style="color:#F59E0B"></i>
+        <div class="text-[11.5px] leading-tight" style="color:#0F172A"><b>1 coin per &#8377;28.60</b> paid &middot; credited within 24 hours</div>
+      </div>
+    </div>
+    <div class="px-5 pt-3 pb-5" style="padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">
+      <button id="codPayBtn" class="w-full h-[50px] rounded-[10px] text-[14px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;letter-spacing:0.04em;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;gap:8px">
+        Pay <span id="codPayBtnAmt" class="tnum">&#8377;0</span> COD
+      </button>
+    </div>
+  </div>
+
   <script>
     // Tab toggle · prototype only (no real filtering)
     document.querySelectorAll('.tab').forEach(t => {
@@ -208,5 +254,58 @@
         t.classList.add('active');
       });
     });
+
+    // COD bottom sheet · the in-transit PAY NOW banner taps open this · the modal stays in sync with the order's amount + coin earn (1 coin per ~₹28.60 to land on +50 for ₹1,430)
+    (function(){
+      const bd     = document.getElementById('codBd');
+      const sheet  = document.getElementById('codSheet');
+      const amtIn  = document.getElementById('codAmtInput');
+      const fullBt = document.getElementById('codFullBtn');
+      const closeBt= document.getElementById('codClose');
+      const payBt  = document.getElementById('codPayBtn');
+      const payAmt = document.getElementById('codPayBtnAmt');
+      const coinLb = document.getElementById('codCoinsLbl');
+      const totLb  = document.getElementById('codTotalLbl');
+      const ordLb  = document.getElementById('codOrderId');
+      const errLb  = document.getElementById('codErr');
+      let codDue = 0;
+      const COIN_RATE = 28.6;  // ~50 coins for ₹1,430 · matches the banner copy
+      function open(orderId, amount){
+        codDue = parseInt(amount, 10) || 0;
+        ordLb.textContent = '#' + orderId;
+        totLb.textContent = '₹' + codDue;
+        amtIn.value = codDue;
+        paint();
+        bd.classList.add('open');
+        sheet.classList.add('open');
+      }
+      function close(){ bd.classList.remove('open'); sheet.classList.remove('open'); }
+      function paint(){
+        const v = parseInt(amtIn.value, 10) || 0;
+        const over = v > codDue;
+        errLb.style.display = over ? 'block' : 'none';
+        payBt.style.opacity = over || v <= 0 ? '0.55' : '1';
+        payBt.style.pointerEvents = over || v <= 0 ? 'none' : 'auto';
+        payAmt.textContent = '₹' + (v || 0);
+        coinLb.textContent = '+' + Math.round((v || 0) / COIN_RATE);
+      }
+      bd.addEventListener('click', close);
+      closeBt.addEventListener('click', close);
+      fullBt.addEventListener('click', () => { amtIn.value = codDue; paint(); });
+      amtIn.addEventListener('input', paint);
+      payBt.addEventListener('click', () => {
+        const v = parseInt(amtIn.value, 10) || 0;
+        if (v <= 0 || v > codDue) return;
+        close();
+        setTimeout(() => alert('COD payment of ₹' + v + ' recorded · ' + Math.round(v/COIN_RATE) + ' coins will credit within 24 hours.'), 240);
+      });
+      // Trigger from any pay-banner with data-amount + data-order
+      document.querySelectorAll('.cod-trigger').forEach(b => {
+        b.addEventListener('click', (e) => {
+          e.preventDefault(); e.stopPropagation();
+          open(b.dataset.order, b.dataset.amount);
+        });
+      });
+    })();
   </script>
 </body></html>

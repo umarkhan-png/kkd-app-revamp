@@ -19,31 +19,29 @@
   .addr-row-bottom{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:#F8FAFC;border-top:1px solid #F1F5F9}
   .addr-change{font-size:12px;font-weight:800;color:#047857;background:transparent;border:0;cursor:pointer;letter-spacing:0.02em;text-transform:uppercase;flex-shrink:0;align-self:flex-start;margin-top:1px}
 
-  /* Payment method · richer · each row shows name + amount + benefit pill · Pay Now is the recommended primary · Partial expands inline with %-pills + breakdown · COD is neutral */
+  /* Payment method · richer · each row shows name + amount + benefit pill · payment-icon column dropped per spec · RECOMMENDED chip sits INLINE next to the name (no longer overlaps the amount) · Partial row has its amount hidden so the %-tray drives the breakdown */
   .pay-card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
   .pay{position:relative;padding:14px;cursor:pointer;border-bottom:1px solid #F1F5F9;transition:background .15s ease;display:block}
   .pay:last-child{border-bottom:0}
   .pay.active{background:#ECFDF5}
   .pay-head{display:flex;align-items:flex-start;gap:12px}
-  .pay-radio{width:20px;height:20px;border-radius:9999px;border:2px solid #CBD5E1;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s ease;margin-top:6px}
+  .pay-radio{width:20px;height:20px;border-radius:9999px;border:2px solid #CBD5E1;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s ease;margin-top:4px}
   .pay.active .pay-radio{border-color:#059669;background:#059669}
   .pay.active .pay-radio::after{content:'';width:8px;height:8px;border-radius:9999px;background:#FFFFFF}
-  .pay-ic{width:42px;height:42px;border-radius:11px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
-  .pay-ic.amber{background:#FEF3C7;color:#B45309}
-  .pay-ic.slate{background:#F1F5F9;color:#475569}
   .pay-body{flex:1;min-width:0;line-height:1.3}
-  .pay-toprow{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+  .pay-toprow{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .pay-name-row{display:inline-flex;align-items:center;gap:7px;flex-wrap:wrap}
   .pay-name{font-size:14.5px;font-weight:800;color:#0F172A;line-height:1.1}
-  .pay-amt{font-size:14.5px;font-weight:800;color:#0F172A;line-height:1;font-variant-numeric:tabular-nums}
+  .pay-amt{font-size:14.5px;font-weight:800;color:#0F172A;line-height:1;font-variant-numeric:tabular-nums;margin-left:auto}
   .pay.active .pay-amt{color:#047857}
   .pay-sub{font-size:11.5px;color:#64748B;margin-top:3px}
   .pay-bene{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:4px 9px;border-radius:9999px;background:#ECFDF5;border:1px solid #A7F3D0;color:#047857;font-size:10.5px;font-weight:800;letter-spacing:0.02em}
   .pay-bene i{font-size:9px}
   .pay-bene.gold{background:#FEF3C7;border-color:#FDE68A;color:#B45309}
-  .pay-best{position:absolute;top:10px;right:14px;background:#FBBF24;color:#0F172A;font-size:9px;font-weight:900;letter-spacing:0.08em;padding:2px 7px;border-radius:9999px;box-shadow:0 2px 6px rgba(251,191,36,0.4)}
+  .pay-best{display:inline-block;background:#FBBF24;color:#0F172A;font-size:9px;font-weight:900;letter-spacing:0.08em;padding:2px 7px;border-radius:9999px;box-shadow:0 2px 6px rgba(251,191,36,0.4)}
 
-  /* Partial expansion tray · shows ONLY when the Partial row is active · 4 percentage pills + a 3-line split breakdown */
-  .partial-tray{display:none;padding:0 14px 14px 50px;background:#ECFDF5}
+  /* Partial expansion tray · shows ONLY when the Partial row is active · 4 percentage pills + a 3-line split breakdown · indent now matches the new icon-less left rail (only the radio width + gap) */
+  .partial-tray{display:none;padding:0 14px 14px 46px;background:#ECFDF5}
   .pay.active.partial-row + .partial-tray{display:block}
   .pp-head{font-size:11px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
   .pp-opts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
@@ -64,9 +62,12 @@
   .bill-total .lbl{font-size:14px;font-weight:800}
   .bill-total .val{font-size:18px;font-weight:800}
 
-  /* Sticky place-order CTA · matches design-system primary */
-  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:10px 12px 14px;z-index:50}
-  .place-btn{width:100%;height:54px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:space-between;padding:0 18px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+  /* Sticky place-order CTA · amount + item count live OUTSIDE the button (left column) · button is roughly 2/3 of the row width on the right · mirrors the cart pattern */
+  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 14px;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .sticky-sum{display:flex;flex-direction:column;line-height:1.15;flex-shrink:0;min-width:90px}
+  .sticky-sum .ttl{font-size:11px;color:#64748B;font-weight:500}
+  .sticky-sum .amt{font-size:20px;font-weight:700;color:#0F172A;letter-spacing:-0.01em;font-variant-numeric:tabular-nums}
+  .place-btn{flex:2;height:52px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 18px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
 </style></head>
 <body>
 
@@ -112,15 +113,16 @@
   <!-- Payment method · 3 rows · Pay Now (5% off, recommended) · Partial (with %-pills + breakdown when active) · Cash on Delivery · each row shows the amount inline -->
   <div class="sec-title">Payment method</div>
   <div class="pay-card">
-    <!-- Pay Now -->
+    <!-- Pay Now · payment icon column dropped · RECOMMENDED chip sits inline next to the name -->
     <label class="pay active" data-pay="paynow">
-      <span class="pay-best">RECOMMENDED</span>
       <span class="pay-head">
         <span class="pay-radio"></span>
-        <span class="pay-ic"><i class="fa-solid fa-bolt"></i></span>
         <span class="pay-body">
           <span class="pay-toprow">
-            <span class="pay-name">Pay Now</span>
+            <span class="pay-name-row">
+              <span class="pay-name">Pay Now</span>
+              <span class="pay-best">RECOMMENDED</span>
+            </span>
             <span class="pay-amt tnum" id="payNowAmt">₹1,805</span>
           </span>
           <div class="pay-sub">UPI &middot; Cards &middot; Net banking &middot; Wallets</div>
@@ -129,15 +131,13 @@
       </span>
     </label>
 
-    <!-- Partial payment · clicking surfaces the tray with %-options + breakdown · earns 2% coins on prepaid amount -->
+    <!-- Partial payment · amount intentionally dropped from the row header · the expandable %-tray drives the breakdown when active -->
     <label class="pay partial-row" data-pay="partial">
       <span class="pay-head">
         <span class="pay-radio"></span>
-        <span class="pay-ic amber"><i class="fa-solid fa-circle-half-stroke"></i></span>
         <span class="pay-body">
           <span class="pay-toprow">
             <span class="pay-name">Partial payment</span>
-            <span class="pay-amt tnum" id="partialSummaryAmt">₹475 + ₹1,425</span>
           </span>
           <div class="pay-sub">Pay part now · balance on delivery</div>
           <span class="pay-bene gold"><i class="fa-solid fa-coins"></i> Earn 2% coins on prepaid amount</span>
@@ -163,7 +163,6 @@
     <label class="pay" data-pay="cod">
       <span class="pay-head">
         <span class="pay-radio"></span>
-        <span class="pay-ic slate"><i class="fa-solid fa-money-bill-wave"></i></span>
         <span class="pay-body">
           <span class="pay-toprow">
             <span class="pay-name">Cash on Delivery</span>
@@ -191,11 +190,14 @@
     </div>
   </div>
 
-  <!-- Sticky place-order -->
+  <!-- Sticky place-order · item count + amount sit OUTSIDE the button (left column) · button is ~2/3 of the row width (flex:2) · pattern matches the cart sticky -->
   <div class="sticky-cta">
+    <div class="sticky-sum">
+      <div class="ttl">3 items</div>
+      <div class="amt tnum" id="ctaAmt">&#8377;1,805</div>
+    </div>
     <button onclick="location.href='order-success.html'" class="place-btn">
-      <span class="tnum" id="ctaAmt">&#8377;1,805</span>
-      <span class="flex items-center gap-1.5">Place order <i class="fa-solid fa-chevron-right text-[12px]"></i></span>
+      Place order <i class="fa-solid fa-chevron-right text-[12px]"></i>
     </button>
   </div>
 
@@ -229,7 +231,6 @@
       document.getElementById('ppPayNow').textContent = fmt(prepaid);
       document.getElementById('ppOnDelivery').textContent = fmt(rest);
       document.getElementById('ppCoins').textContent = '+' + coins + ' coins';
-      document.getElementById('partialSummaryAmt').textContent = fmt(prepaid) + ' + ' + fmt(rest);
     }
 
     // Single-select payment radios · syncs the bill summary and the CTA

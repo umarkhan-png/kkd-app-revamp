@@ -117,16 +117,16 @@
   <!-- Premium hero · top-left language chip (with Change link) + top-right KKD brand-mark (52px squircle with gold accent ring, matches splash treatment) · no back button (user came from language step, onboarding is forward-only) -->
   <section class="hero-card" style="padding-top:52px">
 
-    <!-- Selected language chip · tapping routes back to the language picker so the user can switch without a Back button -->
-    <a href="language.html" class="lang-chip" style="position:absolute;top:36px;left:16px;z-index:4">
+    <!-- KKD brand-mark · 52px squircle · top-LEFT now · anchors the brand at the leading position -->
+    <div class="brand-mark" style="position:absolute;top:30px;left:16px;z-index:4">
+      <img src="../assets/kkd-logo.png" alt="KKD" onerror="this.onerror=null;this.src='https://www.katyayaniorganics.com/wp-content/uploads/2022/06/cropped-logo-3.webp'"/>
+    </div>
+
+    <!-- Selected language chip · top-RIGHT now (swapped with the logo) · tapping routes back to the language picker -->
+    <a href="language.html" class="lang-chip" style="position:absolute;top:36px;right:16px;z-index:4">
       <i class="fa-solid fa-language"></i>
       <span><span id="langCurrent" class="hi">हिंदी</span> &middot; <b>Change</b></span>
     </a>
-
-    <!-- KKD brand-mark · 52px squircle with gold ring (same treatment as splash, scaled down) · prominent enough to anchor the brand, premium enough not to read as a 'small square' -->
-    <div class="brand-mark" style="position:absolute;top:30px;right:16px;z-index:4">
-      <img src="../assets/kkd-logo.png" alt="KKD" onerror="this.onerror=null;this.src='https://www.katyayaniorganics.com/wp-content/uploads/2022/06/cropped-logo-3.webp'"/>
-    </div>
 
     <!-- Product line-up · three bottles, slightly fanned, soft drop-shadow -->
     <div class="hero-row">
@@ -146,10 +146,9 @@
     </div>
   </section>
 
-  <!-- Heading · English only · no Hindi duplicate -->
-  <div class="px-6 mt-7">
+  <!-- Heading · English only · helper line removed per spec -->
+  <div class="px-6 mt-8">
     <h1 class="text-[24px] font-extrabold leading-tight text-[#0F172A]">Enter your mobile number</h1>
-    <p class="text-[13.5px] text-[#64748B] mt-1.5">We'll send a one-time code to verify it's you.</p>
   </div>
 
   <!-- Input · neutral E5E7EB border, clean placeholder · no label, no auto-fetch pill -->

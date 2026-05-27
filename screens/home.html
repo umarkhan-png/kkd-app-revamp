@@ -1113,36 +1113,83 @@
       </div>
     </section>
 
-    <!-- Recently delivered · stand-out treatment · dark emerald header strip + emerald-tinted body bg + thicker border + shadow so it visually separates from the surrounding white cards instead of blending in -->
-    <section class="mt-8 px-4">
-      <div class="rounded-2xl overflow-hidden relative" style="background:linear-gradient(180deg,#ECFDF5 0%,#F0FDF4 100%);border:1.5px solid #059669;box-shadow:0 10px 24px -8px rgba(5,150,105,0.32)">
-        <!-- Solid emerald header strip · checkmark + section label + delivered date · pops the card off the page -->
-        <div class="flex items-center justify-between px-4 py-2.5" style="background:linear-gradient(135deg,#047857 0%,#059669 60%,#10B981 100%);color:#FFFFFF">
-          <div class="flex items-center gap-2">
-            <span class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(255,255,255,0.22)">
-              <i class="fa-solid fa-circle-check text-[12px]" style="color:#FFFFFF"></i>
-            </span>
-            <span class="text-[11.5px] font-extrabold tracking-[0.14em] uppercase">Recently delivered</span>
-          </div>
-          <span class="text-[11px] font-bold" style="color:rgba(255,255,255,0.92)">8 May</span>
-        </div>
-        <div class="absolute -bottom-8 -right-8 w-28 h-28 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(5,150,105,0.12) 0%,transparent 65%)"></div>
-        <div class="relative p-4">
-          <div class="mb-3">
-            <div class="text-[15px] font-extrabold text-[#0F172A] leading-tight">5 items &middot; &#8377;2,140</div>
-          </div>
-          <div class="flex items-center gap-2">
-            <div class="flex gap-1.5 flex-shrink-0">
-              <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 1px 3px rgba(5,150,105,0.1)"><img src="../assets/Chakrawarti_nobg.png" class="w-10 h-10 object-contain"/></div>
-              <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 1px 3px rgba(5,150,105,0.1)"><img src="../assets/Humic_nobg.png" class="w-10 h-10 object-contain"/></div>
-              <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 1px 3px rgba(5,150,105,0.1)"><img src="../assets/AntiVirus_nobg.png" class="w-10 h-10 object-contain"/></div>
-              <div class="w-12 h-12 rounded-lg flex items-center justify-center text-[12px] font-extrabold" style="background:#059669;color:#FFFFFF;border:1px solid #047857;box-shadow:0 2px 6px rgba(5,150,105,0.3)">+2</div>
+    <!-- Previous Orders · horizontal scroll-snap row · supports 1, 2, or more past orders · most recent first · each card mirrors the same emerald-strip treatment so the row reads as one connected unit -->
+    <section class="mt-8">
+      <div class="px-4 mb-3 flex items-baseline justify-between">
+        <h2 class="text-[17px] font-extrabold tracking-tight text-[#0F172A]">Previous Orders</h2>
+        <a href="orders.html" class="nu text-[12.5px] font-bold" style="color:#059669">See all <i class="fa-solid fa-chevron-right text-[9px]"></i></a>
+      </div>
+      <div class="overflow-x-auto scroll-x" style="scroll-snap-type:x mandatory;scroll-padding-left:16px">
+        <div class="flex gap-3 pb-2" style="padding-left:16px;padding-right:16px">
+
+          <!-- Order 1 — most recent -->
+          <div class="flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:300px;scroll-snap-align:start;background:linear-gradient(180deg,#ECFDF5 0%,#F0FDF4 100%);border:1.5px solid #059669;box-shadow:0 10px 24px -8px rgba(5,150,105,0.32)">
+            <div class="flex items-center justify-between px-4 py-2.5" style="background:linear-gradient(135deg,#047857 0%,#059669 60%,#10B981 100%);color:#FFFFFF">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(255,255,255,0.22)">
+                  <i class="fa-solid fa-circle-check text-[12px]" style="color:#FFFFFF"></i>
+                </span>
+                <span class="text-[11px] font-extrabold tracking-[0.14em] uppercase truncate">Delivered &middot; 8 May</span>
+              </div>
+              <span class="text-[10.5px] font-bold flex-shrink-0" style="color:rgba(255,255,255,0.85)">#K2841</span>
             </div>
-            <div class="flex-1"></div>
-            <a href="cart.html?reorder=last" class="nu inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-[13px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF;box-shadow:0 4px 12px -2px rgba(5,150,105,0.4)">
-              <i class="fa-solid fa-arrow-rotate-left text-[11px]" style="color:#FFFFFF"></i> Reorder
-            </a>
+            <div class="absolute -bottom-8 -right-8 w-28 h-28 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(5,150,105,0.12) 0%,transparent 65%)"></div>
+            <div class="relative p-4">
+              <div class="mb-3">
+                <div class="text-[15px] font-extrabold text-[#0F172A] leading-tight">5 items &middot; &#8377;2,140</div>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="flex gap-1.5 flex-shrink-0">
+                  <div class="w-11 h-11 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 1px 3px rgba(5,150,105,0.1)"><img src="../assets/Chakrawarti_nobg.png" class="w-9 h-9 object-contain"/></div>
+                  <div class="w-11 h-11 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 1px 3px rgba(5,150,105,0.1)"><img src="../assets/Humic_nobg.png" class="w-9 h-9 object-contain"/></div>
+                  <div class="w-11 h-11 rounded-lg flex items-center justify-center text-[11px] font-extrabold" style="background:#059669;color:#FFFFFF;border:1px solid #047857;box-shadow:0 2px 6px rgba(5,150,105,0.3)">+3</div>
+                </div>
+                <div class="flex-1"></div>
+                <a href="cart.html?reorder=last" class="nu inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg text-[12.5px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF;box-shadow:0 4px 12px -2px rgba(5,150,105,0.4)">
+                  <i class="fa-solid fa-arrow-rotate-left text-[10.5px]" style="color:#FFFFFF"></i> Reorder
+                </a>
+              </div>
+            </div>
           </div>
+
+          <!-- Order 2 — older · same chrome so the row reads as a continuous strip · tap nav to order details -->
+          <div class="flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:300px;scroll-snap-align:start;background:linear-gradient(180deg,#ECFDF5 0%,#F0FDF4 100%);border:1.5px solid #059669;box-shadow:0 10px 24px -8px rgba(5,150,105,0.32)">
+            <div class="flex items-center justify-between px-4 py-2.5" style="background:linear-gradient(135deg,#047857 0%,#059669 60%,#10B981 100%);color:#FFFFFF">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(255,255,255,0.22)">
+                  <i class="fa-solid fa-circle-check text-[12px]" style="color:#FFFFFF"></i>
+                </span>
+                <span class="text-[11px] font-extrabold tracking-[0.14em] uppercase truncate">Delivered &middot; 18 Apr</span>
+              </div>
+              <span class="text-[10.5px] font-bold flex-shrink-0" style="color:rgba(255,255,255,0.85)">#K2716</span>
+            </div>
+            <div class="absolute -bottom-8 -right-8 w-28 h-28 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(5,150,105,0.12) 0%,transparent 65%)"></div>
+            <div class="relative p-4">
+              <div class="mb-3">
+                <div class="text-[15px] font-extrabold text-[#0F172A] leading-tight">3 items &middot; &#8377;1,180</div>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="flex gap-1.5 flex-shrink-0">
+                  <div class="w-11 h-11 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 1px 3px rgba(5,150,105,0.1)"><img src="../assets/AntiVirus_nobg.png" class="w-9 h-9 object-contain"/></div>
+                  <div class="w-11 h-11 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 1px 3px rgba(5,150,105,0.1)"><img src="../assets/Humic_nobg.png" class="w-9 h-9 object-contain"/></div>
+                  <div class="w-11 h-11 rounded-lg flex items-center justify-center text-[11px] font-extrabold" style="background:#059669;color:#FFFFFF;border:1px solid #047857;box-shadow:0 2px 6px rgba(5,150,105,0.3)">+1</div>
+                </div>
+                <div class="flex-1"></div>
+                <a href="cart.html?reorder=k2716" class="nu inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg text-[12.5px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF;box-shadow:0 4px 12px -2px rgba(5,150,105,0.4)">
+                  <i class="fa-solid fa-arrow-rotate-left text-[10.5px]" style="color:#FFFFFF"></i> Reorder
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- "View all orders" tail tile · keeps the row from looking truncated when there are 3+ orders · routes to full Orders page -->
+          <a href="orders.html" class="nu flex-shrink-0 rounded-2xl flex flex-col items-center justify-center text-center px-5" style="width:140px;scroll-snap-align:start;background:#FFFFFF;border:1.5px dashed #BBF7D0;color:#047857">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center mb-2" style="background:#ECFDF5;border:1.5px solid #BBF7D0">
+              <i class="fa-solid fa-clock-rotate-left text-[15px]" style="color:#059669"></i>
+            </div>
+            <div class="text-[12.5px] font-extrabold leading-tight">View all<br/>orders</div>
+          </a>
+
         </div>
       </div>
     </section>
@@ -1246,25 +1293,32 @@
       </div>
     </section>
 
-    <!-- Featured · wider text column (68%) · smaller floating product image (40% max-w, more pulled-out) · names guaranteed single-line via whitespace-nowrap · disease line shortened + nowrap so it never breaks · larger readable type · OFF chip sits as small superscript-like badge tucked right next to strike-MRP (saves a row) -->
+    <!-- Featured · stacked layout · TOP: full product name (no ellipsis, wraps freely) + tech sub + rating chip · CENTER: large hero image · BOTTOM: disease + crop uses on left, Shop now CTA on right -->
     <section class="mt-8">
       <div class="overflow-x-auto scroll-x" style="scroll-snap-type:x mandatory;scroll-padding-left:16px">
         <div class="flex gap-4 pb-2" style="padding-left:16px;padding-right:16px">
 
-          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:310px;height:340px;scroll-snap-align:start;background:linear-gradient(155deg,#022C22 0%,#047857 40%,#059669 80%,#10B981 100%);box-shadow:0 14px 30px -10px rgba(4,78,57,0.45)">
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative flex flex-col" style="width:300px;height:360px;scroll-snap-align:start;background:linear-gradient(155deg,#022C22 0%,#047857 40%,#059669 80%,#10B981 100%);box-shadow:0 14px 30px -10px rgba(4,78,57,0.45)">
             <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(135deg,rgba(255,255,255,0.04) 0,rgba(255,255,255,0.04) 1px,transparent 1px,transparent 14px)"></div>
             <div class="absolute pointer-events-none" style="top:-20px;right:-30px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.28) 0%,transparent 65%)"></div>
-            <div class="absolute pointer-events-none" style="bottom:-30px;left:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,0.55) 0%,transparent 70%)"></div>
-            <span class="absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
-              <i class="fa-solid fa-star text-[8px]" style="color:#FBBF24"></i> 4.8
-            </span>
-            <img src="../assets/Chakrawarti_nobg.png" class="absolute" style="right:6px;bottom:6px;max-height:96%;max-width:60%;filter:drop-shadow(0 18px 32px rgba(0,0,0,0.55))"/>
-            <div class="relative p-4 flex flex-col justify-between h-full" style="width:50%">
-              <div>
-                <div class="font-extrabold leading-tight mt-2 text-white whitespace-nowrap overflow-hidden text-ellipsis" style="font-size:19px">Chakrawarti ZC</div>
-                <div class="text-[11px] mt-1.5 leading-tight whitespace-nowrap overflow-hidden text-ellipsis" style="color:rgba(255,255,255,0.72)">Chloran. + Lambda-Cy.</div>
+            <div class="absolute pointer-events-none" style="bottom:-30px;left:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,0.55) 0%,transparent 70%)"></div>
+            <!-- TOP block: name (wraps) + tech sub + rating chip aligned to the right -->
+            <div class="relative px-4 pt-4 pb-2 flex items-start gap-2" style="z-index:2">
+              <div class="flex-1 min-w-0">
+                <div class="font-extrabold leading-tight text-white" style="font-size:19px">Chakrawarti ZC</div>
+                <div class="text-[11.5px] mt-1 leading-snug" style="color:rgba(255,255,255,0.72)">Chloran. + Lambda-Cy.</div>
               </div>
-              <div class="-my-1">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold flex-shrink-0" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
+                <i class="fa-solid fa-star text-[9px]" style="color:#FBBF24"></i> 4.8
+              </span>
+            </div>
+            <!-- CENTER: large hero image, centered horizontally -->
+            <div class="relative flex-1 flex items-center justify-center px-4" style="z-index:2">
+              <img src="../assets/Chakrawarti_nobg.png" class="block" style="max-height:100%;max-width:78%;filter:drop-shadow(0 18px 32px rgba(0,0,0,0.55))"/>
+            </div>
+            <!-- BOTTOM: disease + crop uses on left, Shop now button on right -->
+            <div class="relative px-4 pb-4 pt-2 flex items-end gap-2.5" style="z-index:2">
+              <div class="flex-1 min-w-0">
                 <div class="text-[12.5px] font-extrabold leading-snug whitespace-nowrap" style="color:#FBBF24">
                   <i class="fa-solid fa-shield-virus text-[11px]"></i> Kills sucking pests
                 </div>
@@ -1272,26 +1326,28 @@
                   <i class="fa-solid fa-seedling text-[10.5px]"></i> Tomato, Chilli, Brinjal
                 </div>
               </div>
-              <div>
-                <button class="w-full inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-full text-[13px] font-extrabold whitespace-nowrap" style="background:#FFFFFF;color:#064E3B">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#064E3B"></i></button>
-              </div>
+              <button class="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 rounded-full text-[12.5px] font-extrabold whitespace-nowrap flex-shrink-0" style="background:#FFFFFF;color:#064E3B">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#064E3B"></i></button>
             </div>
           </a>
 
-          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:310px;height:340px;scroll-snap-align:start;background:linear-gradient(155deg,#1E1B4B 0%,#4338CA 40%,#6D28D9 80%,#8B5CF6 100%);box-shadow:0 14px 30px -10px rgba(49,46,129,0.45)">
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative flex flex-col" style="width:300px;height:360px;scroll-snap-align:start;background:linear-gradient(155deg,#1E1B4B 0%,#4338CA 40%,#6D28D9 80%,#8B5CF6 100%);box-shadow:0 14px 30px -10px rgba(49,46,129,0.45)">
             <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(135deg,rgba(255,255,255,0.04) 0,rgba(255,255,255,0.04) 1px,transparent 1px,transparent 14px)"></div>
             <div class="absolute pointer-events-none" style="top:-20px;right:-30px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.22) 0%,transparent 65%)"></div>
-            <div class="absolute pointer-events-none" style="bottom:-30px;left:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,0.55) 0%,transparent 70%)"></div>
-            <span class="absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
-              <i class="fa-solid fa-star text-[8px]" style="color:#FBBF24"></i> 4.9
-            </span>
-            <img src="../assets/AntiVirus_nobg.png" class="absolute" style="right:6px;bottom:6px;max-height:96%;max-width:60%;filter:drop-shadow(0 18px 32px rgba(0,0,0,0.55))"/>
-            <div class="relative p-4 flex flex-col justify-between h-full" style="width:50%">
-              <div>
-                <div class="font-extrabold leading-tight mt-2 text-white whitespace-nowrap overflow-hidden text-ellipsis" style="font-size:19px">Antivirus</div>
-                <div class="text-[11px] mt-1.5 leading-tight whitespace-nowrap overflow-hidden text-ellipsis" style="color:rgba(255,255,255,0.72)">Anti-viral biostimulant</div>
+            <div class="absolute pointer-events-none" style="bottom:-30px;left:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,0.55) 0%,transparent 70%)"></div>
+            <div class="relative px-4 pt-4 pb-2 flex items-start gap-2" style="z-index:2">
+              <div class="flex-1 min-w-0">
+                <div class="font-extrabold leading-tight text-white" style="font-size:19px">Antivirus</div>
+                <div class="text-[11.5px] mt-1 leading-snug" style="color:rgba(255,255,255,0.72)">Anti-viral biostimulant</div>
               </div>
-              <div class="-my-1">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold flex-shrink-0" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
+                <i class="fa-solid fa-star text-[9px]" style="color:#FBBF24"></i> 4.9
+              </span>
+            </div>
+            <div class="relative flex-1 flex items-center justify-center px-4" style="z-index:2">
+              <img src="../assets/AntiVirus_nobg.png" class="block" style="max-height:100%;max-width:78%;filter:drop-shadow(0 18px 32px rgba(0,0,0,0.55))"/>
+            </div>
+            <div class="relative px-4 pb-4 pt-2 flex items-end gap-2.5" style="z-index:2">
+              <div class="flex-1 min-w-0">
                 <div class="text-[12.5px] font-extrabold leading-snug whitespace-nowrap" style="color:#FBBF24">
                   <i class="fa-solid fa-shield-virus text-[11px]"></i> Stops leaf-virus
                 </div>
@@ -1299,26 +1355,28 @@
                   <i class="fa-solid fa-seedling text-[10.5px]"></i> Tomato, Chilli, Papaya
                 </div>
               </div>
-              <div>
-                <button class="w-full inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-full text-[13px] font-extrabold whitespace-nowrap" style="background:#FFFFFF;color:#4338CA">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#4338CA"></i></button>
-              </div>
+              <button class="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 rounded-full text-[12.5px] font-extrabold whitespace-nowrap flex-shrink-0" style="background:#FFFFFF;color:#4338CA">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#4338CA"></i></button>
             </div>
           </a>
 
-          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative" style="width:310px;height:340px;scroll-snap-align:start;background:linear-gradient(155deg,#042F2E 0%,#115E59 40%,#0F766E 80%,#14B8A6 100%);box-shadow:0 14px 30px -10px rgba(19,78,74,0.45)">
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative flex flex-col" style="width:300px;height:360px;scroll-snap-align:start;background:linear-gradient(155deg,#042F2E 0%,#115E59 40%,#0F766E 80%,#14B8A6 100%);box-shadow:0 14px 30px -10px rgba(19,78,74,0.45)">
             <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(135deg,rgba(255,255,255,0.04) 0,rgba(255,255,255,0.04) 1px,transparent 1px,transparent 14px)"></div>
             <div class="absolute pointer-events-none" style="top:-20px;right:-30px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.22) 0%,transparent 65%)"></div>
-            <div class="absolute pointer-events-none" style="bottom:-30px;left:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(20,184,166,0.55) 0%,transparent 70%)"></div>
-            <span class="absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
-              <i class="fa-solid fa-star text-[8px]" style="color:#FBBF24"></i> 4.7
-            </span>
-            <img src="../assets/Humic_nobg.png" class="absolute" style="right:6px;bottom:6px;max-height:96%;max-width:60%;filter:drop-shadow(0 18px 32px rgba(0,0,0,0.55))"/>
-            <div class="relative p-4 flex flex-col justify-between h-full" style="width:50%">
-              <div>
-                <div class="font-extrabold leading-tight mt-2 text-white whitespace-nowrap overflow-hidden text-ellipsis" style="font-size:19px">Humic + Fulvic</div>
-                <div class="text-[11px] mt-1.5 leading-tight whitespace-nowrap overflow-hidden text-ellipsis" style="color:rgba(255,255,255,0.72)">Humic 12% + Fulvic 8%</div>
+            <div class="absolute pointer-events-none" style="bottom:-30px;left:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(20,184,166,0.55) 0%,transparent 70%)"></div>
+            <div class="relative px-4 pt-4 pb-2 flex items-start gap-2" style="z-index:2">
+              <div class="flex-1 min-w-0">
+                <div class="font-extrabold leading-tight text-white" style="font-size:19px">Humic + Fulvic</div>
+                <div class="text-[11.5px] mt-1 leading-snug" style="color:rgba(255,255,255,0.72)">Humic 12% + Fulvic 8%</div>
               </div>
-              <div class="-my-1">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold flex-shrink-0" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
+                <i class="fa-solid fa-star text-[9px]" style="color:#FBBF24"></i> 4.7
+              </span>
+            </div>
+            <div class="relative flex-1 flex items-center justify-center px-4" style="z-index:2">
+              <img src="../assets/Humic_nobg.png" class="block" style="max-height:100%;max-width:78%;filter:drop-shadow(0 18px 32px rgba(0,0,0,0.55))"/>
+            </div>
+            <div class="relative px-4 pb-4 pt-2 flex items-end gap-2.5" style="z-index:2">
+              <div class="flex-1 min-w-0">
                 <div class="text-[12.5px] font-extrabold leading-snug whitespace-nowrap" style="color:#FBBF24">
                   <i class="fa-solid fa-shield-virus text-[11px]"></i> Boosts roots &amp; soil
                 </div>
@@ -1326,9 +1384,7 @@
                   <i class="fa-solid fa-seedling text-[10.5px]"></i> Works on all crops
                 </div>
               </div>
-              <div>
-                <button class="w-full inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-full text-[13px] font-extrabold whitespace-nowrap" style="background:#FFFFFF;color:#134E4A">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#134E4A"></i></button>
-              </div>
+              <button class="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 rounded-full text-[12.5px] font-extrabold whitespace-nowrap flex-shrink-0" style="background:#FFFFFF;color:#134E4A">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#134E4A"></i></button>
             </div>
           </a>
 
@@ -1493,16 +1549,13 @@
       </div>
     </section>
 
-    <!-- End-of-page · simple Jump-to-top button, no long hint text · sits a bit lower (mt-10) so it has breathing room from the section above -->
-    <!-- Jump-to-top · always visible, pushed lower so it sits closer to the KKD brand illustration -->
-    <div id="endHint" class="px-4 mt-20 mb-2 flex items-center justify-center">
-      <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="nu inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12.5px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0;box-shadow:0 2px 8px -3px rgba(5,150,105,0.25)">
-        <i class="fa-solid fa-arrow-up text-[11px]" style="color:#047857"></i> Jump to top
-      </button>
-    </div>
-
-    <!-- Brand illustration footer — top 60px fades from transparent so the image's grey-cream sky blends smoothly into the white app bg above (no harsh seam) · zero bottom margin so it sits flush against the nav bar -->
-    <section style="background:#FFFFFF;line-height:0;margin-top:24px">
+    <!-- Brand illustration footer with "Jump to top" pill overlayed on the illustration's top edge so it visually sits on top of the artwork (not floating in white space above) -->
+    <section id="endHint" class="relative" style="background:#FFFFFF;line-height:0;margin-top:64px">
+      <div class="absolute left-0 right-0 flex items-center justify-center" style="top:0;transform:translateY(-50%);z-index:5;line-height:1">
+        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="nu inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12.5px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0;box-shadow:0 6px 18px -4px rgba(5,150,105,0.35)">
+          <i class="fa-solid fa-arrow-up text-[11px]" style="color:#047857"></i> Jump to top
+        </button>
+      </div>
       <img src="../assets/brand-illustration.png" class="w-full block" alt="Katyayani Krishi Direct · Direct from Manufacturer · Crafted for Better Farming" style="-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 60px,#000 100%);mask-image:linear-gradient(180deg,transparent 0%,#000 60px,#000 100%);display:block;margin-bottom:-1px"/>
     </section>
 
@@ -2236,10 +2289,11 @@
           const shadow      = sel ? '0 8px 18px -4px rgba(5,150,105,0.4)' : '0 1px 3px rgba(0,0,0,0.05)';
           const labelColor  = sel ? '#FFFFFF' : '#0F172A';
           // Tick lives INSIDE the image area at top-right so the outer overflow:hidden doesn't clip it
+          // Unselected state shows a blank check-circle so the tile reads as a selectable affordance
           const tick        = sel
             ? '<span class="absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center" style="background:#059669;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff;z-index:2">'
               + '<i class="fa-solid fa-check text-white text-[9px]"></i></span>'
-            : '';
+            : '<span class="absolute top-1 right-1 w-5 h-5 rounded-full" style="background:rgba(255,255,255,0.95);border:1.5px solid #CBD5E1;box-shadow:0 1px 3px rgba(15,23,42,0.18);z-index:2"></span>';
           return '<button type="button" data-crop-key="'+key+'" class="flex-shrink-0 rounded-xl overflow-hidden transition-all"'
             + ' style="background:'+tileBg+';border:1.5px solid '+borderColor+';box-shadow:'+shadow+';width:84px;height:100px;display:flex;flex-direction:column">'
             + '<div class="relative w-full" style="height:78px;background:'+m.bg+';overflow:hidden;flex-shrink:0">'
@@ -2343,8 +2397,8 @@
           const shadow      = sel ? '0 6px 14px -4px rgba(5,150,105,0.32)' : '0 1px 3px rgba(0,0,0,0.05)';
           const labelColor  = sel ? '#047857' : '#0F172A';
           const tick = sel
-            ? '<span class="absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center" style="background:#059669;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff;z-index:2"><i class="fa-solid fa-check text-white text-[9px]"></i></span>'
-            : '';
+            ? '<span class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center" style="background:#059669;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff;z-index:2"><i class="fa-solid fa-check text-white text-[9px]"></i></span>'
+            : '<span class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full" style="background:rgba(255,255,255,0.95);border:1.5px solid #CBD5E1;box-shadow:0 1px 3px rgba(15,23,42,0.18);z-index:2"></span>';
           return '<button type="button" data-sheet-crop="'+key+'" class="rounded-xl overflow-hidden transition-all"'
             + ' style="background:#FFFFFF;border:1.5px solid '+borderColor+';box-shadow:'+shadow+';height:120px;display:flex;flex-direction:column">'
             + '<div class="relative w-full" style="height:90px;background:'+m.bg+';overflow:hidden;flex-shrink:0">'

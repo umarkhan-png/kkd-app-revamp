@@ -14,45 +14,33 @@
   body { min-height: 100vh; background: #FFFFFF; color: #0F172A; }
   .tnum { font-variant-numeric: tabular-nums; }
 
-  /* Top bar · KKD logo (image only, no white squircle backing) + language chip · neat and not heavy on the eye */
+  /* Top bar · KKD logo (image only, no white squircle, no 'Katyayani' wordmark) + language chip · clean and minimal */
   .topbar { padding: 12px 16px 4px; display: flex; align-items: center; justify-content: space-between; }
-  .brand-logo { display: inline-flex; align-items: center; gap: 8px; }
-  .brand-logo img { width: 34px; height: 34px; object-fit: contain; }
-  .brand-logo .name { font-size: 14px; font-weight: 900; color: #047857; letter-spacing: -0.01em; }
-  .lang-pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px; border-radius: 9999px; background: #ECFDF5; border: 1px solid #BBF7D0; color: #047857; font-size: 11.5px; font-weight: 700; text-decoration: none; }
-  .lang-pill i { font-size: 11px; }
-  .lang-pill b { font-weight: 800; color: #0F172A; }
+  .brand-logo img { width: 36px; height: 36px; object-fit: contain; display: block; }
+  .lang-pill { display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; color: #0F172A; font-size: 12.5px; font-weight: 700; text-decoration: none; transition: border-color .15s ease, transform .12s ease; }
+  .lang-pill:active { transform: scale(.97); border-color: #047857; }
+  .lang-pill .globe { font-size: 12px; color: #475569; }
+  .lang-pill .chev { font-size: 9px; color: #94A3B8; }
 
   /* OTP cell · airy 64px boxes with soft border + focus ring · filled state stays emerald */
   .otp-box { width: 64px; height: 68px; border: 2px solid #E5E7EB; border-radius: 14px; font-size: 30px; font-weight: 800; text-align: center; outline: none; background: #FFFFFF; transition: border-color .15s, background .15s, box-shadow .15s; font-variant-numeric: tabular-nums; color:#0F172A; }
   .otp-box.filled { border-color: #047857; background: #ECFDF5; }
   .otp-box.active { border-color: #059669; box-shadow: 0 0 0 3px rgba(5,150,105,0.15); }
 
-  /* Resend pill buttons · only show after the timer expires · body class is `timer-done` (not `.resend-expired`, which used to share its name with the descendant class and made the body invisible when toggled) */
-  .resend-btn { display:inline-flex; align-items:center; gap:6px; height:38px; padding:0 14px; border-radius:9999px; font-size:12.5px; font-weight:700; border:1.5px solid; transition:transform .12s ease; cursor:pointer; text-decoration:none; }
-  .resend-btn:active { transform: scale(.97); }
-  .resend-wa { background:#FFFFFF; color:#25D366; border-color:rgba(37,211,102,0.55); }
-  .resend-sms{ background:#FFFFFF; color:#047857; border-color:rgba(4,120,87,0.35); }
+  /* Resend pill buttons · both use the SAME emerald outline treatment so the styling sits in the design system · only the icons differ (WhatsApp icon stays in its brand green) */
+  .resend-btn { display:inline-flex; align-items:center; gap:6px; height:38px; padding:0 14px; border-radius:9999px; font-size:12.5px; font-weight:700; border:1.5px solid #BBF7D0; background:#FFFFFF; color:#047857; transition:transform .12s ease; cursor:pointer; text-decoration:none; }
+  .resend-btn:active { transform: scale(.97); border-color:#047857; }
   .resend-live    { display:flex; }
   .resend-options { display:none; }
   body.timer-done .resend-live    { display:none; }
   body.timer-done .resend-options { display:flex; }
 
-  /* Rotating fact/news strip · single card, 3-4 items auto-cycle every 4s · fades in/out · gives the user something to read while they wait for the OTP */
-  .fact-strip { margin: 16px; background:#FFFFFF; border:1px solid #E5E7EB; border-radius:14px; box-shadow:0 1px 3px rgba(15,23,42,0.04); overflow:hidden; position:relative; min-height:78px; }
-  .fact-item { display:flex; align-items:center; gap:12px; padding:14px; opacity:0; pointer-events:none; position:absolute; inset:0; transition:opacity .35s ease; }
+  /* Rotating fact / news rotator · bare text, no card box, no slider dots · sits lower in the layout so it's clearly secondary to the OTP cells */
+  .fact-rotator { margin: 28px 24px 0; position:relative; min-height:36px; }
+  .fact-item { display:flex; align-items:center; justify-content:center; gap:8px; opacity:0; pointer-events:none; position:absolute; inset:0; transition:opacity .35s ease; text-align:center; }
   .fact-item.on { opacity:1; pointer-events:auto; position:relative; }
-  .fact-ic { width:42px; height:42px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px; }
-  .fact-ic.emerald { background:#ECFDF5; color:#047857; }
-  .fact-ic.amber   { background:#FEF3C7; color:#B45309; }
-  .fact-ic.indigo  { background:#E0E7FF; color:#3730A3; }
-  .fact-ic.slate   { background:#F1F5F9; color:#475569; }
-  .fact-body { flex:1; line-height:1.3; min-width:0; }
-  .fact-tag { font-size:10px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:#94A3B8; }
-  .fact-headline { font-size:13.5px; font-weight:700; color:#0F172A; margin-top:1px; }
-  .fact-dots { position:absolute; bottom:8px; right:14px; display:flex; gap:5px; }
-  .fact-dots .d { width:5px; height:5px; border-radius:9999px; background:#E2E8F0; transition:all .25s ease; }
-  .fact-dots .d.on { width:18px; background:#047857; }
+  .fact-item i { font-size:13px; color:#047857; flex-shrink:0; }
+  .fact-item span { font-size:12.5px; font-weight:600; color:#64748B; line-height:1.4; }
 </style>
 </head>
 <body class="min-h-screen pb-28">
@@ -67,15 +55,15 @@
     </div>
   </div>
 
-  <!-- Top bar · KKD logo (just the mark, no white square behind it) + language chip · clean and non-distracting -->
+  <!-- Top bar · just the KKD logo image (Katyayani wordmark dropped) + language chip · matches the phone-screen pattern -->
   <div class="topbar">
     <div class="brand-logo">
       <img src="../assets/kkd-logo.png" alt="KKD" onerror="this.onerror=null;this.src='https://www.katyayaniorganics.com/wp-content/uploads/2022/06/cropped-logo-3.webp'"/>
-      <span class="name">Katyayani</span>
     </div>
     <a href="language.html" class="lang-pill">
-      <i class="fa-solid fa-language"></i>
-      <b id="langCurrent" class="hi">हिंदी</b>
+      <i class="fa-solid fa-language globe"></i>
+      <span class="hi" id="langCurrent">हिंदी</span>
+      <i class="fa-solid fa-chevron-down chev"></i>
     </a>
   </div>
 
@@ -118,38 +106,19 @@
     </div>
   </div>
 
-  <!-- Rotating fact / feature / news strip · auto-cycles every 4s · keeps the user engaged while they wait · replaces the emerald hero with deflecting shield animation -->
-  <div class="fact-strip" id="factStrip">
-    <div class="fact-item on" data-fact="0">
-      <span class="fact-ic emerald"><i class="fa-solid fa-truck-fast"></i></span>
-      <div class="fact-body">
-        <div class="fact-tag">Free delivery</div>
-        <div class="fact-headline">Free shipping on every order above &#8377;500</div>
-      </div>
+  <!-- Rotating fact / news rotator · bare centred text, no card box, no progress dots · sits lower so it doesn't compete with the OTP cells -->
+  <div class="fact-rotator" id="factStrip">
+    <div class="fact-item on">
+      <i class="fa-solid fa-truck-fast"></i><span>Free shipping on every order above &#8377;500</span>
     </div>
-    <div class="fact-item" data-fact="1">
-      <span class="fact-ic amber"><i class="fa-solid fa-headset"></i></span>
-      <div class="fact-body">
-        <div class="fact-tag">Krishi Doctor</div>
-        <div class="fact-headline">Free expert calls in your language &middot; 7am to 10pm</div>
-      </div>
+    <div class="fact-item">
+      <i class="fa-solid fa-headset"></i><span>Krishi Doctor expert calls &middot; free, 7am – 10pm</span>
     </div>
-    <div class="fact-item" data-fact="2">
-      <span class="fact-ic indigo"><i class="fa-solid fa-sparkles"></i></span>
-      <div class="fact-body">
-        <div class="fact-tag">Just launched</div>
-        <div class="fact-headline">Humic + Fulvic 98 &middot; for stronger roots &amp; soil</div>
-      </div>
+    <div class="fact-item">
+      <i class="fa-solid fa-sparkles"></i><span>New launch: Humic + Fulvic 98 &middot; stronger roots</span>
     </div>
-    <div class="fact-item" data-fact="3">
-      <span class="fact-ic slate"><i class="fa-solid fa-shield-halved"></i></span>
-      <div class="fact-body">
-        <div class="fact-tag">100% genuine</div>
-        <div class="fact-headline">CIB-CR licensed &middot; sealed straight from the factory</div>
-      </div>
-    </div>
-    <div class="fact-dots" id="factDots">
-      <span class="d on"></span><span class="d"></span><span class="d"></span><span class="d"></span>
+    <div class="fact-item">
+      <i class="fa-solid fa-shield-halved"></i><span>CIB-CR licensed &middot; sealed straight from the factory</span>
     </div>
   </div>
 
@@ -200,26 +169,15 @@
       try { if (cells[0]) cells[0].focus({ preventScroll: true }); } catch (e) {}
     })();
 
-    // Rotating fact strip · cycles every 4s · pauses on tap so the user can read
+    // Rotating fact strip · plain text rotator · cycles every 4s (no progress dots)
     (function(){
       const items = Array.from(document.querySelectorAll('.fact-item'));
-      const dots  = Array.from(document.querySelectorAll('#factDots .d'));
-      let i = 0, paused = false;
-      function go(next){
+      let i = 0;
+      setInterval(() => {
         items[i].classList.remove('on');
-        if (dots[i]) dots[i].classList.remove('on');
-        i = next;
+        i = (i + 1) % items.length;
         items[i].classList.add('on');
-        if (dots[i]) dots[i].classList.add('on');
-      }
-      const tick = setInterval(() => { if (!paused) go((i + 1) % items.length); }, 4000);
-      const strip = document.getElementById('factStrip');
-      if (strip) {
-        strip.addEventListener('touchstart', () => { paused = true; }, { passive: true });
-        strip.addEventListener('touchend',   () => { setTimeout(() => { paused = false; }, 1500); }, { passive: true });
-        strip.addEventListener('mousedown',  () => { paused = true; });
-        strip.addEventListener('mouseup',    () => { setTimeout(() => { paused = false; }, 1500); });
-      }
+      }, 4000);
     })();
   </script>
 </body>

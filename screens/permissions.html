@@ -11,12 +11,12 @@
   * { font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   html, body { margin: 0; padding: 0; }
   body { min-height: 100vh; background: #F8F8F8; color: #0F172A; }
-  /* Pin drop + saturated emerald radar rings · clearly green now (not the muted 15%-alpha rings) */
-  @keyframes pinDrop { 0% { transform: translateY(-26px); opacity: 0; } 60% { transform: translateY(6px); opacity: 1; } 100% { transform: translateY(0); opacity: 1; } }
-  .pin-hero { animation: pinDrop .9s ease-out .15s both; }
-  @keyframes ringPulse { 0% { transform: scale(.55); opacity: .75; } 100% { transform: scale(1.75); opacity: 0; } }
-  .ring { animation: ringPulse 2.2s ease-out infinite; border-radius: 50%; }
-  .ring.r2 { animation-delay: 1.1s; }
+  /* Pin · gentle drop · soft emerald wave rings (slower, lighter alpha) — calm, not aggressive */
+  @keyframes pinDrop { 0% { transform: translateY(-22px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+  .pin-hero { animation: pinDrop .9s cubic-bezier(.22,1,.36,1) .15s both; }
+  @keyframes ringPulse { 0% { transform: scale(.65); opacity: .35; } 100% { transform: scale(1.55); opacity: 0; } }
+  .ring { animation: ringPulse 3.2s cubic-bezier(.22,1,.36,1) infinite; border-radius: 50%; }
+  .ring.r2 { animation-delay: 1.6s; }
   /* Bullet card · white card with hairline E5E7EB border + soft shadow (matches design-system .card spec) */
   .perm-bullet { display:flex; align-items:center; gap:12px; padding:14px; background:#FFFFFF; border:1px solid #E5E7EB; border-radius:14px; box-shadow:0 1px 3px rgba(15,23,42,0.04); }
   .perm-ic { width:40px; height:40px; border-radius:10px; background:#ECFDF5; color:#047857; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:17px; }
@@ -42,20 +42,20 @@
     </button>
   </div>
 
-  <!-- Hero · animated map pin · radar rings repainted with saturated emerald · drop ripple uses an emerald-tinted layer instead of barely-visible 15%-alpha -->
+  <!-- Hero · gentle pin drop · soft emerald wave rings (lighter alpha, slower pulse, no aggressive saturation) -->
   <div class="px-6 mt-4">
     <div class="relative mx-auto pin-hero flex items-center justify-center" style="width:172px;height:172px">
-      <span class="absolute ring" style="inset:0;background:rgba(5,150,105,0.30)"></span>
-      <span class="absolute ring r2" style="inset:0;background:rgba(5,150,105,0.22)"></span>
-      <div class="relative w-[112px] h-[112px] rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%);box-shadow:0 18px 32px -8px rgba(4,120,87,0.5)">
+      <span class="absolute ring" style="inset:0;background:rgba(16,185,129,0.18)"></span>
+      <span class="absolute ring r2" style="inset:0;background:rgba(16,185,129,0.12)"></span>
+      <div class="relative w-[112px] h-[112px] rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%);box-shadow:0 18px 32px -10px rgba(4,120,87,0.4)">
         <svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="3"/></svg>
       </div>
     </div>
   </div>
 
-  <!-- Heading + clear "why" intro · the bullets below now read as the real reasons, not just labels -->
+  <!-- Heading · 'Share your exact location' so it ties to the precise-pin imagery · 'Why' intro under it -->
   <div class="px-6 mt-3 text-center">
-    <h1 class="text-[24px] font-extrabold leading-tight text-[#0F172A]">Share your location</h1>
+    <h1 class="text-[24px] font-extrabold leading-tight text-[#0F172A]">Share your exact location</h1>
     <p class="text-[13px] mt-1.5" style="color:#64748B">We use your location to:</p>
   </div>
 

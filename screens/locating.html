@@ -4,35 +4,26 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>KKD · Locating</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   * { font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-  .hi { font-family: 'Noto Sans Devanagari', sans-serif; }
   html, body { margin: 0; padding: 0; overflow: hidden; }
-  body { min-height: 100vh; background: linear-gradient(180deg, #ECFDF5 0%, #FAF7F2 60%, #ECFDF5 100%); color: #0F172A; }
+  /* Design-system page bg · no busy dotted map grid · a single soft emerald glow sits behind the pin (.ground-glow) so the eye lands there naturally */
+  body { min-height: 100vh; background:#F8F8F8; color:#0F172A; }
 
-  /* Map background · faint dotted grid that lives behind the radar so it reads as an actual map · pure CSS, no asset */
-  .map-grid { background-image:
-      radial-gradient(circle at 1px 1px, rgba(4,120,87,0.18) 1px, transparent 1px),
-      radial-gradient(circle at 1px 1px, rgba(4,120,87,0.10) 1px, transparent 1px);
-    background-size: 24px 24px, 8px 8px;
-    background-position: 0 0, 12px 12px; }
+  /* Gentle radial glow under the pin · replaces the previous dotted map background · single soft layer, no harsh stripes */
+  .ground-glow { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:380px; height:380px; border-radius:50%; background:radial-gradient(circle, rgba(16,185,129,0.18) 0%, rgba(16,185,129,0.07) 40%, transparent 72%); pointer-events:none; }
 
-  /* Radar · concentric rings + sweeping conic-gradient that rotates · saturated emerald so it reads clearly green (no blue tint) · radar fades out smoothly when found */
-  @keyframes radarSweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  .radar-sweep { background: conic-gradient(from 0deg, rgba(5,150,105,0) 0deg, rgba(5,150,105,0.75) 45deg, rgba(5,150,105,0) 60deg); animation: radarSweep 1.8s linear infinite; transition: opacity .6s ease; }
-  @keyframes ringPulse { 0% { transform: scale(.6); opacity: .8; } 100% { transform: scale(2.0); opacity: 0; } }
-  .ring-pulse { animation: ringPulse 2.4s ease-out infinite; transition: opacity .6s ease; }
-  .ring-pulse.r2 { animation-delay: 1.2s; }
-  /* Detecting elements smoothly fade out when found · no hard display:none cut · the radar gracefully dissolves into the pin */
-  body.found .radar-sweep, body.found .ring-pulse { opacity: 0; pointer-events: none; }
+  /* Soft expanding rings · lighter alpha + slower pulse · no aggressive scale-up · easing matches the permissions screen */
+  @keyframes ringPulse { 0% { transform: scale(.7); opacity: .35; } 100% { transform: scale(1.7); opacity: 0; } }
+  .ring-pulse { animation: ringPulse 3.4s cubic-bezier(.22,1,.36,1) infinite; transition: opacity .6s ease; border-radius:50%; }
+  .ring-pulse.r2 { animation-delay: 1.7s; }
+  body.found .ring-pulse { opacity: 0; pointer-events: none; }
 
-  /* Pin found state · gentle scale-up (no overshoot bounce) + fade · feels softer than the previous .34,1.56,.64,1 bounce */
-  @keyframes pinIn { 0% { transform: translate(-50%,-50%) scale(.85); opacity: 0; } 100% { transform: translate(-50%,-50%) scale(1); opacity: 1; } }
-  .pin-found { opacity: 0; pointer-events: none; transform: translate(-50%,-50%) scale(.85); transition: opacity .55s ease, transform .55s cubic-bezier(.22,1,.36,1); }
-  body.found .pin-found { opacity: 1; pointer-events: auto; transform: translate(-50%,-50%) scale(1); }
-  body.found .radar-center { background: linear-gradient(135deg,#047857 0%,#10B981 100%); transition: background .45s ease; }
+  /* Pin · gentle scale-up fade · no spring, no bounce */
+  .pin-core { transition: transform .55s cubic-bezier(.22,1,.36,1), box-shadow .55s ease; }
+  body.found .pin-core { transform: scale(1.06); box-shadow:0 18px 36px -10px rgba(4,120,87,0.45); }
 
   /* Status label · longer cross-fade so the swap reads smooth, not abrupt */
   .status-line { transition: opacity .55s ease; }
@@ -40,9 +31,7 @@
   body.found .status-found  { opacity: 1; pointer-events: auto; }
   .status-found { opacity: 0; pointer-events: none; transition: opacity .55s ease .15s; }
 
-  /* Leaf burst on found · gentle drift outwards · runs slightly slower with a softer cubic ease so it feels organic, not sprung */
-  @keyframes leafFly { 0% { transform: translate(0,0) rotate(0deg); opacity: 0; } 25% { opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; } }
-  body.found .leaf { animation: leafFly 1.8s cubic-bezier(.22,1,.36,1) both; }
+  @keyframes dotPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(.8); } }
 </style>
 </head>
 <body class="min-h-screen relative flex flex-col items-center">
@@ -57,44 +46,18 @@
     </div>
   </div>
 
-  <!-- Radar/map stage · centred · fills the upper half of the screen -->
+  <!-- Pin stage · centred · upper half of the screen · clean, no map-grid clutter -->
   <div class="relative flex-1 w-full flex items-center justify-center" style="max-height:60vh">
-    <!-- Map dotted grid -->
-    <div class="absolute inset-0 map-grid"></div>
+    <!-- Soft emerald glow behind the pin · replaces the dotted-grid map -->
+    <span class="ground-glow"></span>
 
-    <!-- Concentric pulse rings (during detect) · clearer emerald saturation, no blue tint -->
-    <span class="absolute ring-pulse rounded-full" style="width:260px;height:260px;background:rgba(5,150,105,0.28)"></span>
-    <span class="absolute ring-pulse r2 rounded-full" style="width:260px;height:260px;background:rgba(5,150,105,0.22)"></span>
+    <!-- Two slow ring pulses · lighter alpha so the screen feels calm, not radar-aggressive -->
+    <span class="absolute ring-pulse" style="width:240px;height:240px;background:rgba(16,185,129,0.16)"></span>
+    <span class="absolute ring-pulse r2" style="width:240px;height:240px;background:rgba(16,185,129,0.10)"></span>
 
-    <!-- Radar circle · holds the sweep + center pin -->
-    <div class="relative rounded-full flex items-center justify-center" style="width:240px;height:240px;background:radial-gradient(circle,rgba(4,120,87,0.10) 0%,rgba(4,120,87,0.04) 60%,rgba(4,120,87,0) 75%);box-shadow:0 0 0 1.5px rgba(4,120,87,0.18), 0 0 0 60px rgba(4,120,87,0.04)">
-      <!-- Sweep -->
-      <div class="absolute rounded-full radar-sweep" style="width:100%;height:100%;mask:radial-gradient(circle,transparent 25%,#000 26%);-webkit-mask:radial-gradient(circle,transparent 25%,#000 26%)"></div>
-
-      <!-- Center · while detecting it's a faint emerald ring · turns into the found pin (below) -->
-      <div class="radar-center relative rounded-full flex items-center justify-center" style="width:64px;height:64px;background:#FFFFFF;border:2px solid #047857;z-index:2">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
-      </div>
-
-      <!-- "Found" pin (only renders when body.found is set) -->
-      <div class="pin-found absolute" style="top:50%;left:50%;transform:translate(-50%,-50%);z-index:3">
-        <div class="relative">
-          <div class="w-[80px] h-[80px] rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%);box-shadow:0 14px 30px -8px rgba(4,120,87,0.55)">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="3"/></svg>
-          </div>
-          <!-- Tick badge tucked at top-right · signals successful detection -->
-          <span class="absolute -top-1 -right-1 w-8 h-8 rounded-full flex items-center justify-center" style="background:#FBBF24;border:2.5px solid #FFFFFF;box-shadow:0 4px 10px rgba(251,191,36,0.5)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
-          </span>
-        </div>
-      </div>
-
-      <!-- Leaf burst · 5 small leaves fly outward when location is found -->
-      <span class="leaf absolute text-[18px]" style="top:50%;left:50%;--dx:-90px;--dy:-110px;--rot:-180deg">🌱</span>
-      <span class="leaf absolute text-[18px]" style="top:50%;left:50%;--dx:90px;--dy:-100px;--rot:160deg">🌾</span>
-      <span class="leaf absolute text-[18px]" style="top:50%;left:50%;--dx:-100px;--dy:80px;--rot:-120deg">🌿</span>
-      <span class="leaf absolute text-[18px]" style="top:50%;left:50%;--dx:100px;--dy:90px;--rot:140deg">🌱</span>
-      <span class="leaf absolute text-[18px]" style="top:50%;left:50%;--dx:0;--dy:-130px;--rot:0deg">✨</span>
+    <!-- Central pin · same emerald gradient as permissions hero · scales up gently when location is found -->
+    <div class="pin-core relative rounded-full flex items-center justify-center" style="width:112px;height:112px;background:linear-gradient(135deg,#047857 0%,#10B981 100%);box-shadow:0 14px 28px -10px rgba(4,120,87,0.35);z-index:2">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="3"/></svg>
     </div>
   </div>
 
@@ -118,12 +81,8 @@
     </div>
   </div>
 
-  <style>
-    @keyframes dotPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(.8); } }
-  </style>
-
   <script>
-    // Auto-flip from detecting → found after ~2.4s · in real app this fires on a successful geolocation callback · CTA dropped per spec, the screen auto-routes home with a soft 'Taking you home…' line
+    // Auto-flip from detecting → found after ~2.4s · in real app this fires on a successful geolocation callback · auto-routes home with a soft 'Taking you home…' line
     setTimeout(() => {
       document.body.classList.add('found');
       try { localStorage.setItem('kkd.village', 'Mahidpur'); localStorage.setItem('kkd.district', 'Ujjain'); } catch (e) {}

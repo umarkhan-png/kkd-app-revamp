@@ -206,10 +206,13 @@
   .sticky-search { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: background .35s ease, border-color .35s ease, padding .25s; }
   .sticky-cats { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: background .35s ease, border-color .35s ease, padding .25s; }
   .sticky-search input { transition: background .35s ease, border-color .35s ease; }
-  /* At end of page · paint sticky search + categories with emerald so the bottom-of-page state visually echoes the brand colour (matches the at-end FAB / categories pop) */
-  body.at-end .sticky-search { background: linear-gradient(180deg,#ECFDF5 0%,#D1FAE5 100%) !important; border-bottom-color: #BBF7D0 !important; }
-  body.at-end .sticky-search input { background: #FFFFFF !important; border: 1.5px solid #BBF7D0 !important; }
-  body.at-end .sticky-cats { background: linear-gradient(180deg,#D1FAE5 0%,#ECFDF5 100%) !important; border-bottom-color: #BBF7D0 !important; }
+  /* At end of page · paint sticky search + categories with the SAME bold emerald gradient as the top theme so the bottom of the screen mirrors the top section · white text/icons inside for legibility on the dark fill */
+  body.at-end .sticky-search { background: linear-gradient(180deg, #047857 0%, #059669 55%, #10B981 100%) !important; border-bottom-color: rgba(255,255,255,0.18) !important; }
+  body.at-end .sticky-search input { background: rgba(255,255,255,0.95) !important; border: 1.5px solid rgba(255,255,255,0.4) !important; box-shadow: 0 4px 12px -4px rgba(4,120,87,0.45); }
+  body.at-end .sticky-cats { background: linear-gradient(180deg, #059669 0%, #10B981 100%) !important; border-bottom-color: rgba(255,255,255,0.18) !important; }
+  /* Labels inside the at-end category strip flip to white · circles get a translucent white fill so the SVG/emoji glyphs read on dark · selected/active treatments still pop */
+  body.at-end .sticky-cats .cat-label { color: #FFFFFF !important; }
+  body.at-end .sticky-cats .cat-circle { background: rgba(255,255,255,0.92) !important; border-color: rgba(255,255,255,0.7) !important; box-shadow: 0 6px 14px -4px rgba(4,120,87,0.5) !important; }
 
   /* Floating cart bar above bottom nav (full-width by default) */
   .cart-fab { position: fixed; bottom: 76px; left: 12px; right: 12px; z-index: 45; transition: left .3s ease, right .3s ease, padding .3s ease, border-radius .3s ease, transform .3s ease; }
@@ -1090,9 +1093,7 @@
               <span class="text-[10.5px] font-extrabold" style="color:#047857">28% off</span>
             </div>
             <div class="mt-2">
-              <button class="variant-btn w-full h-8 rounded-lg text-[12.5px] font-extrabold inline-flex items-center justify-center gap-1.5" style="background:#ECFDF5;color:#047857;border:1.5px solid #059669">
-                <i class="fa-solid fa-layer-group text-[10.5px]"></i> 2 Options
-              </button>
+              <button class="variant-btn w-full h-8 rounded-lg text-[12.5px] font-semibold text-white" style="background:#059669">2 Options</button>
             </div>
           </div>
         </a>
@@ -1125,9 +1126,7 @@
               <span class="text-[10.5px] font-extrabold" style="color:#047857">28% off</span>
             </div>
             <div class="mt-2">
-              <button class="variant-btn w-full h-8 rounded-lg text-[12.5px] font-extrabold inline-flex items-center justify-center gap-1.5" style="background:#ECFDF5;color:#047857;border:1.5px solid #059669">
-                <i class="fa-solid fa-layer-group text-[10.5px]"></i> 2 Options
-              </button>
+              <button class="variant-btn w-full h-8 rounded-lg text-[12.5px] font-semibold text-white" style="background:#059669">2 Options</button>
             </div>
           </div>
         </a>
@@ -1311,9 +1310,7 @@
                 <span class="text-[10.5px] font-extrabold" style="color:#047857">28% off</span>
               </div>
               <div class="mt-2">
-                <button class="variant-btn w-full h-10 rounded-lg text-[13px] font-extrabold inline-flex items-center justify-center gap-1.5" style="background:#ECFDF5;color:#047857;border:1.5px solid #059669">
-                  <i class="fa-solid fa-layer-group text-[11px]"></i> 2 Options
-                </button>
+                <button class="variant-btn w-full h-10 rounded-lg text-[13.5px] font-semibold text-white" style="background:#059669">2 Options</button>
               </div>
             </div>
           </a>
@@ -1804,21 +1801,18 @@
   <div id="variantSheet" class="fixed inset-0 z-[95]" style="display:none">
     <div id="variantSheetBackdrop" class="absolute inset-0" style="background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
     <div id="variantSheetPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:78vh;transform:translateY(100%);transition:transform .3s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
-      <div class="flex-shrink-0 px-5 pt-5 pb-3 flex items-start gap-3" style="border-bottom:1px solid #F1F5F9">
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#F8FAFC;border:1px solid #E5E7EB"><img id="vsImg" src="" class="w-10 h-10 object-contain"/></div>
-        <div class="flex-1 min-w-0">
-          <div id="vsName" class="text-[15.5px] font-extrabold text-[#0F172A] leading-tight truncate">Product</div>
-          <div id="vsTech" class="text-[11.5px] mt-0.5 leading-tight truncate" style="color:#94A3B8"></div>
-          <div class="text-[10.5px] font-extrabold tracking-[0.12em] uppercase mt-1" style="color:#047857">Choose packaging</div>
+      <div class="flex-shrink-0 px-5 pt-5 pb-4 flex items-start gap-3.5" style="border-bottom:1px solid #F1F5F9">
+        <!-- Larger packaging hero so the user sees the product they're sizing · grey shade matches the home-card thumbnail treatment -->
+        <div class="w-20 h-20 rounded-xl flex items-center justify-center flex-shrink-0" style="background:#F8FAFC;border:1px solid #E5E7EB"><img id="vsImg" src="" class="w-16 h-16 object-contain"/></div>
+        <div class="flex-1 min-w-0 pt-1">
+          <div id="vsName" class="text-[16.5px] font-extrabold text-[#0F172A] leading-tight">Product</div>
+          <div id="vsTech" class="text-[12px] mt-1 leading-snug" style="color:#94A3B8"></div>
         </div>
         <button id="vsClose" class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:#F1F5F9">
           <i class="fa-solid fa-xmark text-[14px]" style="color:#475569"></i>
         </button>
       </div>
-      <div id="vsList" class="px-5 py-1 overflow-y-auto" style="flex:1"></div>
-      <div class="flex-shrink-0 px-5 py-3" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)">
-        <button id="vsDone" class="w-full h-12 rounded-xl text-white text-[14px] font-extrabold" style="background:#059669">Done</button>
-      </div>
+      <div id="vsList" class="px-5 py-1 overflow-y-auto" style="flex:1;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)"></div>
     </div>
   </div>
 
@@ -2684,7 +2678,6 @@
       const nameEl = document.getElementById('vsName');
       const techEl = document.getElementById('vsTech');
       const closeBtn = document.getElementById('vsClose');
-      const doneBtn  = document.getElementById('vsDone');
       if (!sheet) return;
 
       const cartQty = {};
@@ -2702,10 +2695,11 @@
               + '<button data-vs-act="inc" data-vs-key="'+k+'" class="w-8 h-9 flex items-center justify-center text-white text-[18px] font-bold">+</button>'
             + '</div>'
           : '<button data-vs-act="inc" data-vs-key="'+k+'" class="h-9 px-5 rounded-lg text-white text-[12.5px] font-extrabold flex-shrink-0" style="background:#059669">Add</button>';
+        // Pack-size now renders as the same grey badge used on the home product cards (psize style: F1F5F9 bg, slate text, small radius)
         return '<div class="flex items-center gap-3 py-3" style="border-bottom:1px solid #F1F5F9">'
           + '<div class="flex-1 min-w-0">'
-            + '<div class="text-[14px] font-extrabold text-[#0F172A] leading-tight">'+v.size+'</div>'
-            + '<div class="flex items-baseline gap-1.5 mt-1 flex-wrap">'
+            + '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold" style="background:#F1F5F9;color:#475569">'+v.size+'</span>'
+            + '<div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">'
               + '<span class="text-[16px] font-extrabold tnum text-[#0F172A]">₹'+v.price+'</span>'
               + (v.mrp ? '<span class="text-[11.5px] tnum line-through" style="color:#94A3B8">₹'+v.mrp+'</span>' : '')
               + (v.off ? '<span class="text-[10.5px] font-extrabold" style="color:#047857">'+v.off+'% off</span>' : '')
@@ -2749,7 +2743,6 @@
       }
       bg.addEventListener('click', close);
       closeBtn.addEventListener('click', close);
-      doneBtn.addEventListener('click', close);
 
       document.addEventListener('click', function(e){
         const btn = e.target.closest('.variant-btn');

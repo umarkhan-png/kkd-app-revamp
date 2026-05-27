@@ -326,23 +326,19 @@
     </div>
   </div>
 
-  <!-- Variant bottom-sheet · cards with 2+ packaging sizes route here · each row is its own +/- qty stepper -->
+  <!-- Variant bottom-sheet · cards with 2+ packaging sizes route here · each row is its own +/- qty stepper · header carries a large product hero so the user sees what they're sizing · no Done button (changes auto-persist) -->
   <div id="variantSheet" class="fixed inset-0" style="display:none;z-index:95">
     <div id="variantSheetBackdrop" style="position:absolute;inset:0;background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
     <div id="variantSheetPanel" style="position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;display:flex;flex-direction:column;max-height:78vh;transform:translateY(100%);transition:transform .3s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
-      <div style="padding:20px 20px 12px;border-bottom:1px solid #F1F5F9;display:flex;gap:12px;align-items:flex-start;flex-shrink:0">
-        <div style="width:48px;height:48px;border-radius:8px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex-shrink:0"><img id="vsImg" src="" style="width:40px;height:40px;object-fit:contain"/></div>
-        <div style="flex:1;min-width:0">
-          <div id="vsName" style="font-size:15.5px;font-weight:800;color:#0F172A;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Product</div>
-          <div id="vsTech" style="font-size:11.5px;color:#94A3B8;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
-          <div style="font-size:10.5px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#047857;margin-top:4px">Choose packaging</div>
+      <div style="padding:20px 20px 16px;border-bottom:1px solid #F1F5F9;display:flex;gap:14px;align-items:flex-start;flex-shrink:0">
+        <div style="width:80px;height:80px;border-radius:12px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex-shrink:0"><img id="vsImg" src="" style="width:64px;height:64px;object-fit:contain"/></div>
+        <div style="flex:1;min-width:0;padding-top:4px">
+          <div id="vsName" style="font-size:16.5px;font-weight:800;color:#0F172A;line-height:1.18">Product</div>
+          <div id="vsTech" style="font-size:12px;color:#94A3B8;margin-top:4px;line-height:1.3"></div>
         </div>
         <button id="vsClose" style="width:36px;height:36px;border-radius:50%;background:#F1F5F9;border:0;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-xmark" style="font-size:14px;color:#475569"></i></button>
       </div>
-      <div id="vsList" style="padding:0 20px;overflow-y:auto;flex:1"></div>
-      <div style="padding:12px 20px;border-top:1px solid #F1F5F9;flex-shrink:0;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)">
-        <button id="vsDone" style="width:100%;height:48px;border-radius:12px;background:#059669;color:#FFFFFF;font-size:14px;font-weight:800;border:0">Done</button>
-      </div>
+      <div id="vsList" style="padding:0 20px;overflow-y:auto;flex:1;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)"></div>
     </div>
   </div>
 
@@ -702,7 +698,7 @@
       const idx = filteredIndex(id);
       // Products with 2+ packaging sizes show a "2 Options" pill that opens the variant sheet · Add/qty stepper only used for single-size SKUs
       if (Array.isArray(p.variants) && p.variants.length > 1) {
-        return '<button class="padd variant-btn" style="background:#ECFDF5;color:#047857;border:1.5px solid #059669"><i class="fa-solid fa-layer-group" style="font-size:11px;margin-right:6px"></i>'+p.variants.length+' Options</button>';
+        return '<button class="padd variant-btn">'+p.variants.length+' Options</button>';
       }
       if (qty > 0) {
         return '<div class="padd in-cart">'
@@ -966,7 +962,6 @@
       const nameEl  = document.getElementById('vsName');
       const techEl  = document.getElementById('vsTech');
       const closeBtn = document.getElementById('vsClose');
-      const doneBtn  = document.getElementById('vsDone');
       if (!sheet) return;
       const cartQty = {};
       function variantKey(card, idx){ return (card.dataset.productName || 'p') + '__' + idx; }
@@ -980,10 +975,11 @@
               + '<button data-vs-act="inc" data-vs-key="'+k+'" style="width:32px;height:36px;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:18px;font-weight:700;background:transparent;border:0">+</button>'
             + '</div>'
           : '<button data-vs-act="inc" data-vs-key="'+k+'" style="height:36px;padding:0 20px;border-radius:8px;background:#059669;color:#FFFFFF;font-size:12.5px;font-weight:800;border:0;flex-shrink:0">Add</button>';
+        // Pack-size renders as the same grey badge used on home product cards (psize style: F1F5F9 bg, slate text, small radius)
         return '<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #F1F5F9">'
           + '<div style="flex:1;min-width:0">'
-            + '<div style="font-size:14px;font-weight:800;color:#0F172A;line-height:1.15">'+v.size+'</div>'
-            + '<div style="display:flex;align-items:baseline;gap:6px;margin-top:4px;flex-wrap:wrap">'
+            + '<span style="display:inline-flex;align-items:center;padding:2px 10px;border-radius:5px;background:#F1F5F9;color:#475569;font-size:11.5px;font-weight:600">'+v.size+'</span>'
+            + '<div style="display:flex;align-items:baseline;gap:6px;margin-top:6px;flex-wrap:wrap">'
               + '<span style="font-size:16px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums">₹'+v.price+'</span>'
               + (v.mrp ? '<span style="font-size:11.5px;color:#94A3B8;text-decoration:line-through;font-variant-numeric:tabular-nums">₹'+v.mrp+'</span>' : '')
               + (v.off ? '<span style="font-size:10.5px;font-weight:800;color:#047857">'+v.off+'% off</span>' : '')
@@ -1027,7 +1023,6 @@
       }
       bg.addEventListener('click', close);
       closeBtn.addEventListener('click', close);
-      doneBtn.addEventListener('click', close);
       document.addEventListener('click', function(e){
         const btn = e.target.closest('.variant-btn');
         if (!btn) return;

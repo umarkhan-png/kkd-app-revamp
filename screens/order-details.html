@@ -13,7 +13,7 @@
   /* Sticky header */
   .top-stk{position:sticky;top:0;z-index:30;background:#FFFFFF;border-bottom:1px solid #F1F5F9}
 
-  /* Status hero */
+  /* Status hero · slightly toned down · colour swaps via body.state-* */
   .hero{padding:22px 16px 18px;text-align:center;border-bottom:1px solid #E5E7EB;transition:all .25s ease}
   body.state-delivered .hero{background:linear-gradient(180deg,#ECFDF5,#D1FAE5);border-color:#A7F3D0}
   body.state-transit  .hero{background:linear-gradient(180deg,#FFF7ED,#FEF3C7);border-color:#FCD34D}
@@ -27,29 +27,38 @@
   .hero-sub{font-size:13px;color:#475569;margin-top:5px}
   .hero-sub b{color:#0F172A;font-weight:700}
 
-  .sec-title{margin:18px 16px 8px;font-size:11px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
-  .card{margin:0 16px 10px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden}
-  /* Products + Bill stacked tight · single visual group with hairline divider */
-  .card-stack > .card + .card{margin-top:0;border-top-width:0;border-top-left-radius:0;border-top-right-radius:0}
-  .card-stack > .card:not(:last-child){border-bottom-left-radius:0;border-bottom-right-radius:0}
-  .card-stack-divider{margin:0 16px;height:1px;background:#F1F5F9}
+  /* Section title · matches home aesthetic (11.5px font-extrabold tracking-[0.06em] uppercase muted slate) */
+  .sec-title{margin:16px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
+  .card{margin:0 16px 10px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
 
-  /* Product row · qty × price on left, line total on right · no Reorder/Add buttons per product per spec */
-  .prod{padding:12px 12px 12px;display:flex;gap:12px;align-items:flex-start;border-bottom:1px dashed #F1F5F9}
-  .prod:last-child{border-bottom:0}
-  .prod-img{width:64px;height:64px;border-radius:10px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:6px;flex-shrink:0;border:1px solid #E5E7EB;text-decoration:none}
+  /* Unified Products + Bill card · single card, internal hairline dividers separate products from each other and from the bill block · matches home product-card density */
+  .prod-row{padding:12px;display:flex;gap:12px;align-items:flex-start;border-bottom:1px solid #F1F5F9}
+  .prod-img{width:56px;height:56px;border-radius:10px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0;border:1px solid #E5E7EB;text-decoration:none}
   .prod-img img{max-width:100%;max-height:100%;object-fit:contain}
   .prod-info{flex:1;min-width:0;line-height:1.25}
-  .prod-name{font-size:14.5px;font-weight:700;color:#0F172A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;text-decoration:none}
-  .prod-sub{font-size:11.5px;color:#94A3B8;margin-top:2px}
-  .prod-line{display:flex;align-items:baseline;gap:6px;margin-top:6px;font-size:12.5px;color:#475569}
-  .prod-line .p{font-weight:800;color:#0F172A}
-  .prod-line .x{color:#94A3B8;font-weight:600}
-  .prod-total{flex-shrink:0;text-align:right;line-height:1.1}
-  .prod-total-amt{font-size:15.5px;font-weight:900;color:#0F172A}
-  .prod-total-lbl{font-size:9.5px;font-weight:800;letter-spacing:0.06em;color:#64748B;text-transform:uppercase;margin-bottom:3px}
-  /* Rating row · delivered only */
-  .rate-row-wrap{padding:10px 12px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#F8FAFC;border-top:1px solid #F1F5F9}
+  /* Name typography matches home product-card .pname (14.5px font-bold) · tech sub matches .psub (11px slate-muted) */
+  .prod-name{font-size:14.5px;font-weight:700;color:#0F172A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;text-decoration:none;line-height:1.2}
+  .prod-tech{font-size:11.5px;color:#94A3B8;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  /* Pack size badge · same grey badge style as home product cards (.psize) · F1F5F9 bg, slate text, small radius · sits on its own line below the name/tech */
+  .prod-size{display:inline-flex;align-items:center;padding:2px 8px;border-radius:5px;background:#F1F5F9;color:#475569;font-size:10.5px;font-weight:600;margin-top:7px}
+  /* Calculation row · single line · per-pc × Qty on left, line total on right · no "Amount" label */
+  .prod-calc{display:flex;align-items:baseline;justify-content:space-between;margin-top:8px;gap:8px}
+  .prod-calc .lhs{font-size:12.5px;color:#475569;font-weight:600}
+  .prod-calc .lhs .pc{font-weight:800;color:#0F172A}
+  .prod-calc .lhs .qty{display:inline-flex;align-items:center;padding:1px 7px;border-radius:4px;background:#ECFDF5;color:#047857;font-size:10.5px;font-weight:800;letter-spacing:0.02em;margin-left:4px}
+  .prod-calc .rhs{font-size:15.5px;font-weight:800;color:#0F172A;line-height:1}
+  /* Bill section · sits inside the SAME card after the products · stronger top divider so it visually separates from products */
+  .bill-section{padding:13px 14px;border-top:1px solid #E5E7EB;background:#FAFAFA}
+  .bill-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:3px 0}
+  .bill-row .lbl{color:#64748B}
+  .bill-row .val{color:#0F172A;font-weight:600}
+  .bill-row .val.green{color:#047857;font-weight:700}
+  .bill-total{border-top:1px dashed #CBD5E1;margin-top:8px;padding-top:10px;display:flex;align-items:center;justify-content:space-between}
+  .bill-total .lbl{font-size:14px;font-weight:700;color:#0F172A}
+  .bill-total .val{font-size:18px;font-weight:800;color:#0F172A}
+
+  /* Rating row · single sliver under products · only renders for delivered */
+  .rate-row-wrap{padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#FFFFFF;border-top:1px solid #F1F5F9}
   .star-btn{background:transparent;border:0;padding:0;cursor:pointer;transition:transform .15s ease}
   .star-btn:active{transform:scale(.85)}
   .star-btn i{font-size:18px;color:#CBD5E1;transition:color .2s ease}
@@ -59,12 +68,12 @@
 
   /* Address */
   .addr{padding:14px;display:flex;gap:12px}
-  .addr-ic{width:36px;height:36px;border-radius:50%;background:#ECFDF5;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#047857}
+  .addr-ic{width:36px;height:36px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#047857}
   .addr-body{flex:1;line-height:1.25}
   .addr-name{font-size:14px;font-weight:700;color:#0F172A}
   .addr-line{font-size:12px;color:#64748B;margin-top:2px}
 
-  /* Vertical timeline · sits above the Payment section */
+  /* Timeline */
   .tl{padding:14px}
   .tl-item{position:relative;padding-left:38px;padding-bottom:14px}
   .tl-item:last-child{padding-bottom:0}
@@ -79,29 +88,21 @@
   .tl-item.cur .tl-title{color:#B45309}
   .tl-item.upcoming .tl-title{color:#94A3B8}
 
-  /* Bill · GST removed per spec */
-  .bill{padding:14px}
-  .bill-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:3px 0}
-  .bill-row .lbl{color:#64748B}
-  .bill-row .val{color:#0F172A;font-weight:600}
-  .bill-row .val.green{color:#047857;font-weight:700}
-  .bill-total{border-top:1px dashed #E5E7EB;margin-top:8px;padding-top:10px;display:flex;align-items:center;justify-content:space-between}
-  .bill-total .lbl{font-size:14px;font-weight:700;color:#0F172A}
-  .bill-total .val{font-size:18px;font-weight:900;color:#0F172A}
-
-  /* Payment · partial-paid layout with breakdown + Pay-remaining CTA · regular layout for fully paid */
+  /* Payment fully-paid · transaction-id chip beneath the source */
   .pay-row{padding:14px;display:flex;align-items:center;gap:12px}
   .pay-ic{width:40px;height:40px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;color:#047857;flex-shrink:0}
-  .pay-info{flex:1;line-height:1.2}
+  .pay-info{flex:1;line-height:1.25;min-width:0}
   .pay-info .a{font-size:14px;font-weight:700;color:#0F172A}
   .pay-info .b{font-size:11.5px;color:#64748B;margin-top:2px}
-  .pay-inv-btn{padding:8px 12px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:8px;font-size:11.5px;font-weight:800;color:#0F172A;text-transform:uppercase;letter-spacing:0.04em;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+  .pay-txn{display:inline-flex;align-items:center;gap:5px;margin-top:6px;padding:3px 8px;border-radius:6px;background:#F1F5F9;font-size:10.5px;font-weight:700;color:#475569;letter-spacing:0.02em}
+  .pay-txn i{font-size:9px}
+  .pay-inv-btn{padding:8px 12px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:8px;font-size:11.5px;font-weight:800;color:#0F172A;text-transform:uppercase;letter-spacing:0.04em;text-decoration:none;display:inline-flex;align-items:center;gap:5px;flex-shrink:0}
 
-  /* Partial-paid · progress bar + breakdown rows + Pay Remaining CTA */
+  /* Partial-paid · repainted to emerald design-system (was amber/clock-rotate which clashed) · COD-aware copy */
   .partial{padding:14px}
   .partial-head{display:flex;align-items:flex-start;gap:12px}
-  .partial-head .pay-ic{background:#FEF3C7;color:#B45309}
-  .partial-meta{flex:1;line-height:1.2}
+  .partial-head .pay-ic{background:#ECFDF5;color:#047857}
+  .partial-meta{flex:1;line-height:1.25;min-width:0}
   .partial-meta .a{font-size:14px;font-weight:800;color:#0F172A}
   .partial-meta .b{font-size:11.5px;color:#64748B;margin-top:2px}
   .partial-bar{margin-top:12px;height:8px;background:#F1F5F9;border-radius:999px;overflow:hidden}
@@ -109,19 +110,22 @@
   .partial-rows{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .partial-cell{background:#F8FAFC;border:1px solid #E5E7EB;border-radius:10px;padding:10px}
   .partial-cell .lbl{font-size:10px;font-weight:800;letter-spacing:0.06em;color:#94A3B8;text-transform:uppercase}
-  .partial-cell .val{font-size:16px;font-weight:900;color:#0F172A;margin-top:3px}
+  .partial-cell .val{font-size:16px;font-weight:800;color:#0F172A;margin-top:3px}
   .partial-cell.paid .val{color:#047857}
-  .partial-cell.due .val{color:#B45309}
-  .pay-remaining{margin-top:12px;width:100%;height:46px;border-radius:10px;background:#059669;color:#FFFFFF;font-size:13.5px;font-weight:800;border:0;letter-spacing:0.04em;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;cursor:pointer}
+  .partial-cell.due{background:#ECFDF5;border-color:#BBF7D0}
+  .partial-cell.due .val{color:#047857}
+  /* Pay-COD CTA · emerald + coin reward inline so the value-prop reads in one go */
+  .pay-cod-cta{margin-top:12px;width:100%;height:48px;border-radius:10px;background:#059669;color:#FFFFFF;font-size:13.5px;font-weight:800;border:0;letter-spacing:0.04em;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;cursor:pointer;box-shadow:0 6px 18px -4px rgba(5,150,105,0.45)}
+  .pay-cod-cta .coins{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,0.18);padding:3px 8px;border-radius:9999px;font-size:11px;font-weight:800;letter-spacing:0.04em}
 
-  /* Support */
+  /* Need help · neutral slate icon background · no more amber */
   .support-row{padding:14px;display:flex;align-items:center;gap:12px;text-decoration:none}
-  .support-row .ic{width:36px;height:36px;border-radius:50%;background:#FEF3C7;color:#B45309;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .support-row .info{flex:1;line-height:1.2}
+  .support-row .ic{width:36px;height:36px;border-radius:10px;background:#F1F5F9;color:#475569;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .support-row .info{flex:1;line-height:1.25}
   .support-row .info .a{font-size:13.5px;font-weight:700;color:#0F172A}
   .support-row .info .b{font-size:11.5px;color:#64748B;margin-top:2px}
 
-  /* Sticky bottom CTA · single Reorder button */
+  /* Sticky bottom · single Reorder CTA */
   .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:10px 12px;z-index:50;box-shadow:0 -4px 16px rgba(0,0,0,0.05)}
   .cta-pri{width:100%;height:48px;border-radius:10px;background:#059669;color:#FFFFFF;border:0;font-size:14px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 6px 18px -4px rgba(5,150,105,0.45)}
 
@@ -134,10 +138,10 @@
   .kebab-item.danger i{color:#DC2626}
   .kebab-item i{font-size:13px;color:#475569;width:18px;text-align:center}
 
-  /* Confirmation + Reason modals · shared backdrop + sheet pattern */
+  /* Shared modal · backdrop + bottom-sheet */
   .modal-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80}
   .modal-bd.open{opacity:1;pointer-events:auto}
-  .modal-sheet{position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;max-height:84vh;display:flex;flex-direction:column}
+  .modal-sheet{position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;max-height:88vh;display:flex;flex-direction:column}
   .modal-sheet.open{transform:translateY(0)}
   .modal-handle{width:40px;height:4px;border-radius:999px;background:#E2E8F0;margin:10px auto 0}
   .reason-opt{display:flex;align-items:center;gap:12px;padding:13px 20px;border-bottom:1px solid #F1F5F9;cursor:pointer;background:#FFFFFF}
@@ -147,6 +151,14 @@
   .reason-opt.on .ric::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;color:#FFFFFF;font-size:11px}
   .reason-lbl{flex:1;font-size:14px;font-weight:600;color:#0F172A}
   .reason-opt.on .reason-lbl{color:#047857}
+
+  /* COD pay bottom sheet · partner-app style · editable amount + Full shortcut + coins earned */
+  .cod-input-wrap{display:flex;align-items:center;gap:8px;background:#F8FAFC;border:1.5px solid #E5E7EB;border-radius:10px;padding:10px 14px;transition:border-color .15s ease}
+  .cod-input-wrap:focus-within{border-color:#047857;box-shadow:0 0 0 3px rgba(4,120,87,0.12)}
+  .cod-input-wrap .rs{font-size:22px;font-weight:900;color:#0F172A}
+  .cod-input-wrap input{flex:1;font-size:22px;font-weight:900;color:#0F172A;background:transparent;outline:none;border:0;width:0;font-variant-numeric:tabular-nums}
+  .cod-full-btn{padding:6px 10px;border-radius:6px;background:#ECFDF5;color:#047857;font-size:11px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;border:0;cursor:pointer;flex-shrink:0}
+  .cod-coin-strip{margin-top:10px;display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;background:#ECFDF5;border:1px solid #BBF7D0}
 
   /* State-conditional visibility */
   body.state-transit  .only-delivered{display:none}
@@ -166,7 +178,7 @@
     </div>
   </div>
 
-  <!-- Sticky header · Share replaced with kebab · kebab dropdown lives in this row so it positions relative to the top -->
+  <!-- Sticky header · kebab dropdown lives in this row -->
   <div class="top-stk px-4 pt-3 pb-3 flex items-center gap-3 relative">
     <a href="orders.html" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB;text-decoration:none">
       <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
@@ -197,86 +209,7 @@
     <div class="hero-sub only-transit">Arriving tomorrow by <b>5:00 PM</b></div>
   </div>
 
-  <!-- Delivery address -->
-  <div class="sec-title only-delivered">Delivered to</div>
-  <div class="sec-title only-transit">Delivering to</div>
-  <div class="card">
-    <div class="addr">
-      <div class="addr-ic"><i class="fa-solid fa-location-dot text-[15px]"></i></div>
-      <div class="addr-body">
-        <div class="addr-name">Sagar Patel</div>
-        <div class="addr-line">Plot 14, Krishi Mandi Road, Sanwer, Indore, MP 453111</div>
-        <div class="addr-line">+91 98260 12345</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Products in order + Bill Summary kept together as one stacked card group · no Reorder/Add buttons per product · each product shows qty × price = line total -->
-  <div class="sec-title">2 products in this order</div>
-  <div class="card-stack">
-
-    <div class="card" style="margin-bottom:0">
-      <div class="prod">
-        <a href="pdp.html" class="prod-img"><img src="../assets/Humic_nobg.png" class="img-blend" alt="Humic"/></a>
-        <div class="prod-info">
-          <a href="pdp.html" class="prod-name">Humic + Fulvic</a>
-          <div class="prod-sub">Humic 12% + Fulvic 8% &middot; 1 L</div>
-          <div class="prod-line">
-            <span class="p tnum">&#8377;376</span>
-            <span class="x">&times; 1</span>
-          </div>
-        </div>
-        <div class="prod-total">
-          <div class="prod-total-lbl">Amount</div>
-          <div class="prod-total-amt tnum">&#8377;376</div>
-        </div>
-      </div>
-      <div class="prod">
-        <a href="pdp.html" class="prod-img"><img src="../assets/AntiVirus_nobg.png" class="img-blend" alt="Antivirus"/></a>
-        <div class="prod-info">
-          <a href="pdp.html" class="prod-name">Antivirus</a>
-          <div class="prod-sub">Anti-viral biostimulant &middot; 250 ml</div>
-          <div class="prod-line">
-            <span class="p tnum">&#8377;327</span>
-            <span class="x">&times; 1</span>
-          </div>
-        </div>
-        <div class="prod-total">
-          <div class="prod-total-lbl">Amount</div>
-          <div class="prod-total-amt tnum">&#8377;327</div>
-        </div>
-      </div>
-      <!-- Star-rating row · delivered only · single row under the product list since we no longer have per-product rating ribbons -->
-      <div class="rate-row-wrap only-delivered">
-        <div class="leading-tight">
-          <div class="rate-label" data-rate-status="order">Tap stars to rate this order</div>
-          <div class="rate-bonus">Earn 25 coins on rating</div>
-        </div>
-        <div class="rate-row flex items-center gap-1.5" data-rating-group="order">
-          <button class="star-btn" data-val="1"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn" data-val="2"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn" data-val="3"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn" data-val="4"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn" data-val="5"><i class="fa-solid fa-star"></i></button>
-        </div>
-      </div>
-    </div>
-
-    <div class="card-stack-divider"></div>
-
-    <!-- Bill Summary · GST removed per spec · sits flush below the products card so they read as one bill -->
-    <div class="card">
-      <div class="bill">
-        <div class="bill-row"><span class="lbl">Subtotal (2 items)</span><span class="val tnum">&#8377;703</span></div>
-        <div class="bill-row"><span class="lbl">Delivery fee</span><span class="val green">FREE</span></div>
-        <div class="bill-row"><span class="lbl"><i class="fa-solid fa-coins text-[11px]" style="color:#F59E0B"></i> Coins used (50)</span><span class="val green">&minus; &#8377;5</span></div>
-        <div class="bill-total"><span class="lbl">Total Amount</span><span class="val tnum" id="billTotal">&#8377;698</span></div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Order Timeline · placed ABOVE the Payment section per spec -->
+  <!-- Order Timeline · now sits FIRST (interchanged with Delivered to) -->
   <div class="sec-title">Order Timeline</div>
   <div class="card">
     <div class="tl">
@@ -306,46 +239,120 @@
     </div>
   </div>
 
-  <!-- Payment · supports two presentations · fully paid (default) AND partial-paid (10% advance, balance due) · body.state-partial swaps which sub-block is shown -->
+  <!-- UNIFIED Products + Bill Summary · one card · internal dividers separate each product and the bill block -->
+  <div class="sec-title">2 products in this order</div>
+  <div class="card">
+
+    <!-- Product 1 -->
+    <div class="prod-row">
+      <a href="pdp.html" class="prod-img"><img src="../assets/Humic_nobg.png" class="img-blend" alt=""/></a>
+      <div class="prod-info">
+        <a href="pdp.html" class="prod-name">Humic + Fulvic</a>
+        <div class="prod-tech">Humic 12% + Fulvic 8%</div>
+        <span class="prod-size">1 L</span>
+        <div class="prod-calc">
+          <span class="lhs"><span class="pc tnum">&#8377;376</span> &middot; <span class="qty">Qty 1</span></span>
+          <span class="rhs tnum">&#8377;376</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="prod-row">
+      <a href="pdp.html" class="prod-img"><img src="../assets/AntiVirus_nobg.png" class="img-blend" alt=""/></a>
+      <div class="prod-info">
+        <a href="pdp.html" class="prod-name">Antivirus</a>
+        <div class="prod-tech">Anti-viral biostimulant</div>
+        <span class="prod-size">250 ml</span>
+        <div class="prod-calc">
+          <span class="lhs"><span class="pc tnum">&#8377;327</span> &middot; <span class="qty">Qty 1</span></span>
+          <span class="rhs tnum">&#8377;327</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rating row · delivered-only · still inside the unified card -->
+    <div class="rate-row-wrap only-delivered">
+      <div class="leading-tight">
+        <div class="rate-label" data-rate-status="order">Tap stars to rate this order</div>
+        <div class="rate-bonus">Earn 25 coins on rating</div>
+      </div>
+      <div class="rate-row flex items-center gap-1.5" data-rating-group="order">
+        <button class="star-btn" data-val="1"><i class="fa-solid fa-star"></i></button>
+        <button class="star-btn" data-val="2"><i class="fa-solid fa-star"></i></button>
+        <button class="star-btn" data-val="3"><i class="fa-solid fa-star"></i></button>
+        <button class="star-btn" data-val="4"><i class="fa-solid fa-star"></i></button>
+        <button class="star-btn" data-val="5"><i class="fa-solid fa-star"></i></button>
+      </div>
+    </div>
+
+    <!-- Bill block · sits INSIDE the same card as the products · subtle off-white background distinguishes it -->
+    <div class="bill-section">
+      <div class="bill-row"><span class="lbl">Subtotal (2 items)</span><span class="val tnum">&#8377;703</span></div>
+      <div class="bill-row"><span class="lbl">Delivery fee</span><span class="val green">FREE</span></div>
+      <div class="bill-row"><span class="lbl"><i class="fa-solid fa-coins text-[11px]" style="color:#F59E0B"></i> Coins used (50)</span><span class="val green">&minus; &#8377;5</span></div>
+      <div class="bill-total"><span class="lbl">Total Amount</span><span class="val tnum" id="billTotal">&#8377;698</span></div>
+    </div>
+
+  </div>
+
+  <!-- Delivered to · now sits BELOW products/bill (interchanged with timeline) -->
+  <div class="sec-title only-delivered">Delivered to</div>
+  <div class="sec-title only-transit">Delivering to</div>
+  <div class="card">
+    <div class="addr">
+      <div class="addr-ic"><i class="fa-solid fa-location-dot text-[15px]"></i></div>
+      <div class="addr-body">
+        <div class="addr-name">Sagar Patel</div>
+        <div class="addr-line">Plot 14, Krishi Mandi Road, Sanwer, Indore, MP 453111</div>
+        <div class="addr-line">+91 98260 12345</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment · fully-paid shows the UPI transaction id chip · partial-paid shows advance breakdown + COD pay CTA -->
   <div class="sec-title">Payment</div>
   <div class="card">
-    <!-- Fully paid block · UPI / Cash · single line with Invoice action -->
+    <!-- Fully paid block -->
     <div class="pay-row only-fullpaid">
       <div class="pay-ic"><i class="fa-solid fa-mobile-screen text-[16px]"></i></div>
       <div class="pay-info">
-        <div class="a"><span class="only-delivered">Paid via UPI</span><span class="only-transit">Pending &middot; Cash on Delivery</span></div>
-        <div class="b"><span class="only-delivered">HDFC ••7842 &middot; 8 Apr, 2:15 PM</span><span class="only-transit">Pay on delivery &middot; &#8377;698</span></div>
+        <div class="a">Paid via UPI</div>
+        <div class="b">HDFC &bull;&bull;7842 &middot; 8 Apr, 2:15 PM</div>
+        <div class="pay-txn"><i class="fa-solid fa-hashtag"></i> Txn ID: KKDUPI2842K9</div>
       </div>
-      <a href="#" class="pay-inv-btn only-delivered"><i class="fa-solid fa-file-arrow-down text-[11px]"></i> Invoice</a>
+      <a href="#" class="pay-inv-btn"><i class="fa-solid fa-file-arrow-down text-[11px]"></i> Invoice</a>
     </div>
-    <!-- Partial-paid block · 10% advance taken, balance remaining · progress bar + paid/due breakdown + Pay Remaining CTA -->
+    <!-- Partial-paid block · emerald palette · communicates that the balance is COD · CTA opens a partner-app style bottom sheet -->
     <div class="partial only-partial">
       <div class="partial-head">
-        <div class="pay-ic"><i class="fa-solid fa-clock-rotate-left text-[16px]"></i></div>
+        <div class="pay-ic"><i class="fa-solid fa-circle-half-stroke text-[16px]"></i></div>
         <div class="partial-meta">
-          <div class="a">10% advance paid &middot; balance pending</div>
+          <div class="a">10% advance paid &middot; balance is COD</div>
           <div class="b" id="partialMeta">&#8377;70 paid via UPI &middot; HDFC &bull;&bull;7842 &middot; 8 Apr, 2:15 PM</div>
+          <div class="pay-txn"><i class="fa-solid fa-hashtag"></i> Txn ID: KKDUPI2842K9</div>
         </div>
       </div>
       <div class="partial-bar"><div class="partial-bar-fill" style="width:10%"></div></div>
       <div class="partial-rows">
         <div class="partial-cell paid">
-          <div class="lbl">Paid (10%)</div>
+          <div class="lbl">Advance paid</div>
           <div class="val tnum" id="partialPaid">&#8377;70</div>
         </div>
         <div class="partial-cell due">
-          <div class="lbl">Remaining</div>
+          <div class="lbl">COD due</div>
           <div class="val tnum" id="partialDue">&#8377;628</div>
         </div>
       </div>
-      <a href="checkout.html?pay=balance" class="pay-remaining">
-        <i class="fa-solid fa-credit-card text-[13px]"></i>
-        Pay remaining &#8377;<span id="partialDueInline">628</span>
-      </a>
+      <button class="pay-cod-cta" id="payCodBtn">
+        <i class="fa-solid fa-coins text-[13px]"></i>
+        Pay &#8377;<span id="partialDueInline">628</span> COD
+        <span class="coins"><i class="fa-solid fa-star text-[9px]"></i> +50 coins</span>
+      </button>
     </div>
   </div>
 
-  <!-- Support -->
+  <!-- Need help · neutral icon background, in line with the design system -->
   <div class="sec-title">Need help?</div>
   <a href="advisory.html" class="card support-row" style="display:flex">
     <div class="ic"><i class="fa-solid fa-circle-question text-[14px]"></i></div>
@@ -356,7 +363,7 @@
     <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
   </a>
 
-  <!-- Sticky bottom · single Reorder CTA per spec (Track Live + Cancel removed) -->
+  <!-- Sticky bottom · single Reorder CTA -->
   <div class="sticky-cta">
     <a class="cta-pri" href="cart.html?reorder=1">
       <i class="fa-solid fa-bag-shopping text-[13px]"></i> Reorder
@@ -402,22 +409,61 @@
     </div>
   </div>
 
+  <!-- COD pay bottom sheet · partner-app pattern · editable amount, Full shortcut, live coin calculation, Pay button shows current amount -->
+  <div id="codBd" class="modal-bd"></div>
+  <div id="codSheet" class="modal-sheet" style="padding:0">
+    <div class="modal-handle"></div>
+    <div class="px-5 pt-3 pb-2 flex items-center justify-between">
+      <div class="leading-tight">
+        <div class="text-[17px] font-extrabold text-[#0F172A]">Pay COD amount</div>
+        <div class="text-[11.5px] font-semibold" style="color:#64748B">Order <span id="codOrderId" class="font-bold text-[#0F172A]">#KAT-2026-04-1198</span></div>
+      </div>
+      <button id="codClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div class="px-5 pt-3">
+      <div class="text-[10.5px] font-extrabold tracking-[0.06em] uppercase mb-1.5" style="color:#94A3B8">Amount to pay</div>
+      <div class="cod-input-wrap">
+        <span class="rs">&#8377;</span>
+        <input id="codAmtInput" type="number" inputmode="numeric" value="628"/>
+        <button id="codFullBtn" class="cod-full-btn">Full</button>
+      </div>
+      <div class="flex items-center justify-between text-[11.5px] mt-2">
+        <span style="color:#64748B">Total COD: <b class="text-[#0F172A]" id="codTotalLbl">&#8377;628</b></span>
+        <span class="font-extrabold" style="color:#047857">Earn <span id="codCoinsLbl">+50</span> <i class="fa-solid fa-coins text-[10px]" style="color:#F59E0B"></i></span>
+      </div>
+      <div id="codErr" class="text-[11px] font-bold" style="color:#DC2626;display:none;margin-top:4px">Amount cannot exceed total COD due</div>
+
+      <!-- Earn-coin explainer · always-on chip that telegraphs the reward math -->
+      <div class="cod-coin-strip mt-3">
+        <i class="fa-solid fa-coins text-[14px]" style="color:#F59E0B"></i>
+        <div class="text-[11.5px] leading-tight" style="color:#0F172A"><b>1 coin per &#8377;12.50</b> paid &middot; credited within 24 hours</div>
+      </div>
+    </div>
+    <div class="px-5 pt-3 pb-5" style="padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">
+      <button id="codPayBtn" class="w-full h-[50px] rounded-[10px] text-[14px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;letter-spacing:0.04em;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;gap:8px">
+        Pay <span id="codPayBtnAmt" class="tnum">&#8377;628</span> COD
+      </button>
+    </div>
+  </div>
+
   <script>
     (function(){
       const qp = new URLSearchParams(location.search);
       const state = (qp.get('state') || 'delivered').toLowerCase();
-      const payment = (qp.get('payment') || '').toLowerCase();  // 'partial' = 10% advance
+      const payment = (qp.get('payment') || '').toLowerCase();
       const id    = qp.get('id') || 'KAT-2026-04-1198';
       document.body.classList.remove('state-delivered','state-transit');
       document.body.classList.add('state-' + (state === 'transit' ? 'transit' : 'delivered'));
-      // Partial-payment state · toggleable via ?payment=partial (or auto-on for transit since that's the realistic 10%-advance scenario)
+      // For transit, the partial-paid presentation auto-engages (advance + COD due)
       const isPartial = payment === 'partial' || state === 'transit';
       document.body.classList.toggle('state-partial', isPartial);
 
       const idLabel = document.getElementById('orderIdLabel');
       if (idLabel) idLabel.textContent = '#' + id;
+      const codOrd = document.getElementById('codOrderId');
+      if (codOrd) codOrd.textContent = '#' + id;
 
-      // For transit, mark the dispatch step as current and delivered as upcoming · totals tweak too
+      let codDue = 628;
       if (state === 'transit') {
         const disp = document.getElementById('tlDispatch');
         const deliv = document.getElementById('tlDelivered');
@@ -431,14 +477,13 @@
           const dt = document.getElementById('tlDeliveredTime'); if (dt) dt.textContent = 'Arriving tomorrow by 5:00 PM';
         }
         const bt = document.getElementById('billTotal'); if (bt) bt.textContent = '₹1,430';
-        // For transit-partial, the 10% advance + remaining math uses the 1,430 total
         if (isPartial) {
           const total = 1430;
           const paid  = Math.round(total * 0.10);
-          const due   = total - paid;
+          codDue = total - paid;
           const pp = document.getElementById('partialPaid'); if (pp) pp.textContent = '₹' + paid;
-          const pd = document.getElementById('partialDue');  if (pd) pd.textContent = '₹' + due;
-          const pi = document.getElementById('partialDueInline'); if (pi) pi.textContent = due;
+          const pd = document.getElementById('partialDue');  if (pd) pd.textContent = '₹' + codDue;
+          const pi = document.getElementById('partialDueInline'); if (pi) pi.textContent = codDue;
           const pm = document.getElementById('partialMeta'); if (pm) pm.textContent = '₹' + paid + ' paid via UPI · HDFC ••7842 · Today, 8:30 AM';
           const pbf = document.querySelector('.partial-bar-fill'); if (pbf) pbf.style.width = '10%';
         }
@@ -447,28 +492,20 @@
       // Kebab dropdown · tap toggles, outside tap closes
       const kebabBtn = document.getElementById('kebabBtn');
       const kebabMenu = document.getElementById('kebabMenu');
-      kebabBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        kebabMenu.classList.toggle('open');
-      });
-      document.addEventListener('click', (e) => {
-        if (!kebabMenu.contains(e.target) && e.target !== kebabBtn) kebabMenu.classList.remove('open');
-      });
+      kebabBtn.addEventListener('click', (e) => { e.stopPropagation(); kebabMenu.classList.toggle('open'); });
+      document.addEventListener('click', (e) => { if (!kebabMenu.contains(e.target) && e.target !== kebabBtn) kebabMenu.classList.remove('open'); });
 
-      // Cancel order flow · kebab item → confirmation modal → reason modal → toast (simulated)
+      // Modal helpers
+      function openSheet(bd, sheet){ bd.classList.add('open'); sheet.classList.add('open'); }
+      function closeSheet(bd, sheet){ bd.classList.remove('open'); sheet.classList.remove('open'); }
+
+      // Cancel order flow
       const cancelBd = document.getElementById('cancelBd');
       const cancelSheet = document.getElementById('cancelSheet');
       const reasonBd = document.getElementById('reasonBd');
       const reasonSheet = document.getElementById('reasonSheet');
-
-      function openSheet(bd, sheet){ bd.classList.add('open'); sheet.classList.add('open'); }
-      function closeSheet(bd, sheet){ bd.classList.remove('open'); sheet.classList.remove('open'); }
-
       const cancelBtn = document.getElementById('cancelOrderBtn');
-      if (cancelBtn) cancelBtn.addEventListener('click', () => {
-        kebabMenu.classList.remove('open');
-        openSheet(cancelBd, cancelSheet);
-      });
+      if (cancelBtn) cancelBtn.addEventListener('click', () => { kebabMenu.classList.remove('open'); openSheet(cancelBd, cancelSheet); });
       document.getElementById('cancelBack').addEventListener('click', () => closeSheet(cancelBd, cancelSheet));
       cancelBd.addEventListener('click', () => closeSheet(cancelBd, cancelSheet));
       document.getElementById('cancelConfirm').addEventListener('click', () => {
@@ -477,8 +514,6 @@
       });
       document.getElementById('reasonClose').addEventListener('click', () => closeSheet(reasonBd, reasonSheet));
       reasonBd.addEventListener('click', () => closeSheet(reasonBd, reasonSheet));
-
-      // Reason single-select · enables Submit when a reason is picked
       let pickedReason = null;
       const submitBtn = document.getElementById('reasonSubmit');
       document.querySelectorAll('#reasonList .reason-opt').forEach(opt => {
@@ -493,8 +528,47 @@
       submitBtn.addEventListener('click', () => {
         if (!pickedReason) return;
         closeSheet(reasonBd, reasonSheet);
-        // Simulated confirmation · in a real build this routes to a 'cancellation requested' state
         setTimeout(() => alert('Cancellation requested · reason: ' + pickedReason), 240);
+      });
+
+      // COD Pay bottom sheet · partner-app style · live updates as the user edits the amount
+      const codBd     = document.getElementById('codBd');
+      const codSheet  = document.getElementById('codSheet');
+      const payCodBtn = document.getElementById('payCodBtn');
+      const codAmtIn  = document.getElementById('codAmtInput');
+      const codFull   = document.getElementById('codFullBtn');
+      const codClose  = document.getElementById('codClose');
+      const codPayBtn = document.getElementById('codPayBtn');
+      const codPayAmt = document.getElementById('codPayBtnAmt');
+      const codCoins  = document.getElementById('codCoinsLbl');
+      const codTotal  = document.getElementById('codTotalLbl');
+      const codErr    = document.getElementById('codErr');
+      function syncCod(){
+        codAmtIn.value = codDue;
+        codTotal.textContent = '₹' + codDue;
+        paintCod();
+      }
+      function paintCod(){
+        const v = parseInt(codAmtIn.value, 10) || 0;
+        const over = v > codDue;
+        codErr.style.display = over ? 'block' : 'none';
+        codPayBtn.style.opacity = over || v <= 0 ? '0.55' : '1';
+        codPayBtn.style.pointerEvents = over || v <= 0 ? 'none' : 'auto';
+        codPayAmt.textContent = '₹' + (v || 0);
+        // Coin rule · 1 coin per ₹12.50 paid (so paying full ₹628 earns +50)
+        const coins = Math.round((v || 0) / 12.5);
+        codCoins.textContent = '+' + coins;
+      }
+      if (payCodBtn) payCodBtn.addEventListener('click', () => { syncCod(); openSheet(codBd, codSheet); });
+      if (codClose)  codClose.addEventListener('click', () => closeSheet(codBd, codSheet));
+      if (codBd)     codBd.addEventListener('click', () => closeSheet(codBd, codSheet));
+      if (codFull)   codFull.addEventListener('click', () => { codAmtIn.value = codDue; paintCod(); });
+      if (codAmtIn)  codAmtIn.addEventListener('input', paintCod);
+      if (codPayBtn) codPayBtn.addEventListener('click', () => {
+        const v = parseInt(codAmtIn.value, 10) || 0;
+        if (v <= 0 || v > codDue) return;
+        closeSheet(codBd, codSheet);
+        setTimeout(() => alert('COD payment of ₹' + v + ' recorded · ' + Math.round(v/12.5) + ' coins will credit within 24 hours.'), 240);
       });
 
       // Star rating

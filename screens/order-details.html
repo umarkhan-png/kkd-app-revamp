@@ -149,13 +149,13 @@
   .pcard.due  .pcard-head .val{color:#0F172A}
   .pcard-line{display:flex;align-items:center;gap:6px;font-size:11.5px;color:#475569;line-height:1.4;margin-top:3px}
   .pcard-line i{font-size:10.5px;color:#94A3B8;width:14px;text-align:center}
-  /* Pay strip inside the COD-due card · mirrors the orders-page in-transit pay-banner pattern · coin reward sits on the LEFT inline, Pay button on the RIGHT · one banner, no duplicate coin line */
-  .pcard-paystrip{margin-top:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:12px;background:#FEF3C7;border:1px dashed #F59E0B;text-decoration:none;cursor:pointer}
+  /* Pay strip · pulled to the COD-due card's edges so it spans the FULL width of the card · coin-earn section uses the left half, Pay button anchors flush to the right edge */
+  .pcard-paystrip{margin:12px -14px -12px;display:flex;align-items:center;gap:10px;padding:12px 14px;background:#FEF3C7;border-top:1px dashed #F59E0B;border-radius:0 0 12px 12px;text-decoration:none;cursor:pointer}
   .pcard-paystrip-text{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#78350F;flex:1;min-width:0;line-height:1.3}
   .pcard-paystrip-text i{font-size:14px;color:#F59E0B;flex-shrink:0}
   .pcard-paystrip-text b{color:#0F172A;font-weight:900}
-  /* Pay button on the COD strip · widened (more horizontal padding) + amount removed for cleaner balance with the coin-earn text on the left */
-  .pcard-paystrip-btn{flex-shrink:0;padding:10px 22px;background:#059669;color:#FFFFFF;border:0;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;text-decoration:none;box-shadow:0 6px 14px -4px rgba(5,150,105,0.45);letter-spacing:0.02em}
+  /* Pay button anchored to the right · widened (more horizontal padding) · Pay text only (no amount, see HTML) */
+  .pcard-paystrip-btn{flex-shrink:0;margin-left:auto;padding:10px 24px;background:#059669;color:#FFFFFF;border:0;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;text-decoration:none;box-shadow:0 6px 14px -4px rgba(5,150,105,0.45);letter-spacing:0.02em}
 
   /* Need help · neutral slate */
   .support-row{padding:14px;display:flex;align-items:center;gap:12px;text-decoration:none}

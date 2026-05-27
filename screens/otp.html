@@ -22,15 +22,15 @@
   .lang-pill:active { transform: scale(.97); }
   .lang-pill .chev { font-size: 10px; color: #94A3B8; }
 
-  /* OTP cell · airy 64px boxes with soft border + focus ring · filled state stays emerald */
-  .otp-box { width: 64px; height: 68px; border: 2px solid #E5E7EB; border-radius: 14px; font-size: 30px; font-weight: 800; text-align: center; outline: none; background: #FFFFFF; transition: border-color .15s, background .15s, box-shadow .15s; font-variant-numeric: tabular-nums; color:#0F172A; }
+  /* OTP cell · pure white, no slate border · soft shadow for elevation, emerald focus + filled states */
+  .otp-box { width: 64px; height: 68px; border: 2px solid transparent; border-radius: 14px; font-size: 30px; font-weight: 800; text-align: center; outline: none; background: #FFFFFF; box-shadow: 0 1px 3px rgba(15,23,42,0.06); transition: border-color .15s, background .15s, box-shadow .15s; font-variant-numeric: tabular-nums; color:#0F172A; }
   .otp-box.filled { border-color: #047857; background: #ECFDF5; }
   .otp-box.active { border-color: #059669; box-shadow: 0 0 0 3px rgba(5,150,105,0.15); }
 
   /* Resend pill buttons · primary emerald borders (per design-system) · WhatsApp + SMS share the same outline treatment */
   .resend-btn { display:inline-flex; align-items:center; gap:7px; height:40px; padding:0 16px; border-radius:9999px; font-size:13px; font-weight:700; border:1.5px solid #059669; background:#FFFFFF; color:#047857; transition:transform .12s ease, background .12s ease; cursor:pointer; text-decoration:none; }
   .resend-btn:active { transform: scale(.97); background:#ECFDF5; }
-  .resend-btn .wa-ic { font-size:15px; color:#25D366; }
+  .resend-btn .wa-ic { font-size:15px; color:#059669; }
   .resend-btn .sms-ic { font-size:13px; color:#047857; }
   .resend-live    { display:flex; }
   .resend-options { display:none; }

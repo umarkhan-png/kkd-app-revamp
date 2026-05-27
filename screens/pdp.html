@@ -6,7 +6,7 @@
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   html,body{margin:0;padding:0}
-  body{min-height:100vh;background:#fff;color:#0F172A}
+  body{min-height:100vh;background:#fff;color:#0F172A;padding-bottom:100px}
   .tnum{font-variant-numeric:tabular-nums}
   .img-blend{mix-blend-mode:multiply}
   .scrollx{overflow-x:auto;scrollbar-width:none;scroll-snap-type:x mandatory}
@@ -14,44 +14,72 @@
   .snap-c{scroll-snap-align:center}
   .tab{transition:all .15s}
   .tab.active{background:#0F172A;color:#fff}
-  /* Pack-size tile · bigger, more prominent · selected gets emerald border + soft glow */
-  .var{transition:all .15s;border:1.5px solid #E5E7EB;background:#FFFFFF;border-radius:14px;padding:14px 12px;min-width:96px}
-  .var.active{border-color:#059669;background:#ECFDF5;box-shadow:0 6px 14px -6px rgba(5,150,105,0.35)}
-  /* Image gallery paginator · one dot per image · active dot gets the emerald pill treatment */
+  /* Image gallery paginator */
   .pg-dot{width:6px;height:6px;border-radius:9999px;background:rgba(15,23,42,0.22);transition:all .25s ease}
   .pg-dot.active{width:20px;background:#059669}
-  /* Ask-Expert full-width banner · mirrors the at-end state of the home-page expert FAB (same gradient, photo + red video badge, text column, arrow) */
+  /* Pack-size tile · 3-column grid · BESTSELLER badge is an INLINE chip at the top of the bestseller tile (no longer floating outside the border) so it's clearly visible · all 5 tiles fit without scroll · the 6th cell is a "+more" CTA that opens the all-sizes bottom-sheet */
+  .pack-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .var{position:relative;border:1.5px solid #E5E7EB;background:#FFFFFF;border-radius:12px;padding:14px 8px 12px;text-align:center;transition:all .15s;cursor:pointer}
+  .var.active{border-color:#059669;background:#ECFDF5;box-shadow:0 6px 14px -6px rgba(5,150,105,0.35)}
+  .var.bestseller{padding-top:22px}
+  .vk-badge{position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:#FBBF24;color:#0F172A;font-size:9.5px;font-weight:900;padding:3px 8px;border-radius:9999px;white-space:nowrap;box-shadow:0 2px 6px rgba(251,191,36,0.45);letter-spacing:0.04em}
+  .vk-size{font-size:13.5px;font-weight:800;color:#0F172A;line-height:1}
+  .vk-price{font-size:11.5px;color:#64748B;margin-top:5px;line-height:1}
+  /* "+more" tile · dashed border + emerald accent · same dimensions as a variant tile */
+  .var-more{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:1.5px dashed #BBF7D0;background:#ECFDF5;color:#047857;border-radius:12px;padding:14px 8px 12px;font-size:11.5px;font-weight:800;cursor:pointer}
+  .var-more i{font-size:13px}
+  /* Inline ADD button beside price · transitions to a -/+ stepper in place · matches the home card pattern */
+  .price-add{display:flex;align-items:center;gap:8px}
+  .add-btn{height:42px;padding:0 18px;border-radius:12px;background:#059669;color:#FFFFFF;font-size:13.5px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 8px 18px -6px rgba(5,150,105,0.5);cursor:pointer;border:0}
+  .add-btn:active{transform:scale(.97)}
+  .add-steps{display:none;height:42px;background:#059669;color:#FFFFFF;border-radius:12px;align-items:center;padding:0 4px;box-shadow:0 8px 18px -6px rgba(5,150,105,0.5)}
+  .add-steps button{width:36px;height:42px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#FFFFFF;background:transparent;border:0;cursor:pointer}
+  .add-steps .add-val{min-width:24px;text-align:center;font-size:14px;font-weight:900}
+  /* Floating cart bar · home-page pattern · slate-dark background, emerald icon circle, summary + view-cart action · hidden by default until first Add */
+  .cart-fab{position:fixed;left:12px;right:12px;bottom:14px;z-index:60;display:none;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:18px;background:#0F172A;color:#FFFFFF;text-decoration:none;box-shadow:0 10px 28px rgba(0,0,0,0.28)}
+  .cart-fab .cart-ic{width:38px;height:38px;border-radius:9999px;background:#059669;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  /* Ask-Expert full-width banner */
   .expert-banner{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;text-decoration:none;color:#FFFFFF;background:linear-gradient(145deg,#10B981,#065F46);box-shadow:0 8px 22px -6px rgba(16,185,129,0.55),inset 0 1px 0 rgba(255,255,255,0.18)}
   .expert-banner .ph-wrap{position:relative;flex-shrink:0}
   .expert-banner .ph{width:46px;height:46px;border-radius:9999px;object-fit:cover;border:2px solid #FFFFFF;display:block}
   .expert-banner .vb{position:absolute;bottom:-2px;right:-2px;width:22px;height:22px;border-radius:9999px;background:#DC2626;border:2px solid #FFFFFF;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:9px;box-shadow:0 2px 6px rgba(220,38,38,0.4)}
   .expert-banner .ar{margin-left:auto;font-size:18px;font-weight:800;color:#FFFFFF}
-  /* Video card · play overlay on a poster image */
+  /* Video card */
   .video-card{position:relative;border-radius:14px;overflow:hidden;background:#0F172A;display:block}
   .video-card .poster{display:block;width:100%;height:100%;object-fit:cover}
   .video-card .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:9999px;background:rgba(255,255,255,0.92);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px -6px rgba(0,0,0,0.35)}
   .video-card .play svg{margin-left:3px}
   .video-card .label{position:absolute;bottom:10px;left:12px;color:#FFFFFF;font-weight:800;font-size:12px;text-shadow:0 1px 4px rgba(0,0,0,0.35)}
   .video-card .duration{position:absolute;top:10px;right:10px;background:rgba(15,23,42,0.7);color:#FFFFFF;font-weight:700;font-size:10px;padding:3px 7px;border-radius:9999px}
-  /* Trust badge tile · white card with hairline border + soft shadow */
-  .trust-tile{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:12px;padding:10px 8px;box-shadow:0 1px 3px rgba(15,23,42,0.04);display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
-  .trust-ic{width:34px;height:34px;border-radius:9px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:14px}
-  .trust-label{font-size:11px;font-weight:700;color:#0F172A;line-height:1.2}
-  /* Rating bar · per-star distribution row */
+  /* Trust badge · Flipkart-style 3-column with bigger emerald icon panel · chevron suggests tap for details */
+  .trust-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
+  .trust-cell{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:6px 4px}
+  .trust-cell + .trust-cell{border-left:1px solid #F1F5F9}
+  .trust-ic-wrap{width:46px;height:46px;border-radius:12px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;position:relative}
+  .trust-ic-wrap i{color:#047857;font-size:20px}
+  .trust-ic-wrap .badge-dot{position:absolute;top:-3px;right:-3px;width:18px;height:18px;border-radius:9999px;background:#FFFFFF;border:2px solid #ECFDF5;display:flex;align-items:center;justify-content:center;font-size:9px;color:#047857}
+  .trust-cap{font-size:12px;font-weight:700;color:#0F172A;line-height:1.25;display:inline-flex;align-items:center;gap:4px}
+  .trust-cap .chev{font-size:9px;color:#94A3B8}
+  /* Rating bar */
   .bar-track{height:6px;border-radius:9999px;background:#F1F5F9;overflow:hidden;flex:1}
   .bar-fill{height:100%;background:#059669;border-radius:9999px}
+  /* All-sizes bottom sheet */
+  .sheet-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80}
+  .sheet-bd.open{opacity:1;pointer-events:auto}
+  .sheet{position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;max-height:78vh;display:flex;flex-direction:column}
+  .sheet.open{transform:translateY(0)}
 </style></head>
-<body class="min-h-screen pb-[90px]">
+<body class="min-h-screen">
 
 <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
 
-<!-- Top bar · only back + share -->
+<!-- Top bar -->
 <div class="flex items-center justify-between px-4 pt-3">
   <button onclick="if(document.referrer && history.length>1){history.back()}else{location.href='home.html'}" class="w-10 h-10 rounded-full bg-white/80 backdrop-blur border border-[#E5E7EB] flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
   <button class="w-10 h-10 rounded-full bg-white/80 backdrop-blur border border-[#E5E7EB] flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg></button>
 </div>
 
-<!-- Image gallery · horizontal swipe with snap · paginator dots (one per image) · rating badge replaces the duplicate 28% OFF -->
+<!-- Image gallery · #1 BESTSELLER + rating badge fonts bumped (was 9/11 px, now 11/13 px) so both read clearly at a glance -->
 <div class="relative mt-2 mx-4">
   <div id="imgScroll" class="scrollx flex bg-[#F8FAFC] rounded-2xl aspect-square">
     <div class="snap-c w-full flex-shrink-0 flex items-center justify-center p-6"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/></div>
@@ -59,9 +87,9 @@
     <div class="snap-c w-full flex-shrink-0 flex items-center justify-center p-6"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/></div>
     <div class="snap-c w-full flex-shrink-0 flex items-center justify-center p-6"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/></div>
   </div>
-  <span class="absolute top-3 left-3 text-[9px] font-extrabold bg-[#FBBF24] text-[#0F172A] px-2 py-0.5 rounded">#1 BESTSELLER</span>
-  <span class="absolute top-3 right-3 inline-flex items-center gap-1 bg-white/95 backdrop-blur px-2 py-1 rounded-full text-[11px] font-extrabold shadow-sm">
-    <svg width="11" height="11" viewBox="0 0 24 24" fill="#FBBF24"><path d="M12 .587l3.668 7.568L24 9.423l-6 5.85L19.336 24 12 19.897 4.664 24 6 15.273 0 9.423l8.332-1.268z"/></svg>
+  <span class="absolute top-3 left-3 text-[11px] font-extrabold bg-[#FBBF24] text-[#0F172A] px-2.5 py-1 rounded-md tracking-wide">#1 BESTSELLER</span>
+  <span class="absolute top-3 right-3 inline-flex items-center gap-1.5 bg-white/95 backdrop-blur px-2.5 py-1.5 rounded-full text-[13px] font-extrabold shadow-sm">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="#FBBF24"><path d="M12 .587l3.668 7.568L24 9.423l-6 5.85L19.336 24 12 19.897 4.664 24 6 15.273 0 9.423l8.332-1.268z"/></svg>
     <span class="text-[#0F172A] tnum">4.6</span>
   </span>
   <div id="imgDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
@@ -69,79 +97,111 @@
   </div>
 </div>
 
-<!-- Title · category tag → product name H1 → English subtitle -->
+<!-- Title · Bio-stimulant tag dropped · category shows as a chip badge instead · H1 = product name "Humic", subtitle = technical name "Activated Humic + Fulvic 98" · 2,020 reviews text dropped here (lives in the ratings block) -->
 <div class="px-4 mt-4">
-  <div class="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#047857]">Bio-stimulant</div>
-  <h1 class="text-[22px] font-extrabold leading-tight mt-1 text-[#0F172A]">Activated Humic + Fulvic 98</h1>
-  <div class="text-[12.5px] text-[#64748B] mt-1">Strengthens plant roots</div>
-  <div class="flex items-center gap-3 mt-2.5 text-[12.5px]">
-    <span class="font-extrabold text-[#0F172A]">2,020 reviews</span>
-    <span class="text-[#CBD5E1]">·</span>
-    <span class="font-extrabold text-[#0F172A]">8,427 ordered</span>
+  <div class="flex items-center gap-2 mb-2">
+    <a href="categories.html" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-extrabold uppercase tracking-[0.06em]" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0">
+      <i class="fa-solid fa-leaf text-[9px]"></i> Bio-stimulant
+    </a>
+  </div>
+  <h1 class="text-[24px] font-extrabold leading-tight text-[#0F172A]">Humic</h1>
+  <div class="text-[12.5px] text-[#475569] mt-1 font-medium">Activated Humic + Fulvic 98</div>
+
+  <!-- Confidence pill · replaces the plain "8,427 ordered" text with a trust-boost line · verified-tick + emerald accent · sits prominently so the social proof lands hard -->
+  <div class="inline-flex items-center gap-1.5 mt-3 px-2.5 py-1.5 rounded-full" style="background:#ECFDF5;border:1px solid #A7F3D0">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+    <span class="text-[12px] font-extrabold" style="color:#047857"><span class="tnum">8,427+</span> farmers bought this product</span>
   </div>
 </div>
 
-<!-- Price -->
-<div class="px-4 mt-3 flex items-baseline gap-2">
-  <span class="text-[28px] font-black tnum">₹376</span>
-  <span class="text-[14px] text-[#94A3B8] line-through tnum">₹520</span>
-  <span class="text-[12px] font-bold text-[#059669]">28% off</span>
+<!-- Price + inline ADD button beside it · ADD transitions to -/+ stepper in place (home-card pattern) · the bottom-fixed bar is replaced by a floating cart bar that appears only after the first Add -->
+<div class="px-4 mt-4 flex items-center justify-between gap-3" id="priceRow">
+  <div class="price-add">
+    <div>
+      <div class="flex items-baseline gap-2">
+        <span class="text-[28px] font-black tnum text-[#0F172A]">₹376</span>
+        <span class="text-[14px] text-[#94A3B8] line-through tnum">₹520</span>
+      </div>
+      <div class="text-[12.5px] font-extrabold mt-0.5" style="color:#059669">28% off · You save ₹144</div>
+    </div>
+  </div>
+  <div>
+    <button class="add-btn" id="addBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      ADD
+    </button>
+    <div class="add-steps" id="addSteps">
+      <button id="addDec">−</button>
+      <span class="add-val tnum" id="addVal">1</span>
+      <button id="addInc">+</button>
+    </div>
+  </div>
 </div>
 
-<!-- Pack size · prominent label, larger tiles · 5 most-selling variants with 1 BESTSELLER -->
+<!-- Pack size · 3-col grid · all 5 tiles visible at once (no scroll) · BESTSELLER badge is an inline chip on the bestseller tile · 6th cell is "+ 7 more" CTA that opens the all-sizes bottom-sheet -->
 <div class="px-4 mt-5">
-  <div class="flex items-baseline justify-between mb-2.5">
+  <div class="flex items-baseline justify-between mb-3">
     <div class="text-[15px] font-extrabold text-[#0F172A]">Pack size</div>
     <div class="text-[11px] font-bold text-[#64748B]">5 of 12 sizes</div>
   </div>
-  <div class="scrollx flex gap-2.5 pb-1">
-    <button class="var flex-shrink-0 text-left">
-      <div class="text-[13.5px] font-extrabold">250 ml</div>
-      <div class="text-[11.5px] text-[#64748B] tnum mt-0.5">₹176</div>
+  <div class="pack-grid">
+    <button class="var" data-size="250 ml" data-price="₹176">
+      <div class="vk-size">250 ml</div>
+      <div class="vk-price tnum">₹176</div>
     </button>
-    <button class="var active flex-shrink-0 text-left relative">
-      <span class="absolute -top-2 left-2 text-[9px] font-extrabold bg-[#FBBF24] text-[#0F172A] px-1.5 py-0.5 rounded">BESTSELLER</span>
-      <div class="text-[13.5px] font-extrabold">500 ml</div>
-      <div class="text-[11.5px] text-[#64748B] tnum mt-0.5">₹276</div>
+    <button class="var bestseller active" data-size="500 ml" data-price="₹276">
+      <span class="vk-badge">BESTSELLER</span>
+      <div class="vk-size">500 ml</div>
+      <div class="vk-price tnum">₹276</div>
     </button>
-    <button class="var flex-shrink-0 text-left">
-      <div class="text-[13.5px] font-extrabold">1 L</div>
-      <div class="text-[11.5px] text-[#64748B] tnum mt-0.5">₹376</div>
+    <button class="var" data-size="1 L" data-price="₹376">
+      <div class="vk-size">1 L</div>
+      <div class="vk-price tnum">₹376</div>
     </button>
-    <button class="var flex-shrink-0 text-left">
-      <div class="text-[13.5px] font-extrabold">5 L</div>
-      <div class="text-[11.5px] text-[#64748B] tnum mt-0.5">₹1,575</div>
+    <button class="var" data-size="5 L" data-price="₹1,575">
+      <div class="vk-size">5 L</div>
+      <div class="vk-price tnum">₹1,575</div>
     </button>
-    <button class="var flex-shrink-0 text-left">
-      <div class="text-[13.5px] font-extrabold">10 L</div>
-      <div class="text-[11.5px] text-[#64748B] tnum mt-0.5">₹2,890</div>
+    <button class="var" data-size="10 L" data-price="₹2,890">
+      <div class="vk-size">10 L</div>
+      <div class="vk-price tnum">₹2,890</div>
+    </button>
+    <button class="var-more" id="moreSizes">
+      <i class="fa-solid fa-plus"></i>
+      +7 more
     </button>
   </div>
 </div>
 
-<!-- Trust badges · 4-tile row of buyer-trust signals -->
+<!-- Trust badges · Flipkart-style 3-tile row in green · 46px rounded-square icon panels with subtle emerald wash · chevron suggests details · 7-day return / Cash on delivery / Katyayani Assured -->
 <div class="px-4 mt-5">
-  <div class="grid grid-cols-4 gap-2">
-    <div class="trust-tile">
-      <div class="trust-ic"><i class="fa-solid fa-shield-halved"></i></div>
-      <div class="trust-label">Genuine<br/>product</div>
-    </div>
-    <div class="trust-tile">
-      <div class="trust-ic"><i class="fa-solid fa-rotate-left"></i></div>
-      <div class="trust-label">7-day<br/>return</div>
-    </div>
-    <div class="trust-tile">
-      <div class="trust-ic"><i class="fa-solid fa-money-bill-wave"></i></div>
-      <div class="trust-label">Cash on<br/>delivery</div>
-    </div>
-    <div class="trust-tile">
-      <div class="trust-ic"><i class="fa-solid fa-truck-fast"></i></div>
-      <div class="trust-label">Free<br/>delivery</div>
+  <div class="border border-[#E5E7EB] rounded-2xl px-2 py-3" style="box-shadow:0 1px 3px rgba(15,23,42,0.04);background:#FFFFFF">
+    <div class="trust-row">
+      <button class="trust-cell">
+        <span class="trust-ic-wrap">
+          <i class="fa-solid fa-rotate-left"></i>
+          <span class="badge-dot"><i class="fa-solid fa-check"></i></span>
+        </span>
+        <span class="trust-cap">7-Day<br/>Return <i class="fa-solid fa-chevron-right chev"></i></span>
+      </button>
+      <button class="trust-cell">
+        <span class="trust-ic-wrap">
+          <i class="fa-solid fa-indian-rupee-sign"></i>
+        </span>
+        <span class="trust-cap">Cash on<br/>Delivery <i class="fa-solid fa-chevron-right chev"></i></span>
+      </button>
+      <button class="trust-cell">
+        <span class="trust-ic-wrap">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span class="badge-dot" style="background:#FFFFFF"><i class="fa-solid fa-star" style="font-size:8px;color:#FBBF24"></i></span>
+        </span>
+        <span class="trust-cap">Katyayani<br/>Assured <i class="fa-solid fa-chevron-right chev"></i></span>
+      </button>
     </div>
   </div>
 </div>
 
-<!-- Product description · plain prose · sits ABOVE How to Use per spec -->
+<!-- Product description -->
 <div class="px-4 mt-6">
   <div class="text-[16px] font-extrabold mb-2 text-[#0F172A]">Product description</div>
   <p class="text-[12.5px] leading-relaxed text-[#334155]">Activated Humic + Fulvic 98 is a concentrated bio-stimulant that improves root growth, soil structure and nutrient uptake. The 98% active fraction means a little goes a long way — works across cereals, vegetables, pulses and orchard crops, and is safe to tank-mix with most fertilizers.</p>
@@ -152,7 +212,7 @@
   </ul>
 </div>
 
-<!-- How to use · sits BELOW Product description per spec · ships with a how-to video + tabbed details -->
+<!-- How to use -->
 <div class="px-4 mt-6">
   <div class="text-[16px] font-extrabold mb-2 text-[#0F172A]">How to use</div>
   <a href="#" class="video-card aspect-[16/9] block">
@@ -175,7 +235,7 @@
   </div>
 </div>
 
-<!-- Testimonial video · real farmer telling their result · poster + duration + play -->
+<!-- Testimonial video -->
 <div class="px-4 mt-6">
   <div class="text-[16px] font-extrabold mb-2 text-[#0F172A]">Farmer testimonial</div>
   <a href="#" class="video-card aspect-[16/9] block">
@@ -186,7 +246,7 @@
   </a>
 </div>
 
-<!-- Ratings &amp; reviews summary · big score + per-star distribution + 1 highlighted review + View all -->
+<!-- Ratings & reviews -->
 <div class="px-4 mt-6">
   <div class="text-[16px] font-extrabold mb-3 text-[#0F172A]">Ratings &amp; reviews</div>
   <div class="border border-[#E5E7EB] rounded-2xl p-4">
@@ -221,7 +281,7 @@
   </div>
 </div>
 
-<!-- FAQ · sits AFTER the ratings &amp; reviews block per spec -->
+<!-- FAQ -->
 <div class="px-4 mt-6">
   <div class="text-[16px] font-extrabold mb-3 text-[#0F172A]">Questions &amp; answers</div>
   <div class="space-y-2">
@@ -231,7 +291,7 @@
   </div>
 </div>
 
-<!-- Ask Expert · full-width banner · mirrors the at-end state of the home-page Ask Expert FAB (same emerald gradient, expert photo + red video badge, arrow) -->
+<!-- Ask Expert -->
 <div class="px-4 mt-6 mb-6">
   <a href="advisory.html" class="expert-banner">
     <span class="ph-wrap">
@@ -246,19 +306,49 @@
   </a>
 </div>
 
-<!-- Sticky bottom ADD bar · clean home-card emerald ADD pattern, English only -->
-<div class="fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E7EB] px-4 py-3 flex items-center gap-3">
-  <div class="flex-shrink-0">
-    <div class="text-[10px] text-[#64748B] leading-none">500 ml</div>
-    <div class="text-[20px] font-black tnum leading-tight">₹276</div>
+<!-- Floating cart bar · home-page pattern · slate-dark with emerald icon · hidden by default, appears after first Add -->
+<a href="cart.html" id="cartBar" class="cart-fab">
+  <div class="flex items-center gap-3 min-w-0">
+    <div class="cart-ic"><i class="fa-solid fa-bag-shopping text-white text-[14px]"></i></div>
+    <div class="flex items-baseline gap-1.5 min-w-0">
+      <span class="text-[18px] font-extrabold tnum">₹<span id="cartTotal">276</span></span>
+      <span class="text-[11.5px] text-white/70 font-medium whitespace-nowrap"><span id="cartCount">1</span> item</span>
+    </div>
   </div>
-  <button onclick="location.href='cart.html'" class="flex-1 h-[52px] rounded-[12px] bg-[#059669] text-white text-[15px] font-extrabold flex items-center justify-center gap-2" style="box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-    Add to cart
-  </button>
+  <div class="flex items-center gap-1.5 text-[12.5px] font-bold flex-shrink-0">
+    <span>View cart</span>
+    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+  </div>
+</a>
+
+<!-- All-sizes bottom sheet · lists every variant when "+7 more" is tapped -->
+<div id="sheetBd" class="sheet-bd"></div>
+<div id="sheet" class="sheet">
+  <div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 0"></div>
+  <div class="px-5 pt-3 pb-3 flex items-center justify-between" style="flex-shrink:0">
+    <div class="text-[18px] font-extrabold">All pack sizes</div>
+    <button id="sheetClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+  </div>
+  <div class="px-5 pb-5 overflow-y-auto" style="flex:1">
+    <div class="grid grid-cols-3 gap-2">
+      <button class="var" data-size="100 ml" data-price="₹85"><div class="vk-size">100 ml</div><div class="vk-price tnum">₹85</div></button>
+      <button class="var" data-size="250 ml" data-price="₹176"><div class="vk-size">250 ml</div><div class="vk-price tnum">₹176</div></button>
+      <button class="var bestseller active" data-size="500 ml" data-price="₹276"><span class="vk-badge">BESTSELLER</span><div class="vk-size">500 ml</div><div class="vk-price tnum">₹276</div></button>
+      <button class="var" data-size="1 L" data-price="₹376"><div class="vk-size">1 L</div><div class="vk-price tnum">₹376</div></button>
+      <button class="var" data-size="2 L" data-price="₹720"><div class="vk-size">2 L</div><div class="vk-price tnum">₹720</div></button>
+      <button class="var" data-size="3 L" data-price="₹1,050"><div class="vk-size">3 L</div><div class="vk-price tnum">₹1,050</div></button>
+      <button class="var" data-size="5 L" data-price="₹1,575"><div class="vk-size">5 L</div><div class="vk-price tnum">₹1,575</div></button>
+      <button class="var" data-size="10 L" data-price="₹2,890"><div class="vk-size">10 L</div><div class="vk-price tnum">₹2,890</div></button>
+      <button class="var" data-size="20 L" data-price="₹5,490"><div class="vk-size">20 L</div><div class="vk-price tnum">₹5,490</div></button>
+      <button class="var" data-size="25 L" data-price="₹6,750"><div class="vk-size">25 L</div><div class="vk-price tnum">₹6,750</div></button>
+      <button class="var" data-size="50 L" data-price="₹12,800"><div class="vk-size">50 L</div><div class="vk-price tnum">₹12,800</div></button>
+      <button class="var" data-size="100 L" data-price="₹24,500"><div class="vk-size">100 L</div><div class="vk-price tnum">₹24,500</div></button>
+    </div>
+  </div>
 </div>
 
 <script>
+  // Image-gallery paginator
   (function(){
     const sc = document.getElementById('imgScroll');
     const dots = document.querySelectorAll('#imgDots .pg-dot');
@@ -269,17 +359,62 @@
     }, { passive: true });
   })();
 
+  // Variant selection · keep the visible grid and the sheet grid in sync · also feeds the cart bar / inline ADD price
+  function selectVariant(size, price){
+    document.querySelectorAll('.var').forEach(v => {
+      v.classList.toggle('active', v.dataset.size === size);
+    });
+    // Update headline price
+    const headPrice = document.querySelector('#priceRow .text-\\[28px\\]');
+    if (headPrice && price) headPrice.textContent = price;
+  }
+  document.querySelectorAll('.var').forEach(v => {
+    v.addEventListener('click', () => selectVariant(v.dataset.size, v.dataset.price));
+  });
+
+  // Inline ADD → -/+ stepper transition + floating cart bar (home-card pattern)
   (function(){
-    const vars = document.querySelectorAll('.var');
-    const stickySize = document.querySelector('.fixed .flex-shrink-0 .text-\\[10px\\]');
-    const stickyPrice = document.querySelector('.fixed .flex-shrink-0 .text-\\[20px\\]');
-    vars.forEach(v => v.addEventListener('click', () => {
-      vars.forEach(x => x.classList.remove('active'));
-      v.classList.add('active');
-      const sizeEl = v.querySelector('.text-\\[13\\.5px\\]');
-      const priceEl = v.querySelector('.text-\\[11\\.5px\\]');
-      if (stickySize && sizeEl) stickySize.textContent = sizeEl.textContent;
-      if (stickyPrice && priceEl) stickyPrice.textContent = priceEl.textContent;
+    const btn = document.getElementById('addBtn');
+    const steps = document.getElementById('addSteps');
+    const val = document.getElementById('addVal');
+    const dec = document.getElementById('addDec');
+    const inc = document.getElementById('addInc');
+    const cartBar = document.getElementById('cartBar');
+    const cartCount = document.getElementById('cartCount');
+    const cartTotal = document.getElementById('cartTotal');
+    let qty = 0;
+    function syncCart(){
+      if (!cartBar) return;
+      if (qty <= 0) { cartBar.style.display = 'none'; return; }
+      cartBar.style.display = 'flex';
+      cartCount.textContent = qty;
+      cartTotal.textContent = (276 * qty).toLocaleString('en-IN');
+    }
+    function showSteps(){ btn.style.display = 'none'; steps.style.display = 'flex'; }
+    function showAdd(){ btn.style.display = 'flex'; steps.style.display = 'none'; }
+    btn.addEventListener('click', () => { qty = 1; val.textContent = qty; showSteps(); syncCart(); });
+    inc.addEventListener('click', () => { qty += 1; val.textContent = qty; syncCart(); });
+    dec.addEventListener('click', () => {
+      qty -= 1;
+      if (qty <= 0) { qty = 0; val.textContent = 1; showAdd(); syncCart(); }
+      else { val.textContent = qty; syncCart(); }
+    });
+  })();
+
+  // "+7 more" sheet · opens the full 12-size grid
+  (function(){
+    const open = document.getElementById('moreSizes');
+    const close = document.getElementById('sheetClose');
+    const bd = document.getElementById('sheetBd');
+    const sh = document.getElementById('sheet');
+    if (!open) return;
+    open.addEventListener('click', () => { bd.classList.add('open'); sh.classList.add('open'); });
+    close.addEventListener('click', () => { bd.classList.remove('open'); sh.classList.remove('open'); });
+    bd.addEventListener('click', () => { bd.classList.remove('open'); sh.classList.remove('open'); });
+    // tapping a size in the sheet closes it and selects across both grids
+    sh.querySelectorAll('.var').forEach(v => v.addEventListener('click', () => {
+      selectVariant(v.dataset.size, v.dataset.price);
+      setTimeout(() => { bd.classList.remove('open'); sh.classList.remove('open'); }, 180);
     }));
   })();
 </script>

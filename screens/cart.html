@@ -19,11 +19,11 @@
   .cart-img{width:64px;height:64px;border-radius:10px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:6px;flex-shrink:0;border:1px solid #E5E7EB}
   .cart-img img{max-width:100%;max-height:100%;object-fit:contain}
   .cart-info{flex:1;min-width:0;line-height:1.3;padding-right:28px}
-  .cart-name{font-size:14.5px;font-weight:800;color:#0F172A;line-height:1.2}
-  .cart-size-inline{font-weight:700;color:#475569;font-size:13px}
+  .cart-name{font-size:14.5px;font-weight:700;color:#0F172A;line-height:1.2}
+  .cart-size-inline{font-weight:500;color:#94A3B8;font-size:13px}
   .cart-tech{font-size:11.5px;color:#94A3B8;margin-top:3px}
   .cart-price-row{display:flex;align-items:baseline;gap:6px;margin-top:8px}
-  .cart-price{font-size:16px;font-weight:800;color:#0F172A;line-height:1}
+  .cart-price{font-size:16px;font-weight:700;color:#0F172A;line-height:1}
   .cart-mrp{font-size:11px;color:#94A3B8;text-decoration:line-through}
   .cart-bottom{margin-top:10px;display:flex;align-items:center;justify-content:flex-end}
   .trash-btn{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:8px;background:#FEF2F2;color:#DC2626;border:1px solid #FECACA;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px}
@@ -55,22 +55,24 @@
   .applied-chip{display:flex;align-items:center;gap:8px;margin-top:10px;padding:10px 12px;border-radius:10px;background:#ECFDF5;border:1px solid #A7F3D0}
   .applied-chip .ck{width:22px;height:22px;border-radius:9999px;background:#059669;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
   .applied-chip .x-btn{background:transparent;border:0;color:#94A3B8;cursor:pointer;font-size:11px}
+  .applied-chip .nm{font-size:12.5px;font-weight:700;color:#047857}
+  .applied-chip .sv{font-size:10.5px;color:#64748B;margin-top:1px}
 
   /* Bill summary */
   .bill-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:3px 0}
   .bill-row .lbl{color:#64748B}
-  .bill-row .val{color:#0F172A;font-weight:600}
-  .bill-row .val.green{color:#047857;font-weight:700}
+  .bill-row .val{color:#0F172A;font-weight:500}
+  .bill-row .val.green{color:#047857;font-weight:600}
   .bill-total{border-top:1px dashed #CBD5E1;margin-top:8px;padding-top:10px;display:flex;align-items:baseline;justify-content:space-between}
-  .bill-total .lbl{font-size:14px;font-weight:800}
-  .bill-total .val{font-size:18px;font-weight:800}
-  .saved-pill{margin-top:10px;display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;background:#ECFDF5;color:#047857;font-size:11px;font-weight:800;border:1px solid #BBF7D0}
+  .bill-total .lbl{font-size:14px;font-weight:700}
+  .bill-total .val{font-size:18px;font-weight:700}
+  .saved-pill{margin-top:10px;display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;background:#ECFDF5;color:#047857;font-size:11px;font-weight:700;border:1px solid #BBF7D0}
 
   /* Sticky checkout · "3 items ₹1,900" sits ABOVE the button, not inside it · 5-7 day delivery line dropped */
   .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:10px 14px 14px;z-index:50}
   .sticky-sum{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;padding:0 2px}
-  .sticky-sum .ttl{font-size:11px;color:#64748B;font-weight:700}
-  .sticky-sum .amt{font-size:20px;font-weight:900;color:#0F172A}
+  .sticky-sum .ttl{font-size:11px;color:#64748B;font-weight:500}
+  .sticky-sum .amt{font-size:20px;font-weight:700;color:#0F172A}
   .sticky-cta-btn{width:100%;height:52px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
 
   /* Modals · cross-sell + coupon sheet */
@@ -88,13 +90,21 @@
   .coup-tile .code-desc{font-size:11.5px;color:#64748B;margin-top:2px}
   .coup-tile .apply-btn{flex-shrink:0;padding:8px 14px;border-radius:8px;background:#059669;color:#FFFFFF;border:0;font-size:12px;font-weight:800;cursor:pointer}
   .coup-tile.ineligible .apply-btn{background:#F1F5F9;color:#94A3B8;cursor:not-allowed}
-  /* Cross-sell card */
+  /* Cross-sell card · lighter typography (no extrabold pile-up) · tag is a single tiny emerald chip with a dot icon · ADD pill uses the primary emerald border */
   .xsell-card{border:1px solid #E5E7EB;border-radius:14px;background:#FFFFFF;padding:10px 12px;display:flex;align-items:center;gap:10px}
   .xsell-img{width:54px;height:54px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
   .xsell-img img{max-width:100%;max-height:100%;object-fit:contain}
-  .xsell-add{padding:7px 14px;border-radius:8px;background:#FFFFFF;color:#047857;border:1.5px solid #BBF7D0;font-size:12.5px;font-weight:800;cursor:pointer;flex-shrink:0}
-  .xsell-add.added{background:#ECFDF5;color:#047857}
-  .xsell-tag{display:inline-flex;align-items:center;gap:4px;padding:1px 6px;border-radius:4px;background:#FEF3C7;color:#92400E;font-size:9.5px;font-weight:800;letter-spacing:0.04em}
+  .xsell-add{padding:7px 16px;border-radius:9px;background:#FFFFFF;color:#047857;border:1.5px solid #059669;font-size:12.5px;font-weight:800;letter-spacing:0.04em;cursor:pointer;flex-shrink:0;text-transform:uppercase}
+  .xsell-add:active{transform:scale(.96)}
+  .xsell-add.added{background:#ECFDF5;color:#047857;border-color:#059669}
+  /* Single subtle chip · same emerald-tint for every reason (Bestseller pair / Also bought / Combo) so they don't compete · little dot prefix instead of icon */
+  .xsell-tag{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:9999px;background:#ECFDF5;color:#047857;font-size:9.5px;font-weight:700;letter-spacing:0.02em;border:1px solid #A7F3D0}
+  .xsell-tag::before{content:"";width:5px;height:5px;border-radius:50%;background:#059669;display:inline-block}
+  /* Free-delivery threshold strip inside the cross-sell sheet · clear value-prop driver · single sentence + progress bar */
+  .xsell-thresh{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:#ECFDF5;border:1px solid #A7F3D0;margin-bottom:12px}
+  .xsell-thresh .ic{width:32px;height:32px;border-radius:9px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#047857;flex-shrink:0}
+  .xsell-thresh .bar{height:5px;background:#FFFFFF;border-radius:9999px;overflow:hidden;margin-top:5px}
+  .xsell-thresh .fill{height:100%;background:#059669;border-radius:9999px}
 
   /* Confetti celebration when a coupon is applied · short burst that fades out · pure CSS */
   .celeb{position:fixed;inset:0;pointer-events:none;z-index:120;display:none}
@@ -133,15 +143,15 @@
       <div class="addr-ic"><i class="fa-solid fa-truck-fast"></i></div>
       <div class="addr-body">
         <div class="flex items-center gap-1.5">
-          <span class="text-[14.5px] font-extrabold text-[#0F172A]">Tomorrow, 28 May</span>
-          <span class="text-[9px] font-extrabold text-[#047857] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider">Free</span>
+          <span class="text-[14.5px] font-bold text-[#0F172A]">Tomorrow, 28 May</span>
+          <span class="text-[9px] font-bold text-[#047857] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider">Free</span>
         </div>
-        <div class="text-[11.5px] text-[#64748B] mt-0.5">Order before <span class="font-extrabold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
+        <div class="text-[11.5px] text-[#64748B] mt-0.5">Order before <span class="font-bold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
       </div>
     </div>
     <div class="addr-row-bottom">
       <i class="fa-solid fa-location-dot text-[14px]" style="color:#94A3B8"></i>
-      <div class="flex-1 min-w-0 text-[12.5px] font-semibold truncate" style="color:#475569">Ramesh Patel · Mahidpur, Ujjain · 456440</div>
+      <div class="flex-1 min-w-0 text-[12.5px] font-medium truncate" style="color:#475569">Ramesh Patel · Mahidpur, Ujjain · 456440</div>
       <button class="addr-change">Change</button>
     </div>
   </div>
@@ -216,7 +226,7 @@
     <div class="pmeter-head">
       <span class="pmeter-ic"><i class="fa-solid fa-gift"></i></span>
       <div class="flex-1 leading-tight">
-        <div class="text-[13.5px] font-extrabold text-[#0F172A]" id="pmeterTitle">Spend ₹300 more to unlock a free Humic 50 ml sample</div>
+        <div class="text-[13.5px] font-bold text-[#0F172A]" id="pmeterTitle">Spend ₹300 more to unlock a free Humic 50 ml sample</div>
         <div class="text-[11px] mt-1" style="color:#64748B" id="pmeterSub">A trial 50 ml pack will be added automatically at checkout</div>
       </div>
     </div>
@@ -227,13 +237,13 @@
   <div class="coupon-card mt-3" id="couponCard">
     <div class="coupon-row">
       <span class="coup-ic"><i class="fa-solid fa-ticket"></i></span>
-      <span class="flex-1 text-left text-[13px] font-extrabold text-[#0F172A]" id="couponMain">Apply a coupon code</span>
+      <span class="flex-1 text-left text-[13px] font-bold text-[#0F172A]" id="couponMain">Apply a coupon code</span>
       <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
     </div>
     <div class="applied-chip" id="appliedChip" style="display:none">
       <span class="ck"><i class="fa-solid fa-check"></i></span>
       <div class="flex-1 leading-tight">
-        <div class="text-[12.5px] font-extrabold" style="color:#047857" id="appliedName">WELCOME100 applied</div>
+        <div class="text-[12.5px] font-bold" style="color:#047857" id="appliedName">WELCOME100 applied</div>
         <div class="text-[10.5px]" style="color:#64748B" id="appliedSave">You saved ₹100</div>
       </div>
       <button class="x-btn" id="removeCoupon"><i class="fa-solid fa-xmark text-[13px]"></i></button>
@@ -263,7 +273,7 @@
         <div class="ttl">3 items</div>
         <div class="amt tnum">&#8377;1,900</div>
       </div>
-      <div class="text-[11px] font-extrabold" style="color:#047857"><i class="fa-solid fa-circle-check text-[10px]"></i> Saved ₹520</div>
+      <div class="text-[11px] font-bold" style="color:#047857"><i class="fa-solid fa-circle-check text-[10px]"></i> Saved ₹520</div>
     </div>
     <button id="checkoutBtn" class="sticky-cta-btn">
       Checkout <i class="fa-solid fa-arrow-right text-[12px]"></i>
@@ -352,29 +362,35 @@
     <span id="celebText">Coupon applied · Saved ₹100</span>
   </div>
 
-  <!-- Cross-sell sheet (unchanged · opens from Checkout) -->
+  <!-- Cross-sell sheet · trimmed copy · free-delivery threshold strip drives the value · single Skip & Continue CTA (added items stay, others don't) · cards lighter typographic weight -->
   <div id="xsellBd" class="modal-bd"></div>
   <div id="xsellSheet" class="modal-sheet">
     <div class="modal-handle"></div>
-    <div class="px-5 pt-3 pb-3 flex items-center justify-between">
-      <div class="leading-tight">
-        <div class="text-[18px] font-extrabold">Before you checkout</div>
-        <div class="text-[11.5px]" style="color:#64748B">Farmers who bought your items also added these</div>
-      </div>
+    <div class="px-5 pt-3 pb-2 flex items-center justify-between">
+      <div class="text-[17px] font-extrabold leading-tight">Add &amp; save more</div>
       <button id="xsellClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
+
     <div class="px-5 pb-2 overflow-y-auto" style="flex:1">
+      <!-- Threshold strip · "Add ₹300 more for free delivery" with progress · gives a clear reason to add one of the picks below -->
+      <div class="xsell-thresh">
+        <span class="ic"><i class="fa-solid fa-truck-fast text-[14px]"></i></span>
+        <div class="flex-1 leading-tight min-w-0">
+          <div class="text-[12.5px] font-extrabold" style="color:#047857">Add ₹300 more for <span class="font-black">FREE</span> delivery</div>
+          <div class="bar"><div class="fill" style="width:78%"></div></div>
+        </div>
+      </div>
+
       <div class="space-y-2.5">
         <div class="xsell-card">
           <div class="xsell-img"><img src="../assets/AntiVirus_nobg.png" alt=""/></div>
           <div class="flex-1 min-w-0 leading-tight">
-            <div class="flex items-center gap-1.5"><span class="xsell-tag">Bestseller pair</span></div>
-            <div class="text-[13.5px] font-extrabold mt-1">Antivirus</div>
-            <div class="text-[11px]" style="color:#94A3B8">Anti-viral biostimulant · 250 ml</div>
+            <span class="xsell-tag">Bestseller pair</span>
+            <div class="text-[13.5px] font-bold mt-1.5">Antivirus <span class="font-medium" style="color:#94A3B8">· 250 ml</span></div>
             <div class="flex items-baseline gap-1.5 mt-1">
-              <span class="text-[14px] font-extrabold tnum">&#8377;327</span>
+              <span class="text-[13.5px] font-extrabold tnum">&#8377;327</span>
               <span class="text-[10.5px] line-through tnum" style="color:#94A3B8">&#8377;425</span>
-              <span class="text-[10px] font-extrabold" style="color:#047857">23% off</span>
+              <span class="text-[10px] font-bold" style="color:#047857">23% off</span>
             </div>
           </div>
           <button class="xsell-add">Add</button>
@@ -382,13 +398,12 @@
         <div class="xsell-card">
           <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" alt=""/></div>
           <div class="flex-1 min-w-0 leading-tight">
-            <div class="flex items-center gap-1.5"><span class="xsell-tag">Customers also bought</span></div>
-            <div class="text-[13.5px] font-extrabold mt-1">Bhumiraja</div>
-            <div class="text-[11px]" style="color:#94A3B8">Soil conditioner · 1 kg</div>
+            <span class="xsell-tag">Also bought</span>
+            <div class="text-[13.5px] font-bold mt-1.5">Bhumiraja <span class="font-medium" style="color:#94A3B8">· 1 kg</span></div>
             <div class="flex items-baseline gap-1.5 mt-1">
-              <span class="text-[14px] font-extrabold tnum">&#8377;245</span>
+              <span class="text-[13.5px] font-extrabold tnum">&#8377;245</span>
               <span class="text-[10.5px] line-through tnum" style="color:#94A3B8">&#8377;320</span>
-              <span class="text-[10px] font-extrabold" style="color:#047857">24% off</span>
+              <span class="text-[10px] font-bold" style="color:#047857">24% off</span>
             </div>
           </div>
           <button class="xsell-add">Add</button>
@@ -396,13 +411,12 @@
         <div class="xsell-card">
           <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" alt=""/></div>
           <div class="flex-1 min-w-0 leading-tight">
-            <div class="flex items-center gap-1.5"><span class="xsell-tag" style="background:#ECFDF5;color:#047857">Save more in combo</span></div>
-            <div class="text-[13.5px] font-extrabold mt-1">Chakraveer 18.5%</div>
-            <div class="text-[11px]" style="color:#94A3B8">Chlorantraniliprole 18.5% SC · 100 ml</div>
+            <span class="xsell-tag">Combo saver</span>
+            <div class="text-[13.5px] font-bold mt-1.5">Chakraveer 18.5% <span class="font-medium" style="color:#94A3B8">· 100 ml</span></div>
             <div class="flex items-baseline gap-1.5 mt-1">
-              <span class="text-[14px] font-extrabold tnum">&#8377;440</span>
+              <span class="text-[13.5px] font-extrabold tnum">&#8377;440</span>
               <span class="text-[10.5px] line-through tnum" style="color:#94A3B8">&#8377;610</span>
-              <span class="text-[10px] font-extrabold" style="color:#047857">28% off</span>
+              <span class="text-[10px] font-bold" style="color:#047857">28% off</span>
             </div>
           </div>
           <button class="xsell-add">Add</button>
@@ -410,12 +424,9 @@
       </div>
     </div>
     <div class="px-5 pt-3 pb-5" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px)">
-      <div class="flex gap-2 items-center">
-        <button id="xsellSkip" class="flex-1 h-[48px] rounded-[12px] text-[13px] font-bold" style="background:#FFFFFF;color:#475569;border:1.5px solid #E5E7EB">Skip</button>
-        <button id="xsellContinue" class="flex-[1.4] h-[52px] rounded-[12px] text-white text-[14.5px] font-extrabold inline-flex items-center justify-center gap-2" style="background:#059669;border:0;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
-          Continue to checkout <i class="fa-solid fa-chevron-right text-[12px]"></i>
-        </button>
-      </div>
+      <button id="xsellContinue" class="w-full h-[52px] rounded-[12px] text-white text-[14.5px] font-extrabold inline-flex items-center justify-center gap-2" style="background:#059669;border:0;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+        Skip &amp; Continue <i class="fa-solid fa-arrow-right text-[12px]"></i>
+      </button>
     </div>
   </div>
 
@@ -493,14 +504,12 @@
       const bd = document.getElementById('xsellBd');
       const sheet = document.getElementById('xsellSheet');
       const closeBt = document.getElementById('xsellClose');
-      const skipBt = document.getElementById('xsellSkip');
       const goBt = document.getElementById('xsellContinue');
       function open(){ bd.classList.add('open'); sheet.classList.add('open'); }
       function close(){ bd.classList.remove('open'); sheet.classList.remove('open'); }
       btn.addEventListener('click', open);
       closeBt.addEventListener('click', close);
       bd.addEventListener('click', close);
-      skipBt.addEventListener('click', () => { window.location.href = 'checkout.html'; });
       goBt.addEventListener('click',   () => { window.location.href = 'checkout.html'; });
       document.querySelectorAll('.xsell-add').forEach(b => {
         b.addEventListener('click', () => {

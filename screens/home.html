@@ -147,20 +147,9 @@
   body.at-end .cat-label   { font-size: 13.5px !important; }
   body.at-end .cat-emoji   { font-size: 32px !important; }
   body.at-end .cat-svg     { width: 36px !important; height: 36px !important; }
-  body.at-end .cat-tile    { width: 88px !important; gap: 8px !important; animation: catEndPop .55s ease-out 1; }
-  body.at-end .cat-tile:nth-child(1) { animation-delay: 0ms; }
-  body.at-end .cat-tile:nth-child(2) { animation-delay: 70ms; }
-  body.at-end .cat-tile:nth-child(3) { animation-delay: 140ms; }
-  body.at-end .cat-tile:nth-child(4) { animation-delay: 210ms; }
-  body.at-end .cat-tile:nth-child(5) { animation-delay: 280ms; }
+  body.at-end .cat-tile    { width: 88px !important; gap: 8px !important; }
   body.at-end .sticky-cats { padding-top: 14px !important; padding-bottom: 14px !important; }
   body.at-end .sticky-cats > div { gap: 0 !important; padding: 0 16px !important; }
-  /* Single ease-out pop · scale + soft emerald drop-shadow that fades · NO infinite loop · runs once on entry into at-end */
-  @keyframes catEndPop {
-    0%   { transform: scale(.85); filter: drop-shadow(0 0 0 rgba(5,150,105,0)); }
-    60%  { transform: scale(1.08); filter: drop-shadow(0 6px 14px rgba(5,150,105,0.45)); }
-    100% { transform: scale(1);   filter: drop-shadow(0 0 0 rgba(5,150,105,0)); }
-  }
   /* Jump-to-top · always visible above the brand illustration footer (no longer gated by body.at-end) */
 
   /* Flash sale ⚡ icon pulse */

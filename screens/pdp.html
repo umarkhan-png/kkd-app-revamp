@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · PDP</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
@@ -19,18 +20,38 @@
   /* Image gallery paginator · one dot per image · active dot gets the emerald pill treatment */
   .pg-dot{width:6px;height:6px;border-radius:9999px;background:rgba(15,23,42,0.22);transition:all .25s ease}
   .pg-dot.active{width:20px;background:#059669}
+  /* Ask-Expert full-width banner · mirrors the at-end state of the home-page expert FAB (same gradient, photo + red video badge, text column, arrow) */
+  .expert-banner{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;text-decoration:none;color:#FFFFFF;background:linear-gradient(145deg,#10B981,#065F46);box-shadow:0 8px 22px -6px rgba(16,185,129,0.55),inset 0 1px 0 rgba(255,255,255,0.18)}
+  .expert-banner .ph-wrap{position:relative;flex-shrink:0}
+  .expert-banner .ph{width:46px;height:46px;border-radius:9999px;object-fit:cover;border:2px solid #FFFFFF;display:block}
+  .expert-banner .vb{position:absolute;bottom:-2px;right:-2px;width:22px;height:22px;border-radius:9999px;background:#DC2626;border:2px solid #FFFFFF;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:9px;box-shadow:0 2px 6px rgba(220,38,38,0.4)}
+  .expert-banner .ar{margin-left:auto;font-size:18px;font-weight:800;color:#FFFFFF}
+  /* Video card · play overlay on a poster image */
+  .video-card{position:relative;border-radius:14px;overflow:hidden;background:#0F172A;display:block}
+  .video-card .poster{display:block;width:100%;height:100%;object-fit:cover}
+  .video-card .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:9999px;background:rgba(255,255,255,0.92);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px -6px rgba(0,0,0,0.35)}
+  .video-card .play svg{margin-left:3px}
+  .video-card .label{position:absolute;bottom:10px;left:12px;color:#FFFFFF;font-weight:800;font-size:12px;text-shadow:0 1px 4px rgba(0,0,0,0.35)}
+  .video-card .duration{position:absolute;top:10px;right:10px;background:rgba(15,23,42,0.7);color:#FFFFFF;font-weight:700;font-size:10px;padding:3px 7px;border-radius:9999px}
+  /* Trust badge tile · white card with hairline border + soft shadow */
+  .trust-tile{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:12px;padding:10px 8px;box-shadow:0 1px 3px rgba(15,23,42,0.04);display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+  .trust-ic{width:34px;height:34px;border-radius:9px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .trust-label{font-size:11px;font-weight:700;color:#0F172A;line-height:1.2}
+  /* Rating bar · per-star distribution row */
+  .bar-track{height:6px;border-radius:9999px;background:#F1F5F9;overflow:hidden;flex:1}
+  .bar-fill{height:100%;background:#059669;border-radius:9999px}
 </style></head>
 <body class="min-h-screen pb-[90px]">
 
 <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
 
-<!-- Top bar · heart removed · only back + share -->
+<!-- Top bar · only back + share -->
 <div class="flex items-center justify-between px-4 pt-3">
   <button onclick="if(document.referrer && history.length>1){history.back()}else{location.href='home.html'}" class="w-10 h-10 rounded-full bg-white/80 backdrop-blur border border-[#E5E7EB] flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
   <button class="w-10 h-10 rounded-full bg-white/80 backdrop-blur border border-[#E5E7EB] flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg></button>
 </div>
 
-<!-- Image gallery · horizontal swipe with snap · paginator dots (one per image) replace the 1/4 pill · rating badge replaces the duplicate 28% OFF (which lives beside the MRP) -->
+<!-- Image gallery · horizontal swipe with snap · paginator dots (one per image) · rating badge replaces the duplicate 28% OFF -->
 <div class="relative mt-2 mx-4">
   <div id="imgScroll" class="scrollx flex bg-[#F8FAFC] rounded-2xl aspect-square">
     <div class="snap-c w-full flex-shrink-0 flex items-center justify-center p-6"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/></div>
@@ -39,23 +60,20 @@
     <div class="snap-c w-full flex-shrink-0 flex items-center justify-center p-6"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/></div>
   </div>
   <span class="absolute top-3 left-3 text-[9px] font-extrabold bg-[#FBBF24] text-[#0F172A] px-2 py-0.5 rounded">#1 BESTSELLER</span>
-  <!-- Rating badge replaces the duplicate 28% OFF on the image · top-right -->
   <span class="absolute top-3 right-3 inline-flex items-center gap-1 bg-white/95 backdrop-blur px-2 py-1 rounded-full text-[11px] font-extrabold shadow-sm">
     <svg width="11" height="11" viewBox="0 0 24 24" fill="#FBBF24"><path d="M12 .587l3.668 7.568L24 9.423l-6 5.85L19.336 24 12 19.897 4.664 24 6 15.273 0 9.423l8.332-1.268z"/></svg>
     <span class="text-[#0F172A] tnum">4.6</span>
   </span>
-  <!-- Paginator dots · one per image -->
   <div id="imgDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
     <span class="pg-dot active"></span><span class="pg-dot"></span><span class="pg-dot"></span><span class="pg-dot"></span>
   </div>
 </div>
 
-<!-- Title · category tag → product name H1 → English subtitle · Katyayani brand line dropped -->
+<!-- Title · category tag → product name H1 → English subtitle -->
 <div class="px-4 mt-4">
   <div class="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#047857]">Bio-stimulant</div>
   <h1 class="text-[22px] font-extrabold leading-tight mt-1 text-[#0F172A]">Activated Humic + Fulvic 98</h1>
   <div class="text-[12.5px] text-[#64748B] mt-1">Strengthens plant roots</div>
-  <!-- Rating row · larger fonts, clearer hierarchy · separated reviews / orders -->
   <div class="flex items-center gap-3 mt-2.5 text-[12.5px]">
     <span class="font-extrabold text-[#0F172A]">2,020 reviews</span>
     <span class="text-[#CBD5E1]">·</span>
@@ -63,7 +81,7 @@
   </div>
 </div>
 
-<!-- Price · "Inclusive of all taxes" line dropped -->
+<!-- Price -->
 <div class="px-4 mt-3 flex items-baseline gap-2">
   <span class="text-[28px] font-black tnum">₹376</span>
   <span class="text-[14px] text-[#94A3B8] line-through tnum">₹520</span>
@@ -101,35 +119,111 @@
   </div>
 </div>
 
-<!-- Tabbed: How to Use / Crops / Effect -->
-<div class="mx-4 mt-6 border border-[#E5E7EB] rounded-2xl">
-  <div class="flex p-1 border-b border-[#E5E7EB]"><button class="tab active flex-1 h-9 rounded-lg text-[12px] font-bold">How to Use</button><button class="tab flex-1 h-9 rounded-lg text-[12px] font-bold">Crops</button><button class="tab flex-1 h-9 rounded-lg text-[12px] font-bold">Effect</button></div>
-  <div class="p-4 space-y-2 text-[12px] text-[#0F172A]">
-    <div class="flex gap-2"><span class="font-extrabold text-[#059669]">1.</span><span>Dilute 2 ml in 1 litre of water</span></div>
-    <div class="flex gap-2"><span class="font-extrabold text-[#059669]">2.</span><span>Spray on plant leaves during early morning or evening</span></div>
-    <div class="flex gap-2"><span class="font-extrabold text-[#059669]">3.</span><span>Repeat every 10-15 days for best results</span></div>
-  </div>
-</div>
-
-<!-- Real-farmer reviews -->
-<div class="px-4 mt-6">
-  <div class="flex items-baseline justify-between mb-3"><div class="text-[16px] font-extrabold">Farmer reviews</div><button class="text-[11px] font-bold text-[#047857] uppercase">View all</button></div>
-  <div class="border border-[#E5E7EB] rounded-2xl p-3.5">
-    <div class="flex items-start gap-3">
-      <img src="https://images.unsplash.com/photo-1627638458498-71e9fdf12a05?w=200&q=80" class="w-10 h-10 rounded-full object-cover flex-shrink-0"/>
-      <div class="flex-1 min-w-0">
-        <div class="flex items-center justify-between"><div class="text-[13px] font-bold">Ramesh Patel</div><span class="text-[10px] font-bold text-[#059669]">✓ Verified</span></div>
-        <div class="flex items-center gap-1.5"><span class="text-[#FBBF24] text-[12px]">★★★★★</span><span class="text-[10px] text-[#64748B]">·  Indore, MP · 12 days ago</span></div>
-        <p class="text-[12px] mt-1.5 text-[#0F172A] leading-snug">Tomato me lagaya, 15 din me result. Patte chamak gaye. Wapas order karunga.</p>
-        <div class="mt-2 flex gap-2"><img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=200&q=80" class="w-14 h-14 rounded-lg object-cover"/><img src="https://images.unsplash.com/photo-1591857177580-dc82b9ac4e1e?w=200&q=80" class="w-14 h-14 rounded-lg object-cover"/></div>
-      </div>
+<!-- Trust badges · 4-tile row of buyer-trust signals -->
+<div class="px-4 mt-5">
+  <div class="grid grid-cols-4 gap-2">
+    <div class="trust-tile">
+      <div class="trust-ic"><i class="fa-solid fa-shield-halved"></i></div>
+      <div class="trust-label">Genuine<br/>product</div>
+    </div>
+    <div class="trust-tile">
+      <div class="trust-ic"><i class="fa-solid fa-rotate-left"></i></div>
+      <div class="trust-label">7-day<br/>return</div>
+    </div>
+    <div class="trust-tile">
+      <div class="trust-ic"><i class="fa-solid fa-money-bill-wave"></i></div>
+      <div class="trust-label">Cash on<br/>delivery</div>
+    </div>
+    <div class="trust-tile">
+      <div class="trust-ic"><i class="fa-solid fa-truck-fast"></i></div>
+      <div class="trust-label">Free<br/>delivery</div>
     </div>
   </div>
 </div>
 
-<!-- FAQ -->
+<!-- Product description · plain prose · sits ABOVE How to Use per spec -->
 <div class="px-4 mt-6">
-  <div class="text-[16px] font-extrabold mb-3">Questions &amp; answers</div>
+  <div class="text-[16px] font-extrabold mb-2 text-[#0F172A]">Product description</div>
+  <p class="text-[12.5px] leading-relaxed text-[#334155]">Activated Humic + Fulvic 98 is a concentrated bio-stimulant that improves root growth, soil structure and nutrient uptake. The 98% active fraction means a little goes a long way — works across cereals, vegetables, pulses and orchard crops, and is safe to tank-mix with most fertilizers.</p>
+  <ul class="mt-3 space-y-1.5 text-[12.5px] text-[#334155]">
+    <li class="flex gap-2"><span class="text-[#059669] font-extrabold">✓</span><span>Stronger roots and better water absorption</span></li>
+    <li class="flex gap-2"><span class="text-[#059669] font-extrabold">✓</span><span>Greener, fuller leaves within 10–15 days</span></li>
+    <li class="flex gap-2"><span class="text-[#059669] font-extrabold">✓</span><span>Improves soil microbe activity over the season</span></li>
+  </ul>
+</div>
+
+<!-- How to use · sits BELOW Product description per spec · ships with a how-to video + tabbed details -->
+<div class="px-4 mt-6">
+  <div class="text-[16px] font-extrabold mb-2 text-[#0F172A]">How to use</div>
+  <a href="#" class="video-card aspect-[16/9] block">
+    <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=800&q=80" class="poster" alt="How to use video"/>
+    <span class="duration">1:24</span>
+    <span class="play"><svg width="22" height="22" viewBox="0 0 24 24" fill="#059669"><path d="M8 5v14l11-7z"/></svg></span>
+    <span class="label">Watch · How to mix &amp; spray</span>
+  </a>
+  <div class="mt-3 border border-[#E5E7EB] rounded-2xl">
+    <div class="flex p-1 border-b border-[#E5E7EB]">
+      <button class="tab active flex-1 h-9 rounded-lg text-[12px] font-bold">Steps</button>
+      <button class="tab flex-1 h-9 rounded-lg text-[12px] font-bold">Crops</button>
+      <button class="tab flex-1 h-9 rounded-lg text-[12px] font-bold">Effect</button>
+    </div>
+    <div class="p-4 space-y-2 text-[12.5px] text-[#0F172A]">
+      <div class="flex gap-2"><span class="font-extrabold text-[#059669]">1.</span><span>Dilute 2 ml in 1 litre of water</span></div>
+      <div class="flex gap-2"><span class="font-extrabold text-[#059669]">2.</span><span>Spray on plant leaves during early morning or evening</span></div>
+      <div class="flex gap-2"><span class="font-extrabold text-[#059669]">3.</span><span>Repeat every 10–15 days for best results</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Testimonial video · real farmer telling their result · poster + duration + play -->
+<div class="px-4 mt-6">
+  <div class="text-[16px] font-extrabold mb-2 text-[#0F172A]">Farmer testimonial</div>
+  <a href="#" class="video-card aspect-[16/9] block">
+    <img src="https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=800&q=80" class="poster" alt="Farmer testimonial video"/>
+    <span class="duration">0:48</span>
+    <span class="play"><svg width="22" height="22" viewBox="0 0 24 24" fill="#059669"><path d="M8 5v14l11-7z"/></svg></span>
+    <span class="label">Ramesh, Indore · Tomato result in 15 days</span>
+  </a>
+</div>
+
+<!-- Ratings &amp; reviews summary · big score + per-star distribution + 1 highlighted review + View all -->
+<div class="px-4 mt-6">
+  <div class="text-[16px] font-extrabold mb-3 text-[#0F172A]">Ratings &amp; reviews</div>
+  <div class="border border-[#E5E7EB] rounded-2xl p-4">
+    <div class="flex items-center gap-4">
+      <div class="text-center">
+        <div class="text-[34px] font-black leading-none tnum text-[#0F172A]">4.6</div>
+        <div class="text-[#FBBF24] text-[13px] tracking-[2px] leading-none mt-1">★★★★★</div>
+        <div class="text-[10.5px] font-bold text-[#64748B] mt-1.5">2,020 reviews</div>
+      </div>
+      <div class="flex-1 space-y-1.5">
+        <div class="flex items-center gap-2"><span class="text-[10px] font-bold text-[#64748B] w-3">5</span><div class="bar-track"><div class="bar-fill" style="width:72%"></div></div><span class="text-[10px] font-bold text-[#64748B] w-8 text-right tnum">1,454</span></div>
+        <div class="flex items-center gap-2"><span class="text-[10px] font-bold text-[#64748B] w-3">4</span><div class="bar-track"><div class="bar-fill" style="width:18%"></div></div><span class="text-[10px] font-bold text-[#64748B] w-8 text-right tnum">364</span></div>
+        <div class="flex items-center gap-2"><span class="text-[10px] font-bold text-[#64748B] w-3">3</span><div class="bar-track"><div class="bar-fill" style="width:6%"></div></div><span class="text-[10px] font-bold text-[#64748B] w-8 text-right tnum">121</span></div>
+        <div class="flex items-center gap-2"><span class="text-[10px] font-bold text-[#64748B] w-3">2</span><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div><span class="text-[10px] font-bold text-[#64748B] w-8 text-right tnum">41</span></div>
+        <div class="flex items-center gap-2"><span class="text-[10px] font-bold text-[#64748B] w-3">1</span><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div><span class="text-[10px] font-bold text-[#64748B] w-8 text-right tnum">40</span></div>
+      </div>
+    </div>
+
+    <div class="mt-4 pt-4 border-t border-dashed border-[#E5E7EB]">
+      <div class="flex items-start gap-3">
+        <img src="https://images.unsplash.com/photo-1627638458498-71e9fdf12a05?w=200&q=80" class="w-10 h-10 rounded-full object-cover flex-shrink-0"/>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between"><div class="text-[13px] font-bold">Ramesh Patel</div><span class="text-[10px] font-bold text-[#059669]">✓ Verified buyer</span></div>
+          <div class="flex items-center gap-1.5"><span class="text-[#FBBF24] text-[12px]">★★★★★</span><span class="text-[10px] text-[#64748B]">·  Indore, MP · 12 days ago</span></div>
+          <p class="text-[12.5px] mt-1.5 text-[#0F172A] leading-snug">Used on tomato — saw results in 15 days. Leaves are shinier and stronger. Will order again.</p>
+          <div class="mt-2 flex gap-2"><img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=200&q=80" class="w-14 h-14 rounded-lg object-cover"/><img src="https://images.unsplash.com/photo-1591857177580-dc82b9ac4e1e?w=200&q=80" class="w-14 h-14 rounded-lg object-cover"/></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="mt-4 w-full h-10 rounded-lg border border-[#059669] text-[#059669] text-[12.5px] font-extrabold">View all 2,020 reviews</button>
+  </div>
+</div>
+
+<!-- FAQ · sits AFTER the ratings &amp; reviews block per spec -->
+<div class="px-4 mt-6">
+  <div class="text-[16px] font-extrabold mb-3 text-[#0F172A]">Questions &amp; answers</div>
   <div class="space-y-2">
     <button class="w-full text-left border border-[#E5E7EB] rounded-lg p-3.5 flex items-center justify-between"><span class="text-[13px] font-semibold">Is it safe for tomato plants?</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
     <button class="w-full text-left border border-[#E5E7EB] rounded-lg p-3.5 flex items-center justify-between"><span class="text-[13px] font-semibold">How many sprays in one season?</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
@@ -137,22 +231,22 @@
   </div>
 </div>
 
-<!-- Ask expert -->
-<div class="px-4 mt-6 mb-4">
-  <a href="advisory.html" class="block rounded-2xl overflow-hidden relative" style="background:linear-gradient(115deg,#064E3B,#047857)">
-    <div class="flex h-[100px]">
-      <div class="flex-1 p-3.5 text-white">
-        <div class="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#FCD34D]">Need help?</div>
-        <div class="text-[15px] font-extrabold mt-1">Ask an agronomist</div>
-        <div class="text-[10.5px] text-white/70 mt-0.5">Free 5-min call</div>
-        <div class="inline-flex items-center gap-1 mt-2 px-2.5 py-1 rounded-full bg-[#FBBF24] text-[#0F172A] text-[10px] font-extrabold">Call now <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="3" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>
-      </div>
-      <div class="w-[110px] relative"><img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&q=80" class="absolute inset-0 w-full h-full object-cover"/><div class="absolute inset-0" style="background:linear-gradient(90deg,rgba(10,58,32,0.5) 0%,transparent 50%)"></div></div>
-    </div>
+<!-- Ask Expert · full-width banner · mirrors the at-end state of the home-page Ask Expert FAB (same emerald gradient, expert photo + red video badge, arrow) -->
+<div class="px-4 mt-6 mb-6">
+  <a href="advisory.html" class="expert-banner">
+    <span class="ph-wrap">
+      <img src="../assets/expert.png" class="ph" alt="Krishi expert"/>
+      <span class="vb"><i class="fa-solid fa-video"></i></span>
+    </span>
+    <span class="flex-1 leading-tight">
+      <span class="block text-[14px] font-extrabold">Ask Expert</span>
+      <span class="block text-[11px] font-semibold" style="color:rgba(255,255,255,0.85)">Free agronomist call · 5 mins</span>
+    </span>
+    <span class="ar">→</span>
   </a>
 </div>
 
-<!-- Sticky bottom ADD bar · clean home-card emerald ADD pattern, no Hindi/English duplication -->
+<!-- Sticky bottom ADD bar · clean home-card emerald ADD pattern, English only -->
 <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E7EB] px-4 py-3 flex items-center gap-3">
   <div class="flex-shrink-0">
     <div class="text-[10px] text-[#64748B] leading-none">500 ml</div>
@@ -165,7 +259,6 @@
 </div>
 
 <script>
-  // Image gallery · update paginator dots on swipe
   (function(){
     const sc = document.getElementById('imgScroll');
     const dots = document.querySelectorAll('#imgDots .pg-dot');
@@ -176,7 +269,6 @@
     }, { passive: true });
   })();
 
-  // Variant chip selection · update active class + sync sticky bar price/size
   (function(){
     const vars = document.querySelectorAll('.var');
     const stickySize = document.querySelector('.fixed .flex-shrink-0 .text-\\[10px\\]');

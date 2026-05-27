@@ -179,11 +179,9 @@
   .delivery-scroller{ -webkit-overflow-scrolling:touch; }
   .delivery-scroller::-webkit-scrollbar{ display:none; }
   .delivery-card{ scroll-snap-stop:always; }
-  /* Single-order mode (set by JS): hide the swipe header + dots, no horizontal scrollbar artefacts */
-  .delivery-stack.single .ds-header,
-  .delivery-stack.single .ds-dots{ display:none !important; }
-  body.scrolled .delivery-stack .ds-header,
-  body.scrolled .delivery-stack .ds-dots{ display:none !important; }
+  /* Single-order mode (set by JS): hide the dots row · scrolled compact mode also hides it · the row carries both the dots and the inline "1 of N" counter so a single rule controls both */
+  .delivery-stack.single .ds-dots-row,
+  body.scrolled .delivery-stack .ds-dots-row{ display:none !important; }
   .ds-dots .dot{ width:6px; height:6px; border-radius:9999px; background:#A7F3D0; transition: all .2s ease; }
   .ds-dots .dot.on{ background:#047857; width:18px; }
   /* Pulsing dot for live status */
@@ -428,16 +426,8 @@
     </div>
   </div>
 
-  <!-- Delivery status stack · solid light green strip that holds 1..N ongoing orders · when more than one is live, the tiles become a horizontal scroll-snap carousel and a row of pagination dots pins below so the user can see all in-flight orders without leaving the home sticky header -->
+  <!-- Delivery status stack · solid light green strip that holds 1..N ongoing orders · when more than one is live, the tiles become a horizontal scroll-snap carousel and a row of pagination dots (with inline "1 of N" counter) pins below -->
   <div id="deliveryStack" class="delivery-stack" style="background:#D1FAE5;border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0">
-    <!-- Multi-order header · only renders when 2+ tiles are present (toggled by JS via .multi class on the stack) · "Order 1 of N" + a swipe hint -->
-    <div class="ds-header dt-detail flex items-center justify-between px-5 pt-2">
-      <div class="flex items-center gap-1.5">
-        <i class="fa-solid fa-truck-fast text-[11px]" style="color:#047857"></i>
-        <span class="text-[10.5px] font-extrabold tracking-[0.14em] uppercase" style="color:#047857"><span id="dsIndex">1</span> of <span id="dsTotal">2</span> in-progress</span>
-      </div>
-      <span class="text-[10px] font-bold flex items-center gap-1" style="color:#047857"><i class="fa-solid fa-angles-right text-[9px]"></i> swipe</span>
-    </div>
 
     <div id="deliveryScroller" class="delivery-scroller flex" style="overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none">
       <!-- ORDER 1 · Out for Delivery -->
@@ -539,8 +529,11 @@
       </button>
     </div>
 
-    <!-- Pagination dots · only show when there are 2+ tiles · index syncs with scroll position (JS) -->
-    <div id="deliveryDots" class="ds-dots dt-detail flex items-center justify-center gap-1.5 pb-2"></div>
+    <!-- Pagination dots row · only shown when there are 2+ tiles · carries the dots + inline "1 of N" counter on the right · index syncs with scroll position (JS) -->
+    <div class="ds-dots-row dt-detail flex items-center justify-center gap-3 pb-2 px-5" style="position:relative">
+      <div id="deliveryDots" class="ds-dots flex items-center gap-1.5"></div>
+      <span class="text-[10.5px] font-extrabold tracking-[0.1em] uppercase" style="color:#047857;position:absolute;right:20px"><span id="dsIndex">1</span> of <span id="dsTotal">2</span></span>
+    </div>
   </div>
 
   </div><!-- /sticky-actions -->

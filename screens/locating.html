@@ -97,44 +97,36 @@
     </div>
   </div>
 
-  <!-- Status copy · cross-fades from detecting → found -->
-  <div class="relative w-full px-6 pb-6 text-center" style="min-height:120px">
+  <!-- Status copy · cross-fades from detecting → found · English-only -->
+  <div class="relative w-full px-6 pb-12 text-center" style="min-height:120px">
     <div class="status-line status-detect absolute left-0 right-0">
-      <div class="hi text-[22px] font-extrabold leading-tight" style="color:#0F172A">गांव ढूंढ रहे हैं…</div>
-      <div class="text-[14px] mt-1" style="color:#64748B">Detecting your village…</div>
-      <div class="inline-flex items-center gap-1.5 mt-3 px-3 py-1.5 rounded-full" style="background:rgba(4,120,87,0.08);color:#047857">
+      <div class="text-[22px] font-extrabold leading-tight" style="color:#0F172A">Detecting your location…</div>
+      <div class="inline-flex items-center gap-1.5 mt-4 px-3 py-1.5 rounded-full" style="background:rgba(4,120,87,0.08);color:#047857">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        <span class="text-[11.5px] font-extrabold">Reading GPS · this takes 2–3 seconds</span>
+        <span class="text-[11.5px] font-extrabold">Reading GPS · 2–3 seconds</span>
       </div>
     </div>
     <div class="status-line status-found absolute left-0 right-0">
-      <div class="hi text-[13px] font-extrabold tracking-[0.14em] uppercase" style="color:#047857">✓ लोकेशन मिल गई</div>
+      <div class="text-[13px] font-extrabold tracking-[0.14em] uppercase" style="color:#047857">Location detected</div>
       <div class="text-[24px] font-extrabold leading-tight mt-1" style="color:#0F172A" id="villageName">Mahidpur</div>
       <div class="text-[13px] mt-1" style="color:#64748B">Ujjain, Madhya Pradesh · 456440</div>
+      <div class="inline-flex items-center gap-1.5 mt-4 text-[11.5px] font-extrabold" style="color:#64748B">
+        <span class="w-2 h-2 rounded-full" style="background:#10B981;animation:dotPulse 1.4s ease-in-out infinite"></span>
+        Taking you home…
+      </div>
     </div>
   </div>
 
-  <!-- Sticky bottom CTA · revealed when found · 'Continue to home' -->
-  <div id="locCta" class="fixed bottom-0 left-0 right-0 bg-white border-t border-[#EEE5D8] px-6 py-4" style="transform:translateY(110%);transition:transform .4s cubic-bezier(.34,1.56,.64,1)">
-    <button onclick="location.href='home.html'" class="w-full h-[54px] rounded-lg bg-[#059669] text-white text-[16px] font-extrabold flex items-center justify-center gap-2">
-      <span class="hi">होम पर जाएं</span>
-      <span class="opacity-70">·</span>
-      <span>Go to Home</span>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-    </button>
-  </div>
+  <style>
+    @keyframes dotPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(.8); } }
+  </style>
 
   <script>
-    // Auto-flip from detecting → found after ~2.4s · in real app this fires on a successful geolocation callback
+    // Auto-flip from detecting → found after ~2.4s · in real app this fires on a successful geolocation callback · CTA dropped per spec, the screen auto-routes home with a soft 'Taking you home…' line
     setTimeout(() => {
       document.body.classList.add('found');
-      // Slide the Continue CTA into view
-      const cta = document.getElementById('locCta');
-      cta.style.transform = 'translateY(0)';
-      // Persist the detected location so home.html can pick it up
       try { localStorage.setItem('kkd.village', 'Mahidpur'); localStorage.setItem('kkd.district', 'Ujjain'); } catch (e) {}
     }, 2400);
-    // After another 2.5s of the found state, auto-route to home so the user doesn't have to tap if they're happy with the detection
     setTimeout(() => { window.location.href = 'home.html'; }, 5500);
   </script>
 </body>

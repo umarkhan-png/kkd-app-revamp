@@ -1,74 +1,92 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Notifications</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
-<style>*{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}.hi{font-family:'Noto Sans Devanagari',sans-serif}html,body{margin:0;padding:0}body{min-height:100vh;background:#FDF8EE;color:#0F172A}.tnum{font-variant-numeric:tabular-nums}.img-blend{mix-blend-mode:multiply}</style></head>
-<body class="min-h-screen pb-6">
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:24px}
+  .tnum{font-variant-numeric:tabular-nums}
+  .img-blend{mix-blend-mode:multiply}
+  .sec-title{margin:18px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
+  /* Notification card · clean white tile with neutral border + soft shadow · acts as a clickable anchor, routes to a relevant page on tap · unread state gets a thin emerald left bar */
+  .notif{display:flex;align-items:flex-start;gap:12px;padding:12px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04);text-decoration:none;color:#0F172A;position:relative;overflow:hidden;transition:transform .12s ease}
+  .notif:active{transform:scale(.99)}
+  .notif.unread{border-color:#BBF7D0}
+  .notif.unread::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#059669}
+  .notif-ic{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;background:#ECFDF5;color:#047857}
+  .notif-ic.coin{background:#FEF3C7;color:#B45309}
+  .notif-ic.sale{background:#F8FAFC;border:1px solid #E5E7EB;padding:5px}
+  .notif-body{flex:1;min-width:0;line-height:1.3}
+  .notif-title{font-size:13.5px;font-weight:700;color:#0F172A}
+  .notif-sub{font-size:11.5px;color:#64748B;margin-top:2px}
+  .notif-time{font-size:10.5px;color:#94A3B8;flex-shrink:0;margin-left:6px}
+  .notif-action{display:inline-flex;margin-top:8px;font-size:11px;font-weight:800;color:#047857;letter-spacing:0.04em;text-transform:uppercase}
+</style></head>
+<body>
 
-<div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
-
-<div class="px-4 pt-4 flex items-center justify-between"><div class="flex items-center gap-3"><button onclick="history.back()" class="w-10 h-10 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="hi text-[20px] font-extrabold">सूचनाएं</div></div><button class="text-[11px] font-bold text-[#047857] uppercase">Mark all read</button></div>
-
-<!-- Today -->
-<div class="px-4 mt-5">
-  <div class="text-[10px] font-bold uppercase tracking-wider text-[#64748B] mb-2">Today</div>
-  <div class="space-y-2">
-
-    <div class="bg-white border-2 border-[#047857]/30 rounded-[12px] p-3 flex items-start gap-3">
-      <div class="w-10 h-10 rounded-lg bg-[#ECFDF5] flex items-center justify-center flex-shrink-0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="11"/><path d="M8 12l3 3 5-5"/></svg></div>
-      <div class="flex-1 min-w-0">
-        <div class="text-[13px] font-extrabold leading-tight">Order delivered today</div>
-        <div class="text-[11px] text-[#64748B] mt-0.5 leading-snug">#KKD-26194-7821 · 3 items · Was a pleasure!</div>
-        <div class="flex items-center gap-2 mt-2"><button class="text-[10px] font-bold text-[#047857] uppercase">Rate order</button></div>
-      </div>
-      <span class="text-[10px] text-[#94A3B8]">2h</span>
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
     </div>
-
-    <div class="bg-white border border-[#E5E7EB] rounded-[12px] p-3 flex items-start gap-3">
-      <div class="w-10 h-10 rounded-lg bg-[#FFF7ED] flex items-center justify-center flex-shrink-0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A3412" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
-      <div class="flex-1 min-w-0">
-        <div class="hi text-[13px] font-extrabold leading-tight">मिर्च · आज spraying का दिन</div>
-        <div class="text-[11px] text-[#64748B] mt-0.5">Crop calendar reminder · Flowering stage</div>
-      </div>
-      <span class="text-[10px] text-[#94A3B8]">6h</span>
-    </div>
-
   </div>
-</div>
 
-<!-- This week -->
-<div class="px-4 mt-5">
-  <div class="text-[10px] font-bold uppercase tracking-wider text-[#64748B] mb-2">This week</div>
-  <div class="space-y-2">
-
-    <div class="bg-white border border-[#E5E7EB] rounded-[12px] p-3 flex items-start gap-3">
-      <div class="w-10 h-10 rounded-lg bg-[#FEF3C7] flex items-center justify-center flex-shrink-0 text-[18px]">🪙</div>
-      <div class="flex-1 min-w-0">
-        <div class="text-[13px] font-extrabold leading-tight">10 coins added</div>
-        <div class="text-[11px] text-[#64748B] mt-0.5">For enabling notifications · Use at checkout</div>
-      </div>
-      <span class="text-[10px] text-[#94A3B8]">2d</span>
-    </div>
-
-    <div class="bg-white border border-[#E5E7EB] rounded-[12px] p-3 flex items-start gap-3">
-      <div class="w-10 h-10 rounded-lg bg-[#F8FAFC] flex items-center justify-center flex-shrink-0 p-1"><img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" class="img-blend max-h-full"/></div>
-      <div class="flex-1 min-w-0">
-        <div class="text-[13px] font-extrabold leading-tight">Antivirus 15% off</div>
-        <div class="text-[11px] text-[#64748B] mt-0.5">Saved item now on sale · Limited time</div>
-      </div>
-      <span class="text-[10px] text-[#94A3B8]">3d</span>
-    </div>
-
-    <div class="bg-white border border-[#E5E7EB] rounded-[12px] p-3 flex items-start gap-3">
-      <div class="w-10 h-10 rounded-lg bg-[#E8F2FB] flex items-center justify-center flex-shrink-0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1565C0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/></svg></div>
-      <div class="flex-1 min-w-0">
-        <div class="text-[13px] font-extrabold leading-tight">Tomato mandi rate +₹2</div>
-        <div class="text-[11px] text-[#64748B] mt-0.5">Indore · ₹18/kg · Good time to sell</div>
-      </div>
-      <span class="text-[10px] text-[#94A3B8]">5d</span>
-    </div>
-
+  <!-- Header -->
+  <div class="px-4 pt-4 pb-3 flex items-center gap-3 bg-white">
+    <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB">
+      <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
+    </button>
+    <h1 class="flex-1 text-[22px] font-extrabold leading-tight" style="color:#0F172A">Notifications</h1>
+    <button class="text-[11px] font-extrabold uppercase tracking-wide" style="color:#047857">Mark all read</button>
   </div>
-</div>
+
+  <!-- Today -->
+  <div class="sec-title">Today</div>
+  <div class="px-4 space-y-2.5">
+    <a href="order-details.html?state=delivered&id=KKD-26194-7821" class="notif unread">
+      <div class="notif-ic"><i class="fa-solid fa-circle-check"></i></div>
+      <div class="notif-body">
+        <div class="notif-title">Order delivered</div>
+        <div class="notif-sub">#KKD-26194-7821 &middot; 3 items</div>
+        <span class="notif-action">Rate this order &rarr;</span>
+      </div>
+      <span class="notif-time">2h</span>
+    </a>
+
+    <a href="crop-calendar.html" class="notif">
+      <div class="notif-ic"><i class="fa-solid fa-calendar-day"></i></div>
+      <div class="notif-body">
+        <div class="notif-title">Chilli &middot; spray reminder today</div>
+        <div class="notif-sub">Crop calendar &middot; Flowering stage</div>
+      </div>
+      <span class="notif-time">6h</span>
+    </a>
+  </div>
+
+  <!-- This week -->
+  <div class="sec-title">This week</div>
+  <div class="px-4 space-y-2.5">
+    <a href="home.html" class="notif">
+      <div class="notif-ic coin"><i class="fa-solid fa-coins"></i></div>
+      <div class="notif-body">
+        <div class="notif-title">10 coins added to your wallet</div>
+        <div class="notif-sub">For enabling notifications &middot; redeem at checkout</div>
+      </div>
+      <span class="notif-time">2d</span>
+    </a>
+
+    <a href="pdp.html" class="notif">
+      <div class="notif-ic sale"><img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" class="img-blend max-h-full" alt=""/></div>
+      <div class="notif-body">
+        <div class="notif-title">Antivirus is 15% off</div>
+        <div class="notif-sub">Saved item now on sale &middot; limited time</div>
+      </div>
+      <span class="notif-time">3d</span>
+    </a>
+  </div>
 
 </body></html>

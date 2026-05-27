@@ -50,7 +50,8 @@
   .prod-calc-text{font-size:12.5px;color:#475569;font-weight:600}
   .prod-calc-text .pc{font-weight:800;color:#0F172A}
   .prod-calc-text .qty{display:inline-flex;align-items:center;padding:1px 7px;border-radius:4px;background:#ECFDF5;color:#047857;font-size:10.5px;font-weight:800;margin-left:2px}
-  .prod-total{font-size:15px;font-weight:800;color:#0F172A;line-height:1;white-space:nowrap}
+  /* Line total · softened weight + size so it no longer overpowers the per-pc × qty text on its left (was 15px/800) */
+  .prod-total{font-size:13.5px;font-weight:700;color:#0F172A;line-height:1;white-space:nowrap}
 
   /* Bill section inside the same card */
   .bill-section{padding:13px 14px;border-top:1px solid #E5E7EB;background:#FAFAFA}
@@ -153,7 +154,8 @@
   .pcard-paystrip-text{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#78350F;flex:1;min-width:0;line-height:1.3}
   .pcard-paystrip-text i{font-size:14px;color:#F59E0B;flex-shrink:0}
   .pcard-paystrip-text b{color:#0F172A;font-weight:900}
-  .pcard-paystrip-btn{flex-shrink:0;padding:9px 14px;background:#059669;color:#FFFFFF;border:0;border-radius:10px;font-size:12.5px;font-weight:800;cursor:pointer;text-decoration:none;box-shadow:0 6px 14px -4px rgba(5,150,105,0.45)}
+  /* Pay button on the COD strip · widened (more horizontal padding) + amount removed for cleaner balance with the coin-earn text on the left */
+  .pcard-paystrip-btn{flex-shrink:0;padding:10px 22px;background:#059669;color:#FFFFFF;border:0;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;text-decoration:none;box-shadow:0 6px 14px -4px rgba(5,150,105,0.45);letter-spacing:0.02em}
 
   /* Need help · neutral slate */
   .support-row{padding:14px;display:flex;align-items:center;gap:12px;text-decoration:none}
@@ -431,7 +433,7 @@
             <i class="fa-solid fa-coins"></i>
             <span>Earn <b>+50 coins</b> on payment</span>
           </span>
-          <span class="pcard-paystrip-btn">Pay &#8377;<span id="partialDueInline">628</span></span>
+          <span class="pcard-paystrip-btn">Pay<span id="partialDueInline" style="display:none">628</span></span>
         </button>
       </div>
     </div>

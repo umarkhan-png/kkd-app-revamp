@@ -141,8 +141,12 @@
   .pcard.due  .pcard-head .val{color:#0F172A}
   .pcard-line{display:flex;align-items:center;gap:6px;font-size:11.5px;color:#475569;line-height:1.4;margin-top:3px}
   .pcard-line i{font-size:10.5px;color:#94A3B8;width:14px;text-align:center}
-  /* Pay button INSIDE the due card · matches design-system primary CTA (52px height, 12px radius, 15px font-extrabold, emerald soft glow) · NO inline coin chip — the line above already communicates the coin reward */
-  .pcard-pay{margin-top:12px;width:100%;height:52px;border-radius:12px;background:#059669;color:#FFFFFF;font-size:15px;font-weight:800;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;text-decoration:none;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+  /* Pay strip inside the COD-due card · mirrors the orders-page in-transit pay-banner pattern · coin reward sits on the LEFT inline, Pay button on the RIGHT · one banner, no duplicate coin line */
+  .pcard-paystrip{margin-top:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:12px;background:#FEF3C7;border:1px dashed #F59E0B;text-decoration:none;cursor:pointer}
+  .pcard-paystrip-text{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#78350F;flex:1;min-width:0;line-height:1.3}
+  .pcard-paystrip-text i{font-size:14px;color:#F59E0B;flex-shrink:0}
+  .pcard-paystrip-text b{color:#0F172A;font-weight:900}
+  .pcard-paystrip-btn{flex-shrink:0;padding:9px 14px;background:#059669;color:#FFFFFF;border:0;border-radius:10px;font-size:12.5px;font-weight:800;cursor:pointer;text-decoration:none;box-shadow:0 6px 14px -4px rgba(5,150,105,0.45)}
 
   /* Need help · neutral slate */
   .support-row{padding:14px;display:flex;align-items:center;gap:12px;text-decoration:none}
@@ -411,16 +415,19 @@
         <div class="pcard-line"><i class="fa-regular fa-clock"></i> <span id="partialPaidTime">8 Apr, 2:15 PM</span></div>
       </div>
 
-      <!-- COD due card · Pay button sits INSIDE this card, communicating clearly that the action is for the remaining COD amount -->
+      <!-- COD due card · Pay strip mirrors the orders-page in-transit pay-banner (coin earn inline on the left, Pay button on the right) · no duplicate '+50 coins' info line -->
       <div class="pcard due">
         <div class="pcard-head">
           <span class="lbl">COD due</span>
           <span class="val tnum" id="partialDue">&#8377;628</span>
         </div>
         <div class="pcard-line"><i class="fa-solid fa-truck-fast"></i> Pay in cash when the courier delivers</div>
-        <div class="pcard-line"><i class="fa-solid fa-coins" style="color:#F59E0B"></i> Earn +50 coins on payment</div>
-        <button class="pcard-pay" id="payCodBtn">
-          Pay &#8377;<span id="partialDueInline">628</span> COD
+        <button type="button" class="pcard-paystrip" id="payCodBtn">
+          <span class="pcard-paystrip-text">
+            <i class="fa-solid fa-coins"></i>
+            <span>Earn <b>+50 coins</b> on payment</span>
+          </span>
+          <span class="pcard-paystrip-btn">Pay &#8377;<span id="partialDueInline">628</span></span>
         </button>
       </div>
     </div>
@@ -575,7 +582,7 @@
       <div id="codErr" class="text-[11px] font-bold" style="color:#DC2626;display:none;margin-top:4px">Amount cannot exceed total COD due</div>
       <div class="cod-coin-strip mt-3">
         <i class="fa-solid fa-coins text-[14px]" style="color:#F59E0B"></i>
-        <div class="text-[11.5px] leading-tight" style="color:#0F172A"><b>1 coin = &#8377;1</b> in your wallet</div>
+        <div class="text-[11.5px] leading-tight" style="color:#0F172A"><b>1 coin = &#8377;1</b></div>
       </div>
     </div>
     <div class="px-5 pt-3 pb-5" style="padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">

@@ -51,55 +51,64 @@
 
   .hero-tagline { position: relative; z-index: 2; text-align: center; }
 
-  /* Brand mark · 52px squircle with gold accent ring · same identity as splash, smaller scale · used in the hero top-right so KKD branding is anchored without dominating */
+  /* Hero top bar · single absolute row that holds BOTH the KKD logo and the language chip · centred between status-bar and the product image so neither feels squeezed */
+  .hero-top-bar {
+    position: absolute; top: 32px; left: 16px; right: 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 4;
+  }
+
+  /* Brand mark · refined 44px squircle (slightly smaller than before so it doesn't dominate the hero) · gold accent ring kept */
   .brand-mark {
-    width: 52px; height: 52px;
-    border-radius: 16px;
+    width: 44px; height: 44px;
+    border-radius: 13px;
     background: #FFFFFF;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 10px 22px -8px rgba(4,120,87,0.45), 0 4px 10px -4px rgba(251,191,36,0.35);
+    box-shadow: 0 8px 18px -6px rgba(4,120,87,0.4), 0 3px 8px -3px rgba(251,191,36,0.3);
     position: relative;
   }
   .brand-mark::after {
     content: ""; position: absolute; inset: -2px;
-    border-radius: 18px;
+    border-radius: 15px;
     border: 1.5px solid rgba(251,191,36,0.5);
     pointer-events: none;
   }
-  .brand-mark img { width: 40px; height: 40px; object-fit: contain; }
+  .brand-mark img { width: 34px; height: 34px; object-fit: contain; }
 
-  /* Selected-language chip · translucent white pill with the language label + 'Change' link · sits in the hero so the user can switch language without a back button */
+  /* Language chip · refined white pill · cleaner read than the translucent version, still light on the gradient · 'Change' is the action verb, the language name is bolder */
   .lang-chip {
     display: inline-flex; align-items: center; gap: 6px;
-    padding: 7px 12px; border-radius: 9999px;
-    background: rgba(255,255,255,0.18);
-    border: 1px solid rgba(255,255,255,0.30);
-    backdrop-filter: blur(6px);
-    color: #FFFFFF; font-size: 11.5px; font-weight: 600;
+    padding: 8px 12px; border-radius: 9999px;
+    background: #FFFFFF;
+    color: #047857; font-size: 12px; font-weight: 700;
     text-decoration: none;
-    transition: background .15s ease;
+    box-shadow: 0 4px 12px -4px rgba(4,120,87,0.35);
+    transition: transform .12s ease;
   }
-  .lang-chip:active { background: rgba(255,255,255,0.28); }
-  .lang-chip i { font-size: 11px; opacity: .85; }
-  .lang-chip b { font-weight: 800; color: #FBBF24; }
+  .lang-chip:active { transform: scale(.96); }
+  .lang-chip i { font-size: 11px; color: #047857; }
+  .lang-chip b { font-weight: 800; color: #0F172A; }
+  .lang-chip .chev { font-size: 9px; color: #94A3B8; }
 
-  /* Single prominent farmer-count stat callout · centred white pill with a coloured icon · replaces the pair of small chips, reads as a confident social-proof anchor */
+  /* Stat callout · 2-line big-number presentation · much more confident than the inline chip · English-only copy ('10 lakh+' / 'farmers trust KKD') · icon bubble on the left for visual anchoring */
   .hero-stat {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 8px 14px 8px 8px; border-radius: 9999px;
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 10px 16px 10px 10px; border-radius: 14px;
     background: rgba(255,255,255,0.96);
     border: 1px solid rgba(255,255,255,0.7);
-    box-shadow: 0 6px 18px -6px rgba(4,120,87,0.4);
+    box-shadow: 0 8px 22px -8px rgba(4,120,87,0.45);
   }
   .hero-stat-ic {
-    width: 26px; height: 26px; border-radius: 50%;
+    width: 36px; height: 36px; border-radius: 10px;
     display: inline-flex; align-items: center; justify-content: center;
     background: linear-gradient(135deg,#047857 0%,#10B981 100%);
     color: #FFFFFF; flex-shrink: 0;
+    box-shadow: 0 4px 10px -3px rgba(4,120,87,0.5);
   }
-  .hero-stat-ic i { font-size: 11px; }
-  .hero-stat-text { font-size: 12.5px; color: #064E3B; font-weight: 700; }
-  .hero-stat-text b { font-weight: 900; color: #047857; }
+  .hero-stat-ic i { font-size: 16px; }
+  .hero-stat-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; text-align: left; }
+  .hero-stat-num { font-size: 18px; font-weight: 900; color: #047857; letter-spacing: -0.01em; }
+  .hero-stat-lbl { font-size: 11px; font-weight: 600; color: #475569; margin-top: 3px; }
 </style>
 </head>
 <body class="min-h-screen pb-28 relative">
@@ -114,19 +123,20 @@
     </div>
   </div>
 
-  <!-- Premium hero · top-left language chip (with Change link) + top-right KKD brand-mark (52px squircle with gold accent ring, matches splash treatment) · no back button (user came from language step, onboarding is forward-only) -->
-  <section class="hero-card" style="padding-top:52px">
+  <!-- Premium hero · top-bar (logo + lang chip) on a single row with proper clearance · product line-up · tagline · refined 2-line stat callout -->
+  <section class="hero-card" style="padding-top:96px">
 
-    <!-- KKD brand-mark · 52px squircle · top-LEFT now · anchors the brand at the leading position -->
-    <div class="brand-mark" style="position:absolute;top:30px;left:16px;z-index:4">
-      <img src="../assets/kkd-logo.png" alt="KKD" onerror="this.onerror=null;this.src='https://www.katyayaniorganics.com/wp-content/uploads/2022/06/cropped-logo-3.webp'"/>
+    <!-- Top bar · single absolute flex row · holds the KKD brand-mark on the LEFT and the language chip on the RIGHT · centred between status bar and product image so nothing reads as congested -->
+    <div class="hero-top-bar">
+      <div class="brand-mark">
+        <img src="../assets/kkd-logo.png" alt="KKD" onerror="this.onerror=null;this.src='https://www.katyayaniorganics.com/wp-content/uploads/2022/06/cropped-logo-3.webp'"/>
+      </div>
+      <a href="language.html" class="lang-chip">
+        <i class="fa-solid fa-language"></i>
+        <b id="langCurrent" class="hi">हिंदी</b>
+        <span>&middot; Change</span>
+      </a>
     </div>
-
-    <!-- Selected language chip · top-RIGHT now (swapped with the logo) · tapping routes back to the language picker -->
-    <a href="language.html" class="lang-chip" style="position:absolute;top:36px;right:16px;z-index:4">
-      <i class="fa-solid fa-language"></i>
-      <span><span id="langCurrent" class="hi">हिंदी</span> &middot; <b>Change</b></span>
-    </a>
 
     <!-- Product line-up · three bottles, slightly fanned, soft drop-shadow -->
     <div class="hero-row">
@@ -135,13 +145,17 @@
       <img src="../assets/AntiVirus_nobg.png" alt=""/>
     </div>
 
-    <!-- Curiosity tagline + single prominent farmer-count stat (replaces the pair of small trust chips) -->
+    <!-- Curiosity tagline · English-only · drop the Hindi/English mix -->
     <div class="hero-tagline" style="margin-top:10px">
       <div class="text-[18px] font-extrabold leading-tight" style="color:#FFFFFF">Save up to <span style="color:#FBBF24">40%</span> on every spray</div>
-      <div class="hi text-[12.5px] mt-1" style="color:rgba(255,255,255,0.85)">सीधा फैक्ट्री से &middot; Direct from factory, no middleman</div>
+      <div class="text-[12.5px] mt-1" style="color:rgba(255,255,255,0.85)">Direct from factory &middot; no middleman</div>
+      <!-- Stat callout · big-number presentation · English only · icon bubble + 2-line number/label -->
       <div class="hero-stat" style="margin-top:14px">
-        <span class="hero-stat-ic"><i class="fa-solid fa-users"></i></span>
-        <span class="hero-stat-text"><b>10+ लाख</b> farmers already trust KKD</span>
+        <span class="hero-stat-ic"><i class="fa-solid fa-handshake-simple"></i></span>
+        <div class="hero-stat-text">
+          <span class="hero-stat-num">10 lakh+</span>
+          <span class="hero-stat-lbl">farmers trust KKD</span>
+        </div>
       </div>
     </div>
   </section>

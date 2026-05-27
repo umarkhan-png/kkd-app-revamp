@@ -62,16 +62,30 @@
   .bill-total .lbl{font-size:14px;font-weight:700;color:#0F172A}
   .bill-total .val{font-size:18px;font-weight:800;color:#0F172A}
 
-  /* Per-product rate · sits inside the prod-row · stars on a row, optional review textarea appears below after a star is tapped */
+  /* Per-product rate section · sits inside the prod-row · separated by a hairline so it doesn't look shoved in · clearly states coins are awarded for rating (not the review) · review is optional with its own Submit button */
   .star-btn{background:transparent;border:0;padding:0;cursor:pointer;transition:transform .15s ease}
   .star-btn:active{transform:scale(.85)}
-  .star-btn i{font-size:18px;color:#CBD5E1;transition:color .2s ease}
+  .star-btn i{font-size:20px;color:#CBD5E1;transition:color .2s ease}
   .star-btn.on i{color:#F59E0B}
-  .prod-rate-row{margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .prod-rate-row .lbl{font-size:11.5px;font-weight:600;color:#64748B}
-  .prod-review{display:none;margin-top:8px;width:100%;min-height:64px;padding:9px 12px;border-radius:10px;border:1px solid #E5E7EB;background:#FAFAFA;font-size:12.5px;font-family:inherit;color:#0F172A;outline:none;resize:none;box-sizing:border-box}
-  .prod-review.on{display:block}
-  .prod-review:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.10);background:#FFFFFF}
+  .rate-block{margin-top:10px;padding-top:10px;border-top:1px solid #F1F5F9}
+  .rate-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .rate-head .ltxt{font-size:13px;font-weight:700;color:#0F172A}
+  .rate-head .lsub{font-size:10.5px;color:#64748B;margin-top:1px}
+  /* Coin chip · gold accent · makes it unambiguous that the +25 coin reward is tied to the rating action */
+  .rate-coin-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:9999px;background:#FEF3C7;border:1px solid #FDE68A;color:#92400E;font-size:10.5px;font-weight:800;white-space:nowrap}
+  .rate-coin-chip i{font-size:10px;color:#D97706}
+  /* Stars row · sits on its own line below the head label */
+  .rate-stars{margin-top:8px;display:flex;align-items:center;gap:8px}
+  /* Review section · reveals only AFTER a star is tapped · contains an optional textarea + Submit review button */
+  .review-wrap{display:none;margin-top:10px}
+  .review-wrap.on{display:block}
+  .review-wrap textarea{width:100%;min-height:70px;padding:10px 12px;border-radius:10px;border:1px solid #E5E7EB;background:#FAFAFA;font-size:12.5px;font-family:inherit;color:#0F172A;outline:none;resize:none;box-sizing:border-box;transition:border-color .15s ease, background .15s ease}
+  .review-wrap textarea:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.10);background:#FFFFFF}
+  .review-wrap .review-hint{font-size:10.5px;color:#94A3B8;margin-top:4px}
+  /* Submit review button · sentence-case, outline emerald so it doesn't compete with the main sticky CTAs · disabled until the textarea has 3+ chars */
+  .review-submit{margin-top:8px;width:100%;height:40px;border-radius:10px;background:#FFFFFF;color:#047857;border:1.5px solid #BBF7D0;font-size:12.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all .15s ease}
+  .review-submit:disabled{opacity:.55;cursor:not-allowed}
+  .review-submit i{font-size:11px}
 
   /* Address */
   .addr{padding:14px;display:flex;gap:12px}
@@ -127,9 +141,8 @@
   .pcard.due  .pcard-head .val{color:#0F172A}
   .pcard-line{display:flex;align-items:center;gap:6px;font-size:11.5px;color:#475569;line-height:1.4;margin-top:3px}
   .pcard-line i{font-size:10.5px;color:#94A3B8;width:14px;text-align:center}
-  /* Pay button INSIDE the due card · sits below the breakdown lines · coin reward chip inside the button */
-  .pcard-pay{margin-top:10px;width:100%;height:44px;border-radius:10px;background:#059669;color:#FFFFFF;font-size:13.5px;font-weight:800;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;text-decoration:none}
-  .pcard-pay .coins{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,0.20);padding:3px 8px;border-radius:9999px;font-size:11px;font-weight:800}
+  /* Pay button INSIDE the due card · matches design-system primary CTA (52px height, 12px radius, 15px font-extrabold, emerald soft glow) · NO inline coin chip — the line above already communicates the coin reward */
+  .pcard-pay{margin-top:12px;width:100%;height:52px;border-radius:12px;background:#059669;color:#FFFFFF;font-size:15px;font-weight:800;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;text-decoration:none;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
 
   /* Need help · neutral slate */
   .support-row{padding:14px;display:flex;align-items:center;gap:12px;text-decoration:none}
@@ -138,11 +151,11 @@
   .support-row .info .a{font-size:13.5px;font-weight:700;color:#0F172A}
   .support-row .info .b{font-size:11.5px;color:#64748B;margin-top:2px}
 
-  /* Sticky footer · 3 CTAs · Download Invoice (outline) + Return (outline) + Reorder (primary) · NO border-top (that hairline read as a black layer above Reorder · clean white) */
-  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;padding:10px 12px;z-index:50;display:flex;gap:8px}
-  .cta-out{flex:1;height:46px;border-radius:10px;background:#FFFFFF;color:#0F172A;border:1px solid #E5E7EB;font-size:12.5px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
-  .cta-out i{font-size:12px;color:#475569}
-  .cta-pri{flex:1.1;height:46px;border-radius:10px;background:#059669;color:#FFFFFF;border:0;font-size:13.5px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+  /* Sticky footer · 2 CTAs · Return (outline) + Reorder (primary) · NO border-top (clean white footer) */
+  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;padding:10px 12px;z-index:50;display:flex;gap:10px}
+  .cta-out{flex:1;height:52px;border-radius:12px;background:#FFFFFF;color:#0F172A;border:1.5px solid #E5E7EB;font-size:14px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+  .cta-out i{font-size:13px;color:#475569}
+  .cta-pri{flex:1.2;height:52px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
   .cta-pri i{font-size:13px}
 
   /* Kebab dropdown · Cancel order (transit) + Contact support · Download invoice MOVED out into the sticky footer */
@@ -209,6 +222,7 @@
     </button>
     <div id="kebabMenu" class="kebab-menu">
       <button class="kebab-item danger only-transit" id="cancelOrderBtn"><i class="fa-solid fa-circle-xmark"></i> Cancel order</button>
+      <a href="#download-invoice" class="kebab-item"><i class="fa-solid fa-file-arrow-down"></i> Download invoice</a>
       <a href="advisory.html" class="kebab-item"><i class="fa-solid fa-headset"></i> Contact support</a>
     </div>
   </div>
@@ -277,18 +291,28 @@
           </span>
           <span class="prod-total tnum">&#8377;376</span>
         </div>
-        <!-- Per-product rate · delivered only · star tap fills + reveals optional review textarea -->
-        <div class="prod-rate-row only-delivered" data-rating-group="humic">
-          <span class="lbl" data-rate-status>Tap to rate this product</span>
-          <div class="flex items-center gap-1.5">
+        <!-- Per-product rate · delivered only · coins are tied to RATING (chip makes this unambiguous) · review is optional with its own Submit -->
+        <div class="rate-block only-delivered" data-rating-group="humic">
+          <div class="rate-head">
+            <div class="leading-tight">
+              <div class="ltxt" data-rate-status>Rate this product</div>
+              <div class="lsub" data-rate-sub>Help other farmers choose better</div>
+            </div>
+            <span class="rate-coin-chip"><i class="fa-solid fa-coins"></i> +25 on rating</span>
+          </div>
+          <div class="rate-stars">
             <button class="star-btn" data-val="1"><i class="fa-solid fa-star"></i></button>
             <button class="star-btn" data-val="2"><i class="fa-solid fa-star"></i></button>
             <button class="star-btn" data-val="3"><i class="fa-solid fa-star"></i></button>
             <button class="star-btn" data-val="4"><i class="fa-solid fa-star"></i></button>
             <button class="star-btn" data-val="5"><i class="fa-solid fa-star"></i></button>
           </div>
+          <div class="review-wrap" data-review-wrap>
+            <textarea data-review-text placeholder="Write a review (optional)…"></textarea>
+            <div class="review-hint">Optional. Helps other farmers — no extra coins.</div>
+            <button class="review-submit" data-review-submit disabled><i class="fa-solid fa-paper-plane"></i> Submit review</button>
+          </div>
         </div>
-        <textarea class="prod-review only-delivered" data-review-for="humic" placeholder="Write a review (optional)…"></textarea>
       </div>
     </div>
 
@@ -304,17 +328,27 @@
           </span>
           <span class="prod-total tnum">&#8377;327</span>
         </div>
-        <div class="prod-rate-row only-delivered" data-rating-group="antivirus">
-          <span class="lbl" data-rate-status>Tap to rate this product</span>
-          <div class="flex items-center gap-1.5">
+        <div class="rate-block only-delivered" data-rating-group="antivirus">
+          <div class="rate-head">
+            <div class="leading-tight">
+              <div class="ltxt" data-rate-status>Rate this product</div>
+              <div class="lsub" data-rate-sub>Help other farmers choose better</div>
+            </div>
+            <span class="rate-coin-chip"><i class="fa-solid fa-coins"></i> +25 on rating</span>
+          </div>
+          <div class="rate-stars">
             <button class="star-btn" data-val="1"><i class="fa-solid fa-star"></i></button>
             <button class="star-btn" data-val="2"><i class="fa-solid fa-star"></i></button>
             <button class="star-btn" data-val="3"><i class="fa-solid fa-star"></i></button>
             <button class="star-btn" data-val="4"><i class="fa-solid fa-star"></i></button>
             <button class="star-btn" data-val="5"><i class="fa-solid fa-star"></i></button>
           </div>
+          <div class="review-wrap" data-review-wrap>
+            <textarea data-review-text placeholder="Write a review (optional)…"></textarea>
+            <div class="review-hint">Optional. Helps other farmers — no extra coins.</div>
+            <button class="review-submit" data-review-submit disabled><i class="fa-solid fa-paper-plane"></i> Submit review</button>
+          </div>
         </div>
-        <textarea class="prod-review only-delivered" data-review-for="antivirus" placeholder="Write a review (optional)…"></textarea>
       </div>
     </div>
 
@@ -387,7 +421,6 @@
         <div class="pcard-line"><i class="fa-solid fa-coins" style="color:#F59E0B"></i> Earn +50 coins on payment</div>
         <button class="pcard-pay" id="payCodBtn">
           Pay &#8377;<span id="partialDueInline">628</span> COD
-          <span class="coins"><i class="fa-solid fa-star text-[9px]"></i> +50 coins</span>
         </button>
       </div>
     </div>
@@ -404,11 +437,8 @@
     <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
   </button>
 
-  <!-- Sticky bottom · 3 CTAs · Download Invoice (outline) + Return (outline) + Reorder (primary emerald · fa-repeat icon, more semantic for 'buy again') -->
+  <!-- Sticky bottom · 2 CTAs · Return (outline) + Reorder (primary emerald, fa-repeat) · Download invoice moved back into the kebab menu -->
   <div class="sticky-cta">
-    <a class="cta-out" href="#download-invoice">
-      <i class="fa-solid fa-file-arrow-down"></i> Download
-    </a>
     <a class="cta-out" id="returnCta" href="#return">
       <i class="fa-solid fa-right-left"></i> Return
     </a>
@@ -729,12 +759,16 @@
       if (helpClose) helpClose.addEventListener('click', () => closeSheet(helpBd, helpSheet));
       if (helpBd)    helpBd.addEventListener('click', () => closeSheet(helpBd, helpSheet));
 
-      // Per-product star rating · selecting a star reveals an OPTIONAL review textarea below the row · review is never required
+      // Per-product star rating · selecting a star credits +25 coins immediately · the review section (textarea + Submit) reveals AFTER the first star tap · review is optional and earns no extra coins (the hint copy makes this clear)
       document.querySelectorAll('[data-rating-group]').forEach(group => {
-        const pid = group.getAttribute('data-rating-group');
         const stars = group.querySelectorAll('.star-btn');
         const status = group.querySelector('[data-rate-status]');
-        const review = document.querySelector('[data-review-for="'+pid+'"]');
+        const sub    = group.querySelector('[data-rate-sub]');
+        const wrap   = group.querySelector('[data-review-wrap]');
+        const text   = group.querySelector('[data-review-text]');
+        const submit = group.querySelector('[data-review-submit]');
+        let rated = false;
+
         stars.forEach(s => {
           s.addEventListener('click', () => {
             const v = parseInt(s.getAttribute('data-val'), 10);
@@ -742,15 +776,32 @@
               const xv = parseInt(x.getAttribute('data-val'), 10);
               x.classList.toggle('on', xv <= v);
             });
+            const labels = ['', 'Poor', 'Fair', 'Good', 'Very good', 'Excellent'];
             if (status){
-              const labels = ['', 'Poor', 'Fair', 'Good', 'Very good', 'Excellent'];
-              status.textContent = labels[v] + ' · +25 coins';
+              status.textContent = labels[v] + ' · thanks!';
               status.style.color = v >= 4 ? '#047857' : (v >= 3 ? '#B45309' : '#DC2626');
             }
-            // Reveal optional review textarea on first star tap
-            if (review) review.classList.add('on');
+            if (sub) sub.textContent = '+25 coins added to your wallet';
+            // Reveal the review section (textarea + Submit) on the first star tap
+            if (wrap) wrap.classList.add('on');
+            rated = true;
           });
         });
+
+        // Gate the Submit review button on textarea content (>=3 chars)
+        if (text && submit) {
+          text.addEventListener('input', () => {
+            submit.disabled = (text.value || '').trim().length < 3;
+          });
+          submit.addEventListener('click', () => {
+            if (submit.disabled) return;
+            submit.disabled = true;
+            submit.innerHTML = '<i class="fa-solid fa-circle-check"></i> Review submitted';
+            submit.style.background = '#ECFDF5';
+            submit.style.color = '#047857';
+            text.setAttribute('readonly', 'readonly');
+          });
+        }
       });
     })();
   </script>

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>KKD · Mobile</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   * { font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
@@ -15,16 +16,26 @@
   .num-input { transition: border-color .15s ease, box-shadow .15s ease; }
   .num-input:focus-within { border-color: #047857; box-shadow: 0 0 0 3px rgba(4,120,87,0.10); }
 
-  /* Premium hero · emerald-tinted card that holds the product line-up + a curiosity stat · curated, single image of products with floating chips */
+  /* White top bar ABOVE the emerald hero · KKD logo image (no white square backing) + language chip · sits on the page bg so neither fights the status bar nor the hero gradient */
+  .topbar { padding: 10px 16px 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .brand { display: inline-flex; align-items: center; gap: 8px; }
+  .brand img { width: 36px; height: 36px; object-fit: contain; }
+  .brand .name { font-size: 16px; font-weight: 900; color: #047857; letter-spacing: -0.02em; line-height: 1; }
+  /* Language chip · clean white pill with slate border + globe icon + Hindi label + chevron-down · reads as a dropdown picker, no longer a translucent-on-emerald hack */
+  .lang-chip { display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; color: #0F172A; font-size: 12.5px; font-weight: 700; text-decoration: none; transition: border-color .15s ease, transform .12s ease; }
+  .lang-chip:active { transform: scale(.97); border-color: #047857; }
+  .lang-chip .globe { font-size: 12px; color: #475569; }
+  .lang-chip .chev { font-size: 9px; color: #94A3B8; }
+
+  /* Emerald hero · product line-up + tagline + 2-cell stat banner · no top-bar items inside */
   .hero-card {
-    position: relative;
-    overflow: hidden;
+    position: relative; overflow: hidden;
     background: linear-gradient(165deg, #022C22 0%, #047857 38%, #059669 72%, #10B981 100%);
-    border-radius: 0 0 28px 28px;
-    padding: 16px 20px 22px;
+    border-radius: 22px;
+    margin: 4px 14px 0;
+    padding: 18px 18px 22px;
     box-shadow: 0 12px 30px -12px rgba(4,120,87,0.5);
   }
-  /* Soft glow blobs to give the band depth · pure CSS so nothing loads from network */
   .hero-card::before {
     content: ""; position: absolute; pointer-events: none;
     top: -30px; right: -30px; width: 200px; height: 200px; border-radius: 50%;
@@ -35,136 +46,93 @@
     bottom: -40px; left: -40px; width: 180px; height: 180px; border-radius: 50%;
     background: radial-gradient(circle, rgba(16,185,129,0.6) 0%, transparent 70%);
   }
-  /* Product line-up · three transparent bottles overlaid · subtle drop-shadow so they sit on the gradient cleanly */
   .hero-row {
     display: flex; align-items: flex-end; justify-content: center;
-    height: 130px; position: relative; z-index: 2; margin-top: 8px;
+    height: 124px; position: relative; z-index: 2;
   }
   .hero-row img {
-    height: 130px; object-fit: contain;
+    height: 124px; object-fit: contain;
     filter: drop-shadow(0 14px 24px rgba(0,0,0,0.45));
     transition: transform .6s cubic-bezier(.34,1.56,.64,1);
   }
-  .hero-row img:nth-child(1) { transform: translateY(8px) rotate(-6deg); margin-right: -18px; height: 118px; }
-  .hero-row img:nth-child(2) { z-index: 3; height: 140px; }
-  .hero-row img:nth-child(3) { transform: translateY(8px) rotate(6deg); margin-left: -18px; height: 118px; }
-
+  .hero-row img:nth-child(1) { transform: translateY(8px) rotate(-6deg); margin-right: -18px; height: 112px; }
+  .hero-row img:nth-child(2) { z-index: 3; height: 134px; }
+  .hero-row img:nth-child(3) { transform: translateY(8px) rotate(6deg); margin-left: -18px; height: 112px; }
   .hero-tagline { position: relative; z-index: 2; text-align: center; }
 
-  /* Hero top bar · single absolute row that holds BOTH the KKD logo and the language chip · centred between status-bar and the product image so neither feels squeezed */
-  .hero-top-bar {
-    position: absolute; top: 32px; left: 16px; right: 16px;
-    display: flex; align-items: center; justify-content: space-between;
-    z-index: 4;
-  }
-
-  /* Brand mark · refined 44px squircle (slightly smaller than before so it doesn't dominate the hero) · gold accent ring kept */
-  .brand-mark {
-    width: 44px; height: 44px;
-    border-radius: 13px;
-    background: #FFFFFF;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 8px 18px -6px rgba(4,120,87,0.4), 0 3px 8px -3px rgba(251,191,36,0.3);
-    position: relative;
-  }
-  .brand-mark::after {
-    content: ""; position: absolute; inset: -2px;
-    border-radius: 15px;
-    border: 1.5px solid rgba(251,191,36,0.5);
-    pointer-events: none;
-  }
-  .brand-mark img { width: 34px; height: 34px; object-fit: contain; }
-
-  /* Language chip · refined white pill · cleaner read than the translucent version, still light on the gradient · 'Change' is the action verb, the language name is bolder */
-  .lang-chip {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 12px; border-radius: 9999px;
-    background: #FFFFFF;
-    color: #047857; font-size: 12px; font-weight: 700;
-    text-decoration: none;
-    box-shadow: 0 4px 12px -4px rgba(4,120,87,0.35);
-    transition: transform .12s ease;
-  }
-  .lang-chip:active { transform: scale(.96); }
-  .lang-chip i { font-size: 11px; color: #047857; }
-  .lang-chip b { font-weight: 800; color: #0F172A; }
-  .lang-chip .chev { font-size: 9px; color: #94A3B8; }
-
-  /* Stat callout · 2-line big-number presentation · much more confident than the inline chip · English-only copy ('10 lakh+' / 'farmers trust KKD') · icon bubble on the left for visual anchoring */
-  .hero-stat {
-    display: inline-flex; align-items: center; gap: 12px;
-    padding: 10px 16px 10px 10px; border-radius: 14px;
+  /* 2-cell stat banner · 10 lakh+ farmers on the left, 500+ products on the right · clean white pill with an internal divider */
+  .hero-stats {
+    position: relative; z-index: 2;
+    display: flex; align-items: stretch;
+    margin: 14px auto 0; max-width: 92%;
     background: rgba(255,255,255,0.96);
-    border: 1px solid rgba(255,255,255,0.7);
+    border-radius: 14px;
     box-shadow: 0 8px 22px -8px rgba(4,120,87,0.45);
+    overflow: hidden;
   }
-  .hero-stat-ic {
-    width: 36px; height: 36px; border-radius: 10px;
-    display: inline-flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg,#047857 0%,#10B981 100%);
-    color: #FFFFFF; flex-shrink: 0;
-    box-shadow: 0 4px 10px -3px rgba(4,120,87,0.5);
+  .hero-stat-cell {
+    flex: 1; padding: 10px 10px; text-align: center; line-height: 1;
   }
-  .hero-stat-ic i { font-size: 16px; }
-  .hero-stat-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; text-align: left; }
-  .hero-stat-num { font-size: 18px; font-weight: 900; color: #047857; letter-spacing: -0.01em; }
-  .hero-stat-lbl { font-size: 11px; font-weight: 600; color: #475569; margin-top: 3px; }
+  .hero-stat-cell + .hero-stat-cell {
+    border-left: 1px solid #E5E7EB;
+  }
+  .hero-stat-num { font-size: 17px; font-weight: 900; color: #047857; letter-spacing: -0.01em; }
+  .hero-stat-lbl { font-size: 10.5px; font-weight: 600; color: #475569; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
 </style>
 </head>
 <body class="min-h-screen pb-28 relative">
 
-  <!-- Status bar · white text since the hero band sits at the very top -->
-  <div class="flex items-center justify-between px-6 pt-3 text-[11px] font-bold" style="color:#FFFFFF;position:absolute;top:0;left:0;right:0;z-index:5">
+  <!-- Status bar · sits over white page bg · dark icons -->
+  <div class="flex items-center justify-between px-6 pt-3 text-[11px] font-bold text-[#0F172A]">
     <span>9:41</span>
     <div class="flex items-center gap-1.5">
-      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/></svg>
-      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/></svg>
-      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#FFFFFF" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#FFFFFF"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#FFFFFF"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
     </div>
   </div>
 
-  <!-- Premium hero · top-bar (logo + lang chip) on a single row with proper clearance · product line-up · tagline · refined 2-line stat callout -->
-  <section class="hero-card" style="padding-top:96px">
-
-    <!-- Top bar · single absolute flex row · holds the KKD brand-mark on the LEFT and the language chip on the RIGHT · centred between status bar and product image so nothing reads as congested -->
-    <div class="hero-top-bar">
-      <div class="brand-mark">
-        <img src="../assets/kkd-logo.png" alt="KKD" onerror="this.onerror=null;this.src='https://www.katyayaniorganics.com/wp-content/uploads/2022/06/cropped-logo-3.webp'"/>
-      </div>
-      <a href="language.html" class="lang-chip">
-        <i class="fa-solid fa-language"></i>
-        <b id="langCurrent" class="hi">हिंदी</b>
-        <span>&middot; Change</span>
-      </a>
+  <!-- White top bar with KKD branding (image only, no white square) + language picker · sits ABOVE the emerald hero so nothing fights the gradient or the status bar -->
+  <div class="topbar">
+    <div class="brand">
+      <img src="../assets/kkd-logo.png" alt="KKD" onerror="this.onerror=null;this.src='https://www.katyayaniorganics.com/wp-content/uploads/2022/06/cropped-logo-3.webp'"/>
+      <span class="name">Katyayani</span>
     </div>
+    <a href="language.html" class="lang-chip">
+      <i class="fa-solid fa-language globe"></i>
+      <span class="hi" id="langCurrent">हिंदी</span>
+      <i class="fa-solid fa-chevron-down chev"></i>
+    </a>
+  </div>
 
-    <!-- Product line-up · three bottles, slightly fanned, soft drop-shadow -->
+  <!-- Emerald hero · product line-up · tagline · 2-cell stat banner (farmers + products) -->
+  <section class="hero-card">
     <div class="hero-row">
       <img src="../assets/Humic_nobg.png" alt=""/>
       <img src="../assets/Chakrawarti_nobg.png" alt=""/>
       <img src="../assets/AntiVirus_nobg.png" alt=""/>
     </div>
-
-    <!-- Curiosity tagline · English-only · 'Direct from factory · no middleman' line dropped per spec · stat callout sits below the headline -->
-    <div class="hero-tagline" style="margin-top:10px">
+    <div class="hero-tagline" style="margin-top:6px">
       <div class="text-[18px] font-extrabold leading-tight" style="color:#FFFFFF">Save up to <span style="color:#FBBF24">40%</span> on every spray</div>
-      <!-- Stat callout · big-number presentation · English only · icon bubble + 2-line number/label -->
-      <div class="hero-stat" style="margin-top:14px">
-        <span class="hero-stat-ic"><i class="fa-solid fa-handshake-simple"></i></span>
-        <div class="hero-stat-text">
-          <span class="hero-stat-num">10 lakh+</span>
-          <span class="hero-stat-lbl">farmers trust KKD</span>
-        </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat-cell">
+        <div class="hero-stat-num">10 L+</div>
+        <div class="hero-stat-lbl">Farmers</div>
+      </div>
+      <div class="hero-stat-cell">
+        <div class="hero-stat-num">500+</div>
+        <div class="hero-stat-lbl">Products</div>
       </div>
     </div>
   </section>
 
-  <!-- Heading · English only · helper line removed per spec -->
+  <!-- Heading -->
   <div class="px-6 mt-8">
     <h1 class="text-[24px] font-extrabold leading-tight text-[#0F172A]">Enter your mobile number</h1>
   </div>
 
-  <!-- Input · neutral E5E7EB border, clean placeholder · no label, no auto-fetch pill -->
+  <!-- Input · neutral E5E7EB border, clean placeholder -->
   <div class="px-6 mt-5">
     <div class="num-input flex items-center gap-3 h-[58px] px-4 rounded-lg border-2 border-[#E5E7EB] bg-white">
       <span class="text-[17px] font-bold text-[#0F172A]">+91</span>
@@ -178,7 +146,7 @@
     <p class="text-[11.5px] text-[#94A3B8] leading-relaxed">By continuing you agree to our <span class="font-bold" style="color:#047857">Terms</span> &amp; <span class="font-bold" style="color:#047857">Privacy Policy</span></p>
   </div>
 
-  <!-- Sticky CTA · matches design-system primary spec (52px, 12px radius, 15px font-extrabold, soft emerald glow) -->
+  <!-- Sticky CTA · design-system primary -->
   <div class="fixed bottom-0 left-0 right-0 bg-white px-6 py-4" style="border-top:0">
     <button onclick="location.href='otp.html'" class="w-full h-[52px] rounded-[12px] text-white text-[15px] font-extrabold flex items-center justify-center gap-2" style="background:#059669;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
       Send OTP
@@ -186,9 +154,8 @@
     </button>
   </div>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script>
-    // Read the saved language code from the language picker and reflect it in the hero chip · falls back to Hindi if nothing was persisted
+    // Reflect saved language in the chip
     (function(){
       const map = { hi:'हिंदी', en:'English', hien:'Hinglish', mr:'मराठी', gu:'ગુજરાતી', pa:'ਪੰਜਾਬੀ', te:'తెలుగు', ta:'தமிழ்', kn:'ಕನ್ನಡ', ml:'മലയാളം', od:'ଓଡ଼ିଆ', bn:'বাংলা' };
       let code = 'hi';

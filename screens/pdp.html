@@ -5,9 +5,8 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-  html,body{font-family:'Poppins',system-ui,sans-serif}
+  html,body{font-family:'Poppins',system-ui,sans-serif;margin:0;padding:0}
   input,button,select,textarea,optgroup{font-family:inherit}
-  html,body{margin:0;padding:0}
   body{min-height:100vh;background:#fff;color:#0F172A;padding-bottom:100px}
   .tnum{font-variant-numeric:tabular-nums}
   .img-blend{mix-blend-mode:multiply}
@@ -16,31 +15,30 @@
   .snap-c{scroll-snap-align:center}
   .tab{transition:all .15s}
   .tab.active{background:#0F172A;color:#fff}
-  /* Image gallery paginator */
   .pg-dot{width:6px;height:6px;border-radius:9999px;background:rgba(15,23,42,0.22);transition:all .25s ease}
   .pg-dot.active{width:20px;background:#059669}
-  /* Pack-size tile · 3-column grid · BESTSELLER badge is an INLINE chip at the top of the bestseller tile (no longer floating outside the border) so it's clearly visible · all 5 tiles fit without scroll · the 6th cell is a "+more" CTA that opens the all-sizes bottom-sheet */
-  .pack-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-  .var{position:relative;border:1.5px solid #E5E7EB;background:#FFFFFF;border-radius:12px;padding:14px 8px 12px;text-align:center;transition:all .15s;cursor:pointer}
+  /* Pack-size tile · 4-col grid · BESTSELLER chip uses normal weight · per-litre rate shown under the absolute price · the 6th cell is the "+more" CTA */
+  .pack-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .var{position:relative;border:1.5px solid #E5E7EB;background:#FFFFFF;border-radius:12px;padding:14px 6px 10px;text-align:center;transition:all .15s;cursor:pointer}
   .var.active{border-color:#059669;background:#ECFDF5;box-shadow:0 6px 14px -6px rgba(5,150,105,0.35)}
-  .var.bestseller{padding-top:22px}
-  .vk-badge{position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:#FBBF24;color:#0F172A;font-size:9.5px;font-weight:900;padding:3px 8px;border-radius:9999px;white-space:nowrap;box-shadow:0 2px 6px rgba(251,191,36,0.45);letter-spacing:0.04em}
-  .vk-size{font-size:13.5px;font-weight:800;color:#0F172A;line-height:1}
-  .vk-price{font-size:11.5px;color:#64748B;margin-top:5px;line-height:1}
-  /* "+more" tile · dashed border + emerald accent · same dimensions as a variant tile */
-  .var-more{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:1.5px dashed #BBF7D0;background:#ECFDF5;color:#047857;border-radius:12px;padding:14px 8px 12px;font-size:11.5px;font-weight:800;cursor:pointer}
+  .var.bestseller{padding-top:18px}
+  .vk-badge{position:absolute;top:-7px;left:50%;transform:translateX(-50%);background:#FBBF24;color:#0F172A;font-size:8.5px;font-weight:500;padding:2px 7px;border-radius:9999px;white-space:nowrap;box-shadow:0 2px 6px rgba(251,191,36,0.45);letter-spacing:0.02em}
+  .vk-size{font-size:12.5px;font-weight:800;color:#0F172A;line-height:1}
+  .vk-price{font-size:11px;color:#64748B;margin-top:4px;line-height:1}
+  .vk-perL{font-size:9.5px;color:#94A3B8;margin-top:3px;line-height:1;font-weight:600}
+  .var-more{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:1.5px dashed #BBF7D0;background:#ECFDF5;color:#047857;border-radius:12px;padding:14px 6px 10px;font-size:11px;font-weight:800;cursor:pointer}
   .var-more i{font-size:13px}
-  /* Inline ADD button beside price · transitions to a -/+ stepper in place · matches the home card pattern */
+  /* ADD button · more prominent · bigger height + stronger emerald glow + tracked-uppercase label · stepper matches the same dimensions */
   .price-add{display:flex;align-items:center;gap:8px}
-  .add-btn{height:42px;padding:0 18px;border-radius:12px;background:#059669;color:#FFFFFF;font-size:13.5px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 8px 18px -6px rgba(5,150,105,0.5);cursor:pointer;border:0}
+  .add-btn{height:48px;padding:0 22px;border-radius:12px;background:#059669;color:#FFFFFF;font-size:14.5px;font-weight:900;letter-spacing:0.06em;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 12px 22px -8px rgba(5,150,105,0.6),inset 0 1px 0 rgba(255,255,255,0.18);cursor:pointer;border:0;text-transform:uppercase}
   .add-btn:active{transform:scale(.97)}
-  .add-steps{display:none;height:42px;background:#059669;color:#FFFFFF;border-radius:12px;align-items:center;padding:0 4px;box-shadow:0 8px 18px -6px rgba(5,150,105,0.5)}
-  .add-steps button{width:36px;height:42px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#FFFFFF;background:transparent;border:0;cursor:pointer}
+  .add-steps{display:none;height:48px;background:#059669;color:#FFFFFF;border-radius:12px;align-items:center;padding:0 4px;box-shadow:0 12px 22px -8px rgba(5,150,105,0.6),inset 0 1px 0 rgba(255,255,255,0.18)}
+  .add-steps button{width:38px;height:48px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#FFFFFF;background:transparent;border:0;cursor:pointer}
   .add-steps .add-val{min-width:24px;text-align:center;font-size:14px;font-weight:900}
-  /* Floating cart bar · home-page pattern · slate-dark background, emerald icon circle, summary + view-cart action · hidden by default until first Add */
+  /* Floating cart bar */
   .cart-fab{position:fixed;left:12px;right:12px;bottom:14px;z-index:60;display:none;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:18px;background:#0F172A;color:#FFFFFF;text-decoration:none;box-shadow:0 10px 28px rgba(0,0,0,0.28)}
   .cart-fab .cart-ic{width:38px;height:38px;border-radius:9999px;background:#059669;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  /* Ask-Expert full-width banner */
+  /* Ask Expert */
   .expert-banner{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;text-decoration:none;color:#FFFFFF;background:linear-gradient(145deg,#10B981,#065F46);box-shadow:0 8px 22px -6px rgba(16,185,129,0.55),inset 0 1px 0 rgba(255,255,255,0.18)}
   .expert-banner .ph-wrap{position:relative;flex-shrink:0}
   .expert-banner .ph{width:46px;height:46px;border-radius:9999px;object-fit:cover;border:2px solid #FFFFFF;display:block}
@@ -53,29 +51,25 @@
   .video-card .play svg{margin-left:3px}
   .video-card .label{position:absolute;bottom:10px;left:12px;color:#FFFFFF;font-weight:800;font-size:12px;text-shadow:0 1px 4px rgba(0,0,0,0.35)}
   .video-card .duration{position:absolute;top:10px;right:10px;background:rgba(15,23,42,0.7);color:#FFFFFF;font-weight:700;font-size:10px;padding:3px 7px;border-radius:9999px}
-  /* Delivery card · partner-app pattern · 2-row card with delivery date + change-address row · sits below trust badges */
+  /* Delivery card · partner-app pattern · FREE pill + fulfillment chips dropped per spec · only the date/dispatch line and the address row remain */
   .deliv-card{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
   .deliv-top{display:flex;align-items:center;gap:10px;padding:12px 14px}
   .deliv-ic{width:32px;height:32px;border-radius:10px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-  .deliv-chips{display:flex;gap:8px;padding:0 14px 12px}
-  .deliv-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:9999px;background:#ECFDF5;border:1px solid #A7F3D0;font-size:10.5px;font-weight:800;color:#047857}
   .deliv-bottom{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F8FAFC;border-top:1px solid #F1F5F9}
   .deliv-change{font-size:12px;font-weight:800;color:#047857;background:transparent;border:0;cursor:pointer;letter-spacing:0.02em;text-transform:uppercase}
-  /* Collapsible details card (partner-app style) · used for Product description + Ratings section */
+  /* Collapsible details */
   details.kkd-collapse{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden}
   details.kkd-collapse > summary{list-style:none;cursor:pointer;padding:14px;display:flex;align-items:center;justify-content:space-between}
   details.kkd-collapse > summary::-webkit-details-marker{display:none}
   details.kkd-collapse[open] .chev{transform:rotate(180deg)}
   .chev{transition:transform .2s ease;color:#64748B}
-  /* Trust badge · Flipkart-style 3-column with bigger emerald icon panel · chevron suggests tap for details */
+  /* Trust badges (borderless, no ticks/stars, no chevrons, light-grey caption · separation hairline lives above this section between Pack size and Trust badges) */
+  .trust-sep{height:1px;background:#F1F5F9;margin:18px 16px 18px}
   .trust-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
-  .trust-cell{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:6px 4px}
-  .trust-cell + .trust-cell{border-left:1px solid #F1F5F9}
-  .trust-ic-wrap{width:46px;height:46px;border-radius:12px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;position:relative}
-  .trust-ic-wrap i{color:#047857;font-size:20px}
-  .trust-ic-wrap .badge-dot{position:absolute;top:-3px;right:-3px;width:18px;height:18px;border-radius:9999px;background:#FFFFFF;border:2px solid #ECFDF5;display:flex;align-items:center;justify-content:center;font-size:9px;color:#047857}
-  .trust-cap{font-size:12px;font-weight:700;color:#0F172A;line-height:1.25;display:inline-flex;align-items:center;gap:4px}
-  .trust-cap .chev{font-size:9px;color:#94A3B8}
+  .trust-cell{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:0 4px}
+  .trust-ic-wrap{width:44px;height:44px;border-radius:12px;background:#ECFDF5;display:flex;align-items:center;justify-content:center}
+  .trust-ic-wrap i{color:#047857;font-size:18px}
+  .trust-cap{font-size:11.5px;font-weight:400;color:#94A3B8;line-height:1.25;text-align:center}
   /* Rating bar */
   .bar-track{height:6px;border-radius:9999px;background:#F1F5F9;overflow:hidden;flex:1}
   .bar-fill{height:100%;background:#059669;border-radius:9999px}
@@ -84,6 +78,13 @@
   .sheet-bd.open{opacity:1;pointer-events:auto}
   .sheet{position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;max-height:78vh;display:flex;flex-direction:column}
   .sheet.open{transform:translateY(0)}
+  /* Social-proof row · multiple trust signals stacked horizontally below the title · replaces the lone "8,427 farmers" pill · each cell uses a tiny icon + 2-line label so the eye scans 3 reasons at once */
+  .sp-row{margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden;background:#FFFFFF;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .sp-cell{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;padding:10px 6px}
+  .sp-cell + .sp-cell{border-left:1px solid #F1F5F9}
+  .sp-ic{width:26px;height:26px;border-radius:8px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:11px}
+  .sp-val{font-size:13px;font-weight:800;color:#0F172A;line-height:1}
+  .sp-lab{font-size:9.5px;color:#64748B;font-weight:600;line-height:1.1}
 </style></head>
 <body class="min-h-screen">
 
@@ -95,7 +96,7 @@
   <button class="w-10 h-10 rounded-full bg-white/80 backdrop-blur border border-[#E5E7EB] flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg></button>
 </div>
 
-<!-- Image gallery · #1 BESTSELLER + rating badge fonts bumped (was 9/11 px, now 11/13 px) so both read clearly at a glance -->
+<!-- Image gallery -->
 <div class="relative mt-2 mx-4">
   <div id="imgScroll" class="scrollx flex bg-[#F8FAFC] rounded-2xl aspect-square">
     <div class="snap-c w-full flex-shrink-0 flex items-center justify-center p-6"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/></div>
@@ -113,24 +114,39 @@
   </div>
 </div>
 
-<!-- Title · Bio-stimulant tag dropped · category shows as a chip badge instead · H1 = product name "Humic", subtitle = technical name "Activated Humic + Fulvic 98" · 2,020 reviews text dropped here (lives in the ratings block) -->
+<!-- Title row · category badge "Fertilizer" sits on the right side adjacent to the product name (top-right corner of the title block) · technical name lives under the H1 -->
 <div class="px-4 mt-4">
-  <div class="flex items-center gap-2 mb-2">
-    <a href="categories.html" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-extrabold uppercase tracking-[0.06em]" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0">
-      <i class="fa-solid fa-leaf text-[9px]"></i> Bio-stimulant
+  <div class="flex items-start justify-between gap-3">
+    <div class="flex-1 min-w-0">
+      <h1 class="text-[24px] font-extrabold leading-tight text-[#0F172A]">Humic</h1>
+      <div class="text-[12.5px] text-[#475569] mt-1 font-medium">Activated Humic + Fulvic 98</div>
+    </div>
+    <a href="categories.html" class="flex-shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-extrabold uppercase tracking-[0.06em]" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0;margin-top:4px">
+      <i class="fa-solid fa-flask text-[9px]"></i> Fertilizer
     </a>
   </div>
-  <h1 class="text-[24px] font-extrabold leading-tight text-[#0F172A]">Humic</h1>
-  <div class="text-[12.5px] text-[#475569] mt-1 font-medium">Activated Humic + Fulvic 98</div>
 
-  <!-- Confidence pill · replaces the plain "8,427 ordered" text with a trust-boost line · verified-tick + emerald accent · sits prominently so the social proof lands hard -->
-  <div class="inline-flex items-center gap-1.5 mt-3 px-2.5 py-1.5 rounded-full" style="background:#ECFDF5;border:1px solid #A7F3D0">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-    <span class="text-[12px] font-extrabold" style="color:#047857"><span class="tnum">8,427+</span> farmers bought this product</span>
+  <!-- Social-proof row · 3 trust signals together (buyers · rating · trending) replaces the lone "8,427 farmers" pill that didn't read well · each cell is icon + value + tiny caption -->
+  <div class="sp-row">
+    <div class="sp-cell">
+      <span class="sp-ic"><i class="fa-solid fa-user-group"></i></span>
+      <span class="sp-val tnum">8,427+</span>
+      <span class="sp-lab">Farmers bought</span>
+    </div>
+    <div class="sp-cell">
+      <span class="sp-ic"><i class="fa-solid fa-bolt-lightning"></i></span>
+      <span class="sp-val tnum">5 min ago</span>
+      <span class="sp-lab">Last bought</span>
+    </div>
+    <div class="sp-cell">
+      <span class="sp-ic"><i class="fa-solid fa-fire-flame-curved"></i></span>
+      <span class="sp-val">Trending</span>
+      <span class="sp-lab">in Madhya Pradesh</span>
+    </div>
   </div>
 </div>
 
-<!-- Price + inline ADD button beside it · ADD transitions to -/+ stepper in place (home-card pattern) · the bottom-fixed bar is replaced by a floating cart bar that appears only after the first Add -->
+<!-- Price + bigger, more prominent ADD button -->
 <div class="px-4 mt-4 flex items-center justify-between gap-3" id="priceRow">
   <div class="price-add">
     <div>
@@ -143,7 +159,7 @@
   </div>
   <div>
     <button class="add-btn" id="addBtn">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
       ADD
     </button>
     <div class="add-steps" id="addSteps">
@@ -154,7 +170,7 @@
   </div>
 </div>
 
-<!-- Pack size · 3-col grid · all 5 tiles visible at once (no scroll) · BESTSELLER badge is an inline chip on the bestseller tile · 6th cell is "+ 7 more" CTA that opens the all-sizes bottom-sheet -->
+<!-- Pack size · 4-col grid · per-litre rate below the absolute price · BESTSELLER chip uses normal weight per spec -->
 <div class="px-4 mt-5">
   <div class="flex items-baseline justify-between mb-3">
     <div class="text-[15px] font-extrabold text-[#0F172A]">Pack size</div>
@@ -164,23 +180,28 @@
     <button class="var" data-size="250 ml" data-price="₹176">
       <div class="vk-size">250 ml</div>
       <div class="vk-price tnum">₹176</div>
+      <div class="vk-perL tnum">₹704/L</div>
     </button>
     <button class="var bestseller active" data-size="500 ml" data-price="₹276">
-      <span class="vk-badge">BESTSELLER</span>
+      <span class="vk-badge">Bestseller</span>
       <div class="vk-size">500 ml</div>
       <div class="vk-price tnum">₹276</div>
+      <div class="vk-perL tnum">₹552/L</div>
     </button>
     <button class="var" data-size="1 L" data-price="₹376">
       <div class="vk-size">1 L</div>
       <div class="vk-price tnum">₹376</div>
+      <div class="vk-perL tnum">₹376/L</div>
     </button>
     <button class="var" data-size="5 L" data-price="₹1,575">
       <div class="vk-size">5 L</div>
       <div class="vk-price tnum">₹1,575</div>
+      <div class="vk-perL tnum">₹315/L</div>
     </button>
     <button class="var" data-size="10 L" data-price="₹2,890">
       <div class="vk-size">10 L</div>
       <div class="vk-price tnum">₹2,890</div>
+      <div class="vk-perL tnum">₹289/L</div>
     </button>
     <button class="var-more" id="moreSizes">
       <i class="fa-solid fa-plus"></i>
@@ -189,50 +210,36 @@
   </div>
 </div>
 
-<!-- Trust badges · Flipkart-style 3-tile row in green · 46px rounded-square icon panels with subtle emerald wash · chevron suggests details · 7-day return / Cash on delivery / Katyayani Assured -->
-<div class="px-4 mt-5">
-  <div class="border border-[#E5E7EB] rounded-2xl px-2 py-3" style="box-shadow:0 1px 3px rgba(15,23,42,0.04);background:#FFFFFF">
-    <div class="trust-row">
-      <button class="trust-cell">
-        <span class="trust-ic-wrap">
-          <i class="fa-solid fa-rotate-left"></i>
-          <span class="badge-dot"><i class="fa-solid fa-check"></i></span>
-        </span>
-        <span class="trust-cap">7-Day<br/>Return <i class="fa-solid fa-chevron-right chev"></i></span>
-      </button>
-      <button class="trust-cell">
-        <span class="trust-ic-wrap">
-          <i class="fa-solid fa-indian-rupee-sign"></i>
-        </span>
-        <span class="trust-cap">Cash on<br/>Delivery <i class="fa-solid fa-chevron-right chev"></i></span>
-      </button>
-      <button class="trust-cell">
-        <span class="trust-ic-wrap">
-          <i class="fa-solid fa-shield-halved"></i>
-          <span class="badge-dot" style="background:#FFFFFF"><i class="fa-solid fa-star" style="font-size:8px;color:#FBBF24"></i></span>
-        </span>
-        <span class="trust-cap">Katyayani<br/>Assured <i class="fa-solid fa-chevron-right chev"></i></span>
-      </button>
+<!-- Separation hairline between Pack size and Trust badges -->
+<div class="trust-sep"></div>
+
+<!-- Trust badges · no border / no card wrapper · drop tick + star + chevrons · captions are grey + normal weight -->
+<div class="px-4">
+  <div class="trust-row">
+    <div class="trust-cell">
+      <span class="trust-ic-wrap"><i class="fa-solid fa-rotate-left"></i></span>
+      <span class="trust-cap">7-Day Return</span>
+    </div>
+    <div class="trust-cell">
+      <span class="trust-ic-wrap"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+      <span class="trust-cap">Cash on Delivery</span>
+    </div>
+    <div class="trust-cell">
+      <span class="trust-ic-wrap"><i class="fa-solid fa-shield-halved"></i></span>
+      <span class="trust-cap">Katyayani Assured</span>
     </div>
   </div>
 </div>
 
-<!-- Delivery card · partner-app style · delivery estimate + free pill, fulfillment chips, address + CHANGE row -->
+<!-- Delivery card · drop FREE pill + fulfillment chips per spec · just date + dispatch line + address-change row -->
 <div class="px-4 mt-5">
   <div class="deliv-card">
     <div class="deliv-top">
       <span class="deliv-ic"><i class="fa-solid fa-truck-fast"></i></span>
       <div class="flex-1 leading-tight">
-        <div class="flex items-center gap-1.5">
-          <span class="text-[14.5px] font-extrabold text-[#0F172A]">Tomorrow, 28 May</span>
-          <span class="text-[9px] font-extrabold text-[#047857] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider">Free</span>
-        </div>
+        <div class="text-[14.5px] font-extrabold text-[#0F172A]">Tomorrow, 28 May</div>
         <div class="text-[11.5px] mt-0.5" style="color:#64748B">Order before <span class="font-extrabold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
       </div>
-    </div>
-    <div class="deliv-chips">
-      <span class="deliv-chip"><i class="fa-solid fa-box text-[9px]"></i> Packed in 2 hrs</span>
-      <span class="deliv-chip"><i class="fa-solid fa-shield-halved text-[9px]"></i> COD available</span>
     </div>
     <div class="deliv-bottom">
       <i class="fa-solid fa-location-dot text-[14px]" style="color:#94A3B8"></i>
@@ -242,7 +249,7 @@
   </div>
 </div>
 
-<!-- Product description · partner-app collapsible card · drops the 3 benefit bullets · short paragraph + a 3-column key-facts grid (acts in / residual / safe for) -->
+<!-- Product description -->
 <div class="px-4 mt-6">
   <details class="kkd-collapse" open>
     <summary>
@@ -263,8 +270,8 @@
   </details>
 </div>
 
-<!-- How to use -->
-<div class="px-4 mt-6">
+<!-- How to use · video + tabs (renamed Technical / Dose / Disease) · sits directly under Product description per spec -->
+<div class="px-4 mt-4">
   <div class="text-[16px] font-extrabold mb-2 text-[#0F172A]">How to use</div>
   <a href="#" class="video-card aspect-[16/9] block">
     <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=800&q=80" class="poster" alt="How to use video"/>
@@ -274,9 +281,9 @@
   </a>
   <div class="mt-3 border border-[#E5E7EB] rounded-2xl">
     <div class="flex p-1 border-b border-[#E5E7EB]">
-      <button class="tab active flex-1 h-9 rounded-lg text-[12px] font-bold">Steps</button>
-      <button class="tab flex-1 h-9 rounded-lg text-[12px] font-bold">Crops</button>
-      <button class="tab flex-1 h-9 rounded-lg text-[12px] font-bold">Effect</button>
+      <button class="tab active flex-1 h-9 rounded-lg text-[12px] font-bold">Technical</button>
+      <button class="tab flex-1 h-9 rounded-lg text-[12px] font-bold">Dose</button>
+      <button class="tab flex-1 h-9 rounded-lg text-[12px] font-bold">Disease</button>
     </div>
     <div class="p-4 space-y-2 text-[12.5px] text-[#0F172A]">
       <div class="flex gap-2"><span class="font-extrabold text-[#059669]">1.</span><span>Dilute 2 ml in 1 litre of water</span></div>
@@ -286,7 +293,7 @@
   </div>
 </div>
 
-<!-- Farmer testimonials · partner-app pattern · horizontal scroll of vertical video tiles (152x200) with farmer photo poster + name + crop/location + caption -->
+<!-- Farmer testimonials -->
 <div class="mt-6">
   <div class="px-4 flex items-baseline justify-between mb-3">
     <div>
@@ -328,70 +335,62 @@
   </div>
 </div>
 
-<!-- Ratings & reviews · partner-app pattern · edge-to-edge tinted bg · header with VIEW ALL · score card · filter pills · review card -->
+<!-- Ratings & reviews · top "VIEW ALL" link removed · review fonts bumped up · "Verified / Helpful / Report" stripped from review card · bottom CTA is now "View more" which appends 5 more reviews on tap -->
 <div class="mt-6 py-5 px-4" style="background:#F8FAFC;border-top:1px solid #F1F5F9;border-bottom:1px solid #F1F5F9">
-  <div class="flex items-center justify-between mb-3">
-    <div>
-      <div class="text-[15px] font-extrabold text-[#0F172A]">Ratings &amp; reviews</div>
-      <div class="text-[11.5px] mt-0.5" style="color:#64748B">From verified buyers only</div>
-    </div>
-    <a href="#" class="text-[12px] font-extrabold" style="color:#047857">VIEW ALL (2,020)</a>
+  <div class="mb-3">
+    <div class="text-[16px] font-extrabold text-[#0F172A]">Ratings &amp; reviews</div>
+    <div class="text-[12.5px] mt-0.5" style="color:#64748B">From verified buyers only</div>
   </div>
   <div class="bg-white border border-[#E5E7EB] rounded-[12px] p-4">
     <div class="flex items-center gap-4">
       <div class="text-center flex-shrink-0">
-        <div class="text-[30px] font-black leading-none tnum text-[#0F172A]">4.6</div>
-        <div class="text-[#FBBF24] text-[12px] mt-1 tracking-wider">★★★★★</div>
-        <div class="text-[9px] mt-0.5" style="color:#64748B">2,020 ratings</div>
+        <div class="text-[32px] font-black leading-none tnum text-[#0F172A]">4.6</div>
+        <div class="text-[#FBBF24] text-[14px] mt-1 tracking-wider">★★★★★</div>
+        <div class="text-[10.5px] mt-1" style="color:#64748B">2,020 ratings</div>
       </div>
-      <div class="flex-1 space-y-1">
-        <div class="flex items-center gap-2 text-[9.5px]"><span class="w-4" style="color:#64748B">5★</span><div class="bar-track" style="height:6px"><div class="h-full rounded-full" style="background:#059669;width:72%"></div></div><span class="w-8 text-right font-extrabold" style="color:#475569">72%</span></div>
-        <div class="flex items-center gap-2 text-[9.5px]"><span class="w-4" style="color:#64748B">4★</span><div class="bar-track" style="height:6px"><div class="h-full rounded-full" style="background:#10B981;width:18%"></div></div><span class="w-8 text-right font-extrabold" style="color:#475569">18%</span></div>
-        <div class="flex items-center gap-2 text-[9.5px]"><span class="w-4" style="color:#64748B">3★</span><div class="bar-track" style="height:6px"><div class="h-full rounded-full" style="background:#FBBF24;width:6%"></div></div><span class="w-8 text-right font-extrabold" style="color:#475569">6%</span></div>
-        <div class="flex items-center gap-2 text-[9.5px]"><span class="w-4" style="color:#64748B">2★</span><div class="bar-track" style="height:6px"><div class="h-full rounded-full" style="background:#F59E0B;width:2%"></div></div><span class="w-8 text-right font-extrabold" style="color:#475569">2%</span></div>
-        <div class="flex items-center gap-2 text-[9.5px]"><span class="w-4" style="color:#64748B">1★</span><div class="bar-track" style="height:6px"><div class="h-full rounded-full" style="background:#EF4444;width:2%"></div></div><span class="w-8 text-right font-extrabold" style="color:#475569">2%</span></div>
+      <div class="flex-1 space-y-1.5">
+        <div class="flex items-center gap-2 text-[11px]"><span class="w-5" style="color:#64748B">5★</span><div class="bar-track" style="height:7px"><div class="h-full rounded-full" style="background:#059669;width:72%"></div></div><span class="w-8 text-right font-extrabold tnum" style="color:#475569">72%</span></div>
+        <div class="flex items-center gap-2 text-[11px]"><span class="w-5" style="color:#64748B">4★</span><div class="bar-track" style="height:7px"><div class="h-full rounded-full" style="background:#10B981;width:18%"></div></div><span class="w-8 text-right font-extrabold tnum" style="color:#475569">18%</span></div>
+        <div class="flex items-center gap-2 text-[11px]"><span class="w-5" style="color:#64748B">3★</span><div class="bar-track" style="height:7px"><div class="h-full rounded-full" style="background:#FBBF24;width:6%"></div></div><span class="w-8 text-right font-extrabold tnum" style="color:#475569">6%</span></div>
+        <div class="flex items-center gap-2 text-[11px]"><span class="w-5" style="color:#64748B">2★</span><div class="bar-track" style="height:7px"><div class="h-full rounded-full" style="background:#F59E0B;width:2%"></div></div><span class="w-8 text-right font-extrabold tnum" style="color:#475569">2%</span></div>
+        <div class="flex items-center gap-2 text-[11px]"><span class="w-5" style="color:#64748B">1★</span><div class="bar-track" style="height:7px"><div class="h-full rounded-full" style="background:#EF4444;width:2%"></div></div><span class="w-8 text-right font-extrabold tnum" style="color:#475569">2%</span></div>
       </div>
     </div>
   </div>
 
-  <!-- Filter pills · horizontal scroll -->
+  <!-- Filter pills · slightly larger -->
   <div class="mt-3 overflow-x-auto scrollx -mx-4 px-4">
     <div class="flex gap-2 min-w-max">
-      <span class="text-white text-[11.5px] font-extrabold px-3 py-1.5 rounded-full" style="background:#0F172A">All (2,020)</span>
-      <span class="bg-white border border-[#E5E7EB] text-[11.5px] font-bold px-3 py-1.5 rounded-full" style="color:#64748B">Most helpful</span>
-      <span class="bg-white border border-[#E5E7EB] text-[11.5px] font-bold px-3 py-1.5 rounded-full" style="color:#64748B">With photos (412)</span>
-      <span class="bg-white border border-[#E5E7EB] text-[11.5px] font-bold px-3 py-1.5 rounded-full" style="color:#64748B">5★ only</span>
-      <span class="bg-white border border-[#E5E7EB] text-[11.5px] font-bold px-3 py-1.5 rounded-full" style="color:#64748B">Critical</span>
+      <span class="text-white text-[12.5px] font-extrabold px-3.5 py-1.5 rounded-full" style="background:#0F172A">All (2,020)</span>
+      <span class="bg-white border border-[#E5E7EB] text-[12.5px] font-bold px-3.5 py-1.5 rounded-full" style="color:#64748B">Most helpful</span>
+      <span class="bg-white border border-[#E5E7EB] text-[12.5px] font-bold px-3.5 py-1.5 rounded-full" style="color:#64748B">With photos (412)</span>
+      <span class="bg-white border border-[#E5E7EB] text-[12.5px] font-bold px-3.5 py-1.5 rounded-full" style="color:#64748B">5★ only</span>
+      <span class="bg-white border border-[#E5E7EB] text-[12.5px] font-bold px-3.5 py-1.5 rounded-full" style="color:#64748B">Critical</span>
     </div>
   </div>
 
-  <!-- Review card · verified buyer signal + green Zomato-style rating chip + helpful/report row -->
-  <div class="mt-3 space-y-2.5">
-    <div class="bg-white border border-[#E5E7EB] rounded-[12px] p-3">
-      <div class="flex items-center gap-2">
-        <div class="w-8 h-8 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[13px] font-extrabold" style="color:#047857">R</div>
+  <!-- Review list · larger fonts · Helpful/Report/Verified stripped per spec · "View more" reveals 5 additional reviews -->
+  <div id="reviewList" class="mt-3 space-y-2.5">
+    <div class="bg-white border border-[#E5E7EB] rounded-[12px] p-3.5">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[14px] font-extrabold" style="color:#047857">R</div>
         <div class="flex-1 leading-tight">
-          <span class="text-[13px] font-extrabold text-[#0F172A]">Ramesh Patel</span>
-          <div class="flex items-center gap-1 mt-0.5">
-            <div class="flex items-center gap-0.5 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded" style="background:#059669"><svg width="7" height="7" viewBox="0 0 24 24" fill="white"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg>5</div>
-            <span class="text-[9.5px]" style="color:#64748B">Indore · 12 days ago</span>
+          <span class="text-[14px] font-extrabold text-[#0F172A]">Ramesh Patel</span>
+          <div class="flex items-center gap-1.5 mt-1">
+            <div class="flex items-center gap-0.5 text-white text-[10.5px] font-extrabold px-1.5 py-0.5 rounded" style="background:#059669"><svg width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg>5</div>
+            <span class="text-[11px]" style="color:#64748B">Indore · 12 days ago</span>
           </div>
         </div>
-        <span class="text-[9px] font-extrabold" style="color:#047857">✓ Verified</span>
       </div>
-      <p class="text-[12.5px] mt-2 text-[#0F172A] leading-snug">Used on tomato — saw results in 15 days. Leaves are shinier and stronger. Will order again.</p>
-      <div class="mt-2 flex gap-2">
+      <p class="text-[13.5px] mt-2.5 text-[#0F172A] leading-snug">Used on tomato — saw results in 15 days. Leaves are shinier and stronger. Will order again.</p>
+      <div class="mt-2.5 flex gap-2">
         <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=200&q=80" class="w-14 h-14 rounded-lg object-cover"/>
         <img src="https://images.unsplash.com/photo-1591857177580-dc82b9ac4e1e?w=200&q=80" class="w-14 h-14 rounded-lg object-cover"/>
       </div>
-      <div class="mt-2.5 pt-2.5 border-t border-[#F1F5F9] flex items-center gap-4 text-[10.5px]" style="color:#64748B">
-        <button class="font-bold inline-flex items-center gap-1"><i class="fa-regular fa-thumbs-up"></i> Helpful (12)</button>
-        <button class="font-bold inline-flex items-center gap-1"><i class="fa-regular fa-flag"></i> Report</button>
-      </div>
     </div>
   </div>
 
-  <button class="mt-3 w-full h-10 rounded-lg bg-white border border-[#059669] text-[#059669] text-[12.5px] font-extrabold">View all 2,020 reviews</button>
+  <button id="viewMoreBtn" class="mt-3 w-full h-11 rounded-lg bg-white border border-[#059669] text-[#059669] text-[13px] font-extrabold">View more</button>
 </div>
 
 <!-- FAQ -->
@@ -419,7 +418,7 @@
   </a>
 </div>
 
-<!-- Floating cart bar · home-page pattern · slate-dark with emerald icon · hidden by default, appears after first Add -->
+<!-- Floating cart bar -->
 <a href="cart.html" id="cartBar" class="cart-fab">
   <div class="flex items-center gap-3 min-w-0">
     <div class="cart-ic"><i class="fa-solid fa-bag-shopping text-white text-[14px]"></i></div>
@@ -434,7 +433,7 @@
   </div>
 </a>
 
-<!-- All-sizes bottom sheet · lists every variant when "+7 more" is tapped -->
+<!-- All-sizes bottom sheet -->
 <div id="sheetBd" class="sheet-bd"></div>
 <div id="sheet" class="sheet">
   <div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 0"></div>
@@ -444,24 +443,24 @@
   </div>
   <div class="px-5 pb-5 overflow-y-auto" style="flex:1">
     <div class="grid grid-cols-3 gap-2">
-      <button class="var" data-size="100 ml" data-price="₹85"><div class="vk-size">100 ml</div><div class="vk-price tnum">₹85</div></button>
-      <button class="var" data-size="250 ml" data-price="₹176"><div class="vk-size">250 ml</div><div class="vk-price tnum">₹176</div></button>
-      <button class="var bestseller active" data-size="500 ml" data-price="₹276"><span class="vk-badge">BESTSELLER</span><div class="vk-size">500 ml</div><div class="vk-price tnum">₹276</div></button>
-      <button class="var" data-size="1 L" data-price="₹376"><div class="vk-size">1 L</div><div class="vk-price tnum">₹376</div></button>
-      <button class="var" data-size="2 L" data-price="₹720"><div class="vk-size">2 L</div><div class="vk-price tnum">₹720</div></button>
-      <button class="var" data-size="3 L" data-price="₹1,050"><div class="vk-size">3 L</div><div class="vk-price tnum">₹1,050</div></button>
-      <button class="var" data-size="5 L" data-price="₹1,575"><div class="vk-size">5 L</div><div class="vk-price tnum">₹1,575</div></button>
-      <button class="var" data-size="10 L" data-price="₹2,890"><div class="vk-size">10 L</div><div class="vk-price tnum">₹2,890</div></button>
-      <button class="var" data-size="20 L" data-price="₹5,490"><div class="vk-size">20 L</div><div class="vk-price tnum">₹5,490</div></button>
-      <button class="var" data-size="25 L" data-price="₹6,750"><div class="vk-size">25 L</div><div class="vk-price tnum">₹6,750</div></button>
-      <button class="var" data-size="50 L" data-price="₹12,800"><div class="vk-size">50 L</div><div class="vk-price tnum">₹12,800</div></button>
-      <button class="var" data-size="100 L" data-price="₹24,500"><div class="vk-size">100 L</div><div class="vk-price tnum">₹24,500</div></button>
+      <button class="var" data-size="100 ml" data-price="₹85"><div class="vk-size">100 ml</div><div class="vk-price tnum">₹85</div><div class="vk-perL tnum">₹850/L</div></button>
+      <button class="var" data-size="250 ml" data-price="₹176"><div class="vk-size">250 ml</div><div class="vk-price tnum">₹176</div><div class="vk-perL tnum">₹704/L</div></button>
+      <button class="var bestseller active" data-size="500 ml" data-price="₹276"><span class="vk-badge">Bestseller</span><div class="vk-size">500 ml</div><div class="vk-price tnum">₹276</div><div class="vk-perL tnum">₹552/L</div></button>
+      <button class="var" data-size="1 L" data-price="₹376"><div class="vk-size">1 L</div><div class="vk-price tnum">₹376</div><div class="vk-perL tnum">₹376/L</div></button>
+      <button class="var" data-size="2 L" data-price="₹720"><div class="vk-size">2 L</div><div class="vk-price tnum">₹720</div><div class="vk-perL tnum">₹360/L</div></button>
+      <button class="var" data-size="3 L" data-price="₹1,050"><div class="vk-size">3 L</div><div class="vk-price tnum">₹1,050</div><div class="vk-perL tnum">₹350/L</div></button>
+      <button class="var" data-size="5 L" data-price="₹1,575"><div class="vk-size">5 L</div><div class="vk-price tnum">₹1,575</div><div class="vk-perL tnum">₹315/L</div></button>
+      <button class="var" data-size="10 L" data-price="₹2,890"><div class="vk-size">10 L</div><div class="vk-price tnum">₹2,890</div><div class="vk-perL tnum">₹289/L</div></button>
+      <button class="var" data-size="20 L" data-price="₹5,490"><div class="vk-size">20 L</div><div class="vk-price tnum">₹5,490</div><div class="vk-perL tnum">₹275/L</div></button>
+      <button class="var" data-size="25 L" data-price="₹6,750"><div class="vk-size">25 L</div><div class="vk-price tnum">₹6,750</div><div class="vk-perL tnum">₹270/L</div></button>
+      <button class="var" data-size="50 L" data-price="₹12,800"><div class="vk-size">50 L</div><div class="vk-price tnum">₹12,800</div><div class="vk-perL tnum">₹256/L</div></button>
+      <button class="var" data-size="100 L" data-price="₹24,500"><div class="vk-size">100 L</div><div class="vk-price tnum">₹24,500</div><div class="vk-perL tnum">₹245/L</div></button>
     </div>
   </div>
 </div>
 
 <script>
-  // Image-gallery paginator
+  // Image gallery
   (function(){
     const sc = document.getElementById('imgScroll');
     const dots = document.querySelectorAll('#imgDots .pg-dot');
@@ -472,20 +471,15 @@
     }, { passive: true });
   })();
 
-  // Variant selection · keep the visible grid and the sheet grid in sync · also feeds the cart bar / inline ADD price
+  // Variant selection
   function selectVariant(size, price){
-    document.querySelectorAll('.var').forEach(v => {
-      v.classList.toggle('active', v.dataset.size === size);
-    });
-    // Update headline price
+    document.querySelectorAll('.var').forEach(v => v.classList.toggle('active', v.dataset.size === size));
     const headPrice = document.querySelector('#priceRow .text-\\[28px\\]');
     if (headPrice && price) headPrice.textContent = price;
   }
-  document.querySelectorAll('.var').forEach(v => {
-    v.addEventListener('click', () => selectVariant(v.dataset.size, v.dataset.price));
-  });
+  document.querySelectorAll('.var').forEach(v => v.addEventListener('click', () => selectVariant(v.dataset.size, v.dataset.price)));
 
-  // Inline ADD → -/+ stepper transition + floating cart bar (home-card pattern)
+  // ADD → stepper + floating cart bar
   (function(){
     const btn = document.getElementById('addBtn');
     const steps = document.getElementById('addSteps');
@@ -514,7 +508,7 @@
     });
   })();
 
-  // "+7 more" sheet · opens the full 12-size grid
+  // All-sizes sheet
   (function(){
     const open = document.getElementById('moreSizes');
     const close = document.getElementById('sheetClose');
@@ -524,11 +518,48 @@
     open.addEventListener('click', () => { bd.classList.add('open'); sh.classList.add('open'); });
     close.addEventListener('click', () => { bd.classList.remove('open'); sh.classList.remove('open'); });
     bd.addEventListener('click', () => { bd.classList.remove('open'); sh.classList.remove('open'); });
-    // tapping a size in the sheet closes it and selects across both grids
     sh.querySelectorAll('.var').forEach(v => v.addEventListener('click', () => {
       selectVariant(v.dataset.size, v.dataset.price);
       setTimeout(() => { bd.classList.remove('open'); sh.classList.remove('open'); }, 180);
     }));
+  })();
+
+  // View more reviews · appends 5 additional review cards on tap, then hides the button when no more left
+  (function(){
+    const list = document.getElementById('reviewList');
+    const btn = document.getElementById('viewMoreBtn');
+    if (!btn || !list) return;
+    const pool = [
+      { n:'Mohan Verma', loc:'Khandwa · 1 month ago', initials:'M', star:5, body:'Cotton crop me lagaya — leaves greener within 10 days. Strong roots.', imgs:[] },
+      { n:'Balram Kushwaha', loc:'Sehore · 2 months ago', initials:'B', star:4, body:'Used for 2 seasons on wheat. Yield is consistently up.', imgs:[] },
+      { n:'Suresh Yadav', loc:'Bhopal · 3 weeks ago', initials:'S', star:5, body:'Mix easily with urea. No clumping. Highly recommend.', imgs:['https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=200&q=80'] },
+      { n:'Anita Devi', loc:'Ujjain · 5 days ago', initials:'A', star:5, body:'Tomato patch had stunted growth. After 3 sprays, plants are thriving.', imgs:[] },
+      { n:'Pradeep Singh', loc:'Dewas · 2 weeks ago', initials:'P', star:4, body:'Good quality. Pack arrived sealed. Will order again next season.', imgs:[] }
+    ];
+    let shown = 0;
+    btn.addEventListener('click', () => {
+      const batch = pool.slice(shown, shown + 5);
+      batch.forEach(r => {
+        const card = document.createElement('div');
+        card.className = 'bg-white border border-[#E5E7EB] rounded-[12px] p-3.5';
+        const imgs = r.imgs.map(s => '<img src="'+s+'" class="w-14 h-14 rounded-lg object-cover"/>').join('');
+        card.innerHTML = '<div class="flex items-center gap-2.5">'
+          + '<div class="w-9 h-9 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[14px] font-extrabold" style="color:#047857">' + r.initials + '</div>'
+          + '<div class="flex-1 leading-tight">'
+          +   '<span class="text-[14px] font-extrabold text-[#0F172A]">' + r.n + '</span>'
+          +   '<div class="flex items-center gap-1.5 mt-1">'
+          +     '<div class="flex items-center gap-0.5 text-white text-[10.5px] font-extrabold px-1.5 py-0.5 rounded" style="background:#059669"><svg width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg>' + r.star + '</div>'
+          +     '<span class="text-[11px]" style="color:#64748B">' + r.loc + '</span>'
+          +   '</div>'
+          + '</div>'
+          + '</div>'
+          + '<p class="text-[13.5px] mt-2.5 text-[#0F172A] leading-snug">' + r.body + '</p>'
+          + (imgs ? '<div class="mt-2.5 flex gap-2">' + imgs + '</div>' : '');
+        list.appendChild(card);
+      });
+      shown += batch.length;
+      if (shown >= pool.length) btn.style.display = 'none';
+    });
   })();
 </script>
 

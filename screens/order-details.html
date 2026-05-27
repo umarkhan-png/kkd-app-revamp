@@ -10,10 +10,10 @@
   .tnum{font-variant-numeric:tabular-nums}
   .img-blend{mix-blend-mode:multiply}
 
-  /* Sticky header */
+  /* Sticky header · title only, no subtitle order-id (moved into its own row below the hero) */
   .top-stk{position:sticky;top:0;z-index:30;background:#FFFFFF;border-bottom:1px solid #F1F5F9}
 
-  /* Status hero · slightly toned down · colour swaps via body.state-* */
+  /* Status hero */
   .hero{padding:22px 16px 18px;text-align:center;border-bottom:1px solid #E5E7EB;transition:all .25s ease}
   body.state-delivered .hero{background:linear-gradient(180deg,#ECFDF5,#D1FAE5);border-color:#A7F3D0}
   body.state-transit  .hero{background:linear-gradient(180deg,#FFF7ED,#FEF3C7);border-color:#FCD34D}
@@ -27,27 +27,32 @@
   .hero-sub{font-size:13px;color:#475569;margin-top:5px}
   .hero-sub b{color:#0F172A;font-weight:700}
 
-  /* Section title · matches home aesthetic (11.5px font-extrabold tracking-[0.06em] uppercase muted slate) */
+  /* Dedicated order-number row right below the hero · single line, two columns (label + ID) · so the ID isn't hiding in the page chrome */
+  .ord-id-row{background:#FFFFFF;border-bottom:1px solid #F1F5F9;padding:11px 16px;display:flex;align-items:center;justify-content:space-between}
+  .ord-id-row .lbl{font-size:11px;font-weight:800;color:#94A3B8;text-transform:uppercase;letter-spacing:0.06em}
+  .ord-id-row .val{font-size:13px;font-weight:700;color:#0F172A;font-variant-numeric:tabular-nums}
+
+  /* Section title · matches home aesthetic */
   .sec-title{margin:16px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
   .card{margin:0 16px 10px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
 
-  /* Unified Products + Bill card · single card, internal hairline dividers separate products from each other and from the bill block · matches home product-card density */
+  /* Unified Products + Bill card · all product calc tokens on a single inline row · matches home product-card density */
   .prod-row{padding:12px;display:flex;gap:12px;align-items:flex-start;border-bottom:1px solid #F1F5F9}
   .prod-img{width:56px;height:56px;border-radius:10px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0;border:1px solid #E5E7EB;text-decoration:none}
   .prod-img img{max-width:100%;max-height:100%;object-fit:contain}
   .prod-info{flex:1;min-width:0;line-height:1.25}
-  /* Name typography matches home product-card .pname (14.5px font-bold) · tech sub matches .psub (11px slate-muted) */
   .prod-name{font-size:14.5px;font-weight:700;color:#0F172A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;text-decoration:none;line-height:1.2}
   .prod-tech{font-size:11.5px;color:#94A3B8;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  /* Pack size badge · same grey badge style as home product cards (.psize) · F1F5F9 bg, slate text, small radius · sits on its own line below the name/tech */
-  .prod-size{display:inline-flex;align-items:center;padding:2px 8px;border-radius:5px;background:#F1F5F9;color:#475569;font-size:10.5px;font-weight:600;margin-top:7px}
-  /* Calculation row · single line · per-pc × Qty on left, line total on right · no "Amount" label */
-  .prod-calc{display:flex;align-items:baseline;justify-content:space-between;margin-top:8px;gap:8px}
-  .prod-calc .lhs{font-size:12.5px;color:#475569;font-weight:600}
-  .prod-calc .lhs .pc{font-weight:800;color:#0F172A}
-  .prod-calc .lhs .qty{display:inline-flex;align-items:center;padding:1px 7px;border-radius:4px;background:#ECFDF5;color:#047857;font-size:10.5px;font-weight:800;letter-spacing:0.02em;margin-left:4px}
-  .prod-calc .rhs{font-size:15.5px;font-weight:800;color:#0F172A;line-height:1}
-  /* Bill section · sits inside the SAME card after the products · stronger top divider so it visually separates from products */
+  /* Inline calc row · everything on one line · size badge | per-pc × qty | line-total (right) */
+  .prod-inline{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;flex-wrap:wrap}
+  .prod-inline-left{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .prod-size{display:inline-flex;align-items:center;padding:2px 8px;border-radius:5px;background:#F1F5F9;color:#475569;font-size:10.5px;font-weight:600}
+  .prod-calc-text{font-size:12.5px;color:#475569;font-weight:600}
+  .prod-calc-text .pc{font-weight:800;color:#0F172A}
+  .prod-calc-text .qty{display:inline-flex;align-items:center;padding:1px 7px;border-radius:4px;background:#ECFDF5;color:#047857;font-size:10.5px;font-weight:800;margin-left:2px}
+  .prod-total{font-size:15px;font-weight:800;color:#0F172A;line-height:1;white-space:nowrap}
+
+  /* Bill section inside the same card */
   .bill-section{padding:13px 14px;border-top:1px solid #E5E7EB;background:#FAFAFA}
   .bill-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:3px 0}
   .bill-row .lbl{color:#64748B}
@@ -57,7 +62,7 @@
   .bill-total .lbl{font-size:14px;font-weight:700;color:#0F172A}
   .bill-total .val{font-size:18px;font-weight:800;color:#0F172A}
 
-  /* Rating row · single sliver under products · only renders for delivered */
+  /* Rate row */
   .rate-row-wrap{padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#FFFFFF;border-top:1px solid #F1F5F9}
   .star-btn{background:transparent;border:0;padding:0;cursor:pointer;transition:transform .15s ease}
   .star-btn:active{transform:scale(.85)}
@@ -88,48 +93,57 @@
   .tl-item.cur .tl-title{color:#B45309}
   .tl-item.upcoming .tl-title{color:#94A3B8}
 
-  /* Payment fully-paid · transaction-id chip beneath the source */
+  /* Payment · fully paid · single row with chip */
   .pay-row{padding:14px;display:flex;align-items:center;gap:12px}
   .pay-ic{width:40px;height:40px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;color:#047857;flex-shrink:0}
   .pay-info{flex:1;line-height:1.25;min-width:0}
   .pay-info .a{font-size:14px;font-weight:700;color:#0F172A}
   .pay-info .b{font-size:11.5px;color:#64748B;margin-top:2px}
-  .pay-txn{display:inline-flex;align-items:center;gap:5px;margin-top:6px;padding:3px 8px;border-radius:6px;background:#F1F5F9;font-size:10.5px;font-weight:700;color:#475569;letter-spacing:0.02em}
+  .pay-txn{display:inline-flex;align-items:center;gap:5px;margin-top:6px;padding:3px 8px;border-radius:6px;background:#F1F5F9;font-size:10.5px;font-weight:700;color:#475569}
   .pay-txn i{font-size:9px}
-  .pay-inv-btn{padding:8px 12px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:8px;font-size:11.5px;font-weight:800;color:#0F172A;text-transform:uppercase;letter-spacing:0.04em;text-decoration:none;display:inline-flex;align-items:center;gap:5px;flex-shrink:0}
+  .pay-inv-btn{padding:8px 12px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:8px;font-size:12px;font-weight:700;color:#0F172A;text-decoration:none;display:inline-flex;align-items:center;gap:5px;flex-shrink:0}
 
-  /* Partial-paid · repainted to emerald design-system (was amber/clock-rotate which clashed) · COD-aware copy */
+  /* Partial-paid · TWO fuller stacked cells (paid card + due card) · paid details live inside the paid card, Pay button lives inside the due card · no external CTA */
   .partial{padding:14px}
-  .partial-head{display:flex;align-items:flex-start;gap:12px}
+  .partial-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
   .partial-head .pay-ic{background:#ECFDF5;color:#047857}
   .partial-meta{flex:1;line-height:1.25;min-width:0}
   .partial-meta .a{font-size:14px;font-weight:800;color:#0F172A}
   .partial-meta .b{font-size:11.5px;color:#64748B;margin-top:2px}
-  .partial-bar{margin-top:12px;height:8px;background:#F1F5F9;border-radius:999px;overflow:hidden}
+  .partial-bar{height:8px;background:#F1F5F9;border-radius:999px;overflow:hidden;margin-bottom:12px}
   .partial-bar-fill{height:100%;background:linear-gradient(90deg,#047857,#10B981);border-radius:999px;transition:width .35s ease}
-  .partial-rows{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .partial-cell{background:#F8FAFC;border:1px solid #E5E7EB;border-radius:10px;padding:10px}
-  .partial-cell .lbl{font-size:10px;font-weight:800;letter-spacing:0.06em;color:#94A3B8;text-transform:uppercase}
-  .partial-cell .val{font-size:16px;font-weight:800;color:#0F172A;margin-top:3px}
-  .partial-cell.paid .val{color:#047857}
-  .partial-cell.due{background:#ECFDF5;border-color:#BBF7D0}
-  .partial-cell.due .val{color:#047857}
-  /* Pay-COD CTA · emerald + coin reward inline so the value-prop reads in one go */
-  .pay-cod-cta{margin-top:12px;width:100%;height:48px;border-radius:10px;background:#059669;color:#FFFFFF;font-size:13.5px;font-weight:800;border:0;letter-spacing:0.04em;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;cursor:pointer;box-shadow:0 6px 18px -4px rgba(5,150,105,0.45)}
-  .pay-cod-cta .coins{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,0.18);padding:3px 8px;border-radius:9999px;font-size:11px;font-weight:800;letter-spacing:0.04em}
+  .pcard{border-radius:12px;border:1px solid #E5E7EB;padding:12px 14px;margin-bottom:10px}
+  .pcard:last-child{margin-bottom:0}
+  .pcard.paid{background:#F0FDF4;border-color:#BBF7D0}
+  .pcard.due{background:#FFFBEB;border-color:#FDE68A}
+  .pcard-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px}
+  .pcard-head .lbl{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em}
+  .pcard.paid .pcard-head .lbl{color:#047857}
+  .pcard.due  .pcard-head .lbl{color:#B45309}
+  .pcard-head .val{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
+  .pcard.paid .pcard-head .val{color:#0F172A}
+  .pcard.due  .pcard-head .val{color:#0F172A}
+  .pcard-line{display:flex;align-items:center;gap:6px;font-size:11.5px;color:#475569;line-height:1.4;margin-top:3px}
+  .pcard-line i{font-size:10.5px;color:#94A3B8;width:14px;text-align:center}
+  /* Pay button INSIDE the due card · sits below the breakdown lines · coin reward chip inside the button */
+  .pcard-pay{margin-top:10px;width:100%;height:44px;border-radius:10px;background:#059669;color:#FFFFFF;font-size:13.5px;font-weight:800;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;text-decoration:none}
+  .pcard-pay .coins{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,0.20);padding:3px 8px;border-radius:9999px;font-size:11px;font-weight:800}
 
-  /* Need help · neutral slate icon background · no more amber */
+  /* Need help · neutral slate */
   .support-row{padding:14px;display:flex;align-items:center;gap:12px;text-decoration:none}
   .support-row .ic{width:36px;height:36px;border-radius:10px;background:#F1F5F9;color:#475569;display:flex;align-items:center;justify-content:center;flex-shrink:0}
   .support-row .info{flex:1;line-height:1.25}
   .support-row .info .a{font-size:13.5px;font-weight:700;color:#0F172A}
   .support-row .info .b{font-size:11.5px;color:#64748B;margin-top:2px}
 
-  /* Sticky bottom · single Reorder CTA */
-  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:10px 12px;z-index:50;box-shadow:0 -4px 16px rgba(0,0,0,0.05)}
-  .cta-pri{width:100%;height:48px;border-radius:10px;background:#059669;color:#FFFFFF;border:0;font-size:14px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 6px 18px -4px rgba(5,150,105,0.45)}
+  /* Sticky footer · 2 buttons · Download Invoice (outline) + Reorder (primary) · subtle hairline top, no heavy black layer */
+  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:10px 12px;z-index:50;display:flex;gap:10px}
+  .cta-out{flex:1;height:48px;border-radius:10px;background:#FFFFFF;color:#0F172A;border:1.5px solid #E5E7EB;font-size:13.5px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
+  .cta-out i{font-size:13px;color:#475569}
+  .cta-pri{flex:1.2;height:48px;border-radius:10px;background:#059669;color:#FFFFFF;border:0;font-size:14px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+  .cta-pri i{font-size:13px}
 
-  /* Kebab dropdown */
+  /* Kebab dropdown · Cancel order (transit) + Contact support · Download invoice MOVED out into the sticky footer */
   .kebab-menu{position:absolute;top:48px;right:14px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:12px;box-shadow:0 12px 28px -6px rgba(15,23,42,0.18);min-width:180px;overflow:hidden;z-index:40;opacity:0;transform:translateY(-6px) scale(.98);pointer-events:none;transition:opacity .15s ease, transform .15s ease}
   .kebab-menu.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
   .kebab-item{display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;background:transparent;border:0;text-align:left;font-size:13.5px;font-weight:600;color:#0F172A;cursor:pointer;text-decoration:none}
@@ -151,13 +165,18 @@
   .reason-opt.on .ric::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;color:#FFFFFF;font-size:11px}
   .reason-lbl{flex:1;font-size:14px;font-weight:600;color:#0F172A}
   .reason-opt.on .reason-lbl{color:#047857}
+  /* Other-reason textarea · only renders after "Other" is picked */
+  .reason-other-wrap{display:none;padding:14px 20px;border-top:1px solid #F1F5F9;background:#F8FAFC}
+  .reason-other-wrap.open{display:block}
+  .reason-other-wrap textarea{width:100%;min-height:90px;padding:10px 12px;border-radius:10px;border:1.5px solid #E5E7EB;font-size:13.5px;font-family:inherit;background:#FFFFFF;color:#0F172A;outline:none;resize:none;box-sizing:border-box}
+  .reason-other-wrap textarea:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.12)}
 
-  /* COD pay bottom sheet · partner-app style · editable amount + Full shortcut + coins earned */
+  /* COD pay sheet · same partner-app style */
   .cod-input-wrap{display:flex;align-items:center;gap:8px;background:#F8FAFC;border:1.5px solid #E5E7EB;border-radius:10px;padding:10px 14px;transition:border-color .15s ease}
   .cod-input-wrap:focus-within{border-color:#047857;box-shadow:0 0 0 3px rgba(4,120,87,0.12)}
   .cod-input-wrap .rs{font-size:22px;font-weight:900;color:#0F172A}
   .cod-input-wrap input{flex:1;font-size:22px;font-weight:900;color:#0F172A;background:transparent;outline:none;border:0;width:0;font-variant-numeric:tabular-nums}
-  .cod-full-btn{padding:6px 10px;border-radius:6px;background:#ECFDF5;color:#047857;font-size:11px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;border:0;cursor:pointer;flex-shrink:0}
+  .cod-full-btn{padding:6px 12px;border-radius:6px;background:#ECFDF5;color:#047857;font-size:11.5px;font-weight:800;border:0;cursor:pointer;flex-shrink:0}
   .cod-coin-strip{margin-top:10px;display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;background:#ECFDF5;border:1px solid #BBF7D0}
 
   /* State-conditional visibility */
@@ -178,21 +197,17 @@
     </div>
   </div>
 
-  <!-- Sticky header · kebab dropdown lives in this row -->
+  <!-- Sticky header · title only · no subtitle -->
   <div class="top-stk px-4 pt-3 pb-3 flex items-center gap-3 relative">
     <a href="orders.html" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB;text-decoration:none">
       <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
     </a>
-    <div class="flex-1 leading-tight">
-      <h1 class="text-[17px] font-extrabold" style="color:#0F172A">Order Details</h1>
-      <div class="text-[11.5px] font-semibold" style="color:#64748B" id="orderIdLabel">#KAT-2026-04-1198</div>
-    </div>
+    <h1 class="flex-1 text-[18px] font-extrabold leading-tight" style="color:#0F172A">Order Details</h1>
     <button id="kebabBtn" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB" aria-label="More">
       <i class="fa-solid fa-ellipsis-vertical text-[15px]" style="color:#0F172A"></i>
     </button>
     <div id="kebabMenu" class="kebab-menu">
       <button class="kebab-item danger only-transit" id="cancelOrderBtn"><i class="fa-solid fa-circle-xmark"></i> Cancel order</button>
-      <a href="#" class="kebab-item"><i class="fa-solid fa-file-arrow-down"></i> Download invoice</a>
       <a href="advisory.html" class="kebab-item"><i class="fa-solid fa-headset"></i> Contact support</a>
     </div>
   </div>
@@ -209,7 +224,13 @@
     <div class="hero-sub only-transit">Arriving tomorrow by <b>5:00 PM</b></div>
   </div>
 
-  <!-- Order Timeline · now sits FIRST (interchanged with Delivered to) -->
+  <!-- Dedicated order-id row · ID surfaced below the hero so it has a real home, not buried in the header -->
+  <div class="ord-id-row">
+    <span class="lbl">Order ID</span>
+    <span class="val" id="orderIdLabel">#KAT-2026-04-1198</span>
+  </div>
+
+  <!-- Order Timeline -->
   <div class="sec-title">Order Timeline</div>
   <div class="card">
     <div class="tl">
@@ -239,39 +260,41 @@
     </div>
   </div>
 
-  <!-- UNIFIED Products + Bill Summary · one card · internal dividers separate each product and the bill block -->
+  <!-- UNIFIED Products + Bill card · inline calc per product -->
   <div class="sec-title">2 products in this order</div>
   <div class="card">
 
-    <!-- Product 1 -->
     <div class="prod-row">
       <a href="pdp.html" class="prod-img"><img src="../assets/Humic_nobg.png" class="img-blend" alt=""/></a>
       <div class="prod-info">
         <a href="pdp.html" class="prod-name">Humic + Fulvic</a>
         <div class="prod-tech">Humic 12% + Fulvic 8%</div>
-        <span class="prod-size">1 L</span>
-        <div class="prod-calc">
-          <span class="lhs"><span class="pc tnum">&#8377;376</span> &middot; <span class="qty">Qty 1</span></span>
-          <span class="rhs tnum">&#8377;376</span>
+        <div class="prod-inline">
+          <span class="prod-inline-left">
+            <span class="prod-size">1 L</span>
+            <span class="prod-calc-text"><span class="pc tnum">&#8377;376</span> &times; <span class="qty">Qty 1</span></span>
+          </span>
+          <span class="prod-total tnum">&#8377;376</span>
         </div>
       </div>
     </div>
 
-    <!-- Product 2 -->
     <div class="prod-row">
       <a href="pdp.html" class="prod-img"><img src="../assets/AntiVirus_nobg.png" class="img-blend" alt=""/></a>
       <div class="prod-info">
         <a href="pdp.html" class="prod-name">Antivirus</a>
         <div class="prod-tech">Anti-viral biostimulant</div>
-        <span class="prod-size">250 ml</span>
-        <div class="prod-calc">
-          <span class="lhs"><span class="pc tnum">&#8377;327</span> &middot; <span class="qty">Qty 1</span></span>
-          <span class="rhs tnum">&#8377;327</span>
+        <div class="prod-inline">
+          <span class="prod-inline-left">
+            <span class="prod-size">250 ml</span>
+            <span class="prod-calc-text"><span class="pc tnum">&#8377;327</span> &times; <span class="qty">Qty 1</span></span>
+          </span>
+          <span class="prod-total tnum">&#8377;327</span>
         </div>
       </div>
     </div>
 
-    <!-- Rating row · delivered-only · still inside the unified card -->
+    <!-- Rate row · delivered only -->
     <div class="rate-row-wrap only-delivered">
       <div class="leading-tight">
         <div class="rate-label" data-rate-status="order">Tap stars to rate this order</div>
@@ -286,7 +309,6 @@
       </div>
     </div>
 
-    <!-- Bill block · sits INSIDE the same card as the products · subtle off-white background distinguishes it -->
     <div class="bill-section">
       <div class="bill-row"><span class="lbl">Subtotal (2 items)</span><span class="val tnum">&#8377;703</span></div>
       <div class="bill-row"><span class="lbl">Delivery fee</span><span class="val green">FREE</span></div>
@@ -296,7 +318,7 @@
 
   </div>
 
-  <!-- Delivered to · now sits BELOW products/bill (interchanged with timeline) -->
+  <!-- Delivered to · interchanged with Timeline -->
   <div class="sec-title only-delivered">Delivered to</div>
   <div class="sec-title only-transit">Delivering to</div>
   <div class="card">
@@ -310,10 +332,10 @@
     </div>
   </div>
 
-  <!-- Payment · fully-paid shows the UPI transaction id chip · partial-paid shows advance breakdown + COD pay CTA -->
+  <!-- Payment · fully paid (one row + invoice chip) OR partial-paid (paid card with txn details + due card with Pay button INSIDE) -->
   <div class="sec-title">Payment</div>
   <div class="card">
-    <!-- Fully paid block -->
+    <!-- Fully paid · single row · txn chip lives below the bank line -->
     <div class="pay-row only-fullpaid">
       <div class="pay-ic"><i class="fa-solid fa-mobile-screen text-[16px]"></i></div>
       <div class="pay-info">
@@ -323,36 +345,46 @@
       </div>
       <a href="#" class="pay-inv-btn"><i class="fa-solid fa-file-arrow-down text-[11px]"></i> Invoice</a>
     </div>
-    <!-- Partial-paid block · emerald palette · communicates that the balance is COD · CTA opens a partner-app style bottom sheet -->
+
+    <!-- Partial-paid · single hero header + progress + TWO stacked detail cards · paid details inside paid card, Pay button inside due card -->
     <div class="partial only-partial">
       <div class="partial-head">
         <div class="pay-ic"><i class="fa-solid fa-circle-half-stroke text-[16px]"></i></div>
         <div class="partial-meta">
-          <div class="a">10% advance paid &middot; balance is COD</div>
-          <div class="b" id="partialMeta">&#8377;70 paid via UPI &middot; HDFC &bull;&bull;7842 &middot; 8 Apr, 2:15 PM</div>
-          <div class="pay-txn"><i class="fa-solid fa-hashtag"></i> Txn ID: KKDUPI2842K9</div>
+          <div class="a">Partial payment</div>
+          <div class="b">10% advance paid &middot; balance is COD on delivery</div>
         </div>
       </div>
       <div class="partial-bar"><div class="partial-bar-fill" style="width:10%"></div></div>
-      <div class="partial-rows">
-        <div class="partial-cell paid">
-          <div class="lbl">Advance paid</div>
-          <div class="val tnum" id="partialPaid">&#8377;70</div>
+
+      <!-- Advance paid card · all paid-amount details (source, txn, timestamp) live INSIDE this card -->
+      <div class="pcard paid">
+        <div class="pcard-head">
+          <span class="lbl">Advance paid (10%)</span>
+          <span class="val tnum" id="partialPaid">&#8377;70</span>
         </div>
-        <div class="partial-cell due">
-          <div class="lbl">COD due</div>
-          <div class="val tnum" id="partialDue">&#8377;628</div>
-        </div>
+        <div class="pcard-line"><i class="fa-solid fa-mobile-screen"></i> Paid via UPI &middot; HDFC &bull;&bull;7842</div>
+        <div class="pcard-line"><i class="fa-solid fa-hashtag"></i> Txn ID: KKDUPI2842K9</div>
+        <div class="pcard-line"><i class="fa-regular fa-clock"></i> <span id="partialPaidTime">8 Apr, 2:15 PM</span></div>
       </div>
-      <button class="pay-cod-cta" id="payCodBtn">
-        <i class="fa-solid fa-coins text-[13px]"></i>
-        Pay &#8377;<span id="partialDueInline">628</span> COD
-        <span class="coins"><i class="fa-solid fa-star text-[9px]"></i> +50 coins</span>
-      </button>
+
+      <!-- COD due card · Pay button sits INSIDE this card, communicating clearly that the action is for the remaining COD amount -->
+      <div class="pcard due">
+        <div class="pcard-head">
+          <span class="lbl">COD due</span>
+          <span class="val tnum" id="partialDue">&#8377;628</span>
+        </div>
+        <div class="pcard-line"><i class="fa-solid fa-truck-fast"></i> Pay in cash when the courier delivers</div>
+        <div class="pcard-line"><i class="fa-solid fa-coins" style="color:#F59E0B"></i> Earn +50 coins on payment</div>
+        <button class="pcard-pay" id="payCodBtn">
+          Pay &#8377;<span id="partialDueInline">628</span> COD
+          <span class="coins"><i class="fa-solid fa-star text-[9px]"></i> +50 coins</span>
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- Need help · neutral icon background, in line with the design system -->
+  <!-- Need help · neutral icon -->
   <div class="sec-title">Need help?</div>
   <a href="advisory.html" class="card support-row" style="display:flex">
     <div class="ic"><i class="fa-solid fa-circle-question text-[14px]"></i></div>
@@ -363,10 +395,13 @@
     <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
   </a>
 
-  <!-- Sticky bottom · single Reorder CTA -->
+  <!-- Sticky bottom · 2 CTAs · Download Invoice (outline) + Reorder (primary emerald) -->
   <div class="sticky-cta">
+    <a class="cta-out" href="#download-invoice">
+      <i class="fa-solid fa-file-arrow-down"></i> Download Invoice
+    </a>
     <a class="cta-pri" href="cart.html?reorder=1">
-      <i class="fa-solid fa-bag-shopping text-[13px]"></i> Reorder
+      <i class="fa-solid fa-arrow-rotate-left"></i> Reorder
     </a>
   </div>
 
@@ -382,12 +417,12 @@
       <p class="text-[12.5px] mt-2 leading-relaxed" style="color:#64748B">Your advance payment will be refunded to the original source within 3–5 working days. This action can't be undone.</p>
     </div>
     <div class="flex gap-2 mt-5">
-      <button id="cancelBack" class="flex-1 h-[48px] rounded-[10px] text-[14px] font-extrabold" style="background:#FFFFFF;border:1.5px solid #E5E7EB;color:#0F172A">Keep order</button>
+      <button id="cancelBack" class="flex-1 h-[48px] rounded-[10px] text-[14px] font-bold" style="background:#FFFFFF;border:1.5px solid #E5E7EB;color:#0F172A">Keep order</button>
       <button id="cancelConfirm" class="flex-1 h-[48px] rounded-[10px] text-[14px] font-extrabold" style="background:#DC2626;color:#FFFFFF;border:0">Yes, cancel</button>
     </div>
   </div>
 
-  <!-- Cancel order · reason modal -->
+  <!-- Cancel order · reason modal · Other selection reveals a remark textarea -->
   <div id="reasonBd" class="modal-bd"></div>
   <div id="reasonSheet" class="modal-sheet" style="padding:0 0 20px">
     <div class="modal-handle"></div>
@@ -396,20 +431,41 @@
       <button id="reasonClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
     <p class="px-5 text-[12px]" style="color:#64748B">Help us improve. Pick the closest reason.</p>
-    <div class="mt-3" id="reasonList">
-      <div class="reason-opt"><span class="ric"></span><span class="reason-lbl">Ordered by mistake</span></div>
-      <div class="reason-opt"><span class="ric"></span><span class="reason-lbl">Found cheaper price elsewhere</span></div>
-      <div class="reason-opt"><span class="ric"></span><span class="reason-lbl">Wrong product / wrong pack size</span></div>
-      <div class="reason-opt"><span class="ric"></span><span class="reason-lbl">Delivery is too slow</span></div>
-      <div class="reason-opt"><span class="ric"></span><span class="reason-lbl">Need to change quantity / address</span></div>
-      <div class="reason-opt"><span class="ric"></span><span class="reason-lbl">Other</span></div>
+    <div class="mt-3 overflow-y-auto" style="max-height:50vh">
+      <div id="reasonList">
+        <div class="reason-opt" data-other="0"><span class="ric"></span><span class="reason-lbl">Ordered by mistake</span></div>
+        <div class="reason-opt" data-other="0"><span class="ric"></span><span class="reason-lbl">Found cheaper price elsewhere</span></div>
+        <div class="reason-opt" data-other="0"><span class="ric"></span><span class="reason-lbl">Wrong product / wrong pack size</span></div>
+        <div class="reason-opt" data-other="0"><span class="ric"></span><span class="reason-lbl">Delivery is too slow</span></div>
+        <div class="reason-opt" data-other="0"><span class="ric"></span><span class="reason-lbl">Need to change quantity / address</span></div>
+        <div class="reason-opt" data-other="1"><span class="ric"></span><span class="reason-lbl">Other</span></div>
+      </div>
+      <!-- Reveal textarea when Other is picked -->
+      <div id="reasonOtherWrap" class="reason-other-wrap">
+        <label class="text-[11.5px] font-bold mb-1.5 block" style="color:#475569">Tell us what went wrong</label>
+        <textarea id="reasonOtherText" rows="4" placeholder="Type your reason here…"></textarea>
+      </div>
     </div>
     <div class="px-5 pt-3">
       <button id="reasonSubmit" class="w-full h-[48px] rounded-[10px] text-[14px] font-extrabold" style="background:#DC2626;color:#FFFFFF;border:0;opacity:.55" disabled>Submit cancellation</button>
     </div>
   </div>
 
-  <!-- COD pay bottom sheet · partner-app pattern · editable amount, Full shortcut, live coin calculation, Pay button shows current amount -->
+  <!-- Cancel success modal · centred check + Done -->
+  <div id="cancelOkBd" class="modal-bd"></div>
+  <div id="cancelOkSheet" class="modal-sheet" style="padding:0 20px 24px">
+    <div class="modal-handle"></div>
+    <div style="padding-top:22px;text-align:center">
+      <div class="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-3" style="background:#ECFDF5;border:1.5px solid #BBF7D0;box-shadow:0 8px 20px -6px rgba(5,150,105,0.35)">
+        <i class="fa-solid fa-circle-check text-[28px]" style="color:#047857"></i>
+      </div>
+      <div class="text-[20px] font-extrabold leading-tight">Order cancelled</div>
+      <p class="text-[12.5px] mt-2 leading-relaxed" style="color:#64748B">Your advance of <b id="cancelOkAmt" class="text-[#0F172A]">&#8377;70</b> will be refunded to your UPI within 3–5 working days. You'll get an SMS confirmation shortly.</p>
+    </div>
+    <button id="cancelOkDone" class="w-full mt-5 h-[48px] rounded-[10px] text-[14px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0">Done</button>
+  </div>
+
+  <!-- COD pay bottom sheet · same partner-app pattern as orders list -->
   <div id="codBd" class="modal-bd"></div>
   <div id="codSheet" class="modal-sheet" style="padding:0">
     <div class="modal-handle"></div>
@@ -421,7 +477,7 @@
       <button id="codClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
     <div class="px-5 pt-3">
-      <div class="text-[10.5px] font-extrabold tracking-[0.06em] uppercase mb-1.5" style="color:#94A3B8">Amount to pay</div>
+      <div class="text-[11.5px] font-bold mb-1.5" style="color:#475569">Amount to pay</div>
       <div class="cod-input-wrap">
         <span class="rs">&#8377;</span>
         <input id="codAmtInput" type="number" inputmode="numeric" value="628"/>
@@ -432,15 +488,13 @@
         <span class="font-extrabold" style="color:#047857">Earn <span id="codCoinsLbl">+50</span> <i class="fa-solid fa-coins text-[10px]" style="color:#F59E0B"></i></span>
       </div>
       <div id="codErr" class="text-[11px] font-bold" style="color:#DC2626;display:none;margin-top:4px">Amount cannot exceed total COD due</div>
-
-      <!-- Earn-coin explainer · always-on chip that telegraphs the reward math -->
       <div class="cod-coin-strip mt-3">
         <i class="fa-solid fa-coins text-[14px]" style="color:#F59E0B"></i>
         <div class="text-[11.5px] leading-tight" style="color:#0F172A"><b>1 coin per &#8377;12.50</b> paid &middot; credited within 24 hours</div>
       </div>
     </div>
     <div class="px-5 pt-3 pb-5" style="padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">
-      <button id="codPayBtn" class="w-full h-[50px] rounded-[10px] text-[14px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;letter-spacing:0.04em;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;gap:8px">
+      <button id="codPayBtn" class="w-full h-[50px] rounded-[10px] text-[14.5px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px">
         Pay <span id="codPayBtnAmt" class="tnum">&#8377;628</span> COD
       </button>
     </div>
@@ -454,7 +508,6 @@
       const id    = qp.get('id') || 'KAT-2026-04-1198';
       document.body.classList.remove('state-delivered','state-transit');
       document.body.classList.add('state-' + (state === 'transit' ? 'transit' : 'delivered'));
-      // For transit, the partial-paid presentation auto-engages (advance + COD due)
       const isPartial = payment === 'partial' || state === 'transit';
       document.body.classList.toggle('state-partial', isPartial);
 
@@ -464,6 +517,7 @@
       if (codOrd) codOrd.textContent = '#' + id;
 
       let codDue = 628;
+      let advancePaid = 70;
       if (state === 'transit') {
         const disp = document.getElementById('tlDispatch');
         const deliv = document.getElementById('tlDelivered');
@@ -479,17 +533,16 @@
         const bt = document.getElementById('billTotal'); if (bt) bt.textContent = '₹1,430';
         if (isPartial) {
           const total = 1430;
-          const paid  = Math.round(total * 0.10);
-          codDue = total - paid;
-          const pp = document.getElementById('partialPaid'); if (pp) pp.textContent = '₹' + paid;
+          advancePaid = Math.round(total * 0.10);
+          codDue = total - advancePaid;
+          const pp = document.getElementById('partialPaid'); if (pp) pp.textContent = '₹' + advancePaid;
           const pd = document.getElementById('partialDue');  if (pd) pd.textContent = '₹' + codDue;
           const pi = document.getElementById('partialDueInline'); if (pi) pi.textContent = codDue;
-          const pm = document.getElementById('partialMeta'); if (pm) pm.textContent = '₹' + paid + ' paid via UPI · HDFC ••7842 · Today, 8:30 AM';
-          const pbf = document.querySelector('.partial-bar-fill'); if (pbf) pbf.style.width = '10%';
+          const pt = document.getElementById('partialPaidTime'); if (pt) pt.textContent = 'Today, 8:30 AM';
         }
       }
 
-      // Kebab dropdown · tap toggles, outside tap closes
+      // Kebab dropdown
       const kebabBtn = document.getElementById('kebabBtn');
       const kebabMenu = document.getElementById('kebabMenu');
       kebabBtn.addEventListener('click', (e) => { e.stopPropagation(); kebabMenu.classList.toggle('open'); });
@@ -499,39 +552,65 @@
       function openSheet(bd, sheet){ bd.classList.add('open'); sheet.classList.add('open'); }
       function closeSheet(bd, sheet){ bd.classList.remove('open'); sheet.classList.remove('open'); }
 
-      // Cancel order flow
+      // Cancel order flow · confirmation → reason → (success)
       const cancelBd = document.getElementById('cancelBd');
       const cancelSheet = document.getElementById('cancelSheet');
       const reasonBd = document.getElementById('reasonBd');
       const reasonSheet = document.getElementById('reasonSheet');
+      const okBd = document.getElementById('cancelOkBd');
+      const okSheet = document.getElementById('cancelOkSheet');
       const cancelBtn = document.getElementById('cancelOrderBtn');
+      const otherWrap = document.getElementById('reasonOtherWrap');
+      const otherText = document.getElementById('reasonOtherText');
+      const submitBtn = document.getElementById('reasonSubmit');
+      let pickedReason = null;
+      let pickedIsOther = false;
+      function refreshSubmitState(){
+        const ok = pickedReason && (!pickedIsOther || (otherText.value || '').trim().length >= 3);
+        submitBtn.disabled = !ok;
+        submitBtn.style.opacity = ok ? '1' : '.55';
+      }
       if (cancelBtn) cancelBtn.addEventListener('click', () => { kebabMenu.classList.remove('open'); openSheet(cancelBd, cancelSheet); });
       document.getElementById('cancelBack').addEventListener('click', () => closeSheet(cancelBd, cancelSheet));
       cancelBd.addEventListener('click', () => closeSheet(cancelBd, cancelSheet));
       document.getElementById('cancelConfirm').addEventListener('click', () => {
         closeSheet(cancelBd, cancelSheet);
+        // Reset reason picker each open
+        pickedReason = null; pickedIsOther = false;
+        document.querySelectorAll('#reasonList .reason-opt').forEach(o => o.classList.remove('on'));
+        otherWrap.classList.remove('open');
+        otherText.value = '';
+        refreshSubmitState();
         setTimeout(() => openSheet(reasonBd, reasonSheet), 220);
       });
       document.getElementById('reasonClose').addEventListener('click', () => closeSheet(reasonBd, reasonSheet));
       reasonBd.addEventListener('click', () => closeSheet(reasonBd, reasonSheet));
-      let pickedReason = null;
-      const submitBtn = document.getElementById('reasonSubmit');
       document.querySelectorAll('#reasonList .reason-opt').forEach(opt => {
         opt.addEventListener('click', () => {
           document.querySelectorAll('#reasonList .reason-opt').forEach(o => o.classList.remove('on'));
           opt.classList.add('on');
           pickedReason = opt.querySelector('.reason-lbl').textContent;
-          submitBtn.disabled = false;
-          submitBtn.style.opacity = '1';
+          pickedIsOther = opt.dataset.other === '1';
+          otherWrap.classList.toggle('open', pickedIsOther);
+          if (pickedIsOther) setTimeout(() => otherText.focus(), 80);
+          refreshSubmitState();
         });
       });
+      otherText.addEventListener('input', refreshSubmitState);
       submitBtn.addEventListener('click', () => {
-        if (!pickedReason) return;
+        if (submitBtn.disabled) return;
         closeSheet(reasonBd, reasonSheet);
-        setTimeout(() => alert('Cancellation requested · reason: ' + pickedReason), 240);
+        // Show success modal · advance refund amount filled live
+        const okAmt = document.getElementById('cancelOkAmt'); if (okAmt) okAmt.textContent = '₹' + advancePaid;
+        setTimeout(() => openSheet(okBd, okSheet), 240);
       });
+      document.getElementById('cancelOkDone').addEventListener('click', () => {
+        closeSheet(okBd, okSheet);
+        setTimeout(() => { window.location.href = 'orders.html'; }, 280);
+      });
+      okBd.addEventListener('click', () => closeSheet(okBd, okSheet));
 
-      // COD Pay bottom sheet · partner-app style · live updates as the user edits the amount
+      // COD Pay sheet · same partner-app style · entered from inside the COD-due card
       const codBd     = document.getElementById('codBd');
       const codSheet  = document.getElementById('codSheet');
       const payCodBtn = document.getElementById('payCodBtn');
@@ -555,7 +634,6 @@
         codPayBtn.style.opacity = over || v <= 0 ? '0.55' : '1';
         codPayBtn.style.pointerEvents = over || v <= 0 ? 'none' : 'auto';
         codPayAmt.textContent = '₹' + (v || 0);
-        // Coin rule · 1 coin per ₹12.50 paid (so paying full ₹628 earns +50)
         const coins = Math.round((v || 0) / 12.5);
         codCoins.textContent = '+' + coins;
       }

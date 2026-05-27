@@ -19,29 +19,30 @@
     background-size: 24px 24px, 8px 8px;
     background-position: 0 0, 12px 12px; }
 
-  /* Radar · concentric rings + sweeping conic-gradient that rotates · plus a center pin · drives the locating feel */
+  /* Radar · concentric rings + sweeping conic-gradient that rotates · saturated emerald so it reads clearly green (no blue tint) · radar fades out smoothly when found */
   @keyframes radarSweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  .radar-sweep { background: conic-gradient(from 0deg, rgba(4,120,87,0) 0deg, rgba(4,120,87,0.6) 45deg, rgba(4,120,87,0) 60deg); animation: radarSweep 1.8s linear infinite; }
-  @keyframes ringPulse { 0% { transform: scale(.6); opacity: .65; } 100% { transform: scale(2.0); opacity: 0; } }
-  .ring-pulse { animation: ringPulse 2.4s ease-out infinite; }
+  .radar-sweep { background: conic-gradient(from 0deg, rgba(5,150,105,0) 0deg, rgba(5,150,105,0.75) 45deg, rgba(5,150,105,0) 60deg); animation: radarSweep 1.8s linear infinite; transition: opacity .6s ease; }
+  @keyframes ringPulse { 0% { transform: scale(.6); opacity: .8; } 100% { transform: scale(2.0); opacity: 0; } }
+  .ring-pulse { animation: ringPulse 2.4s ease-out infinite; transition: opacity .6s ease; }
   .ring-pulse.r2 { animation-delay: 1.2s; }
+  /* Detecting elements smoothly fade out when found · no hard display:none cut · the radar gracefully dissolves into the pin */
+  body.found .radar-sweep, body.found .ring-pulse { opacity: 0; pointer-events: none; }
 
-  /* Pin found state · scales in with a bounce + fades the radar · driven by the .found class on body */
-  @keyframes pinIn { 0% { transform: translate(-50%,-100%) scale(.4); opacity: 0; } 60% { transform: translate(-50%,-46%) scale(1.15); opacity: 1; } 100% { transform: translate(-50%,-50%) scale(1); opacity: 1; } }
-  .pin-found { display:none; }
-  body.found .pin-found { display: block; animation: pinIn .65s cubic-bezier(.34,1.56,.64,1) both; }
-  body.found .radar-sweep, body.found .ring-pulse { display: none; }
-  body.found .radar-center { background: linear-gradient(135deg,#047857 0%,#10B981 100%); transition: background .35s ease; }
+  /* Pin found state · gentle scale-up (no overshoot bounce) + fade · feels softer than the previous .34,1.56,.64,1 bounce */
+  @keyframes pinIn { 0% { transform: translate(-50%,-50%) scale(.85); opacity: 0; } 100% { transform: translate(-50%,-50%) scale(1); opacity: 1; } }
+  .pin-found { opacity: 0; pointer-events: none; transform: translate(-50%,-50%) scale(.85); transition: opacity .55s ease, transform .55s cubic-bezier(.22,1,.36,1); }
+  body.found .pin-found { opacity: 1; pointer-events: auto; transform: translate(-50%,-50%) scale(1); }
+  body.found .radar-center { background: linear-gradient(135deg,#047857 0%,#10B981 100%); transition: background .45s ease; }
 
-  /* Status label · cross-fades between 'Detecting' and 'Found' */
-  .status-line { transition: opacity .3s ease; }
+  /* Status label · longer cross-fade so the swap reads smooth, not abrupt */
+  .status-line { transition: opacity .55s ease; }
   body.found .status-detect { opacity: 0; pointer-events: none; }
   body.found .status-found  { opacity: 1; pointer-events: auto; }
-  .status-found { opacity: 0; pointer-events: none; transition: opacity .3s ease; }
+  .status-found { opacity: 0; pointer-events: none; transition: opacity .55s ease .15s; }
 
-  /* Confetti / leaf burst on found · tiny green leaves drift up from the pin */
-  @keyframes leafFly { 0% { transform: translate(0,0) rotate(0deg); opacity: 0; } 15% { opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; } }
-  body.found .leaf { animation: leafFly 1.4s ease-out both; }
+  /* Leaf burst on found · gentle drift outwards · runs slightly slower with a softer cubic ease so it feels organic, not sprung */
+  @keyframes leafFly { 0% { transform: translate(0,0) rotate(0deg); opacity: 0; } 25% { opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; } }
+  body.found .leaf { animation: leafFly 1.8s cubic-bezier(.22,1,.36,1) both; }
 </style>
 </head>
 <body class="min-h-screen relative flex flex-col items-center">
@@ -61,9 +62,9 @@
     <!-- Map dotted grid -->
     <div class="absolute inset-0 map-grid"></div>
 
-    <!-- Concentric pulse rings (during detect) -->
-    <span class="absolute ring-pulse rounded-full" style="width:260px;height:260px;background:rgba(4,120,87,0.16)"></span>
-    <span class="absolute ring-pulse r2 rounded-full" style="width:260px;height:260px;background:rgba(4,120,87,0.16)"></span>
+    <!-- Concentric pulse rings (during detect) · clearer emerald saturation, no blue tint -->
+    <span class="absolute ring-pulse rounded-full" style="width:260px;height:260px;background:rgba(5,150,105,0.28)"></span>
+    <span class="absolute ring-pulse r2 rounded-full" style="width:260px;height:260px;background:rgba(5,150,105,0.22)"></span>
 
     <!-- Radar circle · holds the sweep + center pin -->
     <div class="relative rounded-full flex items-center justify-center" style="width:240px;height:240px;background:radial-gradient(circle,rgba(4,120,87,0.10) 0%,rgba(4,120,87,0.04) 60%,rgba(4,120,87,0) 75%);box-shadow:0 0 0 1.5px rgba(4,120,87,0.18), 0 0 0 60px rgba(4,120,87,0.04)">

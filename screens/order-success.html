@@ -9,97 +9,233 @@
   input,button,select,textarea,optgroup{font-family:inherit}
   body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:110px}
   .tnum{font-variant-numeric:tabular-nums}
-  /* Pop-in for the success check */
-  @keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
-  .pop{animation:pop .55s cubic-bezier(.34,1.56,.64,1) both}
-  /* Confetti */
-  @keyframes confetti{0%{transform:translateY(-30px) rotate(0);opacity:1}100%{transform:translateY(300px) rotate(360deg);opacity:0}}
-  .confetti{position:absolute;top:0;width:9px;height:13px;border-radius:2px;animation:confetti 2.6s linear infinite;pointer-events:none}
-  .c1{left:10%;background:#FBBF24;animation-delay:0s}
-  .c2{left:25%;background:#10B981;animation-delay:.3s}
-  .c3{left:45%;background:#3B82F6;animation-delay:.5s}
-  .c4{left:65%;background:#DC2626;animation-delay:.2s}
-  .c5{left:85%;background:#A78BFA;animation-delay:.4s}
-
-  /* Status hero · emerald gradient · same identity as order-details delivered hero */
-  .hero{background:linear-gradient(180deg,#ECFDF5,#D1FAE5);border-bottom:1px solid #A7F3D0;padding:28px 16px 22px;text-align:center;position:relative;overflow:hidden}
-
-  .sec-title{margin:14px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
+  .img-blend{mix-blend-mode:multiply}
+  .sec-title{margin:18px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
   .card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
 
-  /* Sticky CTA · 2 buttons */
+  /* Hero · emerald gradient · gold-trim seal with elegant pop · soft confetti drift behind · drops the loud 5-color confetti rain for a calmer celebration */
+  .hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#047857 0%,#059669 55%,#10B981 100%);color:#FFFFFF;padding:28px 16px 40px;text-align:center}
+  .hero::before{content:"";position:absolute;top:-30px;right:-30px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.32) 0%,transparent 65%);pointer-events:none}
+  .hero::after{content:"";position:absolute;bottom:-40px;left:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.18) 0%,transparent 70%);pointer-events:none}
+  .seal-wrap{position:relative;display:inline-block}
+  .seal{width:96px;height:96px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center;box-shadow:0 18px 38px -10px rgba(0,0,0,0.32),0 0 0 6px rgba(255,255,255,0.18);transform:scale(0) rotate(-15deg);animation:sealIn .65s cubic-bezier(.34,1.56,.64,1) .15s forwards}
+  @keyframes sealIn{to{transform:scale(1) rotate(0)}}
+  .seal i{color:#047857;font-size:48px;opacity:0;animation:checkIn .35s ease-out .55s forwards}
+  @keyframes checkIn{to{opacity:1}}
+  .seal-ring{position:absolute;inset:-12px;border-radius:50%;border:2px dashed rgba(255,255,255,0.45);animation:ringSpin 14s linear infinite;opacity:0;animation-fill-mode:both}
+  @keyframes ringSpin{from{transform:rotate(0);opacity:.45}to{transform:rotate(360deg);opacity:.45}}
+  .seal-wrap::before,.seal-wrap::after{content:"";position:absolute;width:14px;height:14px;border-radius:50%;background:#FCD34D;opacity:0;animation:sparkle 2.4s ease-out .8s infinite}
+  .seal-wrap::before{top:-6px;left:-12px}
+  .seal-wrap::after{bottom:-2px;right:-14px;animation-delay:1.4s;background:#FFFFFF}
+  @keyframes sparkle{0%{transform:scale(0);opacity:0}30%{transform:scale(1);opacity:.9}100%{transform:scale(0);opacity:0}}
+  .hero h1{font-size:26px;font-weight:900;letter-spacing:-0.02em;margin-top:22px;line-height:1.05}
+  .hero p{font-size:13px;margin-top:6px;color:rgba(255,255,255,0.85);line-height:1.4}
+  .hero .order-pill{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:7px 14px;border-radius:9999px;background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.28);backdrop-filter:blur(8px);font-size:11.5px;font-weight:800;letter-spacing:0.04em}
+  .hero .order-pill i{font-size:10px;color:#FCD34D}
+
+  /* Negative-margin lift card that overlaps the hero · holds the delivery ETA + thumbnail strip · gives the page its anchor card */
+  .lift-card{margin:-22px 16px 0;background:#FFFFFF;border-radius:16px;box-shadow:0 14px 30px -14px rgba(15,23,42,0.18);border:1px solid #E5E7EB;overflow:hidden;position:relative;z-index:2}
+  .eta-row{display:flex;align-items:center;gap:12px;padding:14px;border-bottom:1px solid #F1F5F9}
+  .eta-ic{width:42px;height:42px;border-radius:12px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;color:#047857;flex-shrink:0;font-size:17px}
+  .eta-body{flex:1;line-height:1.25}
+  .eta-body .a{font-size:10.5px;font-weight:800;letter-spacing:0.08em;color:#94A3B8;text-transform:uppercase}
+  .eta-body .b{font-size:15px;font-weight:900;color:#0F172A;margin-top:2px;letter-spacing:-0.01em}
+  .eta-body .c{font-size:11.5px;color:#64748B;margin-top:2px}
+  .eta-row .free-pill{flex-shrink:0;font-size:9.5px;font-weight:900;letter-spacing:0.06em;background:#ECFDF5;border:1px solid #A7F3D0;color:#047857;padding:4px 9px;border-radius:9999px}
+  /* Thumbnail strip · 3 product avatars + +N more · sits inside the lift-card */
+  .thumb-row{display:flex;align-items:center;gap:8px;padding:12px 14px}
+  .thumb{width:46px;height:46px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
+  .thumb img{max-width:100%;max-height:100%;object-fit:contain}
+  .thumb-more{width:46px;height:46px;border-radius:10px;background:#F1F5F9;color:#475569;font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .thumb-summary{flex:1;line-height:1.25;min-width:0}
+  .thumb-summary .a{font-size:13.5px;font-weight:800;color:#0F172A}
+  .thumb-summary .b{font-size:11px;color:#64748B;margin-top:2px}
+
+  /* Tracking timeline · 4-step vertical stepper · current step gets emerald accent + pulse · others are slate */
+  .timeline{padding:14px 14px 6px}
+  .ts{position:relative;display:flex;gap:14px;padding-bottom:14px}
+  .ts:last-child{padding-bottom:0}
+  .ts .dot{width:24px;height:24px;border-radius:50%;background:#F1F5F9;border:2px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:2}
+  .ts.on .dot{background:#059669;border-color:#059669}
+  .ts.on .dot i{color:#FFFFFF;font-size:10px}
+  .ts.done .dot{background:#10B981;border-color:#10B981}
+  .ts.done .dot i{color:#FFFFFF;font-size:10px}
+  .ts:not(:last-child)::before{content:"";position:absolute;left:11px;top:24px;bottom:0;width:2px;background:#E5E7EB;z-index:1}
+  .ts.done:not(:last-child)::before,.ts.on:not(:last-child)::before{background:#10B981}
+  .ts .body{flex:1;line-height:1.25;padding-top:1px}
+  .ts .body .a{font-size:13px;font-weight:700;color:#475569}
+  .ts.on .body .a, .ts.done .body .a{color:#0F172A;font-weight:800}
+  .ts .body .b{font-size:11px;color:#94A3B8;margin-top:2px}
+  .ts.on .body .b{color:#047857;font-weight:700}
+  .ts.on .dot::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(5,150,105,0.4);animation:tsPulse 1.6s ease-out infinite}
+  @keyframes tsPulse{0%{transform:scale(0.8);opacity:.8}100%{transform:scale(1.6);opacity:0}}
+
+  /* Payment summary row */
+  .pay-summary{display:flex;align-items:center;justify-content:space-between;padding:12px 14px}
+  .pay-summary .lbl{font-size:12px;color:#64748B}
+  .pay-summary .val{font-size:14px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
+  .pay-mode-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:9999px;background:#ECFDF5;border:1px solid #A7F3D0;color:#047857;font-size:10.5px;font-weight:800;margin-top:3px}
+
+  /* Reward strip · scratch card + coins earned · 2-col grid · feels like a celebration but stays on-brand */
+  .reward-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px}
+  .reward-tile{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:14px 12px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;box-shadow:0 1px 3px rgba(15,23,42,0.04);text-decoration:none;color:inherit;position:relative;overflow:hidden}
+  .reward-tile.scratch{background:linear-gradient(135deg,#FFF7ED 0%,#FFFBEB 100%);border-color:#FED7AA}
+  .reward-tile.scratch::before{content:"";position:absolute;top:-25px;right:-25px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(251,146,60,0.3) 0%,transparent 65%)}
+  .reward-tile.coins{background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border-color:#A7F3D0}
+  .reward-tile.coins::before{content:"";position:absolute;top:-25px;right:-25px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,0.22) 0%,transparent 65%)}
+  .reward-ic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#FFFFFF}
+  .scratch .reward-ic{background:linear-gradient(135deg,#F97316,#DC2626);box-shadow:0 6px 14px -4px rgba(249,115,22,0.45)}
+  .coins .reward-ic{background:linear-gradient(135deg,#10B981,#047857);box-shadow:0 6px 14px -4px rgba(5,150,105,0.45)}
+  .reward-title{font-size:13px;font-weight:900;color:#0F172A;line-height:1.2}
+  .reward-sub{font-size:10.5px;color:#64748B;font-weight:600;line-height:1.3}
+  .reward-action{margin-top:2px;font-size:10.5px;font-weight:900;letter-spacing:0.04em;text-transform:uppercase;color:#047857}
+  .scratch .reward-action{color:#B45309}
+
+  /* WhatsApp + Share helper row */
+  .help-row{display:flex;gap:10px;margin:0 16px;padding:0}
+  .help-card{flex:1;display:flex;align-items:center;gap:10px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:12px;box-shadow:0 1px 3px rgba(15,23,42,0.04);text-decoration:none;color:inherit;line-height:1.2}
+  .help-card .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;color:#FFFFFF}
+  .help-card .ic.wa{background:#25D366}
+  .help-card .ic.sh{background:#475569}
+  .help-card .label{font-size:11.5px;font-weight:800;color:#0F172A;line-height:1.2}
+  .help-card .sub{font-size:9.5px;color:#94A3B8;margin-top:1px;font-weight:600}
+
+  /* Sticky CTA */
   .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:10px 12px 14px;display:flex;gap:10px;z-index:50}
   .cta-out{flex:1;height:52px;border-radius:12px;background:#FFFFFF;color:#0F172A;border:1.5px solid #E5E7EB;font-size:13.5px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
-  .cta-pri{flex:1.2;height:52px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:14.5px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+  .cta-pri{flex:1.4;height:52px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:14.5px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
 </style></head>
 <body>
 
-  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold">
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold text-white">
     <span>9:41</span>
     <div class="flex items-center gap-1.5">
-      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
-      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
-      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#FFFFFF" stroke-width="2.5"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#FFFFFF" stroke-width="2"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#FFFFFF" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#FFFFFF"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#FFFFFF"/></svg>
     </div>
   </div>
 
-  <!-- Success hero · confetti + emerald gradient + animated check -->
+  <!-- Emerald hero · animated white seal with check + rotating dashed ring + subtle sparkle dots · order pill at the bottom -->
   <div class="hero">
-    <div class="confetti c1"></div><div class="confetti c2"></div><div class="confetti c3"></div><div class="confetti c4"></div><div class="confetti c5"></div>
-    <div class="pop mx-auto" style="width:88px;height:88px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(5,150,105,0.35);box-shadow:0 8px 22px -8px rgba(5,150,105,0.4)">
-      <i class="fa-solid fa-circle-check text-[44px]" style="color:#047857"></i>
+    <div class="seal-wrap">
+      <span class="seal-ring"></span>
+      <div class="seal"><i class="fa-solid fa-check"></i></div>
     </div>
-    <h1 class="text-[24px] font-extrabold mt-4 leading-tight">Order placed</h1>
-    <p class="text-[13px] mt-1.5" style="color:#475569">We'll get it to your door in 5–7 days</p>
+    <h1>Order placed!</h1>
+    <p>Your products are on the way. We'll keep you updated.</p>
+    <span class="order-pill"><i class="fa-solid fa-receipt"></i> Order #KKD-26194-7821</span>
   </div>
 
-  <!-- Order ID + WhatsApp confirmation card -->
-  <div class="card mt-3">
-    <div class="p-4 flex items-center justify-between gap-3" style="border-bottom:1px solid #F1F5F9">
+  <!-- Lift card overlapping the hero · delivery ETA on top, product thumbnail strip below -->
+  <div class="lift-card">
+    <div class="eta-row">
+      <span class="eta-ic"><i class="fa-solid fa-calendar-day"></i></span>
+      <div class="eta-body">
+        <div class="a">Arriving</div>
+        <div class="b">Wed, 4 Jun · by 7 PM</div>
+        <div class="c">Plot 22, Bawadia, Indore — 452001</div>
+      </div>
+      <span class="free-pill">FREE</span>
+    </div>
+    <div class="thumb-row">
+      <div class="thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend" alt=""/></div>
+      <div class="thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend" alt=""/></div>
+      <div class="thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend" alt=""/></div>
+      <div class="thumb-summary">
+        <div class="a">3 items · ₹1,805</div>
+        <div class="b">Humic, Chakrawarti, NPK</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline · 4 stages, Confirmed (done) → Packing (active w/ pulse) → Out for delivery → Delivered -->
+  <div class="sec-title">Track order</div>
+  <div class="card">
+    <div class="timeline">
+      <div class="ts done">
+        <div class="dot"><i class="fa-solid fa-check"></i></div>
+        <div class="body">
+          <div class="a">Order confirmed</div>
+          <div class="b">Just now</div>
+        </div>
+      </div>
+      <div class="ts on">
+        <div class="dot"><i class="fa-solid fa-box"></i></div>
+        <div class="body">
+          <div class="a">Packing your order</div>
+          <div class="b">Expected within 2 hours</div>
+        </div>
+      </div>
+      <div class="ts">
+        <div class="dot"></div>
+        <div class="body">
+          <div class="a">Out for delivery</div>
+          <div class="b">Wed, 4 Jun · morning</div>
+        </div>
+      </div>
+      <div class="ts">
+        <div class="dot"></div>
+        <div class="body">
+          <div class="a">Delivered</div>
+          <div class="b">Wed, 4 Jun · by 7 PM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment summary -->
+  <div class="sec-title">Payment</div>
+  <div class="card">
+    <div class="pay-summary">
       <div class="leading-tight">
-        <div class="text-[10.5px] font-extrabold tracking-[0.06em] uppercase" style="color:#94A3B8">Order ID</div>
-        <div class="text-[14.5px] font-extrabold tnum mt-0.5">#KKD-26194-7821</div>
+        <div class="lbl">Paid via Pay Now</div>
+        <span class="pay-mode-chip"><i class="fa-solid fa-circle-check text-[9px]"></i> Payment received</span>
       </div>
-      <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10.5px] font-extrabold" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-circle-check text-[10px]"></i> Payment received</span>
-    </div>
-    <div class="p-4 flex items-center gap-3">
-      <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:#25D366"><i class="fa-brands fa-whatsapp text-[18px]" style="color:#FFFFFF"></i></div>
-      <div class="flex-1 leading-tight">
-        <div class="text-[13px] font-extrabold">Updates on WhatsApp</div>
-        <div class="text-[11px]" style="color:#64748B">+91 98765 43210</div>
-      </div>
-      <span class="text-[10.5px] font-extrabold" style="color:#047857">Sent ✓</span>
+      <div class="val tnum">₹1,805</div>
     </div>
   </div>
 
-  <!-- Delivery ETA -->
-  <div class="card mt-3" style="margin-top:10px">
-    <div class="p-4 flex items-center gap-3">
-      <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#ECFDF5"><i class="fa-solid fa-calendar-day text-[15px]" style="color:#047857"></i></div>
-      <div class="flex-1 leading-tight">
-        <div class="text-[10.5px] font-extrabold uppercase tracking-[0.06em]" style="color:#94A3B8">Delivers</div>
-        <div class="text-[14px] font-extrabold mt-0.5">Tue 19 May &mdash; Thu 21 May</div>
-        <div class="text-[11.5px] mt-1" style="color:#64748B">Plot 22, Bawadia, Indore &mdash; 452001, MP</div>
-      </div>
-    </div>
+  <!-- Rewards · scratch card + coins earned · 2-col grid -->
+  <div class="sec-title">Rewards from this order</div>
+  <div class="reward-grid">
+    <a href="#" class="reward-tile scratch">
+      <span class="reward-ic"><i class="fa-solid fa-gift"></i></span>
+      <span class="reward-title">Scratch &amp; win</span>
+      <span class="reward-sub">Up to ₹200 cashback</span>
+      <span class="reward-action">Scratch now →</span>
+    </a>
+    <a href="coins-statement.html" class="reward-tile coins">
+      <span class="reward-ic"><i class="fa-solid fa-coins"></i></span>
+      <span class="reward-title">+36 coins earned</span>
+      <span class="reward-sub">Use on your next order</span>
+      <span class="reward-action">View wallet →</span>
+    </a>
   </div>
 
-  <!-- Scratch card reward · subtle, on-brand · uses emerald + gold accent, not loud yellow -->
-  <div class="card mt-3" style="margin-top:10px">
-    <div class="p-4 flex items-center gap-3">
-      <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#FBBF24,#F59E0B);box-shadow:0 6px 14px -4px rgba(245,158,11,0.5)"><i class="fa-solid fa-gift text-[20px]" style="color:#FFFFFF"></i></div>
-      <div class="flex-1 leading-tight">
-        <div class="text-[13.5px] font-extrabold">Scratch &amp; win extra</div>
-        <div class="text-[11.5px] mt-1" style="color:#64748B">Up to &#8377;200 cashback waiting</div>
+  <!-- WhatsApp + Share helpers · short row, lighter weight than the reward grid -->
+  <div class="sec-title">Helpful</div>
+  <div class="help-row">
+    <a href="#" class="help-card">
+      <span class="ic wa"><i class="fa-brands fa-whatsapp"></i></span>
+      <div>
+        <div class="label">Updates on WhatsApp</div>
+        <div class="sub">Sent to +91 98765 43210</div>
       </div>
-      <button class="px-3 py-1.5 rounded-lg text-[11.5px] font-extrabold" style="background:#FEF3C7;color:#B45309;border:1px solid #FDE68A">Scratch</button>
-    </div>
+    </a>
+    <a href="#" class="help-card">
+      <span class="ic sh"><i class="fa-solid fa-share-nodes"></i></span>
+      <div>
+        <div class="label">Share with friends</div>
+        <div class="sub">They get ₹100 off</div>
+      </div>
+    </a>
   </div>
 
-  <!-- Sticky bottom CTAs · Continue shopping + Track order · matches design system -->
+  <!-- Sticky bottom CTAs -->
   <div class="sticky-cta">
     <a href="home.html" class="cta-out">
-      <i class="fa-solid fa-house text-[12px]"></i> Continue shopping
+      <i class="fa-solid fa-house text-[12px]"></i> Continue
     </a>
     <a href="track-order.html" class="cta-pri">
       <i class="fa-solid fa-location-arrow text-[12px]"></i> Track order

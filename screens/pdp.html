@@ -17,7 +17,7 @@
   .tab.active{background:#0F172A;color:#fff}
   .pg-dot{width:6px;height:6px;border-radius:9999px;background:rgba(15,23,42,0.22);transition:all .25s ease}
   .pg-dot.active{width:20px;background:#059669}
-  /* Pack-size tile · 4-col grid · BESTSELLER chip uses normal weight · per-litre rate shown under the absolute price · the 6th cell is the "+more" CTA */
+  /* Pack-size tile · 4-col grid · 7 variants visible + an 8th "more" tile that matches the normal tile style (no green-fill) · BESTSELLER chip uses normal weight · per-litre rate shown under the absolute price */
   .pack-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
   .var{position:relative;border:1.5px solid #E5E7EB;background:#FFFFFF;border-radius:12px;padding:14px 6px 10px;text-align:center;transition:all .15s;cursor:pointer}
   .var.active{border-color:#059669;background:#ECFDF5;box-shadow:0 6px 14px -6px rgba(5,150,105,0.35)}
@@ -26,8 +26,10 @@
   .vk-size{font-size:12.5px;font-weight:800;color:#0F172A;line-height:1}
   .vk-price{font-size:11px;color:#64748B;margin-top:4px;line-height:1}
   .vk-perL{font-size:9.5px;color:#94A3B8;margin-top:3px;line-height:1;font-weight:600}
-  .var-more{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:1.5px dashed #BBF7D0;background:#ECFDF5;color:#047857;border-radius:12px;padding:14px 6px 10px;font-size:11px;font-weight:800;cursor:pointer}
+  /* "more" tile · uses the same normal tile look (white bg, slate border) · no emerald-fill · acts like a normal pack-size tile */
+  .var-more{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1.5px solid #E5E7EB;background:#FFFFFF;color:#047857;border-radius:12px;padding:14px 6px 10px;font-size:11.5px;font-weight:800;cursor:pointer;line-height:1}
   .var-more i{font-size:13px}
+  .var-more .lbl-sub{font-size:9.5px;color:#94A3B8;font-weight:600}
   /* ADD button · more prominent · bigger height + stronger emerald glow + tracked-uppercase label · stepper matches the same dimensions */
   .price-add{display:flex;align-items:center;gap:8px}
   .add-btn{height:48px;padding:0 22px;border-radius:12px;background:#059669;color:#FFFFFF;font-size:14.5px;font-weight:900;letter-spacing:0.06em;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 12px 22px -8px rgba(5,150,105,0.6),inset 0 1px 0 rgba(255,255,255,0.18);cursor:pointer;border:0;text-transform:uppercase}
@@ -78,15 +80,49 @@
   .sheet-bd.open{opacity:1;pointer-events:auto}
   .sheet{position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;max-height:78vh;display:flex;flex-direction:column}
   .sheet.open{transform:translateY(0)}
-  /* Social-proof row · multiple trust signals stacked horizontally below the title · replaces the lone "8,427 farmers" pill · each cell uses a tiny icon + 2-line label so the eye scans 3 reasons at once */
-  .sp-row{margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden;background:#FFFFFF;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
-  .sp-cell{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;padding:10px 6px}
-  .sp-cell + .sp-cell{border-left:1px solid #F1F5F9}
-  .sp-ic{width:26px;height:26px;border-radius:8px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:11px}
-  .sp-val{font-size:13px;font-weight:800;color:#0F172A;line-height:1}
-  .sp-lab{font-size:9.5px;color:#64748B;font-weight:600;line-height:1.1}
+  /* Social-proof · single "farmers bought" card with overlapping farmer avatars + count · drops the 'Last bought' and 'Trending' cells per spec · feels human, not statistical */
+  .fb-card{margin-top:12px;display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border:1px solid #A7F3D0;box-shadow:0 1px 3px rgba(5,150,105,0.08)}
+  .fb-avs{display:inline-flex;flex-shrink:0}
+  .fb-av{width:30px;height:30px;border-radius:50%;background:#FFFFFF;border:2px solid #FFFFFF;box-shadow:0 1px 3px rgba(15,23,42,0.15);overflow:hidden;background-size:cover;background-position:center}
+  .fb-av + .fb-av{margin-left:-10px}
+  .fb-av.count{background:#047857;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:900;letter-spacing:0.02em}
+  .fb-text{line-height:1.2;flex:1;min-width:0}
+  .fb-text .a{font-size:13px;font-weight:800;color:#0F172A}
+  .fb-text .a .num{color:#047857;font-variant-numeric:tabular-nums}
+  .fb-text .b{font-size:10.5px;color:#64748B;font-weight:600;margin-top:2px}
+
+  /* Sticky product mini-header · appears once the user scrolls past the image gallery · shows thumbnail + name/price + ADD button (matches partner-app pattern of freezing key product details at the top) · hidden by default; .scrolled-past on body reveals it */
+  .stickyhd{position:fixed;top:0;left:0;right:0;z-index:60;background:#FFFFFF;border-bottom:1px solid #F1F5F9;padding:10px 14px;display:flex;align-items:center;gap:10px;transform:translateY(-100%);transition:transform .25s ease;box-shadow:0 4px 12px -6px rgba(15,23,42,0.12)}
+  body.scrolled-past .stickyhd{transform:translateY(0)}
+  .stickyhd .back{width:32px;height:32px;border-radius:9999px;background:#FFFFFF;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#0F172A}
+  .stickyhd .thumb{width:38px;height:38px;border-radius:9px;background:#F8FAFC;border:1px solid #E5E7EB;padding:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  .stickyhd .thumb img{max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:multiply}
+  .stickyhd .info{flex:1;line-height:1.15;min-width:0}
+  .stickyhd .info .nm{font-size:13.5px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .stickyhd .info .pr{font-size:11.5px;font-weight:700;color:#0F172A;font-variant-numeric:tabular-nums;margin-top:1px}
+  .stickyhd .info .pr .strike{color:#94A3B8;text-decoration:line-through;font-weight:500;margin-left:4px}
+  .stickyhd .add-mini{flex-shrink:0;padding:0 14px;height:36px;border-radius:9px;background:#059669;color:#FFFFFF;font-size:12.5px;font-weight:900;letter-spacing:0.06em;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;border:0;cursor:pointer;box-shadow:0 6px 14px -4px rgba(5,150,105,0.5)}
+
+  /* Cart bar compact on scroll · shrinks to a centered pill when body.scrolled-past (mirrors home page behaviour) */
+  .cart-fab.compact{left:50% !important;right:auto !important;transform:translateX(-50%);padding:8px 16px !important;border-radius:9999px !important;gap:10px;max-width:92%;bottom:18px}
+  .cart-fab.compact .view-label{display:none}
+
+  /* Tab content panels · only the .tab-pane matching the active tab is shown */
+  .tab-pane{display:none}
+  .tab-pane.active{display:block}
 </style></head>
 <body class="min-h-screen">
+
+<!-- Sticky product mini-header · reveals after the user scrolls past the image gallery · partner-app pattern · back + thumb + name/price + ADD -->
+<div class="stickyhd" id="stickyHd">
+  <button class="back" onclick="if(document.referrer && history.length>1){history.back()}else{location.href='home.html'}"><i class="fa-solid fa-arrow-left text-[12px]"></i></button>
+  <div class="thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" alt=""/></div>
+  <div class="info">
+    <div class="nm">Humic <span class="font-medium" style="color:#64748B">· 500 ml</span></div>
+    <div class="pr">₹376 <span class="strike">₹520</span></div>
+  </div>
+  <button class="add-mini" id="stickyAddBtn">ADD</button>
+</div>
 
 <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
 
@@ -126,22 +162,17 @@
     </a>
   </div>
 
-  <!-- Social-proof row · 3 trust signals together (buyers · rating · trending) replaces the lone "8,427 farmers" pill that didn't read well · each cell is icon + value + tiny caption -->
-  <div class="sp-row">
-    <div class="sp-cell">
-      <span class="sp-ic"><i class="fa-solid fa-user-group"></i></span>
-      <span class="sp-val tnum">8,427+</span>
-      <span class="sp-lab">Farmers bought</span>
+  <!-- Farmer social proof · overlapping circular avatars (real farmer photos) + count badge + 2-line text · drops the Last-bought + Trending cells, keeps only farmers-bought · feels human -->
+  <div class="fb-card">
+    <div class="fb-avs">
+      <span class="fb-av" style="background-image:url('https://images.unsplash.com/photo-1627638458498-71e9fdf12a05?w=120&q=80')"></span>
+      <span class="fb-av" style="background-image:url('https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=120&q=80')"></span>
+      <span class="fb-av" style="background-image:url('https://images.unsplash.com/photo-1572177812156-58036aae439c?w=120&q=80')"></span>
+      <span class="fb-av count">+8K</span>
     </div>
-    <div class="sp-cell">
-      <span class="sp-ic"><i class="fa-solid fa-bolt-lightning"></i></span>
-      <span class="sp-val tnum">5 min ago</span>
-      <span class="sp-lab">Last bought</span>
-    </div>
-    <div class="sp-cell">
-      <span class="sp-ic"><i class="fa-solid fa-fire-flame-curved"></i></span>
-      <span class="sp-val">Trending</span>
-      <span class="sp-lab">in Madhya Pradesh</span>
+    <div class="fb-text">
+      <div class="a"><span class="num tnum">8,427+</span> farmers bought this product</div>
+      <div class="b">Trusted by farmers across 12 states</div>
     </div>
   </div>
 </div>
@@ -170,13 +201,18 @@
   </div>
 </div>
 
-<!-- Pack size · 4-col grid · per-litre rate below the absolute price · BESTSELLER chip uses normal weight per spec -->
+<!-- Pack size · 4-col grid · 7 default tiles + an 8th "more" tile that opens the all-sizes sheet · the more tile is plain white (no green-fill) to match the other tiles -->
 <div class="px-4 mt-5">
   <div class="flex items-baseline justify-between mb-3">
     <div class="text-[15px] font-extrabold text-[#0F172A]">Pack size</div>
-    <div class="text-[11px] font-bold text-[#64748B]">5 of 12 sizes</div>
+    <div class="text-[11px] font-bold text-[#64748B]">7 of 12 sizes</div>
   </div>
   <div class="pack-grid">
+    <button class="var" data-size="100 ml" data-price="₹85">
+      <div class="vk-size">100 ml</div>
+      <div class="vk-price tnum">₹85</div>
+      <div class="vk-perL tnum">₹850/L</div>
+    </button>
     <button class="var" data-size="250 ml" data-price="₹176">
       <div class="vk-size">250 ml</div>
       <div class="vk-price tnum">₹176</div>
@@ -193,6 +229,11 @@
       <div class="vk-price tnum">₹376</div>
       <div class="vk-perL tnum">₹376/L</div>
     </button>
+    <button class="var" data-size="2 L" data-price="₹720">
+      <div class="vk-size">2 L</div>
+      <div class="vk-price tnum">₹720</div>
+      <div class="vk-perL tnum">₹360/L</div>
+    </button>
     <button class="var" data-size="5 L" data-price="₹1,575">
       <div class="vk-size">5 L</div>
       <div class="vk-price tnum">₹1,575</div>
@@ -205,7 +246,8 @@
     </button>
     <button class="var-more" id="moreSizes">
       <i class="fa-solid fa-plus"></i>
-      +7 more
+      <span>More</span>
+      <span class="lbl-sub">+5 sizes</span>
     </button>
   </div>
 </div>
@@ -279,16 +321,51 @@
     <span class="play"><svg width="22" height="22" viewBox="0 0 24 24" fill="#059669"><path d="M8 5v14l11-7z"/></svg></span>
     <span class="label">Watch · How to mix &amp; spray</span>
   </a>
-  <div class="mt-3 border border-[#E5E7EB] rounded-2xl">
+  <div class="mt-3 border border-[#E5E7EB] rounded-2xl" id="useTabs">
     <div class="flex p-1 border-b border-[#E5E7EB]">
-      <button class="tab active flex-1 h-9 rounded-lg text-[12px] font-bold">Technical</button>
-      <button class="tab flex-1 h-9 rounded-lg text-[12px] font-bold">Dose</button>
-      <button class="tab flex-1 h-9 rounded-lg text-[12px] font-bold">Disease</button>
+      <button class="tab active flex-1 h-9 rounded-lg text-[12px] font-bold" data-tab="technical">Technical</button>
+      <button class="tab flex-1 h-9 rounded-lg text-[12px] font-bold" data-tab="dose">Dose</button>
+      <button class="tab flex-1 h-9 rounded-lg text-[12px] font-bold" data-tab="disease">Disease</button>
     </div>
-    <div class="p-4 space-y-2 text-[12.5px] text-[#0F172A]">
-      <div class="flex gap-2"><span class="font-extrabold text-[#059669]">1.</span><span>Dilute 2 ml in 1 litre of water</span></div>
-      <div class="flex gap-2"><span class="font-extrabold text-[#059669]">2.</span><span>Spray on plant leaves during early morning or evening</span></div>
-      <div class="flex gap-2"><span class="font-extrabold text-[#059669]">3.</span><span>Repeat every 10–15 days for best results</span></div>
+    <!-- Technical -->
+    <div class="tab-pane active p-4 text-[12.5px] text-[#0F172A]" data-pane="technical">
+      <div class="grid grid-cols-2 gap-x-4 gap-y-3">
+        <div><div class="text-[10px] font-extrabold uppercase tracking-wider" style="color:#94A3B8">Composition</div><div class="font-bold mt-0.5">Humic 80% + Fulvic 18%</div></div>
+        <div><div class="text-[10px] font-extrabold uppercase tracking-wider" style="color:#94A3B8">Form</div><div class="font-bold mt-0.5">Water-soluble granules</div></div>
+        <div><div class="text-[10px] font-extrabold uppercase tracking-wider" style="color:#94A3B8">pH</div><div class="font-bold mt-0.5">9.5 – 10.5</div></div>
+        <div><div class="text-[10px] font-extrabold uppercase tracking-wider" style="color:#94A3B8">Solubility</div><div class="font-bold mt-0.5">100% in water</div></div>
+        <div><div class="text-[10px] font-extrabold uppercase tracking-wider" style="color:#94A3B8">Shelf life</div><div class="font-bold mt-0.5">36 months</div></div>
+        <div><div class="text-[10px] font-extrabold uppercase tracking-wider" style="color:#94A3B8">CIB/RC No.</div><div class="font-bold mt-0.5">CIR-082023-7</div></div>
+      </div>
+    </div>
+    <!-- Dose -->
+    <div class="tab-pane p-4 text-[12.5px] text-[#0F172A]" data-pane="dose">
+      <div class="space-y-2.5">
+        <div class="flex gap-2"><span class="font-extrabold text-[#059669] w-4">1.</span><span><b class="font-extrabold">2 ml per litre</b> of water for foliar spray</span></div>
+        <div class="flex gap-2"><span class="font-extrabold text-[#059669] w-4">2.</span><span><b class="font-extrabold">1 L per acre</b> when applied via drip / drench</span></div>
+        <div class="flex gap-2"><span class="font-extrabold text-[#059669] w-4">3.</span><span>Spray during <b class="font-extrabold">early morning or evening</b></span></div>
+        <div class="flex gap-2"><span class="font-extrabold text-[#059669] w-4">4.</span><span>Repeat every <b class="font-extrabold">10–15 days</b> for best results</span></div>
+      </div>
+      <div class="mt-3 pt-3 border-t border-[#F1F5F9] grid grid-cols-3 divide-x divide-[#F1F5F9]">
+        <div class="text-center"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:#64748B">Per acre</div><div class="text-[13px] font-extrabold mt-0.5">1 L</div></div>
+        <div class="text-center"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:#64748B">Per spray</div><div class="text-[13px] font-extrabold mt-0.5">200 ml</div></div>
+        <div class="text-center"><div class="text-[9px] font-extrabold uppercase tracking-wider" style="color:#64748B">Frequency</div><div class="text-[13px] font-extrabold mt-0.5">15 days</div></div>
+      </div>
+    </div>
+    <!-- Disease -->
+    <div class="tab-pane p-4 text-[12.5px] text-[#0F172A]" data-pane="disease">
+      <div class="text-[11px]" style="color:#64748B">Effective control of:</div>
+      <div class="flex flex-wrap gap-1.5 mt-2">
+        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0">Root rot</span>
+        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0">Wilting</span>
+        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0">Yellowing</span>
+        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0">Nutrient deficiency</span>
+        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0">Slow growth</span>
+        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0">Poor flowering</span>
+      </div>
+      <div class="mt-3 pt-3 border-t border-[#F1F5F9] text-[12px] leading-relaxed" style="color:#475569">
+        Improves plant immunity and helps recover from stress-induced symptoms. Safe to use across the full crop cycle — from seedling to harvest.
+      </div>
     </div>
   </div>
 </div>
@@ -469,6 +546,40 @@
       const idx = Math.round(sc.scrollLeft / sc.clientWidth);
       dots.forEach((d, i) => d.classList.toggle('active', i === idx));
     }, { passive: true });
+  })();
+
+  // Sticky product mini-header + cart-bar compact mode on scroll · mirrors the partner-app "freeze key product details at top once you scroll past the gallery" behaviour
+  (function(){
+    const threshold = 280; // ~the bottom of the image gallery
+    function onScroll(){
+      const y = window.scrollY || document.documentElement.scrollTop;
+      document.body.classList.toggle('scrolled-past', y > threshold);
+      const cb = document.getElementById('cartBar');
+      if (cb) cb.classList.toggle('compact', y > threshold);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  // Tabs · Technical / Dose / Disease · clicking switches the active tab + matching pane
+  (function(){
+    const wrap = document.getElementById('useTabs');
+    if (!wrap) return;
+    wrap.querySelectorAll('.tab').forEach(t => {
+      t.addEventListener('click', () => {
+        const name = t.dataset.tab;
+        wrap.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x === t));
+        wrap.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.dataset.pane === name));
+      });
+    });
+  })();
+
+  // The sticky-header ADD button mirrors the main ADD button
+  (function(){
+    const stickyAdd = document.getElementById('stickyAddBtn');
+    const mainAdd = document.getElementById('addBtn');
+    if (!stickyAdd || !mainAdd) return;
+    stickyAdd.addEventListener('click', () => mainAdd.click());
   })();
 
   // Variant selection

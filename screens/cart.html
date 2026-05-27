@@ -15,11 +15,11 @@
   .card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
 
   /* Cart item · product name + technical name under it · trash icon top-right (icon only, no container) · qty stepper inline-adjacent to the price/off row (right-aligned) so the row feels balanced and the stepper doesn't drop into its own line */
-  .cart-item{position:relative;padding:14px 14px 14px 14px;display:flex;gap:12px;align-items:flex-start;border-bottom:1px solid #F1F5F9}
+  .cart-item{position:relative;padding:14px 14px 16px;display:flex;gap:12px;align-items:flex-start;border-bottom:1px solid #F1F5F9}
   .cart-item:last-child{border-bottom:0}
   .cart-img{width:64px;height:64px;border-radius:10px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:6px;flex-shrink:0;border:1px solid #E5E7EB}
   .cart-img img{max-width:100%;max-height:100%;object-fit:contain}
-  .cart-info{flex:1;min-width:0;line-height:1.3;padding-right:24px}
+  .cart-info{flex:1;min-width:0;line-height:1.3;padding-right:40px}
   .cart-name{font-size:14.5px;font-weight:700;color:#0F172A;line-height:1.2}
   .cart-tech{font-size:11.5px;color:#94A3B8;margin-top:2px;line-height:1.3}
   .cart-size{display:inline-block;margin-top:6px;font-size:11px;font-weight:700;color:#475569;padding:1px 7px;border-radius:5px;background:#F1F5F9}
@@ -27,13 +27,13 @@
   .cart-price{font-size:16px;font-weight:700;color:#0F172A;line-height:1}
   .cart-mrp{font-size:11px;color:#94A3B8;text-decoration:line-through}
   .cart-discount{font-size:10.5px;font-weight:800;color:#047857}
-  /* Trash icon · pure red icon, no container/border/background */
-  .trash-btn{position:absolute;top:12px;right:12px;background:transparent;border:0;color:#DC2626;cursor:pointer;padding:6px;font-size:15px;line-height:1}
-  .trash-btn:active{transform:scale(.88)}
-  /* Qty stepper · emerald pill · now flows on the price row, anchored to the right via margin-left:auto */
-  .qty{display:inline-flex;align-items:center;height:32px;border-radius:9999px;border:1px solid #BBF7D0;background:#ECFDF5;overflow:hidden;margin-left:auto}
-  .qty button{width:30px;height:30px;display:flex;align-items:center;justify-content:center;color:#047857;background:transparent;border:0;cursor:pointer;font-size:13px}
-  .qty .val{padding:0 8px;font-size:13px;font-weight:800;color:#047857;font-variant-numeric:tabular-nums;min-width:16px;text-align:center}
+  /* Trash icon · softened red (lighter tone), generous tap target far from the qty stepper · sits at top-right but visually subtle so the eye lands on price/qty first */
+  .trash-btn{position:absolute;top:10px;right:8px;background:transparent;border:0;color:#FCA5A5;cursor:pointer;padding:10px;font-size:14px;line-height:1;width:38px;height:38px;display:flex;align-items:center;justify-content:center}
+  .trash-btn:active{transform:scale(.88);color:#DC2626}
+  /* Qty stepper · LARGER · 40px tall pill with 38px tap targets · sits on the price row anchored right via margin-left:auto · pushed down via margin-top so it never sits on the same row as the trash icon (avoids accidental taps) */
+  .qty{display:inline-flex;align-items:center;height:40px;border-radius:9999px;border:1px solid #BBF7D0;background:#ECFDF5;overflow:hidden;margin-left:auto}
+  .qty button{width:38px;height:38px;display:flex;align-items:center;justify-content:center;color:#047857;background:transparent;border:0;cursor:pointer;font-size:14px}
+  .qty .val{padding:0 10px;font-size:14px;font-weight:800;color:#047857;font-variant-numeric:tabular-nums;min-width:18px;text-align:center}
 
   /* Deliver-to card · partner-app pattern · moves below Bill summary per spec */
   .addr-card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
@@ -72,10 +72,11 @@
 
   /* Sticky checkout · 2-col layout · summary on the left (item count + amount), button on the right (compact, not full-width) · Saved-520 text removed */
   .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 14px;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:14px}
-  .sticky-sum{display:flex;flex-direction:column;line-height:1.15;flex-shrink:0}
+  .sticky-sum{display:flex;flex-direction:column;line-height:1.15;flex-shrink:0;min-width:90px}
   .sticky-sum .ttl{font-size:11px;color:#64748B;font-weight:500}
   .sticky-sum .amt{font-size:20px;font-weight:700;color:#0F172A;letter-spacing:-0.01em}
-  .sticky-cta-btn{flex-shrink:0;min-width:170px;height:50px;padding:0 22px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:14.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+  /* Wider checkout pill · takes ~60% of the row so the CTA reads as the primary action */
+  .sticky-cta-btn{flex:1;min-width:220px;height:52px;padding:0 22px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
 
   /* Modals */
   .modal-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80}
@@ -107,61 +108,44 @@
   .coup-lock{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:10.5px;font-weight:700;color:#B45309}
   .coup-lock i{font-size:9px}
 
-  /* Cross-sell card · unchanged from prior pass */
-  .xsell-card{border:1px solid #E5E7EB;border-radius:14px;background:#FFFFFF;padding:10px 12px;display:flex;align-items:center;gap:10px}
-  .xsell-img{width:54px;height:54px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
-  .xsell-img img{max-width:100%;max-height:100%;object-fit:contain}
-  .xsell-add{padding:7px 16px;border-radius:9px;background:#FFFFFF;color:#047857;border:1.5px solid #059669;font-size:12.5px;font-weight:800;letter-spacing:0.04em;cursor:pointer;flex-shrink:0;text-transform:uppercase}
+  .xsell-add{padding:7px 16px;border-radius:9px;background:#059669;color:#FFFFFF;border:0;font-size:12.5px;font-weight:800;letter-spacing:0.04em;cursor:pointer;flex-shrink:0;text-transform:uppercase;box-shadow:0 4px 10px -3px rgba(5,150,105,0.5)}
   .xsell-add:active{transform:scale(.96)}
-  .xsell-add.added{background:#ECFDF5;color:#047857;border-color:#059669}
-  .xsell-tag{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:9999px;background:#ECFDF5;color:#047857;font-size:9.5px;font-weight:700;letter-spacing:0.02em;border:1px solid #A7F3D0}
-  .xsell-tag::before{content:"";width:5px;height:5px;border-radius:50%;background:#059669;display:inline-block}
-  /* Free-delivery threshold strip · richer · gradient fill with animated diagonal water-flow stripes, a truck icon riding the fill edge, milestone copy with the amount highlighted in extrabold emerald, and a Free pill anchored at 100% · still a single tile but reads with much more confidence */
+  .xsell-add.added{background:#ECFDF5;color:#047857}
+  /* Free-delivery threshold strip · animation removed (no more water-flow stripes or truck) · simpler · gradient fill, just bar + the highlighted amount line · in-cart / goal labels dropped per spec */
   .xsell-thresh{position:relative;padding:12px 12px 14px;border-radius:14px;background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border:1px solid #A7F3D0;margin-bottom:14px;box-shadow:0 4px 14px -8px rgba(5,150,105,0.35)}
   .xsell-thresh .head{display:flex;align-items:center;gap:10px}
   .xsell-thresh .ic{width:34px;height:34px;border-radius:10px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#047857;flex-shrink:0;box-shadow:0 2px 6px rgba(5,150,105,0.2)}
   .xsell-thresh .copy{flex:1;line-height:1.25;color:#0F172A;font-size:12.5px;font-weight:600}
   .xsell-thresh .copy .hl{color:#047857;font-weight:900}
   .xsell-thresh .pill{margin-left:auto;flex-shrink:0;font-size:9.5px;font-weight:900;background:#FBBF24;color:#0F172A;padding:3px 8px;border-radius:9999px;letter-spacing:0.06em}
-  .xsell-thresh .bar-wrap{position:relative;height:10px;margin-top:10px;background:#FFFFFF;border-radius:9999px;border:1px solid #A7F3D0;overflow:visible}
-  .xsell-thresh .bar-track{position:absolute;inset:1px;border-radius:9999px;overflow:hidden;background:#F0FDF4}
-  .xsell-thresh .fill{position:relative;height:100%;background:linear-gradient(90deg,#10B981 0%,#047857 100%);border-radius:9999px;transition:width .4s ease}
-  .xsell-thresh .fill::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,0.22) 0 8px,transparent 8px 16px);animation:strFlow 1.4s linear infinite;border-radius:inherit}
-  @keyframes strFlow{from{background-position:0 0}to{background-position:22px 0}}
-  .xsell-thresh .truck{position:absolute;top:50%;transform:translate(50%,-50%);width:22px;height:22px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#047857;border:1.5px solid #047857;box-shadow:0 4px 10px -2px rgba(4,120,87,0.45);transition:right .4s ease;font-size:10px}
-  .xsell-thresh .marks{display:flex;justify-content:space-between;margin-top:6px;font-size:10px;font-weight:700;color:#64748B}
-  .xsell-thresh .marks .end{color:#047857;font-weight:900}
+  .xsell-thresh .bar-wrap{position:relative;height:8px;margin-top:10px;background:#FFFFFF;border-radius:9999px;border:1px solid #A7F3D0;overflow:hidden}
+  .xsell-thresh .fill{height:100%;background:linear-gradient(90deg,#10B981 0%,#047857 100%);border-radius:9999px;transition:width .4s ease}
 
-  /* Special Deal FOMO header above cross-sell cards · strong red/orange flame accent, a tight live-countdown chip, and a "84% of farmers add a combo" social-proof line · creates urgency without crowding the cards beneath */
-  .sd-card{position:relative;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#FFF7ED 0%,#FFFBEB 100%);border:1px solid #FED7AA;margin-bottom:12px;overflow:hidden}
-  .sd-card::before{content:"";position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(251,146,60,0.25) 0%,transparent 65%);pointer-events:none}
-  .sd-head{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
-  .sd-flame{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#F97316,#DC2626);display:flex;align-items:center;justify-content:center;color:#FFFFFF;flex-shrink:0;font-size:14px;box-shadow:0 4px 10px -2px rgba(220,38,38,0.4);animation:flameP 1.6s ease-in-out infinite}
-  @keyframes flameP{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
-  .sd-title{font-size:14.5px;font-weight:900;color:#0F172A;line-height:1.15;letter-spacing:-0.01em}
-  .sd-sub{font-size:11px;color:#9A3412;margin-top:2px;line-height:1.3;font-weight:600}
-  .sd-timer{margin-left:auto;flex-shrink:0;display:inline-flex;align-items:center;gap:5px;background:#0F172A;color:#FBBF24;padding:5px 9px;border-radius:9999px;font-size:11px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:0.04em}
-  .sd-timer i{font-size:9px;color:#FCD34D}
+  /* Special-deal product card · the xsell-card itself becomes the appealing special-deal element · no separate FOMO header, no timer · the card gets a SPECIAL DEAL ribbon, a savings badge, and emerald-accent border so it reads as a high-value pick on its own */
+  .xsell-card{position:relative;border:1.5px solid #BBF7D0;border-radius:14px;background:linear-gradient(135deg,#FFFFFF 0%,#F0FDF4 100%);padding:14px 12px 12px;display:flex;align-items:center;gap:12px;overflow:hidden;box-shadow:0 4px 12px -6px rgba(5,150,105,0.18)}
+  .xsell-card::before{content:"SPECIAL DEAL";position:absolute;top:9px;left:-30px;background:linear-gradient(90deg,#047857,#10B981);color:#FFFFFF;font-size:8px;font-weight:900;letter-spacing:0.14em;padding:2px 32px;transform:rotate(-30deg);box-shadow:0 4px 8px -2px rgba(4,120,87,0.4);pointer-events:none}
+  .xsell-card .saving{position:absolute;top:8px;right:10px;font-size:9.5px;font-weight:900;color:#047857;background:#ECFDF5;border:1px solid #A7F3D0;padding:2px 7px;border-radius:9999px;letter-spacing:0.04em}
+  .xsell-img{width:62px;height:62px;border-radius:11px;background:#FFFFFF;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0;box-shadow:0 2px 6px rgba(15,23,42,0.06)}
+  .xsell-img img{max-width:100%;max-height:100%;object-fit:contain}
 
-  /* ===== Coupon-apply CELEBRATION (mirrors the partner-app distributor-unlock pattern) · full-screen takeover with: tinted backdrop + central scale-in badge + radial rays sun-burst + headline that fades up + 12 confetti pieces · auto-dismiss at ~2.6s ===== */
+  /* ===== Coupon-apply celebration · SOFTENED · drops the dark backdrop, the rotating sun-burst rays, the 12-piece confetti rain, the badge rotation/bounce · now: gentle dim overlay + a clean white card that fades + scales-in (no bounce), brief sparkle dots around the badge, smooth text fade · feels confident, not aggressive · ~1.8s total ===== */
   .celeb{position:fixed;inset:0;z-index:200;pointer-events:none;display:none;align-items:center;justify-content:center}
   .celeb.show{display:flex}
-  .celeb-backdrop{position:absolute;inset:0;background:radial-gradient(circle at 50% 42%, rgba(4,120,87,0.55) 0%, rgba(2,44,34,0.85) 60%, rgba(0,0,0,0.92) 100%);animation:celebBackdrop 2.6s ease-out forwards;opacity:0}
-  @keyframes celebBackdrop{0%{opacity:0}15%{opacity:1}85%{opacity:1}100%{opacity:0}}
-  .celeb-rays{position:absolute;top:50%;left:50%;width:520px;height:520px;border-radius:50%;background:conic-gradient(from 0deg, rgba(251,191,36,0) 0deg, rgba(251,191,36,0.45) 6deg, rgba(251,191,36,0) 12deg, rgba(251,191,36,0) 30deg, rgba(251,191,36,0.45) 36deg, rgba(251,191,36,0) 42deg, rgba(251,191,36,0) 60deg, rgba(251,191,36,0.45) 66deg, rgba(251,191,36,0) 72deg, rgba(251,191,36,0) 90deg, rgba(251,191,36,0.45) 96deg, rgba(251,191,36,0) 102deg, rgba(251,191,36,0) 120deg, rgba(251,191,36,0.45) 126deg, rgba(251,191,36,0) 132deg, rgba(251,191,36,0) 150deg, rgba(251,191,36,0.45) 156deg, rgba(251,191,36,0) 162deg, rgba(251,191,36,0) 180deg, rgba(251,191,36,0.45) 186deg, rgba(251,191,36,0) 192deg, rgba(251,191,36,0) 210deg, rgba(251,191,36,0.45) 216deg, rgba(251,191,36,0) 222deg, rgba(251,191,36,0) 240deg, rgba(251,191,36,0.45) 246deg, rgba(251,191,36,0) 252deg, rgba(251,191,36,0) 270deg, rgba(251,191,36,0.45) 276deg, rgba(251,191,36,0) 282deg, rgba(251,191,36,0) 300deg, rgba(251,191,36,0.45) 306deg, rgba(251,191,36,0) 312deg, rgba(251,191,36,0) 330deg, rgba(251,191,36,0.45) 336deg, rgba(251,191,36,0) 342deg, rgba(251,191,36,0) 360deg);transform:translate(-50%,-50%) scale(.4);opacity:0;animation:celebRays 2s ease-out .15s forwards}
-  @keyframes celebRays{0%{transform:translate(-50%,-50%) scale(.4) rotate(0);opacity:0}30%{transform:translate(-50%,-50%) scale(1.4) rotate(45deg);opacity:.7}100%{transform:translate(-50%,-50%) scale(2.6) rotate(180deg);opacity:0}}
-  .celeb-badge{position:relative;width:148px;height:148px;border-radius:50%;background:linear-gradient(135deg,#10B981 0%,#047857 60%,#022C22 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 24px 60px -16px rgba(4,120,87,0.8), inset 0 2px 0 rgba(255,255,255,0.25);transform:scale(0) rotate(-25deg);opacity:0;animation:celebBadge 2.6s cubic-bezier(.34,1.56,.64,1) forwards;z-index:2}
-  @keyframes celebBadge{0%{transform:scale(0) rotate(-25deg);opacity:0}20%{transform:scale(1.15) rotate(0);opacity:1}30%{transform:scale(1) rotate(0);opacity:1}85%{transform:scale(1);opacity:1}100%{transform:scale(.85);opacity:0}}
-  .celeb-badge i{font-size:62px;color:#FFFFFF;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.25))}
-  .celeb-badge .ring{position:absolute;inset:-10px;border-radius:50%;border:2px dashed rgba(255,255,255,0.35);animation:celebRing 6s linear infinite}
-  @keyframes celebRing{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-  .celeb-text{position:absolute;top:65%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#FFFFFF;animation:celebText 2.4s ease-out .25s forwards;opacity:0;z-index:3}
-  @keyframes celebText{0%{transform:translate(-50%,calc(-50% + 16px));opacity:0}20%{transform:translate(-50%,-50%);opacity:1}85%{opacity:1}100%{opacity:0}}
-  .celeb-text .title{font-size:24px;font-weight:900;letter-spacing:-0.01em;line-height:1}
-  .celeb-text .save{margin-top:8px;display:inline-block;font-size:14px;font-weight:700;background:rgba(255,255,255,0.18);padding:6px 14px;border-radius:9999px;border:1px solid rgba(255,255,255,0.3);backdrop-filter:blur(8px)}
-  .celeb-text .code{margin-top:14px;font-size:11.5px;font-weight:800;letter-spacing:0.16em;color:#FCD34D}
-  .celeb-confetti{position:absolute;width:9px;height:14px;border-radius:2px;opacity:0;top:30%;left:50%;animation:celebFall 2s ease-out .2s forwards}
-  @keyframes celebFall{0%{transform:translate(0,-30px) rotate(0);opacity:0}15%{opacity:1}100%{transform:translate(var(--tx),var(--ty)) rotate(var(--r));opacity:0}}
+  .celeb-backdrop{position:absolute;inset:0;background:rgba(15,23,42,0.42);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:celebBackdrop 1.8s ease-out forwards;opacity:0}
+  @keyframes celebBackdrop{0%{opacity:0}20%{opacity:1}80%{opacity:1}100%{opacity:0}}
+  .celeb-card{position:relative;background:#FFFFFF;border-radius:20px;padding:26px 30px;text-align:center;min-width:240px;box-shadow:0 24px 60px -10px rgba(15,23,42,0.35);transform:scale(.92);opacity:0;animation:celebCard 1.8s cubic-bezier(.22,1,.36,1) forwards;z-index:2}
+  @keyframes celebCard{0%{transform:scale(.92);opacity:0}18%{transform:scale(1);opacity:1}82%{transform:scale(1);opacity:1}100%{transform:scale(.98);opacity:0}}
+  .celeb-badge{margin:0 auto;width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#10B981 0%,#047857 100%);display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 12px 24px -8px rgba(5,150,105,0.45)}
+  .celeb-badge i{font-size:30px;color:#FFFFFF}
+  /* Small sparkle dots around the badge · soft pulse, no aggressive scale-out rays */
+  .celeb-badge::before, .celeb-badge::after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:#FCD34D;opacity:0;animation:celebSpark 1.6s ease-out .35s infinite}
+  .celeb-badge::before{top:-4px;left:-6px}
+  .celeb-badge::after{bottom:-2px;right:-8px;animation-delay:.9s;background:#10B981}
+  @keyframes celebSpark{0%{transform:scale(0);opacity:0}40%{transform:scale(1);opacity:.85}100%{transform:scale(0);opacity:0}}
+  .celeb-card .title{margin-top:14px;font-size:17px;font-weight:900;color:#0F172A;letter-spacing:-0.01em;line-height:1.1}
+  .celeb-card .save{margin-top:6px;font-size:13px;color:#64748B;font-weight:500}
+  .celeb-card .save .v{color:#047857;font-weight:800}
+  .celeb-card .code{margin-top:12px;display:inline-block;font-size:11px;font-weight:800;letter-spacing:0.16em;color:#047857;background:#ECFDF5;padding:4px 10px;border-radius:9999px;border:1px solid #A7F3D0}
 </style></head>
 <body>
 
@@ -251,7 +235,7 @@
     <div class="pmeter-head">
       <span class="pmeter-ic"><i class="fa-solid fa-gift"></i></span>
       <div class="flex-1 leading-tight">
-        <div class="text-[13px] text-[#475569] font-medium" id="pmeterTitle">Spend <span class="hl tnum">₹300 more</span> to unlock a <span class="hl">free Humic 50 ml sample</span></div>
+        <div class="text-[13px] text-[#475569] font-medium" id="pmeterTitle">Add products worth <span class="hl tnum">₹300 more</span> to unlock a <span class="hl">free Humic 50 ml sample</span></div>
       </div>
     </div>
     <div class="pmeter-bar"><div class="pmeter-fill" id="pmeterFill" style="width:88%"></div></div>
@@ -410,31 +394,15 @@
     </div>
   </div>
 
-  <!-- Coupon-apply celebration · partner-app pattern (backdrop + ticket badge + radial rays + headline + confetti) -->
+  <!-- Coupon-apply celebration · softer · dim blur backdrop + a small white card with checkmark badge + saved-amount line + code chip · ~1.8s total -->
   <div id="celeb" class="celeb">
     <div class="celeb-backdrop"></div>
-    <div class="celeb-rays"></div>
-    <div class="celeb-badge">
-      <span class="ring"></span>
-      <i class="fa-solid fa-ticket"></i>
-    </div>
-    <div class="celeb-text">
-      <div class="title">Coupon applied!</div>
-      <div class="save">You saved <span id="celebSave">₹100</span></div>
+    <div class="celeb-card">
+      <div class="celeb-badge"><i class="fa-solid fa-check"></i></div>
+      <div class="title">Coupon applied</div>
+      <div class="save">You saved <span class="v" id="celebSave">₹100</span></div>
       <div class="code" id="celebCode">WELCOME100</div>
     </div>
-    <span class="celeb-confetti" style="background:#FBBF24;--tx:-180px;--ty:340px;--r:540deg"></span>
-    <span class="celeb-confetti" style="background:#10B981;--tx:170px;--ty:320px;--r:-460deg;animation-delay:.25s"></span>
-    <span class="celeb-confetti" style="background:#FCD34D;--tx:-90px;--ty:360px;--r:480deg;animation-delay:.4s"></span>
-    <span class="celeb-confetti" style="background:#EF4444;--tx:130px;--ty:290px;--r:-520deg;animation-delay:.15s"></span>
-    <span class="celeb-confetti" style="background:#047857;--tx:-220px;--ty:240px;--r:-360deg;animation-delay:.5s"></span>
-    <span class="celeb-confetti" style="background:#FBBF24;--tx:220px;--ty:260px;--r:560deg;animation-delay:.35s"></span>
-    <span class="celeb-confetti" style="background:#10B981;--tx:-50px;--ty:380px;--r:-540deg;animation-delay:.55s"></span>
-    <span class="celeb-confetti" style="background:#FCD34D;--tx:70px;--ty:340px;--r:520deg;animation-delay:.2s"></span>
-    <span class="celeb-confetti" style="background:#A855F7;--tx:-140px;--ty:300px;--r:-500deg;animation-delay:.45s"></span>
-    <span class="celeb-confetti" style="background:#3B82F6;--tx:160px;--ty:380px;--r:540deg;animation-delay:.3s"></span>
-    <span class="celeb-confetti" style="background:#FB7185;--tx:-110px;--ty:280px;--r:-440deg;animation-delay:.6s"></span>
-    <span class="celeb-confetti" style="background:#10B981;--tx:30px;--ty:330px;--r:520deg;animation-delay:.1s"></span>
   </div>
 
   <!-- Cross-sell sheet -->
@@ -447,7 +415,7 @@
     </div>
 
     <div class="px-5 pb-2 overflow-y-auto" style="flex:1">
-      <!-- Threshold strip · richer progress bar with gradient + water-flow stripes + truck marker · highlighted amount -->
+      <!-- Threshold strip · static (no stripes/truck animation) · in-cart/goal labels dropped -->
       <div class="xsell-thresh">
         <div class="head">
           <span class="ic"><i class="fa-solid fa-truck-fast text-[14px]"></i></span>
@@ -455,37 +423,18 @@
           <span class="pill">SAVE ₹49</span>
         </div>
         <div class="bar-wrap">
-          <div class="bar-track">
-            <div class="fill" id="threshFill" style="width:78%"></div>
-          </div>
-          <span class="truck" id="threshTruck" style="right:22%"><i class="fa-solid fa-truck-fast"></i></span>
-        </div>
-        <div class="marks">
-          <span class="tnum">₹2,200 in cart</span>
-          <span class="end tnum">Goal ₹2,500</span>
-        </div>
-      </div>
-
-      <!-- FOMO Special Deal header above the cross-sell cards · flame icon, live countdown, social-proof copy -->
-      <div class="sd-card">
-        <div class="sd-head">
-          <span class="sd-flame"><i class="fa-solid fa-fire"></i></span>
-          <div class="leading-tight">
-            <div class="sd-title">Special Deal · Today only</div>
-            <div class="sd-sub">84% of farmers add a combo — sells out fast</div>
-          </div>
-          <span class="sd-timer"><i class="fa-solid fa-clock"></i><span id="sdTimer">12:24:08</span></span>
+          <div class="fill" style="width:78%"></div>
         </div>
       </div>
 
       <div class="space-y-2.5">
         <div class="xsell-card">
+          <span class="saving">SAVE ₹98</span>
           <div class="xsell-img"><img src="../assets/AntiVirus_nobg.png" alt=""/></div>
-          <div class="flex-1 min-w-0 leading-tight">
-            <span class="xsell-tag">Bestseller pair</span>
-            <div class="text-[13.5px] font-bold mt-1.5">Antivirus <span class="font-medium" style="color:#94A3B8">· 250 ml</span></div>
+          <div class="flex-1 min-w-0 leading-tight" style="padding-left:6px">
+            <div class="text-[14px] font-extrabold mt-2">Antivirus <span class="font-medium" style="color:#94A3B8">· 250 ml</span></div>
             <div class="flex items-baseline gap-1.5 mt-1">
-              <span class="text-[13.5px] font-extrabold tnum">&#8377;327</span>
+              <span class="text-[14px] font-extrabold tnum text-[#0F172A]">&#8377;327</span>
               <span class="text-[10.5px] line-through tnum" style="color:#94A3B8">&#8377;425</span>
               <span class="text-[10px] font-bold" style="color:#047857">23% off</span>
             </div>
@@ -493,12 +442,12 @@
           <button class="xsell-add">Add</button>
         </div>
         <div class="xsell-card">
+          <span class="saving">SAVE ₹75</span>
           <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" alt=""/></div>
-          <div class="flex-1 min-w-0 leading-tight">
-            <span class="xsell-tag">Also bought</span>
-            <div class="text-[13.5px] font-bold mt-1.5">Bhumiraja <span class="font-medium" style="color:#94A3B8">· 1 kg</span></div>
+          <div class="flex-1 min-w-0 leading-tight" style="padding-left:6px">
+            <div class="text-[14px] font-extrabold mt-2">Bhumiraja <span class="font-medium" style="color:#94A3B8">· 1 kg</span></div>
             <div class="flex items-baseline gap-1.5 mt-1">
-              <span class="text-[13.5px] font-extrabold tnum">&#8377;245</span>
+              <span class="text-[14px] font-extrabold tnum text-[#0F172A]">&#8377;245</span>
               <span class="text-[10.5px] line-through tnum" style="color:#94A3B8">&#8377;320</span>
               <span class="text-[10px] font-bold" style="color:#047857">24% off</span>
             </div>
@@ -506,12 +455,12 @@
           <button class="xsell-add">Add</button>
         </div>
         <div class="xsell-card">
+          <span class="saving">SAVE ₹170</span>
           <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" alt=""/></div>
-          <div class="flex-1 min-w-0 leading-tight">
-            <span class="xsell-tag">Combo saver</span>
-            <div class="text-[13.5px] font-bold mt-1.5">Chakraveer 18.5% <span class="font-medium" style="color:#94A3B8">· 100 ml</span></div>
+          <div class="flex-1 min-w-0 leading-tight" style="padding-left:6px">
+            <div class="text-[14px] font-extrabold mt-2">Chakraveer 18.5% <span class="font-medium" style="color:#94A3B8">· 100 ml</span></div>
             <div class="flex items-baseline gap-1.5 mt-1">
-              <span class="text-[13.5px] font-extrabold tnum">&#8377;440</span>
+              <span class="text-[14px] font-extrabold tnum text-[#0F172A]">&#8377;440</span>
               <span class="text-[10.5px] line-through tnum" style="color:#94A3B8">&#8377;610</span>
               <span class="text-[10px] font-bold" style="color:#047857">28% off</span>
             </div>
@@ -588,13 +537,13 @@
           celebSave.textContent = '₹' + save;
           celebCode.textContent = code;
           celeb.classList.add('show');
-          // restart confetti animations
-          celeb.querySelectorAll('.celeb-confetti, .celeb-badge, .celeb-rays, .celeb-text, .celeb-backdrop').forEach(el => {
+          // Restart animations cleanly on each apply
+          celeb.querySelectorAll('.celeb-card, .celeb-backdrop').forEach(el => {
             el.style.animation = 'none';
             void el.offsetWidth;
             el.style.animation = '';
           });
-          setTimeout(() => { celeb.classList.remove('show'); }, 2600);
+          setTimeout(() => { celeb.classList.remove('show'); }, 1800);
         }, 150);
       }
 
@@ -647,28 +596,6 @@
         });
       });
 
-      // Sync the truck position to the fill width so the truck rides the leading edge of the gradient
-      const fill = document.getElementById('threshFill');
-      const truck = document.getElementById('threshTruck');
-      if (fill && truck) {
-        const w = parseFloat(fill.style.width) || 0;
-        truck.style.right = (100 - w) + '%';
-      }
-
-      // Live countdown for the Special Deal timer · pure visual prototype, counts down from 12:24:08
-      (function(){
-        const el = document.getElementById('sdTimer');
-        if (!el) return;
-        let secs = 12 * 3600 + 24 * 60 + 8;
-        function paint(){
-          const h = Math.floor(secs / 3600);
-          const m = Math.floor((secs % 3600) / 60);
-          const s = secs % 60;
-          el.textContent = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-        }
-        paint();
-        setInterval(() => { if (secs > 0) { secs--; paint(); } }, 1000);
-      })();
     })();
   </script>
 </body></html>

@@ -91,17 +91,18 @@
   .fb-text .a .num{color:#047857;font-variant-numeric:tabular-nums}
   .fb-text .b{font-size:10.5px;color:#64748B;font-weight:600;margin-top:2px}
 
-  /* Sticky product mini-header · appears once the user scrolls past the image gallery · shows thumbnail + name/price + ADD button (matches partner-app pattern of freezing key product details at the top) · hidden by default; .scrolled-past on body reveals it */
-  .stickyhd{position:fixed;top:0;left:0;right:0;z-index:60;background:#FFFFFF;border-bottom:1px solid #F1F5F9;padding:10px 14px;display:flex;align-items:center;gap:10px;transform:translateY(-100%);transition:transform .25s ease;box-shadow:0 4px 12px -6px rgba(15,23,42,0.12)}
+  /* Sticky product mini-header · sits BELOW the status bar (top:28px) so it doesn't overlap the system clock/signal icons · larger thumb (44px) + bigger fonts (name 15.5px, price 13px) + roomier 12px vertical padding so the info bar breathes · hidden by default; .scrolled-past on body reveals it */
+  .stickyhd{position:fixed;top:28px;left:0;right:0;z-index:60;background:#FFFFFF;border-bottom:1px solid #F1F5F9;padding:12px 14px;display:flex;align-items:center;gap:12px;transform:translateY(-150%);transition:transform .25s ease;box-shadow:0 4px 12px -6px rgba(15,23,42,0.12)}
   body.scrolled-past .stickyhd{transform:translateY(0)}
-  .stickyhd .back{width:32px;height:32px;border-radius:9999px;background:#FFFFFF;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#0F172A}
-  .stickyhd .thumb{width:38px;height:38px;border-radius:9px;background:#F8FAFC;border:1px solid #E5E7EB;padding:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  .stickyhd .back{width:36px;height:36px;border-radius:9999px;background:#FFFFFF;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#0F172A}
+  .stickyhd .back i{font-size:13px}
+  .stickyhd .thumb{width:44px;height:44px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;padding:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
   .stickyhd .thumb img{max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:multiply}
-  .stickyhd .info{flex:1;line-height:1.15;min-width:0}
-  .stickyhd .info .nm{font-size:13.5px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .stickyhd .info .pr{font-size:11.5px;font-weight:700;color:#0F172A;font-variant-numeric:tabular-nums;margin-top:1px}
-  .stickyhd .info .pr .strike{color:#94A3B8;text-decoration:line-through;font-weight:500;margin-left:4px}
-  .stickyhd .add-mini{flex-shrink:0;padding:0 14px;height:36px;border-radius:9px;background:#059669;color:#FFFFFF;font-size:12.5px;font-weight:900;letter-spacing:0.06em;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;border:0;cursor:pointer;box-shadow:0 6px 14px -4px rgba(5,150,105,0.5)}
+  .stickyhd .info{flex:1;line-height:1.2;min-width:0}
+  .stickyhd .info .nm{font-size:15.5px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.01em}
+  .stickyhd .info .pr{font-size:13px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums;margin-top:2px}
+  .stickyhd .info .pr .strike{color:#94A3B8;text-decoration:line-through;font-weight:500;margin-left:5px;font-size:11.5px}
+  .stickyhd .add-mini{flex-shrink:0;padding:0 16px;height:40px;border-radius:10px;background:#059669;color:#FFFFFF;font-size:13.5px;font-weight:900;letter-spacing:0.06em;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;border:0;cursor:pointer;box-shadow:0 6px 14px -4px rgba(5,150,105,0.5)}
 
   /* Cart bar compact on scroll · shrinks to a centered pill when body.scrolled-past (mirrors home page behaviour) */
   .cart-fab.compact{left:50% !important;right:auto !important;transform:translateX(-50%);padding:8px 16px !important;border-radius:9999px !important;gap:10px;max-width:92%;bottom:18px}
@@ -162,19 +163,6 @@
     </a>
   </div>
 
-  <!-- Farmer social proof · overlapping circular avatars (real farmer photos) + count badge + 2-line text · drops the Last-bought + Trending cells, keeps only farmers-bought · feels human -->
-  <div class="fb-card">
-    <div class="fb-avs">
-      <span class="fb-av" style="background-image:url('https://images.unsplash.com/photo-1627638458498-71e9fdf12a05?w=120&q=80')"></span>
-      <span class="fb-av" style="background-image:url('https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=120&q=80')"></span>
-      <span class="fb-av" style="background-image:url('https://images.unsplash.com/photo-1572177812156-58036aae439c?w=120&q=80')"></span>
-      <span class="fb-av count">+8K</span>
-    </div>
-    <div class="fb-text">
-      <div class="a"><span class="num tnum">8,427+</span> farmers bought this product</div>
-      <div class="b">Trusted by farmers across 12 states</div>
-    </div>
-  </div>
 </div>
 
 <!-- Price + bigger, more prominent ADD button -->
@@ -249,6 +237,19 @@
       <span>More</span>
       <span class="lbl-sub">+5 sizes</span>
     </button>
+  </div>
+
+  <!-- Farmer social proof · moved BELOW Pack size per spec · subtitle ('Trusted by farmers across 12 states') dropped · just the avatar stack + count line -->
+  <div class="fb-card" style="margin-top:14px">
+    <div class="fb-avs">
+      <span class="fb-av" style="background-image:url('https://images.unsplash.com/photo-1627638458498-71e9fdf12a05?w=120&q=80')"></span>
+      <span class="fb-av" style="background-image:url('https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=120&q=80')"></span>
+      <span class="fb-av" style="background-image:url('https://images.unsplash.com/photo-1572177812156-58036aae439c?w=120&q=80')"></span>
+      <span class="fb-av count">+8K</span>
+    </div>
+    <div class="fb-text">
+      <div class="a"><span class="num tnum">8,427+</span> farmers bought this product</div>
+    </div>
   </div>
 </div>
 

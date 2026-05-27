@@ -22,8 +22,8 @@
   /* Inner clickable area wraps everything except the action row · keeps typography aligned to home product-card aesthetic */
   .ord-link{display:block;padding:14px 14px 12px;text-decoration:none;color:inherit}
   .ord-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-  /* Status pill · matches home's "Previous Orders" header style (11.5px extrabold uppercase tracking-wider) */
-  .status-pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase}
+  /* Status pill · sentence case, matches the rest of the design-system typography (no uppercase transform, no tracking) */
+  .status-pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700}
   .status-pill.transit{color:#B45309}
   .status-pill.transit::before{content:"";width:7px;height:7px;border-radius:50%;background:#F59E0B;animation:dot 1.6s ease-in-out infinite}
   @keyframes dot{0%,100%{opacity:1}50%{opacity:.55}}
@@ -154,10 +154,9 @@
           </div>
         </div>
       </a>
-      <div class="ord-actions">
-        <a href="cart.html?reorder=1198" class="act-btn primary"><i class="fa-solid fa-arrow-rotate-left"></i> Reorder</a>
+      <div class="ord-actions" style="grid-template-columns:1fr 1fr">
+        <a href="cart.html?reorder=1198" class="act-btn primary"><i class="fa-solid fa-repeat"></i> Reorder</a>
         <a href="order-details.html?invoice=1198" class="act-btn outline"><i class="fa-solid fa-file-lines"></i> Invoice</a>
-        <a href="order-details.html?return=1198" class="act-btn outline"><i class="fa-solid fa-right-left"></i> Return</a>
       </div>
     </div>
 
@@ -182,10 +181,9 @@
           </div>
         </div>
       </a>
-      <div class="ord-actions">
-        <a href="cart.html?reorder=1102" class="act-btn primary"><i class="fa-solid fa-arrow-rotate-left"></i> Reorder</a>
+      <div class="ord-actions" style="grid-template-columns:1fr 1fr">
+        <a href="cart.html?reorder=1102" class="act-btn primary"><i class="fa-solid fa-repeat"></i> Reorder</a>
         <a href="order-details.html?invoice=1102" class="act-btn outline"><i class="fa-solid fa-file-lines"></i> Invoice</a>
-        <a href="order-details.html?return=1102" class="act-btn outline"><i class="fa-solid fa-right-left"></i> Return</a>
       </div>
     </div>
 

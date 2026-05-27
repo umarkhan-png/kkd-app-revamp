@@ -62,14 +62,16 @@
   .bill-total .lbl{font-size:14px;font-weight:700;color:#0F172A}
   .bill-total .val{font-size:18px;font-weight:800;color:#0F172A}
 
-  /* Rate row */
-  .rate-row-wrap{padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#FFFFFF;border-top:1px solid #F1F5F9}
+  /* Per-product rate · sits inside the prod-row · stars on a row, optional review textarea appears below after a star is tapped */
   .star-btn{background:transparent;border:0;padding:0;cursor:pointer;transition:transform .15s ease}
   .star-btn:active{transform:scale(.85)}
   .star-btn i{font-size:18px;color:#CBD5E1;transition:color .2s ease}
   .star-btn.on i{color:#F59E0B}
-  .rate-label{font-size:12.5px;font-weight:700;color:#0F172A}
-  .rate-bonus{font-size:9.5px;font-weight:700;color:#B45309;margin-top:1px}
+  .prod-rate-row{margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .prod-rate-row .lbl{font-size:11.5px;font-weight:600;color:#64748B}
+  .prod-review{display:none;margin-top:8px;width:100%;min-height:64px;padding:9px 12px;border-radius:10px;border:1px solid #E5E7EB;background:#FAFAFA;font-size:12.5px;font-family:inherit;color:#0F172A;outline:none;resize:none;box-sizing:border-box}
+  .prod-review.on{display:block}
+  .prod-review:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.10);background:#FFFFFF}
 
   /* Address */
   .addr{padding:14px;display:flex;gap:12px}
@@ -136,11 +138,11 @@
   .support-row .info .a{font-size:13.5px;font-weight:700;color:#0F172A}
   .support-row .info .b{font-size:11.5px;color:#64748B;margin-top:2px}
 
-  /* Sticky footer · 2 buttons · Download Invoice (outline) + Reorder (primary) · subtle hairline top, no heavy black layer */
-  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:10px 12px;z-index:50;display:flex;gap:10px}
-  .cta-out{flex:1;height:48px;border-radius:10px;background:#FFFFFF;color:#0F172A;border:1.5px solid #E5E7EB;font-size:13.5px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
-  .cta-out i{font-size:13px;color:#475569}
-  .cta-pri{flex:1.2;height:48px;border-radius:10px;background:#059669;color:#FFFFFF;border:0;font-size:14px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+  /* Sticky footer · 3 CTAs · Download Invoice (outline) + Return (outline) + Reorder (primary) · NO border-top (that hairline read as a black layer above Reorder · clean white) */
+  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;padding:10px 12px;z-index:50;display:flex;gap:8px}
+  .cta-out{flex:1;height:46px;border-radius:10px;background:#FFFFFF;color:#0F172A;border:1px solid #E5E7EB;font-size:12.5px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
+  .cta-out i{font-size:12px;color:#475569}
+  .cta-pri{flex:1.1;height:46px;border-radius:10px;background:#059669;color:#FFFFFF;border:0;font-size:13.5px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
   .cta-pri i{font-size:13px}
 
   /* Kebab dropdown · Cancel order (transit) + Contact support · Download invoice MOVED out into the sticky footer */
@@ -276,6 +278,18 @@
           </span>
           <span class="prod-total tnum">&#8377;376</span>
         </div>
+        <!-- Per-product rate · delivered only · star tap fills + reveals optional review textarea -->
+        <div class="prod-rate-row only-delivered" data-rating-group="humic">
+          <span class="lbl" data-rate-status>Tap to rate this product</span>
+          <div class="flex items-center gap-1.5">
+            <button class="star-btn" data-val="1"><i class="fa-solid fa-star"></i></button>
+            <button class="star-btn" data-val="2"><i class="fa-solid fa-star"></i></button>
+            <button class="star-btn" data-val="3"><i class="fa-solid fa-star"></i></button>
+            <button class="star-btn" data-val="4"><i class="fa-solid fa-star"></i></button>
+            <button class="star-btn" data-val="5"><i class="fa-solid fa-star"></i></button>
+          </div>
+        </div>
+        <textarea class="prod-review only-delivered" data-review-for="humic" placeholder="Write a review (optional)…"></textarea>
       </div>
     </div>
 
@@ -291,21 +305,17 @@
           </span>
           <span class="prod-total tnum">&#8377;327</span>
         </div>
-      </div>
-    </div>
-
-    <!-- Rate row · delivered only -->
-    <div class="rate-row-wrap only-delivered">
-      <div class="leading-tight">
-        <div class="rate-label" data-rate-status="order">Tap stars to rate this order</div>
-        <div class="rate-bonus">Earn 25 coins on rating</div>
-      </div>
-      <div class="rate-row flex items-center gap-1.5" data-rating-group="order">
-        <button class="star-btn" data-val="1"><i class="fa-solid fa-star"></i></button>
-        <button class="star-btn" data-val="2"><i class="fa-solid fa-star"></i></button>
-        <button class="star-btn" data-val="3"><i class="fa-solid fa-star"></i></button>
-        <button class="star-btn" data-val="4"><i class="fa-solid fa-star"></i></button>
-        <button class="star-btn" data-val="5"><i class="fa-solid fa-star"></i></button>
+        <div class="prod-rate-row only-delivered" data-rating-group="antivirus">
+          <span class="lbl" data-rate-status>Tap to rate this product</span>
+          <div class="flex items-center gap-1.5">
+            <button class="star-btn" data-val="1"><i class="fa-solid fa-star"></i></button>
+            <button class="star-btn" data-val="2"><i class="fa-solid fa-star"></i></button>
+            <button class="star-btn" data-val="3"><i class="fa-solid fa-star"></i></button>
+            <button class="star-btn" data-val="4"><i class="fa-solid fa-star"></i></button>
+            <button class="star-btn" data-val="5"><i class="fa-solid fa-star"></i></button>
+          </div>
+        </div>
+        <textarea class="prod-review only-delivered" data-review-for="antivirus" placeholder="Write a review (optional)…"></textarea>
       </div>
     </div>
 
@@ -384,24 +394,27 @@
     </div>
   </div>
 
-  <!-- Need help · neutral icon -->
+  <!-- Need help · taps open a bottom-sheet listing help options (Return is gated to a 7-day window from delivery) -->
   <div class="sec-title">Need help?</div>
-  <a href="advisory.html" class="card support-row" style="display:flex">
+  <button id="helpRow" class="card support-row" style="display:flex;width:calc(100% - 32px);text-align:left;cursor:pointer">
     <div class="ic"><i class="fa-solid fa-circle-question text-[14px]"></i></div>
     <div class="info">
-      <div class="a">Talk to KKD support</div>
-      <div class="b">Damaged, missing, or wrong item</div>
+      <div class="a">Get help with this order</div>
+      <div class="b">Return, damaged item, or talk to support</div>
     </div>
     <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
-  </a>
+  </button>
 
-  <!-- Sticky bottom · 2 CTAs · Download Invoice (outline) + Reorder (primary emerald) -->
+  <!-- Sticky bottom · 3 CTAs · Download Invoice (outline) + Return (outline) + Reorder (primary emerald · fa-repeat icon, more semantic for 'buy again') -->
   <div class="sticky-cta">
     <a class="cta-out" href="#download-invoice">
-      <i class="fa-solid fa-file-arrow-down"></i> Download Invoice
+      <i class="fa-solid fa-file-arrow-down"></i> Download
+    </a>
+    <a class="cta-out" id="returnCta" href="#return">
+      <i class="fa-solid fa-right-left"></i> Return
     </a>
     <a class="cta-pri" href="cart.html?reorder=1">
-      <i class="fa-solid fa-arrow-rotate-left"></i> Reorder
+      <i class="fa-solid fa-repeat"></i> Reorder
     </a>
   </div>
 
@@ -464,6 +477,50 @@
     </div>
     <button id="cancelOkDone" class="w-full mt-5 h-[48px] rounded-[10px] text-[14px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0">Done</button>
   </div>
+
+  <!-- Help bottom sheet · opens when Need-help row OR the sticky Return CTA is tapped · Return / Replace tile carries a 7-day badge and auto-hides once the return window expires -->
+  <div id="helpBd" class="modal-bd"></div>
+  <div id="helpSheet" class="modal-sheet" style="padding:0 0 16px">
+    <div class="modal-handle"></div>
+    <div class="px-5 pt-3 pb-3 flex items-center justify-between">
+      <div class="text-[18px] font-extrabold">How can we help?</div>
+      <button id="helpClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div class="px-3 pb-2">
+      <!-- Return tile · only renders if delivered within the last 7 days · the dataDays badge counts the remaining days -->
+      <a id="helpReturn" href="#return" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
+        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-right-left text-[16px]"></i></div>
+        <div class="flex-1 leading-tight">
+          <div class="text-[14px] font-bold text-[#0F172A]">Return or replace</div>
+          <div class="text-[11.5px] text-[#64748B] mt-0.5">Damaged, wrong, or not as described</div>
+        </div>
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold flex-shrink-0" style="background:#FEF3C7;color:#92400E"><i class="fa-regular fa-clock text-[9px]"></i> <span id="returnDaysLeft">5</span> days left</span>
+      </a>
+      <a href="advisory.html" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
+        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-triangle-exclamation text-[15px]"></i></div>
+        <div class="flex-1 leading-tight">
+          <div class="text-[14px] font-bold text-[#0F172A]">Report damaged or wrong item</div>
+          <div class="text-[11.5px] text-[#64748B] mt-0.5">Send photos · we'll resolve within 24 hours</div>
+        </div>
+        <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
+      </a>
+      <a href="advisory.html" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
+        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#F1F5F9;color:#475569"><i class="fa-solid fa-headset text-[15px]"></i></div>
+        <div class="flex-1 leading-tight">
+          <div class="text-[14px] font-bold text-[#0F172A]">Talk to KKD support</div>
+          <div class="text-[11.5px] text-[#64748B] mt-0.5">Call back in your language</div>
+        </div>
+        <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
+      </a>
+    </div>
+    <p id="returnExpiredNote" class="px-5 pt-2 text-[11.5px]" style="color:#94A3B8;display:none">The 7-day return window has closed. Reach out to support for any other concerns.</p>
+  </div>
+
+  <style>
+    .hopt{ transition: background .15s ease; }
+    .hopt:hover{ background:#F8FAFC; }
+    .hopt:active{ transform: scale(.98); }
+  </style>
 
   <!-- COD pay bottom sheet · same partner-app pattern as orders list -->
   <div id="codBd" class="modal-bd"></div>
@@ -649,10 +706,39 @@
         setTimeout(() => alert('COD payment of ₹' + v + ' recorded · ' + Math.round(v/12.5) + ' coins will credit within 24 hours.'), 240);
       });
 
-      // Star rating
+      // Help bottom sheet · opens from Need-help row OR the sticky Return CTA · the Return tile is gated to a 7-day window from delivery (auto-hides + shows expired-note past the window)
+      const helpBd    = document.getElementById('helpBd');
+      const helpSheet = document.getElementById('helpSheet');
+      const helpRow   = document.getElementById('helpRow');
+      const helpClose = document.getElementById('helpClose');
+      const returnCta = document.getElementById('returnCta');
+      const returnTile= document.getElementById('helpReturn');
+      const returnDays= document.getElementById('returnDaysLeft');
+      const returnNote= document.getElementById('returnExpiredNote');
+      // Compute days since delivery · prototype assumes the order was delivered 2 days ago (so 5 days remaining of the 7-day window)
+      const daysSinceDelivery = 2;
+      const daysLeft = 7 - daysSinceDelivery;
+      if (daysLeft > 0) {
+        if (returnDays) returnDays.textContent = daysLeft;
+        if (returnTile) returnTile.style.display = 'flex';
+        if (returnNote) returnNote.style.display = 'none';
+      } else {
+        if (returnTile) returnTile.style.display = 'none';
+        if (returnNote) returnNote.style.display = 'block';
+        if (returnCta)  returnCta.style.display = 'none'; // also hide the bottom Return CTA past the window
+      }
+      function openHelp(e){ if (e) { e.preventDefault(); e.stopPropagation(); } openSheet(helpBd, helpSheet); }
+      if (helpRow)   helpRow.addEventListener('click', openHelp);
+      if (returnCta) returnCta.addEventListener('click', openHelp);
+      if (helpClose) helpClose.addEventListener('click', () => closeSheet(helpBd, helpSheet));
+      if (helpBd)    helpBd.addEventListener('click', () => closeSheet(helpBd, helpSheet));
+
+      // Per-product star rating · selecting a star reveals an OPTIONAL review textarea below the row · review is never required
       document.querySelectorAll('[data-rating-group]').forEach(group => {
         const pid = group.getAttribute('data-rating-group');
         const stars = group.querySelectorAll('.star-btn');
+        const status = group.querySelector('[data-rate-status]');
+        const review = document.querySelector('[data-review-for="'+pid+'"]');
         stars.forEach(s => {
           s.addEventListener('click', () => {
             const v = parseInt(s.getAttribute('data-val'), 10);
@@ -660,12 +746,13 @@
               const xv = parseInt(x.getAttribute('data-val'), 10);
               x.classList.toggle('on', xv <= v);
             });
-            const status = document.querySelector('[data-rate-status="'+pid+'"]');
             if (status){
-              const labels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent!'];
+              const labels = ['', 'Poor', 'Fair', 'Good', 'Very good', 'Excellent'];
               status.textContent = labels[v] + ' · +25 coins';
               status.style.color = v >= 4 ? '#047857' : (v >= 3 ? '#B45309' : '#DC2626');
             }
+            // Reveal optional review textarea on first star tap
+            if (review) review.classList.add('on');
           });
         });
       });

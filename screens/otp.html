@@ -14,33 +14,37 @@
   body { min-height: 100vh; background: #FFFFFF; color: #0F172A; }
   .tnum { font-variant-numeric: tabular-nums; }
 
-  /* Top bar · KKD logo (image only, no white squircle, no 'Katyayani' wordmark) + language chip · clean and minimal */
+  /* Top bar · back arrow (replaces logo) + language chip · clean and minimal · chip has no globe icon */
   .topbar { padding: 12px 16px 4px; display: flex; align-items: center; justify-content: space-between; }
-  .brand-logo img { width: 36px; height: 36px; object-fit: contain; display: block; }
-  .lang-pill { display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; color: #0F172A; font-size: 12.5px; font-weight: 700; text-decoration: none; transition: border-color .15s ease, transform .12s ease; }
-  .lang-pill:active { transform: scale(.97); border-color: #047857; }
-  .lang-pill .globe { font-size: 12px; color: #475569; }
-  .lang-pill .chev { font-size: 9px; color: #94A3B8; }
+  .back-btn { width: 40px; height: 40px; border-radius: 50%; background: #FFFFFF; border: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 3px rgba(15,23,42,0.06); }
+  .back-btn i { font-size: 14px; color: #0F172A; }
+  .lang-pill { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 9999px; background: #FFFFFF; border: 0; color: #0F172A; font-size: 13px; font-weight: 700; text-decoration: none; cursor: pointer; box-shadow: 0 1px 3px rgba(15,23,42,0.06); transition: transform .12s ease; }
+  .lang-pill:active { transform: scale(.97); }
+  .lang-pill .chev { font-size: 10px; color: #94A3B8; }
 
   /* OTP cell · airy 64px boxes with soft border + focus ring · filled state stays emerald */
   .otp-box { width: 64px; height: 68px; border: 2px solid #E5E7EB; border-radius: 14px; font-size: 30px; font-weight: 800; text-align: center; outline: none; background: #FFFFFF; transition: border-color .15s, background .15s, box-shadow .15s; font-variant-numeric: tabular-nums; color:#0F172A; }
   .otp-box.filled { border-color: #047857; background: #ECFDF5; }
   .otp-box.active { border-color: #059669; box-shadow: 0 0 0 3px rgba(5,150,105,0.15); }
 
-  /* Resend pill buttons · both use the SAME emerald outline treatment so the styling sits in the design system · only the icons differ (WhatsApp icon stays in its brand green) */
-  .resend-btn { display:inline-flex; align-items:center; gap:6px; height:38px; padding:0 14px; border-radius:9999px; font-size:12.5px; font-weight:700; border:1.5px solid #BBF7D0; background:#FFFFFF; color:#047857; transition:transform .12s ease; cursor:pointer; text-decoration:none; }
-  .resend-btn:active { transform: scale(.97); border-color:#047857; }
+  /* Resend pill buttons · primary emerald borders (per design-system) · WhatsApp + SMS share the same outline treatment */
+  .resend-btn { display:inline-flex; align-items:center; gap:7px; height:40px; padding:0 16px; border-radius:9999px; font-size:13px; font-weight:700; border:1.5px solid #059669; background:#FFFFFF; color:#047857; transition:transform .12s ease, background .12s ease; cursor:pointer; text-decoration:none; }
+  .resend-btn:active { transform: scale(.97); background:#ECFDF5; }
+  .resend-btn .wa-ic { font-size:15px; color:#25D366; }
+  .resend-btn .sms-ic { font-size:13px; color:#047857; }
   .resend-live    { display:flex; }
   .resend-options { display:none; }
   body.timer-done .resend-live    { display:none; }
   body.timer-done .resend-options { display:flex; }
 
-  /* Rotating fact / news rotator · bare text, no card box, no slider dots · sits lower in the layout so it's clearly secondary to the OTP cells */
-  .fact-rotator { margin: 28px 24px 0; position:relative; min-height:36px; }
-  .fact-item { display:flex; align-items:center; justify-content:center; gap:8px; opacity:0; pointer-events:none; position:absolute; inset:0; transition:opacity .35s ease; text-align:center; }
-  .fact-item.on { opacity:1; pointer-events:auto; position:relative; }
-  .fact-item i { font-size:13px; color:#047857; flex-shrink:0; }
-  .fact-item span { font-size:12.5px; font-weight:600; color:#64748B; line-height:1.4; }
+  /* Rotating fact / news rotator · slide-up + fade transition (was a flat opacity swap that read as static text) · soft emerald accent dot pulses with each new item for motion */
+  .fact-rotator { margin: 32px 24px 0; position:relative; min-height:46px; }
+  .fact-item { display:flex; align-items:center; justify-content:center; gap:10px; opacity:0; transform:translateY(8px); pointer-events:none; position:absolute; inset:0; transition:opacity .45s ease, transform .45s cubic-bezier(.4,0,.2,1); text-align:center; }
+  .fact-item.on { opacity:1; transform:translateY(0); pointer-events:auto; position:relative; }
+  @keyframes factDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(.7); opacity: .6; } }
+  .fact-dot { width: 6px; height: 6px; border-radius: 9999px; background: #10B981; flex-shrink: 0; animation: factDot 1.6s ease-in-out infinite; }
+  .fact-item i { font-size:14px; color:#047857; flex-shrink:0; }
+  .fact-item span { font-size:12.5px; font-weight:600; color:#475569; line-height:1.4; }
 </style>
 </head>
 <body class="min-h-screen pb-28">
@@ -55,13 +59,12 @@
     </div>
   </div>
 
-  <!-- Top bar · just the KKD logo image (Katyayani wordmark dropped) + language chip · matches the phone-screen pattern -->
+  <!-- Top bar · back arrow (KKD logo removed per spec) + language chip (no globe icon) · both as white floating pills -->
   <div class="topbar">
-    <div class="brand-logo">
-      <img src="../assets/kkd-logo.png" alt="KKD" onerror="this.onerror=null;this.src='https://www.katyayaniorganics.com/wp-content/uploads/2022/06/cropped-logo-3.webp'"/>
-    </div>
+    <button onclick="location.href='phone.html'" class="back-btn" aria-label="Back">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
     <a href="language.html" class="lang-pill">
-      <i class="fa-solid fa-language globe"></i>
       <span class="hi" id="langCurrent">हिंदी</span>
       <i class="fa-solid fa-chevron-down chev"></i>
     </a>
@@ -73,7 +76,7 @@
     <div class="flex items-center gap-2 mt-2">
       <span class="text-[13px]" style="color:#64748B">Code sent to</span>
       <span class="text-[13px] font-extrabold tnum">+91 98765 43210</span>
-      <a href="phone.html" class="text-[11.5px] font-extrabold uppercase tracking-wide" style="color:#047857;text-decoration:none">Change</a>
+      <a href="phone.html" class="text-[12px] font-extrabold" style="color:#047857;text-decoration:none">Change</a>
     </div>
   </div>
 
@@ -95,30 +98,24 @@
       <span class="font-extrabold tnum" style="color:#0F172A" id="resendTimer">00:30</span>
     </div>
     <div class="resend-options items-center justify-center gap-2 flex-wrap">
-      <button class="resend-btn resend-wa">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="#25D366"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.7.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.8-.7-1.4-1.7-1.6-1.9-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.7-.9-2.3-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5 0 1.4 1 2.8 1.2 3 .1.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.7.4 3.3 1.2 4.7L2 22l5.5-1.2c1.4.7 2.9 1.1 4.5 1.1 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
-        WhatsApp
-      </button>
-      <button class="resend-btn resend-sms">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        SMS
-      </button>
+      <button class="resend-btn"><i class="fa-brands fa-whatsapp wa-ic"></i> WhatsApp</button>
+      <button class="resend-btn"><i class="fa-solid fa-comment-sms sms-ic"></i> SMS</button>
     </div>
   </div>
 
   <!-- Rotating fact / news rotator · bare centred text, no card box, no progress dots · sits lower so it doesn't compete with the OTP cells -->
   <div class="fact-rotator" id="factStrip">
     <div class="fact-item on">
-      <i class="fa-solid fa-truck-fast"></i><span>Free shipping on every order above &#8377;500</span>
+      <span class="fact-dot"></span><i class="fa-solid fa-truck-fast"></i><span>Free shipping on every order above &#8377;500</span>
     </div>
     <div class="fact-item">
-      <i class="fa-solid fa-headset"></i><span>Krishi Doctor expert calls &middot; free, 7am – 10pm</span>
+      <span class="fact-dot"></span><i class="fa-solid fa-headset"></i><span>Krishi Doctor expert calls &middot; free, 7am – 10pm</span>
     </div>
     <div class="fact-item">
-      <i class="fa-solid fa-sparkles"></i><span>New launch: Humic + Fulvic 98 &middot; stronger roots</span>
+      <span class="fact-dot"></span><i class="fa-solid fa-sparkles"></i><span>New launch: Humic + Fulvic 98 &middot; stronger roots</span>
     </div>
     <div class="fact-item">
-      <i class="fa-solid fa-shield-halved"></i><span>CIB-CR licensed &middot; sealed straight from the factory</span>
+      <span class="fact-dot"></span><i class="fa-solid fa-shield-halved"></i><span>CIB-CR licensed &middot; sealed straight from the factory</span>
     </div>
   </div>
 

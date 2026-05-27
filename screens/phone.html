@@ -16,18 +16,18 @@
   .num-input { transition: border-color .15s ease, box-shadow .15s ease; }
   .num-input:focus-within { border-color: #047857; box-shadow: 0 0 0 3px rgba(4,120,87,0.10); }
 
-  /* White top bar ABOVE the emerald hero · KKD logo in a rounded square container (corners explicitly rounded per spec) + language chip (no globe icon now) */
+  /* White top bar ABOVE the emerald hero · KKD logo is the image directly with border-radius + object-fit:cover (matches the home page address-bar treatment) — no wrapper square around it */
   .topbar { padding: 10px 16px 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .brand-mark { width: 40px; height: 40px; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #E5E7EB; }
-  .brand-mark img { width: 34px; height: 34px; object-fit: contain; display: block; }
+  .brand-img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; display: block; }
   /* Language chip · clean white pill with slate border + language label + chevron-down · globe icon removed per spec */
   .lang-chip { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; color: #0F172A; font-size: 13px; font-weight: 700; cursor: pointer; transition: border-color .15s ease, transform .12s ease; }
   .lang-chip:active { transform: scale(.97); border-color: #047857; }
   .lang-chip .chev { font-size: 10px; color: #94A3B8; }
 
-  /* First-order offer chip floating top-right of the hero · adds a concrete value-prop so the hero stops feeling generic */
-  .hero-offer { position:absolute; top:14px; right:14px; z-index:3; display:inline-flex; align-items:center; gap:6px; padding:5px 10px; border-radius:9999px; background:#FBBF24; color:#78350F; font-size:10.5px; font-weight:800; box-shadow:0 6px 14px -4px rgba(180,83,9,0.45); letter-spacing:0.03em; text-transform:uppercase; }
-  .hero-offer i { font-size:10px; color:#92400E; }
+  /* First-order offer banner · sits as a tight gold strip across the very top of the hero card (not floating in a corner) · reads cleanly as a value-prop */
+  .hero-offer { position:relative; z-index:3; display:flex; align-items:center; justify-content:center; gap:8px; padding:8px 14px; background:linear-gradient(90deg,#FDE68A,#FBBF24,#FDE68A); color:#78350F; font-size:11.5px; font-weight:800; letter-spacing:0.04em; border-radius:14px 14px 0 0; margin:-18px -18px 14px; }
+  .hero-offer i { font-size:11px; color:#92400E; }
+  .hero-offer b { color:#0F172A; font-weight:900; }
 
   /* Language modal · in-page bottom sheet with a 2-col language grid */
   .modal-bd { position:fixed; inset:0; background:rgba(15,23,42,0.55); opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:80; }
@@ -102,26 +102,27 @@
     </div>
   </div>
 
-  <!-- White top bar · KKD logo in a rounded container (corners rounded per spec, no 'Katyayani' wordmark) + language chip (no icon, opens an in-page bottom modal) -->
+  <!-- White top bar · KKD logo as plain image with rounded corners (no wrapper square) + language chip (no icon, opens in-page bottom modal) -->
   <div class="topbar">
-    <div class="brand-mark">
-      <img src="../assets/kkd-logo.png" alt="KKD" onerror="this.onerror=null;this.src='https://www.katyayaniorganics.com/wp-content/uploads/2022/06/cropped-logo-3.webp'"/>
-    </div>
+    <img src="../assets/kkd-logo.png" alt="KKD" class="brand-img" onerror="this.onerror=null;this.src='https://www.katyayaniorganics.com/wp-content/uploads/2022/06/cropped-logo-3.webp'"/>
     <button id="langChipBtn" class="lang-chip">
       <span class="hi" id="langCurrent">हिंदी</span>
       <i class="fa-solid fa-chevron-down chev"></i>
     </button>
   </div>
 
-  <!-- Emerald hero · product line-up · tagline · 2-cell stat banner · subtle first-order offer chip floats top-right to give the hero a concrete value-prop instead of just brand copy -->
+  <!-- Emerald hero · top gold offer banner · product line-up · tagline · 2-cell stat banner · redesigned for cleaner hierarchy -->
   <section class="hero-card">
-    <span class="hero-offer"><i class="fa-solid fa-coins"></i> First order · &#8377;100 off</span>
+    <div class="hero-offer">
+      <i class="fa-solid fa-gift"></i>
+      <span>FIRST ORDER &middot; <b>&#8377;100 OFF</b></span>
+    </div>
     <div class="hero-row">
       <img src="../assets/Humic_nobg.png" alt=""/>
       <img src="../assets/Chakrawarti_nobg.png" alt=""/>
       <img src="../assets/AntiVirus_nobg.png" alt=""/>
     </div>
-    <div class="hero-tagline" style="margin-top:6px">
+    <div class="hero-tagline" style="margin-top:8px">
       <div class="text-[18px] font-extrabold leading-tight" style="color:#FFFFFF">Save up to <span style="color:#FBBF24">40%</span> on every spray</div>
     </div>
     <div class="hero-stats">

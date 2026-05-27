@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>KKD · Permissions</title>
+<title>KKD · Location</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
@@ -11,10 +11,15 @@
   .hi { font-family: 'Noto Sans Devanagari', sans-serif; }
   html, body { margin: 0; padding: 0; }
   body { min-height: 100vh; background: #FAF7F2; color: #0F172A; }
-  .perm-card { transition: all .15s ease; }
+  /* Pin illustration · drop + ripple · communicates 'we'll locate your village' */
+  @keyframes pinDrop { 0% { transform: translateY(-26px); opacity: 0; } 60% { transform: translateY(6px); opacity: 1; } 100% { transform: translateY(0); opacity: 1; } }
+  .pin-hero { animation: pinDrop .9s ease-out .15s both; }
+  @keyframes ringPulse { 0% { transform: scale(.6); opacity: .7; } 100% { transform: scale(1.6); opacity: 0; } }
+  .ring { animation: ringPulse 2.2s ease-out infinite; }
+  .ring.r2 { animation-delay: 1.1s; }
 </style>
 </head>
-<body class="min-h-screen pb-32 relative">
+<body class="min-h-screen pb-40 relative">
 
   <!-- Status bar -->
   <div class="flex items-center justify-between px-6 pt-3 text-[11px] font-bold text-[#0F172A]">
@@ -26,81 +31,80 @@
     </div>
   </div>
 
+  <!-- Back -->
+  <div class="px-6 pt-4">
+    <button onclick="history.back()" class="w-10 h-10 rounded-full border border-[#EEE5D8] flex items-center justify-center bg-white">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+  </div>
+
+  <!-- Hero · animated map pin · sits above the heading so the screen feels purposeful, not a permission-prompt slap -->
+  <div class="px-6 mt-2">
+    <div class="relative mx-auto pin-hero flex items-center justify-center" style="width:160px;height:160px">
+      <span class="absolute ring rounded-full" style="inset:0;background:rgba(4,120,87,0.15)"></span>
+      <span class="absolute ring r2 rounded-full" style="inset:0;background:rgba(4,120,87,0.15)"></span>
+      <div class="relative w-[110px] h-[110px] rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%);box-shadow:0 18px 32px -8px rgba(4,120,87,0.45)">
+        <svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="3"/></svg>
+      </div>
+    </div>
+  </div>
+
   <!-- Heading -->
-  <div class="px-6 pt-6">
-    <div class="hi text-[26px] font-extrabold leading-tight">2 permissions चाहिए</div>
-    <div class="text-[14px] text-[#64748B] mt-1">2 permissions to set you up</div>
-    <p class="text-[11.5px] text-[#94A3B8] mt-1.5">Enable both and earn <span class="text-[#78350F] font-bold">+20 🪙 coins</span> right away</p>
+  <div class="px-6 mt-3 text-center">
+    <div class="hi text-[26px] font-extrabold leading-tight">अपना गांव बताएं</div>
+    <div class="text-[15px] font-medium text-[#0F172A] mt-1">Share your location</div>
+    <p class="text-[12.5px] text-[#64748B] mt-2 max-w-[320px] mx-auto leading-relaxed">We use it once to set up the right mandi rates, weather alerts and delivery slot for your village.</p>
   </div>
 
-  <!-- Reward strip -->
-  <div class="mx-6 mt-5 bg-[#FEF3C7] border border-[#FBBF24]/40 rounded-lg px-3.5 py-3 flex items-center gap-3">
-    <div class="text-[28px]">🪙</div>
-    <div class="flex-1">
-      <div class="text-[13.5px] font-bold leading-tight">Enable both → earn <span class="text-[#78350F]">+20 coins</span></div>
-      <div class="text-[11px] text-[#64748B] mt-0.5">Use coins for discounts at checkout · ₹1 = 1 coin</div>
-    </div>
-  </div>
-
-  <!-- Permissions -->
-  <div class="px-6 mt-5 space-y-3">
-
-    <!-- Notification -->
-    <div class="perm-card bg-white border border-[#EEE5D8] rounded-lg p-4">
-      <div class="flex items-start gap-3">
-        <div class="w-12 h-12 rounded-lg bg-[#ECFDF5] flex-shrink-0 flex items-center justify-center">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-        </div>
-        <div class="flex-1">
-          <div class="flex items-baseline gap-2 mb-0.5">
-            <div class="hi text-[16px] font-extrabold">सूचनाएं</div>
-            <span class="text-[10px] font-bold text-[#78350F] bg-[#FEF3C7] px-1.5 py-0.5 rounded-full">+10 🪙</span>
-          </div>
-          <p class="text-[12px] text-[#64748B] leading-snug">Get order updates, Krishi Doctor replies, price drops & weather alerts. <span class="font-semibold text-[#0F172A]">No marketing spam.</span></p>
-        </div>
+  <!-- Why we need it · 3 concrete value bullets · each tells the farmer what they unlock by sharing -->
+  <div class="px-6 mt-6 space-y-3">
+    <div class="bg-white border border-[#EEE5D8] rounded-2xl p-4 flex items-start gap-3">
+      <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#ECFDF5">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2h-4v-7H10v7H6a2 2 0 0 1-2-2z"/></svg>
       </div>
-      <button class="w-full mt-3 h-[44px] rounded-lg bg-[#059669] text-white text-[14px] font-bold flex items-center justify-center gap-2">
-        Allow Notifications
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-
-    <!-- Location -->
-    <div class="perm-card bg-white border border-[#EEE5D8] rounded-lg p-4">
-      <div class="flex items-start gap-3">
-        <div class="w-12 h-12 rounded-lg bg-[#E8F2FB] flex-shrink-0 flex items-center justify-center">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1565C0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="3"/></svg>
-        </div>
-        <div class="flex-1">
-          <div class="flex items-baseline gap-2 mb-0.5">
-            <div class="hi text-[16px] font-extrabold">लोकेशन</div>
-            <span class="text-[10px] font-bold text-[#78350F] bg-[#FEF3C7] px-1.5 py-0.5 rounded-full">+10 🪙</span>
-          </div>
-          <p class="text-[12px] text-[#64748B] leading-snug">Local mandi rates, fastest delivery slot, weather for your village. <span class="font-semibold text-[#0F172A]">We never share your location.</span></p>
-        </div>
+      <div class="flex-1">
+        <div class="hi text-[13.5px] font-extrabold text-[#0F172A]">सही mandi rates आपके पास</div>
+        <p class="text-[12px] text-[#64748B] mt-0.5">Live daily prices from the mandi nearest to you, not a generic state-level rate.</p>
       </div>
-      <button class="w-full mt-3 h-[44px] rounded-lg bg-white border-2 border-[#1565C0] text-[#1565C0] text-[14px] font-bold flex items-center justify-center gap-2">
-        Allow Location
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1565C0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </button>
     </div>
 
+    <div class="bg-white border border-[#EEE5D8] rounded-2xl p-4 flex items-start gap-3">
+      <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#FEF3C7">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 1 0 0-9 5.5 5.5 0 0 0-10.8 1.5A3.5 3.5 0 0 0 7 19z"/><path d="M8 14v4M12 14v6M16 14v3"/></svg>
+      </div>
+      <div class="flex-1">
+        <div class="text-[13.5px] font-extrabold text-[#0F172A]">Weather alerts for your village</div>
+        <p class="text-[12px] text-[#64748B] mt-0.5">Hold the spray, plan harvest — alerts use your exact tehsil, not a city 80 km away.</p>
+      </div>
+    </div>
+
+    <div class="bg-white border border-[#EEE5D8] rounded-2xl p-4 flex items-start gap-3">
+      <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#E8F2FB">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1565C0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="13" height="10" rx="1"/><path d="M16 11h3l2 3v4h-5"/><circle cx="6.5" cy="18.5" r="2"/><circle cx="17" cy="18.5" r="2"/></svg>
+      </div>
+      <div class="flex-1">
+        <div class="text-[13.5px] font-extrabold text-[#0F172A]">Fastest delivery slot</div>
+        <p class="text-[12px] text-[#64748B] mt-0.5">Pin your village once and we'll route the closest warehouse for next-day cash-on-delivery.</p>
+      </div>
+    </div>
   </div>
 
-  <!-- Privacy -->
+  <!-- Privacy note -->
   <div class="px-6 mt-5 flex items-start gap-2">
     <svg class="flex-shrink-0 mt-0.5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/></svg>
-    <p class="text-[11px] text-[#94A3B8] leading-relaxed">Permissions can be changed anytime from Settings. We never sell or share your data.</p>
+    <p class="text-[11px] text-[#64748B] leading-relaxed"><span class="hi font-bold text-[#0F172A]">100% सुरक्षित</span> · We never sell or share your location. Used only inside the KKD app. You can disable it anytime from Settings.</p>
   </div>
 
-  <!-- Sticky bottom: skip + continue -->
-  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-[#EEE5D8] px-6 py-4 flex items-center gap-3">
-    <button onclick="location.href='home.html'" class="px-4 h-[54px] text-[14px] font-bold text-[#64748B] uppercase tracking-wide">Skip</button>
-    <button onclick="location.href='home.html'" class="flex-1 h-[54px] rounded-lg bg-[#0F172A] text-white text-[15px] font-extrabold flex items-center justify-center gap-2">
-      <span class="hi">होम पर जाएं</span>
+  <!-- Sticky CTAs · Allow (primary) + Not now -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-[#EEE5D8] px-6 pt-3 pb-4 space-y-2">
+    <button onclick="location.href='locating.html'" class="w-full h-[54px] rounded-lg bg-[#059669] text-white text-[16px] font-extrabold flex items-center justify-center gap-2">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="3"/></svg>
+      <span class="hi">लोकेशन दें</span>
       <span class="opacity-70">·</span>
-      <span>Go to Home</span>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      <span>Allow Location</span>
+    </button>
+    <button onclick="location.href='home.html'" class="w-full h-[44px] text-[13px] font-bold text-[#64748B] uppercase tracking-wide">
+      Not now &middot; <span class="hi">बाद में</span>
     </button>
   </div>
 

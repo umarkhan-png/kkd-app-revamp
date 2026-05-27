@@ -4,23 +4,30 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>KKD · Language</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;600;700;800&family=Noto+Sans+Bengali:wght@500;700&family=Noto+Sans+Telugu:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;600;700;800&family=Noto+Sans+Bengali:wght@500;700;800&family=Noto+Sans+Telugu:wght@500;700;800&family=Noto+Sans+Tamil:wght@500;700;800&family=Noto+Sans+Kannada:wght@500;700;800&family=Noto+Sans+Gujarati:wght@500;700;800&family=Noto+Sans+Gurmukhi:wght@500;700;800&family=Noto+Sans+Malayalam:wght@500;700;800&family=Noto+Sans+Oriya:wght@500;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   * { font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   .hi { font-family: 'Noto Sans Devanagari', sans-serif; }
   .bn { font-family: 'Noto Sans Bengali', sans-serif; }
   .te { font-family: 'Noto Sans Telugu', sans-serif; }
-  html, body { margin: 0; padding: 0; }
-  body { min-height: 100vh; background: #FAF7F2; color: #0F172A; }
-  .lang-tile { transition: all 0.18s ease; }
-  .lang-tile:hover { transform: translateY(-2px); }
-  .lang-tile.active { background: #ECFDF5; border-color: #047857; box-shadow: 0 0 0 4px rgba(14,122,78,0.1); }
-  .lang-tile.active .check { opacity: 1; transform: scale(1); }
-  .check { opacity: 0; transform: scale(0.6); transition: all .2s ease; }
+  .ta { font-family: 'Noto Sans Tamil', sans-serif; }
+  .kn { font-family: 'Noto Sans Kannada', sans-serif; }
+  .gu { font-family: 'Noto Sans Gujarati', sans-serif; }
+  .pa { font-family: 'Noto Sans Gurmukhi', sans-serif; }
+  .ml { font-family: 'Noto Sans Malayalam', sans-serif; }
+  .od { font-family: 'Noto Sans Oriya', sans-serif; }
+  html, body { margin: 0; padding: 0; background:#FAF7F2; }
+  .lang-tile { transition: all .15s ease; }
+  .lang-tile:active { transform: scale(.98); }
+  .lang-tile.selected { background:#ECFDF5; border-color:#047857; box-shadow: 0 0 0 4px rgba(4,120,87,0.1); }
+  .lang-tile.selected .check { opacity: 1; transform: scale(1); }
+  .lang-tile .check { opacity: 0; transform: scale(.6); transition: all .18s ease; }
+  .modal-backdrop { transition: opacity .25s ease; }
+  .modal-sheet { transition: transform .3s cubic-bezier(0.32,0.72,0,1); }
 </style>
 </head>
-<body class="min-h-screen pb-32 relative">
+<body class="min-h-screen pb-6 relative" style="color:#0F172A">
 
   <!-- Status bar -->
   <div class="flex items-center justify-between px-6 pt-3 text-[11px] font-bold text-[#0F172A]">
@@ -32,83 +39,144 @@
     </div>
   </div>
 
-  <!-- Header -->
-  <div class="px-6 pt-6">
+  <!-- Back -->
+  <div class="px-6 pt-4">
+    <a href="splash.html" class="w-10 h-10 rounded-full border border-[#EEE5D8] flex items-center justify-center bg-white">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </a>
+  </div>
+
+  <!-- Title -->
+  <div class="px-6 pt-3 pb-5">
     <div class="hi text-[26px] font-extrabold leading-tight">अपनी भाषा चुनें</div>
-    <div class="text-[14px] font-medium text-[#64748B] mt-1">Choose your language</div>
+    <div class="text-[15px] font-medium text-[#64748B] mt-1">Choose your language</div>
   </div>
 
-  <!-- Language tiles -->
-  <div class="px-6 mt-7 space-y-3">
+  <!-- 12-language grid · 2 columns · partner-app pattern · tap → confirmation modal -->
+  <div class="px-5">
+    <div class="grid grid-cols-2 gap-3">
 
-    <button onclick="select(this)" class="lang-tile active w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#EEE5D8] bg-white text-left" data-code="hi">
-      <div class="w-12 h-12 rounded-lg bg-[#FEF3C7] text-[#78350F] flex items-center justify-center font-extrabold text-[20px]">अ</div>
-      <div class="flex-1">
-        <div class="hi text-[19px] font-extrabold">हिंदी</div>
-        <div class="hi text-[12px] text-[#64748B] mt-0.5">नमस्ते, स्वागत है</div>
-      </div>
-      <svg class="check w-6 h-6" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#059669"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
+      <button data-name="हिंदी" data-sub="Hindi" data-code="hi" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+        <svg class="check absolute top-2.5 right-2.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#047857"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="hi text-[20px] font-extrabold">हिंदी</div>
+        <div class="text-[12.5px] text-[#64748B] mt-0.5">Hindi</div>
+      </button>
 
-    <button onclick="select(this)" class="lang-tile w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#EEE5D8] bg-white text-left" data-code="en">
-      <div class="w-12 h-12 rounded-lg bg-[#FEF3C7] text-[#78350F] flex items-center justify-center font-extrabold text-[20px]">A</div>
-      <div class="flex-1">
-        <div class="text-[19px] font-extrabold">English</div>
-        <div class="text-[12px] text-[#64748B] mt-0.5">Hello, welcome</div>
-      </div>
-      <svg class="check w-6 h-6" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#059669"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
+      <button data-name="English" data-sub="English" data-code="en" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+        <svg class="check absolute top-2.5 right-2.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#047857"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="text-[20px] font-extrabold">English</div>
+        <div class="text-[12.5px] text-[#64748B] mt-0.5">English</div>
+      </button>
 
-    <button onclick="select(this)" class="lang-tile w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#EEE5D8] bg-white text-left" data-code="bn">
-      <div class="w-12 h-12 rounded-lg bg-[#FEF3C7] text-[#78350F] flex items-center justify-center font-extrabold text-[20px] bn">অ</div>
-      <div class="flex-1">
-        <div class="bn text-[19px] font-extrabold">বাংলা</div>
-        <div class="bn text-[12px] text-[#64748B] mt-0.5">নমস্কার, স্বাগতম</div>
-      </div>
-      <svg class="check w-6 h-6" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#059669"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
+      <button data-name="Hinglish" data-sub="English + Hindi" data-code="hien" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+        <svg class="check absolute top-2.5 right-2.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#047857"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="text-[20px] font-extrabold">Hinglish</div>
+        <div class="text-[12.5px] text-[#64748B] mt-0.5">English + Hindi</div>
+      </button>
 
-    <button onclick="select(this)" class="lang-tile w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#EEE5D8] bg-white text-left" data-code="mr">
-      <div class="w-12 h-12 rounded-lg bg-[#FEF3C7] text-[#78350F] flex items-center justify-center font-extrabold text-[20px]">अ</div>
-      <div class="flex-1">
-        <div class="hi text-[19px] font-extrabold">मराठी</div>
-        <div class="hi text-[12px] text-[#64748B] mt-0.5">नमस्कार, स्वागत आहे</div>
-      </div>
-      <svg class="check w-6 h-6" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#059669"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
+      <button data-name="मराठी" data-sub="Marathi" data-code="mr" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+        <svg class="check absolute top-2.5 right-2.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#047857"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="hi text-[20px] font-extrabold">मराठी</div>
+        <div class="text-[12.5px] text-[#64748B] mt-0.5">Marathi</div>
+      </button>
 
-    <button onclick="select(this)" class="lang-tile w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#EEE5D8] bg-white text-left" data-code="te">
-      <div class="w-12 h-12 rounded-lg bg-[#FEF3C7] text-[#78350F] flex items-center justify-center font-extrabold text-[20px] te">అ</div>
-      <div class="flex-1">
-        <div class="te text-[19px] font-extrabold">తెలుగు</div>
-        <div class="te text-[12px] text-[#64748B] mt-0.5">నమస్తే, స్వాగతం</div>
-      </div>
-      <svg class="check w-6 h-6" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#059669"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
+      <button data-name="ગુજરાતી" data-sub="Gujarati" data-code="gu" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+        <svg class="check absolute top-2.5 right-2.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#047857"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="gu text-[20px] font-extrabold">ગુજરાતી</div>
+        <div class="text-[12.5px] text-[#64748B] mt-0.5">Gujarati</div>
+      </button>
 
+      <button data-name="ਪੰਜਾਬੀ" data-sub="Punjabi" data-code="pa" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+        <svg class="check absolute top-2.5 right-2.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#047857"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="pa text-[20px] font-extrabold">ਪੰਜਾਬੀ</div>
+        <div class="text-[12.5px] text-[#64748B] mt-0.5">Punjabi</div>
+      </button>
+
+      <button data-name="తెలుగు" data-sub="Telugu" data-code="te" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+        <svg class="check absolute top-2.5 right-2.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#047857"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="te text-[20px] font-extrabold">తెలుగు</div>
+        <div class="text-[12.5px] text-[#64748B] mt-0.5">Telugu</div>
+      </button>
+
+      <button data-name="தமிழ்" data-sub="Tamil" data-code="ta" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+        <svg class="check absolute top-2.5 right-2.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#047857"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="ta text-[20px] font-extrabold">தமிழ்</div>
+        <div class="text-[12.5px] text-[#64748B] mt-0.5">Tamil</div>
+      </button>
+
+      <button data-name="ಕನ್ನಡ" data-sub="Kannada" data-code="kn" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+        <svg class="check absolute top-2.5 right-2.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#047857"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="kn text-[20px] font-extrabold">ಕನ್ನಡ</div>
+        <div class="text-[12.5px] text-[#64748B] mt-0.5">Kannada</div>
+      </button>
+
+      <button data-name="മലയാളം" data-sub="Malayalam" data-code="ml" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+        <svg class="check absolute top-2.5 right-2.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#047857"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="ml text-[20px] font-extrabold">മലയാളം</div>
+        <div class="text-[12.5px] text-[#64748B] mt-0.5">Malayalam</div>
+      </button>
+
+      <button data-name="ଓଡ଼ିଆ" data-sub="Odia" data-code="od" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+        <svg class="check absolute top-2.5 right-2.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#047857"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="od text-[20px] font-extrabold">ଓଡ଼ିଆ</div>
+        <div class="text-[12.5px] text-[#64748B] mt-0.5">Odia</div>
+      </button>
+
+      <button data-name="বাংলা" data-sub="Bengali" data-code="bn" class="lang-tile relative bg-white border-2 border-[#EEE5D8] rounded-[12px] text-left p-4">
+        <svg class="check absolute top-2.5 right-2.5 w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#047857"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="bn text-[20px] font-extrabold">বাংলা</div>
+        <div class="text-[12.5px] text-[#64748B] mt-0.5">Bengali</div>
+      </button>
+
+    </div>
   </div>
 
-  <!-- Hint -->
+  <!-- Hint footer -->
   <div class="px-6 mt-6 flex items-start gap-2">
-    <svg class="flex-shrink-0 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-    <p class="hi text-[12px] text-[#64748B] leading-relaxed">बाद में सेटिंग्स से बदल सकते हैं · <span lang="en">You can change this later in settings</span></p>
+    <svg class="flex-shrink-0 mt-0.5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+    <p class="hi text-[11.5px] text-[#64748B] leading-relaxed">बाद में सेटिंग्स से बदल सकते हैं · <span lang="en">You can change this later in settings</span></p>
   </div>
 
-  <!-- Sticky CTA -->
-  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-[#EEE5D8] px-6 py-4">
-    <button onclick="location.href='home-loggedout.html'" class="w-full h-[54px] rounded-lg bg-[#059669] text-white text-[16px] font-extrabold flex items-center justify-center gap-2">
-      <span class="hi">आगे बढ़ें</span>
-      <span class="opacity-70">·</span>
-      <span>Continue</span>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-    </button>
+  <!-- Confirmation bottom-sheet modal · partner-app pattern · tells the user what they picked, asks Continue / Change -->
+  <div id="langModalBd" class="fixed inset-0 modal-backdrop pointer-events-none" style="background:rgba(15,23,42,0.55);opacity:0;z-index:80"></div>
+  <div id="langModal" class="fixed bottom-0 left-0 right-0 modal-sheet bg-white rounded-t-[28px] px-5 pt-3 pb-8" style="box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);z-index:90">
+    <div class="mx-auto w-10 h-1 rounded-full bg-[#E2E8F0] mb-5"></div>
+    <div class="flex flex-col items-center text-center mb-6">
+      <div class="w-16 h-16 rounded-[14px] bg-[#ECFDF5] border border-[#047857]/25 flex items-center justify-center mb-4">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+      </div>
+      <div class="text-[12.5px] font-bold text-[#64748B] uppercase tracking-wider mb-1">App language set to</div>
+      <div id="langModalName" class="text-[30px] font-extrabold text-[#0F172A] leading-tight mb-1"></div>
+      <div id="langModalSub" class="text-[14px] text-[#94A3B8]"></div>
+    </div>
+    <a href="phone.html" class="block w-full text-center font-extrabold text-[16px] py-4 rounded-[12px] uppercase tracking-wider mb-3" style="background:#059669;color:#FFFFFF">Continue</a>
+    <button onclick="closeLangModal()" class="w-full text-[14px] font-medium text-[#64748B] py-2">Change language</button>
   </div>
 
   <script>
-    function select(btn){
-      document.querySelectorAll('.lang-tile').forEach(t=>t.classList.remove('active'));
-      btn.classList.add('active');
+    const tiles = document.querySelectorAll('.lang-tile');
+    const modal = document.getElementById('langModal');
+    const bd    = document.getElementById('langModalBd');
+    function openLangModal(name, sub, code){
+      document.getElementById('langModalName').textContent = name;
+      document.getElementById('langModalSub').textContent  = sub;
+      try { localStorage.setItem('kkd.lang', code); } catch(e) {}
+      bd.style.opacity = '1';
+      bd.style.pointerEvents = 'auto';
+      modal.style.transform = 'translateY(0)';
     }
+    function closeLangModal(){
+      bd.style.opacity = '0';
+      bd.style.pointerEvents = 'none';
+      modal.style.transform = 'translateY(100%)';
+    }
+    tiles.forEach(t => t.addEventListener('click', () => {
+      tiles.forEach(x => x.classList.remove('selected'));
+      t.classList.add('selected');
+      openLangModal(t.dataset.name, t.dataset.sub, t.dataset.code);
+    }));
+    bd.addEventListener('click', closeLangModal);
   </script>
+
 </body>
 </html>

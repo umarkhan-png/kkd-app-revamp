@@ -1957,6 +1957,31 @@
       themeRoot.classList.add('bloom');
     });
 
+    // Detected location handoff · if locating.html persisted a village (kkd.village), swap the address label and play a brief highlight ring so the user feels "current location is selected"
+    (function(){
+      let v = null;
+      try { v = localStorage.getItem('kkd.village'); } catch (e) {}
+      if (!v) return;
+      const addrLine = addressBtn.querySelector('.text-\\[16px\\]');
+      if (addrLine) {
+        // Preserve the chevron icon · only swap the text node
+        const chev = addrLine.querySelector('i');
+        addrLine.textContent = v;
+        if (chev) addrLine.appendChild(chev);
+      }
+      // One-shot highlight ring around the address chip to telegraph the location switch · ring fades after the animation
+      addressBtn.style.transition = 'box-shadow .5s ease, transform .5s cubic-bezier(.34,1.56,.64,1)';
+      addressBtn.style.boxShadow  = '0 0 0 0 rgba(251,191,36,0.0)';
+      requestAnimationFrame(() => {
+        addressBtn.style.boxShadow = '0 0 0 6px rgba(251,191,36,0.45)';
+        addressBtn.style.transform = 'scale(1.02)';
+      });
+      setTimeout(() => {
+        addressBtn.style.boxShadow = '0 0 0 0 rgba(251,191,36,0)';
+        addressBtn.style.transform = 'scale(1)';
+      }, 1200);
+    })();
+
     // Crop image fallback — if Unsplash URL fails, swap img for emoji
     function cropFallback(img, emoji, size) {
       img.outerHTML = '<div class="w-full h-full flex items-center justify-center" style="font-size:' + (size || 32) + 'px;line-height:1">' + emoji + '</div>';

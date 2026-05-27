@@ -11,6 +11,8 @@
   .hi { font-family: 'Noto Sans Devanagari', sans-serif; }
   html, body { margin: 0; padding: 0; }
   body { min-height: 100vh; background: #FAF7F2; color: #0F172A; }
+  .name-input { transition: border-color .15s; }
+  .name-input:focus-within { border-color: #047857; box-shadow: 0 0 0 3px rgba(4,120,87,0.1); }
 </style>
 </head>
 <body class="min-h-screen pb-32 relative">
@@ -25,40 +27,52 @@
     </div>
   </div>
 
-  <!-- Top: New user welcome strip -->
+  <!-- Verified strip -->
   <div class="px-6 pt-4 flex items-center gap-2 text-[11px] font-bold text-[#059669]">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="11"/><path d="M8 12l3 3 5-5"/></svg>
     Mobile verified
   </div>
 
   <!-- Heading -->
-  <div class="px-6 mt-6">
+  <div class="px-6 mt-5">
     <div class="hi text-[26px] font-extrabold leading-tight">आपका नाम क्या है?</div>
     <div class="text-[14px] text-[#64748B] mt-1">What's your name?</div>
-    <p class="text-[12px] text-[#94A3B8] mt-2 max-w-[280px]">We'll use this to greet you and personalize your crop advisories.</p>
+    <p class="text-[12px] text-[#94A3B8] mt-2 max-w-[300px]">We'll greet you personally and use this on the delivery package label.</p>
   </div>
 
-  <!-- Input -->
-  <div class="px-6 mt-7">
-    <label class="hi text-[12px] font-bold text-[#64748B] uppercase tracking-wide">नाम · Name</label>
-    <div class="mt-2 flex items-center gap-3 h-[60px] px-4 rounded-lg border-2 border-[#047857] bg-white">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 5-7 8-7s7 2 8 7"/></svg>
-      <input type="text" placeholder="Ramesh Patel" class="flex-1 outline-none text-[18px] font-semibold bg-transparent"/>
+  <!-- Inputs · First Name + Last Name in separate fields · Hindi labels above -->
+  <div class="px-6 mt-6 space-y-4">
+
+    <div>
+      <label class="hi text-[11.5px] font-bold text-[#64748B] uppercase tracking-wide">पहला नाम · First Name</label>
+      <div class="name-input mt-2 flex items-center gap-3 h-[58px] px-4 rounded-lg border-2 border-[#EEE5D8] bg-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 5-7 8-7s7 2 8 7"/></svg>
+        <input id="firstName" type="text" placeholder="Ramesh" autocomplete="given-name" class="flex-1 outline-none text-[18px] font-semibold bg-transparent"/>
+      </div>
     </div>
-    <p class="text-[11px] text-[#94A3B8] mt-2">As per Aadhaar / records — you can edit later</p>
+
+    <div>
+      <label class="hi text-[11.5px] font-bold text-[#64748B] uppercase tracking-wide">अंतिम नाम · Last Name</label>
+      <div class="name-input mt-2 flex items-center gap-3 h-[58px] px-4 rounded-lg border-2 border-[#EEE5D8] bg-white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 5-7 8-7s7 2 8 7"/></svg>
+        <input id="lastName" type="text" placeholder="Patel" autocomplete="family-name" class="flex-1 outline-none text-[18px] font-semibold bg-transparent"/>
+      </div>
+    </div>
+
+    <p class="text-[11px] text-[#94A3B8] mt-2">As per Aadhaar / records — you can edit later in Settings</p>
   </div>
 
-  <!-- Why we ask -->
-  <div class="px-6 mt-7">
+  <!-- Why we ask · emerald card · explains the value-exchange so the farmer is happy to share -->
+  <div class="px-6 mt-6">
     <div class="bg-[#ECFDF5] border border-[#047857]/20 rounded-lg p-3.5">
       <div class="hi text-[12.5px] font-bold text-[#059669] mb-1.5">क्यों पूछ रहे हैं?</div>
-      <p class="text-[11.5px] text-[#0F172A] leading-relaxed">Your name helps our Krishi Doctor address you properly during voice calls and on the package label for delivery.</p>
+      <p class="text-[11.5px] text-[#0F172A] leading-relaxed">Krishi Doctor will address you by name on voice calls, and the courier prints it on the package label so your delivery never goes to the wrong person in the village.</p>
     </div>
   </div>
 
   <!-- Sticky CTA -->
   <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-[#EEE5D8] px-6 py-4">
-    <button onclick="location.href='tell-us.html'" class="w-full h-[54px] rounded-lg bg-[#059669] text-white text-[16px] font-extrabold flex items-center justify-center gap-2">
+    <button id="cta" onclick="location.href='permissions.html'" class="w-full h-[54px] rounded-lg bg-[#059669] text-white text-[16px] font-extrabold flex items-center justify-center gap-2">
       <span class="hi">आगे</span>
       <span class="opacity-70">·</span>
       <span>Continue</span>
@@ -66,5 +80,20 @@
     </button>
   </div>
 
+  <script>
+    // Persist names so later screens / settings can greet the farmer · also keeps the field state if they bounce back
+    const f = document.getElementById('firstName');
+    const l = document.getElementById('lastName');
+    try {
+      f.value = localStorage.getItem('kkd.firstName') || f.value;
+      l.value = localStorage.getItem('kkd.lastName')  || l.value;
+    } catch (e) {}
+    document.getElementById('cta').addEventListener('click', () => {
+      try {
+        localStorage.setItem('kkd.firstName', f.value.trim());
+        localStorage.setItem('kkd.lastName',  l.value.trim());
+      } catch (e) {}
+    });
+  </script>
 </body>
 </html>

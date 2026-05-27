@@ -116,10 +116,32 @@
   .xsell-add.added{background:#ECFDF5;color:#047857;border-color:#059669}
   .xsell-tag{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:9999px;background:#ECFDF5;color:#047857;font-size:9.5px;font-weight:700;letter-spacing:0.02em;border:1px solid #A7F3D0}
   .xsell-tag::before{content:"";width:5px;height:5px;border-radius:50%;background:#059669;display:inline-block}
-  .xsell-thresh{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:#ECFDF5;border:1px solid #A7F3D0;margin-bottom:12px}
-  .xsell-thresh .ic{width:32px;height:32px;border-radius:9px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#047857;flex-shrink:0}
-  .xsell-thresh .bar{height:5px;background:#FFFFFF;border-radius:9999px;overflow:hidden;margin-top:5px}
-  .xsell-thresh .fill{height:100%;background:#059669;border-radius:9999px}
+  /* Free-delivery threshold strip · richer · gradient fill with animated diagonal water-flow stripes, a truck icon riding the fill edge, milestone copy with the amount highlighted in extrabold emerald, and a Free pill anchored at 100% · still a single tile but reads with much more confidence */
+  .xsell-thresh{position:relative;padding:12px 12px 14px;border-radius:14px;background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border:1px solid #A7F3D0;margin-bottom:14px;box-shadow:0 4px 14px -8px rgba(5,150,105,0.35)}
+  .xsell-thresh .head{display:flex;align-items:center;gap:10px}
+  .xsell-thresh .ic{width:34px;height:34px;border-radius:10px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#047857;flex-shrink:0;box-shadow:0 2px 6px rgba(5,150,105,0.2)}
+  .xsell-thresh .copy{flex:1;line-height:1.25;color:#0F172A;font-size:12.5px;font-weight:600}
+  .xsell-thresh .copy .hl{color:#047857;font-weight:900}
+  .xsell-thresh .pill{margin-left:auto;flex-shrink:0;font-size:9.5px;font-weight:900;background:#FBBF24;color:#0F172A;padding:3px 8px;border-radius:9999px;letter-spacing:0.06em}
+  .xsell-thresh .bar-wrap{position:relative;height:10px;margin-top:10px;background:#FFFFFF;border-radius:9999px;border:1px solid #A7F3D0;overflow:visible}
+  .xsell-thresh .bar-track{position:absolute;inset:1px;border-radius:9999px;overflow:hidden;background:#F0FDF4}
+  .xsell-thresh .fill{position:relative;height:100%;background:linear-gradient(90deg,#10B981 0%,#047857 100%);border-radius:9999px;transition:width .4s ease}
+  .xsell-thresh .fill::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,0.22) 0 8px,transparent 8px 16px);animation:strFlow 1.4s linear infinite;border-radius:inherit}
+  @keyframes strFlow{from{background-position:0 0}to{background-position:22px 0}}
+  .xsell-thresh .truck{position:absolute;top:50%;transform:translate(50%,-50%);width:22px;height:22px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#047857;border:1.5px solid #047857;box-shadow:0 4px 10px -2px rgba(4,120,87,0.45);transition:right .4s ease;font-size:10px}
+  .xsell-thresh .marks{display:flex;justify-content:space-between;margin-top:6px;font-size:10px;font-weight:700;color:#64748B}
+  .xsell-thresh .marks .end{color:#047857;font-weight:900}
+
+  /* Special Deal FOMO header above cross-sell cards · strong red/orange flame accent, a tight live-countdown chip, and a "84% of farmers add a combo" social-proof line · creates urgency without crowding the cards beneath */
+  .sd-card{position:relative;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#FFF7ED 0%,#FFFBEB 100%);border:1px solid #FED7AA;margin-bottom:12px;overflow:hidden}
+  .sd-card::before{content:"";position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(251,146,60,0.25) 0%,transparent 65%);pointer-events:none}
+  .sd-head{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+  .sd-flame{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#F97316,#DC2626);display:flex;align-items:center;justify-content:center;color:#FFFFFF;flex-shrink:0;font-size:14px;box-shadow:0 4px 10px -2px rgba(220,38,38,0.4);animation:flameP 1.6s ease-in-out infinite}
+  @keyframes flameP{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+  .sd-title{font-size:14.5px;font-weight:900;color:#0F172A;line-height:1.15;letter-spacing:-0.01em}
+  .sd-sub{font-size:11px;color:#9A3412;margin-top:2px;line-height:1.3;font-weight:600}
+  .sd-timer{margin-left:auto;flex-shrink:0;display:inline-flex;align-items:center;gap:5px;background:#0F172A;color:#FBBF24;padding:5px 9px;border-radius:9999px;font-size:11px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:0.04em}
+  .sd-timer i{font-size:9px;color:#FCD34D}
 
   /* ===== Coupon-apply CELEBRATION (mirrors the partner-app distributor-unlock pattern) · full-screen takeover with: tinted backdrop + central scale-in badge + radial rays sun-burst + headline that fades up + 12 confetti pieces · auto-dismiss at ~2.6s ===== */
   .celeb{position:fixed;inset:0;z-index:200;pointer-events:none;display:none;align-items:center;justify-content:center}
@@ -425,11 +447,34 @@
     </div>
 
     <div class="px-5 pb-2 overflow-y-auto" style="flex:1">
+      <!-- Threshold strip · richer progress bar with gradient + water-flow stripes + truck marker · highlighted amount -->
       <div class="xsell-thresh">
-        <span class="ic"><i class="fa-solid fa-truck-fast text-[14px]"></i></span>
-        <div class="flex-1 leading-tight min-w-0">
-          <div class="text-[12.5px] font-extrabold" style="color:#047857">Add ₹300 more for <span class="font-black">FREE</span> delivery</div>
-          <div class="bar"><div class="fill" style="width:78%"></div></div>
+        <div class="head">
+          <span class="ic"><i class="fa-solid fa-truck-fast text-[14px]"></i></span>
+          <div class="copy">Add <span class="hl tnum">₹300</span> more for <span class="hl">FREE</span> delivery</div>
+          <span class="pill">SAVE ₹49</span>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-track">
+            <div class="fill" id="threshFill" style="width:78%"></div>
+          </div>
+          <span class="truck" id="threshTruck" style="right:22%"><i class="fa-solid fa-truck-fast"></i></span>
+        </div>
+        <div class="marks">
+          <span class="tnum">₹2,200 in cart</span>
+          <span class="end tnum">Goal ₹2,500</span>
+        </div>
+      </div>
+
+      <!-- FOMO Special Deal header above the cross-sell cards · flame icon, live countdown, social-proof copy -->
+      <div class="sd-card">
+        <div class="sd-head">
+          <span class="sd-flame"><i class="fa-solid fa-fire"></i></span>
+          <div class="leading-tight">
+            <div class="sd-title">Special Deal · Today only</div>
+            <div class="sd-sub">84% of farmers add a combo — sells out fast</div>
+          </div>
+          <span class="sd-timer"><i class="fa-solid fa-clock"></i><span id="sdTimer">12:24:08</span></span>
         </div>
       </div>
 
@@ -601,6 +646,29 @@
           b.innerHTML = '<i class="fa-solid fa-circle-check text-[11px]"></i> Added';
         });
       });
+
+      // Sync the truck position to the fill width so the truck rides the leading edge of the gradient
+      const fill = document.getElementById('threshFill');
+      const truck = document.getElementById('threshTruck');
+      if (fill && truck) {
+        const w = parseFloat(fill.style.width) || 0;
+        truck.style.right = (100 - w) + '%';
+      }
+
+      // Live countdown for the Special Deal timer · pure visual prototype, counts down from 12:24:08
+      (function(){
+        const el = document.getElementById('sdTimer');
+        if (!el) return;
+        let secs = 12 * 3600 + 24 * 60 + 8;
+        function paint(){
+          const h = Math.floor(secs / 3600);
+          const m = Math.floor((secs % 3600) / 60);
+          const s = secs % 60;
+          el.textContent = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+        }
+        paint();
+        setInterval(() => { if (secs > 0) { secs--; paint(); } }, 1000);
+      })();
     })();
   </script>
 </body></html>

@@ -5,118 +5,93 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>KKD · Splash</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&family=Noto+Sans+Devanagari:wght@600;700;800&family=Outfit:wght@900&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
 <style>
   * { font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   .hi { font-family: 'Noto Sans Devanagari', sans-serif; }
   .wordmark { font-family: 'Outfit', sans-serif; font-style: italic; font-weight: 900; letter-spacing: -0.04em; }
   html, body { margin: 0; padding: 0; }
-  /* Warm dawn sky → cream field horizon · farmer-friendly palette · soft emerald hold at the bottom matches the home top-theme */
+  /* Premium minimal background · soft warm white at top → faint emerald wash at bottom · single subtle vignette anchors the centre · no busy elements */
   body {
     min-height: 100vh;
     background:
-      radial-gradient(ellipse 80% 60% at 50% 18%, rgba(251,191,36,0.55) 0%, rgba(251,191,36,0.0) 70%),
-      linear-gradient(180deg, #FFF7E6 0%, #FEF3C7 22%, #FDE68A 38%, #FAF7F2 60%, #ECFDF5 86%, #D1FAE5 100%);
+      radial-gradient(ellipse 110% 70% at 50% 35%, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 65%),
+      linear-gradient(180deg, #FAF7F2 0%, #F5F1E8 40%, #ECFDF5 100%);
     color: #064E3B;
     overflow: hidden;
     position: relative;
   }
-  /* Sun rising over horizon line · pure SVG so no asset loading */
-  @keyframes pulseGlow { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.04); opacity: 0.93; } }
-  .pulse { animation: pulseGlow 2.2s ease-in-out infinite; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  .fade-1 { animation: fadeUp .8s ease-out .25s both; }
-  .fade-2 { animation: fadeUp .8s ease-out .65s both; }
-  .fade-3 { animation: fadeUp .8s ease-out 1.05s both; }
-  .fade-4 { animation: fadeUp .8s ease-out 1.45s both; }
-  @keyframes sway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
-  .sway { transform-origin: 50% 100%; animation: sway 3.5s ease-in-out infinite; }
-  .progress-bar { height: 3px; background: rgba(4,120,87,0.12); border-radius: 999px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg,#FBBF24,#047857); border-radius: 999px; animation: fillIt 2.5s linear forwards; }
-  @keyframes fillIt { from { width: 0; } to { width: 100%; } }
-  .logo-card { box-shadow: 0 24px 48px -16px rgba(4,120,87,0.35), 0 8px 24px -8px rgba(251,191,36,0.4); }
+
+  /* Subtle decorative element · a single thin emerald arc at the very bottom · reads as a ground line, no field illustration clutter */
+  .ground-arc {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(4,120,87,0.18) 25%, rgba(4,120,87,0.32) 50%, rgba(4,120,87,0.18) 75%, transparent 100%);
+  }
+
+  /* Logo card · refined · single soft shadow + a hairline emerald ring · gentle breath, not a heartbeat */
+  @keyframes softBreath {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.018); }
+  }
+  .logo-card {
+    width: 116px; height: 116px;
+    border-radius: 28px;
+    background: #FFFFFF;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 24px 60px -20px rgba(4,120,87,0.22), 0 6px 18px -6px rgba(15,23,42,0.06);
+    position: relative;
+    animation: softBreath 4s ease-in-out infinite;
+  }
+  .logo-card::after {
+    content: ""; position: absolute; inset: -1px;
+    border-radius: 29px;
+    border: 1px solid rgba(4,120,87,0.10);
+    pointer-events: none;
+  }
+
+  /* Typography fade-in · staggered, slow, premium · no bounce */
+  @keyframes fadeRise {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fade-1 { animation: fadeRise 1s ease-out .2s both; }
+  .fade-2 { animation: fadeRise 1s ease-out .65s both; }
+  .fade-3 { animation: fadeRise 1s ease-out 1.05s both; }
+
+  /* Progress · minimal dot-trio at the bottom · loop softly · no caption underneath */
+  @keyframes dotPulse {
+    0%, 100% { transform: scale(.7); opacity: .35; }
+    50%      { transform: scale(1);  opacity: 1; }
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: #047857; animation: dotPulse 1.4s ease-in-out infinite; }
+  .dot:nth-child(2) { animation-delay: .2s; }
+  .dot:nth-child(3) { animation-delay: .4s; }
 </style>
 </head>
-<body class="flex flex-col items-center justify-between min-h-screen relative">
+<body class="flex flex-col items-center justify-center min-h-screen relative">
 
-  <!-- Status bar · dark text on warm bg -->
-  <div class="absolute top-0 left-0 right-0 flex items-center justify-between px-6 pt-3 text-[11px] font-bold" style="color:#064E3B">
-    <span>9:41</span>
-    <div class="flex items-center gap-1.5">
-      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#064E3B" stroke-width="2.5" stroke-linecap="round"/></svg>
-      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#064E3B" stroke-width="2" stroke-linecap="round"/></svg>
-      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#064E3B" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#064E3B"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#064E3B"/></svg>
+  <!-- Centred logo + minimal wordmark · just three elements · everything else stripped per premium spec -->
+  <div class="flex flex-col items-center" style="margin-top:-40px">
+    <div class="logo-card fade-1">
+      <img src="https://www.katyayaniorganics.com/wp-content/uploads/2022/06/cropped-logo-3.webp" alt="Katyayani" style="width:86px;height:86px;object-fit:contain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div style="display:none;width:86px;height:86px;border-radius:18px;align-items:center;justify-content:center;font-weight:900;color:#FFFFFF;font-size:42px;background:linear-gradient(135deg,#047857 0%,#10B981 100%)">K</div>
     </div>
+
+    <!-- Wordmark · single line · refined italic Outfit -->
+    <div class="wordmark fade-2" style="font-size:42px;line-height:1;margin-top:30px;color:#064E3B">Katyayani</div>
+
+    <!-- Subtle Hindi tagline · one line only, no English duplicate -->
+    <div class="hi fade-3" style="font-size:14px;font-weight:700;margin-top:10px;color:#047857;letter-spacing:0.02em">कृषि डायरेक्ट</div>
   </div>
 
-  <!-- Sun + sky · positioned behind everything -->
-  <div class="absolute pointer-events-none" style="top:10%;left:50%;transform:translateX(-50%);width:160px;height:160px">
-    <div class="absolute inset-0 rounded-full pulse" style="background:radial-gradient(circle,#FBBF24 0%,#F59E0B 55%,transparent 75%);filter:blur(2px);opacity:.85"></div>
+  <!-- Loading indicator · three breathing dots, no progress bar, no copy -->
+  <div class="absolute flex items-center gap-2 fade-3" style="bottom:64px;left:50%;transform:translateX(-50%)">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
   </div>
 
-  <!-- Field illustration at bottom · gentle hills + wheat stalks · sits behind the progress strip -->
-  <svg class="absolute pointer-events-none" style="bottom:0;left:0;right:0;width:100%;height:240px" viewBox="0 0 400 240" preserveAspectRatio="none">
-    <!-- Distant hills -->
-    <path d="M0,120 C60,90 120,110 200,95 C280,80 340,108 400,100 L400,240 L0,240 Z" fill="#A7F3D0" opacity=".55"/>
-    <!-- Middle field stripe -->
-    <path d="M0,160 C80,140 160,162 240,148 C320,135 360,158 400,152 L400,240 L0,240 Z" fill="#6EE7B7" opacity=".7"/>
-    <!-- Foreground field stripe (richer emerald) -->
-    <path d="M0,200 C90,184 180,206 260,196 C340,186 380,210 400,205 L400,240 L0,240 Z" fill="#10B981" opacity=".85"/>
-    <!-- Wheat tufts on horizon -->
-    <g class="sway">
-      <line x1="80"  y1="160" x2="80"  y2="140" stroke="#92400E" stroke-width="1.5"/>
-      <ellipse cx="80"  cy="138" rx="3" ry="6" fill="#FBBF24"/>
-      <line x1="120" y1="158" x2="120" y2="136" stroke="#92400E" stroke-width="1.5"/>
-      <ellipse cx="120" cy="134" rx="3" ry="6" fill="#FBBF24"/>
-      <line x1="280" y1="160" x2="280" y2="138" stroke="#92400E" stroke-width="1.5"/>
-      <ellipse cx="280" cy="136" rx="3" ry="6" fill="#FBBF24"/>
-      <line x1="320" y1="156" x2="320" y2="134" stroke="#92400E" stroke-width="1.5"/>
-      <ellipse cx="320" cy="132" rx="3" ry="6" fill="#FBBF24"/>
-    </g>
-    <!-- Tiny farmer silhouette in the middle ground -->
-    <g transform="translate(196,154)" fill="#064E3B">
-      <circle cx="0" cy="0" r="3.5"/>
-      <path d="M-4,4 L-4,16 L-2,16 L-2,9 L2,9 L2,16 L4,16 L4,4 Z"/>
-      <path d="M-7,5 L7,5 L7,7 L-7,7 Z"/>
-    </g>
-  </svg>
-
-  <!-- Spacer top -->
-  <div class="h-20"></div>
-
-  <!-- Logo + wordmark stack -->
-  <div class="relative z-10 flex flex-col items-center mt-12">
-    <div class="logo-card pulse fade-1 w-[120px] h-[120px] rounded-[28px] bg-white flex items-center justify-center" style="border:3px solid #FBBF24">
-      <img src="https://www.katyayaniorganics.com/wp-content/uploads/2022/06/cropped-logo-3.webp" alt="Katyayani" class="w-[90px] h-[90px] object-contain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-      <div class="hidden w-[90px] h-[90px] rounded-[20px] items-center justify-center font-extrabold text-white text-[44px]" style="background:linear-gradient(135deg,#047857 0%,#FBBF24 100%)">K</div>
-    </div>
-
-    <div class="text-center mt-7 fade-2">
-      <div class="wordmark text-[40px] leading-none" style="color:#064E3B">Katyayani</div>
-      <div class="hi text-[18px] font-bold mt-2 tracking-wide" style="color:#047857">कृषि डायरेक्ट</div>
-      <div class="text-[10px] uppercase tracking-[0.3em] font-extrabold mt-2" style="color:#B45309">सीधा फैक्ट्री से · Direct from Factory</div>
-    </div>
-
-    <!-- Trust strip · earned-trust badges, emerald on warm bg -->
-    <div class="fade-3 mt-7 flex items-center gap-2">
-      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10.5px] font-extrabold" style="background:rgba(255,255,255,0.85);border:1px solid rgba(4,120,87,0.2);color:#047857;backdrop-filter:blur(4px)">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9.5-8 10-4.5-.5-8-5-8-10V6l8-4z"/></svg>
-        CIB-CR Licensed
-      </span>
-      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10.5px] font-extrabold" style="background:rgba(255,255,255,0.85);border:1px solid rgba(4,120,87,0.2);color:#047857;backdrop-filter:blur(4px)">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-5"/></svg>
-        Lab Tested
-      </span>
-    </div>
-  </div>
-
-  <!-- Progress + tagline · sits above the field illustration -->
-  <div class="relative z-10 w-full px-10 pb-10 fade-4">
-    <div class="progress-bar mb-3">
-      <div class="progress-fill"></div>
-    </div>
-    <div class="text-center hi text-[13px] font-bold" style="color:#047857">किसान का अपना ऐप · The farmer's own app</div>
-  </div>
+  <!-- Ground line · single hairline accent at the very bottom -->
+  <div class="ground-arc"></div>
 
   <!-- Auto-advance -->
   <script>setTimeout(()=>{ window.location.href='language.html'; }, 2500);</script>

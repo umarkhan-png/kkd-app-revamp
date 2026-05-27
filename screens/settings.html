@@ -1,55 +1,148 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Settings</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
-<style>*{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}.hi{font-family:'Noto Sans Devanagari',sans-serif}html,body{margin:0;padding:0}body{min-height:100vh;background:#FDF8EE;color:#0F172A}.toggle{width:36px;height:20px;border-radius:999px;background:#059669;position:relative}.toggle::after{content:'';position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:999px;background:#fff}.toggle.off{background:#C8C2B0}.toggle.off::after{right:auto;left:2px}</style></head>
-<body class="min-h-screen pb-6">
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:32px}
+  .tnum{font-variant-numeric:tabular-nums}
+  .sec-title{margin:18px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
+  .card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .row{display:flex;align-items:center;gap:12px;padding:14px;border-bottom:1px solid #F1F5F9;text-decoration:none;color:#0F172A;cursor:pointer}
+  .row:last-child{border-bottom:0}
+  .row:active{background:#F8FAFC}
+  .row-ic{width:36px;height:36px;border-radius:10px;background:#F1F5F9;color:#475569;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+  .row-label{flex:1;line-height:1.25}
+  .row-label .a{font-size:14px;font-weight:700;color:#0F172A}
+  .row-label .b{font-size:11px;color:#64748B;margin-top:2px}
+  .row-meta{font-size:11.5px;color:#64748B;margin-right:4px}
+  .row-chev{font-size:11px;color:#94A3B8}
+  /* Toggle · emerald on, slate off · matches design-system primary */
+  .toggle{width:38px;height:22px;border-radius:9999px;background:#059669;position:relative;flex-shrink:0;transition:background .2s ease;cursor:pointer}
+  .toggle::after{content:'';position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:9999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.18);transition:right .2s ease, left .2s ease}
+  .toggle.off{background:#CBD5E1}
+  .toggle.off::after{right:auto;left:2px}
+</style></head>
+<body>
 
-<div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
-
-<div class="px-4 pt-4 flex items-center gap-3"><button onclick="history.back()" class="w-10 h-10 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="hi text-[20px] font-extrabold">सेटिंग्स</div></div>
-
-<!-- Language -->
-<div class="px-4 mt-5">
-  <div class="text-[10px] uppercase tracking-wider font-bold text-[#64748B] mb-2">App preferences</div>
-  <div class="bg-white border border-[#E5E7EB] rounded-2xl divide-y divide-[#EEE5D8] overflow-hidden">
-    <a href="language.html" class="p-3.5 flex items-center gap-3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2c3 4 3 16 0 20M12 2c-3 4-3 16 0 20"/></svg><span class="text-[13px] font-bold flex-1">Language</span><span class="text-[11px] font-bold text-[#047857]">हिंदी</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></a>
-    <div class="p-3.5 flex items-center gap-3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg><span class="text-[13px] font-bold flex-1">Theme</span><span class="text-[11px] text-[#64748B]">Light</span></div>
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
+    </div>
   </div>
-</div>
 
-<!-- Notifications -->
-<div class="px-4 mt-5">
-  <div class="text-[10px] uppercase tracking-wider font-bold text-[#64748B] mb-2">Notifications</div>
-  <div class="bg-white border border-[#E5E7EB] rounded-2xl divide-y divide-[#EEE5D8] overflow-hidden">
-    <div class="p-3.5 flex items-center gap-3"><div class="flex-1"><div class="text-[13px] font-bold">Order updates</div><div class="text-[10.5px] text-[#64748B] mt-0.5">Status, delivery, tracking</div></div><div class="toggle"></div></div>
-    <div class="p-3.5 flex items-center gap-3"><div class="flex-1"><div class="text-[13px] font-bold">Price alerts</div><div class="text-[10.5px] text-[#64748B] mt-0.5">When products you saved drop</div></div><div class="toggle"></div></div>
-    <div class="p-3.5 flex items-center gap-3"><div class="flex-1"><div class="text-[13px] font-bold">Crop calendar reminders</div><div class="text-[10.5px] text-[#64748B] mt-0.5">Spraying, fertilizing nudges</div></div><div class="toggle"></div></div>
-    <div class="p-3.5 flex items-center gap-3"><div class="flex-1"><div class="text-[13px] font-bold">Promotions & offers</div><div class="text-[10.5px] text-[#64748B] mt-0.5">Sale alerts, coupons</div></div><div class="toggle off"></div></div>
-    <div class="p-3.5 flex items-center gap-3"><div class="flex-1"><div class="text-[13px] font-bold">WhatsApp updates</div><div class="text-[10.5px] text-[#64748B] mt-0.5">Order & tracking on WA</div></div><div class="toggle"></div></div>
+  <div class="px-4 pt-4 pb-3 flex items-center gap-3 bg-white">
+    <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB">
+      <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
+    </button>
+    <h1 class="text-[22px] font-extrabold leading-tight" style="color:#0F172A">Settings</h1>
   </div>
-</div>
 
-<!-- Privacy -->
-<div class="px-4 mt-5">
-  <div class="text-[10px] uppercase tracking-wider font-bold text-[#64748B] mb-2">Privacy</div>
-  <div class="bg-white border border-[#E5E7EB] rounded-2xl divide-y divide-[#EEE5D8] overflow-hidden">
-    <div class="p-3.5 flex items-center gap-3"><div class="flex-1"><div class="text-[13px] font-bold">Location access</div><div class="text-[10.5px] text-[#64748B] mt-0.5">Mandi rates, delivery slots</div></div><div class="toggle"></div></div>
-    <a class="p-3.5 flex items-center gap-3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/></svg><span class="text-[13px] font-bold flex-1">Privacy Policy</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></a>
-    <a class="p-3.5 flex items-center gap-3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg><span class="text-[13px] font-bold flex-1">Terms of Service</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></a>
+  <!-- App preferences · just Theme · Language moved to Profile page -->
+  <div class="sec-title">App preferences</div>
+  <div class="card">
+    <div class="row">
+      <span class="row-ic"><i class="fa-solid fa-sun"></i></span>
+      <span class="row-label">
+        <span class="a">Theme</span>
+        <span class="b">Light · auto-matches system</span>
+      </span>
+      <span class="row-meta">Light</span>
+      <i class="fa-solid fa-chevron-right row-chev"></i>
+    </div>
   </div>
-</div>
 
-<!-- Account -->
-<div class="px-4 mt-5">
-  <div class="text-[10px] uppercase tracking-wider font-bold text-[#64748B] mb-2">Account</div>
-  <div class="bg-white border border-[#E5E7EB] rounded-2xl divide-y divide-[#EEE5D8] overflow-hidden">
-    <a class="p-3.5 flex items-center gap-3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-17 0 8.5 8.5 0 0 1 17 0z"/><path d="M3 11h18"/></svg><span class="text-[13px] font-bold flex-1">Download my data</span></a>
-    <a href="signout-confirm.html" class="p-3.5 flex items-center gap-3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E23744" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span class="text-[13px] font-bold flex-1 text-[#E23744]">Sign out</span></a>
-    <a class="p-3.5 flex items-center gap-3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E23744" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg><span class="text-[13px] font-bold flex-1 text-[#E23744]">Delete account</span></a>
+  <!-- Notifications · channel toggles · emerald primary -->
+  <div class="sec-title">Notifications</div>
+  <div class="card">
+    <div class="row">
+      <span class="row-ic"><i class="fa-solid fa-truck-fast"></i></span>
+      <span class="row-label">
+        <span class="a">Order updates</span>
+        <span class="b">Status, delivery, tracking</span>
+      </span>
+      <span class="toggle"></span>
+    </div>
+    <div class="row">
+      <span class="row-ic"><i class="fa-solid fa-tag"></i></span>
+      <span class="row-label">
+        <span class="a">Price alerts</span>
+        <span class="b">When saved products drop in price</span>
+      </span>
+      <span class="toggle"></span>
+    </div>
+    <div class="row">
+      <span class="row-ic"><i class="fa-solid fa-seedling"></i></span>
+      <span class="row-label">
+        <span class="a">Crop calendar reminders</span>
+        <span class="b">Spraying, fertilizing nudges</span>
+      </span>
+      <span class="toggle"></span>
+    </div>
+    <div class="row">
+      <span class="row-ic"><i class="fa-solid fa-gift"></i></span>
+      <span class="row-label">
+        <span class="a">Promotions &amp; offers</span>
+        <span class="b">Sale alerts, coupons</span>
+      </span>
+      <span class="toggle off"></span>
+    </div>
+    <div class="row">
+      <span class="row-ic"><i class="fa-brands fa-whatsapp"></i></span>
+      <span class="row-label">
+        <span class="a">WhatsApp updates</span>
+        <span class="b">Order &amp; tracking on WhatsApp</span>
+      </span>
+      <span class="toggle"></span>
+    </div>
   </div>
-</div>
 
-<div class="text-center text-[10px] text-[#94A3B8] mt-6">KKD v1.0 · Build 2026.05.14</div>
+  <!-- Privacy · Privacy Policy + Terms · Location-access toggle removed (lives only in the system OS-level) · Download my data removed -->
+  <div class="sec-title">Privacy</div>
+  <div class="card">
+    <a href="#privacy-policy" class="row">
+      <span class="row-ic"><i class="fa-solid fa-shield-halved"></i></span>
+      <span class="row-label">
+        <span class="a">Privacy Policy</span>
+      </span>
+      <i class="fa-solid fa-chevron-right row-chev"></i>
+    </a>
+    <a href="#terms" class="row">
+      <span class="row-ic"><i class="fa-solid fa-file-lines"></i></span>
+      <span class="row-label">
+        <span class="a">Terms of Service</span>
+      </span>
+      <i class="fa-solid fa-chevron-right row-chev"></i>
+    </a>
+  </div>
 
+  <!-- Account · Sign out as the primary danger · Delete account de-prominent as a small tertiary link at the bottom of the page (not inside this card) -->
+  <div class="sec-title">Account</div>
+  <div class="card">
+    <a href="signout-confirm.html" class="row">
+      <span class="row-ic" style="background:#FEE2E2;color:#DC2626"><i class="fa-solid fa-right-from-bracket"></i></span>
+      <span class="row-label">
+        <span class="a" style="color:#DC2626">Sign out</span>
+        <span class="b">You can sign back in any time</span>
+      </span>
+    </a>
+  </div>
+
+  <!-- Tertiary · Delete account · tiny slate text link, not a destructive row -->
+  <div class="text-center mt-6 px-4">
+    <a href="#delete-account" class="inline-block text-[11.5px] font-semibold" style="color:#94A3B8;text-decoration:underline">Delete my account</a>
+  </div>
+
+  <!-- Version -->
+  <div class="text-center text-[10.5px] mt-4 mb-2" style="color:#94A3B8">KKD v1.0 &middot; Build 2026.05.14</div>
+
+  <script>
+    // Toggle handlers
+    document.querySelectorAll('.toggle').forEach(t => t.addEventListener('click', () => t.classList.toggle('off')));
+  </script>
 </body></html>

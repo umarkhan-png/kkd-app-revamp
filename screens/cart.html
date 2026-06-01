@@ -449,10 +449,7 @@
   <div id="xsellSheet" class="modal-sheet">
     <div class="modal-handle"></div>
     <div class="px-5 pt-3 pb-2 flex items-center justify-between">
-      <div class="leading-tight">
-        <div class="text-[17px] font-extrabold">Add &amp; save more</div>
-        <div class="text-[11.5px] font-semibold" style="color:#64748B">Cart total · <span class="tnum" id="xsellCartVal" style="color:#047857;font-weight:800">₹1,900</span></div>
-      </div>
+      <div class="text-[17px] font-extrabold">Add &amp; save more</div>
       <button id="xsellClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
 
@@ -514,9 +511,13 @@
         </div>
       </div>
     </div>
-    <div class="px-5 pt-3 pb-5" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px)">
-      <button id="xsellContinue" class="w-full h-[52px] rounded-[12px] text-white text-[14.5px] font-extrabold inline-flex items-center justify-center gap-2" style="background:#059669;border:0;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
-        Skip &amp; Continue <i class="fa-solid fa-arrow-right text-[12px]"></i>
+    <div class="px-5 pt-3 pb-5 flex items-center gap-3" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px)">
+      <div class="leading-tight flex-shrink-0" style="min-width:78px">
+        <div class="text-[15px] font-extrabold tnum" style="color:#0F172A" id="xsellSummItems">3 items</div>
+        <div class="text-[13px] font-extrabold tnum" style="color:#047857" id="xsellSummVal">₹1,900</div>
+      </div>
+      <button id="xsellContinue" class="flex-1 h-[52px] rounded-[12px] text-white text-[14.5px] font-extrabold inline-flex items-center justify-center gap-2" style="background:#059669;border:0;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+        Continue <i class="fa-solid fa-arrow-right text-[12px]"></i>
       </button>
     </div>
   </div>
@@ -645,11 +646,15 @@
       const sheet = document.getElementById('xsellSheet');
       const closeBt = document.getElementById('xsellClose');
       const goBt = document.getElementById('xsellContinue');
-      function open(){
-        const cv = document.getElementById('xsellCartVal');
-        if (cv) cv.textContent = '₹' + cartTotal.toLocaleString('en-IN');
-        bd.classList.add('open'); sheet.classList.add('open');
+      function syncXsellSummary(){
+        const items = document.querySelectorAll('#cartList .cart-item').length;
+        const si = document.getElementById('xsellSummItems');
+        const sv = document.getElementById('xsellSummVal');
+        if (si) si.textContent = items + (items === 1 ? ' item' : ' items');
+        if (sv) sv.textContent = '₹' + cartTotal.toLocaleString('en-IN');
       }
+      window.syncXsellSummary = syncXsellSummary;
+      function open(){ syncXsellSummary(); bd.classList.add('open'); sheet.classList.add('open'); }
       function close(){ bd.classList.remove('open'); sheet.classList.remove('open'); }
       btn.addEventListener('click', open);
       closeBt.addEventListener('click', close);
@@ -684,9 +689,10 @@
             + '</div>';
           cartList.appendChild(item);
           wireTrash(item.querySelector('.trash-btn'));
-          // Feedback 3 · sticky total + count update, and a toast confirms
+          // Feedback 3 · sticky total + count update, the sheet summary, and a toast confirms
           cartTotal += parseInt(d.price, 10);
           updateSticky();
+          if (window.syncXsellSummary) window.syncXsellSummary();
           showToast(d.name);
         });
       });

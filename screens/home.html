@@ -157,6 +157,10 @@
     0%, 100% { transform: scale(1) rotate(-3deg); opacity: 1; }
     50%      { transform: scale(1.15) rotate(3deg); opacity: 0.85; }
   }
+  /* Flash-sale qty stepper · replaces the "+" after first add · sits in the image corner */
+  .flash-step{position:absolute;bottom:6px;right:6px;display:inline-flex;align-items:center;height:32px;background:#059669;border-radius:9px;box-shadow:0 2px 8px rgba(5,150,105,0.4);overflow:hidden;z-index:2}
+  .flash-step button{width:28px;height:32px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:800;background:transparent;border:0;cursor:pointer;line-height:1}
+  .flash-step .n{min-width:18px;text-align:center;color:#fff;font-size:13px;font-weight:800;font-variant-numeric:tabular-nums}
   /* Select-your-crop View Products CTA — gentle pulse so user notices the tap target once a crop is picked */
   @keyframes cropCtaPulse {
     0%, 100% { transform: scale(1); box-shadow: 0 8px 20px -6px rgba(5,150,105,0.55),0 2px 6px rgba(0,0,0,0.08); }
@@ -1393,16 +1397,18 @@
     <!-- Engagement widgets · backend-gated, shown individually based on audience · stacked full-width here so each tile design can be previewed · action tiles run a full end-to-end flow (modal) -->
     <section class="mt-8">
       <style>
-        .eng-card{position:relative;background:#FFFFFF;border:1px solid #BBF7D0;border-radius:14px;padding:14px;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15);overflow:hidden;display:flex;flex-direction:column;gap:10px}
-        .eng-top{display:flex;align-items:center;justify-content:space-between}
-        .eng-ic{width:34px;height:34px;border-radius:10px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:14px}
-        .eng-coin{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:9999px;font-size:10.5px;font-weight:800;background:linear-gradient(135deg,#FBBF24,#F59E0B);color:#78350F}
+        /* Compact poll tile · mirrors the "How many acres" widget: header row (icon + question + coin + close), options below · question wraps aligned to its own left edge (parallel to line 1) */
+        .eng-card{position:relative;background:#FFFFFF;border:1px solid #BBF7D0;border-radius:14px;padding:12px 13px;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15);overflow:hidden}
+        .eng-head{display:flex;align-items:flex-start;gap:9px}
+        .eng-ic{width:30px;height:30px;border-radius:9px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+        .eng-coin{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:9999px;font-size:10.5px;font-weight:800;background:linear-gradient(135deg,#FBBF24,#F59E0B);color:#78350F}
         .eng-coin i{font-size:9px}
-        .eng-q{font-size:13px;font-weight:800;color:#0F172A;line-height:1.25;min-height:34px}
-        .eng-opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+        .eng-close{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:#F1F5F9;color:#475569;border:0;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer}
+        .eng-q{flex:1;min-width:0;font-size:13px;font-weight:800;color:#0F172A;line-height:1.3;padding-top:2px}
+        .eng-opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
         .eng-chip{padding:6px 11px;border-radius:9999px;background:#F8FAFC;border:1px solid #E5E7EB;font-size:11.5px;font-weight:700;color:#0F172A;cursor:pointer}
         .eng-chip:active{transform:scale(.96)}
-        .eng-cta{width:100%;height:38px;border-radius:10px;background:#059669;color:#FFFFFF;border:0;font-size:12.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;text-decoration:none;margin-top:auto}
+        .eng-cta{width:100%;height:36px;border-radius:10px;background:#059669;color:#FFFFFF;border:0;font-size:12.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;text-decoration:none;margin-top:10px}
         .eng-cta.ghost{background:#ECFDF5;color:#047857;border:1px solid #BBF7D0}
         .eng-done{position:absolute;inset:0;background:linear-gradient(135deg,rgba(5,150,105,0.97),rgba(16,185,129,0.97));color:#FFFFFF;display:none;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center;padding:14px}
         .eng-card.done .eng-done{display:flex}
@@ -1425,8 +1431,12 @@
 
           <!-- Crop -->
           <div class="eng-card">
-            <div class="eng-top"><span class="eng-ic"><i class="fa-solid fa-wheat-awn"></i></span><span class="eng-coin"><i class="fa-solid fa-coins"></i> +15</span></div>
-            <div class="eng-q">Which crop do you grow most?</div>
+            <div class="eng-head">
+              <span class="eng-ic"><i class="fa-solid fa-wheat-awn"></i></span>
+              <div class="eng-q">Which crop do you grow most?</div>
+              <span class="eng-coin"><i class="fa-solid fa-coins"></i> +15</span>
+              <button class="eng-close" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button>
+            </div>
             <div class="eng-opts">
               <button class="eng-chip" data-reward>Wheat</button>
               <button class="eng-chip" data-reward>Cotton</button>
@@ -1438,8 +1448,12 @@
 
           <!-- Crop problem -->
           <div class="eng-card">
-            <div class="eng-top"><span class="eng-ic" style="background:#FEE2E2;color:#DC2626"><i class="fa-solid fa-bug"></i></span><span class="eng-coin"><i class="fa-solid fa-coins"></i> +15</span></div>
-            <div class="eng-q">Facing any crop problem now?</div>
+            <div class="eng-head">
+              <span class="eng-ic" style="background:#FEE2E2;color:#DC2626"><i class="fa-solid fa-bug"></i></span>
+              <div class="eng-q">Facing any crop problem now?</div>
+              <span class="eng-coin"><i class="fa-solid fa-coins"></i> +15</span>
+              <button class="eng-close" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button>
+            </div>
             <div class="eng-opts">
               <button class="eng-chip" data-reward>Pest</button>
               <button class="eng-chip" data-reward>Disease</button>
@@ -1451,23 +1465,35 @@
 
           <!-- Share testimonial · opens a full bottom-sheet flow -->
           <div class="eng-card" id="engTestiCard">
-            <div class="eng-top"><span class="eng-ic" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-quote-right"></i></span><span class="eng-coin"><i class="fa-solid fa-coins"></i> +30</span></div>
-            <div class="eng-q">Share your success story with KKD</div>
+            <div class="eng-head">
+              <span class="eng-ic" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-quote-right"></i></span>
+              <div class="eng-q">Share your success story with KKD</div>
+              <span class="eng-coin"><i class="fa-solid fa-coins"></i> +30</span>
+              <button class="eng-close" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button>
+            </div>
             <button class="eng-cta" id="engTestiOpen"><i class="fa-solid fa-pen text-[11px]"></i> Share testimonial</button>
             <div class="eng-done"><div class="ic">🙏</div><div class="t">+30 coins earned!</div><div class="s">Thanks for sharing your story</div></div>
           </div>
 
           <!-- Refer & earn -->
           <div class="eng-card">
-            <div class="eng-top"><span class="eng-ic" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-gift"></i></span><span class="eng-coin"><i class="fa-solid fa-coins"></i> ₹50</span></div>
-            <div class="eng-q">Refer a friend, earn ₹50 each</div>
+            <div class="eng-head">
+              <span class="eng-ic" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-gift"></i></span>
+              <div class="eng-q">Refer a friend, earn ₹50 each</div>
+              <span class="eng-coin"><i class="fa-solid fa-coins"></i> ₹50</span>
+              <button class="eng-close" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button>
+            </div>
             <a href="refer.html" class="eng-cta"><i class="fa-solid fa-user-plus text-[11px]"></i> Invite a friend</a>
           </div>
 
           <!-- Order delivered -->
           <div class="eng-card">
-            <div class="eng-top"><span class="eng-ic"><i class="fa-solid fa-truck-fast"></i></span><span class="eng-coin"><i class="fa-solid fa-coins"></i> +10</span></div>
-            <div class="eng-q">Did your last order arrive OK?</div>
+            <div class="eng-head">
+              <span class="eng-ic"><i class="fa-solid fa-truck-fast"></i></span>
+              <div class="eng-q">Did your last order arrive OK?</div>
+              <span class="eng-coin"><i class="fa-solid fa-coins"></i> +10</span>
+              <button class="eng-close" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button>
+            </div>
             <div class="eng-opts">
               <button class="eng-chip" data-reward>👍 Yes</button>
               <button class="eng-chip" data-reward>Not yet</button>
@@ -1477,8 +1503,12 @@
 
           <!-- Rate & review · opens bottom modal -->
           <div class="eng-card" id="engRateCard">
-            <div class="eng-top"><span class="eng-ic" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-star"></i></span><span class="eng-coin"><i class="fa-solid fa-coins"></i> +25</span></div>
-            <div class="eng-q">Rate your recent purchase</div>
+            <div class="eng-head">
+              <span class="eng-ic" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-star"></i></span>
+              <div class="eng-q">Rate your recent purchase</div>
+              <span class="eng-coin"><i class="fa-solid fa-coins"></i> +25</span>
+              <button class="eng-close" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button>
+            </div>
             <button class="eng-cta ghost" id="engRateOpen"><i class="fa-solid fa-star text-[11px]"></i> Rate &amp; review</button>
             <div class="eng-done"><div class="ic">⭐</div><div class="t">+25 coins earned!</div><div class="s">Thanks for your review</div></div>
           </div>
@@ -1536,6 +1566,11 @@
             if (card && !card.classList.contains('done')) card.classList.add('done');
           });
         });
+        // Close (×) · dismiss a tile
+        document.querySelectorAll('#engRow .eng-close').forEach(b => b.addEventListener('click', (e) => {
+          e.preventDefault(); e.stopPropagation();
+          const card = b.closest('.eng-card'); if (card) card.style.display = 'none';
+        }));
         const bd = document.getElementById('engRateBd');
         const sh = document.getElementById('engRateModal');
         const openBtn = document.getElementById('engRateOpen');
@@ -1587,15 +1622,11 @@
 
     <!-- Farmer testimonials · same portrait video-tile pattern as the PDP "Farmer testimonials" section -->
     <section class="mt-8">
-      <div class="px-4 flex items-baseline justify-between mb-3">
-        <div>
-          <h2 class="text-[21px] font-bold tracking-tight">Farmer testimonials</h2>
-          <div class="text-[11.5px] mt-0.5" style="color:#64748B">Real results from verified buyers</div>
-        </div>
-        <a href="#" class="text-[12px] font-extrabold" style="color:#047857;text-decoration:none">SEE ALL</a>
+      <div class="px-4 mb-3">
+        <h2 class="text-[21px] font-bold tracking-tight">Farmer testimonials</h2>
       </div>
-      <div class="overflow-x-auto scroll-x px-4">
-        <div class="flex gap-3 min-w-max pb-1">
+      <div class="overflow-x-auto scroll-x px-4" id="testiScroll">
+        <div class="flex gap-3 min-w-max pb-1" id="testiRow">
           <div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">
             <img src="https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=400&q=80" class="w-full h-full object-cover" style="opacity:.55"/>
             <div class="absolute inset-0 flex flex-col items-center justify-center">
@@ -1635,6 +1666,50 @@
         </div>
       </div>
     </section>
+    <style>@keyframes tspin{to{transform:rotate(360deg)}}</style>
+    <script>
+      // Farmer testimonials · load more as the row is scrolled to its right end (loader shows briefly)
+      (function(){
+        const scroll = document.getElementById('testiScroll');
+        const row = document.getElementById('testiRow');
+        if (!scroll || !row) return;
+        const POOL = [
+          {img:'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80', n:'Suresh Yadav', loc:'Maize · Bhopal', q:'"Strong roots, no clumping"'},
+          {img:'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=400&q=80', n:'Pradeep Singh', loc:'Soybean · Dewas', q:'"Pack sealed, great result"'},
+          {img:'https://images.unsplash.com/photo-1591857177580-dc82b9ac4e1e?w=400&q=80', n:'Lakshmi Bai', loc:'Onion · Ujjain', q:'"Bigger bulbs this season"'},
+          {img:'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&q=80', n:'Kishan Lal', loc:'Wheat · Sehore', q:'"Yield up, cost down"'},
+          {img:'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=400&q=80', n:'Geeta Verma', loc:'Chilli · Khargone', q:'"Less spray needed"'},
+          {img:'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=400&q=80', n:'Ramlal Meena', loc:'Cotton · Ratlam', q:'"Healthier bolls"'}
+        ];
+        let idx = 0, loading = false, done = false;
+        function tile(t){
+          return '<div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">'
+            + '<img src="' + t.img + '" class="w-full h-full object-cover" style="opacity:.55"/>'
+            + '<div class="absolute inset-0 flex flex-col items-center justify-center"><div class="w-11 h-11 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg></div>'
+            + '<div class="text-white text-[10px] font-extrabold text-center px-2">' + t.n + '</div><div class="text-[9px] text-center" style="color:rgba(255,255,255,0.7)">' + t.loc + '</div></div>'
+            + '<div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-semibold leading-tight">' + t.q + '</div></div></div>';
+        }
+        function loadMore(){
+          if (loading || done) return;
+          loading = true;
+          const loader = document.createElement('div');
+          loader.id = 'testiLoader';
+          loader.className = 'flex-shrink-0 flex flex-col items-center justify-center gap-2';
+          loader.style.cssText = 'width:108px;height:200px;border-radius:12px;border:1px solid #E5E7EB;background:#fff';
+          loader.innerHTML = '<div style="width:24px;height:24px;border-radius:50%;border:3px solid #D1FAE5;border-top-color:#059669;animation:tspin .8s linear infinite"></div><div class="text-[10px] font-bold" style="color:#94A3B8">Loading…</div>';
+          row.appendChild(loader);
+          setTimeout(() => {
+            loader.remove();
+            POOL.slice(idx, idx + 3).forEach(t => row.insertAdjacentHTML('beforeend', tile(t)));
+            idx += 3; loading = false;
+            if (idx >= POOL.length) done = true;
+          }, 750);
+        }
+        scroll.addEventListener('scroll', () => {
+          if (scroll.scrollLeft + scroll.clientWidth >= scroll.scrollWidth - 60) loadMore();
+        }, { passive: true });
+      })();
+    </script>
 
     <!-- Most Selling in Indore — Bestseller-style tiles (grey image area edge-to-edge) + Flash-Sale-style emerald top strip carrying the "X bought last week" social-proof badge -->
     <section class="mt-8">
@@ -2320,14 +2395,22 @@
       });
     });
 
-    // Flash-sale "+" buttons · each tap adds the product to the cart (bumps the floating bar) · brief check feedback · prevents the parent card link from navigating
+    // Flash-sale "+" · first tap swaps the + for a −/+ qty stepper (like the other product cards) · stepper drives the floating cart bar; dec to 0 reverts to "+"
     document.querySelectorAll('.flash-add').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault(); e.stopPropagation();
-        bumpCart();
-        btn.style.background = '#059669'; btn.style.color = '#FFFFFF'; btn.textContent = '✓';
-        setTimeout(() => { btn.style.background = '#FFFFFF'; btn.style.color = '#059669'; btn.textContent = '+'; }, 850);
-      });
+      const wrap = btn.parentElement;            // the relative image box
+      let qty = 0;
+      const step = document.createElement('div');
+      step.className = 'flash-step';
+      step.style.display = 'none';
+      step.innerHTML = '<button type="button" class="fdec">−</button><span class="n">1</span><button type="button" class="finc">+</button>';
+      wrap.appendChild(step);
+      const nEl = step.querySelector('.n');
+      const stop = e => { e.preventDefault(); e.stopPropagation(); };
+      function show(){ btn.style.display = 'none'; step.style.display = 'inline-flex'; }
+      function hide(){ btn.style.display = 'flex'; step.style.display = 'none'; }
+      btn.addEventListener('click', (e) => { stop(e); qty = 1; nEl.textContent = qty; show(); bumpCart(); });
+      step.querySelector('.finc').addEventListener('click', (e) => { stop(e); qty += 1; nEl.textContent = qty; bumpCart(); });
+      step.querySelector('.fdec').addEventListener('click', (e) => { stop(e); qty -= 1; unbumpCart(); if (qty <= 0) { qty = 0; hide(); } else nEl.textContent = qty; });
     });
 
     // Shop-by-Crop modal: empty state → Add Crop → bottom-sheet pick → populated state

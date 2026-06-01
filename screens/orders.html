@@ -91,6 +91,32 @@
   .cod-input-wrap .rs{font-size:22px;font-weight:900;color:#0F172A}
   .cod-input-wrap input{flex:1;font-size:22px;font-weight:900;color:#0F172A;background:transparent;outline:none;border:0;width:0;font-variant-numeric:tabular-nums}
   .cod-coin-strip{margin-top:10px;display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;background:#ECFDF5;border:1px solid #BBF7D0}
+
+  /* Rate-products sheet · one row per product · stars + an optional review that reveals after the first star */
+  .rate-item{padding:14px 0;border-bottom:1px solid #F1F5F9}
+  .rate-item:last-child{border-bottom:0}
+  .rate-item-head{display:flex;align-items:center;gap:10px}
+  .rate-item-img{width:44px;height:44px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
+  .rate-item-img img{max-width:100%;max-height:100%;object-fit:contain}
+  .rate-item-name{font-size:13.5px;font-weight:800;color:#0F172A;line-height:1.2}
+  .rate-item-size{font-size:11px;color:#94A3B8;margin-top:1px}
+  .rate-stars{display:flex;gap:8px;margin-top:10px}
+  .rate-stars .star{background:transparent;border:0;padding:0;cursor:pointer;font-size:22px;color:#CBD5E1;transition:transform .12s ease,color .15s ease}
+  .rate-stars .star.on{color:#F59E0B}
+  .rate-stars .star:active{transform:scale(.85)}
+  .rate-review{display:none;margin-top:10px;width:100%;min-height:58px;padding:10px 12px;border-radius:10px;border:1px solid #E5E7EB;background:#FAFAFA;font-size:12.5px;font-family:inherit;color:#0F172A;outline:none;resize:none;box-sizing:border-box}
+  .rate-item.rated .rate-review{display:block}
+
+  /* Shared rating success · soft scale-in card + coin pop gesture · auto-dismiss */
+  .rate-ok{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,0.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+  .rate-ok.show{display:flex}
+  .rate-ok-card{background:#FFFFFF;border-radius:18px;padding:24px 28px;text-align:center;width:250px;box-shadow:0 24px 60px -10px rgba(15,23,42,0.35);transform:scale(.9);opacity:0;animation:rateOkIn .42s cubic-bezier(.34,1.56,.64,1) forwards}
+  @keyframes rateOkIn{to{transform:scale(1);opacity:1}}
+  .rate-ok-coin{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#FBBF24,#F59E0B);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:27px;margin:0 auto;box-shadow:0 10px 24px -6px rgba(245,158,11,0.5);animation:coinPop .6s ease-out .12s both}
+  @keyframes coinPop{0%{transform:scale(0) rotate(-18deg)}60%{transform:scale(1.14) rotate(7deg)}100%{transform:scale(1) rotate(0)}}
+  .rate-ok-title{font-size:16px;font-weight:900;color:#0F172A;margin-top:14px}
+  .rate-ok-sub{font-size:12.5px;color:#64748B;margin-top:4px;line-height:1.35}
+  .rate-ok-sub b{color:#B45309}
 </style></head>
 <body>
 
@@ -191,8 +217,9 @@
           </div>
         </div>
       </a>
-      <div class="ord-actions" style="grid-template-columns:1fr 1fr">
+      <div class="ord-actions" style="grid-template-columns:1fr 1fr 1fr">
         <a href="cart.html?reorder=1198" class="act-btn primary"><i class="fa-solid fa-repeat"></i> Reorder</a>
+        <button type="button" class="act-btn outline rate-trigger" data-order="KAT-2026-04-1198" data-products='[{"name":"Humic + Fulvic","size":"1 L","img":"../assets/Humic_nobg.png"},{"name":"Antivirus","size":"250 ml","img":"../assets/AntiVirus_nobg.png"}]'><i class="fa-solid fa-star"></i> Rate</button>
         <a href="order-details.html?invoice=1198" class="act-btn outline"><i class="fa-solid fa-file-lines"></i> Invoice</a>
       </div>
     </div>
@@ -219,8 +246,9 @@
           </div>
         </div>
       </a>
-      <div class="ord-actions" style="grid-template-columns:1fr 1fr">
+      <div class="ord-actions" style="grid-template-columns:1fr 1fr 1fr">
         <a href="cart.html?reorder=1102" class="act-btn primary"><i class="fa-solid fa-repeat"></i> Reorder</a>
+        <button type="button" class="act-btn outline rate-trigger" data-order="KAT-2026-04-1102" data-products='[{"name":"Chakrawarti ZC","size":"100 ml","img":"../assets/Chakrawarti_nobg.png"},{"name":"Humic + Fulvic","size":"500 ml","img":"../assets/Humic_nobg.png"},{"name":"Antivirus","size":"250 ml","img":"../assets/AntiVirus_nobg.png"}]'><i class="fa-solid fa-star"></i> Rate</button>
         <a href="order-details.html?invoice=1102" class="act-btn outline"><i class="fa-solid fa-file-lines"></i> Invoice</a>
       </div>
     </div>
@@ -283,7 +311,89 @@
     </div>
   </div>
 
+  <!-- Rate-products bottom sheet · lists every product in the tapped order with stars + an optional review · built dynamically from the Rate button's data-products -->
+  <div id="rateBd" class="modal-bd"></div>
+  <div id="rateSheet" class="modal-sheet" style="padding:0">
+    <div class="modal-handle"></div>
+    <div class="px-5 pt-3 pb-2 flex items-center justify-between">
+      <div class="leading-tight">
+        <div class="text-[17px] font-extrabold text-[#0F172A]">Rate your products</div>
+        <div class="text-[11.5px] font-semibold" style="color:#64748B">Order <span id="rateOrderId" class="font-bold text-[#0F172A]">#</span> · earn 25 coins per rating</div>
+      </div>
+      <button id="rateClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div id="rateList" class="px-5 overflow-y-auto" style="flex:1"></div>
+    <div class="px-5 pt-3 pb-5" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">
+      <button id="rateSubmit" class="w-full h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+        <i class="fa-solid fa-paper-plane text-[13px]"></i> Submit ratings
+      </button>
+    </div>
+  </div>
+
+  <!-- Rating success · soft coin-pop gesture -->
+  <div id="rateOk" class="rate-ok">
+    <div class="rate-ok-card">
+      <div class="rate-ok-coin"><i class="fa-solid fa-coins"></i></div>
+      <div class="rate-ok-title">Thanks for rating!</div>
+      <div class="rate-ok-sub" id="rateOkSub">You earned <b>+25 coins</b></div>
+    </div>
+  </div>
+
   <script>
+    // Rate-products sheet · opens from a delivered order's Rate button · builds a star row + optional review per product · Submit shows the shared coin-pop success
+    (function(){
+      const bd = document.getElementById('rateBd');
+      const sh = document.getElementById('rateSheet');
+      const closeBt = document.getElementById('rateClose');
+      const list = document.getElementById('rateList');
+      const ordLbl = document.getElementById('rateOrderId');
+      const submit = document.getElementById('rateSubmit');
+      const ok = document.getElementById('rateOk');
+      const okSub = document.getElementById('rateOkSub');
+      function open(orderId, products){
+        ordLbl.textContent = '#' + orderId;
+        list.innerHTML = '';
+        products.forEach(p => {
+          const item = document.createElement('div');
+          item.className = 'rate-item';
+          item.innerHTML =
+            '<div class="rate-item-head"><div class="rate-item-img"><img src="' + p.img + '" class="img-blend" alt=""/></div>'
+            + '<div class="leading-tight"><div class="rate-item-name">' + p.name + '</div><div class="rate-item-size">' + p.size + '</div></div></div>'
+            + '<div class="rate-stars">' + [1,2,3,4,5].map(n => '<button class="star" data-val="' + n + '"><i class="fa-solid fa-star"></i></button>').join('') + '</div>'
+            + '<textarea class="rate-review" placeholder="Write a review (optional)…"></textarea>';
+          const stars = item.querySelectorAll('.star');
+          stars.forEach(s => s.addEventListener('click', () => {
+            const v = parseInt(s.dataset.val, 10);
+            stars.forEach(x => x.classList.toggle('on', parseInt(x.dataset.val, 10) <= v));
+            item.classList.add('rated');
+          }));
+          list.appendChild(item);
+        });
+        bd.classList.add('open'); sh.classList.add('open');
+      }
+      function close(){ bd.classList.remove('open'); sh.classList.remove('open'); }
+      closeBt.addEventListener('click', close);
+      bd.addEventListener('click', close);
+      submit.addEventListener('click', () => {
+        const rated = list.querySelectorAll('.rate-item.rated').length;
+        if (rated === 0) return;
+        close();
+        const coins = rated * 25;
+        if (okSub) okSub.innerHTML = 'You earned <b>+' + coins + ' coins</b> · thanks for the feedback!';
+        setTimeout(() => {
+          ok.classList.add('show');
+          ok.querySelectorAll('.rate-ok-card,.rate-ok-coin').forEach(el => { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; });
+          setTimeout(() => ok.classList.remove('show'), 2300);
+        }, 220);
+      });
+      document.querySelectorAll('.rate-trigger').forEach(b => b.addEventListener('click', e => {
+        e.preventDefault(); e.stopPropagation();
+        let products = [];
+        try { products = JSON.parse(b.dataset.products || '[]'); } catch (err) {}
+        open(b.dataset.order, products);
+      }));
+    })();
+
     // Tab toggle · prototype only (no real filtering)
     document.querySelectorAll('.tab').forEach(t => {
       t.addEventListener('click', () => {

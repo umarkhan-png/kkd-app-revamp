@@ -30,6 +30,16 @@
   .var-more{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1.5px solid #E5E7EB;background:#FFFFFF;color:#047857;border-radius:12px;padding:14px 6px 10px;font-size:11.5px;font-weight:800;cursor:pointer;line-height:1}
   .var-more i{font-size:13px}
   .var-more .lbl-sub{font-size:9.5px;color:#94A3B8;font-weight:600}
+  /* Best-value badge · added by JS to the lowest per-unit (per-L) tile in each grid · distinct from the amber Bestseller chip */
+  .vk-best{position:absolute;top:-7px;left:50%;transform:translateX(-50%);background:#059669;color:#FFFFFF;font-size:8px;font-weight:800;padding:2px 6px;border-radius:9999px;white-space:nowrap;letter-spacing:0.02em;box-shadow:0 2px 6px rgba(5,150,105,0.4);display:inline-flex;align-items:center;gap:3px;z-index:2}
+  .vk-best i{font-size:7px}
+  .var.has-best{padding-top:18px;border-color:#A7F3D0}
+  /* Live-viewers + low-stock FOMO tags · sit under the product title */
+  .live-view{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#B45309;background:#FFF7ED;border:1px solid #FED7AA;padding:4px 10px;border-radius:9999px}
+  .live-dot{width:7px;height:7px;border-radius:50%;background:#F97316;animation:livePulse 1.6s ease-out infinite}
+  @keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(249,115,22,0.5)}100%{box-shadow:0 0 0 8px rgba(249,115,22,0)}}
+  .low-stock{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#DC2626;background:#FEF2F2;border:1px solid #FECACA;padding:4px 10px;border-radius:9999px}
+  .low-stock i{font-size:10px}
   /* ADD button · more prominent · bigger height + stronger emerald glow + tracked-uppercase label · stepper matches the same dimensions */
   .price-add{display:flex;align-items:center;gap:8px}
   .add-btn{height:48px;padding:0 22px;border-radius:12px;background:#059669;color:#FFFFFF;font-size:14.5px;font-weight:900;letter-spacing:0.06em;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 12px 22px -8px rgba(5,150,105,0.6),inset 0 1px 0 rgba(255,255,255,0.18);cursor:pointer;border:0;text-transform:uppercase}
@@ -165,6 +175,12 @@
     <a href="categories.html" class="flex-shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-extrabold uppercase tracking-[0.06em]" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0;margin-top:4px">
       <i class="fa-solid fa-flask text-[9px]"></i> Fertilizer
     </a>
+  </div>
+
+  <!-- FOMO tags · live viewers (highly viewed) + low stock -->
+  <div class="flex items-center gap-2 mt-2.5 flex-wrap">
+    <span class="live-view"><span class="live-dot"></span> <span class="tnum">142</span> people viewing now</span>
+    <span class="low-stock"><i class="fa-solid fa-fire"></i> Only 8 left in stock</span>
   </div>
 
 </div>
@@ -448,12 +464,12 @@
     </div>
     <div class="overflow-x-auto scrollx -mx-4 px-4">
       <div class="flex gap-2.5 min-w-max">
-        <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=320&q=80" class="w-[108px] h-[144px] rounded-xl object-cover flex-shrink-0 border border-[#E5E7EB]" alt=""/>
-        <img src="https://images.unsplash.com/photo-1591857177580-dc82b9ac4e1e?w=320&q=80" class="w-[108px] h-[144px] rounded-xl object-cover flex-shrink-0 border border-[#E5E7EB]" alt=""/>
-        <img src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=320&q=80" class="w-[108px] h-[144px] rounded-xl object-cover flex-shrink-0 border border-[#E5E7EB]" alt=""/>
-        <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=320&q=80" class="w-[108px] h-[144px] rounded-xl object-cover flex-shrink-0 border border-[#E5E7EB]" alt=""/>
-        <a href="#" class="relative flex-shrink-0 w-[108px] h-[144px] rounded-xl overflow-hidden border border-[#E5E7EB]">
-          <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=320&q=80" class="w-full h-full object-cover" alt=""/>
+        <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&q=80" class="w-[164px] h-[120px] rounded-xl object-cover flex-shrink-0 border border-[#E5E7EB]" alt=""/>
+        <img src="https://images.unsplash.com/photo-1591857177580-dc82b9ac4e1e?w=400&q=80" class="w-[164px] h-[120px] rounded-xl object-cover flex-shrink-0 border border-[#E5E7EB]" alt=""/>
+        <img src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=400&q=80" class="w-[164px] h-[120px] rounded-xl object-cover flex-shrink-0 border border-[#E5E7EB]" alt=""/>
+        <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80" class="w-[164px] h-[120px] rounded-xl object-cover flex-shrink-0 border border-[#E5E7EB]" alt=""/>
+        <a href="#" class="relative flex-shrink-0 w-[164px] h-[120px] rounded-xl overflow-hidden border border-[#E5E7EB]">
+          <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=400&q=80" class="w-full h-full object-cover" alt=""/>
           <span class="absolute inset-0 flex flex-col items-center justify-center text-white" style="background:rgba(15,23,42,0.48)">
             <span class="text-[20px] font-black leading-none tnum">+407</span>
             <span class="text-[10px] font-semibold mt-1">View all photos</span>
@@ -602,24 +618,33 @@
     });
   })();
 
-  // The sticky-header ADD button mirrors the main ADD button
+  // Best value · badge the lowest per-unit (per-L) tile in each grid (main grid + the all-sizes sheet)
   (function(){
-    const stickyAdd = document.getElementById('stickyAddBtn');
-    const mainAdd = document.getElementById('addBtn');
-    if (!stickyAdd || !mainAdd) return;
-    stickyAdd.addEventListener('click', () => mainAdd.click());
+    function badge(container){
+      if (!container) return;
+      const tiles = Array.from(container.querySelectorAll('.var'));
+      let min = Infinity, best = null;
+      tiles.forEach(t => {
+        const el = t.querySelector('.vk-perL');
+        if (!el) return;
+        const n = parseInt(el.textContent.replace(/[^0-9]/g,''),10) || Infinity;
+        if (n < min) { min = n; best = t; }
+      });
+      if (best && !best.querySelector('.vk-best')) {
+        const b = document.createElement('span');
+        b.className = 'vk-best';
+        b.innerHTML = '<i class="fa-solid fa-tag"></i> Best value';
+        best.appendChild(b);
+        best.classList.add('has-best');
+      }
+    }
+    badge(document.querySelector('.pack-grid'));
+    badge(document.querySelector('#sheet .grid'));
   })();
 
-  // Variant selection
-  function selectVariant(size, price){
-    document.querySelectorAll('.var').forEach(v => v.classList.toggle('active', v.dataset.size === size));
-    const headPrice = document.querySelector('#priceRow .text-\\[28px\\]');
-    if (headPrice && price) headPrice.textContent = price;
-  }
-  document.querySelectorAll('.var').forEach(v => v.addEventListener('click', () => selectVariant(v.dataset.size, v.dataset.price)));
-
-  // ADD → stepper + floating cart bar
+  // Variant selection + per-variant cart · supports adding MULTIPLE different sizes (selecting another variant resets the ADD control so a new one can be added; the cart bar tallies all variants)
   (function(){
+    const headPrice = document.querySelector('#priceRow .text-\\[28px\\]');
     const btn = document.getElementById('addBtn');
     const steps = document.getElementById('addSteps');
     const val = document.getElementById('addVal');
@@ -628,23 +653,42 @@
     const cartBar = document.getElementById('cartBar');
     const cartCount = document.getElementById('cartCount');
     const cartTotal = document.getElementById('cartTotal');
-    let qty = 0;
-    function syncCart(){
-      if (!cartBar) return;
-      if (qty <= 0) { cartBar.style.display = 'none'; return; }
-      cartBar.style.display = 'flex';
-      cartCount.textContent = qty;
-      cartTotal.textContent = (276 * qty).toLocaleString('en-IN');
-    }
+    const stickyAdd = document.getElementById('stickyAddBtn');
+    const cart = {};                       // size -> { qty, price }
+    let curSize = '500 ml', curPrice = 276;
+    const num = p => parseInt(String(p).replace(/[^0-9]/g,''),10) || 0;
     function showSteps(){ btn.style.display = 'none'; steps.style.display = 'flex'; }
     function showAdd(){ btn.style.display = 'flex'; steps.style.display = 'none'; }
-    btn.addEventListener('click', () => { qty = 1; val.textContent = qty; showSteps(); syncCart(); });
-    inc.addEventListener('click', () => { qty += 1; val.textContent = qty; syncCart(); });
+    function syncControl(){
+      const q = cart[curSize] ? cart[curSize].qty : 0;
+      if (q > 0) { val.textContent = q; showSteps(); } else { val.textContent = 1; showAdd(); }
+    }
+    function syncBar(){
+      if (!cartBar) return;
+      let totQ = 0, totAmt = 0;
+      Object.values(cart).forEach(it => { totQ += it.qty; totAmt += it.qty * it.price; });
+      if (totQ <= 0) { cartBar.style.display = 'none'; return; }
+      cartBar.style.display = 'flex';
+      if (cartCount) cartCount.textContent = totQ;
+      if (cartTotal) cartTotal.textContent = totAmt.toLocaleString('en-IN');
+    }
+    window.selectVariant = function(size, price){
+      document.querySelectorAll('.var').forEach(v => v.classList.toggle('active', v.dataset.size === size));
+      curSize = size; curPrice = num(price);
+      if (headPrice && price) headPrice.textContent = price;
+      syncControl();                       // reflect this variant's own qty (0 → fresh ADD button)
+    };
+    document.querySelectorAll('.var').forEach(v => v.addEventListener('click', () => window.selectVariant(v.dataset.size, v.dataset.price)));
+    btn.addEventListener('click', () => { cart[curSize] = { qty: 1, price: curPrice }; syncControl(); syncBar(); });
+    inc.addEventListener('click', () => { if (!cart[curSize]) cart[curSize] = { qty: 0, price: curPrice }; cart[curSize].qty += 1; val.textContent = cart[curSize].qty; syncBar(); });
     dec.addEventListener('click', () => {
-      qty -= 1;
-      if (qty <= 0) { qty = 0; val.textContent = 1; showAdd(); syncCart(); }
-      else { val.textContent = qty; syncCart(); }
+      if (!cart[curSize]) return;
+      cart[curSize].qty -= 1;
+      if (cart[curSize].qty <= 0) { delete cart[curSize]; val.textContent = 1; showAdd(); }
+      else { val.textContent = cart[curSize].qty; }
+      syncBar();
     });
+    if (stickyAdd) stickyAdd.addEventListener('click', () => btn.click());
   })();
 
   // All-sizes sheet

@@ -97,6 +97,17 @@
   .review-wrap.submitted .review-submitted-badge{display:inline-flex}
   .review-submitted-badge i{font-size:11px;color:#047857}
 
+  /* Rating success · soft scale-in card + coin pop gesture · shared look with the My-Orders rate sheet */
+  .rate-ok{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,0.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+  .rate-ok.show{display:flex}
+  .rate-ok-card{background:#FFFFFF;border-radius:18px;padding:24px 28px;text-align:center;width:250px;box-shadow:0 24px 60px -10px rgba(15,23,42,0.35);transform:scale(.9);opacity:0;animation:rateOkIn .42s cubic-bezier(.34,1.56,.64,1) forwards}
+  @keyframes rateOkIn{to{transform:scale(1);opacity:1}}
+  .rate-ok-coin{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#FBBF24,#F59E0B);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:27px;margin:0 auto;box-shadow:0 10px 24px -6px rgba(245,158,11,0.5);animation:coinPop .6s ease-out .12s both}
+  @keyframes coinPop{0%{transform:scale(0) rotate(-18deg)}60%{transform:scale(1.14) rotate(7deg)}100%{transform:scale(1) rotate(0)}}
+  .rate-ok-title{font-size:16px;font-weight:900;color:#0F172A;margin-top:14px}
+  .rate-ok-sub{font-size:12.5px;color:#64748B;margin-top:4px;line-height:1.35}
+  .rate-ok-sub b{color:#B45309}
+
   /* Address */
   .addr{padding:14px;display:flex;gap:12px}
   .addr-ic{width:36px;height:36px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#047857}
@@ -601,6 +612,15 @@
     </div>
   </div>
 
+  <!-- Rating success · soft coin-pop gesture (shown when a product is first rated) -->
+  <div id="rateOk" class="rate-ok">
+    <div class="rate-ok-card">
+      <div class="rate-ok-coin"><i class="fa-solid fa-coins"></i></div>
+      <div class="rate-ok-title">Thanks for rating!</div>
+      <div class="rate-ok-sub" id="rateOkSub">You earned <b>+25 coins</b></div>
+    </div>
+  </div>
+
   <script>
     (function(){
       const qp = new URLSearchParams(location.search);
@@ -775,6 +795,19 @@
       if (helpClose) helpClose.addEventListener('click', () => closeSheet(helpBd, helpSheet));
       if (helpBd)    helpBd.addEventListener('click', () => closeSheet(helpBd, helpSheet));
 
+      // Shared rating-success gesture · soft coin pop · fired once per product when it's first rated
+      const rateOk = document.getElementById('rateOk');
+      const rateOkSub = document.getElementById('rateOkSub');
+      let rateOkTimer;
+      function showRateOk(coins){
+        if (!rateOk) return;
+        if (rateOkSub) rateOkSub.innerHTML = 'You earned <b>+' + coins + ' coins</b>';
+        rateOk.classList.add('show');
+        rateOk.querySelectorAll('.rate-ok-card,.rate-ok-coin').forEach(el => { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; });
+        clearTimeout(rateOkTimer);
+        rateOkTimer = setTimeout(() => rateOk.classList.remove('show'), 2200);
+      }
+
       // Per-product star rating · selecting a star credits +25 coins immediately · the review section (textarea + Submit) reveals AFTER the first star tap · review is optional and earns no extra coins (the hint copy makes this clear)
       document.querySelectorAll('[data-rating-group]').forEach(group => {
         const stars = group.querySelectorAll('.star-btn');
@@ -784,6 +817,7 @@
         const text   = group.querySelector('[data-review-text]');
         const submit = group.querySelector('[data-review-submit]');
         let rated = false;
+        let okShown = false;
 
         stars.forEach(s => {
           s.addEventListener('click', () => {
@@ -801,6 +835,8 @@
             // Reveal the review section (textarea + Submit) on the first star tap
             if (wrap) wrap.classList.add('on');
             rated = true;
+            // Soft success gesture + coin credit · fired once on the first rating for this product
+            if (!okShown) { okShown = true; showRateOk(25); }
           });
         });
 

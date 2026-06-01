@@ -37,11 +37,13 @@
   .ord-saved i{font-size:10px}
 
   /* Lifetime savings banner · emerald, sits below the tabs */
-  /* Compact savings chip in the header (replaced the full-width savings banner) */
-  .saved-chip{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;padding:7px 12px;border-radius:13px;background:#ECFDF5;border:1px solid #A7F3D0}
-  .saved-chip i{color:#047857;font-size:15px}
-  .saved-chip .amt{font-size:15px;font-weight:900;color:#047857;line-height:1;font-variant-numeric:tabular-nums}
-  .saved-chip .lbl{font-size:8.5px;font-weight:800;color:#047857;text-transform:uppercase;letter-spacing:0.05em;line-height:1;margin-top:3px}
+  /* Summary strip · total orders + lifetime savings (replaced the order tabs) */
+  .ord-summary{margin:12px 16px 0;display:flex;align-items:center;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .ord-summary .os{flex:1;text-align:center}
+  .ord-summary .os .v{font-size:20px;font-weight:900;color:#0F172A;line-height:1}
+  .ord-summary .os .v.green{color:#047857}
+  .ord-summary .os .k{font-size:11px;color:#64748B;font-weight:600;margin-top:4px}
+  .ord-summary .os-div{width:1px;align-self:stretch;background:#F1F5F9;margin:2px 0}
 
   /* Order search · by ID or product name */
   .ord-search{margin:12px 16px 0;display:flex;align-items:center;gap:8px;height:44px;padding:0 14px;border-radius:12px;background:#FFFFFF;border:1px solid #E5E7EB}
@@ -136,14 +138,13 @@
     </div>
   </div>
 
-  <!-- Header · title + compact lifetime-savings chip on the right · search lives inside the header block -->
+  <!-- Header · title + search -->
   <div class="px-4 pt-4 pb-4 bg-white" style="border-bottom:1px solid #F1F5F9">
     <div class="flex items-center gap-3">
       <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB">
         <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
       </button>
       <h1 class="flex-1 text-[22px] font-extrabold leading-tight" style="color:#0F172A">My Orders</h1>
-      <span class="saved-chip"><i class="fa-solid fa-piggy-bank"></i><div><div class="amt">₹4,180</div><div class="lbl">saved</div></div></span>
     </div>
     <!-- Search · by order ID or product name -->
     <div class="ord-search" id="ordSearch" style="margin:14px 0 0">
@@ -153,11 +154,11 @@
     </div>
   </div>
 
-  <!-- Tabs -->
-  <div class="px-2 flex bg-white" style="border-bottom:1px solid #F1F5F9">
-    <button class="tab active" data-tab="all">All (12)</button>
-    <button class="tab" data-tab="transit">In Transit (3)</button>
-    <button class="tab" data-tab="delivered">Delivered (9)</button>
+  <!-- Summary · total orders + lifetime savings (replaced the All/In-transit/Delivered tabs) -->
+  <div class="ord-summary">
+    <div class="os"><div class="v tnum">12</div><div class="k">Total orders</div></div>
+    <div class="os-div"></div>
+    <div class="os"><div class="v green tnum">₹4,180</div><div class="k">You saved</div></div>
   </div>
 
   <!-- Order list -->

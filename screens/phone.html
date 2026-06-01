@@ -203,15 +203,25 @@
     </div>
   </div>
 
-  <!-- Sticky CTA · both consent checkboxes sit directly ABOVE the Send OTP button · both are mandatory (button disabled until both ticked) · checked by default -->
+  <!-- Custom polished checkbox -->
+  <style>
+    .cbx{position:relative;width:20px;height:20px;flex-shrink:0;margin-top:1px}
+    .cbx input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+    .cbx .box{width:20px;height:20px;border-radius:6px;border:2px solid #CBD5E1;background:#fff;display:flex;align-items:center;justify-content:center;transition:background .15s ease,border-color .15s ease}
+    .cbx .box i{font-size:10px;color:#fff;opacity:0;transform:scale(.6);transition:opacity .15s ease,transform .15s ease}
+    .cbx input:checked + .box{background:#059669;border-color:#059669}
+    .cbx input:checked + .box i{opacity:1;transform:scale(1)}
+  </style>
+
+  <!-- Sticky CTA · consent sits directly above Send OTP (both mandatory, checked by default) · when the keyboard opens, the consent collapses so ONLY the CTA lifts -->
   <div id="stickyCta" class="fixed bottom-0 left-0 right-0 px-6 pt-3 pb-4" style="background:#F8F8F8;border-top:0;transition:transform .15s ease;will-change:transform">
-    <div class="space-y-2.5 mb-3">
-      <label class="flex items-start gap-2.5 cursor-pointer">
-        <input type="checkbox" id="consentTerms" checked class="mt-0.5 w-[18px] h-[18px] rounded-[5px] flex-shrink-0" style="accent-color:#059669"/>
+    <div id="consentWrap" class="space-y-3 mb-3.5">
+      <label class="flex items-start gap-3 cursor-pointer">
+        <span class="cbx"><input type="checkbox" id="consentTerms" checked/><span class="box"><i class="fa-solid fa-check"></i></span></span>
         <span class="text-[11.5px] leading-snug text-[#475569]">By continuing you agree that you have read and accept our <span class="font-bold" style="color:#047857">terms &amp; conditions</span> and <span class="font-bold" style="color:#047857">privacy policy</span>.</span>
       </label>
-      <label class="flex items-start gap-2.5 cursor-pointer">
-        <input type="checkbox" id="consentSms" checked class="mt-0.5 w-[18px] h-[18px] rounded-[5px] flex-shrink-0" style="accent-color:#059669"/>
+      <label class="flex items-start gap-3 cursor-pointer">
+        <span class="cbx"><input type="checkbox" id="consentSms" checked/><span class="box"><i class="fa-solid fa-check"></i></span></span>
         <span class="text-[11.5px] leading-snug text-[#475569]">I hereby authorize KKD to send notifications on SMS / Promotional / Information messages.</span>
       </label>
     </div>
@@ -302,9 +312,12 @@
       if (!window.visualViewport) return;
       const cta = document.getElementById('stickyCta');
       if (!cta) return;
+      const consentWrap = document.getElementById('consentWrap');
       function reposition(){
         const offset = Math.max(0, window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop);
         cta.style.transform = offset > 0 ? 'translateY(-' + offset + 'px)' : '';
+        // Keyboard open · collapse the consent so only the CTA lifts above the keyboard
+        if (consentWrap) consentWrap.style.display = offset > 0 ? 'none' : '';
       }
       window.visualViewport.addEventListener('resize', reposition);
       window.visualViewport.addEventListener('scroll', reposition);

@@ -223,6 +223,8 @@
   /* State-conditional visibility */
   body.state-transit  .only-delivered{display:none}
   body.state-delivered .only-transit{display:none}
+  /* No Return/Refund CTA while the order is still out for delivery */
+  body.state-transit #returnCta{display:none}
   body:not(.state-partial) .only-partial{display:none}
   body.state-partial .only-fullpaid{display:none}
 </style></head>

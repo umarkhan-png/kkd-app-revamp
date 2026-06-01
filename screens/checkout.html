@@ -69,6 +69,17 @@
   .coin-toggle::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.2);transition:transform .2s ease}
   .coin-toggle:checked{background:#059669}
   .coin-toggle:checked::after{transform:translateX(18px)}
+  /* Wallet · money balance · MANDATORY auto-apply (no toggle) · shows applied + remaining */
+  .wallet-apply{display:flex;align-items:center;gap:12px;padding:14px}
+  .wallet-apply .wal-ic{width:40px;height:40px;border-radius:12px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+  .wallet-apply .wal-body{flex:1;line-height:1.25;min-width:0}
+  .wallet-apply .wal-a{font-size:13.5px;font-weight:800;color:#0F172A}
+  .wallet-apply .wal-a .wal-amt{color:#047857}
+  .wallet-apply .wal-b{font-size:11px;color:#64748B;margin-top:2px}
+  .wallet-apply .wal-tag{flex-shrink:0;font-size:9px;font-weight:900;letter-spacing:0.06em;color:#047857;background:#ECFDF5;border:1px solid #A7F3D0;padding:3px 8px;border-radius:9999px}
+  /* Remaining-balance strip below the wallet row */
+  .wal-remain{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:#F8FAFC;border-top:1px solid #F1F5F9;font-size:12px;font-weight:700;color:#475569}
+  .wal-remain .v{font-weight:900;color:#0F172A;font-variant-numeric:tabular-nums}
   .bill-total{border-top:1px dashed #CBD5E1;margin-top:8px;padding-top:10px;display:flex;align-items:baseline;justify-content:space-between}
   .bill-total .lbl{font-size:14px;font-weight:800}
   .bill-total .val{font-size:18px;font-weight:800}
@@ -198,6 +209,20 @@
     </label>
   </div>
 
+  <!-- Wallet · money balance · mandatorily applied to the order (not a toggle) · shows applied amount + remaining balance -->
+  <div class="sec-title">Wallet</div>
+  <div class="card">
+    <div class="wallet-apply">
+      <span class="wal-ic"><i class="fa-solid fa-wallet"></i></span>
+      <div class="wal-body">
+        <div class="wal-a">Wallet applied <span class="wal-amt tnum">− ₹540</span></div>
+        <div class="wal-b">Auto-applied to this order · money balance, separate from Krishi Coins</div>
+      </div>
+      <span class="wal-tag">APPLIED</span>
+    </div>
+    <div class="wal-remain"><span>Remaining wallet balance</span><span class="v tnum" id="walRemain">₹0</span></div>
+  </div>
+
   <!-- Bill summary · "Prepaid extra off" line replaces the old "UPI extra off" · shown only when Pay Now or Partial is selected -->
   <div class="sec-title">Bill summary</div>
   <div class="card">
@@ -207,6 +232,7 @@
       <div class="bill-row"><span class="lbl">Coupon (WELCOME100)</span><span class="val green tnum">&minus; &#8377;100</span></div>
       <div class="bill-row" id="prepaidBillRow"><span class="lbl" style="color:#047857;font-weight:700">Prepaid extra off</span><span class="val green tnum" id="prepaidBillAmt">&minus; &#8377;95</span></div>
       <div class="bill-row" id="coinBillRow" style="display:none"><span class="lbl" style="color:#047857;font-weight:700"><i class="fa-solid fa-coins text-[11px]" style="color:#F59E0B"></i> Krishi Coins</span><span class="val green tnum" id="coinBillAmt">&minus; &#8377;190</span></div>
+      <div class="bill-row"><span class="lbl" style="color:#047857;font-weight:700"><i class="fa-solid fa-wallet text-[10px]"></i> Wallet</span><span class="val green tnum">&minus; &#8377;540</span></div>
       <div class="bill-row"><span class="lbl">Delivery</span><span class="val green">FREE</span></div>
       <div class="bill-total">
         <span class="lbl">Total to pay</span>
@@ -234,6 +260,8 @@
 
     const COIN_REDEEM = 190;   // capped Krishi Coins redemption (1 coin = ₹1)
     let coinsRedeem = 0;
+    const WALLET_BALANCE = 540;   // money wallet · MANDATORY auto-apply (capped to the order)
+    let walletApplied = 0;
 
     function updateBill(method, pct){
       const billRow = document.getElementById('prepaidBillRow');
@@ -248,9 +276,14 @@
         showOff = false; total = SUBTOTAL;
       } else { showOff = false; total = SUBTOTAL; }
       total -= coinsRedeem;
+      // Wallet money is mandatorily applied · capped to whatever's left on the bill
+      walletApplied = Math.min(WALLET_BALANCE, Math.max(0, total));
+      total -= walletApplied;
       billRow.style.display = showOff ? 'flex' : 'none';
       billAmt.textContent = '− ' + fmt(off);
       if (coinRow) coinRow.style.display = coinsRedeem > 0 ? 'flex' : 'none';
+      const walRemain = document.getElementById('walRemain');
+      if (walRemain) walRemain.textContent = fmt(WALLET_BALANCE - walletApplied);
       billTotal.textContent = fmt(total);
       ctaAmt.textContent = fmt(total);
     }

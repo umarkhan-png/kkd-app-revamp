@@ -203,25 +203,38 @@
     </div>
   </div>
 
-  <!-- Consent · two checkboxes, both checked by default · 1) T&C + Privacy, 2) SMS/promotional authorization -->
-  <div class="px-6 mt-5 space-y-3">
-    <label class="flex items-start gap-2.5 cursor-pointer">
-      <input type="checkbox" id="consentTerms" checked class="mt-0.5 w-[18px] h-[18px] rounded-[5px] accent-emerald-600 flex-shrink-0" style="accent-color:#059669"/>
-      <span class="text-[11.5px] leading-snug text-[#475569]">By continuing you agree that you have read and accept our <span class="font-bold" style="color:#047857">terms &amp; conditions</span> and <span class="font-bold" style="color:#047857">privacy policy</span>.</span>
-    </label>
-    <label class="flex items-start gap-2.5 cursor-pointer">
-      <input type="checkbox" id="consentSms" checked class="mt-0.5 w-[18px] h-[18px] rounded-[5px] flex-shrink-0" style="accent-color:#059669"/>
-      <span class="text-[11.5px] leading-snug text-[#475569]">I hereby authorize KKD to send notifications on SMS / Promotional / Information messages.</span>
-    </label>
-  </div>
-
-  <!-- Sticky CTA · design-system primary · lifts with the keyboard via visualViewport (see script at end of body) -->
-  <div id="stickyCta" class="fixed bottom-0 left-0 right-0 px-6 py-4" style="background:#F8F8F8;border-top:0;transition:transform .15s ease;will-change:transform">
+  <!-- Sticky CTA · both consent checkboxes sit directly ABOVE the Send OTP button · both are mandatory (button disabled until both ticked) · checked by default -->
+  <div id="stickyCta" class="fixed bottom-0 left-0 right-0 px-6 pt-3 pb-4" style="background:#F8F8F8;border-top:0;transition:transform .15s ease;will-change:transform">
+    <div class="space-y-2.5 mb-3">
+      <label class="flex items-start gap-2.5 cursor-pointer">
+        <input type="checkbox" id="consentTerms" checked class="mt-0.5 w-[18px] h-[18px] rounded-[5px] flex-shrink-0" style="accent-color:#059669"/>
+        <span class="text-[11.5px] leading-snug text-[#475569]">By continuing you agree that you have read and accept our <span class="font-bold" style="color:#047857">terms &amp; conditions</span> and <span class="font-bold" style="color:#047857">privacy policy</span>.</span>
+      </label>
+      <label class="flex items-start gap-2.5 cursor-pointer">
+        <input type="checkbox" id="consentSms" checked class="mt-0.5 w-[18px] h-[18px] rounded-[5px] flex-shrink-0" style="accent-color:#059669"/>
+        <span class="text-[11.5px] leading-snug text-[#475569]">I hereby authorize KKD to send notifications on SMS / Promotional / Information messages.</span>
+      </label>
+    </div>
     <button id="sendOtpBtn" class="w-full h-[52px] rounded-[12px] text-white text-[15px] font-extrabold flex items-center justify-center gap-2" style="background:#059669;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
       Send OTP
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
     </button>
   </div>
+
+  <script>
+    // Both consent boxes are mandatory · Send OTP stays disabled until both are ticked
+    (function(){
+      const t = document.getElementById('consentTerms');
+      const s = document.getElementById('consentSms');
+      const btn = document.getElementById('sendOtpBtn');
+      function sync(){
+        const ok = t.checked && s.checked;
+        btn.style.opacity = ok ? '1' : '.5';
+        btn.style.pointerEvents = ok ? 'auto' : 'none';
+      }
+      t.addEventListener('change', sync); s.addEventListener('change', sync); sync();
+    })();
+  </script>
 
   <script>
     // Language modal · chip taps open the bottom sheet, tile taps persist + close + update the chip

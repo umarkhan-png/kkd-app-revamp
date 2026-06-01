@@ -1390,6 +1390,155 @@
       </div>
     </section>
 
+    <!-- Engagement widgets · same poll-card pattern as the acres widget · each awards Krishi Coins · horizontally scrollable · Rate & review opens a bottom modal -->
+    <section class="mt-8">
+      <div class="px-4 mb-3 flex items-baseline justify-between">
+        <h2 class="text-[21px] font-bold tracking-tight">Earn Krishi Coins</h2>
+        <a href="wallet.html" class="nu text-[12px] font-extrabold" style="color:#047857;text-decoration:none">WALLET</a>
+      </div>
+      <style>
+        .eng-card{position:relative;flex-shrink:0;width:236px;background:#FFFFFF;border:1px solid #BBF7D0;border-radius:14px;padding:13px;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15);overflow:hidden;display:flex;flex-direction:column;gap:10px}
+        .eng-top{display:flex;align-items:center;justify-content:space-between}
+        .eng-ic{width:34px;height:34px;border-radius:10px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:14px}
+        .eng-coin{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:9999px;font-size:10.5px;font-weight:800;background:linear-gradient(135deg,#FBBF24,#F59E0B);color:#78350F}
+        .eng-coin i{font-size:9px}
+        .eng-q{font-size:13px;font-weight:800;color:#0F172A;line-height:1.25;min-height:34px}
+        .eng-opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+        .eng-chip{padding:6px 11px;border-radius:9999px;background:#F8FAFC;border:1px solid #E5E7EB;font-size:11.5px;font-weight:700;color:#0F172A;cursor:pointer}
+        .eng-chip:active{transform:scale(.96)}
+        .eng-cta{width:100%;height:38px;border-radius:10px;background:#059669;color:#FFFFFF;border:0;font-size:12.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;text-decoration:none;margin-top:auto}
+        .eng-cta.ghost{background:#ECFDF5;color:#047857;border:1px solid #BBF7D0}
+        .eng-done{position:absolute;inset:0;background:linear-gradient(135deg,rgba(5,150,105,0.97),rgba(16,185,129,0.97));color:#FFFFFF;display:none;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center;padding:14px}
+        .eng-card.done .eng-done{display:flex}
+        .eng-done .ic{font-size:26px}
+        .eng-done .t{font-size:14px;font-weight:900}
+        .eng-done .s{font-size:11px;opacity:.92}
+        .eng-modal-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80}
+        .eng-modal-bd.open{opacity:1;pointer-events:auto}
+        .eng-modal{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;padding:0 20px 22px}
+        .eng-modal.open{transform:translateY(0)}
+        .eng-stars{display:flex;gap:12px;justify-content:center;margin:16px 0}
+        .eng-stars .s{font-size:32px;color:#CBD5E1;cursor:pointer;transition:transform .12s ease,color .15s ease}
+        .eng-stars .s.on{color:#F59E0B}
+        .eng-stars .s:active{transform:scale(.85)}
+      </style>
+      <div class="overflow-x-auto scroll-x" id="engRow">
+        <div class="flex gap-3 px-4 pb-1">
+
+          <!-- Crop -->
+          <div class="eng-card">
+            <div class="eng-top"><span class="eng-ic"><i class="fa-solid fa-wheat-awn"></i></span><span class="eng-coin"><i class="fa-solid fa-coins"></i> +15</span></div>
+            <div class="eng-q">Which crop do you grow most?</div>
+            <div class="eng-opts">
+              <button class="eng-chip" data-reward>Wheat</button>
+              <button class="eng-chip" data-reward>Cotton</button>
+              <button class="eng-chip" data-reward>Tomato</button>
+              <button class="eng-chip" data-reward>Other</button>
+            </div>
+            <div class="eng-done"><div class="ic">🌾</div><div class="t">+15 coins earned!</div><div class="s">Thanks — we'll tailor your feed</div></div>
+          </div>
+
+          <!-- Crop problem -->
+          <div class="eng-card">
+            <div class="eng-top"><span class="eng-ic" style="background:#FEE2E2;color:#DC2626"><i class="fa-solid fa-bug"></i></span><span class="eng-coin"><i class="fa-solid fa-coins"></i> +15</span></div>
+            <div class="eng-q">Facing any crop problem now?</div>
+            <div class="eng-opts">
+              <button class="eng-chip" data-reward>Pest</button>
+              <button class="eng-chip" data-reward>Disease</button>
+              <button class="eng-chip" data-reward>Weeds</button>
+              <button class="eng-chip" data-reward>Nutrition</button>
+            </div>
+            <div class="eng-done"><div class="ic">🛡️</div><div class="t">+15 coins earned!</div><div class="s">We'll suggest the right fix</div></div>
+          </div>
+
+          <!-- Share testimonial -->
+          <div class="eng-card">
+            <div class="eng-top"><span class="eng-ic" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-quote-right"></i></span><span class="eng-coin"><i class="fa-solid fa-coins"></i> +30</span></div>
+            <div class="eng-q">Share your success story with KKD</div>
+            <button class="eng-cta" data-reward><i class="fa-solid fa-pen text-[11px]"></i> Share testimonial</button>
+            <div class="eng-done"><div class="ic">🙏</div><div class="t">+30 coins earned!</div><div class="s">Thanks for sharing your story</div></div>
+          </div>
+
+          <!-- Refer & earn -->
+          <div class="eng-card">
+            <div class="eng-top"><span class="eng-ic" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-gift"></i></span><span class="eng-coin"><i class="fa-solid fa-coins"></i> ₹50</span></div>
+            <div class="eng-q">Refer a friend, earn ₹50 each</div>
+            <a href="refer.html" class="eng-cta"><i class="fa-solid fa-user-plus text-[11px]"></i> Invite a friend</a>
+          </div>
+
+          <!-- Order delivered -->
+          <div class="eng-card">
+            <div class="eng-top"><span class="eng-ic"><i class="fa-solid fa-truck-fast"></i></span><span class="eng-coin"><i class="fa-solid fa-coins"></i> +10</span></div>
+            <div class="eng-q">Did your last order arrive OK?</div>
+            <div class="eng-opts">
+              <button class="eng-chip" data-reward>👍 Yes</button>
+              <button class="eng-chip" data-reward>Not yet</button>
+            </div>
+            <div class="eng-done"><div class="ic">📦</div><div class="t">+10 coins earned!</div><div class="s">Thanks for confirming</div></div>
+          </div>
+
+          <!-- Rate & review · opens bottom modal -->
+          <div class="eng-card" id="engRateCard">
+            <div class="eng-top"><span class="eng-ic" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-star"></i></span><span class="eng-coin"><i class="fa-solid fa-coins"></i> +25</span></div>
+            <div class="eng-q">Rate your recent purchase</div>
+            <button class="eng-cta ghost" id="engRateOpen"><i class="fa-solid fa-star text-[11px]"></i> Rate &amp; review</button>
+            <div class="eng-done"><div class="ic">⭐</div><div class="t">+25 coins earned!</div><div class="s">Thanks for your review</div></div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Rate & review bottom modal -->
+    <div id="engRateBd" class="eng-modal-bd"></div>
+    <div id="engRateModal" class="eng-modal">
+      <div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 0"></div>
+      <div class="flex items-center gap-3 mt-4">
+        <div class="w-12 h-12 rounded-[12px] flex items-center justify-center flex-shrink-0" style="background:#F8FAFC;border:1px solid #E5E7EB;padding:6px"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="max-h-full object-contain"/></div>
+        <div class="leading-tight">
+          <div class="text-[15px] font-extrabold text-[#0F172A]">Humic + Fulvic</div>
+          <div class="text-[11.5px]" style="color:#64748B">From your order on 10 Apr</div>
+        </div>
+      </div>
+      <div class="eng-stars" id="engRateStars">
+        <span class="s" data-v="1"><i class="fa-solid fa-star"></i></span>
+        <span class="s" data-v="2"><i class="fa-solid fa-star"></i></span>
+        <span class="s" data-v="3"><i class="fa-solid fa-star"></i></span>
+        <span class="s" data-v="4"><i class="fa-solid fa-star"></i></span>
+        <span class="s" data-v="5"><i class="fa-solid fa-star"></i></span>
+      </div>
+      <textarea id="engRateText" placeholder="Write a quick review (optional)…" class="w-full rounded-[10px] text-[12.5px] outline-none" style="border:1px solid #E5E7EB;background:#FAFAFA;padding:10px 12px;min-height:60px;resize:none;font-family:inherit;color:#0F172A"></textarea>
+      <button id="engRateSubmit" class="w-full h-[50px] mt-3 rounded-[12px] text-white text-[14.5px] font-extrabold" style="background:#059669;border:0;opacity:.55" disabled>Submit &amp; earn +25 coins</button>
+    </div>
+
+    <script>
+      // Engagement widgets · reward on tap (chips / CTAs) → flip the card to its done state · Rate & review opens the bottom modal and rewards on submit
+      (function(){
+        document.querySelectorAll('#engRow [data-reward]').forEach(el => {
+          el.addEventListener('click', () => {
+            const card = el.closest('.eng-card');
+            if (card && !card.classList.contains('done')) card.classList.add('done');
+          });
+        });
+        const bd = document.getElementById('engRateBd');
+        const sh = document.getElementById('engRateModal');
+        const openBtn = document.getElementById('engRateOpen');
+        const stars = document.querySelectorAll('#engRateStars .s');
+        const submit = document.getElementById('engRateSubmit');
+        const card = document.getElementById('engRateCard');
+        let val = 0;
+        function shut(){ bd.classList.remove('open'); sh.classList.remove('open'); }
+        openBtn && openBtn.addEventListener('click', () => { bd.classList.add('open'); sh.classList.add('open'); });
+        bd && bd.addEventListener('click', shut);
+        stars.forEach(s => s.addEventListener('click', () => {
+          val = parseInt(s.dataset.v, 10);
+          stars.forEach(x => x.classList.toggle('on', parseInt(x.dataset.v, 10) <= val));
+          submit.disabled = false; submit.style.opacity = '1';
+        }));
+        submit && submit.addEventListener('click', () => { if (!val) return; shut(); if (card) card.classList.add('done'); });
+      })();
+    </script>
+
     <!-- Most Selling in Indore — Bestseller-style tiles (grey image area edge-to-edge) + Flash-Sale-style emerald top strip carrying the "X bought last week" social-proof badge -->
     <section class="mt-8">
       <div class="px-4 mb-3">

@@ -93,6 +93,29 @@
     }
     .phone::before { display: none; }
   }
+  /* Loading screen · shown while a screen loads (slow network / navigation) */
+  .vload {
+    position: absolute; inset: 0; z-index: 50;
+    background: #FFFFFF;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+    opacity: 1; transition: opacity .35s ease;
+  }
+  .vload.hide { opacity: 0; pointer-events: none; }
+  .vload-logo {
+    width: 64px; height: 64px; border-radius: 18px;
+    background: linear-gradient(135deg,#047857,#10B981);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; box-shadow: 0 10px 24px -6px rgba(5,150,105,0.5);
+    animation: vloadPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes vloadPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.09)} }
+  .vload-spin {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 3px solid #D1FAE5; border-top-color: #059669;
+    animation: vspin .8s linear infinite;
+  }
+  @keyframes vspin { to { transform: rotate(360deg); } }
+  .vload-txt { font-size: 13px; font-weight: 700; color: #0F172A; font-family: 'Poppins', system-ui, sans-serif; }
 </style>
 </head>
 <body>
@@ -120,7 +143,12 @@
 
   <div class="stage">
     <div class="phone">
-      <iframe id="frame" src="" onload="hideInnerScrollbars(this)"></iframe>
+      <iframe id="frame" src="" onload="onFrameLoad(this)"></iframe>
+      <div class="vload" id="vload">
+        <div class="vload-logo">🌱</div>
+        <div class="vload-spin"></div>
+        <div class="vload-txt" id="vloadTxt">Loading…</div>
+      </div>
     </div>
   </div>
 
@@ -164,6 +192,33 @@
     function reload() {
       document.getElementById('frame').src = document.getElementById('frame').src;
     }
+    // Loading screen · rotating Krishi-themed copy · stays up at least 650ms so it reads as a real loader, re-shows when the iframe navigates to another screen
+    const LOAD_MSGS = ['Taking you to your fields…','Loading fresh prices…','Getting the best deals…','Warming up the mandi…','Almost there…'];
+    const vload = document.getElementById('vload');
+    const vloadTxt = document.getElementById('vloadTxt');
+    let loadStart = Date.now();
+    function showLoad() {
+      if (vloadTxt) vloadTxt.textContent = LOAD_MSGS[Math.floor(Math.random() * LOAD_MSGS.length)];
+      if (vload) vload.classList.remove('hide');
+      loadStart = Date.now();
+    }
+    function hideLoad() {
+      const wait = Math.max(0, 650 - (Date.now() - loadStart));
+      setTimeout(() => { if (vload) vload.classList.add('hide'); }, wait);
+    }
+    showLoad();
+
+    // Fired on every iframe load · hides the loader + re-arms it for the next in-app navigation
+    function onFrameLoad(frame) {
+      hideInnerScrollbars(frame);
+      hideLoad();
+      try {
+        // Re-show the loader the moment the user navigates to another screen inside the app
+        frame.contentWindow.addEventListener('beforeunload', showLoad);
+        frame.contentWindow.addEventListener('pagehide', showLoad);
+      } catch (e) { /* cross-origin — ignore */ }
+    }
+
     // Inject scrollbar-hiding CSS into each loaded screen (same-origin iframes)
     function hideInnerScrollbars(frame) {
       try {

@@ -31,9 +31,13 @@
   .var-more i{font-size:13px}
   .var-more .lbl-sub{font-size:9.5px;color:#94A3B8;font-weight:600}
   /* Best-value badge · added by JS to the lowest per-unit (per-L) tile in each grid · distinct from the amber Bestseller chip */
-  .vk-best{position:absolute;top:-7px;left:50%;transform:translateX(-50%);background:#059669;color:#FFFFFF;font-size:8px;font-weight:800;padding:2px 6px;border-radius:9999px;white-space:nowrap;letter-spacing:0.02em;box-shadow:0 2px 6px rgba(5,150,105,0.4);display:inline-flex;align-items:center;gap:3px;z-index:2}
-  .vk-best i{font-size:7px}
-  .var.has-best{padding-top:18px;border-color:#A7F3D0}
+  /* Per-variant low-stock line (shows only when units < 5) */
+  .vk-low{font-size:8.5px;font-weight:800;color:#DC2626;margin-top:4px;line-height:1}
+  /* "Cheaper per unit than the selected pack" down-arrow · injected/toggled by JS on variant change */
+  .vk-arrow{display:none;position:absolute;top:6px;right:6px;width:18px;height:18px;border-radius:50%;background:#059669;color:#fff;align-items:center;justify-content:center;font-size:9px;z-index:3;box-shadow:0 2px 6px rgba(5,150,105,0.4);animation:vkBounce 1s ease-in-out infinite}
+  .var.cheaper .vk-arrow{display:flex}
+  .var.cheaper .vk-perL{color:#047857;font-weight:800}
+  @keyframes vkBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(2.5px)}}
   /* Live-viewers + low-stock FOMO tags · sit under the product title */
   .live-view{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#B45309;background:#FFF7ED;border:1px solid #FED7AA;padding:4px 10px;border-radius:9999px}
   .live-dot{width:7px;height:7px;border-radius:50%;background:#F97316;animation:livePulse 1.6s ease-out infinite}
@@ -177,10 +181,9 @@
     </a>
   </div>
 
-  <!-- FOMO tags · live viewers (highly viewed) + low stock -->
+  <!-- Highly-viewed tag · sits right below the #1 Bestseller badge · low-stock moved into the pack-size tiles -->
   <div class="flex items-center gap-2 mt-2.5 flex-wrap">
-    <span class="live-view"><span class="live-dot"></span> <span class="tnum">142</span> people viewing now</span>
-    <span class="low-stock"><i class="fa-solid fa-fire"></i> Only 8 left in stock</span>
+    <span class="live-view"><span class="live-dot"></span> Highly viewed today</span>
   </div>
 
 </div>
@@ -640,28 +643,28 @@
     });
   })();
 
-  // Best value · badge the lowest per-unit (per-L) tile in each grid (main grid + the all-sizes sheet)
+  // Per-variant stock line + "cheaper per unit than the selected pack" down-arrow (recomputed on every variant change)
   (function(){
-    function badge(container){
-      if (!container) return;
-      const tiles = Array.from(container.querySelectorAll('.var'));
-      let min = Infinity, best = null;
-      tiles.forEach(t => {
-        const el = t.querySelector('.vk-perL');
-        if (!el) return;
-        const n = parseInt(el.textContent.replace(/[^0-9]/g,''),10) || Infinity;
-        if (n < min) { min = n; best = t; }
-      });
-      if (best && !best.querySelector('.vk-best')) {
-        const b = document.createElement('span');
-        b.className = 'vk-best';
-        b.innerHTML = '<i class="fa-solid fa-tag"></i> Best value';
-        best.appendChild(b);
-        best.classList.add('has-best');
+    // units in stock per pack size · an "Only N left" line shows only when < 5
+    const STOCK = {'100 ml':22,'250 ml':4,'500 ml':2,'1 L':16,'2 L':30,'5 L':12,'10 L':9,'20 L':25,'25 L':20,'50 L':14,'100 L':8};
+    function perL(t){ const el = t.querySelector('.vk-perL'); return el ? (parseInt(el.textContent.replace(/[^0-9]/g,''),10) || Infinity) : Infinity; }
+    document.querySelectorAll('.var').forEach(t => {
+      if (!t.querySelector('.vk-arrow')) {
+        const a = document.createElement('span'); a.className = 'vk-arrow'; a.innerHTML = '<i class="fa-solid fa-arrow-down"></i>';
+        t.appendChild(a);
       }
-    }
-    badge(document.querySelector('.pack-grid'));
-    badge(document.querySelector('#sheet .grid'));
+      const st = STOCK[t.dataset.size];
+      if (st != null && st < 5 && !t.querySelector('.vk-low')) {
+        const l = document.createElement('div'); l.className = 'vk-low'; l.textContent = 'Only ' + st + ' left';
+        t.appendChild(l);
+      }
+    });
+    // Flag every variant whose per-unit (per-L) price is LOWER than the selected pack's → animated down-arrow
+    window.markCheaper = function(selSize){
+      const sel = document.querySelector('.var[data-size="' + selSize + '"]');
+      const selPerL = sel ? perL(sel) : Infinity;
+      document.querySelectorAll('.var').forEach(t => t.classList.toggle('cheaper', perL(t) < selPerL));
+    };
   })();
 
   // Variant selection + per-variant cart · supports adding MULTIPLE different sizes (selecting another variant resets the ADD control so a new one can be added; the cart bar tallies all variants)
@@ -699,8 +702,10 @@
       curSize = size; curPrice = num(price);
       if (headPrice && price) headPrice.textContent = price;
       syncControl();                       // reflect this variant's own qty (0 → fresh ADD button)
+      if (window.markCheaper) window.markCheaper(size);   // refresh cheaper-per-unit arrows
     };
     document.querySelectorAll('.var').forEach(v => v.addEventListener('click', () => window.selectVariant(v.dataset.size, v.dataset.price)));
+    if (window.markCheaper) window.markCheaper(curSize);   // initial pass for the default-selected pack
     btn.addEventListener('click', () => { cart[curSize] = { qty: 1, price: curPrice }; syncControl(); syncBar(); });
     inc.addEventListener('click', () => { if (!cart[curSize]) cart[curSize] = { qty: 0, price: curPrice }; cart[curSize].qty += 1; val.textContent = cart[curSize].qty; syncBar(); });
     dec.addEventListener('click', () => {

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Rate the app</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0;overflow-x:hidden}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;position:relative}
+  .tnum{font-variant-numeric:tabular-nums}
+
+  /* Faint app context behind the sheet */
+  .ctx{filter:saturate(.7);opacity:.5;pointer-events:none}
+  .ctx .row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid #F1F5F9;background:#fff}
+  .ctx .ic{width:36px;height:36px;border-radius:10px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center}
+
+  /* Backdrop + sheet */
+  .rate-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease;z-index:80}
+  .rate-bd.open{opacity:1}
+  .rate-sheet{position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:26px 26px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1);z-index:90;max-height:90vh;overflow-y:auto}
+  .rate-sheet.open{transform:translateY(0)}
+  .handle{width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 2px}
+
+  .fork-opt{width:100%;display:flex;align-items:center;gap:12px;text-align:left;border:1.5px solid #E5E7EB;border-radius:12px;padding:13px;background:#FFFFFF;cursor:pointer;transition:border-color .15s ease}
+  .fork-opt:active{transform:scale(.99)}
+  .fork-opt .emo{font-size:28px;line-height:1}
+  .fork-opt .a{font-size:15px;font-weight:800;color:#0F172A}
+  .fork-opt .b{font-size:12px;color:#64748B;margin-top:1px}
+  .fork-opt.happy:hover{border-color:#059669}
+  .fork-opt.okay:hover{border-color:#F59E0B}
+  .fork-opt.sad:hover{border-color:#DC2626}
+
+  .fb-tag{font-size:12.5px;padding:7px 12px;border-radius:9999px;border:1px solid #E5E7EB;color:#0F172A;background:#FFFFFF;font-weight:600;cursor:pointer;transition:all .15s ease}
+  .fb-tag.sel{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:700}
+
+  .star-row{display:flex;gap:10px;justify-content:center;margin:14px 0 4px}
+  .star-row .st{font-size:34px;color:#CBD5E1;cursor:pointer;transition:transform .12s ease,color .15s ease}
+  .star-row .st.on{color:#F59E0B}
+  .star-row .st:active{transform:scale(.85)}
+
+  .ghost-link{display:block;width:100%;text-align:center;font-size:13px;font-weight:700;color:#64748B;background:transparent;border:0;cursor:pointer;padding:10px 0;text-decoration:none}
+  .prim-cta{width:100%;height:52px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45);text-decoration:none}
+</style></head>
+<body>
+
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
+    </div>
+  </div>
+
+  <!-- Faint profile context behind the sheet -->
+  <div class="px-4 pt-4 pb-3 flex items-center gap-3 bg-white ctx">
+    <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB"><i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i></div>
+    <h1 class="flex-1 text-[22px] font-extrabold" style="color:#0F172A">Profile</h1>
+  </div>
+  <div class="ctx">
+    <div class="row"><span class="ic"><i class="fa-solid fa-wallet"></i></span><span class="flex-1 text-[14px] font-bold">Krishi Coins wallet</span><span class="text-[11.5px] text-[#64748B]">₹1,240</span></div>
+    <div class="row"><span class="ic"><i class="fa-solid fa-star"></i></span><span class="flex-1 text-[14px] font-bold">Rate the app</span></div>
+    <div class="row"><span class="ic"><i class="fa-solid fa-circle-question"></i></span><span class="flex-1 text-[14px] font-bold">Help &amp; Support</span></div>
+  </div>
+
+  <!-- Rate sheet -->
+  <div id="rateBd" class="rate-bd"></div>
+  <div id="rateSheet" class="rate-sheet">
+    <div class="handle"></div>
+    <div class="px-5 pt-2 pb-6">
+
+      <!-- VIEW 1 · fork -->
+      <div data-rv="1">
+        <div class="text-center">
+          <div class="text-[21px] font-extrabold text-[#0F172A] tracking-tight">How's your experience?</div>
+          <div class="text-[13px] mt-1" style="color:#64748B">Your feedback helps us serve farmers better</div>
+        </div>
+        <div class="mt-4 space-y-2.5">
+          <button class="fork-opt happy" onclick="rateFork('happy')">
+            <span class="emo">😊</span>
+            <div class="flex-1"><div class="a">Loving it!</div><div class="b">The app works great for my farm</div></div>
+            <i class="fa-solid fa-chevron-right text-[12px]" style="color:#94A3B8"></i>
+          </button>
+          <button class="fork-opt okay" onclick="rateFork('okay')">
+            <span class="emo">😐</span>
+            <div class="flex-1"><div class="a">It's okay</div><div class="b">Some things could be better</div></div>
+            <i class="fa-solid fa-chevron-right text-[12px]" style="color:#94A3B8"></i>
+          </button>
+          <button class="fork-opt sad" onclick="rateFork('unhappy')">
+            <span class="emo">😔</span>
+            <div class="flex-1"><div class="a">Needs work</div><div class="b">Facing issues or annoyances</div></div>
+            <i class="fa-solid fa-chevron-right text-[12px]" style="color:#94A3B8"></i>
+          </button>
+        </div>
+        <button class="ghost-link mt-3" onclick="closeRate()">Maybe later</button>
+      </div>
+
+      <!-- VIEW 2 · happy → app store -->
+      <div data-rv="2" class="hidden">
+        <div class="text-center">
+          <div class="w-16 h-16 rounded-full mx-auto flex items-center justify-center" style="background:radial-gradient(circle,#FFFBEB 0%,#FEF3C7 100%);border:1.5px solid #FCD34D">
+            <i class="fa-solid fa-star text-[30px]" style="color:#F59E0B"></i>
+          </div>
+          <div class="star-row" id="happyStars">
+            <span class="st on"><i class="fa-solid fa-star"></i></span><span class="st on"><i class="fa-solid fa-star"></i></span><span class="st on"><i class="fa-solid fa-star"></i></span><span class="st on"><i class="fa-solid fa-star"></i></span><span class="st on"><i class="fa-solid fa-star"></i></span>
+          </div>
+          <div class="text-[22px] font-extrabold text-[#0F172A] tracking-tight">That's wonderful! 🎉</div>
+          <div class="text-[13px] mt-1 px-2" style="color:#64748B">A quick 5-star rating helps other farmers discover Katyayani Krishi Direct. It takes just 10 seconds.</div>
+        </div>
+        <a href="#" onclick="closeRate();return false;" class="prim-cta mt-5"><i class="fa-brands fa-google-play text-[15px]"></i> Rate us on Play Store</a>
+        <button class="ghost-link mt-2" onclick="closeRate()">Not now</button>
+      </div>
+
+      <!-- VIEW 3 · unhappy → feedback -->
+      <div data-rv="3" class="hidden">
+        <div>
+          <div class="text-[20px] font-extrabold text-[#0F172A] tracking-tight">Help us get better</div>
+          <div class="text-[13px] mt-0.5" style="color:#64748B">Sorry you're not happy. Tell us what went wrong.</div>
+        </div>
+        <div class="text-[11px] font-extrabold uppercase tracking-wider mt-3" style="color:#64748B">What's bothering you? (select any)</div>
+        <div class="flex flex-wrap gap-1.5 mt-2">
+          <button class="fb-tag" onclick="this.classList.toggle('sel')">App is slow</button>
+          <button class="fb-tag" onclick="this.classList.toggle('sel')">Crashes / Bugs</button>
+          <button class="fb-tag" onclick="this.classList.toggle('sel')">Hard to use</button>
+          <button class="fb-tag" onclick="this.classList.toggle('sel')">Can't find products</button>
+          <button class="fb-tag" onclick="this.classList.toggle('sel')">Payment issues</button>
+          <button class="fb-tag" onclick="this.classList.toggle('sel')">Delivery problems</button>
+          <button class="fb-tag" onclick="this.classList.toggle('sel')">Confusing screens</button>
+          <button class="fb-tag" onclick="this.classList.toggle('sel')">Wrong product info</button>
+          <button class="fb-tag" onclick="this.classList.toggle('sel')">Something else</button>
+        </div>
+        <div class="text-[11px] font-extrabold uppercase tracking-wider mt-3" style="color:#64748B">Tell us more (optional)</div>
+        <textarea rows="3" class="w-full mt-1.5 text-[13.5px] text-[#0F172A] rounded-[10px] p-2.5 resize-none" style="border:1px solid #E5E7EB;background:#FAFAFA;outline:none" placeholder="Describe the issue so we can fix it…"></textarea>
+        <button class="text-[12px] font-bold mt-2 inline-flex items-center gap-1.5" style="color:#047857;background:transparent;border:0;cursor:pointer"><i class="fa-solid fa-camera text-[11px]"></i> Attach screenshot</button>
+        <button onclick="showRateView(4)" class="prim-cta mt-4"><i class="fa-solid fa-paper-plane text-[13px]"></i> Submit feedback</button>
+        <button class="ghost-link mt-2" onclick="showRateView(1)">← Back</button>
+      </div>
+
+      <!-- VIEW 4 · thanks -->
+      <div data-rv="4" class="hidden">
+        <div class="text-center py-3">
+          <div class="relative w-16 h-16 mx-auto">
+            <div class="absolute inset-0 rounded-full" style="background:rgba(5,150,105,0.15);animation:ping 1.4s cubic-bezier(0,0,.2,1) infinite"></div>
+            <div class="relative w-16 h-16 rounded-full flex items-center justify-center" style="background:#ECFDF5;border:1px solid #A7F3D0">
+              <i class="fa-solid fa-check text-[28px]" style="color:#047857"></i>
+            </div>
+          </div>
+          <div class="text-[22px] font-extrabold text-[#0F172A] mt-3 tracking-tight">Thank you!</div>
+          <div class="text-[13px] mt-1 px-4 leading-relaxed" style="color:#64748B">Your feedback has been shared with our team. We'll review it and keep making the app better for every farmer.</div>
+        </div>
+        <button onclick="closeRate()" class="prim-cta mt-1">Done</button>
+      </div>
+
+    </div>
+  </div>
+
+  <style>@keyframes ping{75%,100%{transform:scale(1.9);opacity:0}}</style>
+  <script>
+    function showRateView(n){
+      document.querySelectorAll('#rateSheet [data-rv]').forEach(el => el.classList.add('hidden'));
+      const t = document.querySelector('#rateSheet [data-rv="' + n + '"]');
+      if (t) t.classList.remove('hidden');
+      document.getElementById('rateSheet').scrollTop = 0;
+    }
+    function rateFork(choice){ showRateView(choice === 'happy' ? 2 : 3); }
+    function closeRate(){
+      document.getElementById('rateBd').classList.remove('open');
+      document.getElementById('rateSheet').classList.remove('open');
+      setTimeout(() => { if (history.length > 1) history.back(); else location.href = 'account.html'; }, 320);
+    }
+    // Happy-view stars · tapping sets the rating (visual only)
+    document.querySelectorAll('#happyStars .st').forEach((s, i) => s.addEventListener('click', () => {
+      document.querySelectorAll('#happyStars .st').forEach((x, j) => x.classList.toggle('on', j <= i));
+    }));
+    // Open on load · ?rate=happy|feedback|thanks jumps to a view for previews
+    (function(){
+      const r = (new URLSearchParams(location.search).get('rate') || 'fork').toLowerCase();
+      const map = { fork:1, happy:2, feedback:3, thanks:4 };
+      showRateView(map[r] || 1);
+      requestAnimationFrame(() => {
+        document.getElementById('rateBd').classList.add('open');
+        document.getElementById('rateSheet').classList.add('open');
+      });
+    })();
+    document.getElementById('rateBd').addEventListener('click', closeRate);
+  </script>
+</body></html>

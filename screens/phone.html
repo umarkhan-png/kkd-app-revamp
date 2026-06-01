@@ -192,15 +192,12 @@
     </div>
   </div>
 
-  <!-- Refer code · small inline link · expands to a referral input when tapped · low-stakes UX so first-time users don't get distracted -->
-  <div class="px-6 mt-3">
-    <button id="referToggle" class="text-[11.5px] font-bold inline-flex items-center gap-1.5" style="color:#047857">
-      <i class="fa-solid fa-ticket text-[10px]"></i> Have a referral code?
-    </button>
+  <!-- Refer code · centred text link · icon dropped per spec · expands to a centred input when tapped -->
+  <div class="px-6 mt-3 text-center">
+    <button id="referToggle" class="text-[11.5px] font-bold" style="color:#047857;background:transparent;border:0;cursor:pointer">Have a referral code?</button>
     <div id="referBox" class="mt-2 hidden">
-      <div class="flex items-center gap-2 h-[44px] px-3 rounded-[10px] bg-white" style="border:1px solid #E5E7EB">
-        <i class="fa-solid fa-tag text-[11px]" style="color:#94A3B8"></i>
-        <input id="referCode" type="text" placeholder="Enter referral code" class="flex-1 outline-none text-[13px] font-semibold bg-transparent placeholder:text-[#94A3B8] placeholder:font-medium" style="text-transform:uppercase;letter-spacing:0.06em"/>
+      <div class="flex items-center gap-2 h-[44px] px-3 rounded-[10px] bg-white mx-auto" style="border:1px solid #E5E7EB;max-width:280px">
+        <input id="referCode" type="text" placeholder="Enter referral code" class="flex-1 outline-none text-[13px] font-semibold bg-transparent placeholder:text-[#94A3B8] placeholder:font-medium text-center" style="text-transform:uppercase;letter-spacing:0.06em"/>
         <button id="referApply" class="text-[11.5px] font-extrabold" style="color:#047857">Apply</button>
       </div>
     </div>

@@ -276,7 +276,7 @@
 
   <!-- Info bar: address (tap to change theme) + coin + profile · breathing space below the system status row + below the row -->
   <div class="flex items-center justify-between px-4 pt-3 pb-2.5 relative">
-    <button id="addressBtn" class="flex items-center gap-2.5 min-w-0 flex-1 text-left relative z-10" style="background:transparent;border:0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(255,255,255,0.2)">
+    <button id="addressBtn" class="flex items-center gap-2.5 min-w-0 flex-1 text-left relative z-10" style="background:transparent;border:0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;outline:none">
       <img src="../assets/kkd-logo.png" alt="KKD" class="flex-shrink-0" style="width:36px;height:36px;border-radius:9px;object-fit:cover"/>
       <div class="leading-tight min-w-0">
         <!-- Greeting · scrolls upward continuously (current text exits up, new text enters from below) · normal Title-Case ("Hey! Sagar"), no all-caps -->
@@ -315,7 +315,7 @@
   <!-- Search · voice icon less prominent -->
   <div class="sticky-search px-4 py-3">
     <div class="relative">
-      <input id="search-input" type="text" placeholder="Search products, pests, crops" class="w-full pl-12 pr-12 py-3 rounded-xl text-[15.5px] font-medium focus:outline-none focus:ring-2 focus:ring-emerald-600/30" style="background:#F1F5F9;border:1px solid #E2E8F0"/>
+      <input id="search-input" type="text" readonly onclick="location.href='search.html'" placeholder="Search products, pests, crops" class="w-full pl-12 pr-12 py-3 rounded-xl text-[15.5px] font-medium focus:outline-none focus:ring-2 focus:ring-emerald-600/30 cursor-pointer" style="background:#F1F5F9;border:1px solid #E2E8F0"/>
       <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-[15px]" style="color:#94A3B8"></i>
       <a href="voice-search.html" class="nu absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg flex items-center justify-center" style="background:#F1F5F9">
         <i class="fa-solid fa-microphone text-[14px] text-[#475569]"></i>
@@ -1954,13 +1954,17 @@
     const addressBtn = document.getElementById('addressBtn');
     const themes = ['green', 'rain', 'festival'];
     let themeIdx = 0;
-    addressBtn.addEventListener('click', () => {
+    // Tap on the address bar now opens the addresses screen (per spec) · theme cycling moves to a long-press as a demo escape hatch
+    addressBtn.addEventListener('click', () => { window.location.href = 'addresses.html'; });
+    let pressTimer = null;
+    addressBtn.addEventListener('touchstart', () => { pressTimer = setTimeout(() => {
       themeIdx = (themeIdx + 1) % themes.length;
       themeRoot.setAttribute('data-theme', themes[themeIdx]);
-      themeRoot.classList.remove('bloom');
-      void themeRoot.offsetWidth; // restart animation
-      themeRoot.classList.add('bloom');
-    });
+      themeRoot.classList.remove('bloom'); void themeRoot.offsetWidth; themeRoot.classList.add('bloom');
+      pressTimer = 'fired';
+    }, 700); }, { passive: true });
+    addressBtn.addEventListener('touchend', e => { if (pressTimer === 'fired') { e.preventDefault(); } pressTimer && clearTimeout(pressTimer); pressTimer = null; });
+    addressBtn.addEventListener('touchcancel', () => { pressTimer && clearTimeout(pressTimer); pressTimer = null; });
 
     // Detected location handoff · if locating.html persisted a village (kkd.village), swap the address label and play a brief highlight ring so the user feels "current location is selected"
     (function(){

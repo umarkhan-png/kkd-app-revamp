@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Welcome back</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0;font-family:'Poppins',system-ui,sans-serif}
+  body{min-height:100vh;color:#0F172A;background:linear-gradient(180deg,#ECFDF5 0%,#FFFFFF 60%,#FAF7F2 100%);overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;position:relative}
+  body::before{content:"";position:absolute;top:-80px;right:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,0.18) 0%,transparent 65%);pointer-events:none}
+  body::after{content:"";position:absolute;bottom:-100px;left:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.16) 0%,transparent 70%);pointer-events:none}
+
+  /* Hero · warm waving-hand emoji-style icon (waving palm) · pulses gently · less celebratory than the new-user splash, more "good to see you again" */
+  .seal-wrap{position:relative;display:inline-block;margin:0 auto}
+  .seal{width:120px;height:120px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center;box-shadow:0 18px 38px -10px rgba(15,23,42,0.18),0 0 0 6px rgba(16,185,129,0.12);transform:scale(0);animation:sealIn .6s cubic-bezier(.34,1.56,.64,1) .1s forwards;position:relative;z-index:2}
+  @keyframes sealIn{to{transform:scale(1)}}
+  /* Waving hand · slight rotation oscillation to mimic the 'hello' wave */
+  .seal i{font-size:54px;color:#F59E0B;opacity:0;animation:waveIn .35s ease-out .55s forwards, waveMotion 2.6s ease-in-out .9s infinite;transform-origin:70% 70%}
+  @keyframes waveIn{to{opacity:1}}
+  @keyframes waveMotion{0%,100%{transform:rotate(0)}30%{transform:rotate(18deg)}60%{transform:rotate(-12deg)}}
+
+  /* Eyebrow + headline + name + subline · staggered fade-up · same pattern as welcome-aboard, but warmer copy + cream/emerald palette */
+  .eyebrow{margin-top:24px;font-size:11.5px;font-weight:900;letter-spacing:0.22em;color:#047857;opacity:0;animation:up .55s ease-out .85s forwards}
+  .headline{margin-top:8px;font-size:32px;font-weight:900;letter-spacing:-0.02em;line-height:1.05;color:#0F172A;opacity:0;animation:up .55s ease-out 1.0s forwards}
+  .name{margin-top:6px;font-size:34px;font-weight:900;letter-spacing:-0.02em;background:linear-gradient(135deg,#047857,#10B981);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;opacity:0;animation:up .55s ease-out 1.15s forwards}
+  .subline{margin-top:14px;font-size:14px;color:#475569;line-height:1.5;max-width:300px;margin-left:auto;margin-right:auto;opacity:0;animation:up .55s ease-out 1.3s forwards;font-weight:500}
+  @keyframes up{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+  /* Stat strip · 3 quick cells of farmer-friendly social signals · "Your last order delivered" / "X new products" / "X products in your cart" · adds warmth so the splash isn't empty */
+  .stat-strip{margin-top:28px;display:flex;align-items:stretch;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;max-width:340px;margin-left:auto;margin-right:auto;opacity:0;animation:up .55s ease-out 1.45s forwards;box-shadow:0 4px 14px -8px rgba(15,23,42,0.12)}
+  .stat-strip .cell{flex:1;padding:11px 6px;line-height:1.1;text-align:center}
+  .stat-strip .cell + .cell{border-left:1px solid #F1F5F9}
+  .stat-strip .v{font-size:15px;font-weight:900;color:#047857;font-variant-numeric:tabular-nums;letter-spacing:-0.01em}
+  .stat-strip .l{font-size:9.5px;font-weight:700;color:#64748B;margin-top:3px;text-transform:uppercase;letter-spacing:0.06em}
+
+  /* CTA · primary emerald pill · "Tap to continue" */
+  .cta{position:absolute;left:24px;right:24px;bottom:32px;height:54px;border-radius:14px;background:#059669;color:#FFFFFF;font-size:15.5px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;box-shadow:0 14px 30px -10px rgba(5,150,105,0.45);opacity:0;animation:up .5s ease-out 1.6s forwards}
+  .cta i{font-size:13px}
+</style></head>
+<body>
+
+  <div>
+    <div class="seal-wrap">
+      <div class="seal"><i class="fa-solid fa-hand"></i></div>
+    </div>
+    <div class="eyebrow">Welcome back</div>
+    <div class="headline">Hey,</div>
+    <div class="name" id="userName">Sagar</div>
+    <div class="subline">Good to see you again. Your farm has been waiting for you.</div>
+    <div class="stat-strip">
+      <div class="cell"><div class="v">Last week</div><div class="l">Last order</div></div>
+      <div class="cell"><div class="v tnum">24</div><div class="l">New products</div></div>
+      <div class="cell"><div class="v tnum">3</div><div class="l">In your cart</div></div>
+    </div>
+  </div>
+
+  <a href="home.html" class="cta">Continue to home <i class="fa-solid fa-arrow-right"></i></a>
+
+  <script>
+    (function(){
+      const el = document.getElementById('userName');
+      if (!el) return;
+      let fn = '';
+      try { fn = (localStorage.getItem('kkd.firstName') || '').trim(); } catch (e) {}
+      if (fn) el.textContent = fn;
+    })();
+    setTimeout(() => { if (!document.hidden) window.location.href = 'home.html'; }, 4500);
+  </script>
+</body></html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Search</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0;font-family:'Poppins',system-ui,sans-serif}
+  input,button{font-family:inherit}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A}
+  .scrollx{overflow-x:auto;scrollbar-width:none}
+  .scrollx::-webkit-scrollbar{display:none}
+  .img-blend{mix-blend-mode:multiply}
+
+  /* Top search bar · sticky · back arrow + input + clear */
+  .stk{position:sticky;top:0;z-index:30;background:#FFFFFF;border-bottom:1px solid #F1F5F9;padding:10px 12px;display:flex;align-items:center;gap:10px}
+  .stk .back{width:36px;height:36px;border-radius:9999px;background:#FFFFFF;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#0F172A;cursor:pointer}
+  .search-input{flex:1;display:flex;align-items:center;gap:8px;height:42px;padding:0 12px;border-radius:11px;background:#F8FAFC;border:1px solid #E5E7EB}
+  .search-input input{flex:1;outline:0;background:transparent;font-size:14px;font-weight:600;color:#0F172A}
+  .search-input input::placeholder{color:#94A3B8;font-weight:500}
+  .search-input .clear{width:22px;height:22px;border-radius:9999px;background:#E2E8F0;color:#475569;display:none;align-items:center;justify-content:center;font-size:9px;cursor:pointer;border:0;flex-shrink:0}
+  .search-input.has-query .clear{display:flex}
+
+  /* Section title · matches design system */
+  .sec-title{margin:18px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em;display:flex;align-items:center;justify-content:space-between}
+  .sec-title a{font-size:11px;color:#047857;text-decoration:none;text-transform:uppercase;letter-spacing:0.06em}
+
+  /* Chip · recent search / trending */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px}
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:9999px;background:#FFFFFF;border:1px solid #E5E7EB;font-size:12.5px;font-weight:700;color:#0F172A;cursor:pointer;text-decoration:none;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .chip i.lead{color:#94A3B8;font-size:10px}
+  .chip i.x{color:#94A3B8;font-size:9px;margin-left:2px}
+  .chip.trend{background:#ECFDF5;border-color:#A7F3D0;color:#047857}
+  .chip.trend i.lead{color:#047857}
+
+  /* Category grid · 4-col tile · same look as the home categories chip-tiles */
+  .cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 16px}
+  .cat-tile{display:flex;flex-direction:column;align-items:center;gap:6px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:12px 6px;text-decoration:none;color:inherit;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .cat-ic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#047857;background:#ECFDF5}
+  .cat-lab{font-size:11px;font-weight:700;text-align:center;line-height:1.2;color:#0F172A}
+
+  /* Suggestion row (live) · product hit list · image + name/tech + price */
+  .sugg-card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .sugg-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:1px solid #F1F5F9;cursor:pointer;text-decoration:none;color:inherit}
+  .sugg-row:last-child{border-bottom:0}
+  .sugg-img{width:46px;height:46px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:4px;flex-shrink:0}
+  .sugg-img img{max-width:100%;max-height:100%;object-fit:contain}
+  .sugg-body{flex:1;min-width:0;line-height:1.25}
+  .sugg-body .nm{font-size:13.5px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sugg-body .nm mark{background:#FEF3C7;color:#0F172A;padding:0;font-weight:900}
+  .sugg-body .sub{font-size:11px;color:#64748B;margin-top:2px}
+  .sugg-body .pr{font-size:11.5px;color:#047857;font-weight:800;font-variant-numeric:tabular-nums;margin-top:3px}
+  .sugg-row .arrow{font-size:11px;color:#94A3B8;flex-shrink:0}
+
+  /* Empty results · stub state */
+  .empty-wrap{margin:0 16px;background:#FFFFFF;border:1px dashed #E5E7EB;border-radius:14px;padding:28px 18px;text-align:center;color:#64748B;font-size:12.5px}
+  .empty-wrap .ic{width:44px;height:44px;border-radius:12px;background:#F1F5F9;color:#94A3B8;display:flex;align-items:center;justify-content:center;font-size:18px;margin:0 auto 10px}
+</style></head>
+<body>
+
+  <!-- Sticky top search row · back + search input + clear -->
+  <div class="stk">
+    <button class="back" onclick="if(document.referrer && history.length>1){history.back()}else{location.href='home.html'}" aria-label="Back"><i class="fa-solid fa-arrow-left text-[12px]"></i></button>
+    <div class="search-input" id="searchWrap">
+      <i class="fa-solid fa-magnifying-glass text-[13px]" style="color:#94A3B8"></i>
+      <input id="q" type="text" placeholder="Search products, crops, diseases" autofocus/>
+      <button class="clear" id="clearBtn" aria-label="Clear"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+  </div>
+
+  <!-- IDLE state · recent searches + trending + shop-by-category · visible when the query is empty -->
+  <div id="idle">
+    <div class="sec-title"><span>Recent searches</span><a href="#" id="clearRecent">CLEAR</a></div>
+    <div class="chips" id="recentChips">
+      <button class="chip" data-q="Humic"><i class="fa-regular fa-clock lead"></i> Humic <i class="fa-solid fa-xmark x"></i></button>
+      <button class="chip" data-q="Chakrawarti"><i class="fa-regular fa-clock lead"></i> Chakrawarti <i class="fa-solid fa-xmark x"></i></button>
+      <button class="chip" data-q="NPK"><i class="fa-regular fa-clock lead"></i> NPK 19-19-19 <i class="fa-solid fa-xmark x"></i></button>
+      <button class="chip" data-q="Antivirus"><i class="fa-regular fa-clock lead"></i> Antivirus <i class="fa-solid fa-xmark x"></i></button>
+    </div>
+
+    <div class="sec-title"><span>Trending in your area</span></div>
+    <div class="chips">
+      <button class="chip trend" data-q="Wheat protect"><i class="fa-solid fa-fire lead"></i> Wheat protect</button>
+      <button class="chip trend" data-q="Bhumiraja"><i class="fa-solid fa-fire lead"></i> Bhumiraja</button>
+      <button class="chip trend" data-q="Imida"><i class="fa-solid fa-fire lead"></i> Imida</button>
+      <button class="chip trend" data-q="Cotton care"><i class="fa-solid fa-fire lead"></i> Cotton care</button>
+      <button class="chip trend" data-q="Bio stimulant"><i class="fa-solid fa-fire lead"></i> Bio stimulant</button>
+    </div>
+
+    <div class="sec-title"><span>Shop by category</span><a href="categories.html">VIEW ALL</a></div>
+    <div class="cat-grid">
+      <a href="categories.html?c=fertilizer" class="cat-tile"><span class="cat-ic"><i class="fa-solid fa-leaf"></i></span><span class="cat-lab">Fertilizer</span></a>
+      <a href="categories.html?c=insecticide" class="cat-tile"><span class="cat-ic"><i class="fa-solid fa-bug-slash"></i></span><span class="cat-lab">Insecticide</span></a>
+      <a href="categories.html?c=fungicide" class="cat-tile"><span class="cat-ic"><i class="fa-solid fa-droplet"></i></span><span class="cat-lab">Fungicide</span></a>
+      <a href="categories.html?c=herbicide" class="cat-tile"><span class="cat-ic"><i class="fa-solid fa-seedling"></i></span><span class="cat-lab">Herbicide</span></a>
+      <a href="categories.html?c=seeds" class="cat-tile"><span class="cat-ic"><i class="fa-solid fa-wheat-awn"></i></span><span class="cat-lab">Seeds</span></a>
+      <a href="categories.html?c=tools" class="cat-tile"><span class="cat-ic"><i class="fa-solid fa-screwdriver-wrench"></i></span><span class="cat-lab">Tools</span></a>
+      <a href="categories.html?c=organic" class="cat-tile"><span class="cat-ic"><i class="fa-solid fa-spa"></i></span><span class="cat-lab">Organic</span></a>
+      <a href="categories.html?c=biostimulant" class="cat-tile"><span class="cat-ic"><i class="fa-solid fa-flask"></i></span><span class="cat-lab">Bio-stim</span></a>
+    </div>
+    <div style="height:24px"></div>
+  </div>
+
+  <!-- RESULTS state · shown when there's a query · 5 hardcoded product hits that filter by name -->
+  <div id="results" style="display:none">
+    <div class="sec-title"><span id="resultsTitle">Top results</span></div>
+    <div class="sugg-card" id="hitsList">
+      <a href="pdp.html" class="sugg-row" data-name="Humic">
+        <div class="sugg-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend" alt=""/></div>
+        <div class="sugg-body"><div class="nm">Humic</div><div class="sub">Bio-stimulant · 500 ml</div><div class="pr">₹276 · 29% off</div></div>
+        <i class="fa-solid fa-arrow-up-right-from-square arrow"></i>
+      </a>
+      <a href="pdp.html" class="sugg-row" data-name="Chakrawarti">
+        <div class="sugg-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend" alt=""/></div>
+        <div class="sugg-body"><div class="nm">Chakrawarti ZC</div><div class="sub">Insecticide · 100 ml</div><div class="pr">₹358 · 28% off</div></div>
+        <i class="fa-solid fa-arrow-up-right-from-square arrow"></i>
+      </a>
+      <a href="pdp.html" class="sugg-row" data-name="NPK">
+        <div class="sugg-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend" alt=""/></div>
+        <div class="sugg-body"><div class="nm">NPK 19-19-19</div><div class="sub">Fertilizer · 1 kg</div><div class="pr">₹330</div></div>
+        <i class="fa-solid fa-arrow-up-right-from-square arrow"></i>
+      </a>
+      <a href="pdp.html" class="sugg-row" data-name="Antivirus">
+        <div class="sugg-img"><img src="../assets/AntiVirus_nobg.png" class="img-blend" alt=""/></div>
+        <div class="sugg-body"><div class="nm">Antivirus</div><div class="sub">Bio-stimulant · 250 ml</div><div class="pr">₹327 · 23% off</div></div>
+        <i class="fa-solid fa-arrow-up-right-from-square arrow"></i>
+      </a>
+      <a href="pdp.html" class="sugg-row" data-name="Bhumiraja">
+        <div class="sugg-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" class="img-blend" alt=""/></div>
+        <div class="sugg-body"><div class="nm">Bhumiraja</div><div class="sub">Soil conditioner · 1 kg</div><div class="pr">₹245 · 24% off</div></div>
+        <i class="fa-solid fa-arrow-up-right-from-square arrow"></i>
+      </a>
+    </div>
+    <div id="empty" class="empty-wrap mt-3" style="display:none;margin-top:12px">
+      <div class="ic"><i class="fa-solid fa-magnifying-glass"></i></div>
+      <div>No products match this search.</div>
+      <div class="mt-2 text-[11px]">Try a different keyword or browse <a href="categories.html" style="color:#047857;font-weight:800;text-decoration:none">categories</a></div>
+    </div>
+    <div style="height:24px"></div>
+  </div>
+
+  <script>
+    const wrap = document.getElementById('searchWrap');
+    const q = document.getElementById('q');
+    const clearBtn = document.getElementById('clearBtn');
+    const idle = document.getElementById('idle');
+    const results = document.getElementById('results');
+    const rows = document.querySelectorAll('#hitsList .sugg-row');
+    const empty = document.getElementById('empty');
+
+    function render(){
+      const val = q.value.trim();
+      wrap.classList.toggle('has-query', val.length > 0);
+      if (!val){ idle.style.display = ''; results.style.display = 'none'; return; }
+      idle.style.display = 'none'; results.style.display = '';
+      let hits = 0;
+      rows.forEach(r => {
+        const name = (r.dataset.name || '').toLowerCase();
+        const match = name.includes(val.toLowerCase());
+        r.style.display = match ? '' : 'none';
+        if (match) {
+          hits++;
+          // Highlight the matched substring in the name
+          const nameEl = r.querySelector('.nm');
+          if (nameEl) {
+            const orig = r.dataset.name;
+            const idx = orig.toLowerCase().indexOf(val.toLowerCase());
+            if (idx >= 0) {
+              nameEl.innerHTML = orig.slice(0, idx) + '<mark>' + orig.slice(idx, idx + val.length) + '</mark>' + orig.slice(idx + val.length);
+            } else nameEl.textContent = orig;
+          }
+        }
+      });
+      empty.style.display = hits === 0 ? '' : 'none';
+      document.getElementById('resultsTitle').textContent = hits === 0 ? 'No matches' : 'Top results for "' + val + '"';
+    }
+
+    q.addEventListener('input', render);
+    clearBtn.addEventListener('click', () => { q.value = ''; q.focus(); render(); });
+
+    // Recent + trending chips fill the input
+    document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', e => {
+      // If the user tapped the X inside a recent chip, just remove it
+      if (e.target.closest('.x')) { e.preventDefault(); c.remove(); return; }
+      q.value = c.dataset.q || c.textContent.trim();
+      render();
+      q.focus();
+    }));
+
+    // Clear all recent
+    const clearRecent = document.getElementById('clearRecent');
+    clearRecent && clearRecent.addEventListener('click', e => { e.preventDefault(); document.getElementById('recentChips').innerHTML = ''; });
+
+    render();
+  </script>
+</body></html>

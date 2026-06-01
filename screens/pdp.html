@@ -94,8 +94,8 @@
   .trust-ic-wrap{width:44px;height:44px;border-radius:12px;background:#ECFDF5;display:flex;align-items:center;justify-content:center}
   .trust-ic-wrap i{color:#047857;font-size:18px}
   .trust-cap{font-size:11.5px;font-weight:400;color:#94A3B8;line-height:1.25;text-align:center}
-  .trust-cell{cursor:pointer}
-  .trust-view{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:#047857}
+  .trust-i{width:15px;height:15px;border-radius:50%;background:#059669;color:#FFFFFF;font-size:8px;display:inline-flex;align-items:center;justify-content:center;border:0;cursor:pointer;flex-shrink:0;box-shadow:0 1px 3px rgba(5,150,105,0.4)}
+  .trust-i:active{transform:scale(.9)}
   /* Trust detail bottom sheet */
   .trust-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:96}
   .trust-bd.open{opacity:1;pointer-events:auto}
@@ -297,21 +297,20 @@
 <!-- Trust badges · no border / no card wrapper · drop tick + star + chevrons · captions are grey + normal weight -->
 <div class="px-4">
   <div class="trust-row">
-    <button type="button" class="trust-cell" data-trust="return" style="background:transparent;border:0">
+    <div class="trust-cell">
       <span class="trust-ic-wrap"><i class="fa-solid fa-rotate-left"></i></span>
-      <span class="trust-cap">7-Day Return</span>
-      <span class="trust-view">View <i class="fa-solid fa-chevron-right text-[7px]"></i></span>
-    </button>
-    <button type="button" class="trust-cell" data-trust="cod" style="background:transparent;border:0">
+      <span class="trust-cap" style="display:inline-flex;align-items:center;gap:5px">7-Day Return
+        <button type="button" class="trust-i" data-trust="return" aria-label="Return policy"><i class="fa-solid fa-info"></i></button>
+      </span>
+    </div>
+    <div class="trust-cell">
       <span class="trust-ic-wrap"><i class="fa-solid fa-indian-rupee-sign"></i></span>
       <span class="trust-cap">Cash on Delivery</span>
-      <span class="trust-view">View <i class="fa-solid fa-chevron-right text-[7px]"></i></span>
-    </button>
-    <button type="button" class="trust-cell" data-trust="assured" style="background:transparent;border:0">
+    </div>
+    <div class="trust-cell">
       <span class="trust-ic-wrap"><i class="fa-solid fa-shield-halved"></i></span>
       <span class="trust-cap">Katyayani Assured</span>
-      <span class="trust-view">View <i class="fa-solid fa-chevron-right text-[7px]"></i></span>
-    </button>
+    </div>
   </div>
 </div>
 
@@ -361,7 +360,7 @@
       bd.classList.add('open'); sh.classList.add('open');
     }
     function close(){ bd.classList.remove('open'); sh.classList.remove('open'); }
-    document.querySelectorAll('.trust-cell[data-trust]').forEach(b => b.addEventListener('click', () => open(b.dataset.trust)));
+    document.querySelectorAll('[data-trust]').forEach(b => b.addEventListener('click', () => open(b.dataset.trust)));
     document.getElementById('trustClose').addEventListener('click', close);
     bd.addEventListener('click', close);
   })();

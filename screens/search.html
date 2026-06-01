@@ -445,5 +445,13 @@
   })();
 
   render();
+
+  // Shop-by-category labels · reserve a 2nd line for ALL tiles only if at least one name wraps (otherwise keep single-line height — no wasted space)
+  (function(){
+    const labs = Array.from(document.querySelectorAll('.cat-grid .cat-lab'));
+    if (!labs.length) return;
+    const lh = parseFloat(getComputedStyle(labs[0]).lineHeight) || 14;
+    if (labs.some(l => l.offsetHeight > lh * 1.6)) labs.forEach(l => l.style.minHeight = (lh * 2) + 'px');
+  })();
 </script>
 </body></html>

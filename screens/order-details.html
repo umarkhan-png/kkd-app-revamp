@@ -543,28 +543,40 @@
       <button id="helpClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
     <div class="px-3 pb-2">
-      <!-- Return tile · only renders if delivered within the last 7 days · the dataDays badge counts the remaining days -->
-      <a id="helpReturn" href="#return" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
+      <!-- Return / replace · opens the detailed return form · gated to a 7-day window -->
+      <button id="helpReturn" type="button" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;width:100%;background:transparent;border:0;text-align:left;cursor:pointer">
         <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-right-left text-[16px]"></i></div>
         <div class="flex-1 leading-tight">
           <div class="text-[14px] font-bold text-[#0F172A]">Return or replace</div>
           <div class="text-[11.5px] text-[#64748B] mt-0.5">Damaged, wrong, or not as described</div>
         </div>
         <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold flex-shrink-0" style="background:#FEF3C7;color:#92400E"><i class="fa-regular fa-clock text-[9px]"></i> <span id="returnDaysLeft">5</span> days left</span>
-      </a>
-      <a href="advisory.html" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
-        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-triangle-exclamation text-[15px]"></i></div>
+      </button>
+      <!-- Shoot unboxing video · opens the device camera (capture) to record proof -->
+      <label class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;cursor:pointer">
+        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#EFF6FF;color:#2563EB"><i class="fa-solid fa-video text-[15px]"></i></div>
         <div class="flex-1 leading-tight">
-          <div class="text-[14px] font-bold text-[#0F172A]">Report damaged or wrong item</div>
-          <div class="text-[11.5px] text-[#64748B] mt-0.5">Send photos · we'll resolve within 24 hours</div>
+          <div class="text-[14px] font-bold text-[#0F172A]">Shoot unboxing video</div>
+          <div class="text-[11.5px] text-[#64748B] mt-0.5">Record now — fastest way to resolve a claim</div>
+        </div>
+        <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
+        <input type="file" accept="video/*" capture="environment" id="unboxVideo" style="display:none"/>
+      </label>
+      <!-- Call us -->
+      <a href="tel:18002700300" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
+        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-phone text-[15px]"></i></div>
+        <div class="flex-1 leading-tight">
+          <div class="text-[14px] font-bold text-[#0F172A]">Call us</div>
+          <div class="text-[11.5px] text-[#64748B] mt-0.5">Toll-free 1800 270 0300 · 9am–7pm</div>
         </div>
         <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
       </a>
-      <a href="advisory.html" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
-        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#F1F5F9;color:#475569"><i class="fa-solid fa-headset text-[15px]"></i></div>
+      <!-- Returns policy -->
+      <a href="policy.html?doc=returns" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
+        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#F1F5F9;color:#475569"><i class="fa-solid fa-file-lines text-[15px]"></i></div>
         <div class="flex-1 leading-tight">
-          <div class="text-[14px] font-bold text-[#0F172A]">Talk to KKD support</div>
-          <div class="text-[11.5px] text-[#64748B] mt-0.5">Call back in your language</div>
+          <div class="text-[14px] font-bold text-[#0F172A]">Returns &amp; refund policy</div>
+          <div class="text-[11.5px] text-[#64748B] mt-0.5">What's eligible and how refunds work</div>
         </div>
         <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
       </a>
@@ -576,7 +588,90 @@
     .hopt{ transition: background .15s ease; }
     .hopt:hover{ background:#F8FAFC; }
     .hopt:active{ transform: scale(.98); }
+
+    /* Return / replace form */
+    .rtn-seg{display:flex;gap:8px}
+    .rtn-seg-btn{flex:1;height:46px;border-radius:11px;border:1.5px solid #E5E7EB;background:#FFFFFF;color:#475569;font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
+    .rtn-seg-btn i{font-size:12px}
+    .rtn-seg-btn.active{border-color:#059669;background:#ECFDF5;color:#047857}
+    .rtn-prod{display:flex;align-items:center;gap:10px;padding:10px;border:1.5px solid #E5E7EB;border-radius:12px;cursor:pointer}
+    .rtn-prod.sel{border-color:#059669;background:#ECFDF5}
+    .rtn-prod input{width:18px;height:18px;accent-color:#059669;flex-shrink:0}
+    .rtn-prod .pimg{width:40px;height:40px;border-radius:9px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:4px;flex-shrink:0}
+    .rtn-prod .pimg img{max-width:100%;max-height:100%;object-fit:contain}
+    .rtn-prod .pn{font-size:13px;font-weight:700;color:#0F172A;line-height:1.2}
+    .rtn-prod .ps{font-size:11px;color:#94A3B8;margin-top:1px}
+    .rtn-select,.rtn-desc{width:100%;border:1.5px solid #E5E7EB;border-radius:10px;background:#FAFAFA;font-size:13px;font-family:inherit;color:#0F172A;outline:none;box-sizing:border-box;padding:11px 12px}
+    .rtn-select:focus,.rtn-desc:focus{border-color:#047857}
+    .rtn-desc{min-height:64px;resize:none;margin-top:8px}
+    .rtn-attach{flex:1;height:46px;border-radius:11px;border:1.5px dashed #CBD5E1;background:#FFFFFF;color:#475569;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
+    .rtn-attach i{font-size:13px;color:#047857}
+    .rtn-attach.rec{border-color:#FCA5A5;background:#FEF2F2;color:#DC2626}
+    .rtn-attach.rec i{color:#DC2626}
+    /* success */
+    .rate-ok-coin.check{background:linear-gradient(135deg,#10B981,#047857)}
   </style>
+
+  <!-- Return / replace form · choice + product select + reason + description + photo-video + voice note + policy link -->
+  <div id="rtnBd" class="modal-bd"></div>
+  <div id="rtnSheet" class="modal-sheet" style="padding:0">
+    <div class="modal-handle"></div>
+    <div class="px-5 pt-3 pb-2 flex items-center justify-between" style="flex-shrink:0">
+      <div class="leading-tight">
+        <div class="text-[18px] font-extrabold text-[#0F172A]">Return or replace</div>
+        <div class="text-[11.5px] font-semibold" style="color:#64748B">Order #KAT-2026-04-1198</div>
+      </div>
+      <button id="rtnClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div class="px-5 pb-4 overflow-y-auto" style="flex:1">
+      <div class="text-[11px] font-extrabold uppercase tracking-wider mb-2" style="color:#64748B">What would you like?</div>
+      <div class="rtn-seg" id="rtnSeg">
+        <button type="button" class="rtn-seg-btn active" data-choice="return"><i class="fa-solid fa-rotate-left"></i> Return &amp; refund</button>
+        <button type="button" class="rtn-seg-btn" data-choice="replace"><i class="fa-solid fa-right-left"></i> Replacement</button>
+      </div>
+
+      <div class="text-[11px] font-extrabold uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Select product(s)</div>
+      <div class="space-y-2" id="rtnProducts">
+        <label class="rtn-prod"><input type="checkbox" class="rtn-prod-cb"/><div class="pimg"><img src="../assets/Humic_nobg.png" class="img-blend"/></div><div class="flex-1 leading-tight"><div class="pn">Humic + Fulvic</div><div class="ps">1 L · ₹376</div></div></label>
+        <label class="rtn-prod"><input type="checkbox" class="rtn-prod-cb"/><div class="pimg"><img src="../assets/AntiVirus_nobg.png" class="img-blend"/></div><div class="flex-1 leading-tight"><div class="pn">Antivirus</div><div class="ps">250 ml · ₹327</div></div></label>
+      </div>
+
+      <div class="text-[11px] font-extrabold uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Reason</div>
+      <select class="rtn-select" id="rtnReason">
+        <option value="">Select a reason…</option>
+        <option>Damaged / leaking on arrival</option>
+        <option>Wrong product delivered</option>
+        <option>Not as described</option>
+        <option>Missing item in package</option>
+        <option>Quality issue</option>
+        <option>Other</option>
+      </select>
+      <textarea class="rtn-desc" id="rtnDesc" placeholder="Describe the issue in your words…"></textarea>
+
+      <div class="text-[11px] font-extrabold uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Add proof</div>
+      <div class="flex gap-2.5">
+        <label class="rtn-attach"><i class="fa-solid fa-camera"></i> Photo / video<input type="file" accept="image/*,video/*" capture="environment" multiple id="rtnMedia" style="display:none"/></label>
+        <button type="button" class="rtn-attach" id="rtnVoice"><i class="fa-solid fa-microphone"></i> Voice note</button>
+      </div>
+      <div id="rtnAttachInfo" class="text-[11.5px] font-semibold mt-2" style="color:#047857;display:none"></div>
+
+      <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-4 text-[12px] font-bold" style="color:#047857;text-decoration:none"><i class="fa-solid fa-circle-info text-[11px]"></i> Read returns &amp; refund policy</a>
+    </div>
+    <div class="px-5 pt-3 pb-5" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">
+      <button id="rtnSubmit" class="w-full h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+        <i class="fa-solid fa-paper-plane text-[13px]"></i> Submit request
+      </button>
+    </div>
+  </div>
+
+  <!-- Return success -->
+  <div id="rtnOk" class="rate-ok">
+    <div class="rate-ok-card">
+      <div class="rate-ok-coin check"><i class="fa-solid fa-check"></i></div>
+      <div class="rate-ok-title" id="rtnOkTitle">Request submitted</div>
+      <div class="rate-ok-sub" id="rtnOkSub">Free pickup in 24–48 hrs · refund to your wallet after QC</div>
+    </div>
+  </div>
 
   <!-- COD pay bottom sheet · same partner-app pattern as orders list -->
   <div id="codBd" class="modal-bd"></div>
@@ -794,6 +889,72 @@
       if (returnCta) returnCta.addEventListener('click', openHelp);
       if (helpClose) helpClose.addEventListener('click', () => closeSheet(helpBd, helpSheet));
       if (helpBd)    helpBd.addEventListener('click', () => closeSheet(helpBd, helpSheet));
+
+      // Unboxing video · device camera capture · confirm once a clip is chosen
+      const unbox = document.getElementById('unboxVideo');
+      if (unbox) unbox.addEventListener('change', () => { if (unbox.files && unbox.files.length) { closeSheet(helpBd, helpSheet); setTimeout(() => alert('Unboxing video attached · our team will review and get back within 24 hours.'), 200); } });
+
+      // Return / replace form · choice + product select + reason + description + photo-video + voice note
+      (function(){
+        const rtnBd = document.getElementById('rtnBd');
+        const rtnSheet = document.getElementById('rtnSheet');
+        const rtnClose = document.getElementById('rtnClose');
+        const seg = document.getElementById('rtnSeg');
+        const media = document.getElementById('rtnMedia');
+        const voice = document.getElementById('rtnVoice');
+        const info = document.getElementById('rtnAttachInfo');
+        const submit = document.getElementById('rtnSubmit');
+        const ok = document.getElementById('rtnOk');
+        const okTitle = document.getElementById('rtnOkTitle');
+        const okSub = document.getElementById('rtnOkSub');
+        let choice = 'return', mediaCount = 0, voiceOn = false, recording = false;
+        function refreshInfo(){
+          const bits = [];
+          if (mediaCount) bits.push(mediaCount + ' file' + (mediaCount > 1 ? 's' : '') + ' attached');
+          if (voiceOn) bits.push('voice note recorded');
+          info.style.display = bits.length ? 'block' : 'none';
+          info.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + bits.join(' · ');
+        }
+        // Open from the help-sheet Return tile
+        if (returnTile) returnTile.addEventListener('click', () => { closeSheet(helpBd, helpSheet); setTimeout(() => openSheet(rtnBd, rtnSheet), 180); });
+        if (rtnClose) rtnClose.addEventListener('click', () => closeSheet(rtnBd, rtnSheet));
+        if (rtnBd) rtnBd.addEventListener('click', () => closeSheet(rtnBd, rtnSheet));
+        // Segmented choice
+        seg.querySelectorAll('.rtn-seg-btn').forEach(b => b.addEventListener('click', () => {
+          seg.querySelectorAll('.rtn-seg-btn').forEach(x => x.classList.remove('active'));
+          b.classList.add('active'); choice = b.dataset.choice;
+        }));
+        // Product checkbox styling
+        document.querySelectorAll('#rtnProducts .rtn-prod').forEach(p => {
+          const cb = p.querySelector('.rtn-prod-cb');
+          cb.addEventListener('change', () => p.classList.toggle('sel', cb.checked));
+        });
+        // Attachments
+        if (media) media.addEventListener('change', () => { mediaCount = media.files ? media.files.length : 0; refreshInfo(); });
+        if (voice) voice.addEventListener('click', () => {
+          recording = !recording;
+          voice.classList.toggle('rec', recording);
+          voice.innerHTML = recording ? '<i class="fa-solid fa-stop"></i> Stop recording' : '<i class="fa-solid fa-microphone"></i> Voice note';
+          if (!recording) { voiceOn = true; refreshInfo(); }
+        });
+        // Submit → success
+        if (submit) submit.addEventListener('click', () => {
+          const picked = document.querySelectorAll('#rtnProducts .rtn-prod-cb:checked').length;
+          const reason = document.getElementById('rtnReason').value;
+          if (picked === 0) { alert('Please select at least one product.'); return; }
+          if (!reason) { alert('Please choose a reason.'); return; }
+          closeSheet(rtnBd, rtnSheet);
+          if (okTitle) okTitle.textContent = choice === 'replace' ? 'Replacement requested' : 'Return requested';
+          if (okSub) okSub.innerHTML = choice === 'replace'
+            ? 'Free pickup in 24–48 hrs · replacement ships after we collect the item'
+            : 'Free pickup in 24–48 hrs · refund to your wallet after QC';
+          setTimeout(() => {
+            ok.classList.add('show');
+            ok.querySelectorAll('.rate-ok-card,.rate-ok-coin').forEach(el => { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; });
+            setTimeout(() => ok.classList.remove('show'), 2600);
+          }, 220);
+        });
+      })();
 
       // Shared rating-success gesture · soft coin pop · fired once per product when it's first rated
       const rateOk = document.getElementById('rateOk');

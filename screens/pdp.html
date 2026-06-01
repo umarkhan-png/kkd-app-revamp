@@ -18,16 +18,16 @@
   .pg-dot{width:6px;height:6px;border-radius:9999px;background:rgba(15,23,42,0.22);transition:all .25s ease}
   .pg-dot.active{width:20px;background:#059669}
   /* Pack-size tile · 4-col grid · 7 variants visible + an 8th "more" tile that matches the normal tile style (no green-fill) · BESTSELLER chip uses normal weight · per-litre rate shown under the absolute price */
-  .pack-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-  .var{position:relative;border:1.5px solid #E5E7EB;background:#FFFFFF;border-radius:12px;padding:14px 6px 10px;text-align:center;transition:all .15s;cursor:pointer}
+  .pack-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px 10px}
+  .var{position:relative;border:1.5px solid #E5E7EB;background:#FFFFFF;border-radius:12px;padding:16px 6px 13px;text-align:center;transition:all .15s;cursor:pointer}
   .var.active{border-color:#059669;background:#ECFDF5;box-shadow:0 6px 14px -6px rgba(5,150,105,0.35)}
-  .var.bestseller{padding-top:18px}
+  .var.bestseller{padding-top:20px}
   .vk-badge{position:absolute;top:-7px;left:50%;transform:translateX(-50%);background:#FBBF24;color:#0F172A;font-size:8.5px;font-weight:500;padding:2px 7px;border-radius:9999px;white-space:nowrap;box-shadow:0 2px 6px rgba(251,191,36,0.45);letter-spacing:0.02em}
-  .vk-size{font-size:12.5px;font-weight:800;color:#0F172A;line-height:1}
-  .vk-price{font-size:11px;color:#64748B;margin-top:4px;line-height:1}
-  .vk-perL{font-size:9.5px;color:#94A3B8;margin-top:3px;line-height:1;font-weight:600}
+  .vk-size{font-size:12.5px;font-weight:800;color:#0F172A;line-height:1.1}
+  .vk-price{font-size:11px;color:#64748B;margin-top:5px;line-height:1}
+  .vk-perL{font-size:9.5px;color:#94A3B8;margin-top:5px;line-height:1;font-weight:600}
   /* "more" tile · uses the same normal tile look (white bg, slate border) · no emerald-fill · acts like a normal pack-size tile */
-  .var-more{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1.5px solid #E5E7EB;background:#FFFFFF;color:#047857;border-radius:12px;padding:14px 6px 10px;font-size:11.5px;font-weight:800;cursor:pointer;line-height:1}
+  .var-more{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border:1.5px solid #E5E7EB;background:#FFFFFF;color:#047857;border-radius:12px;padding:16px 6px 13px;font-size:11.5px;font-weight:800;cursor:pointer;line-height:1}
   .var-more i{font-size:13px}
   .var-more .lbl-sub{font-size:9.5px;color:#94A3B8;font-weight:600}
   /* Best-value badge · added by JS to the lowest per-unit (per-L) tile in each grid · distinct from the amber Bestseller chip */
@@ -658,7 +658,7 @@
     <button id="sheetClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
   </div>
   <div class="px-5 pb-5 overflow-y-auto" style="flex:1">
-    <div class="grid grid-cols-3 gap-2">
+    <div class="grid grid-cols-3 gap-x-2.5 gap-y-3.5">
       <button class="var" data-size="100 ml" data-price="₹85"><div class="vk-size">100 ml</div><div class="vk-price tnum">₹85</div><div class="vk-perL tnum">₹850/L</div></button>
       <button class="var" data-size="250 ml" data-price="₹176"><div class="vk-size">250 ml</div><div class="vk-price tnum">₹176</div><div class="vk-perL tnum">₹704/L</div></button>
       <button class="var bestseller active" data-size="500 ml" data-price="₹276"><span class="vk-badge">Bestseller</span><div class="vk-size">500 ml</div><div class="vk-price tnum">₹276</div><div class="vk-perL tnum">₹552/L</div></button>

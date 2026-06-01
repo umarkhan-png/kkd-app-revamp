@@ -1,35 +1,61 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Loading</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
-  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-  html,body{margin:0;padding:0;height:100%}
-  body{min-height:100vh;background:#FFFFFF;color:#0F172A;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;position:relative;overflow:hidden}
-  body::before{content:"";position:absolute;top:-60px;right:-50px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,0.12) 0%,transparent 70%)}
-  body::after{content:"";position:absolute;bottom:-60px;left:-50px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.12) 0%,transparent 70%)}
-  .logo{width:74px;height:74px;border-radius:20px;background:linear-gradient(135deg,#047857,#10B981);display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 14px 30px -8px rgba(5,150,105,0.5);animation:pulse 1.4s ease-in-out infinite;position:relative;z-index:1}
-  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-  .spin{width:30px;height:30px;border-radius:50%;border:3px solid #D1FAE5;border-top-color:#059669;animation:spin .8s linear infinite;position:relative;z-index:1}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .txt{font-size:14px;font-weight:800;color:#0F172A;position:relative;z-index:1;transition:opacity .3s ease}
-  .sub{font-size:11.5px;color:#94A3B8;margin-top:-10px;position:relative;z-index:1}
-  .dots{display:flex;gap:6px;position:relative;z-index:1}
-  .dots span{width:7px;height:7px;border-radius:50%;background:#A7F3D0;animation:dot 1.2s ease-in-out infinite}
-  .dots span:nth-child(2){animation-delay:.2s}
-  .dots span:nth-child(3){animation-delay:.4s}
-  @keyframes dot{0%,100%{background:#A7F3D0;transform:scale(1)}50%{background:#059669;transform:scale(1.3)}}
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased;box-sizing:border-box}
+  html,body{margin:0;padding:0;overflow-x:hidden}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A}
+  /* Shimmer skeleton · moving highlight across grey blocks (replaces the spinner) */
+  .sk{background:#E7ECF1;border-radius:8px;position:relative;overflow:hidden}
+  .sk::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent 0,rgba(255,255,255,0.65) 50%,transparent 100%);animation:shimmer 1.25s infinite}
+  @keyframes shimmer{100%{transform:translateX(100%)}}
+  .sk-circle{border-radius:50%}
+  .card-sk{background:#FFFFFF;border:1px solid #EEF1F4;border-radius:16px;padding:10px}
 </style></head>
 <body>
-  <div class="logo">🌱</div>
-  <div class="spin"></div>
-  <div class="txt" id="txt">Taking you to your fields…</div>
-  <div class="sub">Please wait a moment</div>
-  <div class="dots"><span></span><span></span><span></span></div>
-  <script>
-    // Rotating loading copy · shown during slow network / page transitions
-    const MSGS = ['Taking you to your fields…','Loading fresh prices…','Getting the best deals…','Warming up the mandi…','Almost there…'];
-    let i = 0; const el = document.getElementById('txt');
-    setInterval(() => { i = (i + 1) % MSGS.length; el.style.opacity = '0'; setTimeout(() => { el.textContent = MSGS[i]; el.style.opacity = '1'; }, 300); }, 1800);
-  </script>
+
+  <!-- status bar -->
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
+    </div>
+  </div>
+
+  <!-- top bar skeleton (location + bell) -->
+  <div class="px-4 pt-4 flex items-center gap-3">
+    <div class="sk sk-circle" style="width:34px;height:34px"></div>
+    <div class="flex-1">
+      <div class="sk" style="width:42%;height:11px"></div>
+      <div class="sk mt-2" style="width:64%;height:13px"></div>
+    </div>
+    <div class="sk sk-circle" style="width:34px;height:34px"></div>
+  </div>
+
+  <!-- search skeleton -->
+  <div class="px-4 mt-4"><div class="sk" style="width:100%;height:46px;border-radius:12px"></div></div>
+
+  <!-- category circles skeleton -->
+  <div class="px-4 mt-5 flex justify-between">
+    <div class="flex flex-col items-center gap-2"><div class="sk sk-circle" style="width:58px;height:58px"></div><div class="sk" style="width:42px;height:9px"></div></div>
+    <div class="flex flex-col items-center gap-2"><div class="sk sk-circle" style="width:58px;height:58px"></div><div class="sk" style="width:42px;height:9px"></div></div>
+    <div class="flex flex-col items-center gap-2"><div class="sk sk-circle" style="width:58px;height:58px"></div><div class="sk" style="width:42px;height:9px"></div></div>
+    <div class="flex flex-col items-center gap-2"><div class="sk sk-circle" style="width:58px;height:58px"></div><div class="sk" style="width:42px;height:9px"></div></div>
+  </div>
+
+  <!-- banner skeleton -->
+  <div class="px-4 mt-6"><div class="sk" style="width:100%;height:120px;border-radius:16px"></div></div>
+
+  <!-- section title -->
+  <div class="px-4 mt-6"><div class="sk" style="width:46%;height:16px"></div></div>
+
+  <!-- product card grid skeleton -->
+  <div class="px-4 mt-4 grid grid-cols-2 gap-3">
+    <div class="card-sk"><div class="sk" style="width:100%;height:120px;border-radius:10px"></div><div class="sk mt-3" style="width:80%;height:12px"></div><div class="sk mt-2" style="width:55%;height:10px"></div><div class="sk mt-3" style="width:40%;height:16px"></div><div class="sk mt-3" style="width:100%;height:30px;border-radius:8px"></div></div>
+    <div class="card-sk"><div class="sk" style="width:100%;height:120px;border-radius:10px"></div><div class="sk mt-3" style="width:80%;height:12px"></div><div class="sk mt-2" style="width:55%;height:10px"></div><div class="sk mt-3" style="width:40%;height:16px"></div><div class="sk mt-3" style="width:100%;height:30px;border-radius:8px"></div></div>
+  </div>
+
 </body></html>

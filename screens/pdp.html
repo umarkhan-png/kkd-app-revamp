@@ -34,7 +34,7 @@
   /* Per-variant low-stock · 'N left' label sitting ON the tile's bottom border (shows only when units < 5) */
   .vk-low{position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);font-size:8px;font-weight:800;color:#DC2626;background:#FFFFFF;border:1px solid #FECACA;padding:1px 6px;border-radius:9999px;white-space:nowrap;line-height:1.3;z-index:3}
   /* Out-of-stock variant · greyed + non-selectable · 'Out of stock' on the bottom border */
-  .var.oos{background:#F1F5F9;border-color:#E5E7EB;opacity:.7;cursor:not-allowed}
+  .var.oos{background:#F1F5F9;border-color:#E5E7EB;opacity:.7;cursor:pointer}
   .var.oos .vk-size,.var.oos .vk-price,.var.oos .vk-perL{color:#94A3B8}
   .var.oos .vk-arrow{display:none!important}
   .vk-low.oos-lbl{color:#64748B;border-color:#CBD5E1;background:#F1F5F9}
@@ -53,6 +53,9 @@
   .price-add{display:flex;align-items:center;gap:8px}
   .add-btn{height:48px;padding:0 22px;border-radius:12px;background:#059669;color:#FFFFFF;font-size:14.5px;font-weight:900;letter-spacing:0.06em;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 12px 22px -8px rgba(5,150,105,0.6),inset 0 1px 0 rgba(255,255,255,0.18);cursor:pointer;border:0;text-transform:uppercase}
   .add-btn:active{transform:scale(.97)}
+  /* Out-of-stock state · selectable variant but cannot be added */
+  .add-btn.oos-add,.add-mini.oos-add{background:#E2E8F0;color:#64748B;box-shadow:none;cursor:not-allowed;letter-spacing:0;text-transform:none}
+  .add-btn.oos-add:active,.add-mini.oos-add:active{transform:none}
   .add-steps{display:none;height:48px;background:#059669;color:#FFFFFF;border-radius:12px;align-items:center;padding:0 4px;box-shadow:0 12px 22px -8px rgba(5,150,105,0.6),inset 0 1px 0 rgba(255,255,255,0.18)}
   .add-steps button{width:38px;height:48px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#FFFFFF;background:transparent;border:0;cursor:pointer}
   .add-steps .add-val{min-width:24px;text-align:center;font-size:14px;font-weight:900}
@@ -809,9 +812,20 @@
     const cart = {};                       // size -> { qty, price }
     let curSize = '500 ml', curPrice = 276;
     const num = p => parseInt(String(p).replace(/[^0-9]/g,''),10) || 0;
+    const addHTML = btn.innerHTML;         // original ADD markup (icon + label) to restore after an OOS variant
+    const stickyHTML = stickyAdd ? stickyAdd.innerHTML : '';
+    const isOOS = size => { const t = document.querySelector('.var[data-size="' + size + '"]'); return !!(t && t.classList.contains('oos')); };
     function showSteps(){ btn.style.display = 'none'; steps.style.display = 'flex'; }
     function showAdd(){ btn.style.display = 'flex'; steps.style.display = 'none'; }
     function syncControl(){
+      if (isOOS(curSize)) {                 // selectable but not purchasable → button becomes a disabled "Out of stock" notice
+        steps.style.display = 'none'; btn.style.display = 'flex';
+        btn.classList.add('oos-add'); btn.innerHTML = '<i class="fa-solid fa-ban text-[13px]"></i> Out of stock';
+        if (stickyAdd) { stickyAdd.classList.add('oos-add'); stickyAdd.textContent = 'Out of stock'; }
+        return;
+      }
+      btn.classList.remove('oos-add'); btn.innerHTML = addHTML;
+      if (stickyAdd) { stickyAdd.classList.remove('oos-add'); stickyAdd.innerHTML = stickyHTML; }
       const q = cart[curSize] ? cart[curSize].qty : 0;
       if (q > 0) { val.textContent = q; showSteps(); } else { val.textContent = 1; showAdd(); }
     }
@@ -831,9 +845,9 @@
       syncControl();                       // reflect this variant's own qty (0 → fresh ADD button)
       if (window.markCheaper) window.markCheaper(size);   // refresh cheaper-per-unit arrows
     };
-    document.querySelectorAll('.var').forEach(v => v.addEventListener('click', () => { if (v.classList.contains('oos')) return; window.selectVariant(v.dataset.size, v.dataset.price); }));
+    document.querySelectorAll('.var').forEach(v => v.addEventListener('click', () => { window.selectVariant(v.dataset.size, v.dataset.price); }));
     if (window.markCheaper) window.markCheaper(curSize);   // initial pass for the default-selected pack
-    btn.addEventListener('click', () => { cart[curSize] = { qty: 1, price: curPrice }; syncControl(); syncBar(); });
+    btn.addEventListener('click', () => { if (isOOS(curSize)) return; cart[curSize] = { qty: 1, price: curPrice }; syncControl(); syncBar(); });
     inc.addEventListener('click', () => { if (!cart[curSize]) cart[curSize] = { qty: 0, price: curPrice }; cart[curSize].qty += 1; val.textContent = cart[curSize].qty; syncBar(); });
     dec.addEventListener('click', () => {
       if (!cart[curSize]) return;
@@ -856,7 +870,6 @@
     close.addEventListener('click', () => { bd.classList.remove('open'); sh.classList.remove('open'); });
     bd.addEventListener('click', () => { bd.classList.remove('open'); sh.classList.remove('open'); });
     sh.querySelectorAll('.var').forEach(v => v.addEventListener('click', () => {
-      if (v.classList.contains('oos')) return;
       selectVariant(v.dataset.size, v.dataset.price);
       setTimeout(() => { bd.classList.remove('open'); sh.classList.remove('open'); }, 180);
     }));

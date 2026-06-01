@@ -33,6 +33,11 @@
   /* Best-value badge · added by JS to the lowest per-unit (per-L) tile in each grid · distinct from the amber Bestseller chip */
   /* Per-variant low-stock · 'N left' label sitting ON the tile's bottom border (shows only when units < 5) */
   .vk-low{position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);font-size:8px;font-weight:800;color:#DC2626;background:#FFFFFF;border:1px solid #FECACA;padding:1px 6px;border-radius:9999px;white-space:nowrap;line-height:1.3;z-index:3}
+  /* Out-of-stock variant · greyed + non-selectable · 'Out of stock' on the bottom border */
+  .var.oos{background:#F1F5F9;border-color:#E5E7EB;opacity:.7;cursor:not-allowed}
+  .var.oos .vk-size,.var.oos .vk-price,.var.oos .vk-perL{color:#94A3B8}
+  .var.oos .vk-arrow{display:none!important}
+  .vk-low.oos-lbl{color:#64748B;border-color:#CBD5E1;background:#F1F5F9}
   /* "Cheaper per unit than the selected pack" down-arrow · injected/toggled by JS on variant change */
   .vk-arrow{display:none;position:absolute;top:6px;right:6px;width:18px;height:18px;border-radius:50%;background:#059669;color:#fff;align-items:center;justify-content:center;font-size:9px;z-index:3;box-shadow:0 2px 6px rgba(5,150,105,0.4);animation:vkBounce 1s ease-in-out infinite}
   .var.cheaper .vk-arrow{display:flex}
@@ -86,6 +91,16 @@
   .trust-ic-wrap{width:44px;height:44px;border-radius:12px;background:#ECFDF5;display:flex;align-items:center;justify-content:center}
   .trust-ic-wrap i{color:#047857;font-size:18px}
   .trust-cap{font-size:11.5px;font-weight:400;color:#94A3B8;line-height:1.25;text-align:center}
+  .trust-cell{cursor:pointer}
+  .trust-view{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:#047857}
+  /* Trust detail bottom sheet */
+  .trust-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:96}
+  .trust-bd.open{opacity:1;pointer-events:auto}
+  .trust-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:97;padding:0 20px 22px;max-height:82vh;overflow-y:auto}
+  .trust-sheet.open{transform:translateY(0)}
+  .trust-li{display:flex;gap:9px;font-size:12.5px;line-height:1.5;color:#475569;margin-bottom:9px}
+  .trust-li i{font-size:11px;color:#047857;margin-top:3px;flex-shrink:0}
+  .trust-li b{color:#0F172A}
   /* Rating bar */
   .bar-track{height:6px;border-radius:9999px;background:#F1F5F9;overflow:hidden;flex:1}
   .bar-fill{height:100%;background:#059669;border-radius:9999px}
@@ -159,7 +174,6 @@
     <div class="snap-c w-full flex-shrink-0 flex items-center justify-center p-6"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/></div>
   </div>
   <span class="absolute top-3 left-3 text-[11px] font-extrabold bg-[#FBBF24] text-[#0F172A] px-2.5 py-1 rounded-md tracking-wide">#1 BESTSELLER</span>
-  <span class="live-view absolute left-3 bottom-3" style="z-index:2"><span class="live-dot"></span> Highly viewed today</span>
   <span class="absolute top-3 right-3 inline-flex items-center gap-1.5 bg-white/95 backdrop-blur px-2.5 py-1.5 rounded-full text-[13px] font-extrabold shadow-sm">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="#FBBF24"><path d="M12 .587l3.668 7.568L24 9.423l-6 5.85L19.336 24 12 19.897 4.664 24 6 15.273 0 9.423l8.332-1.268z"/></svg>
     <span class="text-[#0F172A] tnum">4.6</span>
@@ -174,6 +188,7 @@
 <div class="px-4 mt-4">
   <div class="flex items-start justify-between gap-3">
     <div class="flex-1 min-w-0">
+      <span class="live-view mb-2" style="display:inline-flex"><span class="live-dot"></span> Highly viewed today</span>
       <h1 class="text-[24px] font-extrabold leading-tight text-[#0F172A]">Humic</h1>
       <div class="text-[12.5px] text-[#475569] mt-1 font-medium">Activated Humic + Fulvic 98</div>
     </div>
@@ -279,42 +294,75 @@
 <!-- Trust badges · no border / no card wrapper · drop tick + star + chevrons · captions are grey + normal weight -->
 <div class="px-4">
   <div class="trust-row">
-    <div class="trust-cell">
+    <button type="button" class="trust-cell" data-trust="return" style="background:transparent;border:0">
       <span class="trust-ic-wrap"><i class="fa-solid fa-rotate-left"></i></span>
       <span class="trust-cap">7-Day Return</span>
-    </div>
-    <div class="trust-cell">
+      <span class="trust-view">View <i class="fa-solid fa-chevron-right text-[7px]"></i></span>
+    </button>
+    <button type="button" class="trust-cell" data-trust="cod" style="background:transparent;border:0">
       <span class="trust-ic-wrap"><i class="fa-solid fa-indian-rupee-sign"></i></span>
       <span class="trust-cap">Cash on Delivery</span>
-    </div>
-    <div class="trust-cell">
+      <span class="trust-view">View <i class="fa-solid fa-chevron-right text-[7px]"></i></span>
+    </button>
+    <button type="button" class="trust-cell" data-trust="assured" style="background:transparent;border:0">
       <span class="trust-ic-wrap"><i class="fa-solid fa-shield-halved"></i></span>
       <span class="trust-cap">Katyayani Assured</span>
-    </div>
+      <span class="trust-view">View <i class="fa-solid fa-chevron-right text-[7px]"></i></span>
+    </button>
   </div>
-
-  <!-- Returns & refund policy · sits under the 7-Day Return badge · expandable -->
-  <details class="kkd-collapse mt-3">
-    <summary>
-      <div class="flex items-center gap-2.5">
-        <span class="w-8 h-8 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-rotate-left text-[13px]"></i></span>
-        <div class="leading-tight">
-          <div class="text-[13.5px] font-extrabold text-[#0F172A]">Returns &amp; refund policy</div>
-          <div class="text-[11px] mt-0.5" style="color:#64748B">7-day easy return on this product</div>
-        </div>
-      </div>
-      <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-    </summary>
-    <div class="px-4 pb-4 text-[12.5px] leading-relaxed" style="color:#475569">
-      <p>Raise a return or replacement within <b class="text-[#0F172A]">7 days</b> of delivery if the product is damaged, wrong, or unopened. Shoot a short <b class="text-[#0F172A]">unboxing video</b> to speed up approval.</p>
-      <ul class="mt-2 space-y-1.5" style="list-style:none;padding:0">
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[11px] mt-1" style="color:#047857"></i> Refunds to your original payment method or Krishi Coins wallet within <b class="text-[#0F172A]">3–5 days</b> of pickup.</li>
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[11px] mt-1" style="color:#047857"></i> Opened agro-chemicals are eligible only if damaged or incorrect.</li>
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[11px] mt-1" style="color:#047857"></i> Free reverse pickup — no extra charge.</li>
-      </ul>
-    </div>
-  </details>
 </div>
+
+<!-- Trust detail bottom sheet · 7-Day Return / COD / Katyayani Assured -->
+<div id="trustBd" class="trust-bd"></div>
+<div id="trustSheet" class="trust-sheet">
+  <div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 4px"></div>
+  <div class="flex items-center gap-3 pt-2 pb-1">
+    <span id="trustIc" class="w-11 h-11 rounded-[12px] flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;color:#047857;font-size:18px"><i class="fa-solid fa-rotate-left"></i></span>
+    <div class="text-[18px] font-extrabold text-[#0F172A]" id="trustTitle">7-Day Return</div>
+    <button id="trustClose" class="ml-auto w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+  </div>
+  <div id="trustBody" class="mt-3"></div>
+</div>
+<script>
+  // Trust badges · tap any to open its detail sheet · 7-Day Return shows the return T&C
+  (function(){
+    const DATA = {
+      return:{ ic:'fa-rotate-left', title:'7-Day Return', link:true, items:[
+        'Raise a return or replacement within <b>7 days</b> of delivery if the product is damaged, wrong, or unopened.',
+        'Shoot a short <b>unboxing video</b> to speed up approval.',
+        'Refund to your original payment method or <b>Krishi Coins wallet</b> within 3–5 days of pickup.',
+        'Opened agro-chemicals are eligible only if damaged or incorrect.',
+        'Free reverse pickup — no extra charge.'
+      ] },
+      cod:{ ic:'fa-indian-rupee-sign', title:'Cash on Delivery', items:[
+        'Pay in <b>cash</b> when the courier delivers — no advance needed.',
+        'Available on this product across serviceable pincodes.',
+        'Prefer prepaid? Pay online to earn <b>2% Krishi Coins</b> + extra offers.',
+        'Please keep exact change ready for a smooth handover.'
+      ] },
+      assured:{ ic:'fa-shield-halved', title:'Katyayani Assured', items:[
+        '<b>100% genuine</b> products sourced direct from the factory.',
+        'Quality-checked &amp; sealed before dispatch.',
+        'Authentic composition exactly as per the label.',
+        'Backed by KKD support — call, email or chat anytime.'
+      ] }
+    };
+    const bd = document.getElementById('trustBd'), sh = document.getElementById('trustSheet');
+    function open(key){
+      const d = DATA[key]; if (!d) return;
+      document.getElementById('trustIc').innerHTML = '<i class="fa-solid ' + d.ic + '"></i>';
+      document.getElementById('trustTitle').textContent = d.title;
+      let html = d.items.map(t => '<div class="trust-li"><i class="fa-solid fa-check"></i><div>' + t + '</div></div>').join('');
+      if (d.link) html += '<a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-1 text-[12px] font-bold" style="color:#047857;text-decoration:none"><i class="fa-solid fa-up-right-from-square text-[10px]"></i> Full returns &amp; refund policy</a>';
+      document.getElementById('trustBody').innerHTML = html;
+      bd.classList.add('open'); sh.classList.add('open');
+    }
+    function close(){ bd.classList.remove('open'); sh.classList.remove('open'); }
+    document.querySelectorAll('.trust-cell[data-trust]').forEach(b => b.addEventListener('click', () => open(b.dataset.trust)));
+    document.getElementById('trustClose').addEventListener('click', close);
+    bd.addEventListener('click', close);
+  })();
+</script>
 
 <!-- Delivery card · drop FREE pill + fulfillment chips per spec · just date + dispatch line + address-change row -->
 <div class="px-4 mt-5">
@@ -715,8 +763,8 @@
 
   // Per-variant stock line + "cheaper per unit than the selected pack" down-arrow (recomputed on every variant change)
   (function(){
-    // units in stock per pack size · an "Only N left" line shows only when < 5
-    const STOCK = {'100 ml':22,'250 ml':4,'500 ml':2,'1 L':16,'2 L':30,'5 L':12,'10 L':9,'20 L':25,'25 L':20,'50 L':14,'100 L':8};
+    // units in stock per pack size · 0 = Out of stock (greyed, not selectable) · <5 = 'N left' label
+    const STOCK = {'100 ml':22,'250 ml':4,'500 ml':2,'1 L':16,'2 L':0,'5 L':12,'10 L':9,'20 L':25,'25 L':20,'50 L':14,'100 L':8};
     function perL(t){ const el = t.querySelector('.vk-perL'); return el ? (parseInt(el.textContent.replace(/[^0-9]/g,''),10) || Infinity) : Infinity; }
     document.querySelectorAll('.var').forEach(t => {
       if (!t.querySelector('.vk-arrow')) {
@@ -724,7 +772,10 @@
         t.appendChild(a);
       }
       const st = STOCK[t.dataset.size];
-      if (st != null && st < 5 && !t.querySelector('.vk-low')) {
+      if (st === 0) {
+        t.classList.add('oos');
+        if (!t.querySelector('.vk-low')) { const l = document.createElement('div'); l.className = 'vk-low oos-lbl'; l.textContent = 'Out of stock'; t.appendChild(l); }
+      } else if (st != null && st < 5 && !t.querySelector('.vk-low')) {
         const l = document.createElement('div'); l.className = 'vk-low'; l.textContent = st + ' left';
         t.appendChild(l);
       }
@@ -780,7 +831,7 @@
       syncControl();                       // reflect this variant's own qty (0 → fresh ADD button)
       if (window.markCheaper) window.markCheaper(size);   // refresh cheaper-per-unit arrows
     };
-    document.querySelectorAll('.var').forEach(v => v.addEventListener('click', () => window.selectVariant(v.dataset.size, v.dataset.price)));
+    document.querySelectorAll('.var').forEach(v => v.addEventListener('click', () => { if (v.classList.contains('oos')) return; window.selectVariant(v.dataset.size, v.dataset.price); }));
     if (window.markCheaper) window.markCheaper(curSize);   // initial pass for the default-selected pack
     btn.addEventListener('click', () => { cart[curSize] = { qty: 1, price: curPrice }; syncControl(); syncBar(); });
     inc.addEventListener('click', () => { if (!cart[curSize]) cart[curSize] = { qty: 0, price: curPrice }; cart[curSize].qty += 1; val.textContent = cart[curSize].qty; syncBar(); });
@@ -805,6 +856,7 @@
     close.addEventListener('click', () => { bd.classList.remove('open'); sh.classList.remove('open'); });
     bd.addEventListener('click', () => { bd.classList.remove('open'); sh.classList.remove('open'); });
     sh.querySelectorAll('.var').forEach(v => v.addEventListener('click', () => {
+      if (v.classList.contains('oos')) return;
       selectVariant(v.dataset.size, v.dataset.price);
       setTimeout(() => { bd.classList.remove('open'); sh.classList.remove('open'); }, 180);
     }));

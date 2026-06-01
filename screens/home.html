@@ -1057,8 +1057,7 @@
            data-product-name="Humic + Fulvic 98"
            data-product-tech="Humic 12% + Fulvic 8%"
            data-product-img="../assets/Humic_nobg.png"
-           data-stock="6"
-           data-variants='[{"size":"500 ml","price":210,"mrp":290,"off":28},{"size":"1 L","price":376,"mrp":520,"off":28}]'
+           data-variants='[{"size":"500 ml","price":210,"mrp":290,"off":28,"low":6},{"size":"1 L","price":376,"mrp":520,"off":28}]'
            style="background:#FFFFFF;border:1px solid #E5E7EB">
           <!-- Compact image area with badges sitting on the grey shade (top corners, out of product center) -->
           <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:140px">
@@ -1095,8 +1094,7 @@
            data-product-name="Chakrawarti ZC"
            data-product-tech="Chloran. + Lambda-Cy. ZC"
            data-product-img="../assets/Chakrawarti_nobg.png"
-           data-stock="4"
-           data-variants='[{"size":"100 ml","price":358,"mrp":495,"off":28},{"size":"250 ml","price":820,"mrp":1175,"off":30}]'
+           data-variants='[{"size":"100 ml","price":358,"mrp":495,"off":28,"low":4},{"size":"250 ml","price":820,"mrp":1175,"off":30}]'
            style="background:#FFFFFF;border:1px solid #E5E7EB">
           <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:140px">
             <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full object-contain"/>
@@ -2013,7 +2011,6 @@
         <div class="flex-1 min-w-0">
           <div id="vsName" class="text-[16.5px] font-extrabold text-[#0F172A] leading-tight">Product</div>
           <div id="vsTech" class="text-[12px] mt-1 leading-snug" style="color:#94A3B8"></div>
-          <span id="vsStock" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9.5px] font-extrabold mt-2" style="background:#FEF2F2;color:#DC2626;border:1px solid #FECACA;display:none"><i class="fa-solid fa-fire text-[7.5px]"></i> <span id="vsStockN">6</span> left</span>
         </div>
         <button id="vsClose" class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:#F1F5F9">
           <i class="fa-solid fa-xmark text-[14px]" style="color:#475569"></i>
@@ -2955,7 +2952,10 @@
         return '<div class="flex items-center gap-3 py-3" style="border-bottom:1px solid #F1F5F9">'
           + thumb
           + '<div class="flex-1 min-w-0">'
-            + '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold" style="background:#F1F5F9;color:#475569">'+v.size+'</span>'
+            + '<div class="flex items-center gap-1.5 flex-wrap">'
+              + '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold" style="background:#F1F5F9;color:#475569">'+v.size+'</span>'
+              + (v.low ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-extrabold" style="background:#FEF2F2;color:#DC2626;border:1px solid #FECACA"><i class="fa-solid fa-fire text-[7.5px]"></i> '+v.low+' left</span>' : '')
+            + '</div>'
             + '<div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">'
               + '<span class="text-[16px] font-extrabold tnum text-[#0F172A]">₹'+v.price+'</span>'
               + (v.mrp ? '<span class="text-[11.5px] tnum line-through" style="color:#94A3B8">₹'+v.mrp+'</span>' : '')
@@ -2991,13 +2991,6 @@
         sheet.__card = card;
         nameEl.textContent = card.dataset.productName || '';
         techEl.textContent = card.dataset.productTech || '';
-        // Low-stock badge · shown in the header when the product has < 5 units left
-        const stockEl = document.getElementById('vsStock');
-        const stock = parseInt(card.dataset.stock, 10);
-        if (stockEl) {
-          if (!isNaN(stock)) { document.getElementById('vsStockN').textContent = stock; stockEl.style.display = 'inline-flex'; }
-          else stockEl.style.display = 'none';
-        }
         render();
         sheet.style.display = 'block';
         requestAnimationFrame(function(){

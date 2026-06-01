@@ -350,6 +350,7 @@
       const submit = document.getElementById('rateSubmit');
       const ok = document.getElementById('rateOk');
       const okSub = document.getElementById('rateOkSub');
+      let currentTrigger = null;
       function open(orderId, products){
         ordLbl.textContent = '#' + orderId;
         list.innerHTML = '';
@@ -387,6 +388,13 @@
         const rated = list.querySelectorAll('.rate-item.rated').length;
         if (rated === 0) return;
         close();
+        // Rated → remove the Rate button from that order card (reflow the action row)
+        if (currentTrigger) {
+          const row = currentTrigger.parentElement;
+          currentTrigger.remove();
+          if (row) row.style.gridTemplateColumns = '1fr 1fr';
+          currentTrigger = null;
+        }
         const coins = rated * 25;
         if (okSub) okSub.innerHTML = 'You earned <b>+' + coins + ' coins</b> · thanks for the feedback!';
         setTimeout(() => {
@@ -397,6 +405,7 @@
       });
       document.querySelectorAll('.rate-trigger').forEach(b => b.addEventListener('click', e => {
         e.preventDefault(); e.stopPropagation();
+        currentTrigger = b;
         let products = [];
         try { products = JSON.parse(b.dataset.products || '[]'); } catch (err) {}
         open(b.dataset.order, products);

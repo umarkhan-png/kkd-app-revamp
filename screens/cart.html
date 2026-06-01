@@ -449,7 +449,10 @@
   <div id="xsellSheet" class="modal-sheet">
     <div class="modal-handle"></div>
     <div class="px-5 pt-3 pb-2 flex items-center justify-between">
-      <div class="text-[17px] font-extrabold leading-tight">Add &amp; save more</div>
+      <div class="leading-tight">
+        <div class="text-[17px] font-extrabold">Add &amp; save more</div>
+        <div class="text-[11.5px] font-semibold" style="color:#64748B">Cart total · <span class="tnum" id="xsellCartVal" style="color:#047857;font-weight:800">₹1,900</span></div>
+      </div>
       <button id="xsellClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
 
@@ -642,7 +645,11 @@
       const sheet = document.getElementById('xsellSheet');
       const closeBt = document.getElementById('xsellClose');
       const goBt = document.getElementById('xsellContinue');
-      function open(){ bd.classList.add('open'); sheet.classList.add('open'); }
+      function open(){
+        const cv = document.getElementById('xsellCartVal');
+        if (cv) cv.textContent = '₹' + cartTotal.toLocaleString('en-IN');
+        bd.classList.add('open'); sheet.classList.add('open');
+      }
       function close(){ bd.classList.remove('open'); sheet.classList.remove('open'); }
       btn.addEventListener('click', open);
       closeBt.addEventListener('click', close);

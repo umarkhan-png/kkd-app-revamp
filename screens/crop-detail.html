@@ -8,15 +8,14 @@
   html,body{margin:0;padding:0;overflow-x:hidden}
   body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:84px}
   .tnum{font-variant-numeric:tabular-nums}
-  .scrollx{overflow-x:auto;scrollbar-width:none}.scrollx::-webkit-scrollbar{display:none}
   .sec-title{margin:20px 16px 10px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em;display:flex;align-items:center;gap:8px}
-  .sec-title .cnt{font-size:10px;font-weight:800;color:#047857;background:#ECFDF5;border:1px solid #A7F3D0;padding:1px 7px;border-radius:9999px}
 
   /* Crop selector chips */
   .crop-chips{display:flex;gap:8px;padding:4px 16px 2px;overflow-x:auto;scrollbar-width:none}
   .crop-chips::-webkit-scrollbar{display:none}
   .crop-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:9999px;background:#FFFFFF;border:1.5px solid #E5E7EB;cursor:pointer}
-  .crop-chip img{width:26px;height:26px;border-radius:50%;object-fit:cover}
+  .crop-chip .cimg{width:26px;height:26px;border-radius:50%;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#ECFDF5;font-size:14px}
+  .crop-chip .cimg img{width:100%;height:100%;object-fit:cover}
   .crop-chip span{font-size:12.5px;font-weight:700;color:#0F172A}
   .crop-chip.active{border-color:#047857;background:#ECFDF5}
   .crop-chip.active span{color:#047857;font-weight:800}
@@ -24,7 +23,7 @@
 
   /* Identity card */
   .ident{margin:8px 16px 0;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:16px;padding:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04);display:flex;align-items:center;gap:13px}
-  .ident-img{width:60px;height:60px;border-radius:14px;overflow:hidden;flex-shrink:0;border:1px solid #E5E7EB}
+  .ident-img{width:60px;height:60px;border-radius:14px;overflow:hidden;flex-shrink:0;border:1px solid #E5E7EB;background:#ECFDF5;display:flex;align-items:center;justify-content:center;font-size:30px}
   .ident-img img{width:100%;height:100%;object-fit:cover}
   .ident h1{font-size:21px;font-weight:900;letter-spacing:-0.01em;line-height:1;color:#0F172A}
   .ident .sci{font-size:11.5px;font-style:italic;color:#94A3B8;margin-top:3px}
@@ -32,63 +31,54 @@
   .ident-chip{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:9999px;background:#F1F5F9;color:#475569}
   .ident-chip i{font-size:9px;color:#047857}
 
-  /* Stat strip · compact 4-up scroll */
+  /* Stat strip */
   .stats{display:flex;gap:10px;margin:12px 16px 0}
   .stat{flex:1;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:13px;padding:11px 8px;text-align:center;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
   .stat .v{font-size:17px;font-weight:900;color:#0F172A;line-height:1}
   .stat .k{font-size:9.5px;color:#64748B;font-weight:600;margin-top:3px;line-height:1.15}
 
-  /* Growth stages stepper */
-  .stages{display:flex;padding:6px 16px 4px;overflow-x:auto;scrollbar-width:none}
-  .stages::-webkit-scrollbar{display:none}
-  .stg{flex-shrink:0;width:96px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;cursor:pointer}
-  .stg::before{content:"";position:absolute;top:17px;right:50%;width:100%;height:2px;background:#E5E7EB;z-index:0}
-  .stg:first-child::before{display:none}
-  .stg.done::before,.stg.on::before{background:#10B981}
-  .stg .dot{width:36px;height:36px;border-radius:50%;background:#FFFFFF;border:2px solid #E5E7EB;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#94A3B8;position:relative;z-index:1}
-  .stg.done .dot{background:#10B981;border-color:#10B981;color:#FFFFFF}
-  .stg.on .dot{background:#047857;border-color:#047857;color:#FFFFFF;box-shadow:0 0 0 4px rgba(4,120,87,0.15)}
-  .stg .nm{font-size:10px;font-weight:700;color:#94A3B8;margin-top:7px;line-height:1.2;padding:0 4px}
-  .stg.done .nm,.stg.on .nm{color:#0F172A}
-  .stg .dy{font-size:9px;color:#CBD5E1;margin-top:2px;font-weight:600}
-  .stg.on .dy{color:#047857}
+  /* Vertical growth-stage accordions */
+  .vstages{margin:0 16px}
+  .vstg{background:#FFFFFF;border:1px solid #E5E7EB;border-left:3px solid #E5E7EB;border-radius:14px;overflow:hidden;margin-bottom:10px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .vstg.done{border-left-color:#10B981}
+  .vstg.on{border-left-color:#047857}
+  .vstg-head{display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;background:transparent;border:0;cursor:pointer;text-align:left}
+  .vstg-dot{width:30px;height:30px;border-radius:50%;background:#F1F5F9;border:2px solid #E5E7EB;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#94A3B8;flex-shrink:0}
+  .vstg.done .vstg-dot{background:#10B981;border-color:#10B981;color:#fff}
+  .vstg.on .vstg-dot{background:#047857;border-color:#047857;color:#fff}
+  .vstg-info{flex:1;min-width:0;line-height:1.25}
+  .vstg-info .nm{font-size:14px;font-weight:800;color:#0F172A}
+  .vstg-info .meta{font-size:11px;color:#94A3B8;margin-top:1px}
+  .vstg-iss{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;color:#B45309;background:#FEF3C7;border:1px solid #FCD34D;padding:3px 8px;border-radius:9999px}
+  .vstg-iss.none{color:#047857;background:#ECFDF5;border-color:#A7F3D0}
+  .vstg-chev{font-size:12px;color:#94A3B8;transition:transform .2s ease;flex-shrink:0}
+  .vstg.open .vstg-chev{transform:rotate(180deg)}
+  .vstg-body{display:none;padding:0 14px 14px}
+  .vstg.open .vstg-body{display:block}
+  .vstg-empty{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:#047857;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:10px;padding:10px 12px}
 
-  .stage-card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-left:4px solid #047857;border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04);display:flex;align-items:flex-start;gap:12px}
-  .stage-card .badge{width:34px;height:34px;border-radius:10px;background:#047857;color:#FFFFFF;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .stage-card .ttl{font-size:15px;font-weight:800;color:#0F172A;line-height:1.2}
-  .stage-card .meta{font-size:11.5px;color:#64748B;margin-top:3px}
-  .stage-card .meta b{color:#0F172A}
-
-  /* Problem accordion */
-  .prob{margin:0 16px 12px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
-  .prob-head{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;background:#FFFBEB}
-  .prob-head .pic{width:30px;height:30px;border-radius:9px;background:#FEF3C7;color:#B45309;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-  .prob-head .pt{flex:1;min-width:0}
-  .prob-head .pn{font-size:14px;font-weight:800;color:#0F172A;line-height:1.2}
-  .prob-head .tags{display:flex;align-items:center;gap:7px;margin-top:3px}
-  .sev{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em}
+  /* Problem block (inside an expanded stage) */
+  .prob-block{border:1px solid #F1F5F9;border-radius:12px;overflow:hidden;margin-top:10px}
+  .prob-h{display:flex;align-items:center;gap:10px;padding:11px 12px;background:#FFFBEB}
+  .prob-h .pic{width:28px;height:28px;border-radius:8px;background:#FEF3C7;color:#B45309;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+  .prob-h .pn{font-size:13.5px;font-weight:800;color:#0F172A;line-height:1.2}
+  .sev{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;margin-top:2px}
   .sev::before{content:"";width:6px;height:6px;border-radius:50%}
   .sev.high{color:#DC2626}.sev.high::before{background:#DC2626}
   .sev.med{color:#B45309}.sev.med::before{background:#F59E0B}
-  .type-tag{font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:9999px;background:#FEE2E2;color:#B91C1C}
-  .prob-head .chev{font-size:12px;color:#94A3B8;transition:transform .2s ease;flex-shrink:0}
-  .prob.open .prob-head .chev{transform:rotate(180deg)}
-  .prob-body{display:none;padding:0 14px 14px}
-  .prob.open .prob-body{display:block}
-  .prob-desc{font-size:12px;line-height:1.5;color:#475569;padding:12px 0}
-  .rp-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:#64748B;display:flex;align-items:center;gap:6px;margin-bottom:8px}
-  .prod-row{display:flex;align-items:center;gap:11px;padding:10px;border:1px solid #E5E7EB;border-radius:12px;margin-bottom:8px;text-decoration:none;color:inherit}
-  .prod-row:last-child{margin-bottom:0}
-  .prod-thumb{width:46px;height:46px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
+  .prob-desc{font-size:12px;line-height:1.5;color:#475569;padding:10px 12px 0}
+  .rp-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:#64748B;padding:10px 12px 6px}
+  .prod-row{display:flex;align-items:center;gap:11px;padding:9px 12px;border-top:1px solid #F1F5F9;text-decoration:none;color:inherit}
+  .prod-thumb{width:42px;height:42px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
   .prod-thumb img{max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:multiply}
   .prod-meta{flex:1;min-width:0;line-height:1.25}
-  .prod-meta .pn{font-size:13px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .prod-meta .pc{font-size:10.5px;color:#94A3B8;font-weight:600;margin-top:1px}
-  .prod-meta .ptype{display:inline-flex;font-size:9px;font-weight:700;padding:2px 7px;border-radius:9999px;margin-top:4px}
+  .prod-meta .pn{font-size:12.5px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prod-meta .pc{font-size:10px;color:#94A3B8;font-weight:600;margin-top:1px}
+  .prod-meta .ptype{display:inline-flex;font-size:9px;font-weight:700;padding:2px 7px;border-radius:9999px;margin-top:3px}
   .ptype.chem{background:#EFF6FF;color:#2563EB}.ptype.bio{background:#ECFDF5;color:#047857}
   .prod-price{text-align:right;flex-shrink:0}
-  .prod-price .amt{font-size:14px;font-weight:900;color:#0F172A}
-  .prod-price .add{margin-top:5px;display:inline-flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;color:#FFFFFF;background:#059669;padding:5px 12px;border-radius:8px}
+  .prod-price .amt{font-size:13px;font-weight:900;color:#0F172A}
+  .prod-price .add{margin-top:4px;display:inline-flex;font-size:10px;font-weight:800;color:#FFFFFF;background:#059669;padding:4px 11px;border-radius:8px;cursor:pointer}
 
   /* Empty state */
   .empty{margin:24px 16px 0;background:#FFFFFF;border:1px dashed #A7F3D0;border-radius:16px;padding:30px 20px;text-align:center}
@@ -97,18 +87,24 @@
   .empty p{font-size:12.5px;color:#64748B;margin-top:5px;line-height:1.5}
   .empty .cta{margin-top:16px;height:48px;width:100%;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:14px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
 
-  .doc-cta{margin:8px 16px 0;display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:14px;background:linear-gradient(135deg,#10B981,#065F46);color:#FFFFFF;text-decoration:none;box-shadow:0 8px 20px -8px rgba(6,95,70,0.55)}
-  .doc-cta .ic{width:40px;height:40px;border-radius:11px;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;border:1px solid rgba(255,255,255,0.3)}
-  .doc-cta .a{font-size:14px;font-weight:800}.doc-cta .b{font-size:11px;color:rgba(255,255,255,0.85);margin-top:1px}
+  /* Ask Expert banner (matches the home/PDP expert element) */
+  .expert-banner{display:flex;align-items:center;gap:12px;margin:16px 16px 0;padding:12px 14px;border-radius:16px;text-decoration:none;color:#FFFFFF;background:linear-gradient(145deg,#10B981,#065F46);box-shadow:0 8px 22px -6px rgba(16,185,129,0.55),inset 0 1px 0 rgba(255,255,255,0.18)}
+  .expert-banner .ph-wrap{position:relative;flex-shrink:0}
+  .expert-banner .ph{width:46px;height:46px;border-radius:9999px;object-fit:cover;border:2px solid #FFFFFF;display:block}
+  .expert-banner .vb{position:absolute;bottom:-2px;right:-2px;width:22px;height:22px;border-radius:9999px;background:#DC2626;border:2px solid #FFFFFF;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:9px}
+  .expert-banner .a{font-size:14px;font-weight:800}
+  .expert-banner .b{font-size:11px;font-weight:600;color:rgba(255,255,255,0.85)}
+  .expert-banner .ar{margin-left:auto;font-size:18px;font-weight:800}
 
-  /* Add-crop sheet */
+  /* Add-crop bottom sheet (same pattern as the homepage Shop-by-Crop modal) */
   .modal-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80}
   .modal-bd.open{opacity:1;pointer-events:auto}
-  .modal-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;padding:0 16px 22px}
+  .modal-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;padding:0 0 22px;max-height:82vh;display:flex;flex-direction:column}
   .modal-sheet.open{transform:translateY(0)}
-  .pick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
-  .pick{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px;border:1.5px solid #E5E7EB;border-radius:14px;background:#fff;cursor:pointer}
-  .pick img{width:46px;height:46px;border-radius:50%;object-fit:cover}
+  .pick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:6px 20px 0;overflow-y:auto}
+  .pick{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px;border:2px solid #E5E7EB;border-radius:14px;background:#fff;cursor:pointer}
+  .pick .pcirc{width:56px;height:56px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#ECFDF5;font-size:28px}
+  .pick .pcirc img{width:100%;height:100%;object-fit:cover}
   .pick span{font-size:12px;font-weight:700;color:#0F172A}
   .pick:active{transform:scale(.97)}
 </style></head>
@@ -128,10 +124,8 @@
     <h1 class="flex-1 text-[18px] font-extrabold" style="color:#0F172A">My crops</h1>
   </div>
 
-  <!-- Crop selector · your crops + Add -->
   <div class="crop-chips" id="cropChips"></div>
 
-  <!-- Empty state · shown when no crop is added -->
   <div class="empty" id="cropEmpty" style="display:none">
     <div class="ic"><i class="fa-solid fa-seedling"></i></div>
     <h2>Add your first crop</h2>
@@ -139,45 +133,33 @@
     <button class="cta" id="emptyAdd"><i class="fa-solid fa-plus text-[12px]"></i> Add a crop</button>
   </div>
 
-  <!-- Crop content -->
   <div id="cropContent">
     <div class="ident">
-      <div class="ident-img"><img id="cIdImg" src="" alt=""/></div>
+      <div class="ident-img" id="cIdImg"></div>
       <div class="flex-1 min-w-0"><h1 id="cIdName">—</h1><div class="sci" id="cIdSci">—</div></div>
     </div>
     <div class="ident-chips" id="cIdChips"></div>
     <div class="stats" id="cStats"></div>
 
-    <div class="sec-title"><i class="fa-solid fa-seedling"></i> Growth stages</div>
-    <div class="stages" id="cStages"></div>
-    <div class="stage-card">
-      <span class="badge" id="cStgNum">1</span>
-      <div class="flex-1 min-w-0">
-        <div class="ttl" id="cStgTtl">—</div>
-        <div class="meta"><b id="cStgDay">—</b> · <b id="cStgDur">—</b> · <b id="cStgPct">—</b> of lifecycle</div>
-      </div>
-    </div>
+    <div class="sec-title"><i class="fa-solid fa-seedling"></i> Growth stages · tap to expand</div>
+    <div class="vstages" id="cStages"></div>
 
-    <div class="sec-title"><i class="fa-solid fa-bug"></i> Problems &amp; products <span class="cnt" id="cProbCount">0</span></div>
-    <div id="cProblems"></div>
-
-    <a href="advisory.html" class="doc-cta">
-      <span class="ic"><i class="fa-solid fa-user-doctor"></i></span>
-      <div class="flex-1"><div class="a">Not sure what's wrong?</div><div class="b">Send a photo to the Krishi Doctor — free</div></div>
-      <i class="fa-solid fa-arrow-right text-[14px]"></i>
+    <a href="advisory.html" class="expert-banner">
+      <span class="ph-wrap"><img src="../assets/expert.png" class="ph" alt="Krishi expert"/><span class="vb"><i class="fa-solid fa-video"></i></span></span>
+      <span class="flex-1 leading-tight"><span class="block a">Ask Expert</span><span class="block b">Free agronomist call · 5 mins</span></span>
+      <span class="ar">→</span>
     </a>
   </div>
 
   <!-- Add-crop bottom sheet -->
   <div id="addBd" class="modal-bd"></div>
   <div id="addSheet" class="modal-sheet">
-    <div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 12px"></div>
-    <div class="flex items-center justify-between mb-1">
-      <div class="text-[17px] font-extrabold text-[#0F172A]">Add a crop</div>
+    <div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 12px;flex-shrink:0"></div>
+    <div class="px-5 flex items-center justify-between flex-shrink-0">
+      <div class="leading-tight"><div class="text-[18px] font-extrabold text-[#0F172A]">Add your crops</div><div class="text-[12px] mt-0.5" style="color:#64748B">Tap a crop you grow</div></div>
       <button id="addClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
-    <div class="text-[11.5px] mb-2" style="color:#64748B">Choose the crops you grow</div>
-    <div class="pick-grid" id="pickGrid"></div>
+    <div class="pick-grid mt-3" id="pickGrid" style="flex:1"></div>
   </div>
 
   <!-- Bottom nav · Crop active -->
@@ -190,12 +172,13 @@
 
   <script>
     const IMG = {
-      cotton:'https://images.unsplash.com/photo-1591885503007-9b80d9c89a52?w=200&q=80',
-      wheat:'https://images.unsplash.com/photo-1574226516831-e1dff420e562?w=200&q=80',
-      tomato:'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=200&q=80',
-      chilli:'https://images.unsplash.com/photo-1583852048850-31c0d0e7cdde?w=200&q=80',
-      maize:'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=200&q=80'
+      cotton:{u:'https://images.unsplash.com/photo-1591885503007-9b80d9c89a52?w=160&q=80', e:'🌿'},
+      wheat:{u:'https://images.unsplash.com/photo-1574226516831-e1dff420e562?w=160&q=80', e:'🌾'},
+      tomato:{u:'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=160&q=80', e:'🍅'},
+      chilli:{u:'https://images.unsplash.com/photo-1583852048850-31c0d0e7cdde?w=160&q=80', e:'🌶️'},
+      maize:{u:'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=160&q=80', e:'🌽'}
     };
+    function cropImg(k, cls){ const c = IMG[k]; return '<img src="' + c.u + '" class="' + (cls||'') + '" onerror="this.parentNode.textContent=\'' + c.e + '\'"/>'; }
     const P = {
       striker:{n:'STRIKER',c:'BK-548',t:'chem',p:'₹8,789',img:'https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp'},
       hattrick:{n:'HATTRICK',c:'BK-996',t:'chem',p:'₹24,400',img:'https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg'},
@@ -206,36 +189,29 @@
       metamanco:{n:'META-MANCO',c:'BK-144',t:'chem',p:'₹22,500',img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp'},
       neem:{n:'NEEM SHAKTI',c:'BK-208',t:'bio',p:'₹980',img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp'}
     };
-    function st(n,nm,day,dur,pct){ return {n,nm,day,dur,pct}; }
+    const PROB = {
+      rootrot:{nm:'Root Rot',sev:'high',desc:'Black lesions on hypocotyls, girdling of stem and seedling death. The root system rots and plants pull out easily.',prods:['striker','hattrick','coc','zyme']},
+      clcv:{nm:'Cotton Leaf Curl Virus',sev:'high',desc:'Deep downward cupping of young leaves with swelling/darkening of veins; later, curling of leaf margins.',prods:['antivirus','kacepro','neem']},
+      cercospora:{nm:'Cercospora leaf spot',sev:'med',desc:'Brown flecks with reddish borders expand to circular ashy-grey spots; tissue turns thin and brittle.',prods:['metamanco','coc']},
+      yellowrust:{nm:'Yellow Rust',sev:'high',desc:'Yellow stripes of powdery pustules along leaf veins; severe attacks shrivel grain and cut yield.',prods:['metamanco','coc','zyme']},
+      aphid:{nm:'Aphid infestation',sev:'med',desc:'Colonies on leaves/ears suck sap, leaving plants weak and sticky with honeydew and sooty mould.',prods:['kacepro','neem']},
+      earlyblight:{nm:'Early Blight',sev:'high',desc:'Concentric dark "target" rings on older leaves; spreads upward, defoliating the plant.',prods:['metamanco','coc','zyme']},
+      tlcv:{nm:'Leaf Curl Virus',sev:'high',desc:'Upward curling, puckering and yellowing of leaves with stunted growth; whitefly-transmitted.',prods:['antivirus','neem','kacepro']},
+      thrips:{nm:'Thrips & leaf curl',sev:'high',desc:'Thrips scrape leaves causing upward curling and a leathery look; flowers and fruit-set drop.',prods:['kacepro','antivirus','neem']},
+      anthracnose:{nm:'Anthracnose (fruit rot)',sev:'med',desc:'Sunken, circular, water-soaked lesions on ripening fruit with pinkish spore masses.',prods:['metamanco','coc']}
+    };
+    function S(n,nm,day,dur,pct,problems){ return {n,nm,day,dur,pct,problems:problems||[]}; }
     const CROPS = {
-      cotton:{ name:'Cotton', sci:'Gossypium hirsutum', chips:['Fiber','Kharif','CR-8','180 days'], stats:{stages:9,issues:47,products:313,dur:'180d'},
-        stages:[st(1,'Sprouting','Day 0–1','1 day','0%'),st(2,'Sowing','Day 0–1','1 day','1%'),st(3,'Germination','Day 8–15','8 days','4%'),st(4,'Vegetative','Day 15–25','11 days','6%'),st(5,'Squaring start','Day 30–40','11 days','20%'),st(6,'Squaring','Day 40–50','11 days','27%'),st(7,'Bloom','Day 50–75','26 days','40%'),st(8,'Ball dev.','Day 90–100','11 days','55%'),st(9,'Maturity','Day 120–140','21 days','78%')], on:3,
-        problems:[
-          {nm:'Root Rot',sev:'high',desc:'Germinating seedlings show black lesions on hypocotyls and girdling of the stem. The root system rots and plants pull out easily.',prods:['striker','hattrick','coc','metamanco','zyme']},
-          {nm:'Cotton Leaf Curl Virus',sev:'high',desc:'Deep downward cupping of the youngest leaves with swelling and darkening of leaf veins; later, upward/downward curling of margins.',prods:['antivirus','kacepro','neem']},
-          {nm:'Cercospora leaf spot',sev:'med',desc:'Small brown flecks with a reddish border expand to circular spots with an ashy-grey centre; tissue turns thin and brittle.',prods:['metamanco','coc']}
-        ]},
-      wheat:{ name:'Wheat', sci:'Triticum aestivum', chips:['Cereal','Rabi','WH-1105','140 days'], stats:{stages:6,issues:31,products:210,dur:'140d'},
-        stages:[st(1,'Sowing','Day 0–1','1 day','0%'),st(2,'Germination','Day 4–10','6 days','5%'),st(3,'Tillering','Day 20–45','25 days','20%'),st(4,'Jointing','Day 45–65','20 days','40%'),st(5,'Heading & flower','Day 65–95','30 days','60%'),st(6,'Grain fill & maturity','Day 95–140','45 days','80%')], on:2,
-        problems:[
-          {nm:'Yellow Rust',sev:'high',desc:'Yellow stripes of powdery pustules along the leaf veins; severe attacks shrivel the grain and cut yield sharply.',prods:['metamanco','coc','zyme']},
-          {nm:'Aphid infestation',sev:'med',desc:'Colonies on leaves and ears suck sap, leaving plants weak and sticky with honeydew that invites sooty mould.',prods:['kacepro','neem']}
-        ]},
-      tomato:{ name:'Tomato', sci:'Solanum lycopersicum', chips:['Vegetable','All season','TM-842','120 days'], stats:{stages:6,issues:38,products:265,dur:'120d'},
-        stages:[st(1,'Sowing/Nursery','Day 0–20','20 days','0%'),st(2,'Transplant','Day 20–25','5 days','15%'),st(3,'Vegetative','Day 25–45','20 days','30%'),st(4,'Flowering','Day 45–60','15 days','45%'),st(5,'Fruit set','Day 60–85','25 days','60%'),st(6,'Ripening & harvest','Day 85–120','35 days','80%')], on:3,
-        problems:[
-          {nm:'Early Blight',sev:'high',desc:'Concentric dark rings ("target spots") on older leaves; spreads upward, defoliating the plant and exposing fruit.',prods:['metamanco','coc','zyme']},
-          {nm:'Leaf Curl Virus',sev:'high',desc:'Upward curling, puckering and yellowing of leaves with stunted growth; whitefly-transmitted.',prods:['antivirus','neem','kacepro']}
-        ]},
-      chilli:{ name:'Chilli', sci:'Capsicum annuum', chips:['Vegetable','Kharif','CH-27','150 days'], stats:{stages:6,issues:29,products:198,dur:'150d'},
-        stages:[st(1,'Nursery','Day 0–25','25 days','0%'),st(2,'Transplant','Day 25–30','5 days','15%'),st(3,'Vegetative','Day 30–55','25 days','30%'),st(4,'Flowering','Day 55–75','20 days','45%'),st(5,'Fruiting','Day 75–110','35 days','65%'),st(6,'Harvest','Day 110–150','40 days','85%')], on:2,
-        problems:[
-          {nm:'Thrips & leaf curl',sev:'high',desc:'Thrips scrape leaves causing upward curling and a leathery look; flowers and fruit-set drop.',prods:['kacepro','antivirus','neem']},
-          {nm:'Anthracnose (fruit rot)',sev:'med',desc:'Sunken, circular, water-soaked lesions on ripening fruit with pinkish spore masses in the centre.',prods:['metamanco','coc']}
-        ]}
+      cotton:{ name:'Cotton', sci:'Gossypium hirsutum', chips:['Fiber','Kharif','CR-8','180 days'], stats:{stages:9,issues:47,products:313,dur:'180d'}, on:3,
+        stages:[S(1,'Sprouting','Day 0–1','1 day','0%'),S(2,'Sowing','Day 0–1','1 day','1%'),S(3,'Germination & Emergence','Day 8–15','8 days','4%',['rootrot']),S(4,'Vegetative & Branch Dev.','Day 15–25','11 days','6%',['rootrot','clcv']),S(5,'Squaring start','Day 30–40','11 days','20%',['clcv']),S(6,'Squaring','Day 40–50','11 days','27%',['cercospora']),S(7,'Bloom','Day 50–75','26 days','40%'),S(8,'Ball development','Day 90–100','11 days','55%'),S(9,'Maturity','Day 120–140','21 days','78%')] },
+      wheat:{ name:'Wheat', sci:'Triticum aestivum', chips:['Cereal','Rabi','WH-1105','140 days'], stats:{stages:6,issues:31,products:210,dur:'140d'}, on:2,
+        stages:[S(1,'Sowing','Day 0–1','1 day','0%'),S(2,'Germination','Day 4–10','6 days','5%'),S(3,'Tillering','Day 20–45','25 days','20%',['yellowrust']),S(4,'Jointing','Day 45–65','20 days','40%'),S(5,'Heading & flowering','Day 65–95','30 days','60%',['aphid']),S(6,'Grain fill & maturity','Day 95–140','45 days','80%')] },
+      tomato:{ name:'Tomato', sci:'Solanum lycopersicum', chips:['Vegetable','All season','TM-842','120 days'], stats:{stages:6,issues:38,products:265,dur:'120d'}, on:3,
+        stages:[S(1,'Nursery','Day 0–20','20 days','0%'),S(2,'Transplant','Day 20–25','5 days','15%'),S(3,'Vegetative','Day 25–45','20 days','30%',['earlyblight']),S(4,'Flowering','Day 45–60','15 days','45%',['tlcv']),S(5,'Fruit set','Day 60–85','25 days','60%'),S(6,'Ripening & harvest','Day 85–120','35 days','80%')] },
+      chilli:{ name:'Chilli', sci:'Capsicum annuum', chips:['Vegetable','Kharif','CH-27','150 days'], stats:{stages:6,issues:29,products:198,dur:'150d'}, on:2,
+        stages:[S(1,'Nursery','Day 0–25','25 days','0%'),S(2,'Transplant','Day 25–30','5 days','15%'),S(3,'Vegetative','Day 30–55','25 days','30%',['thrips']),S(4,'Flowering','Day 55–75','20 days','45%'),S(5,'Fruiting','Day 75–110','35 days','65%',['anthracnose']),S(6,'Harvest','Day 110–150','40 days','85%')] }
     };
 
-    // Default selected crops (would come from the user's profile / backend)
     let userCrops = ['cotton','wheat'];
     let active = userCrops[0] || null;
 
@@ -246,10 +222,9 @@
     function renderChips(){
       chipsEl.innerHTML = '';
       userCrops.forEach(k => {
-        const c = CROPS[k];
         const b = document.createElement('button');
         b.className = 'crop-chip' + (k === active ? ' active' : '');
-        b.innerHTML = '<img src="' + IMG[k] + '"/><span>' + c.name + '</span>';
+        b.innerHTML = '<span class="cimg">' + cropImg(k) + '</span><span>' + CROPS[k].name + '</span>';
         b.addEventListener('click', () => { active = k; renderChips(); renderCrop(); });
         chipsEl.appendChild(b);
       });
@@ -261,11 +236,18 @@
       chipsEl.style.display = userCrops.length ? 'flex' : 'none';
     }
 
+    function prodRow(pk){ const p = P[pk]; return '<a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="' + p.img + '"/></div>'
+      + '<div class="prod-meta"><div class="pn">' + p.n + '</div><div class="pc">' + p.c + '</div><span class="ptype ' + p.t + '">' + (p.t === 'chem' ? 'Chemical' : 'Biological') + '</span></div>'
+      + '<div class="prod-price"><div class="amt tnum">' + p.p + '</div><span class="add">Add</span></div></a>'; }
+    function probBlock(k){ const pr = PROB[k]; return '<div class="prob-block"><div class="prob-h"><span class="pic"><i class="fa-solid fa-shield-virus"></i></span>'
+      + '<div><div class="pn">' + pr.nm + '</div><span class="sev ' + pr.sev + '">' + (pr.sev === 'high' ? 'High' : 'Medium') + ' · Disease</span></div></div>'
+      + '<div class="prob-desc">' + pr.desc + '</div><div class="rp-title">Recommended products</div>' + pr.prods.map(prodRow).join('') + '</div>'; }
+
     function renderCrop(){
       if (!active) { content.style.display = 'none'; emptyEl.style.display = 'block'; return; }
       content.style.display = ''; emptyEl.style.display = 'none';
       const c = CROPS[active];
-      document.getElementById('cIdImg').src = IMG[active];
+      document.getElementById('cIdImg').innerHTML = cropImg(active);
       document.getElementById('cIdName').textContent = c.name;
       document.getElementById('cIdSci').textContent = c.sci;
       const icons = ['fa-tag','fa-cloud-sun-rain','fa-barcode','fa-clock'];
@@ -276,51 +258,24 @@
         + '<div class="stat"><div class="v tnum">' + s.issues + '</div><div class="k">Known issues</div></div>'
         + '<div class="stat"><div class="v tnum">' + s.products + '</div><div class="k">Products</div></div>'
         + '<div class="stat"><div class="v tnum">' + s.dur + '</div><div class="k">Duration</div></div>';
-      // Stages
-      const stEl = document.getElementById('cStages'); stEl.innerHTML = '';
       const onIdx = (c.on || 1) - 1;
-      c.stages.forEach((g, i) => {
-        const d = document.createElement('div');
-        d.className = 'stg' + (i < onIdx ? ' done' : (i === onIdx ? ' on' : ''));
-        d.innerHTML = '<div class="dot">' + (i < onIdx ? '<i class="fa-solid fa-check"></i>' : g.n) + '</div><div class="nm">' + g.nm + '</div><div class="dy">' + g.day + '</div>';
-        d.addEventListener('click', () => setStage(g, i, stEl));
-        stEl.appendChild(d);
-      });
-      setStage(c.stages[onIdx], onIdx, stEl);
-      // Problems
-      document.getElementById('cProbCount').textContent = c.problems.length;
-      const pe = document.getElementById('cProblems'); pe.innerHTML = '';
-      c.problems.forEach((pr, i) => {
-        const prods = pr.prods.map(pk => { const p = P[pk]; return ''
-          + '<a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="' + p.img + '"/></div>'
-          + '<div class="prod-meta"><div class="pn">' + p.n + '</div><div class="pc">' + p.c + '</div><span class="ptype ' + p.t + '">' + (p.t === 'chem' ? 'Chemical' : 'Biological') + '</span></div>'
-          + '<div class="prod-price"><div class="amt tnum">' + p.p + '</div><span class="add">Add</span></div></a>';
-        }).join('');
-        const el = document.createElement('div');
-        el.className = 'prob' + (i === 0 ? ' open' : '');
-        el.innerHTML =
-          '<div class="prob-head"><span class="pic"><i class="fa-solid fa-shield-virus"></i></span>'
-          + '<div class="pt"><div class="pn">' + pr.nm + '</div><div class="tags"><span class="sev ' + pr.sev + '">' + (pr.sev === 'high' ? 'High' : 'Medium') + '</span><span class="type-tag">Disease</span></div></div>'
-          + '<span class="text-[10.5px] font-bold mr-1" style="color:#64748B"><i class="fa-solid fa-box text-[10px]"></i> ' + pr.prods.length + '</span>'
-          + '<i class="fa-solid fa-chevron-down chev"></i></div>'
-          + '<div class="prob-body"><div class="prob-desc">' + pr.desc + '</div><div class="rp-title"><i class="fa-solid fa-flask text-[10px]"></i> Recommended products</div>' + prods + '</div>';
-        el.querySelector('.prob-head').addEventListener('click', () => el.classList.toggle('open'));
-        el.querySelectorAll('.add').forEach(b => b.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); b.textContent = 'Added ✓'; b.style.background = '#047857'; setTimeout(() => { b.textContent = 'Add'; b.style.background = '#059669'; }, 900); }));
-        pe.appendChild(el);
-      });
-    }
-
-    function setStage(g, i, stEl){
-      stEl.querySelectorAll('.stg').forEach((x, j) => {
-        x.classList.toggle('on', j === i);
-        x.classList.toggle('done', j < i);
-        x.querySelector('.dot').innerHTML = (j < i ? '<i class="fa-solid fa-check"></i>' : (j + 1));
-      });
-      document.getElementById('cStgNum').textContent = i + 1;
-      document.getElementById('cStgTtl').textContent = g.nm;
-      document.getElementById('cStgDay').textContent = g.day;
-      document.getElementById('cStgDur').textContent = g.dur;
-      document.getElementById('cStgPct').textContent = g.pct;
+      const stEl = document.getElementById('cStages');
+      stEl.innerHTML = c.stages.map((g, i) => {
+        const cls = i < onIdx ? 'done' : (i === onIdx ? 'on' : '');
+        const probs = g.problems || [];
+        const iss = probs.length
+          ? '<span class="vstg-iss"><i class="fa-solid fa-triangle-exclamation"></i> ' + probs.length + ' issue' + (probs.length > 1 ? 's' : '') + '</span>'
+          : '<span class="vstg-iss none"><i class="fa-solid fa-circle-check"></i> Healthy</span>';
+        const body = probs.length ? probs.map(probBlock).join('')
+          : '<div class="vstg-empty"><i class="fa-solid fa-circle-check"></i> No common problems reported at this stage</div>';
+        return '<div class="vstg ' + cls + (i === onIdx ? ' open' : '') + '">'
+          + '<button class="vstg-head"><span class="vstg-dot">' + (i < onIdx ? '<i class="fa-solid fa-check"></i>' : (i + 1)) + '</span>'
+          + '<div class="vstg-info"><div class="nm">' + g.nm + '</div><div class="meta">' + g.day + ' · ' + g.dur + ' · ' + g.pct + ' of lifecycle</div></div>'
+          + iss + '<i class="fa-solid fa-chevron-down vstg-chev"></i></button>'
+          + '<div class="vstg-body">' + body + '</div></div>';
+      }).join('');
+      stEl.querySelectorAll('.vstg-head').forEach(h => h.addEventListener('click', () => h.closest('.vstg').classList.toggle('open')));
+      stEl.querySelectorAll('.prod-price .add').forEach(b => b.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); b.textContent = 'Added ✓'; b.style.background = '#047857'; setTimeout(() => { b.textContent = 'Add'; b.style.background = '#059669'; }, 900); }));
     }
 
     // Add-crop sheet
@@ -328,11 +283,10 @@
     function openAdd(){
       const grid = document.getElementById('pickGrid');
       const avail = Object.keys(CROPS).filter(k => userCrops.indexOf(k) < 0);
-      grid.innerHTML = avail.length ? avail.map(k => '<button class="pick" data-k="' + k + '"><img src="' + IMG[k] + '"/><span>' + CROPS[k].name + '</span></button>').join('')
-        : '<div class="text-[12.5px] col-span-3 text-center py-4" style="color:#64748B">You\'ve added all available crops.</div>';
-      grid.querySelectorAll('.pick').forEach(b => b.addEventListener('click', () => {
-        userCrops.push(b.dataset.k); active = b.dataset.k; closeAdd(); renderChips(); renderCrop();
-      }));
+      grid.innerHTML = avail.length
+        ? avail.map(k => '<button class="pick" data-k="' + k + '"><span class="pcirc">' + cropImg(k) + '</span><span>' + CROPS[k].name + '</span></button>').join('')
+        : '<div class="text-[12.5px] col-span-3 text-center py-6" style="color:#64748B">You\'ve added all available crops.</div>';
+      grid.querySelectorAll('.pick').forEach(b => b.addEventListener('click', () => { userCrops.push(b.dataset.k); active = b.dataset.k; closeAdd(); renderChips(); renderCrop(); }));
       addBd.classList.add('open'); addSheet.classList.add('open');
     }
     function closeAdd(){ addBd.classList.remove('open'); addSheet.classList.remove('open'); }

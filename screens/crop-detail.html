@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Crop</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0;overflow-x:hidden}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:84px}
+  .tnum{font-variant-numeric:tabular-nums}
+  .scrollx{overflow-x:auto;scrollbar-width:none}
+  .scrollx::-webkit-scrollbar{display:none}
+  .sec-title{margin:18px 16px 10px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em;display:flex;align-items:center;gap:8px}
+  .sec-title .cnt{font-size:10px;font-weight:800;color:#047857;background:#ECFDF5;border:1px solid #A7F3D0;padding:1px 7px;border-radius:9999px}
+
+  /* Hero · crop identity */
+  .hero{margin:8px 16px 0;border-radius:18px;padding:16px;color:#FFFFFF;background:linear-gradient(135deg,#065F46 0%,#047857 55%,#10B981 120%);position:relative;overflow:hidden;box-shadow:0 12px 30px -12px rgba(4,120,87,0.55)}
+  .hero::before{content:"";position:absolute;top:-40px;right:-30px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.16) 0%,transparent 70%)}
+  .hero-top{display:flex;align-items:center;gap:14px;position:relative}
+  .hero-img{width:64px;height:64px;border-radius:16px;overflow:hidden;flex-shrink:0;border:2px solid rgba(255,255,255,0.45);box-shadow:0 6px 16px -4px rgba(0,0,0,0.35)}
+  .hero-img img{width:100%;height:100%;object-fit:cover}
+  .hero h1{font-size:23px;font-weight:900;letter-spacing:-0.01em;line-height:1}
+  .hero .sci{font-size:12px;font-style:italic;color:rgba(255,255,255,0.82);margin-top:3px}
+  .hero-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px;position:relative}
+  .hero-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:9999px;background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.28);backdrop-filter:blur(4px)}
+  .hero-chip i{font-size:9px;color:#FCD34D}
+
+  /* Stats · 2x2 grid */
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 16px 0}
+  .stat{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:13px;display:flex;align-items:center;gap:11px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .stat .ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+  .stat .ic.g{background:#ECFDF5;color:#047857}
+  .stat .ic.a{background:#FEF3C7;color:#B45309}
+  .stat .ic.b{background:#EFF6FF;color:#2563EB}
+  .stat .ic.v{background:#F5F3FF;color:#7C3AED}
+  .stat .v{font-size:19px;font-weight:900;color:#0F172A;line-height:1}
+  .stat .k{font-size:10.5px;color:#64748B;font-weight:600;margin-top:2px}
+
+  /* Growth stages · horizontal stepper */
+  .stages{display:flex;gap:0;padding:6px 16px 4px;overflow-x:auto;scrollbar-width:none}
+  .stages::-webkit-scrollbar{display:none}
+  .stg{flex-shrink:0;width:104px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;cursor:pointer}
+  .stg::before{content:"";position:absolute;top:17px;right:50%;width:100%;height:2px;background:#E5E7EB;z-index:0}
+  .stg:first-child::before{display:none}
+  .stg.done::before,.stg.on::before{background:#10B981}
+  .stg .dot{width:36px;height:36px;border-radius:50%;background:#FFFFFF;border:2px solid #E5E7EB;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#94A3B8;position:relative;z-index:1}
+  .stg.done .dot{background:#10B981;border-color:#10B981;color:#FFFFFF}
+  .stg.on .dot{background:#047857;border-color:#047857;color:#FFFFFF;box-shadow:0 0 0 4px rgba(4,120,87,0.15)}
+  .stg .nm{font-size:10px;font-weight:700;color:#94A3B8;margin-top:7px;line-height:1.2;padding:0 4px}
+  .stg.done .nm,.stg.on .nm{color:#0F172A}
+  .stg .dy{font-size:9px;color:#CBD5E1;margin-top:2px;font-weight:600}
+  .stg.on .dy{color:#047857}
+
+  /* Active stage card */
+  .stage-card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-left:4px solid #047857;border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .stage-card .top{display:flex;align-items:flex-start;gap:12px}
+  .stage-card .badge{width:34px;height:34px;border-radius:10px;background:#047857;color:#FFFFFF;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .stage-card .ttl{font-size:15px;font-weight:800;color:#0F172A;line-height:1.2}
+  .stage-card .meta{font-size:11.5px;color:#64748B;margin-top:3px;display:flex;flex-wrap:wrap;gap:8px}
+  .stage-card .meta b{color:#0F172A}
+  .stage-card .iss{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#B45309;background:#FEF3C7;border:1px solid #FCD34D;padding:4px 9px;border-radius:9999px}
+
+  /* Problem accordion */
+  .prob{margin:0 16px 12px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .prob-head{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;background:#FFFBEB;border-bottom:1px solid transparent}
+  .prob.open .prob-head{border-bottom-color:#F1F5F9}
+  .prob-head .pic{width:30px;height:30px;border-radius:9px;background:#FEF3C7;color:#B45309;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+  .prob-head .pt{flex:1;min-width:0}
+  .prob-head .pn{font-size:14px;font-weight:800;color:#0F172A;line-height:1.2}
+  .prob-head .tags{display:flex;align-items:center;gap:7px;margin-top:3px}
+  .sev{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em}
+  .sev::before{content:"";width:6px;height:6px;border-radius:50%}
+  .sev.high{color:#DC2626}.sev.high::before{background:#DC2626}
+  .sev.med{color:#B45309}.sev.med::before{background:#F59E0B}
+  .sev.low{color:#047857}.sev.low::before{background:#10B981}
+  .type-tag{font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:9999px}
+  .type-tag.dis{background:#FEE2E2;color:#B91C1C}
+  .prob-head .pcount{font-size:10.5px;font-weight:700;color:#64748B;flex-shrink:0;display:inline-flex;align-items:center;gap:4px}
+  .prob-head .chev{font-size:12px;color:#94A3B8;transition:transform .2s ease;flex-shrink:0}
+  .prob.open .prob-head .chev{transform:rotate(180deg)}
+  .prob-body{display:none;padding:0 14px 14px}
+  .prob.open .prob-body{display:block}
+  .prob-desc{font-size:12px;line-height:1.5;color:#475569;padding:12px 0}
+  .rp-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:#64748B;display:flex;align-items:center;gap:6px;margin-bottom:8px}
+  .prod-row{display:flex;align-items:center;gap:11px;padding:10px;border:1px solid #E5E7EB;border-radius:12px;margin-bottom:8px;text-decoration:none;color:inherit}
+  .prod-row:last-child{margin-bottom:0}
+  .prod-thumb{width:46px;height:46px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
+  .prod-thumb img{max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:multiply}
+  .prod-meta{flex:1;min-width:0;line-height:1.25}
+  .prod-meta .pn{font-size:13px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prod-meta .pc{font-size:10.5px;color:#94A3B8;font-weight:600;margin-top:1px}
+  .prod-meta .ptype{display:inline-flex;font-size:9px;font-weight:700;padding:2px 7px;border-radius:9999px;margin-top:4px}
+  .ptype.chem{background:#EFF6FF;color:#2563EB}
+  .ptype.bio{background:#ECFDF5;color:#047857}
+  .prod-price{text-align:right;flex-shrink:0}
+  .prod-price .amt{font-size:14px;font-weight:900;color:#0F172A}
+  .prod-price .mrp{font-size:9px;color:#94A3B8;font-weight:600;letter-spacing:0.06em}
+  .prod-price .add{margin-top:5px;display:inline-flex;align-items:center;justify-content:center;gap:4px;font-size:10.5px;font-weight:800;color:#FFFFFF;background:#059669;padding:5px 12px;border-radius:8px}
+
+  /* Doctor CTA */
+  .doc-cta{margin:8px 16px 0;display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:14px;background:linear-gradient(135deg,#10B981,#065F46);color:#FFFFFF;text-decoration:none;box-shadow:0 8px 20px -8px rgba(6,95,70,0.55)}
+  .doc-cta .ic{width:40px;height:40px;border-radius:11px;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;border:1px solid rgba(255,255,255,0.3)}
+  .doc-cta .a{font-size:14px;font-weight:800}
+  .doc-cta .b{font-size:11px;color:rgba(255,255,255,0.85);margin-top:1px}
+</style></head>
+<body>
+
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
+    </div>
+  </div>
+
+  <div class="px-4 pt-4 pb-1 flex items-center gap-3">
+    <button onclick="if(history.length>1){history.back()}else{location.href='my-crop.html'}" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB"><i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i></button>
+    <h1 class="flex-1 text-[18px] font-extrabold" style="color:#0F172A">Crop guide</h1>
+    <a href="my-crop.html" class="text-[12px] font-extrabold" style="color:#047857;text-decoration:none">My crops</a>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-img"><img src="https://images.unsplash.com/photo-1591885503007-9b80d9c89a52?w=200&q=80" alt="Cotton"/></div>
+      <div class="flex-1 min-w-0">
+        <h1>Cotton</h1>
+        <div class="sci">Gossypium hirsutum</div>
+      </div>
+    </div>
+    <div class="hero-chips">
+      <span class="hero-chip"><i class="fa-solid fa-tag"></i> Fiber</span>
+      <span class="hero-chip"><i class="fa-solid fa-cloud-sun-rain"></i> Kharif</span>
+      <span class="hero-chip"><i class="fa-solid fa-barcode"></i> CR-8</span>
+      <span class="hero-chip"><i class="fa-solid fa-clock"></i> 180 days total</span>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat"><span class="ic g"><i class="fa-solid fa-layer-group"></i></span><div><div class="v tnum">9</div><div class="k">Growth stages</div></div></div>
+    <div class="stat"><span class="ic a"><i class="fa-solid fa-bug"></i></span><div><div class="v tnum">47</div><div class="k">Known issues</div></div></div>
+    <div class="stat"><span class="ic b"><i class="fa-solid fa-box"></i></span><div><div class="v tnum">313</div><div class="k">Products</div></div></div>
+    <div class="stat"><span class="ic v"><i class="fa-solid fa-clock"></i></span><div><div class="v tnum">180d</div><div class="k">Total duration</div></div></div>
+  </div>
+
+  <!-- Growth stages stepper -->
+  <div class="sec-title"><i class="fa-solid fa-seedling"></i> Growth stages</div>
+  <div class="stages" id="stages">
+    <div class="stg done" data-nm="Sprouting" data-day="Day 0–1" data-dur="1 day" data-pct="0"><div class="dot"><i class="fa-solid fa-check"></i></div><div class="nm">Sprouting</div><div class="dy">Day 0–1</div></div>
+    <div class="stg done" data-nm="Sowing" data-day="Day 0–1" data-dur="1 day" data-pct="1"><div class="dot"><i class="fa-solid fa-check"></i></div><div class="nm">Sowing</div><div class="dy">Day 0–1</div></div>
+    <div class="stg done" data-nm="Germination &amp; Emergence" data-day="Day 8–15" data-dur="8 days" data-pct="4"><div class="dot"><i class="fa-solid fa-check"></i></div><div class="nm">Germination</div><div class="dy">Day 8–15</div></div>
+    <div class="stg on" data-nm="Vegetative &amp; Branch Development" data-day="Day 15–25" data-dur="11 days" data-pct="6"><div class="dot">4</div><div class="nm">Vegetative</div><div class="dy">Day 15–25</div></div>
+    <div class="stg" data-nm="Vegetative, Branch Dev. &amp; Squaring" data-day="Day 30–40" data-dur="11 days" data-pct="20"><div class="dot">5</div><div class="nm">Squaring start</div><div class="dy">Day 30–40</div></div>
+    <div class="stg" data-nm="Squaring stage" data-day="Day 40–50" data-dur="11 days" data-pct="27"><div class="dot">6</div><div class="nm">Squaring</div><div class="dy">Day 40–50</div></div>
+    <div class="stg" data-nm="Bloom stage" data-day="Day 50–75" data-dur="26 days" data-pct="40"><div class="dot">7</div><div class="nm">Bloom</div><div class="dy">Day 50–75</div></div>
+    <div class="stg" data-nm="Bloom &amp; Ball Development" data-day="Day 90–100" data-dur="11 days" data-pct="55"><div class="dot">8</div><div class="nm">Ball dev.</div><div class="dy">Day 90–100</div></div>
+    <div class="stg" data-nm="Ball Development &amp; Maturity" data-day="Day 120–140" data-dur="21 days" data-pct="78"><div class="dot">9</div><div class="nm">Maturity</div><div class="dy">Day 120–140</div></div>
+  </div>
+
+  <!-- Active stage card -->
+  <div class="stage-card">
+    <div class="top">
+      <span class="badge" id="stageNum">4</span>
+      <div class="flex-1 min-w-0">
+        <div class="ttl" id="stageTtl">Vegetative &amp; Branch Development</div>
+        <div class="meta"><span><b id="stageDay">Day 15–25</b></span><span>· <b id="stageDur">11 days</b></span><span>· <b id="stagePct">6%</b> of lifecycle</span></div>
+      </div>
+      <span class="iss"><i class="fa-solid fa-triangle-exclamation"></i> 9 issues</span>
+    </div>
+  </div>
+
+  <!-- Problems & recommended products -->
+  <div class="sec-title"><i class="fa-solid fa-bug"></i> Problems &amp; products <span class="cnt">9</span></div>
+
+  <!-- Root Rot -->
+  <div class="prob open">
+    <div class="prob-head">
+      <span class="pic"><i class="fa-solid fa-shield-virus"></i></span>
+      <div class="pt">
+        <div class="pn">Root Rot</div>
+        <div class="tags"><span class="sev high">High</span><span class="type-tag dis">Disease</span></div>
+      </div>
+      <span class="pcount"><i class="fa-solid fa-box text-[10px]"></i> 5</span>
+      <i class="fa-solid fa-chevron-down chev"></i>
+    </div>
+    <div class="prob-body">
+      <div class="prob-desc">Germinating seedlings show black lesions on hypocotyls, girdling of stem and death of seedlings. Affected basal stem becomes dark with bark shredding; the root system rots and plants can be easily pulled out.</div>
+      <div class="rp-title"><i class="fa-solid fa-flask text-[10px]"></i> Recommended products</div>
+      <a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp"/></div><div class="prod-meta"><div class="pn">STRIKER</div><div class="pc">BK-548</div><span class="ptype chem">Chemical</span></div><div class="prod-price"><div class="amt tnum">₹8,789</div><div class="mrp">MRP</div><span class="add">Add</span></div></a>
+      <a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg"/></div><div class="prod-meta"><div class="pn">HATTRICK</div><div class="pc">BK-996</div><span class="ptype chem">Chemical</span></div><div class="prod-price"><div class="amt tnum">₹24,400</div><div class="mrp">MRP</div><span class="add">Add</span></div></a>
+      <a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp"/></div><div class="prod-meta"><div class="pn">COC 50</div><div class="pc">BK-46</div><span class="ptype chem">Chemical</span></div><div class="prod-price"><div class="amt tnum">₹2,800</div><div class="mrp">MRP</div><span class="add">Add</span></div></a>
+      <a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp"/></div><div class="prod-meta"><div class="pn">META-MANCO</div><div class="pc">BK-144</div><span class="ptype chem">Chemical</span></div><div class="prod-price"><div class="amt tnum">₹22,500</div><div class="mrp">MRP</div><span class="add">Add</span></div></a>
+      <a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="../assets/AntiVirus_nobg.png"/></div><div class="prod-meta"><div class="pn">ZYME PLUS</div><div class="pc">BK-137</div><span class="ptype bio">Biological</span></div><div class="prod-price"><div class="amt tnum">₹14,850</div><div class="mrp">MRP</div><span class="add">Add</span></div></a>
+    </div>
+  </div>
+
+  <!-- Cotton Leaf Curl Virus -->
+  <div class="prob">
+    <div class="prob-head">
+      <span class="pic"><i class="fa-solid fa-shield-virus"></i></span>
+      <div class="pt">
+        <div class="pn">Cotton Leaf Curl Virus</div>
+        <div class="tags"><span class="sev high">High</span><span class="type-tag dis">Disease</span></div>
+      </div>
+      <span class="pcount"><i class="fa-solid fa-box text-[10px]"></i> 4</span>
+      <i class="fa-solid fa-chevron-down chev"></i>
+    </div>
+    <div class="prob-body">
+      <div class="prob-desc">Early symptoms include deep downward cupping of the youngest leaves with swelling and darkening of leaf veins. Later stages show upward or downward curling of the leaf margins.</div>
+      <div class="rp-title"><i class="fa-solid fa-flask text-[10px]"></i> Recommended products</div>
+      <a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="../assets/AntiVirus_nobg.png"/></div><div class="prod-meta"><div class="pn">ANTI VIRUS</div><div class="pc">BK-116</div><span class="ptype bio">Biological</span></div><div class="prod-price"><div class="amt tnum">₹1,740</div><div class="mrp">MRP</div><span class="add">Add</span></div></a>
+      <a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp"/></div><div class="prod-meta"><div class="pn">ASHWAMEDH PLUS</div><div class="pc">BK-122</div><span class="ptype chem">Chemical</span></div><div class="prod-price"><div class="amt tnum">₹46,310</div><div class="mrp">MRP</div><span class="add">Add</span></div></a>
+      <a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp"/></div><div class="prod-meta"><div class="pn">K-ACEPRO</div><div class="pc">BK-5513</div><span class="ptype chem">Chemical</span></div><div class="prod-price"><div class="amt tnum">₹550</div><div class="mrp">MRP</div><span class="add">Add</span></div></a>
+      <a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp"/></div><div class="prod-meta"><div class="pn">NEEM SHAKTI</div><div class="pc">BK-208</div><span class="ptype bio">Biological</span></div><div class="prod-price"><div class="amt tnum">₹980</div><div class="mrp">MRP</div><span class="add">Add</span></div></a>
+    </div>
+  </div>
+
+  <!-- Cercospora leaf spot -->
+  <div class="prob">
+    <div class="prob-head">
+      <span class="pic"><i class="fa-solid fa-shield-virus"></i></span>
+      <div class="pt">
+        <div class="pn">Cercospora leaf spot</div>
+        <div class="tags"><span class="sev med">Medium</span><span class="type-tag dis">Disease</span></div>
+      </div>
+      <span class="pcount"><i class="fa-solid fa-box text-[10px]"></i> 6</span>
+      <i class="fa-solid fa-chevron-down chev"></i>
+    </div>
+    <div class="prob-body">
+      <div class="prob-desc">Small brown flecks develop with a reddish border, expanding to circular spots with an ashy-grey centre. The tissue becomes thin and brittle and often drops out, leaving a ragged hole.</div>
+      <div class="rp-title"><i class="fa-solid fa-flask text-[10px]"></i> Recommended products</div>
+      <a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp"/></div><div class="prod-meta"><div class="pn">META-MANCO</div><div class="pc">BK-144</div><span class="ptype chem">Chemical</span></div><div class="prod-price"><div class="amt tnum">₹22,500</div><div class="mrp">MRP</div><span class="add">Add</span></div></a>
+      <a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg"/></div><div class="prod-meta"><div class="pn">COC 50</div><div class="pc">BK-46</div><span class="ptype chem">Chemical</span></div><div class="prod-price"><div class="amt tnum">₹2,800</div><div class="mrp">MRP</div><span class="add">Add</span></div></a>
+    </div>
+  </div>
+
+  <!-- Talk to doctor -->
+  <a href="advisory.html" class="doc-cta">
+    <span class="ic"><i class="fa-solid fa-user-doctor"></i></span>
+    <div class="flex-1">
+      <div class="a">Not sure what's wrong?</div>
+      <div class="b">Send a photo to the Krishi Doctor — free</div>
+    </div>
+    <i class="fa-solid fa-arrow-right text-[14px]"></i>
+  </a>
+
+  <!-- Bottom nav · Crop active -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white flex justify-around items-center px-2 py-2 z-50" style="height:68px;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04)">
+    <a href="home.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none">
+      <i class="fa-solid fa-house text-[20px]"></i><span class="text-[12.5px] font-semibold">Home</span>
+    </a>
+    <a href="crop-detail.html" class="flex flex-col items-center gap-1" style="text-decoration:none">
+      <i class="fa-solid fa-seedling text-[20px]" style="color:#059669"></i><span class="text-[12.5px] font-bold" style="color:#0F172A">Crop</span>
+    </a>
+    <a href="orders.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none">
+      <i class="fa-solid fa-box text-[20px]"></i><span class="text-[12.5px] font-semibold">Orders</span>
+    </a>
+    <a href="account.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none">
+      <i class="fa-solid fa-user text-[20px]"></i><span class="text-[12.5px] font-semibold">Profile</span>
+    </a>
+  </nav>
+
+  <script>
+    // Stage stepper · tapping a stage updates the active node + the stage detail card
+    (function(){
+      const stages = Array.from(document.querySelectorAll('#stages .stg'));
+      stages.forEach((s, i) => s.addEventListener('click', () => {
+        stages.forEach((x, j) => {
+          x.classList.remove('on');
+          x.classList.toggle('done', j < i);
+          if (j < i && !x.querySelector('.dot i')) x.querySelector('.dot').innerHTML = '<i class="fa-solid fa-check"></i>';
+          else if (j >= i) x.querySelector('.dot').textContent = (j + 1);
+        });
+        s.classList.remove('done'); s.classList.add('on'); s.querySelector('.dot').textContent = (i + 1);
+        document.getElementById('stageNum').textContent = i + 1;
+        document.getElementById('stageTtl').innerHTML = s.dataset.nm;
+        document.getElementById('stageDay').textContent = s.dataset.day;
+        document.getElementById('stageDur').textContent = s.dataset.dur;
+        document.getElementById('stagePct').textContent = s.dataset.pct + '%';
+      }));
+    })();
+    // Problem accordions
+    document.querySelectorAll('.prob-head').forEach(h => h.addEventListener('click', () => {
+      h.closest('.prob').classList.toggle('open');
+    }));
+    // Add buttons → don't navigate, quick feedback
+    document.querySelectorAll('.prod-row .add').forEach(b => b.addEventListener('click', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      b.textContent = 'Added ✓'; b.style.background = '#047857';
+      setTimeout(() => { b.textContent = 'Add'; b.style.background = '#059669'; }, 900);
+    }));
+  </script>
+</body></html>

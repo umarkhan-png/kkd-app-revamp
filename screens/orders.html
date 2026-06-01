@@ -106,6 +106,12 @@
   .rate-stars .star:active{transform:scale(.85)}
   .rate-review{display:none;margin-top:10px;width:100%;min-height:58px;padding:10px 12px;border-radius:10px;border:1px solid #E5E7EB;background:#FAFAFA;font-size:12.5px;font-family:inherit;color:#0F172A;outline:none;resize:none;box-sizing:border-box}
   .rate-item.rated .rate-review{display:block}
+  /* Attach photo/video · reveals with the review after the first star */
+  .rate-attach{display:none;align-items:center;gap:7px;margin-top:8px;height:38px;padding:0 14px;border-radius:10px;border:1.5px dashed #CBD5E1;background:#FFFFFF;color:#475569;font-size:12px;font-weight:700;cursor:pointer}
+  .rate-item.rated .rate-attach{display:inline-flex}
+  .rate-attach i{color:#047857;font-size:13px}
+  .rate-attach-info{display:none;font-size:11px;font-weight:700;color:#047857;margin-top:6px}
+  .rate-attach-info i{font-size:10px}
 
   /* Shared rating success · soft scale-in card + coin pop gesture · auto-dismiss */
   .rate-ok{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,0.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
@@ -263,9 +269,9 @@
       <i class="fa-solid fa-house text-[20px]"></i>
       <span class="text-[12.5px] font-semibold">Home</span>
     </a>
-    <a href="categories.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none">
-      <i class="fa-solid fa-grip text-[20px]"></i>
-      <span class="text-[12.5px] font-semibold">Category</span>
+    <a href="crop-detail.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none">
+      <i class="fa-solid fa-seedling text-[20px]"></i>
+      <span class="text-[12.5px] font-semibold">Crop</span>
     </a>
     <a href="orders.html" class="flex flex-col items-center gap-1" style="text-decoration:none">
       <i class="fa-solid fa-box text-[20px]" style="color:#059669"></i>
@@ -360,13 +366,22 @@
             '<div class="rate-item-head"><div class="rate-item-img"><img src="' + p.img + '" class="img-blend" alt=""/></div>'
             + '<div class="leading-tight"><div class="rate-item-name">' + p.name + '</div><div class="rate-item-size">' + p.size + '</div></div></div>'
             + '<div class="rate-stars">' + [1,2,3,4,5].map(n => '<button class="star" data-val="' + n + '"><i class="fa-solid fa-star"></i></button>').join('') + '</div>'
-            + '<textarea class="rate-review" placeholder="Write a review (optional)…"></textarea>';
+            + '<textarea class="rate-review" placeholder="Write a review (optional)…"></textarea>'
+            + '<label class="rate-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input type="file" accept="image/*,video/*" capture="environment" multiple style="display:none"/></label>'
+            + '<div class="rate-attach-info"></div>';
           const stars = item.querySelectorAll('.star');
           stars.forEach(s => s.addEventListener('click', () => {
             const v = parseInt(s.dataset.val, 10);
             stars.forEach(x => x.classList.toggle('on', parseInt(x.dataset.val, 10) <= v));
             item.classList.add('rated');
           }));
+          const fileIn = item.querySelector('.rate-attach input');
+          const info = item.querySelector('.rate-attach-info');
+          fileIn.addEventListener('change', () => {
+            const n = fileIn.files ? fileIn.files.length : 0;
+            if (n > 0) { info.style.display = 'block'; info.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + n + ' file' + (n > 1 ? 's' : '') + ' attached'; }
+            else info.style.display = 'none';
+          });
           list.appendChild(item);
         });
         bd.classList.add('open'); sh.classList.add('open');

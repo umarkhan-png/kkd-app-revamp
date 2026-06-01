@@ -91,9 +91,9 @@
 
   /* Sticky checkout · 2-col layout · summary on the left (item count + amount), button on the right (compact, not full-width) · Saved-520 text removed */
   .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 14px;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:14px}
-  .sticky-sum{display:flex;flex-direction:column;line-height:1.15;flex-shrink:0;min-width:110px}
-  .sticky-sum .ttl{font-size:16px;color:#0F172A;font-weight:800;letter-spacing:-0.01em}
-  .sticky-sum .amt{font-size:14px;font-weight:800;color:#047857;letter-spacing:0;margin-top:4px;display:inline-flex;align-items:center;gap:4px}
+  .sticky-sum{display:flex;flex-direction:column;line-height:1.2;flex-shrink:0;min-width:100px}
+  .sticky-sum .ttl{font-size:13.5px;color:#0F172A;font-weight:700}
+  .sticky-sum .amt{font-size:14px;font-weight:800;color:#047857;letter-spacing:-0.01em;margin-top:2px}
   /* Wider checkout pill · takes ~60% of the row so the CTA reads as the primary action */
   .sticky-cta-btn{flex:1;min-width:220px;height:52px;padding:0 22px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
 
@@ -166,6 +166,13 @@
   .celeb-card .save{margin-top:6px;font-size:13px;color:#64748B;font-weight:500}
   .celeb-card .save .v{color:#047857;font-weight:800}
   .celeb-card .code{margin-top:12px;display:inline-block;font-size:11px;font-weight:800;letter-spacing:0.16em;color:#047857;background:#ECFDF5;padding:4px 10px;border-radius:9999px;border:1px solid #A7F3D0}
+
+  /* Add-to-cart toast · sits ABOVE the cross-sell sheet (z above modal) so the farmer gets clear feedback that the item went in · slides down from the top, auto-dismisses */
+  .toast{position:fixed;top:14px;left:50%;transform:translate(-50%,-160%);z-index:120;display:flex;align-items:center;gap:10px;max-width:90%;padding:10px 14px;border-radius:12px;background:#0F172A;color:#FFFFFF;box-shadow:0 12px 28px -8px rgba(15,23,42,0.5);transition:transform .32s cubic-bezier(.22,1,.36,1)}
+  .toast.show{transform:translate(-50%,0)}
+  .toast .tk{width:24px;height:24px;border-radius:9999px;background:#10B981;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+  .toast .tx{font-size:13px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .toast .tx .nm{font-weight:800}
 </style></head>
 <body>
 
@@ -454,7 +461,7 @@
       </div>
 
       <div class="space-y-2.5">
-        <div class="xsell-card">
+        <div class="xsell-card" data-name="Antivirus" data-tech="Bio bactericide + virucide" data-size="250 ml" data-price="327" data-mrp="425" data-off="23% off" data-img="../assets/AntiVirus_nobg.png">
           <div class="xsell-img"><img src="../assets/AntiVirus_nobg.png" alt=""/></div>
           <div class="flex-1 min-w-0 leading-tight">
             <div class="flex items-center gap-2"><span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹98</span></div>
@@ -468,7 +475,7 @@
           </div>
           <button class="xsell-add">Add</button>
         </div>
-        <div class="xsell-card">
+        <div class="xsell-card" data-name="Bhumiraja" data-tech="Soil conditioner · micronutrients" data-size="1 kg" data-price="245" data-mrp="320" data-off="24% off" data-img="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp">
           <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" alt=""/></div>
           <div class="flex-1 min-w-0 leading-tight">
             <div class="flex items-center gap-2"><span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹75</span></div>
@@ -482,7 +489,7 @@
           </div>
           <button class="xsell-add">Add</button>
         </div>
-        <div class="xsell-card">
+        <div class="xsell-card" data-name="Chakraveer 18.5%" data-tech="Chlorantraniliprole 18.5% SC" data-size="100 ml" data-price="440" data-mrp="610" data-off="28% off" data-img="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp">
           <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" alt=""/></div>
           <div class="flex-1 min-w-0 leading-tight">
             <div class="flex items-center gap-2"><span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹170</span></div>
@@ -505,32 +512,47 @@
     </div>
   </div>
 
+  <!-- Add-to-cart toast · shown when a cross-sell item is added -->
+  <div id="toast" class="toast"><span class="tk"><i class="fa-solid fa-check"></i></span><span class="tx" id="toastText"></span></div>
+
   <script>
-    // Trash · remove the cart item from DOM + update the items-count line
-    (function(){
-      function refreshCount(){
-        const n = document.querySelectorAll('#cartList .cart-item').length;
-        const sticky = document.getElementById('stickyItems');
-        if (sticky) sticky.textContent = n + (n === 1 ? ' item' : ' items') + ' · ₹1,900';
-      }
-      document.querySelectorAll('.trash-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const row = btn.closest('.cart-item');
-          if (!row) return;
-          row.style.transition = 'opacity .25s ease, transform .25s ease, max-height .3s ease, padding .3s ease, border-color .3s ease';
-          row.style.maxHeight = row.offsetHeight + 'px';
-          requestAnimationFrame(() => {
-            row.style.opacity = '0';
-            row.style.transform = 'translateX(40px)';
-            row.style.maxHeight = '0';
-            row.style.paddingTop = '0';
-            row.style.paddingBottom = '0';
-            row.style.borderColor = 'transparent';
-          });
-          setTimeout(() => { row.remove(); refreshCount(); }, 320);
+    // Shared cart state · keeps the sticky item-count + total line in sync as items are removed (trash) or added (cross-sell)
+    let cartTotal = 1900;
+    function updateSticky(){
+      const n = document.querySelectorAll('#cartList .cart-item').length;
+      const sticky = document.getElementById('stickyItems');
+      if (sticky) sticky.textContent = n + (n === 1 ? ' item' : ' items') + ' · ₹' + cartTotal.toLocaleString('en-IN');
+    }
+
+    // Toast · brief confirmation that an item went into the cart · shown above the cross-sell sheet
+    let toastTimer;
+    function showToast(name){
+      const t = document.getElementById('toast');
+      document.getElementById('toastText').innerHTML = '<span class="nm">' + name + '</span> added to cart';
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    // Trash · remove the cart item from DOM + update the items-count line · wireTrash is reused for cross-sell items added at runtime
+    function wireTrash(btn){
+      btn.addEventListener('click', () => {
+        const row = btn.closest('.cart-item');
+        if (!row) return;
+        row.style.transition = 'opacity .25s ease, transform .25s ease, max-height .3s ease, padding .3s ease, border-color .3s ease';
+        row.style.maxHeight = row.offsetHeight + 'px';
+        requestAnimationFrame(() => {
+          row.style.opacity = '0';
+          row.style.transform = 'translateX(40px)';
+          row.style.maxHeight = '0';
+          row.style.paddingTop = '0';
+          row.style.paddingBottom = '0';
+          row.style.borderColor = 'transparent';
         });
+        setTimeout(() => { row.remove(); updateSticky(); }, 320);
       });
-    })();
+    }
+    document.querySelectorAll('.trash-btn').forEach(wireTrash);
 
     // Coupon sheet open / close + apply (full-screen celebration)
     (function(){
@@ -620,10 +642,39 @@
       closeBt.addEventListener('click', close);
       bd.addEventListener('click', close);
       goBt.addEventListener('click',   () => { window.location.href = 'checkout.html'; });
+      const cartList = document.getElementById('cartList');
       document.querySelectorAll('.xsell-add').forEach(b => {
         b.addEventListener('click', () => {
+          if (b.classList.contains('added')) return;
+          const card = b.closest('.xsell-card');
+          const d = card.dataset;
+          // Feedback 1 · button flips to Added (locked)
           b.classList.add('added');
+          b.disabled = true;
           b.innerHTML = '<i class="fa-solid fa-circle-check text-[11px]"></i> Added';
+          // Feedback 2 · a real cart row is appended so the item actually shows up in the cart
+          const item = document.createElement('div');
+          item.className = 'cart-item';
+          item.innerHTML =
+            '<button class="trash-btn" aria-label="Remove"><i class="fa-solid fa-trash-can"></i></button>'
+            + '<div class="cart-img"><img src="' + d.img + '" class="img-blend"/></div>'
+            + '<div class="cart-info">'
+            +   '<div class="cart-name">' + d.name + '</div>'
+            +   '<div class="cart-tech">' + d.tech + '</div>'
+            +   '<span class="cart-size">' + d.size + '</span>'
+            +   '<div class="cart-price-row">'
+            +     '<span class="cart-price tnum">₹' + d.price + '</span>'
+            +     '<span class="cart-mrp tnum">₹' + d.mrp + '</span>'
+            +     '<span class="cart-discount">' + d.off + '</span>'
+            +     '<div class="qty"><button aria-label="Decrease"><i class="fa-solid fa-minus"></i></button><span class="val tnum">1</span><button aria-label="Increase"><i class="fa-solid fa-plus"></i></button></div>'
+            +   '</div>'
+            + '</div>';
+          cartList.appendChild(item);
+          wireTrash(item.querySelector('.trash-btn'));
+          // Feedback 3 · sticky total + count update, and a toast confirms
+          cartTotal += parseInt(d.price, 10);
+          updateSticky();
+          showToast(d.name);
         });
       });
 

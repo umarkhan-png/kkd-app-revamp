@@ -16,15 +16,16 @@
   .status-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 16px 4px;font-size:11px;font-weight:800;color:#0F172A;background:#FFFFFF}
 
   /* Sticky top search row · sits below the status bar · back + input + voice */
-  .stk{position:sticky;top:0;z-index:30;background:#FFFFFF;border-bottom:1px solid #F1F5F9;padding:8px 12px 10px;display:flex;align-items:center;gap:8px}
-  .stk .back{width:36px;height:36px;border-radius:9999px;background:#FFFFFF;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#0F172A;cursor:pointer}
-  .search-input{flex:1;display:flex;align-items:center;gap:8px;height:42px;padding:0 12px;border-radius:11px;background:#F8FAFC;border:1px solid #E5E7EB}
-  .search-input input{flex:1;outline:0;background:transparent;font-size:14px;font-weight:600;color:#0F172A;min-width:0}
+  .stk{position:sticky;top:0;z-index:30;background:#FFFFFF;border-bottom:1px solid #F1F5F9;padding:4px 12px 10px;display:flex;align-items:center;gap:10px}
+  .stk .back{width:40px;height:40px;border-radius:9999px;background:#FFFFFF;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#0F172A;cursor:pointer}
+  /* Search pill · mirrors home's input (15.5px medium, #F1F5F9 fill) · voice icon lives INSIDE the pill on the right, just like home */
+  .search-input{flex:1;display:flex;align-items:center;gap:8px;height:46px;padding:0 6px 0 14px;border-radius:12px;background:#F1F5F9;border:1px solid #E2E8F0}
+  .search-input input{flex:1;outline:0;background:transparent;font-size:15.5px;font-weight:500;color:#0F172A;min-width:0}
   .search-input input::placeholder{color:#94A3B8;font-weight:500}
   .search-input .clear{width:22px;height:22px;border-radius:9999px;background:#E2E8F0;color:#475569;display:none;align-items:center;justify-content:center;font-size:9px;cursor:pointer;border:0;flex-shrink:0}
   .search-input.has-query .clear{display:flex}
-  .voice-btn{width:36px;height:36px;border-radius:10px;background:#FFFFFF;border:1px solid #E5E7EB;color:#047857;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;cursor:pointer}
-  .voice-btn:active{background:#ECFDF5}
+  .search-input .voice{width:34px;height:34px;border-radius:9px;background:#FFFFFF;border:1px solid #E5E7EB;color:#475569;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;cursor:pointer}
+  .search-input .voice:active{background:#ECFDF5;color:#047857}
 
   /* Section title · matches design system */
   .sec-title{margin:18px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em;display:flex;align-items:center;justify-content:space-between}
@@ -45,8 +46,8 @@
   .rv-card .img-box{background:#F8FAFC;height:74px;display:flex;align-items:center;justify-content:center;padding:6px;border-bottom:1px solid #F1F5F9}
   .rv-card .img-box img{max-width:100%;max-height:100%;object-fit:contain}
   .rv-card .body{padding:8px 10px 10px;line-height:1.2}
-  .rv-card .nm{font-size:12.5px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .rv-card .pr{font-size:11px;font-weight:800;color:#047857;margin-top:2px;font-variant-numeric:tabular-nums}
+  .rv-card .nm{font-size:13px;font-weight:700;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rv-card .pr{font-size:11.5px;font-weight:700;color:#047857;margin-top:2px;font-variant-numeric:tabular-nums}
 
   /* New-arrival tile · same dimensions as rv-card but with a NEW badge */
   .new-card{position:relative}
@@ -79,10 +80,10 @@
   .sugg-img{width:46px;height:46px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:4px;flex-shrink:0}
   .sugg-img img{max-width:100%;max-height:100%;object-fit:contain}
   .sugg-body{flex:1;min-width:0;line-height:1.25}
-  .sugg-body .nm{font-size:13.5px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .sugg-body .nm mark{background:#FEF3C7;color:#0F172A;padding:0;font-weight:900}
-  .sugg-body .sub{font-size:11px;color:#64748B;margin-top:2px}
-  .sugg-body .pr{font-size:11.5px;color:#047857;font-weight:800;font-variant-numeric:tabular-nums;margin-top:3px}
+  .sugg-body .nm{font-size:14.5px;font-weight:700;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sugg-body .nm mark{background:transparent;color:#047857;padding:0;font-weight:800}
+  .sugg-body .sub{font-size:11.5px;color:#94A3B8;margin-top:2px;font-weight:500}
+  .sugg-body .pr{font-size:12.5px;color:#047857;font-weight:700;font-variant-numeric:tabular-nums;margin-top:3px}
   .sugg-row .arrow{font-size:11px;color:#94A3B8;flex-shrink:0}
 
   /* Empty results · stub state */
@@ -90,11 +91,11 @@
   .empty-wrap .ic{width:44px;height:44px;border-radius:12px;background:#F1F5F9;color:#94A3B8;display:flex;align-items:center;justify-content:center;font-size:18px;margin:0 auto 10px}
 
   /* First-time onboarding banner · gold border + emoji · only renders when there are no recent searches saved */
-  .ft-banner{margin:14px 16px 0;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#FFFBEB 0%,#FEF3C7 100%);border:1px solid #FCD34D}
-  .ft-banner .ic{width:36px;height:36px;border-radius:10px;background:#FFFFFF;color:#B45309;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+  .ft-banner{margin:14px 16px 0;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:#ECFDF5;border:1px solid #A7F3D0}
+  .ft-banner .ic{width:36px;height:36px;border-radius:10px;background:#FFFFFF;color:#047857;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
   .ft-banner .body{flex:1;line-height:1.25}
-  .ft-banner .body .a{font-size:13px;font-weight:900;color:#0F172A}
-  .ft-banner .body .b{font-size:11px;color:#78350F;margin-top:2px;font-weight:600}
+  .ft-banner .body .a{font-size:13px;font-weight:800;color:#0F172A}
+  .ft-banner .body .b{font-size:11.5px;color:#047857;margin-top:2px;font-weight:500}
 
   /* Voice-search mini overlay · simple modal that mimics 'listening' */
   .voice-bd{position:fixed;inset:0;z-index:200;background:rgba(15,23,42,0.65);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center}
@@ -124,11 +125,11 @@
 <div class="stk">
   <button class="back" onclick="if(document.referrer && history.length>1){history.back()}else{location.href='home.html'}" aria-label="Back"><i class="fa-solid fa-arrow-left text-[12px]"></i></button>
   <div class="search-input" id="searchWrap">
-    <i class="fa-solid fa-magnifying-glass text-[13px]" style="color:#94A3B8"></i>
+    <i class="fa-solid fa-magnifying-glass text-[14px]" style="color:#94A3B8"></i>
     <input id="q" type="text" placeholder="Search products, crops, diseases" autofocus/>
     <button class="clear" id="clearBtn" aria-label="Clear"><i class="fa-solid fa-xmark"></i></button>
+    <button id="voiceBtn" class="voice" aria-label="Voice search"><i class="fa-solid fa-microphone"></i></button>
   </div>
-  <button id="voiceBtn" class="voice-btn" aria-label="Voice search"><i class="fa-solid fa-microphone"></i></button>
 </div>
 
 <!-- IDLE state · two-state: first-time (no history) shows Trending + New arrival + Categories with a friendly intro banner · returning users get Recent searches (terms) + Recently viewed products + Trending + Categories -->

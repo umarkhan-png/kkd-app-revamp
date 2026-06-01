@@ -203,9 +203,16 @@
     </div>
   </div>
 
-  <!-- Terms -->
-  <div class="px-6 mt-5 text-center">
-    <p class="text-[11.5px] text-[#94A3B8] leading-relaxed">By continuing you agree to our <span class="font-bold" style="color:#047857">Terms</span> &amp; <span class="font-bold" style="color:#047857">Privacy Policy</span></p>
+  <!-- Consent · two checkboxes, both checked by default · 1) T&C + Privacy, 2) SMS/promotional authorization -->
+  <div class="px-6 mt-5 space-y-3">
+    <label class="flex items-start gap-2.5 cursor-pointer">
+      <input type="checkbox" id="consentTerms" checked class="mt-0.5 w-[18px] h-[18px] rounded-[5px] accent-emerald-600 flex-shrink-0" style="accent-color:#059669"/>
+      <span class="text-[11.5px] leading-snug text-[#475569]">By continuing you agree that you have read and accept our <span class="font-bold" style="color:#047857">terms &amp; conditions</span> and <span class="font-bold" style="color:#047857">privacy policy</span>.</span>
+    </label>
+    <label class="flex items-start gap-2.5 cursor-pointer">
+      <input type="checkbox" id="consentSms" checked class="mt-0.5 w-[18px] h-[18px] rounded-[5px] flex-shrink-0" style="accent-color:#059669"/>
+      <span class="text-[11.5px] leading-snug text-[#475569]">I hereby authorize KKD to send notifications on SMS / Promotional / Information messages.</span>
+    </label>
   </div>
 
   <!-- Sticky CTA · design-system primary · lifts with the keyboard via visualViewport (see script at end of body) -->

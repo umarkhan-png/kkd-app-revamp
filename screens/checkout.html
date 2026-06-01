@@ -58,6 +58,17 @@
   .bill-row .lbl{color:#64748B}
   .bill-row .val{color:#0F172A;font-weight:600}
   .bill-row .val.green{color:#047857;font-weight:700}
+  /* Krishi Coins wallet redeem row + toggle */
+  .coin-redeem{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer}
+  .coin-redeem .coin-ic{width:40px;height:40px;border-radius:12px;background:#FEF3C7;color:#B45309;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+  .coin-body{flex:1;line-height:1.25}
+  .coin-a{font-size:13.5px;font-weight:800;color:#0F172A}
+  .coin-b{font-size:11px;color:#64748B;margin-top:2px}
+  .coin-b b{color:#047857}
+  .coin-toggle{appearance:none;-webkit-appearance:none;width:42px;height:24px;border-radius:9999px;background:#E2E8F0;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s ease;border:0;margin:0}
+  .coin-toggle::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.2);transition:transform .2s ease}
+  .coin-toggle:checked{background:#059669}
+  .coin-toggle:checked::after{transform:translateX(18px)}
   .bill-total{border-top:1px dashed #CBD5E1;margin-top:8px;padding-top:10px;display:flex;align-items:baseline;justify-content:space-between}
   .bill-total .lbl{font-size:14px;font-weight:800}
   .bill-total .val{font-size:18px;font-weight:800}
@@ -174,6 +185,19 @@
     </label>
   </div>
 
+  <!-- Krishi Coins wallet · redeem coins against the bill · 1 coin = ₹1 · capped redemption -->
+  <div class="sec-title">Krishi Coins wallet</div>
+  <div class="card">
+    <label class="coin-redeem">
+      <span class="coin-ic"><i class="fa-solid fa-coins"></i></span>
+      <div class="coin-body">
+        <div class="coin-a">Use Krishi Coins</div>
+        <div class="coin-b">Balance <b class="tnum">1,240</b> coins · redeem up to <b class="tnum">₹190</b> on this order</div>
+      </div>
+      <input type="checkbox" id="coinUse" class="coin-toggle"/>
+    </label>
+  </div>
+
   <!-- Bill summary · "Prepaid extra off" line replaces the old "UPI extra off" · shown only when Pay Now or Partial is selected -->
   <div class="sec-title">Bill summary</div>
   <div class="card">
@@ -182,6 +206,7 @@
       <div class="bill-row"><span class="lbl">Discount</span><span class="val green tnum">&minus; &#8377;300</span></div>
       <div class="bill-row"><span class="lbl">Coupon (WELCOME100)</span><span class="val green tnum">&minus; &#8377;100</span></div>
       <div class="bill-row" id="prepaidBillRow"><span class="lbl" style="color:#047857;font-weight:700">Prepaid extra off</span><span class="val green tnum" id="prepaidBillAmt">&minus; &#8377;95</span></div>
+      <div class="bill-row" id="coinBillRow" style="display:none"><span class="lbl" style="color:#047857;font-weight:700"><i class="fa-solid fa-coins text-[11px]" style="color:#F59E0B"></i> Krishi Coins</span><span class="val green tnum" id="coinBillAmt">&minus; &#8377;190</span></div>
       <div class="bill-row"><span class="lbl">Delivery</span><span class="val green">FREE</span></div>
       <div class="bill-total">
         <span class="lbl">Total to pay</span>
@@ -207,22 +232,35 @@
 
     function fmt(n){ return '₹' + n.toLocaleString('en-IN'); }
 
+    const COIN_REDEEM = 190;   // capped Krishi Coins redemption (1 coin = ₹1)
+    let coinsRedeem = 0;
+
     function updateBill(method, pct){
       const billRow = document.getElementById('prepaidBillRow');
       const billAmt = document.getElementById('prepaidBillAmt');
       const billTotal = document.getElementById('billTotal');
       const ctaAmt = document.getElementById('ctaAmt');
+      const coinRow = document.getElementById('coinBillRow');
       let off = 0, total = SUBTOTAL, showOff = false;
       if (method === 'paynow') { off = Math.round(SUBTOTAL * 0.05); total = SUBTOTAL - off; showOff = true; }
       else if (method === 'partial') {
         // Prepaid percent of subtotal · NO instant discount in partial mode (only 2% coins on prepaid)
         showOff = false; total = SUBTOTAL;
       } else { showOff = false; total = SUBTOTAL; }
+      total -= coinsRedeem;
       billRow.style.display = showOff ? 'flex' : 'none';
       billAmt.textContent = '− ' + fmt(off);
+      if (coinRow) coinRow.style.display = coinsRedeem > 0 ? 'flex' : 'none';
       billTotal.textContent = fmt(total);
       ctaAmt.textContent = fmt(total);
     }
+
+    // Krishi Coins toggle · applies/removes the capped redemption and recomputes the bill
+    (function(){
+      const t = document.getElementById('coinUse');
+      if (!t) return;
+      t.addEventListener('change', () => { coinsRedeem = t.checked ? COIN_REDEEM : 0; updateBill(currentMethod, currentPct); });
+    })();
 
     function updatePartialSplit(pct){
       const prepaid = Math.round(SUBTOTAL * pct / 100);

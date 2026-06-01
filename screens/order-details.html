@@ -315,15 +315,16 @@
         <div class="prod-inline">
           <span class="prod-inline-left">
             <span class="prod-size">1 L</span>
-            <span class="prod-calc-text"><span class="pc tnum">&#8377;376</span> &times; <span class="qty">Qty 1</span></span>
+            <span class="prod-calc-text"><span class="pc tnum">&#8377;376</span> &times; <span class="qty">Qty 2</span></span>
           </span>
-          <span class="prod-total tnum">&#8377;376</span>
+          <span class="prod-total tnum">&#8377;752</span>
         </div>
         <!-- Return status · revealed once a return/replacement is initiated for this product -->
-        <div class="ret-status" data-ret-status style="display:none">
-          <span class="ret-pill" data-ret-pill><i class="fa-solid fa-rotate-left"></i> Return requested</span>
-          <button class="ret-details" data-ret-details>View details <i class="fa-solid fa-chevron-right text-[8px]"></i></button>
-        </div>
+        <button class="ret-status" data-ret-status data-ret-details style="display:none">
+          <span class="ret-ic"><i class="fa-solid fa-rotate-left"></i></span>
+          <span class="ret-tx"><span class="ret-a" data-ret-pill>Return requested</span><span class="ret-b">Tap to view return details</span></span>
+          <i class="fa-solid fa-chevron-right ret-chev"></i>
+        </button>
         <!-- Per-product rate · delivered only · coins are tied to RATING (chip makes this unambiguous) · review is optional with its own Submit -->
         <div class="rate-block only-delivered" data-rating-group="humic">
           <div class="rate-head">
@@ -355,14 +356,15 @@
         <div class="prod-inline">
           <span class="prod-inline-left">
             <span class="prod-size">250 ml</span>
-            <span class="prod-calc-text"><span class="pc tnum">&#8377;327</span> &times; <span class="qty">Qty 1</span></span>
+            <span class="prod-calc-text"><span class="pc tnum">&#8377;327</span> &times; <span class="qty">Qty 3</span></span>
           </span>
-          <span class="prod-total tnum">&#8377;327</span>
+          <span class="prod-total tnum">&#8377;981</span>
         </div>
-        <div class="ret-status" data-ret-status style="display:none">
-          <span class="ret-pill" data-ret-pill><i class="fa-solid fa-rotate-left"></i> Return requested</span>
-          <button class="ret-details" data-ret-details>View details <i class="fa-solid fa-chevron-right text-[8px]"></i></button>
-        </div>
+        <button class="ret-status" data-ret-status data-ret-details style="display:none">
+          <span class="ret-ic"><i class="fa-solid fa-rotate-left"></i></span>
+          <span class="ret-tx"><span class="ret-a" data-ret-pill>Return requested</span><span class="ret-b">Tap to view return details</span></span>
+          <i class="fa-solid fa-chevron-right ret-chev"></i>
+        </button>
         <div class="rate-block only-delivered" data-rating-group="antivirus">
           <div class="rate-head">
             <div class="ltxt" data-rate-status>Rate this product</div>
@@ -386,10 +388,10 @@
     </div>
 
     <div class="bill-section">
-      <div class="bill-row"><span class="lbl">Subtotal (2 items)</span><span class="val tnum">&#8377;703</span></div>
+      <div class="bill-row"><span class="lbl">Subtotal (5 units)</span><span class="val tnum">&#8377;1,733</span></div>
       <div class="bill-row"><span class="lbl">Delivery fee</span><span class="val green">FREE</span></div>
       <div class="bill-row"><span class="lbl"><i class="fa-solid fa-coins text-[11px]" style="color:#F59E0B"></i> Coins used (50)</span><span class="val green">&minus; &#8377;5</span></div>
-      <div class="bill-total"><span class="lbl">Total Amount</span><span class="val tnum" id="billTotal">&#8377;698</span></div>
+      <div class="bill-total"><span class="lbl">Total Amount</span><span class="val tnum" id="billTotal">&#8377;1,728</span></div>
     </div>
 
   </div>
@@ -620,6 +622,12 @@
     .rtn-prod .pimg img{max-width:100%;max-height:100%;object-fit:contain}
     .rtn-prod .pn{font-size:13px;font-weight:700;color:#0F172A;line-height:1.2}
     .rtn-prod .ps{font-size:11px;color:#94A3B8;margin-top:1px}
+    /* clickable part + return-qty stepper (capped at ordered qty) */
+    .rtn-prod-main{display:flex;align-items:center;gap:10px;flex:1;min-width:0;cursor:pointer}
+    .rtn-qty{display:inline-flex;align-items:center;height:32px;border-radius:9px;border:1px solid #BBF7D0;background:#ECFDF5;overflow:hidden;flex-shrink:0}
+    .rtn-qty button{width:30px;height:32px;display:flex;align-items:center;justify-content:center;color:#047857;font-size:15px;font-weight:800;background:transparent;border:0;cursor:pointer}
+    .rtn-qty button:disabled{color:#A7F3D0;cursor:not-allowed}
+    .rtn-qty .qv{min-width:18px;text-align:center;font-size:13px;font-weight:800;color:#047857;font-variant-numeric:tabular-nums}
     .rtn-select,.rtn-desc{width:100%;border:1.5px solid #E5E7EB;border-radius:10px;background:#FAFAFA;font-size:13px;font-family:inherit;color:#0F172A;outline:none;box-sizing:border-box;padding:11px 12px}
     .rtn-select:focus,.rtn-desc:focus{border-color:#047857}
     .rtn-desc{min-height:64px;resize:none;margin-top:8px}
@@ -651,11 +659,13 @@
     .rtn-src{display:flex;flex-direction:column;align-items:center;gap:9px;padding:18px;border:1.5px solid #E5E7EB;border-radius:14px;background:#FFFFFF;cursor:pointer;font-size:13px;font-weight:800;color:#0F172A}
     .rtn-src i{font-size:23px;color:#047857}
     .rtn-src:active{transform:scale(.98)}
-    /* Return status on a product row + detail timeline */
-    .ret-status{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid #F1F5F9}
-    .ret-pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;color:#B45309;background:#FEF3C7;border:1px solid #FCD34D;padding:3px 9px;border-radius:9999px}
-    .ret-pill i{font-size:9px}
-    .ret-details{font-size:11px;font-weight:800;color:#047857;background:transparent;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+    /* Return status · tappable status banner on the product row (whole strip opens details) */
+    .ret-status{display:flex;align-items:center;gap:10px;width:100%;margin-top:10px;padding:9px 11px;border-radius:11px;background:#FFFBEB;border:1px solid #FCD34D;cursor:pointer;text-align:left}
+    .ret-status .ret-ic{width:28px;height:28px;border-radius:8px;background:#FEF3C7;color:#B45309;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+    .ret-status .ret-tx{flex:1;line-height:1.25;min-width:0}
+    .ret-status .ret-a{display:block;font-size:12px;font-weight:800;color:#92400E}
+    .ret-status .ret-b{display:block;font-size:10.5px;color:#B45309;font-weight:600}
+    .ret-status .ret-chev{font-size:11px;color:#B45309;flex-shrink:0}
     .rtl{position:relative;display:flex;gap:13px;padding-bottom:16px}
     .rtl:last-child{padding-bottom:0}
     .rtl .dot{width:24px;height:24px;border-radius:50%;background:#F1F5F9;border:2px solid #E5E7EB;display:flex;align-items:center;justify-content:center;font-size:9px;color:#94A3B8;flex-shrink:0;z-index:1}
@@ -713,8 +723,14 @@
 
       <div class="text-[11px] font-extrabold uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Select product(s)</div>
       <div class="space-y-2" id="rtnProducts">
-        <label class="rtn-prod"><input type="checkbox" class="rtn-prod-cb" data-key="humic"/><div class="pimg"><img src="../assets/Humic_nobg.png" class="img-blend"/></div><div class="flex-1 leading-tight"><div class="pn">Humic + Fulvic</div><div class="ps">1 L · ₹376</div></div></label>
-        <label class="rtn-prod"><input type="checkbox" class="rtn-prod-cb" data-key="antivirus"/><div class="pimg"><img src="../assets/AntiVirus_nobg.png" class="img-blend"/></div><div class="flex-1 leading-tight"><div class="pn">Antivirus</div><div class="ps">250 ml · ₹327</div></div></label>
+        <div class="rtn-prod">
+          <label class="rtn-prod-main"><input type="checkbox" class="rtn-prod-cb" data-key="humic" data-max="2"/><div class="pimg"><img src="../assets/Humic_nobg.png" class="img-blend"/></div><div class="flex-1 leading-tight"><div class="pn">Humic + Fulvic</div><div class="ps">1 L · ₹376 · ordered 2</div></div></label>
+          <div class="rtn-qty" style="display:none"><button type="button" class="qd">−</button><span class="qv">1</span><button type="button" class="qi">+</button></div>
+        </div>
+        <div class="rtn-prod">
+          <label class="rtn-prod-main"><input type="checkbox" class="rtn-prod-cb" data-key="antivirus" data-max="3"/><div class="pimg"><img src="../assets/AntiVirus_nobg.png" class="img-blend"/></div><div class="flex-1 leading-tight"><div class="pn">Antivirus</div><div class="ps">250 ml · ₹327 · ordered 3</div></div></label>
+          <div class="rtn-qty" style="display:none"><button type="button" class="qd">−</button><span class="qv">1</span><button type="button" class="qi">+</button></div>
+        </div>
       </div>
 
       <div class="text-[11px] font-extrabold uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Reason</div>
@@ -1038,10 +1054,21 @@
           seg.querySelectorAll('.rtn-seg-btn').forEach(x => x.classList.remove('active'));
           b.classList.add('active'); choice = b.dataset.choice;
         }));
-        // Product checkbox styling
+        // Product checkbox + return-qty stepper · qty reveals when selected, capped at the ordered quantity
         document.querySelectorAll('#rtnProducts .rtn-prod').forEach(p => {
           const cb = p.querySelector('.rtn-prod-cb');
-          cb.addEventListener('change', () => p.classList.toggle('sel', cb.checked));
+          const qtyBox = p.querySelector('.rtn-qty');
+          const qv = p.querySelector('.qv'), qd = p.querySelector('.qd'), qi = p.querySelector('.qi');
+          const max = parseInt(cb.dataset.max, 10) || 1;
+          let n = 1;
+          function paint(){ qv.textContent = n; qd.disabled = n <= 1; qi.disabled = n >= max; }
+          cb.addEventListener('change', () => {
+            p.classList.toggle('sel', cb.checked);
+            qtyBox.style.display = cb.checked ? 'inline-flex' : 'none';
+            if (cb.checked) { n = 1; paint(); }
+          });
+          qd.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); if (n > 1) { n--; paint(); } });
+          qi.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); if (n < max) { n++; paint(); } });
         });
 
         // Add proof · "Camera or Gallery" choice → file input → thumbnail previews (removable)

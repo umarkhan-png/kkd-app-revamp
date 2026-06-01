@@ -142,7 +142,14 @@
   .xsell-thresh .fill{height:100%;background:linear-gradient(90deg,#10B981 0%,#047857 100%);border-radius:9999px;transition:width .4s ease}
 
   /* Special-deal xsell card · CLEANED UP · drops the diagonal ribbon + the gradient bg in favour of a clean white card with hairline border · a single SAVE chip sits at the top-right · the eye lands on the image + name + price · primary ADD pill on the right */
-  .xsell-card{position:relative;border:1px solid #E5E7EB;border-radius:14px;background:#FFFFFF;padding:12px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .xsell-card{position:relative;border:1px solid #E5E7EB;border-radius:14px;background:#FFFFFF;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(15,23,42,0.04);overflow:hidden}
+  /* Top deal-label layer · full-width strip · one per tile, each a different colour */
+  .xsell-deal{display:flex;align-items:center;gap:6px;padding:6px 12px;font-size:10px;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;border-bottom:1px solid}
+  .xsell-deal i{font-size:10px}
+  .xsell-deal.hot{background:#FEF2F2;color:#DC2626;border-color:#FEE2E2}
+  .xsell-deal.combo{background:#ECFDF5;color:#047857;border-color:#D1FAE5}
+  .xsell-deal.best{background:#FFFBEB;color:#B45309;border-color:#FDE68A}
+  .xsell-main{display:flex;align-items:center;gap:12px;padding:12px}
   .xsell-card .saving{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:900;color:#047857;background:#ECFDF5;border:1px solid #A7F3D0;padding:3px 8px;border-radius:9999px;letter-spacing:0.04em}
   .xsell-card .saving i{font-size:8px}
   .xsell-img{width:60px;height:60px;border-radius:11px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
@@ -462,46 +469,55 @@
 
       <div class="space-y-2.5">
         <div class="xsell-card" data-name="Antivirus" data-tech="Bio bactericide + virucide" data-size="250 ml" data-price="327" data-mrp="425" data-off="23% off" data-img="../assets/AntiVirus_nobg.png">
-          <div class="xsell-img"><img src="../assets/AntiVirus_nobg.png" alt=""/></div>
-          <div class="flex-1 min-w-0 leading-tight">
-            <div class="flex items-center gap-2"><span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹98</span></div>
-            <div class="text-[14px] font-extrabold mt-1.5 text-[#0F172A]">Antivirus</div>
-            <div class="text-[11px] font-medium" style="color:#94A3B8">250 ml</div>
-            <div class="flex items-baseline gap-1.5 mt-1.5">
-              <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;327</span>
-              <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;425</span>
-              <span class="text-[10.5px] font-bold" style="color:#047857">23% off</span>
+          <div class="xsell-deal hot"><i class="fa-solid fa-bolt"></i> Special deal</div>
+          <div class="xsell-main">
+            <div class="xsell-img"><img src="../assets/AntiVirus_nobg.png" alt=""/></div>
+            <div class="flex-1 min-w-0 leading-tight">
+              <div class="flex items-center gap-2"><span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹98</span></div>
+              <div class="text-[14px] font-extrabold mt-1.5 text-[#0F172A]">Antivirus</div>
+              <div class="text-[11px] font-medium" style="color:#94A3B8">250 ml</div>
+              <div class="flex items-baseline gap-1.5 mt-1.5">
+                <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;327</span>
+                <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;425</span>
+                <span class="text-[10.5px] font-bold" style="color:#047857">23% off</span>
+              </div>
             </div>
+            <button class="xsell-add">Add</button>
           </div>
-          <button class="xsell-add">Add</button>
         </div>
         <div class="xsell-card" data-name="Bhumiraja" data-tech="Soil conditioner · micronutrients" data-size="1 kg" data-price="245" data-mrp="320" data-off="24% off" data-img="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp">
-          <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" alt=""/></div>
-          <div class="flex-1 min-w-0 leading-tight">
-            <div class="flex items-center gap-2"><span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹75</span></div>
-            <div class="text-[14px] font-extrabold mt-1.5 text-[#0F172A]">Bhumiraja</div>
-            <div class="text-[11px] font-medium" style="color:#94A3B8">1 kg</div>
-            <div class="flex items-baseline gap-1.5 mt-1.5">
-              <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;245</span>
-              <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;320</span>
-              <span class="text-[10.5px] font-bold" style="color:#047857">24% off</span>
+          <div class="xsell-deal combo"><i class="fa-solid fa-link"></i> Best buy together</div>
+          <div class="xsell-main">
+            <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" alt=""/></div>
+            <div class="flex-1 min-w-0 leading-tight">
+              <div class="flex items-center gap-2"><span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹75</span></div>
+              <div class="text-[14px] font-extrabold mt-1.5 text-[#0F172A]">Bhumiraja</div>
+              <div class="text-[11px] font-medium" style="color:#94A3B8">1 kg</div>
+              <div class="flex items-baseline gap-1.5 mt-1.5">
+                <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;245</span>
+                <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;320</span>
+                <span class="text-[10.5px] font-bold" style="color:#047857">24% off</span>
+              </div>
             </div>
+            <button class="xsell-add">Add</button>
           </div>
-          <button class="xsell-add">Add</button>
         </div>
         <div class="xsell-card" data-name="Chakraveer 18.5%" data-tech="Chlorantraniliprole 18.5% SC" data-size="100 ml" data-price="440" data-mrp="610" data-off="28% off" data-img="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp">
-          <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" alt=""/></div>
-          <div class="flex-1 min-w-0 leading-tight">
-            <div class="flex items-center gap-2"><span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹170</span></div>
-            <div class="text-[14px] font-extrabold mt-1.5 text-[#0F172A]">Chakraveer 18.5%</div>
-            <div class="text-[11px] font-medium" style="color:#94A3B8">100 ml</div>
-            <div class="flex items-baseline gap-1.5 mt-1.5">
-              <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;440</span>
-              <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;610</span>
-              <span class="text-[10.5px] font-bold" style="color:#047857">28% off</span>
+          <div class="xsell-deal best"><i class="fa-solid fa-crown"></i> Bestseller</div>
+          <div class="xsell-main">
+            <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" alt=""/></div>
+            <div class="flex-1 min-w-0 leading-tight">
+              <div class="flex items-center gap-2"><span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹170</span></div>
+              <div class="text-[14px] font-extrabold mt-1.5 text-[#0F172A]">Chakraveer 18.5%</div>
+              <div class="text-[11px] font-medium" style="color:#94A3B8">100 ml</div>
+              <div class="flex items-baseline gap-1.5 mt-1.5">
+                <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;440</span>
+                <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;610</span>
+                <span class="text-[10.5px] font-bold" style="color:#047857">28% off</span>
+              </div>
             </div>
+            <button class="xsell-add">Add</button>
           </div>
-          <button class="xsell-add">Add</button>
         </div>
       </div>
     </div>

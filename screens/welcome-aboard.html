@@ -35,9 +35,14 @@
   .confetti{position:absolute;width:8px;height:14px;border-radius:2px;top:-20px;opacity:0;animation:cfall 3.2s ease-out forwards}
   @keyframes cfall{0%{transform:translateY(-30px) rotate(0);opacity:0}10%{opacity:1}100%{transform:translateY(110vh) rotate(540deg);opacity:0}}
 
-  /* CTA · primary white pill (high-contrast on emerald bg) · sits at bottom with safe-area padding */
-  .cta{position:absolute;left:24px;right:24px;bottom:32px;height:54px;border-radius:14px;background:#FFFFFF;color:#047857;font-size:15.5px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;box-shadow:0 14px 30px -10px rgba(0,0,0,0.3);opacity:0;animation:up .5s ease-out 1.55s forwards}
-  .cta i{font-size:13px}
+  /* Join-strip · social-proof row with overlapping avatars + user count · replaces the Continue CTA */
+  .join-strip{display:inline-flex;align-items:center;gap:12px;margin:28px auto 0;padding:10px 16px 10px 10px;border-radius:9999px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.28);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;animation:up .55s ease-out 1.55s forwards}
+  .join-avs{display:inline-flex;flex-shrink:0}
+  .join-av{width:28px;height:28px;border-radius:50%;background:#FFFFFF;border:2px solid #FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.2);overflow:hidden;background-size:cover;background-position:center}
+  .join-av + .join-av{margin-left:-10px}
+  .join-text{line-height:1.15;text-align:left}
+  .join-text .jv{font-size:15px;font-weight:900;color:#FCD34D;letter-spacing:-0.01em}
+  .join-text .jl{font-size:11px;color:rgba(255,255,255,0.85);font-weight:600;margin-top:2px}
 </style></head>
 <body>
 
@@ -67,10 +72,20 @@
     <div class="eyebrow">Welcome aboard</div>
     <div class="headline">Namaste,</div>
     <div class="name" id="userName">Farmer!</div>
-    <div class="subline">Your farm is now part of the Katyayani family. Let's grow together.</div>
+    <div class="subline">You've joined the Katyayani family. Let's grow together.</div>
+    <!-- Social-proof user count · replaces the Continue CTA · shows the user the size of the community they just joined -->
+    <div class="join-strip">
+      <div class="join-avs">
+        <span class="join-av" style="background-image:url('https://images.unsplash.com/photo-1627638458498-71e9fdf12a05?w=120&q=80')"></span>
+        <span class="join-av" style="background-image:url('https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=120&q=80')"></span>
+        <span class="join-av" style="background-image:url('https://images.unsplash.com/photo-1572177812156-58036aae439c?w=120&q=80')"></span>
+      </div>
+      <div class="join-text">
+        <div class="jv tnum">10 lakh+</div>
+        <div class="jl">farmers across India trust KKD</div>
+      </div>
+    </div>
   </div>
-
-  <a href="home.html" class="cta">Continue to home <i class="fa-solid fa-arrow-right"></i></a>
 
   <script>
     (function(){
@@ -80,7 +95,7 @@
       try { fn = (localStorage.getItem('kkd.firstName') || '').trim(); } catch (e) {}
       el.textContent = (fn ? fn : 'Farmer') + '!';
     })();
-    // Auto-route home after 4.5s · gives the user time to read the welcome
-    setTimeout(() => { if (!document.hidden) window.location.href = 'home.html'; }, 4500);
+    // Auto-route to notifications-allow next (skippable) · welcome stays on screen ~4.5s
+    setTimeout(() => { if (!document.hidden) window.location.href = 'notifications-allow.html'; }, 4500);
   </script>
 </body></html>

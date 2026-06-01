@@ -162,11 +162,22 @@
   </div>
 
   <script>
-    // Verify · returning users (first-name already saved) → welcome-back splash · new users → name screen which then routes to welcome-aboard
+    // Verify · the mobile-number PREFIX decides the flow: anything that starts with "12345" is treated as a returning user (→ welcome-back), anything starting with "1234" is treated as a new user (→ name → welcome-aboard) · falls back to checking a saved first-name when the prefix doesn't match either
     (function(){
       const btn = document.getElementById('verifyBtn');
       if (!btn) return;
       btn.addEventListener('click', () => {
+        let mob = '';
+        try { mob = (localStorage.getItem('kkd.mobile') || '').replace(/\D/g,''); } catch (e) {}
+        // The "12345" check has to run BEFORE the "1234" check, because "12345" also starts with "1234"
+        if (mob.startsWith('12345')) {
+          // Returning user · ensure a name exists for the welcome screen
+          try { if (!localStorage.getItem('kkd.firstName')) localStorage.setItem('kkd.firstName', 'Sagar'); } catch (e) {}
+          window.location.href = 'welcome-back.html';
+          return;
+        }
+        if (mob.startsWith('1234')) { window.location.href = 'name.html'; return; }
+        // Fallback · use saved first-name as the signal
         let fn = '';
         try { fn = (localStorage.getItem('kkd.firstName') || '').trim(); } catch (e) {}
         window.location.href = fn ? 'welcome-back.html' : 'name.html';

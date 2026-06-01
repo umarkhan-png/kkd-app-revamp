@@ -144,11 +144,13 @@
   /* Special-deal xsell card · CLEANED UP · drops the diagonal ribbon + the gradient bg in favour of a clean white card with hairline border · a single SAVE chip sits at the top-right · the eye lands on the image + name + price · primary ADD pill on the right */
   .xsell-card{position:relative;border:1px solid #E5E7EB;border-radius:14px;background:#FFFFFF;padding:12px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
   /* Deal label · small pill tag · one per tile, each a different colour · sits on the top row next to the savings chip */
-  .xsell-deal{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;padding:3px 8px;border-radius:9999px;border:1px solid;flex-shrink:0}
-  .xsell-deal i{font-size:9px}
-  .xsell-deal.hot{background:#FEF2F2;color:#DC2626;border-color:#FECACA}
-  .xsell-deal.combo{background:#ECFDF5;color:#047857;border-color:#A7F3D0}
-  .xsell-deal.best{background:#FFFBEB;color:#B45309;border-color:#FDE68A}
+  /* Deal badge · gradient pill with a leading icon-chip · reads as a premium tag rather than a flat label */
+  .xsell-deal{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:900;letter-spacing:0.05em;text-transform:uppercase;padding:3px 9px 3px 3px;border-radius:9999px;color:#FFFFFF;flex-shrink:0;box-shadow:0 4px 9px -3px rgba(0,0,0,0.28)}
+  .xsell-deal i{width:16px;height:16px;border-radius:9999px;background:rgba(255,255,255,0.28);display:inline-flex;align-items:center;justify-content:center;font-size:8px}
+  .xsell-deal.hot{background:linear-gradient(135deg,#FB7185,#E11D48)}
+  .xsell-deal.combo{background:linear-gradient(135deg,#10B981,#047857)}
+  .xsell-deal.best{background:linear-gradient(135deg,#FBBF24,#F59E0B);color:#7C2D12}
+  .xsell-deal.best i{background:rgba(124,45,18,0.18)}
   .xsell-card .saving{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:900;color:#047857;background:#ECFDF5;border:1px solid #A7F3D0;padding:3px 8px;border-radius:9999px;letter-spacing:0.04em}
   .xsell-card .saving i{font-size:8px}
   .xsell-img{width:60px;height:60px;border-radius:11px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}

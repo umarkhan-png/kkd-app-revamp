@@ -1,33 +1,139 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Addresses</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
-<style>*{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}.hi{font-family:'Noto Sans Devanagari',sans-serif}html,body{margin:0;padding:0}body{min-height:100vh;background:#FDF8EE;color:#0F172A}</style></head>
-<body class="min-h-screen pb-[100px]">
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{font-family:'Poppins',system-ui,sans-serif;margin:0;padding:0}
+  input,button{font-family:inherit}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:100px}
+  .tnum{font-variant-numeric:tabular-nums}
 
-<div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
+  /* Address card · design-system white tile with hairline border + soft shadow · proper spacing inside · selected state gets emerald-tint band + ring */
+  .addr-card{position:relative;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04);cursor:pointer;transition:border-color .15s ease,box-shadow .15s ease}
+  .addr-card.selected{border-color:#059669;box-shadow:0 6px 14px -6px rgba(5,150,105,0.25),0 0 0 2px rgba(5,150,105,0.12)}
+  .addr-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .addr-ic{width:34px;height:34px;border-radius:10px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+  .addr-ic.work{background:#FEF3C7;color:#B45309}
+  .addr-ic.other{background:#F1F5F9;color:#475569}
+  .addr-tag{font-size:14px;font-weight:800;color:#0F172A;letter-spacing:-0.01em}
+  .addr-default{font-size:9.5px;font-weight:900;letter-spacing:0.08em;background:#ECFDF5;color:#047857;border:1px solid #A7F3D0;padding:2px 7px;border-radius:9999px}
+  .addr-actions{margin-left:auto;display:flex;align-items:center;gap:4px}
+  .addr-act{width:34px;height:34px;border-radius:9px;background:transparent;border:0;color:#94A3B8;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px}
+  .addr-act:hover{background:#F1F5F9;color:#0F172A}
+  .addr-act.del:hover{color:#DC2626;background:#FEF2F2}
+  .addr-name{font-size:13.5px;font-weight:700;color:#0F172A;line-height:1.3}
+  .addr-phone{font-size:12.5px;color:#64748B;font-weight:600;margin-left:6px}
+  .addr-body{font-size:12.5px;color:#475569;margin-top:6px;line-height:1.45}
+  .addr-foot{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px dashed #E5E7EB}
+  .addr-foot .pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:#64748B;background:#F8FAFC;padding:4px 9px;border-radius:9999px;border:1px solid #E5E7EB}
+  .addr-foot .pill.eta{background:#ECFDF5;color:#047857;border-color:#A7F3D0}
+  .addr-foot .pill i{font-size:9px}
 
-<div class="px-4 pt-4 flex items-center gap-3"><button onclick="history.back()" class="w-10 h-10 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div><div class="hi text-[20px] font-extrabold leading-none">पते</div><div class="text-[11px] text-[#64748B] mt-0.5">2 saved addresses</div></div></div>
+  /* Floating add button · primary green pill anchored at the bottom */
+  .stk{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 14px;z-index:50}
+  .add-btn{width:100%;height:52px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+</style></head>
+<body>
 
-<div class="px-4 mt-5 space-y-3">
+<div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold">
+  <span>9:41</span>
+  <div class="flex items-center gap-1.5">
+    <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+    <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+    <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
+  </div>
+</div>
 
-  <div class="bg-white border-2 border-[#047857]/40 rounded-2xl p-4">
-    <div class="flex items-start justify-between mb-2"><div class="flex items-center gap-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg><span class="text-[13px] font-extrabold">Home</span><span class="text-[9px] font-bold bg-[#ECFDF5] text-[#059669] px-1.5 py-0.5 rounded">Default</span></div><button><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
-    <div class="text-[13px] font-bold">Ramesh Patel · 98765 43210</div>
-    <div class="text-[12px] text-[#64748B] mt-0.5 leading-snug">Plot 22, Khasra No. 145, Village Bawadia<br/>Indore — 452001, Madhya Pradesh</div>
+<div class="px-4 pt-4 pb-3 flex items-center gap-3" style="background:#F8F8F8">
+  <button onclick="history.back()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center" style="border:1px solid #E5E7EB;box-shadow:0 1px 3px rgba(15,23,42,0.04)">
+    <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
+  </button>
+  <div class="flex-1 leading-tight">
+    <h1 class="text-[22px] font-extrabold" style="color:#0F172A">Addresses</h1>
+    <div class="text-[12px] mt-0.5" style="color:#64748B">Tap a card to deliver here</div>
+  </div>
+</div>
+
+<!-- Address cards · cleaner spacing inside (consistent 14px padding, 12px gaps), proper hierarchy (icon+tag+default chip+actions on header row → name+phone → full address → delivery ETA pill foot) -->
+<div class="px-4 mt-2 space-y-3">
+
+  <div class="addr-card selected" data-id="home">
+    <div class="addr-head">
+      <span class="addr-ic"><i class="fa-solid fa-house"></i></span>
+      <span class="addr-tag">Home</span>
+      <span class="addr-default">Default</span>
+      <div class="addr-actions">
+        <button class="addr-act" aria-label="Edit"><i class="fa-solid fa-pen"></i></button>
+        <button class="addr-act del" aria-label="Delete"><i class="fa-solid fa-trash-can"></i></button>
+      </div>
+    </div>
+    <div>
+      <span class="addr-name">Ramesh Patel</span>
+      <span class="addr-phone tnum">· +91 98765 43210</span>
+    </div>
+    <div class="addr-body">Plot 22, Khasra No. 145, Village Bawadia<br/>Indore — 452001, Madhya Pradesh</div>
+    <div class="addr-foot">
+      <span class="pill eta"><i class="fa-solid fa-truck-fast"></i> Delivers in 1 day</span>
+      <span class="pill"><i class="fa-solid fa-circle-check"></i> Verified</span>
+    </div>
   </div>
 
-  <div class="bg-white border border-[#E5E7EB] rounded-2xl p-4">
-    <div class="flex items-start justify-between mb-2"><div class="flex items-center gap-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8M8 6l4-4 4 4M5 22V12h14v10"/></svg><span class="text-[13px] font-extrabold">Farm</span></div><button><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
-    <div class="text-[13px] font-bold">Ramesh Patel · 98765 43210</div>
-    <div class="text-[12px] text-[#64748B] mt-0.5 leading-snug">Farm Plot 8, Survey 312<br/>Sanwer Road, Indore — 453555, MP</div>
+  <div class="addr-card" data-id="farm">
+    <div class="addr-head">
+      <span class="addr-ic work"><i class="fa-solid fa-wheat-awn"></i></span>
+      <span class="addr-tag">Farm</span>
+      <div class="addr-actions">
+        <button class="addr-act" aria-label="Edit"><i class="fa-solid fa-pen"></i></button>
+        <button class="addr-act del" aria-label="Delete"><i class="fa-solid fa-trash-can"></i></button>
+      </div>
+    </div>
+    <div>
+      <span class="addr-name">Ramesh Patel</span>
+      <span class="addr-phone tnum">· +91 98765 43210</span>
+    </div>
+    <div class="addr-body">Farm Plot 8, Survey 312, Sanwer Road<br/>Indore — 453555, Madhya Pradesh</div>
+    <div class="addr-foot">
+      <span class="pill eta"><i class="fa-solid fa-truck-fast"></i> Delivers in 2 days</span>
+    </div>
+  </div>
+
+  <div class="addr-card" data-id="shop">
+    <div class="addr-head">
+      <span class="addr-ic other"><i class="fa-solid fa-store"></i></span>
+      <span class="addr-tag">Shop</span>
+      <div class="addr-actions">
+        <button class="addr-act" aria-label="Edit"><i class="fa-solid fa-pen"></i></button>
+        <button class="addr-act del" aria-label="Delete"><i class="fa-solid fa-trash-can"></i></button>
+      </div>
+    </div>
+    <div>
+      <span class="addr-name">Patel Krishi Kendra</span>
+      <span class="addr-phone tnum">· +91 98123 45678</span>
+    </div>
+    <div class="addr-body">Shop 14, Sadar Bazaar, Old City Road<br/>Indore — 452002, Madhya Pradesh</div>
+    <div class="addr-foot">
+      <span class="pill eta"><i class="fa-solid fa-truck-fast"></i> Delivers in 1 day</span>
+    </div>
   </div>
 
 </div>
 
-<!-- Sticky add -->
-<div class="fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E7EB] px-4 py-3">
-  <button onclick="location.href='add-address.html'" class="w-full h-[52px] rounded-lg bg-[#059669] text-white text-[15px] font-extrabold flex items-center justify-center gap-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg><span class="hi">नया पता जोड़ें</span></button>
+<!-- Sticky add new address -->
+<div class="stk">
+  <button onclick="location.href='add-address.html'" class="add-btn">
+    <i class="fa-solid fa-plus text-[13px]"></i> Add new address
+  </button>
 </div>
 
+<script>
+  document.querySelectorAll('.addr-card').forEach(c => {
+    c.addEventListener('click', e => {
+      if (e.target.closest('.addr-act')) return;
+      document.querySelectorAll('.addr-card').forEach(x => x.classList.remove('selected'));
+      c.classList.add('selected');
+    });
+  });
+</script>
 </body></html>

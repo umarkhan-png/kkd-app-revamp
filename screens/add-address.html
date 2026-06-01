@@ -1,46 +1,173 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Add Address</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
-<style>*{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}.hi{font-family:'Noto Sans Devanagari',sans-serif}html,body{margin:0;padding:0}body{min-height:100vh;background:#FDF8EE;color:#0F172A}.input{height:54px;padding:0 14px;border-radius:10px;border:2px solid #EEE5D8;background:#fff;font-size:14px;font-weight:600;width:100%;outline:none}.input:focus{border-color:#047857}.lbl{font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:0.08em;color:#64748B;display:block;margin-bottom:6px}.tag{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:999px;border:2px solid #EEE5D8;background:#fff;font-size:12px;font-weight:bold}.tag.active{border-color:#059669;background:#ECFDF5;color:#059669}</style></head>
-<body class="min-h-screen pb-[110px]">
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{font-family:'Poppins',system-ui,sans-serif;margin:0;padding:0}
+  input,button,textarea,select{font-family:inherit}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:110px}
+  .tnum{font-variant-numeric:tabular-nums}
 
-<div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
+  .sec-title{margin:14px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
+  .card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
 
-<div class="px-4 pt-4 flex items-center gap-3"><button onclick="history.back()" class="w-10 h-10 rounded-full bg-white border border-[#E5E7EB] flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="hi text-[20px] font-extrabold">नया पता</div></div>
+  /* Field group · floating label feel via small caps above the input · input height + 12px radius matches design system */
+  .field{padding:14px;border-bottom:1px solid #F1F5F9}
+  .field:last-child{border-bottom:0}
+  .field-lbl{font-size:10.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:6px}
+  .field-in{display:flex;align-items:center;gap:10px;height:46px;padding:0 12px;border-radius:11px;background:#F8FAFC;border:1.5px solid #E5E7EB;transition:border-color .15s ease,box-shadow .15s ease}
+  .field-in:focus-within{border-color:#047857;background:#FFFFFF;box-shadow:0 0 0 3px rgba(4,120,87,0.10)}
+  .field-in i.lead{font-size:13px;color:#94A3B8;flex-shrink:0}
+  .field-in input,.field-in textarea{flex:1;outline:0;background:transparent;font-size:14px;font-weight:600;color:#0F172A;border:0;resize:none}
+  .field-in input::placeholder,.field-in textarea::placeholder{color:#94A3B8;font-weight:500}
+  .field-in.row-2{height:auto;padding:12px;align-items:flex-start}
+  .field-in.row-2 i.lead{margin-top:2px}
+  .field-in.row-2 textarea{min-height:64px}
 
-<!-- Use current location -->
-<div class="px-4 mt-5">
-  <button class="w-full bg-[#E8F2FB] border border-[#1565C0]/25 rounded-lg p-3 flex items-center gap-3">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1565C0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
-    <div class="flex-1 text-left"><div class="text-[12.5px] font-extrabold text-[#1565C0]">Use current location</div><div class="text-[10.5px] text-[#64748B] mt-0.5">Auto-fill from GPS</div></div>
-  </button>
+  /* Two-col grid for pincode + state */
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:0}
+  .grid-2 .field{border-right:1px solid #F1F5F9}
+  .grid-2 .field:nth-child(2n){border-right:0}
+
+  /* Tag selector · Home / Work / Farm / Other · primary emerald active state */
+  .tag-row{display:flex;flex-wrap:wrap;gap:8px;padding:14px}
+  .tag{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border-radius:9999px;border:1.5px solid #E5E7EB;background:#FFFFFF;color:#475569;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .tag i{font-size:11px}
+  .tag.active{background:#ECFDF5;color:#047857;border-color:#059669;box-shadow:0 4px 10px -3px rgba(5,150,105,0.25)}
+
+  /* Locate-me banner · emerald-tint card with crosshair icon · subtle, low-stakes CTA */
+  .locate{display:flex;align-items:center;gap:12px;margin:0 16px;padding:12px 14px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:14px;cursor:pointer;text-decoration:none;color:inherit}
+  .locate .ic{width:36px;height:36px;border-radius:10px;background:#FFFFFF;color:#047857;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+  .locate .body{flex:1;line-height:1.25}
+  .locate .body .a{font-size:13.5px;font-weight:800;color:#047857}
+  .locate .body .b{font-size:11px;color:#0F172A;margin-top:1px;font-weight:500}
+  .locate .arrow{font-size:11px;color:#047857}
+
+  /* Sticky save */
+  .stk{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 14px;z-index:50}
+  .save-btn{width:100%;height:52px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+</style></head>
+<body>
+
+<div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold">
+  <span>9:41</span>
+  <div class="flex items-center gap-1.5">
+    <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+    <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+    <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
+  </div>
 </div>
 
-<!-- Form -->
-<div class="px-4 mt-5 space-y-4">
-  <div><label class="lbl">Name</label><input class="input" value="Ramesh Patel"/></div>
-  <div><label class="lbl">Mobile</label><input class="input" value="98765 43210"/></div>
-  <div><label class="lbl">Pincode</label><input class="input" value="452001" placeholder="6 digits"/></div>
-  <div><label class="lbl">House / Plot / Survey No.</label><input class="input" placeholder="Plot 22, Khasra 145"/></div>
-  <div><label class="lbl">Village / Area</label><input class="input" placeholder="Bawadia"/></div>
-  <div><label class="lbl">City</label><input class="input" value="Indore"/></div>
-  <div><label class="lbl">State</label><input class="input" value="Madhya Pradesh"/></div>
-  <div><label class="lbl">Landmark <span class="text-[#94A3B8] normal-case font-normal">(optional)</span></label><input class="input" placeholder="Near tube well"/></div>
+<div class="px-4 pt-4 pb-3 flex items-center gap-3" style="background:#F8F8F8">
+  <button onclick="history.back()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center" style="border:1px solid #E5E7EB;box-shadow:0 1px 3px rgba(15,23,42,0.04)">
+    <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
+  </button>
+  <div class="flex-1 leading-tight">
+    <h1 class="text-[22px] font-extrabold">Add new address</h1>
+    <div class="text-[12px] mt-0.5" style="color:#64748B">We use this for delivery</div>
+  </div>
+</div>
 
-  <div>
-    <label class="lbl">Address type</label>
-    <div class="flex gap-2 flex-wrap">
-      <button class="tag active"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-5 9 5v13"/></svg>Home</button>
-      <button class="tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8M8 6l4-4 4 4M5 22V12h14v10"/></svg>Farm</button>
-      <button class="tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>Other</button>
+<!-- Locate-me banner -->
+<div class="locate mt-2" onclick="navigator.geolocation && navigator.geolocation.getCurrentPosition && navigator.geolocation.getCurrentPosition(()=>{},()=>{})">
+  <span class="ic"><i class="fa-solid fa-location-crosshairs"></i></span>
+  <div class="body">
+    <div class="a">Use my current location</div>
+    <div class="b">Auto-fill pincode + state from GPS</div>
+  </div>
+  <i class="fa-solid fa-chevron-right arrow"></i>
+</div>
+
+<!-- Contact + address form · grouped into a single design-system card with field-by-field separators -->
+<div class="sec-title">Contact</div>
+<div class="card">
+  <div class="field">
+    <span class="field-lbl">Full name</span>
+    <div class="field-in">
+      <i class="fa-solid fa-user lead"></i>
+      <input type="text" placeholder="Ramesh Patel" value="Ramesh Patel"/>
+    </div>
+  </div>
+  <div class="field">
+    <span class="field-lbl">Mobile number</span>
+    <div class="field-in">
+      <i class="fa-solid fa-phone lead"></i>
+      <span class="text-[14px] font-bold tnum">+91</span>
+      <span class="w-px h-5" style="background:#E5E7EB"></span>
+      <input type="tel" maxlength="10" placeholder="98765 43210" value="98765 43210" class="tnum"/>
     </div>
   </div>
 </div>
 
-<!-- Sticky save -->
-<div class="fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E7EB] px-4 py-3">
-  <button onclick="location.href='addresses.html'" class="w-full h-[52px] rounded-lg bg-[#059669] text-white text-[15px] font-extrabold"><span class="hi">पता save करें</span></button>
+<div class="sec-title">Address</div>
+<div class="card">
+  <div class="field">
+    <span class="field-lbl">House / Plot · Building</span>
+    <div class="field-in">
+      <i class="fa-solid fa-house lead"></i>
+      <input type="text" placeholder="Plot 22, Khasra No. 145"/>
+    </div>
+  </div>
+  <div class="field">
+    <span class="field-lbl">Area · Village · Landmark</span>
+    <div class="field-in row-2">
+      <i class="fa-solid fa-map-location-dot lead"></i>
+      <textarea placeholder="Village Bawadia, near SBI branch"></textarea>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="field">
+      <span class="field-lbl">Pincode</span>
+      <div class="field-in">
+        <input type="tel" maxlength="6" placeholder="452001" class="tnum"/>
+      </div>
+    </div>
+    <div class="field">
+      <span class="field-lbl">State</span>
+      <div class="field-in">
+        <input type="text" placeholder="Madhya Pradesh" value="Madhya Pradesh"/>
+      </div>
+    </div>
+  </div>
 </div>
 
+<!-- Address tag selector -->
+<div class="sec-title">Save as</div>
+<div class="card">
+  <div class="tag-row">
+    <button class="tag active" data-tag="home"><i class="fa-solid fa-house"></i> Home</button>
+    <button class="tag" data-tag="work"><i class="fa-solid fa-briefcase"></i> Work</button>
+    <button class="tag" data-tag="farm"><i class="fa-solid fa-wheat-awn"></i> Farm</button>
+    <button class="tag" data-tag="shop"><i class="fa-solid fa-store"></i> Shop</button>
+    <button class="tag" data-tag="other"><i class="fa-solid fa-bookmark"></i> Other</button>
+  </div>
+</div>
+
+<!-- Default checkbox · simple row · taps toggle -->
+<div class="sec-title">Preferences</div>
+<div class="card" id="defaultCard">
+  <label class="field flex items-center gap-3 cursor-pointer" style="border-bottom:0">
+    <input id="defaultChk" type="checkbox" class="w-5 h-5 accent-emerald-600" checked/>
+    <div class="leading-tight flex-1">
+      <div class="text-[13.5px] font-bold">Set as default delivery address</div>
+      <div class="text-[11px] mt-0.5" style="color:#64748B">Orders will deliver here unless changed</div>
+    </div>
+  </label>
+</div>
+
+<!-- Sticky save -->
+<div class="stk">
+  <button onclick="location.href='addresses.html'" class="save-btn">
+    <i class="fa-solid fa-circle-check text-[13px]"></i> Save address
+  </button>
+</div>
+
+<script>
+  document.querySelectorAll('.tag').forEach(t => t.addEventListener('click', () => {
+    document.querySelectorAll('.tag').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+  }));
+</script>
 </body></html>

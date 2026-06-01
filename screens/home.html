@@ -326,11 +326,11 @@
   <!-- STICKY CATEGORIES — uniform circle + emoji representing the pest/disease the category treats -->
   <div class="sticky-cats cat-row scroll-x py-3">
     <div class="flex gap-3 px-4">
-      <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
+      <a href="categories.html?cat=pesticide" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle"><span class="cat-emoji">🐛</span></div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Pesticide</span>
       </a>
-      <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
+      <a href="categories.html?cat=fungicide" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle">
           <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="fungus on leaf">
             <path d="M18 3 C8 6 4 16 6 26 C7 30 11 33 18 33 C25 33 29 30 30 26 C32 16 28 6 18 3 Z" fill="#22C55E"/>
@@ -344,7 +344,7 @@
         </div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Fungicide</span>
       </a>
-      <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
+      <a href="categories.html?cat=fertilizer" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle">
           <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="growing plant with multiple leaves + fertilizer granules">
             <!-- Soil mound -->
@@ -373,7 +373,7 @@
         </div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Fertilizer</span>
       </a>
-      <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
+      <a href="categories.html?cat=herbicide" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle">
           <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="single dense grass tuft — Google flat-illustration reference">
             <!-- Single tuft of 7 blades fanning from a common base (~x=18, y=33) -->
@@ -406,7 +406,7 @@
         </div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Herbicide</span>
       </a>
-      <a href="shop.html" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
+      <a href="categories.html?cat=combo" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle">
           <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="combo — 3 stacked packaged boxes">
             <!-- Bottom box (largest, blue) -->
@@ -1261,101 +1261,112 @@
       </div>
     </section>
 
-    <!-- Buy Again — Bestseller-style tiles · image area fills edge-to-edge with grey bg (no outer card padding so no visible gap between image bg and card border) -->
+    <!-- Buy Again · now renders the SAME card pattern as the previous-orders list (status pill + date + ord-id + thumb strip + amount/items + 2-col Reorder/Invoice action row), horizontally scrollable · the old "Bestseller-style" tile was the previous-order block in disguise; unified now per spec -->
     <section class="mt-8">
-      <div class="px-4 mb-4">
+      <div class="px-4 mb-3 flex items-baseline justify-between">
         <h2 class="text-[21px] font-bold tracking-tight">Buy again</h2>
+        <a href="orders.html" class="nu text-[12px] font-extrabold" style="color:#047857;text-decoration:none">SEE ALL</a>
       </div>
+      <style>
+        .ba-card{flex-shrink:0;width:280px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+        .ba-link{display:block;padding:14px 14px 12px;text-decoration:none;color:inherit}
+        .ba-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+        .ba-pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:#047857}
+        .ba-pill i{font-size:11px}
+        .ba-date{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:500;color:#94A3B8}
+        .ba-id{font-size:11.5px;font-weight:500;color:#94A3B8;margin-bottom:10px}
+        .ba-thumbs{display:flex;gap:8px;margin-bottom:12px}
+        .ba-thumb{width:50px;height:50px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
+        .ba-thumb img{max-width:100%;max-height:100%;object-fit:contain}
+        .ba-divider{height:1px;background:#F1F5F9;margin:0 0 10px}
+        .ba-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px}
+        .ba-amt{font-size:18px;font-weight:800;color:#0F172A;line-height:1}
+        .ba-meta{font-size:11.5px;color:#64748B;margin-top:3px}
+        .ba-actions{padding:0 14px 14px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+        .ba-actions .act-btn{height:38px;display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;border:1px solid transparent;background:transparent}
+        .ba-actions .act-btn i{font-size:11px}
+        .ba-actions .primary{background:#059669;color:#FFFFFF;border-color:#059669}
+        .ba-actions .outline{background:#FFFFFF;color:#475569;border-color:#E5E7EB;font-weight:600}
+        .ba-actions .outline i{color:#94A3B8}
+      </style>
       <div class="overflow-x-auto scroll-x">
         <div class="flex gap-3 px-4 pb-1">
 
-          <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl overflow-hidden"
-             data-variant-card
-             data-product-name="Humic + Fulvic 98"
-             data-product-tech="Humic 12% + Fulvic 8%"
-             data-product-img="../assets/Humic_nobg.png"
-             data-variants='[{"size":"500 ml","price":210,"mrp":290,"off":28},{"size":"1 L","price":376,"mrp":520,"off":28}]'
-             style="background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06)">
-            <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:140px">
-              <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/>
-              <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-bold shadow-sm" style="background:#FFFFFF;color:#475569">
-                <i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>4.7
-              </span>
-            </div>
-            <div class="p-2.5">
-              <div class="leading-tight">
-                <div class="text-[14px] font-bold text-[#0F172A] truncate">Humic + Fulvic 98</div>
-                <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Humic 12% + Fulvic 8%</div>
+          <div class="ba-card">
+            <a href="order-details.html?id=KAT-2026-05-1212" class="ba-link">
+              <div class="ba-head">
+                <span class="ba-pill"><i class="fa-solid fa-circle-check"></i> Delivered</span>
+                <span class="ba-date">12 May <i class="fa-solid fa-chevron-right text-[10px]" style="color:#94A3B8"></i></span>
               </div>
-              <div class="text-[11px] text-[#64748B] mt-1">Bought 12 May &middot; 500 ml</div>
-              <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
-                <span class="text-[17px] font-extrabold tnum text-[#0F172A]">&#8377;210</span>
-                <span class="text-[11.5px] text-[#94A3B8] line-through tnum">&#8377;290</span>
-                <span class="text-[10.5px] font-extrabold" style="color:#047857">28% off</span>
+              <div class="ba-id">#KAT-2026-05-1212</div>
+              <div class="ba-thumbs">
+                <div class="ba-thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend"/></div>
+                <div class="ba-thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend"/></div>
               </div>
-              <div class="mt-2">
-                <button class="variant-btn w-full h-10 rounded-lg text-[13.5px] font-semibold text-white" style="background:#059669">2 Options</button>
-              </div>
-            </div>
-          </a>
-
-          <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06)">
-            <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:140px">
-              <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full object-contain"/>
-              <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-bold shadow-sm" style="background:#FFFFFF;color:#475569">
-                <i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>4.8
-              </span>
-            </div>
-            <div class="p-2.5">
-              <div class="leading-tight">
-                <div class="text-[14px] font-bold text-[#0F172A] truncate">Chakrawarti ZC</div>
-                <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Chloran. + Lambda-Cy. ZC</div>
-              </div>
-              <div class="text-[11px] text-[#64748B] mt-1">Bought 12 May &middot; 100 ml</div>
-              <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
-                <span class="text-[17px] font-extrabold tnum text-[#0F172A]">&#8377;358</span>
-                <span class="text-[11.5px] text-[#94A3B8] line-through tnum">&#8377;495</span>
-                <span class="text-[10.5px] font-extrabold" style="color:#047857">28% off</span>
-              </div>
-              <div class="mt-2 qty-wrap">
-                <button class="qty-add w-full h-10 rounded-lg bg-emerald-600 text-white text-[13.5px] font-semibold">Buy again</button>
-                <div class="qty-steps w-full h-10 rounded-lg bg-emerald-600 text-white items-center justify-between px-1" style="display:none">
-                  <button class="qty-dec w-8 h-8 flex items-center justify-center text-[18px] font-bold">&minus;</button>
-                  <span class="qty-val text-[14px] font-bold tnum">1</span>
-                  <button class="qty-inc w-8 h-8 flex items-center justify-center text-[18px] font-bold">+</button>
+              <div class="ba-divider"></div>
+              <div class="ba-bottom">
+                <div>
+                  <div class="ba-amt tnum">&#8377;568</div>
+                  <div class="ba-meta">2 items</div>
                 </div>
               </div>
+            </a>
+            <div class="ba-actions">
+              <a href="cart.html?reorder=1212" class="act-btn primary"><i class="fa-solid fa-repeat"></i> Reorder</a>
+              <a href="order-details.html?invoice=1212" class="act-btn outline"><i class="fa-solid fa-file-lines"></i> Invoice</a>
             </div>
-          </a>
+          </div>
 
-          <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06)">
-            <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:140px">
-              <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend max-h-full object-contain"/>
-              <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-bold shadow-sm" style="background:#FFFFFF;color:#475569">
-                <i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>4.6
-              </span>
-            </div>
-            <div class="p-2.5">
-              <div class="leading-tight">
-                <div class="text-[14px] font-bold text-[#0F172A] truncate">NPK 19-19-19</div>
-                <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">N 19 &middot; P 19 &middot; K 19</div>
+          <div class="ba-card">
+            <a href="order-details.html?id=KAT-2026-04-1198" class="ba-link">
+              <div class="ba-head">
+                <span class="ba-pill"><i class="fa-solid fa-circle-check"></i> Delivered</span>
+                <span class="ba-date">28 Apr <i class="fa-solid fa-chevron-right text-[10px]" style="color:#94A3B8"></i></span>
               </div>
-              <div class="text-[11px] text-[#64748B] mt-1">Bought 28 Apr &middot; 1 kg</div>
-              <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
-                <span class="text-[17px] font-extrabold tnum text-[#0F172A]">&#8377;289</span>
-                <span class="text-[11.5px] text-[#94A3B8] line-through tnum">&#8377;340</span>
-                <span class="text-[10.5px] font-extrabold" style="color:#047857">15% off</span>
+              <div class="ba-id">#KAT-2026-04-1198</div>
+              <div class="ba-thumbs">
+                <div class="ba-thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend"/></div>
+                <div class="ba-thumb"><img src="../assets/AntiVirus_nobg.png" class="img-blend"/></div>
               </div>
-              <div class="mt-2 qty-wrap">
-                <button class="qty-add w-full h-10 rounded-lg bg-emerald-600 text-white text-[13.5px] font-semibold">Buy again</button>
-                <div class="qty-steps w-full h-10 rounded-lg bg-emerald-600 text-white items-center justify-between px-1" style="display:none">
-                  <button class="qty-dec w-8 h-8 flex items-center justify-center text-[18px] font-bold">&minus;</button>
-                  <span class="qty-val text-[14px] font-bold tnum">1</span>
-                  <button class="qty-inc w-8 h-8 flex items-center justify-center text-[18px] font-bold">+</button>
+              <div class="ba-divider"></div>
+              <div class="ba-bottom">
+                <div>
+                  <div class="ba-amt tnum">&#8377;698</div>
+                  <div class="ba-meta">2 items</div>
                 </div>
               </div>
+            </a>
+            <div class="ba-actions">
+              <a href="cart.html?reorder=1198" class="act-btn primary"><i class="fa-solid fa-repeat"></i> Reorder</a>
+              <a href="order-details.html?invoice=1198" class="act-btn outline"><i class="fa-solid fa-file-lines"></i> Invoice</a>
             </div>
-          </a>
+          </div>
+
+          <div class="ba-card">
+            <a href="order-details.html?id=KAT-2026-04-1102" class="ba-link">
+              <div class="ba-head">
+                <span class="ba-pill"><i class="fa-solid fa-circle-check"></i> Delivered</span>
+                <span class="ba-date">5 Apr <i class="fa-solid fa-chevron-right text-[10px]" style="color:#94A3B8"></i></span>
+              </div>
+              <div class="ba-id">#KAT-2026-04-1102</div>
+              <div class="ba-thumbs">
+                <div class="ba-thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" class="img-blend"/></div>
+                <div class="ba-thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend"/></div>
+                <div class="ba-thumb"><img src="../assets/Chakrawarti_nobg.png" class="img-blend"/></div>
+              </div>
+              <div class="ba-divider"></div>
+              <div class="ba-bottom">
+                <div>
+                  <div class="ba-amt tnum">&#8377;1,205</div>
+                  <div class="ba-meta">3 items</div>
+                </div>
+              </div>
+            </a>
+            <div class="ba-actions">
+              <a href="cart.html?reorder=1102" class="act-btn primary"><i class="fa-solid fa-repeat"></i> Reorder</a>
+              <a href="order-details.html?invoice=1102" class="act-btn outline"><i class="fa-solid fa-file-lines"></i> Invoice</a>
+            </div>
+          </div>
 
         </div>
       </div>

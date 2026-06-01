@@ -272,6 +272,64 @@
     </a>
   </div>
 
+  <!-- COD pay sheet · same pattern as orders.html · editable amount + Full shortcut + live coin preview · success state celebrates the prepayment + credited coins -->
+  <div id="codBd" class="modal-bd"></div>
+  <div id="codSheet" class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="px-5 pt-3 pb-3 flex items-center justify-between" style="flex-shrink:0">
+      <div class="leading-tight">
+        <div class="text-[18px] font-extrabold">Pay COD amount</div>
+        <div class="text-[11.5px]" style="color:#64748B">Skip cash on delivery · earn bonus coins</div>
+      </div>
+      <button id="codClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div class="px-5 pb-5 overflow-y-auto" style="flex:1">
+      <!-- Editable amount input · with currency prefix + Full shortcut · 2% coins live preview -->
+      <div style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)">
+        <div class="text-[11px] font-extrabold uppercase tracking-wider" style="color:#64748B">Amount due</div>
+        <div class="flex items-center gap-2 mt-3 h-[54px] px-3 rounded-[12px]" style="background:#F8FAFC;border:1.5px solid #E5E7EB">
+          <span class="text-[20px] font-extrabold" style="color:#0F172A">₹</span>
+          <input id="codInput" type="tel" inputmode="numeric" class="flex-1 outline-0 bg-transparent text-[22px] font-extrabold tnum" style="color:#0F172A" value="1900"/>
+          <button id="codFull" class="px-3 py-1.5 rounded-lg text-[11.5px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0">Full</button>
+        </div>
+        <div class="mt-3 flex items-center gap-2 text-[12px]">
+          <i class="fa-solid fa-coins text-[14px]" style="color:#F59E0B"></i>
+          <span style="color:#475569">You will earn <span class="font-extrabold tnum" id="codCoins" style="color:#B45309">+38 coins</span> on this payment</span>
+        </div>
+      </div>
+
+      <div class="mt-4 text-[10.5px] font-extrabold uppercase tracking-wider mb-2" style="color:#64748B">Pay using</div>
+      <div style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)">
+        <label class="flex items-center gap-3 p-3 cursor-pointer" style="border-bottom:1px solid #F1F5F9">
+          <input type="radio" name="codpay" checked class="w-4 h-4 accent-emerald-600"/>
+          <span class="text-[13.5px] font-bold flex-1">UPI · GPay / PhonePe / Paytm</span>
+          <i class="fa-solid fa-mobile-screen text-[14px]" style="color:#475569"></i>
+        </label>
+        <label class="flex items-center gap-3 p-3 cursor-pointer" style="border-bottom:1px solid #F1F5F9">
+          <input type="radio" name="codpay" class="w-4 h-4 accent-emerald-600"/>
+          <span class="text-[13.5px] font-bold flex-1">Cards · Credit / Debit</span>
+          <i class="fa-solid fa-credit-card text-[14px]" style="color:#475569"></i>
+        </label>
+        <label class="flex items-center gap-3 p-3 cursor-pointer">
+          <input type="radio" name="codpay" class="w-4 h-4 accent-emerald-600"/>
+          <span class="text-[13.5px] font-bold flex-1">Net banking</span>
+          <i class="fa-solid fa-building-columns text-[14px]" style="color:#475569"></i>
+        </label>
+      </div>
+
+      <button id="codPayConfirm" class="w-full h-[52px] mt-4 rounded-[12px] text-white text-[15px] font-extrabold inline-flex items-center justify-center gap-2" style="background:#059669;border:0;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+        Pay <span class="tnum" id="codPayAmt">₹1,900</span> &amp; earn coins <i class="fa-solid fa-arrow-right text-[12px]"></i>
+      </button>
+    </div>
+  </div>
+  <style>
+    .modal-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80}
+    .modal-bd.open{opacity:1;pointer-events:auto}
+    .modal-sheet{position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;max-height:88vh;display:flex;flex-direction:column}
+    .modal-sheet.open{transform:translateY(0)}
+    .modal-handle{width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 0}
+  </style>
+
   <script>
     // Read ?mode=paynow|partial|cod from the URL · shows the COD pay-now strip for cod + partial · updates the Payment summary line + amount accordingly
     (function(){
@@ -295,6 +353,50 @@
         codStrip && (codStrip.style.display = 'flex');
         codAmt && (codAmt.textContent = '₹1,425');
       }
+    })();
+
+    // COD pay sheet · open from the strip · live updates the amount + coin preview · "Pay" routes to a quick success toast
+    (function(){
+      const trigger = document.getElementById('payCodBtn');
+      const bd = document.getElementById('codBd');
+      const sh = document.getElementById('codSheet');
+      const cls = document.getElementById('codClose');
+      const input = document.getElementById('codInput');
+      const fullBtn = document.getElementById('codFull');
+      const coinsLbl = document.getElementById('codCoins');
+      const payAmt = document.getElementById('codPayAmt');
+      const confirm = document.getElementById('codPayConfirm');
+      const due = parseInt((document.getElementById('codStripAmt').textContent || '0').replace(/[^0-9]/g,''),10) || 1900;
+
+      function open(e){ if (e) e.preventDefault(); input.value = due; refresh(); bd.classList.add('open'); sh.classList.add('open'); }
+      function close(){ bd.classList.remove('open'); sh.classList.remove('open'); }
+      function refresh(){
+        let v = Math.max(0, Math.min(due, parseInt(input.value || '0',10) || 0));
+        if (v !== parseInt(input.value || '0',10)) input.value = v;
+        const coins = Math.round(v * 0.02);
+        coinsLbl.textContent = '+' + coins + ' coins';
+        payAmt.textContent = '₹' + v.toLocaleString('en-IN');
+      }
+      trigger && trigger.addEventListener('click', open);
+      cls && cls.addEventListener('click', close);
+      bd && bd.addEventListener('click', close);
+      input.addEventListener('input', refresh);
+      fullBtn.addEventListener('click', () => { input.value = due; refresh(); });
+      confirm.addEventListener('click', () => {
+        close();
+        // brief in-page toast confirming the prepayment + coin credit
+        const t = document.createElement('div');
+        t.style.cssText = 'position:fixed;left:50%;top:30%;transform:translate(-50%,-50%);background:#FFFFFF;border:1px solid #A7F3D0;border-radius:14px;padding:16px 22px;box-shadow:0 20px 40px -10px rgba(15,23,42,0.3);z-index:200;text-align:center;font-family:Poppins,sans-serif';
+        t.innerHTML = '<div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#10B981,#047857);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 8px"><i class="fa-solid fa-check"></i></div>'
+          + '<div style="font-size:15px;font-weight:900;color:#0F172A">Payment received</div>'
+          + '<div style="font-size:12px;color:#64748B;margin-top:3px">' + coinsLbl.textContent + ' credited to your wallet</div>';
+        document.body.appendChild(t);
+        // Hide the COD strip + flip the payment status
+        const strip = document.getElementById('codStrip'); if (strip) strip.style.display = 'none';
+        const ps = document.getElementById('payStatus'); if (ps) { ps.style.background = '#ECFDF5'; ps.style.borderColor = '#A7F3D0'; ps.style.color = '#047857'; ps.innerHTML = '<i class="fa-solid fa-circle-check text-[9px]"></i> Payment received'; }
+        const ml = document.getElementById('payMethodLbl'); if (ml) ml.textContent = 'Paid online';
+        setTimeout(() => t.remove(), 2200);
+      });
     })();
 
     // Welcome-back overlay · only renders when ?welcome=1 (typically appended by login flow for returning users) · brief 2.4s emerald card with the user's first name

@@ -14,7 +14,7 @@
   .card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
 
   /* Hero · emerald gradient · gold-trim seal with elegant pop · soft confetti drift behind · drops the loud 5-color confetti rain for a calmer celebration */
-  .hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#047857 0%,#059669 55%,#10B981 100%);color:#FFFFFF;padding:28px 16px 40px;text-align:center}
+  .hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#047857 0%,#059669 55%,#10B981 100%);color:#FFFFFF;padding:24px 16px 36px;text-align:center}
   .hero::before{content:"";position:absolute;top:-30px;right:-30px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.32) 0%,transparent 65%);pointer-events:none}
   .hero::after{content:"";position:absolute;bottom:-40px;left:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.18) 0%,transparent 70%);pointer-events:none}
   .seal-wrap{position:relative;display:inline-block}
@@ -51,30 +51,29 @@
   .thumb-summary .a{font-size:13.5px;font-weight:800;color:#0F172A}
   .thumb-summary .b{font-size:11px;color:#64748B;margin-top:2px}
 
-  /* Tracking timeline · 4-step vertical stepper · current step gets emerald accent + pulse · others are slate */
-  .timeline{padding:14px 14px 6px}
-  .ts{position:relative;display:flex;gap:14px;padding-bottom:14px}
-  .ts:last-child{padding-bottom:0}
-  .ts .dot{width:24px;height:24px;border-radius:50%;background:#F1F5F9;border:2px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:2}
-  .ts.on .dot{background:#059669;border-color:#059669}
-  .ts.on .dot i{color:#FFFFFF;font-size:10px}
-  .ts.done .dot{background:#10B981;border-color:#10B981}
-  .ts.done .dot i{color:#FFFFFF;font-size:10px}
-  .ts:not(:last-child)::before{content:"";position:absolute;left:11px;top:24px;bottom:0;width:2px;background:#E5E7EB;z-index:1}
-  .ts.done:not(:last-child)::before,.ts.on:not(:last-child)::before{background:#10B981}
-  .ts .body{flex:1;line-height:1.25;padding-top:1px}
-  .ts .body .a{font-size:13px;font-weight:700;color:#475569}
-  .ts.on .body .a, .ts.done .body .a{color:#0F172A;font-weight:800}
-  .ts .body .b{font-size:11px;color:#94A3B8;margin-top:2px}
-  .ts.on .body .b{color:#047857;font-weight:700}
-  .ts.on .dot::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(5,150,105,0.4);animation:tsPulse 1.6s ease-out infinite}
-  @keyframes tsPulse{0%{transform:scale(0.8);opacity:.8}100%{transform:scale(1.6);opacity:0}}
-
-  /* Payment summary row */
-  .pay-summary{display:flex;align-items:center;justify-content:space-between;padding:12px 14px}
-  .pay-summary .lbl{font-size:12px;color:#64748B}
-  .pay-summary .val{font-size:14px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
+  /* Merged payment row · lives inside the order card (drops the separate Payment section + its header) */
+  .pay-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-top:1px solid #F1F5F9}
+  .pay-row .lbl{font-size:12px;color:#64748B}
+  .pay-row .val{font-size:15px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
   .pay-mode-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:9999px;background:#ECFDF5;border:1px solid #A7F3D0;color:#047857;font-size:10.5px;font-weight:800;margin-top:3px}
+
+  /* Compact HORIZONTAL tracking stepper · 4 stages in a single row instead of the old 4-row vertical list · current step gets emerald fill + pulse · a single status banner sits below */
+  .htrack{display:flex;align-items:flex-start;padding:16px 8px 4px}
+  .htstep{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative}
+  .htstep .dot{width:30px;height:30px;border-radius:50%;background:#F1F5F9;border:2px solid #E5E7EB;display:flex;align-items:center;justify-content:center;color:#94A3B8;font-size:11px;position:relative;z-index:2}
+  .htstep.done .dot{background:#10B981;border-color:#10B981;color:#FFFFFF}
+  .htstep.on .dot{background:#059669;border-color:#059669;color:#FFFFFF}
+  .htstep:not(:first-child)::before{content:"";position:absolute;top:14px;right:50%;width:100%;height:2px;background:#E5E7EB;z-index:1}
+  .htstep.done::before,.htstep.on::before{background:#10B981}
+  .htstep .lab{font-size:10px;font-weight:700;color:#94A3B8;margin-top:7px;line-height:1.2;letter-spacing:-0.01em}
+  .htstep.done .lab,.htstep.on .lab{color:#0F172A;font-weight:800}
+  .htstep.on .dot::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid rgba(5,150,105,0.4);animation:tsPulse 1.6s ease-out infinite}
+  @keyframes tsPulse{0%{transform:scale(0.8);opacity:.8}100%{transform:scale(1.5);opacity:0}}
+  .track-status{display:flex;align-items:center;gap:10px;margin:12px 14px 14px;padding:10px 12px;border-radius:12px;background:#ECFDF5;border:1px solid #A7F3D0}
+  .track-status .ic{width:30px;height:30px;border-radius:9px;background:#FFFFFF;color:#047857;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+  .track-status .tx{flex:1;line-height:1.2;min-width:0}
+  .track-status .tx .a{font-size:12.5px;font-weight:800;color:#0F172A}
+  .track-status .tx .b{font-size:10.5px;color:#047857;font-weight:600;margin-top:1px}
 
   /* COD pay-now strip · only renders when the order was placed via COD or Partial · gradient amber band with the pending amount + a Pay-now CTA that gives bonus coins */
   .cod-strip{margin:0 16px;border-radius:14px;padding:14px;background:linear-gradient(135deg,#FFFBEB 0%,#FEF3C7 100%);border:1px solid #FCD34D;display:flex;align-items:center;gap:12px;box-shadow:0 4px 14px -8px rgba(180,83,9,0.25);position:relative;overflow:hidden}
@@ -147,7 +146,7 @@
     <span class="order-pill"><i class="fa-solid fa-receipt"></i> Order #KKD-26194-7821</span>
   </div>
 
-  <!-- Lift card overlapping the hero · delivery ETA on top, product thumbnail strip below -->
+  <!-- Order card overlapping the hero · delivery ETA · product thumbnail strip · merged payment row (the separate Payment section + header is gone — one cohesive card) -->
   <div class="lift-card">
     <div class="eta-row">
       <span class="eta-ic"><i class="fa-solid fa-calendar-day"></i></span>
@@ -167,52 +166,30 @@
         <div class="b">Humic, Chakrawarti, NPK</div>
       </div>
     </div>
-  </div>
-
-  <!-- Timeline · 4 stages, Confirmed (done) → Packing (active w/ pulse) → Out for delivery → Delivered -->
-  <div class="sec-title">Track order</div>
-  <div class="card">
-    <div class="timeline">
-      <div class="ts done">
-        <div class="dot"><i class="fa-solid fa-check"></i></div>
-        <div class="body">
-          <div class="a">Order confirmed</div>
-          <div class="b">Just now</div>
-        </div>
-      </div>
-      <div class="ts on">
-        <div class="dot"><i class="fa-solid fa-box"></i></div>
-        <div class="body">
-          <div class="a">Packing your order</div>
-          <div class="b">Expected within 2 hours</div>
-        </div>
-      </div>
-      <div class="ts">
-        <div class="dot"></div>
-        <div class="body">
-          <div class="a">Out for delivery</div>
-          <div class="b">Wed, 4 Jun · morning</div>
-        </div>
-      </div>
-      <div class="ts">
-        <div class="dot"></div>
-        <div class="body">
-          <div class="a">Delivered</div>
-          <div class="b">Wed, 4 Jun · by 7 PM</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Payment summary -->
-  <div class="sec-title">Payment</div>
-  <div class="card">
-    <div class="pay-summary">
+    <div class="pay-row">
       <div class="leading-tight">
         <div class="lbl" id="payMethodLbl">Paid via Pay Now</div>
         <span class="pay-mode-chip" id="payStatus"><i class="fa-solid fa-circle-check text-[9px]"></i> Payment received</span>
       </div>
       <div class="val tnum" id="payMethodAmt">₹1,805</div>
+    </div>
+  </div>
+
+  <!-- Track order · compact horizontal 4-stage stepper + a single current-status banner -->
+  <div class="sec-title">Track order</div>
+  <div class="card">
+    <div class="htrack">
+      <div class="htstep done"><div class="dot"><i class="fa-solid fa-check"></i></div><div class="lab">Confirmed</div></div>
+      <div class="htstep on"><div class="dot"><i class="fa-solid fa-box"></i></div><div class="lab">Packing</div></div>
+      <div class="htstep"><div class="dot"><i class="fa-solid fa-truck-fast"></i></div><div class="lab">On the way</div></div>
+      <div class="htstep"><div class="dot"><i class="fa-solid fa-house"></i></div><div class="lab">Delivered</div></div>
+    </div>
+    <div class="track-status">
+      <span class="ic"><i class="fa-solid fa-box-open"></i></span>
+      <div class="tx">
+        <div class="a">Packing your order</div>
+        <div class="b">Expected to dispatch within 2 hours</div>
+      </div>
     </div>
   </div>
 
@@ -227,7 +204,7 @@
   </div>
 
   <!-- Rewards · scratch card + coins earned · 2-col grid -->
-  <div class="sec-title">Rewards from this order</div>
+  <div class="sec-title">Your rewards</div>
   <div class="reward-grid">
     <a href="#" class="reward-tile scratch">
       <span class="reward-ic"><i class="fa-solid fa-gift"></i></span>

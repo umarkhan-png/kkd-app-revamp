@@ -75,15 +75,18 @@
   .track-status .tx .a{font-size:12.5px;font-weight:800;color:#0F172A}
   .track-status .tx .b{font-size:10.5px;color:#047857;font-weight:600;margin-top:1px}
 
-  /* COD pay-now strip · only renders when the order was placed via COD or Partial · gradient amber band with the pending amount + a Pay-now CTA that gives bonus coins */
-  .cod-strip{margin:0 16px;border-radius:14px;padding:14px;background:linear-gradient(135deg,#FFFBEB 0%,#FEF3C7 100%);border:1px solid #FCD34D;display:flex;align-items:center;gap:12px;box-shadow:0 4px 14px -8px rgba(180,83,9,0.25);position:relative;overflow:hidden}
-  .cod-strip::before{content:"";position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,0.2) 0%,transparent 65%);pointer-events:none}
-  .cod-strip .ic{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#F59E0B,#B45309);color:#FFFFFF;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;box-shadow:0 6px 14px -4px rgba(180,83,9,0.4)}
-  .cod-strip .body{flex:1;min-width:0;line-height:1.2;position:relative;z-index:1}
-  .cod-strip .body .a{font-size:13px;font-weight:900;color:#0F172A;display:flex;align-items:center;gap:8px}
-  .cod-strip .body .amt{font-size:14px;font-weight:900;color:#B45309;font-variant-numeric:tabular-nums}
-  .cod-strip .body .b{font-size:11px;color:#78350F;margin-top:3px;font-weight:600}
-  .cod-strip .btn{flex-shrink:0;padding:9px 16px;border-radius:10px;background:#047857;color:#FFFFFF;font-size:12.5px;font-weight:900;letter-spacing:0.06em;text-transform:uppercase;border:0;cursor:pointer;box-shadow:0 6px 14px -4px rgba(4,120,87,0.4);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+  /* COD-due card · mirrors the order-details COD-due card so the COD pay flow looks identical wherever you reach it · amount prominent on top, then a coin-earn pay strip that runs edge-to-edge and opens the COD pay sheet · only shown for COD/Partial orders */
+  .cod-due{margin:0 16px;border-radius:14px;border:1px solid #FDE68A;background:#FFFBEB;padding:12px 14px;overflow:hidden}
+  .cod-due-head{display:flex;align-items:baseline;justify-content:space-between}
+  .cod-due-head .lbl{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:#B45309}
+  .cod-due-head .val{font-size:18px;font-weight:900;color:#0F172A;font-variant-numeric:tabular-nums}
+  .cod-due-line{display:flex;align-items:center;gap:6px;font-size:11.5px;color:#475569;margin-top:4px}
+  .cod-due-line i{font-size:10.5px;color:#94A3B8}
+  .cod-due-strip{width:calc(100% + 30px);box-sizing:border-box;margin:12px -15px -13px;display:flex;align-items:center;gap:10px;padding:12px 14px;background:#FDE68A;border-top:1px solid #F59E0B;text-decoration:none;cursor:pointer}
+  .cod-due-strip-text{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#78350F;flex:1;min-width:0;line-height:1.3}
+  .cod-due-strip-text i{font-size:14px;color:#B45309;flex-shrink:0}
+  .cod-due-strip-text b{color:#0F172A;font-weight:900}
+  .cod-due-strip-btn{flex-shrink:0;margin-left:auto;padding:10px 22px;background:#059669;color:#FFFFFF;border:0;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;text-decoration:none;box-shadow:0 6px 14px -4px rgba(5,150,105,0.45)}
 
   /* Welcome-back overlay · brief animated greeting for returning users · fades over the page for ~2.4s then dismisses */
   .welback{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,0.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:welbackBd 2.4s ease-out forwards;pointer-events:none}
@@ -193,14 +196,17 @@
     </div>
   </div>
 
-  <!-- COD pay-now strip · shows when payment is COD or Partial · lets the user clear the balance early and earn bonus coins · hidden by default · activates if URL has ?mode=cod or ?mode=partial -->
-  <div class="cod-strip mt-3" id="codStrip" style="display:none;margin-top:10px">
-    <span class="ic"><i class="fa-solid fa-wallet"></i></span>
-    <div class="body">
-      <div class="a">Pay COD now <span class="amt tnum" id="codStripAmt">₹1,900</span></div>
-      <div class="b">Skip cash, earn <span class="tnum">38 bonus coins</span></div>
+  <!-- COD-due card · shows when payment is COD or Partial · same pattern as order-details · lets the user clear the balance early and earn bonus coins · hidden by default · activates if URL has ?mode=cod or ?mode=partial -->
+  <div class="cod-due" id="codStrip" style="display:none;margin-top:10px">
+    <div class="cod-due-head">
+      <span class="lbl">COD due</span>
+      <span class="val tnum" id="codStripAmt">₹1,900</span>
     </div>
-    <a href="#" class="btn" id="payCodBtn">Pay <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
+    <div class="cod-due-line"><i class="fa-solid fa-truck-fast"></i> Pay in cash when the courier delivers</div>
+    <button type="button" class="cod-due-strip" id="payCodBtn">
+      <span class="cod-due-strip-text"><i class="fa-solid fa-coins"></i> <span>Pay online now &amp; earn <b>+38 coins</b></span></span>
+      <span class="cod-due-strip-btn">Pay</span>
+    </button>
   </div>
 
   <!-- Rewards · scratch card + coins earned · 2-col grid -->
@@ -321,13 +327,13 @@
         methodLbl && (methodLbl.textContent = 'Cash on Delivery');
         methodAmt && (methodAmt.textContent = '₹1,900');
         if (payStatus) { payStatus.style.background = '#FEF3C7'; payStatus.style.borderColor = '#FDE68A'; payStatus.style.color = '#B45309'; payStatus.innerHTML = '<i class="fa-solid fa-clock text-[9px]"></i> Pay on delivery'; }
-        codStrip && (codStrip.style.display = 'flex');
+        codStrip && (codStrip.style.display = 'block');
         codAmt && (codAmt.textContent = '₹1,900');
       } else if (mode === 'partial') {
         methodLbl && (methodLbl.textContent = 'Partial · ₹475 paid · ₹1,425 due');
         methodAmt && (methodAmt.textContent = '₹1,900');
         if (payStatus) { payStatus.style.background = '#FEF3C7'; payStatus.style.borderColor = '#FDE68A'; payStatus.style.color = '#B45309'; payStatus.innerHTML = '<i class="fa-solid fa-circle-half-stroke text-[9px]"></i> Partial paid'; }
-        codStrip && (codStrip.style.display = 'flex');
+        codStrip && (codStrip.style.display = 'block');
         codAmt && (codAmt.textContent = '₹1,425');
       }
     })();

@@ -31,7 +31,26 @@
   .status-pill.delivered{color:#047857}
   .status-pill.delivered i{font-size:11px;color:#047857}
   .ord-date{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:500;color:#94A3B8}
-  .ord-id{font-size:11.5px;font-weight:500;color:#94A3B8;letter-spacing:0.01em;margin-bottom:10px}
+  /* Order ID · made prominent (was 11.5px/500/#94A3B8 muted) so it's easy to read + quote on support calls */
+  .ord-id{font-size:14px;font-weight:800;color:#0F172A;letter-spacing:0.01em;margin-bottom:10px;font-variant-numeric:tabular-nums}
+  .ord-saved{font-size:11.5px;font-weight:700;color:#047857;margin-top:3px;display:inline-flex;align-items:center;gap:4px}
+  .ord-saved i{font-size:10px}
+
+  /* Lifetime savings banner · emerald, sits below the tabs */
+  .save-banner{margin:12px 16px 0;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border:1px solid #A7F3D0}
+  .save-banner .ic{width:40px;height:40px;border-radius:12px;background:#FFFFFF;color:#047857;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 2px 6px rgba(5,150,105,0.15)}
+  .save-banner .tx{flex:1;line-height:1.2}
+  .save-banner .tx .a{font-size:16px;font-weight:900;color:#0F172A;font-variant-numeric:tabular-nums}
+  .save-banner .tx .b{font-size:11px;color:#047857;font-weight:600;margin-top:1px}
+
+  /* Order search · by ID or product name */
+  .ord-search{margin:12px 16px 0;display:flex;align-items:center;gap:8px;height:44px;padding:0 14px;border-radius:12px;background:#FFFFFF;border:1px solid #E5E7EB}
+  .ord-search i{color:#94A3B8;font-size:14px;flex-shrink:0}
+  .ord-search input{flex:1;outline:0;border:0;background:transparent;font-size:14px;font-weight:500;color:#0F172A;min-width:0}
+  .ord-search input::placeholder{color:#94A3B8;font-weight:500}
+  .ord-search .clr{display:none;width:22px;height:22px;border-radius:9999px;background:#E2E8F0;color:#475569;align-items:center;justify-content:center;font-size:9px;border:0;cursor:pointer;flex-shrink:0}
+  .ord-search.has-q .clr{display:flex}
+  .ord-noresult{display:none;text-align:center;color:#64748B;font-size:13px;padding:30px 16px}
   .ord-thumbs{display:flex;gap:8px;margin-bottom:12px}
   .ord-thumb{width:52px;height:52px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
   .ord-thumb img{max-width:100%;max-height:100%;object-fit:contain}
@@ -100,11 +119,27 @@
     <button class="tab" data-tab="delivered">Delivered (9)</button>
   </div>
 
+  <!-- Lifetime savings · total the customer has saved across all orders -->
+  <div class="save-banner">
+    <span class="ic"><i class="fa-solid fa-piggy-bank"></i></span>
+    <div class="tx">
+      <div class="a">You've saved ₹4,180</div>
+      <div class="b">Across 12 orders with KKD · keep saving!</div>
+    </div>
+  </div>
+
+  <!-- Search · by order ID or product name -->
+  <div class="ord-search" id="ordSearch">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input id="ordSearchInput" type="text" placeholder="Search by order ID or product"/>
+    <button class="clr" id="ordSearchClear" aria-label="Clear"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
   <!-- Order list -->
-  <div class="px-4 pt-3">
+  <div class="px-4 pt-3" id="ordList">
 
     <!-- IN-TRANSIT · #1284 -->
-    <div class="ord-card">
+    <div class="ord-card" data-search="kat-2026-04-1284 1284 humic antivirus chakrawarti">
       <a href="order-details.html?state=transit&id=KAT-2026-04-1284" class="ord-link">
         <div class="ord-head">
           <span class="status-pill transit">In Transit</span>
@@ -121,6 +156,7 @@
           <div>
             <div class="ord-amt tnum">&#8377;1,430</div>
             <div class="ord-meta">3 items</div>
+            <div class="ord-saved"><i class="fa-solid fa-circle-check"></i> Saved &#8377;420</div>
           </div>
           <span class="ord-arrive">Arriving tomorrow <i class="fa-solid fa-chevron-right text-[11px]"></i></span>
         </div>
@@ -135,7 +171,7 @@
     </div>
 
     <!-- DELIVERED · #1198 -->
-    <div class="ord-card">
+    <div class="ord-card" data-search="kat-2026-04-1198 1198 humic antivirus">
       <a href="order-details.html?state=delivered&id=KAT-2026-04-1198" class="ord-link">
         <div class="ord-head">
           <span class="status-pill delivered"><i class="fa-solid fa-circle-check"></i> Delivered</span>
@@ -151,6 +187,7 @@
           <div>
             <div class="ord-amt tnum">&#8377;698</div>
             <div class="ord-meta">2 items</div>
+            <div class="ord-saved"><i class="fa-solid fa-circle-check"></i> Saved &#8377;260</div>
           </div>
         </div>
       </a>
@@ -161,7 +198,7 @@
     </div>
 
     <!-- DELIVERED · #1102 -->
-    <div class="ord-card">
+    <div class="ord-card" data-search="kat-2026-04-1102 1102 chakrawarti humic antivirus">
       <a href="order-details.html?state=delivered&id=KAT-2026-04-1102" class="ord-link">
         <div class="ord-head">
           <span class="status-pill delivered"><i class="fa-solid fa-circle-check"></i> Delivered</span>
@@ -178,6 +215,7 @@
           <div>
             <div class="ord-amt tnum">&#8377;1,205</div>
             <div class="ord-meta">3 items</div>
+            <div class="ord-saved"><i class="fa-solid fa-circle-check"></i> Saved &#8377;340</div>
           </div>
         </div>
       </a>
@@ -186,6 +224,8 @@
         <a href="order-details.html?invoice=1102" class="act-btn outline"><i class="fa-solid fa-file-lines"></i> Invoice</a>
       </div>
     </div>
+
+    <div class="ord-noresult" id="ordNoResult">No orders match "<span id="ordQueryEcho"></span>"</div>
 
   </div>
 
@@ -251,6 +291,30 @@
         t.classList.add('active');
       });
     });
+
+    // Order search · matches the typed query against each card's data-search (order ID + product names) · shows a no-result line when nothing matches
+    (function(){
+      const wrap = document.getElementById('ordSearch');
+      const input = document.getElementById('ordSearchInput');
+      const clr = document.getElementById('ordSearchClear');
+      const cards = Array.from(document.querySelectorAll('#ordList .ord-card'));
+      const noRes = document.getElementById('ordNoResult');
+      const echo = document.getElementById('ordQueryEcho');
+      function run(){
+        const q = input.value.trim().toLowerCase();
+        wrap.classList.toggle('has-q', q.length > 0);
+        let shown = 0;
+        cards.forEach(c => {
+          const hit = !q || (c.dataset.search || '').includes(q);
+          c.style.display = hit ? '' : 'none';
+          if (hit) shown++;
+        });
+        if (echo) echo.textContent = input.value.trim();
+        noRes.style.display = (q && shown === 0) ? 'block' : 'none';
+      }
+      input.addEventListener('input', run);
+      clr.addEventListener('click', () => { input.value = ''; input.focus(); run(); });
+    })();
 
     // COD bottom sheet · the in-transit PAY NOW banner taps open this · the modal stays in sync with the order's amount + coin earn (1 coin per ~₹28.60 to land on +50 for ₹1,430)
     (function(){

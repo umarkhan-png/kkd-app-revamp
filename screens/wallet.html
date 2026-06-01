@@ -8,44 +8,46 @@
   html,body{margin:0;padding:0;overflow-x:hidden}
   body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:30px}
   .tnum{font-variant-numeric:tabular-nums}
-  .sec-title{margin:18px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em;display:flex;align-items:center;justify-content:space-between}
+  .sec-title{margin:18px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
 
-  /* Balance hero · money wallet (₹) · distinct from Krishi Coins */
+  /* Balance hero · available balance + lifetime received */
   .wallet-hero{margin:6px 16px 0;border-radius:18px;padding:20px;color:#FFFFFF;background:linear-gradient(135deg,#0F172A 0%,#1E293B 55%,#334155 120%);position:relative;overflow:hidden;box-shadow:0 14px 30px -14px rgba(15,23,42,0.5)}
   .wallet-hero::before{content:"";position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,0.3) 0%,transparent 65%)}
   .wallet-hero .lbl{font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:rgba(255,255,255,0.7)}
-  .wallet-hero .bal{font-size:34px;font-weight:900;line-height:1.05;margin-top:4px}
-  .wallet-hero .sub{font-size:11.5px;color:rgba(255,255,255,0.7);margin-top:8px}
-  .wallet-cta{margin-top:14px;display:flex;gap:10px}
-  .wallet-cta button,.wallet-cta a{flex:1;height:42px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:12.5px;font-weight:800;text-decoration:none;border:0;cursor:pointer}
-  .wallet-cta .solid{background:#10B981;color:#FFFFFF}
-  .wallet-cta .ghost{background:rgba(255,255,255,0.12);color:#FFFFFF;border:1px solid rgba(255,255,255,0.25)}
-
-  /* Coins cross-link · reminds the user coins are separate */
-  .coins-link{margin:12px 16px 0;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:#FFFBEB;border:1px solid #FCD34D;text-decoration:none}
-  .coins-link .ic{width:38px;height:38px;border-radius:11px;background:#FEF3C7;color:#B45309;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-  .coins-link .a{font-size:13.5px;font-weight:800;color:#0F172A}
-  .coins-link .b{font-size:11px;color:#92400E;margin-top:1px}
-
-  .stat-row{display:flex;gap:10px;margin:12px 16px 0}
-  .stat{flex:1;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:12px;text-align:center;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
-  .stat .v{font-size:16px;font-weight:900;color:#0F172A}
-  .stat .v.green{color:#047857}
-  .stat .k{font-size:10.5px;color:#64748B;margin-top:2px;font-weight:600}
+  .wallet-hero .bal{font-size:36px;font-weight:900;line-height:1.05;margin-top:4px}
+  .wallet-hero .recv{margin-top:14px;display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:11px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);font-size:12px;font-weight:700;color:rgba(255,255,255,0.9)}
+  .wallet-hero .recv b{color:#34D399;font-variant-numeric:tabular-nums}
+  .wallet-hero .recv i{color:#34D399;font-size:12px}
 
   .card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04);overflow:hidden}
-  .txn{display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid #F1F5F9}
+  .txn{display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid #F1F5F9;width:100%;background:transparent;border-left:0;border-right:0;border-top:0;cursor:pointer;text-align:left}
   .txn:last-child{border-bottom:0}
-  .txn .ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
-  .txn .ic.in{background:#ECFDF5;color:#047857}
-  .txn .ic.out{background:#FEF2F2;color:#DC2626}
-  .txn .ic.refund{background:#EFF6FF;color:#2563EB}
+  .txn:active{background:#F8FAFC}
+  .txn .ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;background:#EFF6FF;color:#2563EB}
   .txn .body{flex:1;min-width:0;line-height:1.3}
-  .txn .a{font-size:13.5px;font-weight:700;color:#0F172A}
+  .txn .a{font-size:13.5px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
   .txn .b{font-size:11px;color:#94A3B8;margin-top:1px}
-  .txn .amt{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;flex-shrink:0}
-  .txn .amt.pos{color:#047857}
-  .txn .amt.neg{color:#DC2626}
+  .txn .amt{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;color:#047857;flex-shrink:0}
+  .txn .chev{font-size:11px;color:#94A3B8;flex-shrink:0;margin-left:2px}
+
+  /* Refund detail sheet */
+  .modal-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80}
+  .modal-bd.open{opacity:1;pointer-events:auto}
+  .modal-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;padding:0 0 22px;max-height:88vh;display:flex;flex-direction:column}
+  .modal-sheet.open{transform:translateY(0)}
+  .rd-prod{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid #F1F5F9}
+  .rd-prod:last-child{border-bottom:0}
+  .rd-img{width:44px;height:44px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
+  .rd-img img{max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:multiply}
+  .rd-prod .pn{font-size:13.5px;font-weight:700;color:#0F172A;line-height:1.2}
+  .rd-prod .pq{font-size:11px;color:#94A3B8;margin-top:1px}
+  .rd-prod .pr{font-size:14px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums;flex-shrink:0}
+  .rd-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:4px 0}
+  .rd-row .l{color:#64748B}.rd-row .v{font-weight:700;color:#0F172A;font-variant-numeric:tabular-nums}
+  .rd-row .v.neg{color:#DC2626}
+  .rd-total{display:flex;align-items:center;justify-content:space-between;border-top:1px dashed #CBD5E1;margin-top:8px;padding-top:10px}
+  .rd-total .l{font-size:14px;font-weight:800;color:#0F172A}
+  .rd-total .v{font-size:16px;font-weight:900;color:#047857;font-variant-numeric:tabular-nums}
 </style></head>
 <body>
 
@@ -65,62 +67,77 @@
     <h1 class="flex-1 text-[22px] font-extrabold leading-tight" style="color:#0F172A">Wallet</h1>
   </div>
 
-  <!-- Money balance hero -->
+  <!-- Balance hero · available + total received -->
   <div class="wallet-hero">
-    <div class="lbl"><i class="fa-solid fa-wallet"></i> Wallet balance</div>
+    <div class="lbl"><i class="fa-solid fa-wallet"></i> Available balance</div>
     <div class="bal tnum">₹540</div>
-    <div class="sub">Refunds &amp; cashback land here · use at checkout or withdraw to bank</div>
-    <div class="wallet-cta">
-      <button class="solid"><i class="fa-solid fa-plus text-[11px]"></i> Add money</button>
-      <button class="ghost"><i class="fa-solid fa-building-columns text-[11px]"></i> Withdraw</button>
+    <div class="recv"><i class="fa-solid fa-arrow-down-long"></i> Total received till date · <b>₹3,180</b></div>
+  </div>
+
+  <!-- Refunds · only refund transactions · tile shows the order ID; tap for the breakdown -->
+  <div class="sec-title">Refunds</div>
+  <div class="card" id="refundList"></div>
+
+  <!-- Refund detail sheet -->
+  <div id="rdBd" class="modal-bd"></div>
+  <div id="rdSheet" class="modal-sheet">
+    <div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 0;flex-shrink:0"></div>
+    <div class="px-5 pt-3 pb-2 flex items-center justify-between" style="flex-shrink:0">
+      <div class="leading-tight">
+        <div class="text-[18px] font-extrabold text-[#0F172A]">Refund details</div>
+        <div class="text-[11.5px] font-semibold" style="color:#64748B" id="rdOrder">Order #—</div>
+      </div>
+      <button id="rdClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div class="px-5 pb-5 overflow-y-auto" style="flex:1">
+      <div class="text-[11px] font-extrabold uppercase tracking-wider mb-1" style="color:#64748B">Returned items</div>
+      <div id="rdProds"></div>
+      <div class="mt-4" id="rdSummary"></div>
     </div>
   </div>
 
-  <!-- Coins are separate -->
-  <a href="coins-statement.html" class="coins-link">
-    <span class="ic"><i class="fa-solid fa-coins"></i></span>
-    <div class="flex-1">
-      <div class="a">Krishi Coins · 1,240</div>
-      <div class="b">Loyalty points, separate from wallet money · tap to view</div>
-    </div>
-    <i class="fa-solid fa-chevron-right text-[11px]" style="color:#B45309"></i>
-  </a>
+  <script>
+    const REFUNDS = [
+      { id:'KAT-2026-05-1284', date:'Today · 11:20 AM', items:[
+          { name:'NPK 19-19-19', qty:1, refund:330, img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp' }
+        ], penalty:0 },
+      { id:'KAT-2026-04-1198', date:'12 Apr · 3:40 PM', items:[
+          { name:'Humic + Fulvic', qty:2, refund:552, img:'../assets/Humic_nobg.png' }
+        ], penalty:40, penaltyNote:'Opened-pack restocking fee' },
+      { id:'KAT-2026-04-1102', date:'5 Apr · 1:10 PM', items:[
+          { name:'Bhumiraja', qty:1, refund:245, img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' },
+          { name:'Antivirus', qty:1, refund:160, img:'../assets/AntiVirus_nobg.png' }
+        ], penalty:0 }
+    ];
+    function net(r){ return r.items.reduce((s,i) => s + i.refund, 0) - (r.penalty || 0); }
 
-  <!-- Lifetime stats -->
-  <div class="stat-row">
-    <div class="stat"><div class="v green tnum">₹3,180</div><div class="k">Added</div></div>
-    <div class="stat"><div class="v tnum">₹2,310</div><div class="k">Spent</div></div>
-    <div class="stat"><div class="v tnum">₹330</div><div class="k">Refunds</div></div>
-  </div>
+    const list = document.getElementById('refundList');
+    list.innerHTML = REFUNDS.map((r, i) =>
+      '<button class="txn" data-i="' + i + '">'
+      + '<span class="ic"><i class="fa-solid fa-rotate-left"></i></span>'
+      + '<div class="body"><div class="a">Order #' + r.id + '</div><div class="b">' + r.date + '</div></div>'
+      + '<span class="amt">+ ₹' + net(r).toLocaleString('en-IN') + '</span>'
+      + '<i class="fa-solid fa-chevron-right chev"></i></button>'
+    ).join('');
 
-  <!-- Transactions · money wallet activity (₹) -->
-  <div class="sec-title"><span>Wallet transactions</span></div>
-  <div class="card">
-    <div class="txn">
-      <span class="ic refund"><i class="fa-solid fa-rotate-left"></i></span>
-      <div class="body"><div class="a">Refund · returned NPK 19-19-19</div><div class="b">Today · 11:20 AM</div></div>
-      <span class="amt pos tnum">+ ₹330</span>
-    </div>
-    <div class="txn">
-      <span class="ic out"><i class="fa-solid fa-bag-shopping"></i></span>
-      <div class="body"><div class="a">Used on order #KAT-2026-05-1284</div><div class="b">28 May · 4:30 PM</div></div>
-      <span class="amt neg tnum">− ₹200</span>
-    </div>
-    <div class="txn">
-      <span class="ic in"><i class="fa-solid fa-gift"></i></span>
-      <div class="body"><div class="a">Cashback · Scratch &amp; win</div><div class="b">20 May · 1:10 PM</div></div>
-      <span class="amt pos tnum">+ ₹150</span>
-    </div>
-    <div class="txn">
-      <span class="ic in"><i class="fa-solid fa-plus"></i></span>
-      <div class="body"><div class="a">Added money via UPI</div><div class="b">12 May · 9:00 AM</div></div>
-      <span class="amt pos tnum">+ ₹500</span>
-    </div>
-    <div class="txn">
-      <span class="ic out"><i class="fa-solid fa-bag-shopping"></i></span>
-      <div class="body"><div class="a">Used on order #1198</div><div class="b">10 Apr · 5:15 PM</div></div>
-      <span class="amt neg tnum">− ₹260</span>
-    </div>
-  </div>
-
+    const bd = document.getElementById('rdBd'), sh = document.getElementById('rdSheet');
+    function openDetail(r){
+      document.getElementById('rdOrder').textContent = 'Order #' + r.id + ' · ' + r.date;
+      document.getElementById('rdProds').innerHTML = r.items.map(it =>
+        '<div class="rd-prod"><div class="rd-img"><img src="' + it.img + '"/></div>'
+        + '<div class="flex-1 min-w-0"><div class="pn">' + it.name + '</div><div class="pq">Qty ' + it.qty + ' · refunded</div></div>'
+        + '<div class="pr">₹' + it.refund.toLocaleString('en-IN') + '</div></div>'
+      ).join('');
+      const itemsTotal = r.items.reduce((s,i) => s + i.refund, 0);
+      let html = '<div class="rd-row"><span class="l">Items refund</span><span class="v">₹' + itemsTotal.toLocaleString('en-IN') + '</span></div>';
+      if (r.penalty > 0) html += '<div class="rd-row"><span class="l"><i class="fa-solid fa-circle-exclamation text-[10px]" style="color:#DC2626"></i> Penalty · ' + (r.penaltyNote || 'Deduction') + '</span><span class="v neg">− ₹' + r.penalty + '</span></div>';
+      html += '<div class="rd-total"><span class="l">Refunded to wallet</span><span class="v">₹' + net(r).toLocaleString('en-IN') + '</span></div>';
+      document.getElementById('rdSummary').innerHTML = html;
+      bd.classList.add('open'); sh.classList.add('open');
+    }
+    function close(){ bd.classList.remove('open'); sh.classList.remove('open'); }
+    list.querySelectorAll('.txn').forEach(b => b.addEventListener('click', () => openDetail(REFUNDS[+b.dataset.i])));
+    document.getElementById('rdClose').addEventListener('click', close);
+    bd.addEventListener('click', close);
+  </script>
 </body></html>

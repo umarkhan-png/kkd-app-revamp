@@ -31,8 +31,8 @@
   .var-more i{font-size:13px}
   .var-more .lbl-sub{font-size:9.5px;color:#94A3B8;font-weight:600}
   /* Best-value badge · added by JS to the lowest per-unit (per-L) tile in each grid · distinct from the amber Bestseller chip */
-  /* Per-variant low-stock line (shows only when units < 5) */
-  .vk-low{font-size:8.5px;font-weight:800;color:#DC2626;margin-top:4px;line-height:1}
+  /* Per-variant low-stock · 'N left' label sitting ON the tile's bottom border (shows only when units < 5) */
+  .vk-low{position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);font-size:8px;font-weight:800;color:#DC2626;background:#FFFFFF;border:1px solid #FECACA;padding:1px 6px;border-radius:9999px;white-space:nowrap;line-height:1.3;z-index:3}
   /* "Cheaper per unit than the selected pack" down-arrow · injected/toggled by JS on variant change */
   .vk-arrow{display:none;position:absolute;top:6px;right:6px;width:18px;height:18px;border-radius:50%;background:#059669;color:#fff;align-items:center;justify-content:center;font-size:9px;z-index:3;box-shadow:0 2px 6px rgba(5,150,105,0.4);animation:vkBounce 1s ease-in-out infinite}
   .var.cheaper .vk-arrow{display:flex}
@@ -159,6 +159,7 @@
     <div class="snap-c w-full flex-shrink-0 flex items-center justify-center p-6"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/></div>
   </div>
   <span class="absolute top-3 left-3 text-[11px] font-extrabold bg-[#FBBF24] text-[#0F172A] px-2.5 py-1 rounded-md tracking-wide">#1 BESTSELLER</span>
+  <span class="live-view absolute left-3" style="top:42px;z-index:2"><span class="live-dot"></span> Highly viewed today</span>
   <span class="absolute top-3 right-3 inline-flex items-center gap-1.5 bg-white/95 backdrop-blur px-2.5 py-1.5 rounded-full text-[13px] font-extrabold shadow-sm">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="#FBBF24"><path d="M12 .587l3.668 7.568L24 9.423l-6 5.85L19.336 24 12 19.897 4.664 24 6 15.273 0 9.423l8.332-1.268z"/></svg>
     <span class="text-[#0F172A] tnum">4.6</span>
@@ -181,10 +182,6 @@
     </a>
   </div>
 
-  <!-- Highly-viewed tag · sits right below the #1 Bestseller badge · low-stock moved into the pack-size tiles -->
-  <div class="flex items-center gap-2 mt-2.5 flex-wrap">
-    <span class="live-view"><span class="live-dot"></span> Highly viewed today</span>
-  </div>
 
 </div>
 
@@ -418,15 +415,11 @@
 
 <!-- Farmer testimonials -->
 <div class="mt-6">
-  <div class="px-4 flex items-baseline justify-between mb-3">
-    <div>
-      <div class="text-[15px] font-extrabold text-[#0F172A]">Farmer testimonials</div>
-      <div class="text-[11.5px] mt-0.5" style="color:#64748B">Real results from verified buyers</div>
-    </div>
-    <a href="#" class="text-[12px] font-extrabold" style="color:#047857">SEE ALL</a>
+  <div class="px-4 mb-3">
+    <div class="text-[15px] font-extrabold text-[#0F172A]">Farmer testimonials</div>
   </div>
-  <div class="overflow-x-auto scrollx -mx-1 px-4">
-    <div class="flex gap-3 min-w-max">
+  <div class="overflow-x-auto scrollx -mx-1 px-4" id="pdpTestiScroll">
+    <div class="flex gap-3 min-w-max" id="pdpTestiRow">
       <div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">
         <img src="https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=400&q=80" class="w-full h-full object-cover" style="opacity:.55"/>
         <div class="absolute inset-0 flex flex-col items-center justify-center">
@@ -456,6 +449,45 @@
       </div>
     </div>
   </div>
+  <script>
+    // Farmer testimonials · load more on scroll-to-end (spinner)
+    (function(){
+      const scroll = document.getElementById('pdpTestiScroll'), row = document.getElementById('pdpTestiRow');
+      if (!scroll || !row) return;
+      const POOL = [
+        {img:'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80', n:'Suresh Yadav', loc:'Maize · Bhopal', q:'"Strong roots in 10 days"'},
+        {img:'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=400&q=80', n:'Anita Devi', loc:'Chilli · Ujjain', q:'"Less spray needed"'},
+        {img:'https://images.unsplash.com/photo-1591857177580-dc82b9ac4e1e?w=400&q=80', n:'Pradeep Singh', loc:'Soybean · Dewas', q:'"Great result, sealed pack"'},
+        {img:'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&q=80', n:'Kishan Lal', loc:'Wheat · Sehore', q:'"Yield up, cost down"'}
+      ];
+      let idx = 0, loading = false, done = false;
+      function tile(t){
+        return '<div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">'
+          + '<img src="' + t.img + '" class="w-full h-full object-cover" style="opacity:.55"/>'
+          + '<div class="absolute inset-0 flex flex-col items-center justify-center"><div class="w-11 h-11 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg></div>'
+          + '<div class="text-white text-[10px] font-extrabold text-center px-2">' + t.n + '</div><div class="text-[9px] text-center" style="color:rgba(255,255,255,0.7)">' + t.loc + '</div></div>'
+          + '<div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-semibold leading-tight">' + t.q + '</div></div></div>';
+      }
+      function loadMore(){
+        if (loading || done) return;
+        loading = true;
+        const loader = document.createElement('div');
+        loader.className = 'flex-shrink-0 flex flex-col items-center justify-center gap-2';
+        loader.style.cssText = 'width:90px;height:200px;border-radius:12px;border:1px solid #E5E7EB;background:#fff';
+        loader.innerHTML = '<div class="cust-spin"></div><div class="text-[10px] font-bold" style="color:#94A3B8">Loading…</div>';
+        row.appendChild(loader);
+        setTimeout(() => {
+          loader.remove();
+          POOL.slice(idx, idx + 2).forEach(t => row.insertAdjacentHTML('beforeend', tile(t)));
+          idx += 2; loading = false;
+          if (idx >= POOL.length) done = true;
+        }, 750);
+      }
+      scroll.addEventListener('scroll', () => {
+        if (scroll.scrollLeft + scroll.clientWidth >= scroll.scrollWidth - 60) loadMore();
+      }, { passive: true });
+    })();
+  </script>
 </div>
 
 <!-- Ratings & reviews · top "VIEW ALL" link removed · review fonts bumped up · "Verified / Helpful / Report" stripped from review card · bottom CTA is now "View more" which appends 5 more reviews on tap -->
@@ -693,15 +725,21 @@
       }
       const st = STOCK[t.dataset.size];
       if (st != null && st < 5 && !t.querySelector('.vk-low')) {
-        const l = document.createElement('div'); l.className = 'vk-low'; l.textContent = 'Only ' + st + ' left';
+        const l = document.createElement('div'); l.className = 'vk-low'; l.textContent = st + ' left';
         t.appendChild(l);
       }
     });
-    // Flag every variant whose per-unit (per-L) price is LOWER than the selected pack's → animated down-arrow
+    // Flag only ONE tile per grid · the single best-value (lowest per-L) pack that's cheaper than the selected one → animated down-arrow
     window.markCheaper = function(selSize){
       const sel = document.querySelector('.var[data-size="' + selSize + '"]');
       const selPerL = sel ? perL(sel) : Infinity;
-      document.querySelectorAll('.var').forEach(t => t.classList.toggle('cheaper', perL(t) < selPerL));
+      document.querySelectorAll('.var').forEach(t => t.classList.remove('cheaper'));
+      [document.querySelector('.pack-grid'), document.querySelector('#sheet .grid')].forEach(c => {
+        if (!c) return;
+        let best = null, min = selPerL;
+        c.querySelectorAll('.var').forEach(t => { const pl = perL(t); if (pl < min) { min = pl; best = t; } });
+        if (best) best.classList.add('cheaper');
+      });
     };
   })();
 

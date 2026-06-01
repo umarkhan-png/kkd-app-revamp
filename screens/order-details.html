@@ -453,13 +453,25 @@
     </div>
   </div>
 
-  <!-- Need help · taps open a bottom-sheet listing help options (Return is gated to a 7-day window from delivery) -->
+  <!-- Unboxing video · standalone card (moved out of the help sheet) · records proof via device camera -->
+  <div class="sec-title">Order proof</div>
+  <label class="card" style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer">
+    <div class="w-10 h-10 rounded-[11px] flex items-center justify-center flex-shrink-0" style="background:#EFF6FF;color:#2563EB"><i class="fa-solid fa-video text-[16px]"></i></div>
+    <div class="flex-1 leading-tight">
+      <div class="text-[14px] font-bold text-[#0F172A]">Shoot unboxing video</div>
+      <div class="text-[11.5px] mt-0.5" style="color:#64748B">Record while opening — fastest way to settle any claim</div>
+    </div>
+    <span class="inline-flex items-center justify-center w-9 h-9 rounded-full flex-shrink-0" style="background:#EFF6FF;color:#2563EB"><i class="fa-solid fa-circle-dot text-[14px]"></i></span>
+    <input type="file" accept="video/*" capture="environment" id="unboxVideo" style="display:none"/>
+  </label>
+
+  <!-- Need help · taps open a bottom-sheet of support reach-outs -->
   <div class="sec-title">Need help?</div>
   <button id="helpRow" class="card support-row" style="display:flex;width:calc(100% - 32px);text-align:left;cursor:pointer">
     <div class="ic"><i class="fa-solid fa-circle-question text-[14px]"></i></div>
     <div class="info">
       <div class="a">Get help with this order</div>
-      <div class="b">Return, damaged item, or talk to support</div>
+      <div class="b">Call, email or live-chat with support</div>
     </div>
     <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
   </button>
@@ -543,25 +555,6 @@
       <button id="helpClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
     <div class="px-3 pb-2">
-      <!-- Return / replace · opens the detailed return form · gated to a 7-day window -->
-      <button id="helpReturn" type="button" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;width:100%;background:transparent;border:0;text-align:left;cursor:pointer">
-        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-right-left text-[16px]"></i></div>
-        <div class="flex-1 leading-tight">
-          <div class="text-[14px] font-bold text-[#0F172A]">Return or replace</div>
-          <div class="text-[11.5px] text-[#64748B] mt-0.5">Damaged, wrong, or not as described</div>
-        </div>
-        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold flex-shrink-0" style="background:#FEF3C7;color:#92400E"><i class="fa-regular fa-clock text-[9px]"></i> <span id="returnDaysLeft">5</span> days left</span>
-      </button>
-      <!-- Shoot unboxing video · opens the device camera (capture) to record proof -->
-      <label class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;cursor:pointer">
-        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#EFF6FF;color:#2563EB"><i class="fa-solid fa-video text-[15px]"></i></div>
-        <div class="flex-1 leading-tight">
-          <div class="text-[14px] font-bold text-[#0F172A]">Shoot unboxing video</div>
-          <div class="text-[11.5px] text-[#64748B] mt-0.5">Record now — fastest way to resolve a claim</div>
-        </div>
-        <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
-        <input type="file" accept="video/*" capture="environment" id="unboxVideo" style="display:none"/>
-      </label>
       <!-- Call us -->
       <a href="tel:18002700300" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
         <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-phone text-[15px]"></i></div>
@@ -571,17 +564,34 @@
         </div>
         <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
       </a>
-      <!-- Returns policy -->
-      <a href="policy.html?doc=returns" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
-        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#F1F5F9;color:#475569"><i class="fa-solid fa-file-lines text-[15px]"></i></div>
+      <!-- Email us -->
+      <a href="mailto:care@katyayanikrishidirect.com" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
+        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#EFF6FF;color:#2563EB"><i class="fa-solid fa-envelope text-[15px]"></i></div>
         <div class="flex-1 leading-tight">
-          <div class="text-[14px] font-bold text-[#0F172A]">Returns &amp; refund policy</div>
-          <div class="text-[11.5px] text-[#64748B] mt-0.5">What's eligible and how refunds work</div>
+          <div class="text-[14px] font-bold text-[#0F172A]">Email us</div>
+          <div class="text-[11.5px] text-[#64748B] mt-0.5">care@katyayanikrishidirect.com · reply in 24 hrs</div>
+        </div>
+        <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
+      </a>
+      <!-- Live chat -->
+      <a href="advisory.html" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
+        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-comments text-[15px]"></i></div>
+        <div class="flex-1 leading-tight">
+          <div class="text-[14px] font-bold text-[#0F172A]">Live chat</div>
+          <div class="text-[11.5px] text-[#64748B] mt-0.5">Chat with a support agent now</div>
+        </div>
+        <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
+      </a>
+      <!-- WhatsApp -->
+      <a href="#" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
+        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;color:#25D366"><i class="fa-brands fa-whatsapp text-[17px]"></i></div>
+        <div class="flex-1 leading-tight">
+          <div class="text-[14px] font-bold text-[#0F172A]">WhatsApp us</div>
+          <div class="text-[11.5px] text-[#64748B] mt-0.5">Message on +91 96964 00400</div>
         </div>
         <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
       </a>
     </div>
-    <p id="returnExpiredNote" class="px-5 pt-2 text-[11.5px]" style="color:#94A3B8;display:none">The 7-day return window has closed. Reach out to support for any other concerns.</p>
   </div>
 
   <style>
@@ -610,7 +620,37 @@
     .rtn-attach.rec i{color:#DC2626}
     /* success */
     .rate-ok-coin.check{background:linear-gradient(135deg,#10B981,#047857)}
+    /* Return T&C modal */
+    .tnc-li{display:flex;gap:8px;font-size:12.5px;line-height:1.5;color:#475569;margin-bottom:8px}
+    .tnc-li i{font-size:10px;color:#047857;margin-top:4px;flex-shrink:0}
+    .tnc-check{display:flex;align-items:flex-start;gap:9px;margin-top:14px;padding:12px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;cursor:pointer;font-size:12.5px;font-weight:600;color:#0F172A;line-height:1.4}
+    .tnc-check input{width:18px;height:18px;accent-color:#059669;flex-shrink:0;margin-top:1px}
   </style>
+
+  <!-- Return & refund · Terms modal · 'Proceed to R&R' opens the return form -->
+  <div id="rtnTncBd" class="modal-bd"></div>
+  <div id="rtnTncSheet" class="modal-sheet" style="padding:0">
+    <div class="modal-handle"></div>
+    <div class="px-5 pt-3 pb-2 flex items-center justify-between" style="flex-shrink:0">
+      <div class="text-[18px] font-extrabold text-[#0F172A]">Return &amp; refund</div>
+      <button id="rtnTncClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div class="px-5 pb-3 overflow-y-auto" style="flex:1">
+      <div class="text-[11px] font-extrabold uppercase tracking-wider mb-2" style="color:#64748B">Terms &amp; conditions</div>
+      <div class="tnc-li"><i class="fa-solid fa-circle"></i> Raise a return or replacement within <b>7 days</b> of delivery.</div>
+      <div class="tnc-li"><i class="fa-solid fa-circle"></i> Damaged, wrong, or unopened sealed items are eligible; opened agro-chemicals only if damaged or incorrect.</div>
+      <div class="tnc-li"><i class="fa-solid fa-circle"></i> An <b>unboxing video</b> speeds up approval.</div>
+      <div class="tnc-li"><i class="fa-solid fa-circle"></i> Free reverse pickup in 24–48 hrs.</div>
+      <div class="tnc-li"><i class="fa-solid fa-circle"></i> Refund to your <b>Wallet</b> or original payment method in 3–5 days after quality check; replacement ships after pickup.</div>
+      <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-1 text-[12px] font-bold" style="color:#047857;text-decoration:none"><i class="fa-solid fa-up-right-from-square text-[10px]"></i> Read full policy</a>
+      <label class="tnc-check"><input type="checkbox" id="rtnTncAgree"/> I have read and agree to the Return &amp; Refund Terms &amp; Conditions.</label>
+    </div>
+    <div class="px-5 pt-3 pb-5" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">
+      <button id="rtnTncProceed" disabled class="w-full h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45);opacity:.55">
+        Proceed to Return &amp; Refund <i class="fa-solid fa-arrow-right text-[12px]"></i>
+      </button>
+    </div>
+  </div>
 
   <!-- Return / replace form · choice + product select + reason + description + photo-video + voice note + policy link -->
   <div id="rtnBd" class="modal-bd"></div>
@@ -869,30 +909,30 @@
       const helpRow   = document.getElementById('helpRow');
       const helpClose = document.getElementById('helpClose');
       const returnCta = document.getElementById('returnCta');
-      const returnTile= document.getElementById('helpReturn');
-      const returnDays= document.getElementById('returnDaysLeft');
-      const returnNote= document.getElementById('returnExpiredNote');
-      // Compute days since delivery · prototype assumes the order was delivered 2 days ago (so 5 days remaining of the 7-day window)
+      // Return window · hide the bottom Return CTA once the 7-day window from delivery has closed (prototype: delivered 2 days ago)
       const daysSinceDelivery = 2;
       const daysLeft = 7 - daysSinceDelivery;
-      if (daysLeft > 0) {
-        if (returnDays) returnDays.textContent = daysLeft;
-        if (returnTile) returnTile.style.display = 'flex';
-        if (returnNote) returnNote.style.display = 'none';
-      } else {
-        if (returnTile) returnTile.style.display = 'none';
-        if (returnNote) returnNote.style.display = 'block';
-        if (returnCta)  returnCta.style.display = 'none'; // also hide the bottom Return CTA past the window
-      }
+      if (daysLeft <= 0 && returnCta) returnCta.style.display = 'none';
+
       function openHelp(e){ if (e) { e.preventDefault(); e.stopPropagation(); } openSheet(helpBd, helpSheet); }
       if (helpRow)   helpRow.addEventListener('click', openHelp);
-      if (returnCta) returnCta.addEventListener('click', openHelp);
       if (helpClose) helpClose.addEventListener('click', () => closeSheet(helpBd, helpSheet));
       if (helpBd)    helpBd.addEventListener('click', () => closeSheet(helpBd, helpSheet));
 
-      // Unboxing video · device camera capture · confirm once a clip is chosen
+      // Return & refund · the bottom Return CTA opens the T&C modal first; "Proceed" then opens the return form
+      const tncBd = document.getElementById('rtnTncBd');
+      const tncSheet = document.getElementById('rtnTncSheet');
+      const tncClose = document.getElementById('rtnTncClose');
+      const tncAgree = document.getElementById('rtnTncAgree');
+      const tncProceed = document.getElementById('rtnTncProceed');
+      if (returnCta) returnCta.addEventListener('click', (e) => { e.preventDefault(); openSheet(tncBd, tncSheet); });
+      if (tncClose) tncClose.addEventListener('click', () => closeSheet(tncBd, tncSheet));
+      if (tncBd) tncBd.addEventListener('click', () => closeSheet(tncBd, tncSheet));
+      if (tncAgree) tncAgree.addEventListener('change', () => { tncProceed.disabled = !tncAgree.checked; tncProceed.style.opacity = tncAgree.checked ? '1' : '.55'; });
+
+      // Unboxing video · standalone card · device camera capture · confirm once a clip is chosen
       const unbox = document.getElementById('unboxVideo');
-      if (unbox) unbox.addEventListener('change', () => { if (unbox.files && unbox.files.length) { closeSheet(helpBd, helpSheet); setTimeout(() => alert('Unboxing video attached · our team will review and get back within 24 hours.'), 200); } });
+      if (unbox) unbox.addEventListener('change', () => { if (unbox.files && unbox.files.length) { setTimeout(() => alert('Unboxing video attached · our team will review and get back within 24 hours.'), 200); } });
 
       // Return / replace form · choice + product select + reason + description + photo-video + voice note
       (function(){
@@ -915,8 +955,8 @@
           info.style.display = bits.length ? 'block' : 'none';
           info.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + bits.join(' · ');
         }
-        // Open from the help-sheet Return tile
-        if (returnTile) returnTile.addEventListener('click', () => { closeSheet(helpBd, helpSheet); setTimeout(() => openSheet(rtnBd, rtnSheet), 180); });
+        // Open from the T&C modal's "Proceed to Return & Refund" button
+        if (tncProceed) tncProceed.addEventListener('click', () => { if (tncProceed.disabled) return; closeSheet(tncBd, tncSheet); setTimeout(() => openSheet(rtnBd, rtnSheet), 180); });
         if (rtnClose) rtnClose.addEventListener('click', () => closeSheet(rtnBd, rtnSheet));
         if (rtnBd) rtnBd.addEventListener('click', () => closeSheet(rtnBd, rtnSheet));
         // Segmented choice

@@ -161,11 +161,11 @@
   <div id="addSheet" class="modal-sheet">
     <div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 12px;flex-shrink:0"></div>
     <div class="px-5 flex items-center justify-between flex-shrink-0">
-      <div class="leading-tight"><div class="text-[18px] font-extrabold text-[#0F172A]">Select your crops</div><div class="text-[12px] mt-0.5" style="color:#64748B">Tap all crops you grow</div></div>
+      <div class="leading-tight"><div class="text-[18px] font-extrabold text-[#0F172A]">All Crops</div><div class="text-[12px] mt-0.5" style="color:#64748B">Tap all crops you grow</div></div>
       <button id="addClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
     <div class="pick-grid mt-3" id="pickGrid" style="flex:1"></div>
-    <button id="addApply" class="pick-apply" disabled>Select crops to add</button>
+    <button id="addApply" class="pick-apply">Done</button>
   </div>
 
   <!-- Bottom nav · Crop active -->
@@ -188,7 +188,49 @@
       onion:{u:'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=160&q=80', e:'🧅'},
       potato:{u:'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=160&q=80', e:'🥔'}
     };
-    function cropImg(k, cls){ const c = IMG[k]; return '<img src="' + c.u + '" class="' + (cls||'') + '" onerror="this.parentNode.textContent=\'' + c.e + '\'"/>'; }
+    // Full crop catalog · identical to the homepage "All Crops" sheet (assets/crops/<key>.jpg) so the Add-crop modal matches it 1:1
+    const CROP_IMG = '../assets/crops/';
+    const CROP_META = {
+      tomato:{label:'Tomato',emoji:'🍅',bg:'#FEE2E2',img:CROP_IMG+'tomato.jpg'},
+      chilli:{label:'Chilli',emoji:'🌶',bg:'#FFEDD5',img:CROP_IMG+'chilli.jpg'},
+      wheat:{label:'Wheat',emoji:'🌾',bg:'#FEF3C7',img:CROP_IMG+'wheat.jpg'},
+      maize:{label:'Maize',emoji:'🌽',bg:'#FEF9C3',img:CROP_IMG+'maize.jpg'},
+      onion:{label:'Onion',emoji:'🧅',bg:'#FCE7F3',img:CROP_IMG+'onion.jpg'},
+      potato:{label:'Potato',emoji:'🥔',bg:'#FEF3C7',img:CROP_IMG+'potato.jpg'},
+      sugarcane:{label:'Sugarcane',emoji:'🎋',bg:'#DCFCE7',img:CROP_IMG+'sugarcane.jpg'},
+      banana:{label:'Banana',emoji:'🍌',bg:'#FEF9C3',img:CROP_IMG+'banana.jpg'},
+      mango:{label:'Mango',emoji:'🥭',bg:'#FED7AA',img:CROP_IMG+'mango.jpg'},
+      grapes:{label:'Grapes',emoji:'🍇',bg:'#F3E8FF',img:CROP_IMG+'grapes.jpg'},
+      orange:{label:'Orange',emoji:'🍊',bg:'#FFEDD5',img:CROP_IMG+'orange.jpg'},
+      watermelon:{label:'Watermelon',emoji:'🍉',bg:'#FECACA',img:CROP_IMG+'watermelon.jpg'},
+      papaya:{label:'Papaya',emoji:'🥭',bg:'#FED7AA',img:CROP_IMG+'papaya.jpg'},
+      pomegranate:{label:'Pomegranate',emoji:'🍎',bg:'#FEE2E2',img:CROP_IMG+'pomegranate.jpg'},
+      brinjal:{label:'Brinjal',emoji:'🍆',bg:'#EDE9FE',img:CROP_IMG+'brinjal.jpg'},
+      cauliflower:{label:'Cauliflower',emoji:'🥦',bg:'#FEF3C7',img:CROP_IMG+'cauliflower.jpg'},
+      cabbage:{label:'Cabbage',emoji:'🥬',bg:'#DCFCE7',img:CROP_IMG+'cabbage.jpg'},
+      okra:{label:'Okra',emoji:'🌿',bg:'#DCFCE7',img:CROP_IMG+'okra.jpg'},
+      garlic:{label:'Garlic',emoji:'🧄',bg:'#F5F5F4',img:CROP_IMG+'garlic.jpg'},
+      cumin:{label:'Cumin',emoji:'🌱',bg:'#FEF3C7',img:CROP_IMG+'cumin.jpg'},
+      cardamom:{label:'Cardamom',emoji:'🌿',bg:'#D1FAE5',img:CROP_IMG+'cardamom.jpg'},
+      chickpea:{label:'Chickpea',emoji:'🫘',bg:'#FEF3C7',img:CROP_IMG+'chickpea.jpg'},
+      soyabean:{label:'Soyabean',emoji:'🫘',bg:'#DCFCE7',img:CROP_IMG+'soyabean.jpg'},
+      blackgram:{label:'Black Gram',emoji:'🫘',bg:'#E5E7EB',img:CROP_IMG+'blackgram.jpg'}
+    };
+    function cropFallback(img, emoji, size){ img.outerHTML = '<div class="w-full h-full flex items-center justify-center" style="font-size:'+(size||32)+'px;line-height:1">'+emoji+'</div>'; }
+    function cropImg(k, cls){
+      const c = IMG[k];
+      if (c) return '<img src="' + c.u + '" class="' + (cls||'') + '" onerror="this.parentNode.textContent=\'' + c.e + '\'"/>';
+      const m = CROP_META[k];
+      if (m) return '<img src="' + m.img + '" class="' + (cls||'') + '" onerror="this.parentNode.textContent=\'' + m.emoji + '\'"/>';
+      return '🌱';
+    }
+    // Returns the full guide entry, or a graceful stub for catalog crops without a detailed guide yet
+    function getCrop(k){
+      if (CROPS[k]) return CROPS[k];
+      const m = CROP_META[k] || { label:k };
+      const cap = m.label.charAt(0).toUpperCase() + m.label.slice(1);
+      return { name:cap, sci:'', chips:['Crop'], stats:{stages:'—',issues:'—',products:'—',dur:'—'}, on:1, stages:[], stub:true };
+    }
     const P = {
       striker:{n:'STRIKER',c:'BK-548',t:'chem',p:'₹8,789',img:'https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp'},
       hattrick:{n:'HATTRICK',c:'BK-996',t:'chem',p:'₹24,400',img:'https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg'},
@@ -249,7 +291,7 @@
       userCrops.forEach(k => {
         const b = document.createElement('button');
         b.className = 'crop-chip' + (k === active ? ' active' : '');
-        b.innerHTML = '<span class="cimg">' + cropImg(k) + '</span><span>' + CROPS[k].name + '</span>';
+        b.innerHTML = '<span class="cimg">' + cropImg(k) + '</span><span>' + getCrop(k).name + '</span>';
         b.addEventListener('click', () => { active = k; renderChips(); renderCrop(); });
         chipsEl.appendChild(b);
       });
@@ -271,12 +313,12 @@
     function renderCrop(){
       if (!active) { content.style.display = 'none'; emptyEl.style.display = 'block'; return; }
       content.style.display = ''; emptyEl.style.display = 'none';
-      const c = CROPS[active];
+      const c = getCrop(active);
       document.getElementById('cIdImg').innerHTML = cropImg(active);
       document.getElementById('cIdName').textContent = c.name;
       document.getElementById('cIdSci').textContent = c.sci;
       const icons = ['fa-tag','fa-cloud-sun-rain','fa-barcode','fa-clock'];
-      document.getElementById('cIdChips').innerHTML = c.chips.map((x,i) => '<span class="ident-chip"><i class="fa-solid ' + icons[i] + '"></i> ' + x + '</span>').join('');
+      document.getElementById('cIdChips').innerHTML = c.chips.map((x,i) => '<span class="ident-chip"><i class="fa-solid ' + icons[i % icons.length] + '"></i> ' + x + '</span>').join('');
       const s = c.stats;
       document.getElementById('cStats').innerHTML =
         '<div class="stat"><div class="v tnum">' + s.stages + '</div><div class="k">Growth stages</div></div>'
@@ -285,6 +327,10 @@
         + '<div class="stat"><div class="v tnum">' + s.dur + '</div><div class="k">Duration</div></div>';
       const onIdx = (c.on || 1) - 1;
       const stEl = document.getElementById('cStages');
+      if (!c.stages || !c.stages.length) {
+        stEl.innerHTML = '<div class="vstg-empty" style="margin:4px 0"><i class="fa-solid fa-seedling"></i> Detailed crop guide for ' + c.name + ' is coming soon. We\'re adding its growth stages, common problems and recommended products.</div>';
+        return;
+      }
       stEl.innerHTML = c.stages.map((g, i) => {
         const cls = i < onIdx ? 'done' : (i === onIdx ? 'on' : '');
         const probs = g.problems || [];
@@ -303,36 +349,48 @@
       stEl.querySelectorAll('.prod-price .add').forEach(b => b.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); b.textContent = 'Added ✓'; b.style.background = '#047857'; setTimeout(() => { b.textContent = 'Add'; b.style.background = '#059669'; }, 900); }));
     }
 
-    // Add-crop sheet
+    // Add-crop sheet · identical layout + behaviour to the homepage "All Crops" bottom-sheet (photo tile + white check-circle, multi-select, Done)
     const addBd = document.getElementById('addBd'), addSheet = document.getElementById('addSheet');
     const applyBtn = document.getElementById('addApply');
     let picked = new Set();
-    function updateApply(){
-      applyBtn.disabled = picked.size === 0;
-      applyBtn.textContent = picked.size ? 'Add ' + picked.size + ' crop' + (picked.size > 1 ? 's' : '') : 'Select crops to add';
+    function renderPickGrid(){
+      const grid = document.getElementById('pickGrid');
+      grid.innerHTML = Object.keys(CROP_META).map(k => {
+        const m = CROP_META[k];
+        const sel = picked.has(k);
+        const borderColor = sel ? '#059669' : '#E5E7EB';
+        const shadow = sel ? '0 6px 14px -4px rgba(5,150,105,0.32)' : '0 1px 3px rgba(0,0,0,0.05)';
+        const labelColor = sel ? '#047857' : '#0F172A';
+        const tick = sel
+          ? '<span class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center" style="background:#059669;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff;z-index:2"><i class="fa-solid fa-check text-white text-[9px]"></i></span>'
+          : '<span class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full" style="background:rgba(255,255,255,0.95);border:1.5px solid #CBD5E1;box-shadow:0 1px 3px rgba(15,23,42,0.18);z-index:2"></span>';
+        return '<button type="button" data-k="' + k + '" class="rounded-xl overflow-hidden"'
+          + ' style="background:#FFFFFF;border:1.5px solid ' + borderColor + ';box-shadow:' + shadow + ';height:120px;display:flex;flex-direction:column">'
+          + '<div class="relative w-full" style="height:90px;background:' + m.bg + ';overflow:hidden;flex-shrink:0">'
+          + '<img src="' + m.img + '" class="w-full h-full object-cover" style="display:block" onerror="cropFallback(this,\'' + m.emoji + '\',38)"/>'
+          + tick + '</div>'
+          + '<div class="flex-1 flex items-center justify-center px-1">'
+          + '<span class="text-[12.5px] font-bold leading-none" style="color:' + labelColor + '">' + m.label + '</span>'
+          + '</div></button>';
+      }).join('');
+      grid.querySelectorAll('[data-k]').forEach(b => b.addEventListener('click', () => {
+        const k = b.dataset.k;
+        if (picked.has(k)) picked.delete(k); else picked.add(k);
+        renderPickGrid();
+      }));
     }
     function openAdd(){
-      picked = new Set();
-      const grid = document.getElementById('pickGrid');
-      const avail = Object.keys(CROPS).filter(k => userCrops.indexOf(k) < 0);
-      applyBtn.style.display = avail.length ? '' : 'none';
-      grid.innerHTML = avail.length
-        ? avail.map(k => '<button class="pick" data-k="' + k + '"><span class="chk"><i class="fa-solid fa-check"></i></span><span class="pcirc">' + cropImg(k) + '</span><span>' + CROPS[k].name + '</span></button>').join('')
-        : '<div class="text-[12.5px] col-span-3 text-center py-6" style="color:#64748B">You\'ve added all available crops.</div>';
-      grid.querySelectorAll('.pick').forEach(b => b.addEventListener('click', () => {
-        const k = b.dataset.k;
-        if (picked.has(k)) { picked.delete(k); b.classList.remove('sel'); } else { picked.add(k); b.classList.add('sel'); }
-        updateApply();
-      }));
-      updateApply();
+      picked = new Set(userCrops.filter(k => CROP_META[k]));   // pre-select crops already added (that exist in the catalog)
+      renderPickGrid();
       addBd.classList.add('open'); addSheet.classList.add('open');
     }
     function closeAdd(){ addBd.classList.remove('open'); addSheet.classList.remove('open'); }
     applyBtn.addEventListener('click', () => {
-      if (!picked.size) return;
-      const arr = Array.from(picked);
-      arr.forEach(k => userCrops.push(k));
-      active = arr[0];
+      // Keep any non-catalog crops already present (e.g. cotton), then apply the catalog selection
+      const keep = userCrops.filter(k => !CROP_META[k]);
+      const arr = keep.concat(Array.from(picked));
+      userCrops = arr;
+      if (userCrops.indexOf(active) < 0) active = userCrops[0] || null;
       closeAdd(); renderChips(); renderCrop();
     });
     document.getElementById('addClose').addEventListener('click', closeAdd);

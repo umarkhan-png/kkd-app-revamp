@@ -92,8 +92,9 @@
   .stk-filter{background:#F8F8F8;border-bottom:1px solid #ECECEC;flex-shrink:0}
   /* Compact category row on product scroll · mirrors the home page's shrink-on-scroll behaviour */
   .stk-main .cat-row-inner{transition:padding .3s ease, gap .3s ease}
-  .stk-main.compact .cat-row-inner{padding-top:8px;padding-bottom:8px;gap:10px}
-  .stk-main.compact .cat-tile{width:64px !important}
+  /* Compact · spread all 5 tiles across the full width (no left white-space / no scroll) · mirrors the home page */
+  .stk-main.compact .cat-row-inner{padding:8px 8px;gap:0;justify-content:space-around;overflow-x:hidden}
+  .stk-main.compact .cat-tile{width:auto !important}
   .stk-main.compact .cat-circle{width:42px;height:42px;border-width:1px}
   .stk-main.compact .cat-emoji{font-size:21px}
   .stk-main.compact .cat-svg{width:23px;height:23px}

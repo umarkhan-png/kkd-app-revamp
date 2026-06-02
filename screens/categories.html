@@ -1031,15 +1031,18 @@
     renderAppliedChips();
     updateFilterDots();
 
-    // Shrink the category circles when the product column scrolls · mirrors the home page's compact-on-scroll
+    // Shrink the category circles when the product column scrolls · capture-phase listener catches scroll on whichever element actually scrolls (scroll doesn't bubble)
     (function(){
-      const pm = document.getElementById('productMain');
       const stkMain = document.querySelector('.stk-main');
-      if (!pm || !stkMain) return;
-      pm.addEventListener('scroll', function(){
-        if (pm.scrollTop > 12) stkMain.classList.add('compact');
-        else stkMain.classList.remove('compact');
-      }, { passive: true });
+      if (!stkMain) return;
+      function apply(top){ stkMain.classList.toggle('compact', (top || 0) > 12); }
+      const pm = document.getElementById('productMain');
+      if (pm) pm.addEventListener('scroll', function(){ apply(pm.scrollTop); }, { passive: true });
+      document.addEventListener('scroll', function(e){
+        const t = e.target;
+        if (t && typeof t.scrollTop === 'number') apply(t.scrollTop);
+      }, true);
+      window.addEventListener('scroll', function(){ apply(window.scrollY || document.documentElement.scrollTop); }, { passive: true });
     })();
 
     // Variant bottom-sheet · opens when a product card with multiple packaging sizes has its "N Options" pill tapped · each row has its own +/- stepper, state survives across opens for the same product

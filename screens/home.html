@@ -613,8 +613,7 @@
           <div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div>
           <div class="flex items-center justify-between">
             <div class="leading-tight">
-              <div class="text-[18px] font-extrabold text-[#0F172A]">Earn Krishi Coins</div>
-              <div class="text-[11.5px] mt-0.5" style="color:#64748B">Complete each step to earn coins · <span id="questModalDone">0</span>/5 done</div>
+              <div class="text-[17px] font-extrabold text-[#0F172A]">Complete steps to earn krishi coin</div>
             </div>
             <button id="questClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[14px]" style="color:#475569"></i></button>
           </div>
@@ -2777,11 +2776,11 @@
 
       // ===== Earn-coins quest · 5 steps, each completion earns coins · detailed bottom modal =====
       const QUEST = [
-        { id:'notif',  icon:'fa-bell',             bg:'#EFF6FF', color:'#2563EB', title:'Allow notifications', desc:'Get order updates & exclusive offers',  coins:10, action:'Allow' },
-        { id:'loc',    icon:'fa-location-dot',     bg:'#FEF2F2', color:'#DC2626', title:'Allow location',      desc:'Faster delivery & local mandi prices',  coins:10, action:'Allow' },
-        { id:'cart',   icon:'fa-cart-shopping',    bg:'#ECFDF5', color:'#047857', title:'Add to cart & earn',  desc:'Add any product to your cart',          coins:15, action:'Shop' },
-        { id:'search', icon:'fa-magnifying-glass', bg:'#FEF3C7', color:'#B45309', title:'Search & earn',       desc:'Search for a product, crop or disease', coins:10, action:'Search' },
-        { id:'crop',   icon:'fa-wheat-awn',        bg:'#ECFDF5', color:'#047857', title:'Add crop & earn',     desc:'Add a crop you grow to your profile',   coins:50, action:'Add crop', crop:true }
+        { id:'notif',  icon:'fa-bell',             bg:'#EFF6FF', color:'#2563EB', title:'Allow notifications', coins:10, kind:'action', action:'Allow' },
+        { id:'loc',    icon:'fa-location-dot',     bg:'#FEF2F2', color:'#DC2626', title:'Allow location',      coins:10, kind:'action', action:'Allow' },
+        { id:'cart',   icon:'fa-cart-shopping',    bg:'#ECFDF5', color:'#047857', title:'Add to cart',         coins:15, kind:'status' },
+        { id:'search', icon:'fa-magnifying-glass', bg:'#FEF3C7', color:'#B45309', title:'Search product',      coins:10, kind:'status' },
+        { id:'crop',   icon:'fa-wheat-awn',        bg:'#ECFDF5', color:'#047857', title:'Add crop',            coins:50, kind:'crop', action:'Add crop', crop:true }
       ];
       function questDoneSet(){
         let s = [];
@@ -2806,14 +2805,19 @@
         const md = document.getElementById('questModalDone'); if (md) md.textContent = QUEST.filter(q => done.has(q.id)).length;
         list.innerHTML = QUEST.map(function(q){
           const isDone = done.has(q.id);
-          const right = isDone
-            ? '<span class="flex-shrink-0 inline-flex items-center gap-1.5 px-3 h-9 rounded-lg text-[12px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0"><i class="fa-solid fa-check"></i> Done</span>'
-            : '<button data-quest="'+q.id+'" class="flex-shrink-0 inline-flex items-center justify-center px-4 h-9 rounded-lg text-[12.5px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;box-shadow:0 4px 10px -3px rgba(5,150,105,0.45)">'+q.action+'</button>';
-          return '<div class="flex items-center gap-3 py-3" style="border-bottom:1px solid #F1F5F9;'+(isDone ? 'opacity:.65' : '')+'">'
+          let right;
+          if (isDone) {
+            right = '<span class="flex-shrink-0 inline-flex items-center gap-1.5 px-3 h-9 rounded-lg text-[12px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0"><i class="fa-solid fa-check"></i> Earned</span>';
+          } else if (q.kind === 'status') {
+            // passive step · no action, just a status
+            right = '<span class="flex-shrink-0 inline-flex items-center gap-1.5 px-3 h-9 rounded-lg text-[12px] font-bold" style="background:#F1F5F9;color:#64748B"><i class="fa-regular fa-clock text-[11px]"></i> Pending</span>';
+          } else {
+            right = '<button data-quest="'+q.id+'" class="flex-shrink-0 inline-flex items-center justify-center px-4 h-9 rounded-lg text-[12.5px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;box-shadow:0 4px 10px -3px rgba(5,150,105,0.45)">'+q.action+'</button>';
+          }
+          return '<div class="flex items-center gap-3 py-3.5" style="border-bottom:1px solid #F1F5F9;'+(isDone ? 'opacity:.65' : '')+'">'
             + '<span class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:'+q.bg+';color:'+q.color+';font-size:17px"><i class="fa-solid '+q.icon+'"></i></span>'
             + '<div class="flex-1 min-w-0 leading-tight">'
               + '<div class="flex items-center gap-2 flex-wrap"><span class="text-[14px] font-extrabold text-[#0F172A]">'+q.title+'</span><span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-extrabold" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-coins text-[8px]"></i> +'+q.coins+'</span></div>'
-              + '<div class="text-[11.5px] mt-0.5" style="color:#64748B">'+q.desc+'</div>'
             + '</div>' + right
           + '</div>';
         }).join('');

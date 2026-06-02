@@ -2732,10 +2732,18 @@
         if (!obTile) return;
         const earnEl = obTile.querySelector('.ob-state-earn');
         const shopEl = obTile.querySelector('.ob-state-shop');
-        if (localStorage.getItem('kkd.coins.firstCrop') === '1') {
+        const earned = localStorage.getItem('kkd.coins.firstCrop') === '1';
+        const seen   = localStorage.getItem('kkd.coins.rewardSeen') === '1';
+        if (earned && seen) {                       // reward already shown once → hide the whole tile for good (survives page changes)
+          const sec = obTile.closest('section') || obTile;
+          sec.style.display = 'none';
+          return;
+        }
+        if (earned) {                               // show the "Your rewards" state ONCE, then mark it seen so it disappears next time
           if (earnEl) earnEl.style.display = 'none';
           if (shopEl) shopEl.style.display = 'block';
           syncWalletAmt();
+          try { localStorage.setItem('kkd.coins.rewardSeen', '1'); } catch (e) {}
         } else {
           if (earnEl) earnEl.style.display = 'block';
           if (shopEl) shopEl.style.display = 'none';
@@ -2764,6 +2772,8 @@
           shopEl.style.opacity = '0';
           shopEl.style.transition = 'opacity .35s ease';
           requestAnimationFrame(function(){ shopEl.style.opacity = '1'; });
+          // Reward shown this once · mark seen so the tile disappears on the next home visit
+          try { localStorage.setItem('kkd.coins.rewardSeen', '1'); } catch (e) {}
         }, 350);
       });
 

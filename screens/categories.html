@@ -41,9 +41,10 @@
   .cat-tile[aria-pressed="true"] .cat-svg [stroke="#15803D"]{stroke:#FFFFFF}
 
   /* Left sub-cat rail · subtle grey separator · slightly larger label (11.5px) and thumbnail (42px) for legibility */
-  .subcat-btn{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;text-align:center;padding:12px 4px;font-size:11.5px;font-weight:600;color:#475569;border-left:3px solid transparent;background:transparent;transition:all .15s ease;line-height:1.2;cursor:pointer}
-  .subcat-btn[aria-pressed="true"]{background:#FFFFFF;color:#047857;border-left-color:#059669;font-weight:800}
-  .subcat-btn:not([aria-pressed="true"]):hover{background:rgba(5,150,105,0.04)}
+  .subcat-btn{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;text-align:center;padding:12px 4px;font-size:11.5px;font-weight:600;color:#475569;border-left:4px solid transparent;background:transparent;transition:all .15s ease;line-height:1.2;cursor:pointer}
+  /* Selected sub-cat · white card lifted off the green rail with a thicker emerald bar + shadow so it clearly reads as selected */
+  .subcat-btn[aria-pressed="true"]{background:#FFFFFF;color:#047857;border-left:4px solid #059669;font-weight:800;box-shadow:0 3px 10px -3px rgba(5,150,105,0.3);position:relative;z-index:1}
+  .subcat-btn:not([aria-pressed="true"]):hover{background:rgba(5,150,105,0.06)}
   .subcat-ic{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:10px;font-size:20px;line-height:1;border:1px solid rgba(15,23,42,0.06);box-shadow:0 1px 3px rgba(15,23,42,0.05)}
   .subcat-btn[aria-pressed="true"] .subcat-ic{box-shadow:0 4px 10px -2px rgba(5,150,105,0.35);transform:scale(1.04)}
 
@@ -86,20 +87,22 @@
   @keyframes cartIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 
   /* Top stack · static white · the body is locked and only the product column scrolls so neither needs sticky positioning */
-  .stk-main{background:#F1F5F9;border-bottom:1px solid #E2E8F0;flex-shrink:0}
-  .stk-filter{background:#FFFFFF;border-bottom:1px solid #F1F5F9;flex-shrink:0}
+  /* Category + filter sections · neutral app-grey (#F8F8F8), not the blueish slate */
+  .stk-main{background:#F8F8F8;border-bottom:1px solid #ECECEC;flex-shrink:0}
+  .stk-filter{background:#F8F8F8;border-bottom:1px solid #ECECEC;flex-shrink:0}
   /* Compact category row on product scroll · mirrors the home page's shrink-on-scroll behaviour */
-  .stk-main .cat-row-inner{transition:padding .3s ease}
-  .stk-main.compact .cat-row-inner{padding-top:8px;padding-bottom:8px}
-  .stk-main.compact .cat-circle{width:44px;height:44px;border-width:1px}
-  .stk-main.compact .cat-emoji{font-size:22px}
-  .stk-main.compact .cat-svg{width:24px;height:24px}
-  .stk-main.compact .cat-label{font-size:11px}
+  .stk-main .cat-row-inner{transition:padding .3s ease, gap .3s ease}
+  .stk-main.compact .cat-row-inner{padding-top:8px;padding-bottom:8px;gap:10px}
+  .stk-main.compact .cat-tile{width:64px !important}
+  .stk-main.compact .cat-circle{width:42px;height:42px;border-width:1px}
+  .stk-main.compact .cat-emoji{font-size:21px}
+  .stk-main.compact .cat-svg{width:23px;height:23px}
+  .stk-main.compact .cat-label{font-size:10.5px}
 
   /* Two-column body · flex:1 of the viewport-height column · each pane scrolls independently */
   .cat-body{flex:1;display:flex;min-height:0}
   .cat-body aside{overflow-y:auto;-webkit-overflow-scrolling:touch}
-  .cat-body main{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:160px;background:#F8F8F8}
+  .cat-body main{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:160px;background:#FFFFFF}
   .cat-body aside::-webkit-scrollbar,
   .cat-body main::-webkit-scrollbar{width:0;display:none}
 
@@ -1034,7 +1037,7 @@
       const stkMain = document.querySelector('.stk-main');
       if (!pm || !stkMain) return;
       pm.addEventListener('scroll', function(){
-        if (pm.scrollTop > 30) stkMain.classList.add('compact');
+        if (pm.scrollTop > 12) stkMain.classList.add('compact');
         else stkMain.classList.remove('compact');
       }, { passive: true });
     })();

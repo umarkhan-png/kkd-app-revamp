@@ -743,6 +743,9 @@
     // The page is locked; only the product column scrolls · listen on that element instead of window for cart-bar wrap behaviour
     const productMain = document.getElementById('productMain');
     productMain.addEventListener('scroll', () => {
+      // Shrink the category circles on product scroll (home-style compact)
+      const stkMain = document.querySelector('.stk-main');
+      if (stkMain) stkMain.classList.toggle('compact', productMain.scrollTop > 12);
       const bar = document.getElementById('cartBar');
       if (bar && bar.style.display !== 'none') {
         if (productMain.scrollTop > 80) bar.classList.add('compact');

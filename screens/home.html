@@ -1062,6 +1062,12 @@
           <div id="cropInlinePicker" class="flex gap-2 px-4 min-w-max"></div>
         </div>
 
+        <!-- Products for the selected crop(s) · 2-col grid · shown once a crop is selected -->
+        <div id="cropProductsWrap" class="relative px-4 pb-1" style="display:none">
+          <div id="cropProductsHead" class="text-[11px] font-extrabold uppercase tracking-wider mb-2" style="color:#64748B"></div>
+          <div id="cropProductsGrid" class="grid grid-cols-2 gap-3"></div>
+        </div>
+
         <!-- "View Products" CTA — disabled-looking when 0 crops selected, vivid emerald + pulse when one or more is selected -->
         <div class="relative px-4 pb-4">
           <a id="cropViewMore" href="shop.html" class="nu flex items-center justify-center gap-1.5 rounded-xl py-3 text-[14px] font-extrabold transition-all" style="background:#FFFFFF;color:#94A3B8;border:1.5px dashed #CBD5E1">
@@ -2746,6 +2752,43 @@
         if (moreBtn) moreBtn.addEventListener('click', openSheet);
       }
 
+      // Products surfaced under the picker for the selected crop(s) · 2-col grid (partner-app pattern)
+      const CROP_PROD = [
+        { n:'Humic + Fulvic',  t:'Bio-stimulant',               s:'500 ml', p:276, m:390, img:'https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg',          crops:'all' },
+        { n:'NPK 19-19-19',    t:'Water-soluble fertilizer',    s:'1 kg',   p:330, m:0,   img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp', crops:'all' },
+        { n:'Bhumiraja',       t:'Soil conditioner',            s:'1 kg',   p:245, m:320, img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp',     crops:'all' },
+        { n:'Chakrawarti ZC',  t:'Insecticide',                 s:'100 ml', p:358, m:495, img:'https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp',     crops:['tomato','chilli','cotton','brinjal','okra','maize','paddy','onion'] },
+        { n:'Antivirus',       t:'Bio bactericide + virucide',  s:'250 ml', p:327, m:425, img:'../assets/AntiVirus_nobg.png',                                            crops:['tomato','chilli','papaya','potato','cucumber'] },
+        { n:'Chakraveer 18.5%',t:'Chlorantraniliprole 18.5% SC',s:'100 ml', p:440, m:610, img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp',crops:['paddy','maize','sugarcane','cotton','wheat'] }
+      ];
+      function renderCropProducts(){
+        const wrap = document.getElementById('cropProductsWrap');
+        const grid = document.getElementById('cropProductsGrid');
+        const head = document.getElementById('cropProductsHead');
+        if (!wrap || !grid) return;
+        if (selected.size === 0) { wrap.style.display = 'none'; grid.innerHTML = ''; return; }
+        const matches = CROP_PROD.filter(function(p){ return p.crops === 'all' || p.crops.some(function(c){ return selected.has(c); }); });
+        const names = Array.from(selected).map(function(k){ return (CROP_META[k] || {}).label || k; }).join(', ');
+        if (head) head.textContent = 'Recommended for ' + names;
+        grid.innerHTML = matches.map(function(p){
+          const off = p.m ? Math.round((1 - p.p / p.m) * 100) : 0;
+          return '<div class="rounded-xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 1px 3px rgba(15,23,42,0.05);display:flex;flex-direction:column">'
+            + '<a href="pdp.html" style="text-decoration:none"><div style="height:98px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:8px;border-bottom:1px solid #F1F5F9"><img src="'+p.img+'" class="img-blend" style="max-width:82%;max-height:100%;object-fit:contain"/></div></a>'
+            + '<div style="padding:8px 9px 10px;display:flex;flex-direction:column;flex:1">'
+              + '<a href="pdp.html" class="text-[13px] font-extrabold" style="color:#0F172A;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+p.n+'</a>'
+              + '<div class="text-[10.5px]" style="color:#94A3B8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+p.t+'</div>'
+              + '<span class="self-start text-[10px] font-semibold mt-1.5 px-1.5 py-0.5 rounded" style="background:#F1F5F9;color:#475569">'+p.s+'</span>'
+              + '<div class="flex items-baseline gap-1.5 mt-1.5"><span class="text-[14.5px] font-extrabold tnum" style="color:#0F172A">₹'+p.p+'</span>'+(p.m?'<span class="text-[10.5px] line-through tnum" style="color:#94A3B8">₹'+p.m+'</span>':'')+(off?'<span class="text-[10px] font-bold" style="color:#047857">'+off+'% off</span>':'')+'</div>'
+              + '<button class="cropprod-add w-full mt-2 h-8 rounded-lg text-white text-[12px] font-extrabold" style="background:#059669;border:0;cursor:pointer">Add</button>'
+            + '</div>'
+          + '</div>';
+        }).join('');
+        grid.querySelectorAll('.cropprod-add').forEach(function(b){
+          b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if (typeof bumpCart === 'function') bumpCart(); b.textContent = 'Added ✓'; b.style.background = '#047857'; setTimeout(function(){ b.textContent = 'Add'; b.style.background = '#059669'; }, 1000); });
+        });
+        wrap.style.display = 'block';
+      }
+
       // Onboarding tile click → opens the same All-Crops bottom-sheet modal so user can add crops directly
       const obTile = document.getElementById('onboardingTile');
       // Tile is dual-state: STATE A opens the crop sheet so user can earn coins · STATE B (already earned) routes to categories.html so user can spend them
@@ -3056,6 +3099,7 @@
       // once any crop is selected it transforms into a vivid emerald button with a soft pulse
       // so the user clearly sees "tap this to see products for the crops I picked"
       function updateCTA(){
+        renderCropProducts();
         if (selected.size === 0) {
           cta.style.background = '#FFFFFF';
           cta.style.color = '#94A3B8';

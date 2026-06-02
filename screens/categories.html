@@ -1007,6 +1007,11 @@
       activeCat = qp.get('cat');
       document.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === activeCat ? 'true' : 'false'));
     }
+    // Auto-apply a sort via ?sort= (e.g. home "Bestsellers · See all" → ?sort=bestsellers)
+    if (qp.get('sort') && SORT_OPTIONS.some(s => s.key === qp.get('sort'))) {
+      activeSort = qp.get('sort');
+      pendingSort = qp.get('sort');
+    }
 
     renderSubs();
     renderProducts();

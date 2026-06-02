@@ -2037,13 +2037,17 @@
         </button>
       </div>
       <div id="vsList" class="px-5 py-1 overflow-y-auto" style="flex:1"></div>
-      <!-- Cart bar · appears over the sheet once a variant is added -->
-      <a id="vsCartBar" href="cart.html" style="display:none;flex-shrink:0;margin:8px 16px;height:54px;border-radius:12px;background:#059669;color:#FFFFFF;align-items:center;justify-content:space-between;padding:0 16px;text-decoration:none;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45);margin-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)">
-        <span style="display:inline-flex;align-items:center;gap:9px">
-          <span style="width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,0.2);display:inline-flex;align-items:center;justify-content:center"><i class="fa-solid fa-cart-shopping text-[13px]"></i></span>
-          <span style="font-size:13.5px;font-weight:800"><span id="vsBarCount">1 item</span> · ₹<span id="vsBarAmt" class="tnum">0</span></span>
-        </span>
-        <span style="font-size:14px;font-weight:800;display:inline-flex;align-items:center;gap:8px">View cart <i class="fa-solid fa-arrow-right text-[12px]"></i></span>
+      <!-- Cart bar · appears over the sheet once a variant is added · same dark floating bar as the home page -->
+      <a id="vsCartBar" href="cart.html" class="items-center justify-between px-4 py-3 rounded-2xl shadow-lg" style="display:none;flex-shrink:0;margin:8px 16px;margin-bottom:calc(env(safe-area-inset-bottom,0px) + 12px);background:#0F172A;color:#fff;text-decoration:none">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 rounded-full bg-emerald-600 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-bag-shopping text-white text-[14px]"></i></div>
+          <div class="flex items-baseline gap-1.5 min-w-0">
+            <span class="text-[20px] font-extrabold tnum">₹<span id="vsBarAmt">0</span></span>
+            <span class="text-[15px] text-white/70 font-semibold whitespace-nowrap"><span id="vsBarCount">1</span> items</span>
+            <span id="vsBarSaveWrap" class="text-[13.5px] font-bold whitespace-nowrap" style="color:#34D399">· Save ₹<span id="vsBarSave">0</span></span>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5 text-[12.5px] font-bold flex-shrink-0"><span>View cart</span><i class="fa-solid fa-arrow-right text-[10px]"></i></div>
       </a>
     </div>
   </div>
@@ -3004,12 +3008,14 @@
         (function(){
           const bar = document.getElementById('vsCartBar');
           if (!bar) return;
-          let totQ = 0, totAmt = 0;
-          variants.forEach(function(v, i){ const q = cartQty[variantKey(card, i)] || 0; totQ += q; totAmt += q * (v.price || 0); });
+          let totQ = 0, totAmt = 0, totSave = 0;
+          variants.forEach(function(v, i){ const q = cartQty[variantKey(card, i)] || 0; totQ += q; totAmt += q * (v.price || 0); totSave += q * Math.max(0, (v.mrp || v.price || 0) - (v.price || 0)); });
           if (totQ > 0){
             bar.style.display = 'flex';
-            document.getElementById('vsBarCount').textContent = totQ + (totQ === 1 ? ' item' : ' items');
+            document.getElementById('vsBarCount').textContent = totQ;
             document.getElementById('vsBarAmt').textContent = totAmt.toLocaleString('en-IN');
+            document.getElementById('vsBarSave').textContent = totSave.toLocaleString('en-IN');
+            document.getElementById('vsBarSaveWrap').style.display = totSave > 0 ? '' : 'none';
           } else { bar.style.display = 'none'; }
         })();
         list.querySelectorAll('[data-vs-act]').forEach(function(btn){

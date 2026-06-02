@@ -267,6 +267,12 @@
 <script>
   const wrap = document.getElementById('searchWrap');
   const q = document.getElementById('q');
+  // Earn-coins quest · typing a search completes the "Search product" step
+  if (q) q.addEventListener('input', function(){
+    if (this.value.trim().length >= 2) {
+      try { var s = JSON.parse(localStorage.getItem('kkd.quest') || '[]'); if (s.indexOf('search') < 0) { s.push('search'); localStorage.setItem('kkd.quest', JSON.stringify(s)); } } catch (e) {}
+    }
+  });
   const clearBtn = document.getElementById('clearBtn');
   const idle = document.getElementById('idle');
   const results = document.getElementById('results');

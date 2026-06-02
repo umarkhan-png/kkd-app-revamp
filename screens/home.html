@@ -2741,34 +2741,36 @@
         if (chip) chip.textContent = total;
         if (amt)  amt.textContent  = total;
       }
+      // All 5 quest steps complete? (questDoneSet is hoisted · reads localStorage + firstCrop)
+      function questAllDone(){
+        const d = questDoneSet();
+        return ['notif','loc','cart','search','crop'].every(function(id){ return d.has(id); });
+      }
+      function hideOnboardingTile(){
+        const sec = obTile.closest('section') || obTile;
+        if (sec) sec.style.display = 'none';
+      }
+      function showRewardsState(){
+        const earnEl = obTile.querySelector('.ob-state-earn');
+        const shopEl = obTile.querySelector('.ob-state-shop');
+        if (earnEl) earnEl.style.display = 'none';
+        if (shopEl) shopEl.style.display = 'block';
+        syncWalletAmt();
+        try { localStorage.setItem('kkd.coins.rewardSeen', '1'); } catch (e) {}
+      }
       function applyOnboardingState(){
         if (!obTile) return;
         const earnEl = obTile.querySelector('.ob-state-earn');
         const shopEl = obTile.querySelector('.ob-state-shop');
-        const earned = localStorage.getItem('kkd.coins.firstCrop') === '1';
-        const seen   = localStorage.getItem('kkd.coins.rewardSeen') === '1';
-        if (earned && seen) {                       // reward already shown once → hide the whole tile for good (survives page changes)
-          const sec = obTile.closest('section') || obTile;
-          sec.style.display = 'none';
-          return;
-        }
-        if (earned) {                               // show the "Your rewards" state ONCE, then mark it seen so it disappears next time
-          if (earnEl) earnEl.style.display = 'none';
-          if (shopEl) shopEl.style.display = 'block';
-          syncWalletAmt();
-          try { localStorage.setItem('kkd.coins.rewardSeen', '1'); } catch (e) {}
-        } else {
-          if (earnEl) earnEl.style.display = 'block';
-          if (shopEl) shopEl.style.display = 'none';
-        }
+        if (localStorage.getItem('kkd.coins.rewardSeen') === '1') { hideOnboardingTile(); return; }  // already shown once → gone after page change / reopen
+        if (questAllDone()) { showRewardsState(); return; }                                          // all 5 steps done → "Your rewards" shown once
+        if (earnEl) earnEl.style.display = 'block';
+        if (shopEl) shopEl.style.display = 'none';
       }
       applyOnboardingState();
       if (obTile) obTile.addEventListener('click', function(){
-        if (localStorage.getItem('kkd.coins.firstCrop') === '1') {
-          window.location.href = 'categories.html';
-        } else {
-          openQuest();
-        }
+        if (questAllDone()) { window.location.href = 'categories.html'; }
+        else { openQuest(); }
       });
 
       // ===== Earn-coins quest · 5 steps, each completion earns coins · detailed bottom modal =====
@@ -2836,6 +2838,10 @@
             if (s.indexOf(id) < 0) s.push(id);
             try { localStorage.setItem('kkd.quest', JSON.stringify(s)); } catch (e) {}
             renderQuestList(); renderQuestTile();
+            // All 5 done → close the quest and reveal "Your rewards" once
+            if (questAllDone() && localStorage.getItem('kkd.coins.rewardSeen') !== '1') {
+              setTimeout(function(){ closeQuest(); setTimeout(showRewardsState, 320); }, 500);
+            }
           });
         });
       }
@@ -2858,9 +2864,12 @@
         if (cls) cls.addEventListener('click', closeQuest);
       })();
       renderQuestTile();
-      // After the first-crop celebration finishes, swap to the spend state with a soft fade · sync wallet figures from the live pill balance
+      // After the first-crop celebration · reflect the crop step in the stepper · only flip to "Your rewards" when ALL 5 steps are done
       window.addEventListener('kkd:firstCropEarned', function(){
         if (!obTile) return;
+        renderQuestTile();
+        if (localStorage.getItem('kkd.coins.rewardSeen') === '1') return;
+        if (!questAllDone()) return;                 // crop done but other steps pending → stay on the quest tile
         const earnEl = obTile.querySelector('.ob-state-earn');
         const shopEl = obTile.querySelector('.ob-state-shop');
         if (!earnEl || !shopEl) return;
@@ -2868,12 +2877,11 @@
         earnEl.style.opacity = '0';
         setTimeout(function(){
           earnEl.style.display = 'none';
-          syncWalletAmt();
           shopEl.style.display = 'block';
           shopEl.style.opacity = '0';
           shopEl.style.transition = 'opacity .35s ease';
           requestAnimationFrame(function(){ shopEl.style.opacity = '1'; });
-          // Reward shown this once · mark seen so the tile disappears on the next home visit
+          syncWalletAmt();
           try { localStorage.setItem('kkd.coins.rewardSeen', '1'); } catch (e) {}
         }, 350);
       });

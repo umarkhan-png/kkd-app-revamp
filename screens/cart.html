@@ -614,6 +614,9 @@
   <div id="toast" class="toast"><span class="tk"><i class="fa-solid fa-check"></i></span><span class="tx" id="toastText"></span></div>
 
   <script>
+    // Earn-coins quest · reaching the cart with items completes the "Add to cart" step
+    try { var _q = JSON.parse(localStorage.getItem('kkd.quest') || '[]'); if (_q.indexOf('cart') < 0) { _q.push('cart'); localStorage.setItem('kkd.quest', JSON.stringify(_q)); } } catch (e) {}
+
     // Shared cart state · bill is derived live from item unit-price × qty · discounts/coupon fixed, wallet auto-applied (capped), coins via toggle
     const ITEM_DISCOUNT = 300, COUPON = 100, COIN_REDEEM = 190, WALLET_BAL = 540;
     let cartTotal = 0, coinOn = false;

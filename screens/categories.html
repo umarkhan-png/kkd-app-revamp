@@ -18,7 +18,7 @@
   /* Top main-cat circles · home-page parity · uniform 72px circle, 36px SVG, emoji 34px · selected = solid emerald fill with white-tinted icon + emerald label */
   .cat-tile{transition:transform .15s ease}
   .cat-tile:active{transform:scale(.96)}
-  .cat-circle{width:72px;height:72px;border-radius:9999px;background:#F1F5F9;border:1.5px solid #E2E8F0;display:flex;align-items:center;justify-content:center;transition:all .35s ease}
+  .cat-circle{width:72px;height:72px;border-radius:9999px;background:#FFFFFF;border:1.5px solid #E2E8F0;display:flex;align-items:center;justify-content:center;transition:all .35s ease}
   .cat-emoji{font-size:34px;line-height:1}
   .cat-svg{width:36px;height:36px;display:block}
   .cat-label{transition:color .35s ease}
@@ -86,8 +86,15 @@
   @keyframes cartIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 
   /* Top stack · static white · the body is locked and only the product column scrolls so neither needs sticky positioning */
-  .stk-main{background:#FFFFFF;border-bottom:1px solid #F1F5F9;flex-shrink:0}
+  .stk-main{background:#F1F5F9;border-bottom:1px solid #E2E8F0;flex-shrink:0}
   .stk-filter{background:#FFFFFF;border-bottom:1px solid #F1F5F9;flex-shrink:0}
+  /* Compact category row on product scroll · mirrors the home page's shrink-on-scroll behaviour */
+  .stk-main .cat-row-inner{transition:padding .3s ease}
+  .stk-main.compact .cat-row-inner{padding-top:8px;padding-bottom:8px}
+  .stk-main.compact .cat-circle{width:44px;height:44px;border-width:1px}
+  .stk-main.compact .cat-emoji{font-size:22px}
+  .stk-main.compact .cat-svg{width:24px;height:24px}
+  .stk-main.compact .cat-label{font-size:11px}
 
   /* Two-column body · flex:1 of the viewport-height column · each pane scrolls independently */
   .cat-body{flex:1;display:flex;min-height:0}
@@ -188,7 +195,7 @@
 
   <!-- TOP: Main 5 categories · SAME SVG illustrations as homepage -->
     <div class="stk-main">
-    <div class="flex gap-3 px-4 py-3 scroll-x">
+    <div class="flex gap-3 px-4 py-3 scroll-x cat-row-inner">
       <button data-cat="pesticide" aria-pressed="true" class="cat-tile flex-shrink-0 flex flex-col items-center gap-2" style="width:80px;background:transparent;border:0;cursor:pointer">
         <div class="cat-circle"><span class="cat-emoji">🐛</span></div>
         <span class="cat-label text-[13px] font-semibold text-center leading-tight" style="color:#0F172A">Pesticide</span>
@@ -281,7 +288,7 @@
 
   <!-- TWO-COLUMN body · flex:1 of viewport · each pane scrolls independently -->
   <div class="cat-body">
-    <aside id="subRail" class="flex-shrink-0" style="width:100px;background:#F8FAFC;border-right:1px solid #E5E7EB"></aside>
+    <aside id="subRail" class="flex-shrink-0" style="width:100px;background:#ECFDF5;border-right:1px solid #A7F3D0"></aside>
     <main id="productMain" class="flex-1 min-w-0 p-3">
       <div id="productList" class="pgrid"></div>
     </main>
@@ -1020,6 +1027,17 @@
     renderFilterPane();
     renderAppliedChips();
     updateFilterDots();
+
+    // Shrink the category circles when the product column scrolls · mirrors the home page's compact-on-scroll
+    (function(){
+      const pm = document.getElementById('productMain');
+      const stkMain = document.querySelector('.stk-main');
+      if (!pm || !stkMain) return;
+      pm.addEventListener('scroll', function(){
+        if (pm.scrollTop > 30) stkMain.classList.add('compact');
+        else stkMain.classList.remove('compact');
+      }, { passive: true });
+    })();
 
     // Variant bottom-sheet · opens when a product card with multiple packaging sizes has its "N Options" pill tapped · each row has its own +/- stepper, state survives across opens for the same product
     (function(){

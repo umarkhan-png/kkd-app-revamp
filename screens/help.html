@@ -1,44 +1,110 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Help</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Help & Support</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
-<style>*{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}.hi{font-family:'Noto Sans Devanagari',sans-serif}html,body{margin:0;padding:0}body{min-height:100vh;background:#fff;color:#0F172A}</style></head>
-<body class="min-h-screen pb-6">
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased;box-sizing:border-box}
+  html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:88px}
 
-<div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
+  .sec-title{margin:18px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
+  .card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
 
-<div class="px-4 pt-4 flex items-center gap-3"><button onclick="history.back()" class="w-10 h-10 rounded-full border border-[#E5E7EB] flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div><div class="hi text-[20px] font-extrabold leading-none">मदद</div><div class="text-[11px] text-[#64748B] mt-0.5">Help & Support</div></div></div>
+  /* Prominent "Call an expert" video-call hero */
+  .expert-hero{margin:0 16px;border-radius:18px;background:linear-gradient(135deg,#047857 0%,#059669 55%,#10B981 100%);padding:16px;color:#FFFFFF;box-shadow:0 16px 32px -12px rgba(5,150,105,0.55);position:relative;overflow:hidden}
+  .expert-hero::after{content:"";position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.08)}
+  .eh-top{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+  .eh-avatar{position:relative;width:66px;height:66px;border-radius:16px;overflow:hidden;flex-shrink:0;border:2px solid rgba(255,255,255,0.5);background:#FFFFFF}
+  .eh-avatar img{width:100%;height:100%;object-fit:cover}
+  .eh-vbadge{position:absolute;bottom:-5px;right:-5px;width:26px;height:26px;border-radius:50%;background:#FFFFFF;color:#059669;display:flex;align-items:center;justify-content:center;font-size:11px;border:2px solid #059669;box-shadow:0 2px 6px rgba(0,0,0,0.2)}
+  .eh-info{flex:1;min-width:0}
+  .eh-title{font-size:19px;font-weight:900;line-height:1.1;letter-spacing:-0.01em}
+  .eh-sub{font-size:12px;opacity:.94;margin-top:3px;font-weight:500;line-height:1.3}
+  .eh-online{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:10.5px;font-weight:800;background:rgba(255,255,255,0.18);padding:3px 10px;border-radius:9999px;letter-spacing:0.02em}
+  .eh-online .dot{width:7px;height:7px;border-radius:50%;background:#86EFAC;animation:ehpulse 1.6s infinite}
+  @keyframes ehpulse{0%{box-shadow:0 0 0 0 rgba(134,239,172,0.6)}70%{box-shadow:0 0 0 7px rgba(134,239,172,0)}100%{box-shadow:0 0 0 0 rgba(134,239,172,0)}}
+  .eh-cta{width:100%;margin-top:14px;height:50px;border-radius:12px;background:#FFFFFF;color:#047857;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;box-shadow:0 8px 18px -6px rgba(0,0,0,0.28);position:relative;z-index:1}
+  .eh-cta i{font-size:15px}
+  .eh-cta:active{transform:scale(.99)}
+  .eh-note{margin-top:10px;font-size:11px;text-align:center;opacity:.9;font-weight:500;position:relative;z-index:1}
 
-<!-- Contact options -->
-<div class="px-4 mt-5 grid grid-cols-3 gap-2.5">
-  <button class="bg-white border border-[#E5E7EB] rounded-2xl p-3 flex flex-col items-center gap-2 text-center">
-    <div class="w-10 h-10 rounded-full bg-[#ECFDF5] flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72"/></svg></div>
-    <div class="text-[11px] font-extrabold">Call us</div>
-    <div class="text-[9.5px] text-[#64748B]">9 AM – 9 PM</div>
-  </button>
-  <button class="bg-white border border-[#E5E7EB] rounded-2xl p-3 flex flex-col items-center gap-2 text-center">
-    <div class="w-10 h-10 rounded-full bg-[#25D366]/15 flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1l-1 1.2c-.2.2-.4.2-.6.1-.8-.3-1.6-.7-2.3-1.4-.5-.5-1-1.1-1.4-1.7-.1-.2-.1-.4.1-.5l.7-.8c.2-.2.3-.5.1-.7l-1-2.4c-.1-.3-.3-.4-.6-.4-1.4 0-2.6 1.2-2.6 2.6 0 4.1 6 8.1 8.6 8.1 1.4 0 2.6-1.2 2.6-2.6 0-.2-.1-.5-.1-.6z"/></svg></div>
-    <div class="text-[11px] font-extrabold">WhatsApp</div>
-    <div class="text-[9.5px] text-[#64748B]">24×7</div>
-  </button>
-  <button class="bg-white border border-[#E5E7EB] rounded-2xl p-3 flex flex-col items-center gap-2 text-center">
-    <div class="w-10 h-10 rounded-full bg-[#E8F2FB] flex items-center justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1565C0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
-    <div class="text-[11px] font-extrabold">Chat</div>
-    <div class="text-[9.5px] text-[#64748B]">Live agent</div>
-  </button>
-</div>
+  /* Other contact options · clean list rows */
+  .opt-row{display:flex;align-items:center;gap:13px;padding:14px;text-decoration:none;color:inherit;border-bottom:1px solid #F1F5F9}
+  .opt-row:last-child{border-bottom:0}
+  .opt-ic{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+  .opt-body{flex:1;min-width:0;line-height:1.3}
+  .opt-a{font-size:14px;font-weight:700;color:#0F172A}
+  .opt-b{font-size:11.5px;color:#64748B;margin-top:1px}
+  .opt-row .chev{color:#CBD5E1;font-size:13px;flex-shrink:0}
 
-<!-- FAQ -->
-<div class="px-4 mt-6">
-  <div class="hi text-[16px] font-extrabold mb-3">मुख्य सवाल</div>
-  <div class="space-y-2">
-    <details class="bg-white border border-[#E5E7EB] rounded-lg p-3.5"><summary class="text-[13px] font-bold cursor-pointer">Order kaise track karein?</summary><p class="text-[12px] text-[#64748B] mt-2 leading-relaxed">Orders → tap your order → Track live. WhatsApp pe bhi updates milte hain.</p></details>
-    <details class="bg-white border border-[#E5E7EB] rounded-lg p-3.5"><summary class="text-[13px] font-bold cursor-pointer">Galat product mila to?</summary><p class="text-[12px] text-[#64748B] mt-2 leading-relaxed">Order details → "Got wrong item?" → Pre-approved replacement 24 hrs me. No phone calls needed.</p></details>
-    <details class="bg-white border border-[#E5E7EB] rounded-lg p-3.5"><summary class="text-[13px] font-bold cursor-pointer">Refund kab milega?</summary><p class="text-[12px] text-[#64748B] mt-2 leading-relaxed">Refund initiate hone ke 3-5 business days me. Refund SLA tracker order detail me visible hai.</p></details>
-    <details class="bg-white border border-[#E5E7EB] rounded-lg p-3.5"><summary class="text-[13px] font-bold cursor-pointer">Pesticide use safe hai?</summary><p class="text-[12px] text-[#64748B] mt-2 leading-relaxed">Sab products CIB-CR licensed aur lab-tested hain. PDP par batch + expiry deekha sakte hain.</p></details>
-    <details class="bg-white border border-[#E5E7EB] rounded-lg p-3.5"><summary class="text-[13px] font-bold cursor-pointer">COD pe extra charge?</summary><p class="text-[12px] text-[#64748B] mt-2 leading-relaxed">Nahi, COD bilkul free hai. UPI pe extra ₹50 off milta hai.</p></details>
-    <details class="bg-white border border-[#E5E7EB] rounded-lg p-3.5"><summary class="text-[13px] font-bold cursor-pointer">Krishi Doctor free hai?</summary><p class="text-[12px] text-[#64748B] mt-2 leading-relaxed">Haan, har user ke liye 5-min ki free call available hai. Hindi + 4 aur languages.</p></details>
+  .nav{position:fixed;bottom:0;left:0;right:0;height:68px;background:#FFFFFF;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04);display:flex;justify-content:space-around;align-items:center;padding:0 8px;z-index:50}
+  .nav a{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:#94A3B8;font-size:12px;font-weight:600}
+  .nav a.on{color:#0F172A;font-weight:700}
+  .nav a.on i{color:#059669}
+  .nav i{font-size:19px}
+</style></head>
+<body>
+
+  <!-- Status bar -->
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
+
+  <!-- Header · white bar, no subtitle -->
+  <div class="px-4 pt-4 pb-4 flex items-center gap-3 bg-white" style="border-bottom:1px solid #F1F5F9">
+    <button onclick="if(history.length>1){history.back()}else{location.href='account.html'}" class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:#FFFFFF;border:1px solid #E5E7EB"><i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i></button>
+    <h1 class="text-[22px] font-extrabold">Help &amp; Support</h1>
   </div>
-</div>
+
+  <!-- Call an expert · prominent video-call hero -->
+  <div class="mt-4">
+    <div class="expert-hero">
+      <div class="eh-top">
+        <div class="eh-avatar">
+          <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=160&q=80&fit=crop" alt="Expert" onerror="this.outerHTML='<div style=&quot;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#ECFDF5;color:#047857;font-size:28px&quot;><i class=\'fa-solid fa-user-doctor\'></i></div>'"/>
+          <span class="eh-vbadge"><i class="fa-solid fa-video"></i></span>
+        </div>
+        <div class="eh-info">
+          <div class="eh-title">Call an expert</div>
+          <div class="eh-sub">1-on-1 video call with a Krishi agronomist</div>
+          <span class="eh-online"><span class="dot"></span> ONLINE NOW · AVG WAIT 2 MIN</span>
+        </div>
+      </div>
+      <button class="eh-cta"><i class="fa-solid fa-video"></i> Start video call</button>
+      <div class="eh-note">Free for every farmer · Hindi + 4 more languages</div>
+    </div>
+  </div>
+
+  <!-- Other ways to reach us -->
+  <div class="sec-title">Other ways to reach us</div>
+  <div class="card">
+    <a href="#" class="opt-row">
+      <span class="opt-ic" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-comments"></i></span>
+      <div class="opt-body"><div class="opt-a">Live chat</div><div class="opt-b">Instant replies · in-app agent</div></div>
+      <i class="fa-solid fa-chevron-right chev"></i>
+    </a>
+    <a href="tel:+918000000000" class="opt-row">
+      <span class="opt-ic" style="background:#E8F2FB;color:#1565C0"><i class="fa-solid fa-phone"></i></span>
+      <div class="opt-body"><div class="opt-a">Call us</div><div class="opt-b">9 AM – 9 PM · toll-free</div></div>
+      <i class="fa-solid fa-chevron-right chev"></i>
+    </a>
+    <a href="#" class="opt-row">
+      <span class="opt-ic" style="background:rgba(37,211,102,0.14);color:#1FAE54"><i class="fa-brands fa-whatsapp"></i></span>
+      <div class="opt-body"><div class="opt-a">WhatsApp</div><div class="opt-b">Chat with us 24×7</div></div>
+      <i class="fa-solid fa-chevron-right chev"></i>
+    </a>
+    <a href="mailto:support@katyayanikrishidirect.com" class="opt-row">
+      <span class="opt-ic" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-envelope"></i></span>
+      <div class="opt-body"><div class="opt-a">Email us</div><div class="opt-b">support@katyayanikrishidirect.com</div></div>
+      <i class="fa-solid fa-chevron-right chev"></i>
+    </a>
+  </div>
+
+  <!-- Bottom nav · consistent with the app (Profile active) -->
+  <nav class="nav">
+    <a href="home.html"><i class="fa-solid fa-house"></i>Home</a>
+    <a href="crop-detail.html"><i class="fa-solid fa-seedling"></i>Crop</a>
+    <a href="orders.html"><i class="fa-solid fa-box"></i>Orders</a>
+    <a href="account.html" class="on"><i class="fa-solid fa-user"></i>Profile</a>
+  </nav>
 
 </body></html>

@@ -292,7 +292,12 @@
       </div>
     </button>
     <div class="flex items-center gap-2 flex-shrink-0">
-      <a href="coins-statement.html" id="coinPill" class="flex items-center gap-1.5 h-10 px-3 rounded-full relative" style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgba(15,23,42,0.04);text-decoration:none;transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .35s ease,border-color .35s ease">
+      <!-- Wallet balance pill · shown only when the money wallet has a balance -->
+      <a href="wallet.html" id="walletPill" class="flex items-center gap-1.5 h-10 px-2.5 rounded-full" style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgba(15,23,42,0.04);text-decoration:none">
+        <i class="fa-solid fa-wallet text-[13px]" style="color:#047857"></i>
+        <span class="text-[14px] font-extrabold tnum" style="color:#0F172A">&#8377;<span id="walletAmt">540</span></span>
+      </a>
+      <a href="coins-statement.html" id="coinPill" class="flex items-center gap-1.5 h-10 px-2.5 rounded-full relative" style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgba(15,23,42,0.04);text-decoration:none;transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .35s ease,border-color .35s ease">
         <i id="coinIcon" class="fa-solid fa-coins text-[14px]" style="color:#D9A441;transition:transform .35s cubic-bezier(.34,1.56,.64,1)"></i>
         <span id="coinBalance" class="text-[14px] font-extrabold tnum" style="color:#0F172A">220</span>
       </a>
@@ -303,6 +308,17 @@
       </a>
     </div>
   </div>
+  <script>
+    // Wallet pill · show on home only when the money wallet has a balance (default ₹540 for the prototype)
+    (function(){
+      var pill = document.getElementById('walletPill'), amtEl = document.getElementById('walletAmt');
+      if (!pill) return;
+      var amt = 540;
+      try { var w = localStorage.getItem('kkd.wallet'); if (w !== null) amt = parseInt(w, 10) || 0; } catch (e) {}
+      if (amt > 0) { if (amtEl) amtEl.textContent = amt.toLocaleString('en-IN'); pill.style.display = 'flex'; }
+      else { pill.style.display = 'none'; }
+    })();
+  </script>
 
   <!-- Top status banner — auto-rotates rain → christmas → order every 4s (in-place text swap) -->
   <a href="#" id="topStatusBanner" class="theme-banner rain-banner nu" style="flex-wrap:nowrap;transition:opacity .3s ease">

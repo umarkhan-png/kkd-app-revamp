@@ -104,9 +104,9 @@
 
   /* Sticky checkout · 2-col layout · summary on the left (item count + amount), button on the right (compact, not full-width) · Saved-520 text removed */
   .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 14px;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:14px}
-  .sticky-sum{display:flex;flex-direction:column;line-height:1.2;flex-shrink:0;min-width:100px}
-  .sticky-sum .ttl{font-size:13.5px;color:#0F172A;font-weight:700}
-  .sticky-sum .amt{font-size:14px;font-weight:800;color:#047857;letter-spacing:-0.01em;margin-top:2px}
+  .sticky-sum{display:flex;flex-direction:column;line-height:1.15;flex-shrink:0;min-width:90px}
+  .sticky-sum .ttl{font-size:11px;color:#64748B;font-weight:500}
+  .sticky-sum .amt{font-size:20px;font-weight:700;color:#0F172A;letter-spacing:-0.01em;font-variant-numeric:tabular-nums}
   /* Wider checkout pill · takes ~60% of the row so the CTA reads as the primary action */
   .sticky-cta-btn{flex:1;min-width:220px;height:52px;padding:0 22px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
 
@@ -364,8 +364,8 @@
   <!-- Sticky CTA · summary on the LEFT (item count + saved amount, both larger), Checkout pill on the RIGHT -->
   <div class="sticky-cta">
     <div class="sticky-sum">
-      <div class="ttl tnum" id="stickyItems">3 items · ₹1,360</div>
-      <div class="amt tnum"><i class="fa-solid fa-circle-check text-[11px]"></i> Saved ₹520</div>
+      <div class="ttl" id="stickyItems">3 items</div>
+      <div class="amt tnum" id="stickyAmt">₹1,360</div>
     </div>
     <button id="checkoutBtn" class="sticky-cta-btn">
       Checkout <i class="fa-solid fa-arrow-right text-[12px]"></i>
@@ -562,7 +562,9 @@
     function updateSticky(){
       const n = document.querySelectorAll('#cartList .cart-item').length;
       const sticky = document.getElementById('stickyItems');
-      if (sticky) sticky.textContent = n + (n === 1 ? ' item' : ' items') + ' · ₹' + cartTotal.toLocaleString('en-IN');
+      const amt = document.getElementById('stickyAmt');
+      if (sticky) sticky.textContent = n + (n === 1 ? ' item' : ' items');
+      if (amt) amt.textContent = '₹' + cartTotal.toLocaleString('en-IN');
     }
 
     // Toast · brief confirmation that an item went into the cart · shown above the cross-sell sheet

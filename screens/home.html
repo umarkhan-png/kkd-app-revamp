@@ -553,28 +553,27 @@
         <div class="ob-state-earn">
           <div class="flex items-center gap-1.5 px-3.5 py-2" style="background:#ECFDF5;border-bottom:1px solid #BBF7D0">
             <i class="fa-solid fa-trophy text-[11px]" style="color:#047857"></i>
-            <span class="text-[10px] font-extrabold tracking-[0.14em] uppercase" style="color:#047857">Earn coins</span>
-            <span class="text-[10px]" style="color:#94A3B8">·</span>
-            <span class="text-[10.5px] font-bold" style="color:#0F172A">Step 3 of 5</span>
+            <span class="text-[10px] font-extrabold tracking-[0.14em] uppercase" style="color:#047857">Earn Krishi Coins</span>
+            <span class="ml-auto text-[10.5px] font-bold" style="color:#0F172A"><span id="questDoneCount">0</span> of 5 done</span>
           </div>
           <div class="px-3.5 pt-3 flex items-center gap-3">
             <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#059669 0%,#10B981 100%);box-shadow:0 4px 12px -2px rgba(5,150,105,0.4)">
-              <i class="fa-solid fa-wheat-awn text-[20px]" style="color:#FFFFFF"></i>
+              <i class="fa-solid fa-coins text-[20px]" style="color:#FFFFFF"></i>
             </div>
             <div class="flex-1 leading-tight min-w-0">
-              <div class="text-[15px] font-extrabold truncate" style="color:#0F172A">Add your first crop</div>
+              <div class="text-[15px] font-extrabold" style="color:#0F172A">Complete 5 quick steps</div>
               <div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-[10.5px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0">
-                <i class="fa-solid fa-coins text-[9px]" style="color:#F59E0B"></i> Get 50 coins
+                <i class="fa-solid fa-coins text-[9px]" style="color:#F59E0B"></i> Earn up to <span id="questMaxCoins">95</span> coins
               </div>
             </div>
             <span class="inline-flex items-center gap-1 text-[12px] font-extrabold flex-shrink-0" style="color:#059669">
-              Start <i class="fa-solid fa-arrow-right text-[10px]" style="color:#059669"></i>
+              View all <i class="fa-solid fa-arrow-right text-[10px]" style="color:#059669"></i>
             </span>
           </div>
           <div class="px-3.5 py-3">
-            <div class="flex gap-1">
-              <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-              <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+            <div class="flex gap-1" id="questBar">
+              <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
+              <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
               <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
               <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
               <div class="flex-1 h-1.5 rounded-full" style="background:#D1FAE5"></div>
@@ -605,6 +604,24 @@
         </div>
       </button>
     </section>
+
+    <!-- Earn-coins quest · bottom modal · lists all 5 earning steps with details + per-step action -->
+    <div id="questBd" class="fixed inset-0 z-[100]" style="display:none">
+      <div id="questBackdrop" class="absolute inset-0" style="background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
+      <div id="questPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:84vh;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
+        <div class="flex-shrink-0 pt-2.5 px-5">
+          <div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div>
+          <div class="flex items-center justify-between">
+            <div class="leading-tight">
+              <div class="text-[18px] font-extrabold text-[#0F172A]">Earn Krishi Coins</div>
+              <div class="text-[11.5px] mt-0.5" style="color:#64748B">Complete each step to earn coins · <span id="questModalDone">0</span>/5 done</div>
+            </div>
+            <button id="questClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[14px]" style="color:#475569"></i></button>
+          </div>
+        </div>
+        <div id="questList" class="px-4 py-3 overflow-y-auto" style="flex:1;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)"></div>
+      </div>
+    </div>
 
 
     <!-- ⚡ FLASH DEALS · KKD style with extra visual flair · price/MRP/OFF% prominent · wider cards so text doesn't truncate -->
@@ -1995,7 +2012,7 @@
       </div>
       <div class="flex-shrink-0 px-5 py-3 flex gap-2" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)">
         <a href="help.html" class="nu flex-1 h-12 rounded-xl flex items-center justify-center text-[13px] font-extrabold" style="background:#F1F5F9;color:#0F172A">Need help?</a>
-        <a href="track-order.html" class="nu flex-1 h-12 rounded-xl flex items-center justify-center gap-1.5 text-[13px] font-extrabold" style="background:#059669;color:#FFFFFF">View full <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i></a>
+        <a href="order-details.html" class="nu flex-1 h-12 rounded-xl flex items-center justify-center gap-1.5 text-[13px] font-extrabold" style="background:#059669;color:#FFFFFF">View full <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i></a>
       </div>
     </div>
   </div>
@@ -2754,9 +2771,84 @@
         if (localStorage.getItem('kkd.coins.firstCrop') === '1') {
           window.location.href = 'categories.html';
         } else {
-          openSheet();
+          openQuest();
         }
       });
+
+      // ===== Earn-coins quest · 5 steps, each completion earns coins · detailed bottom modal =====
+      const QUEST = [
+        { id:'notif',  icon:'fa-bell',             bg:'#EFF6FF', color:'#2563EB', title:'Allow notifications', desc:'Get order updates & exclusive offers',  coins:10, action:'Allow' },
+        { id:'loc',    icon:'fa-location-dot',     bg:'#FEF2F2', color:'#DC2626', title:'Allow location',      desc:'Faster delivery & local mandi prices',  coins:10, action:'Allow' },
+        { id:'cart',   icon:'fa-cart-shopping',    bg:'#ECFDF5', color:'#047857', title:'Add to cart & earn',  desc:'Add any product to your cart',          coins:15, action:'Shop' },
+        { id:'search', icon:'fa-magnifying-glass', bg:'#FEF3C7', color:'#B45309', title:'Search & earn',       desc:'Search for a product, crop or disease', coins:10, action:'Search' },
+        { id:'crop',   icon:'fa-wheat-awn',        bg:'#ECFDF5', color:'#047857', title:'Add crop & earn',     desc:'Add a crop you grow to your profile',   coins:50, action:'Add crop', crop:true }
+      ];
+      function questDoneSet(){
+        let s = [];
+        try { s = JSON.parse(localStorage.getItem('kkd.quest') || '[]'); } catch (e) {}
+        const set = new Set(s);
+        if (localStorage.getItem('kkd.coins.firstCrop') === '1') set.add('crop');
+        return set;
+      }
+      function renderQuestTile(){
+        const done = questDoneSet();
+        const cnt = QUEST.filter(q => done.has(q.id)).length;
+        const dc = document.getElementById('questDoneCount'); if (dc) dc.textContent = cnt;
+        const remaining = QUEST.filter(q => !done.has(q.id)).reduce((a,q) => a + q.coins, 0);
+        const mc = document.getElementById('questMaxCoins'); if (mc) mc.textContent = remaining;
+        const bar = document.getElementById('questBar');
+        if (bar) Array.from(bar.children).forEach((seg,i) => { seg.style.background = i < cnt ? '#059669' : '#D1FAE5'; });
+      }
+      function renderQuestList(){
+        const list = document.getElementById('questList');
+        if (!list) return;
+        const done = questDoneSet();
+        const md = document.getElementById('questModalDone'); if (md) md.textContent = QUEST.filter(q => done.has(q.id)).length;
+        list.innerHTML = QUEST.map(function(q){
+          const isDone = done.has(q.id);
+          const right = isDone
+            ? '<span class="flex-shrink-0 inline-flex items-center gap-1.5 px-3 h-9 rounded-lg text-[12px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0"><i class="fa-solid fa-check"></i> Done</span>'
+            : '<button data-quest="'+q.id+'" class="flex-shrink-0 inline-flex items-center justify-center px-4 h-9 rounded-lg text-[12.5px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;box-shadow:0 4px 10px -3px rgba(5,150,105,0.45)">'+q.action+'</button>';
+          return '<div class="flex items-center gap-3 py-3" style="border-bottom:1px solid #F1F5F9;'+(isDone ? 'opacity:.65' : '')+'">'
+            + '<span class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:'+q.bg+';color:'+q.color+';font-size:17px"><i class="fa-solid '+q.icon+'"></i></span>'
+            + '<div class="flex-1 min-w-0 leading-tight">'
+              + '<div class="flex items-center gap-2 flex-wrap"><span class="text-[14px] font-extrabold text-[#0F172A]">'+q.title+'</span><span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-extrabold" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-coins text-[8px]"></i> +'+q.coins+'</span></div>'
+              + '<div class="text-[11.5px] mt-0.5" style="color:#64748B">'+q.desc+'</div>'
+            + '</div>' + right
+          + '</div>';
+        }).join('');
+        list.querySelectorAll('[data-quest]').forEach(function(btn){
+          btn.addEventListener('click', function(){
+            const id = btn.dataset.quest;
+            const step = QUEST.find(q => q.id === id);
+            if (step && step.crop) { closeQuest(); openSheet(); return; }   // crop opens the real add-crop sheet
+            let s = [];
+            try { s = JSON.parse(localStorage.getItem('kkd.quest') || '[]'); } catch (e) {}
+            if (s.indexOf(id) < 0) s.push(id);
+            try { localStorage.setItem('kkd.quest', JSON.stringify(s)); } catch (e) {}
+            renderQuestList(); renderQuestTile();
+          });
+        });
+      }
+      function openQuest(){
+        renderQuestList();
+        const bd = document.getElementById('questBd'), bg = document.getElementById('questBackdrop'), pnl = document.getElementById('questPanel');
+        if (!bd) return;
+        bd.style.display = 'block';
+        requestAnimationFrame(function(){ bg.style.opacity = '1'; pnl.style.transform = 'translateY(0)'; });
+      }
+      function closeQuest(){
+        const bd = document.getElementById('questBd'), bg = document.getElementById('questBackdrop'), pnl = document.getElementById('questPanel');
+        if (!bd) return;
+        bg.style.opacity = '0'; pnl.style.transform = 'translateY(100%)';
+        setTimeout(function(){ bd.style.display = 'none'; }, 280);
+      }
+      (function(){
+        const bg = document.getElementById('questBackdrop'), cls = document.getElementById('questClose');
+        if (bg) bg.addEventListener('click', closeQuest);
+        if (cls) cls.addEventListener('click', closeQuest);
+      })();
+      renderQuestTile();
       // After the first-crop celebration finishes, swap to the spend state with a soft fade · sync wallet figures from the live pill balance
       window.addEventListener('kkd:firstCropEarned', function(){
         if (!obTile) return;

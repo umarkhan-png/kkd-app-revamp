@@ -1248,6 +1248,10 @@
         .ba-reorder{margin-top:9px;height:34px;border-radius:9px;background:#059669;color:#FFFFFF;border:0;font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;text-decoration:none;box-shadow:0 4px 12px -4px rgba(5,150,105,0.4)}
         .ba-reorder:active{transform:scale(.98)}
         .ba-reorder i{font-size:11px}
+        .ba-rate{margin-top:6px;width:100%;height:30px;border-radius:8px;background:#FFFFFF;border:1px solid #E5E7EB;color:#475569;font-size:11.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:5px;cursor:pointer}
+        .ba-rate i{color:#F59E0B;font-size:10px}
+        .ba-rate.rated{color:#047857;border-color:#A7F3D0;background:#ECFDF5}
+        .ba-rate.rated i{color:#047857}
       </style>
       <div class="overflow-x-auto scroll-x">
         <div class="flex gap-3 px-4 pb-1">
@@ -1555,7 +1559,7 @@
             </div>
             <div class="eng-opts">
               <button class="eng-chip" data-reward>👍 Yes</button>
-              <button class="eng-chip" data-reward>Not yet</button>
+              <button class="eng-chip" id="orderNotOkBtn">😟 No</button>
             </div>
             <div class="eng-done"><div class="ic">📦</div><div class="t">+10 coins earned!</div><div class="s">Thanks for confirming</div></div>
           </div>
@@ -1616,7 +1620,33 @@
       <button id="engRateSubmit" class="w-full h-[50px] mt-3 rounded-[12px] text-white text-[14.5px] font-extrabold" style="background:#059669;border:0;opacity:.55" disabled>Submit &amp; earn +25 coins</button>
     </div>
 
+    <!-- "Sorry to hear" sheet · shown when the user says their last order did NOT arrive OK -->
+    <div id="sorryBd" class="fixed inset-0 z-[100]" style="display:none">
+      <div id="sorryBackdrop" class="absolute inset-0" style="background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
+      <div id="sorryPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl" style="transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18);padding:0 20px calc(env(safe-area-inset-bottom,0px) + 22px)">
+        <div class="mx-auto w-10 h-1 rounded-full mt-2.5 mb-4" style="background:#E2E8F0"></div>
+        <div class="w-14 h-14 mx-auto rounded-full flex items-center justify-center mb-3" style="background:#FEF2F2;border:1.5px solid #FECACA">
+          <i class="fa-solid fa-face-frown text-[24px]" style="color:#DC2626"></i>
+        </div>
+        <div class="text-[19px] font-extrabold text-center leading-tight text-[#0F172A]">Sorry to hear that</div>
+        <p class="text-[13px] text-center mt-2 leading-relaxed" style="color:#64748B">We're really sorry your order didn't arrive as expected. Our support team will make it right — please reach out and we'll help you straight away.</p>
+        <a href="help.html" class="w-full mt-5 h-[52px] rounded-[12px] text-[15px] font-extrabold inline-flex items-center justify-center gap-2" style="background:#059669;color:#FFFFFF;text-decoration:none;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)"><i class="fa-solid fa-headset text-[14px]"></i> Reach out to us</a>
+        <button id="sorryClose" class="w-full mt-2.5 h-[48px] rounded-[12px] text-[14px] font-bold" style="background:#FFFFFF;border:1.5px solid #E5E7EB;color:#0F172A">Not now</button>
+      </div>
+    </div>
+
     <script>
+      // "Last order arrive OK?" → No · opens the sorry/support sheet
+      (function(){
+        const btn = document.getElementById('orderNotOkBtn');
+        const bd = document.getElementById('sorryBd'), bg = document.getElementById('sorryBackdrop'), pnl = document.getElementById('sorryPanel'), cls = document.getElementById('sorryClose');
+        if (!btn || !bd) return;
+        function open(){ bd.style.display = 'block'; requestAnimationFrame(function(){ bg.style.opacity = '1'; pnl.style.transform = 'translateY(0)'; }); }
+        function close(){ bg.style.opacity = '0'; pnl.style.transform = 'translateY(100%)'; setTimeout(function(){ bd.style.display = 'none'; }, 280); }
+        btn.addEventListener('click', open);
+        if (cls) cls.addEventListener('click', close);
+        if (bg) bg.addEventListener('click', close);
+      })();
       // Engagement widgets · reward on tap (chips / CTAs) → flip the card to its done state · Rate & review opens the bottom modal and rewards on submit
       (function(){
         document.querySelectorAll('#engRow [data-reward]').forEach(el => {
@@ -3364,6 +3394,101 @@
         if (paused) return;
         go((active + 1) % slides.length);
       }, 4000);
+    })();
+  </script>
+
+  <!-- Buy-again · Rate & review bottom modal (rating + review + attachment + share-as-testimonial) -->
+  <div id="baRateBd" class="fixed inset-0 z-[120]" style="display:none">
+    <div id="baRateBackdrop" class="absolute inset-0" style="background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
+    <div id="baRatePanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:90vh;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
+      <div class="flex-shrink-0 px-5 pt-3">
+        <div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div>
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:#F8FAFC;border:1px solid #E5E7EB;padding:5px"><img id="baRateImg" src="" class="max-h-full object-contain"/></div>
+          <div class="flex-1 leading-tight min-w-0">
+            <div class="text-[15px] font-extrabold text-[#0F172A]">Rate <span id="baRateName">product</span></div>
+            <div class="text-[11.5px]" style="color:#64748B">Share your experience &amp; earn coins</div>
+          </div>
+          <button id="baRateClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+        </div>
+      </div>
+      <div class="px-5 pb-2 pt-2 overflow-y-auto" style="flex:1;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)">
+        <div id="baRateStars" class="flex items-center justify-center gap-2.5 py-3">
+          <span class="bar-star" data-v="1"><i class="fa-solid fa-star"></i></span>
+          <span class="bar-star" data-v="2"><i class="fa-solid fa-star"></i></span>
+          <span class="bar-star" data-v="3"><i class="fa-solid fa-star"></i></span>
+          <span class="bar-star" data-v="4"><i class="fa-solid fa-star"></i></span>
+          <span class="bar-star" data-v="5"><i class="fa-solid fa-star"></i></span>
+        </div>
+        <textarea id="baRateText" placeholder="Write a quick review — how did it work on your crop?" class="w-full rounded-[10px] text-[12.5px] outline-none" style="border:1px solid #E5E7EB;background:#FAFAFA;padding:10px 12px;min-height:64px;resize:none;font-family:inherit;color:#0F172A"></textarea>
+        <label class="mt-2.5 flex items-center gap-2 text-[12.5px] font-bold cursor-pointer" style="color:#047857">
+          <i class="fa-solid fa-camera text-[12px]"></i> Add photo / video
+          <input id="baRateMedia" type="file" accept="image/*,video/*" capture="environment" multiple style="display:none"/>
+        </label>
+        <div id="baRateMediaInfo" class="text-[11px] mt-1" style="color:#94A3B8;display:none"></div>
+        <label class="mt-3 flex items-center gap-3 p-3 rounded-[12px] cursor-pointer" style="background:#F8FAFC;border:1px solid #E5E7EB">
+          <input id="baRateTesti" type="checkbox" class="w-4 h-4 accent-emerald-600"/>
+          <span class="flex-1 leading-tight"><span class="block text-[13px] font-bold text-[#0F172A]">Share as a testimonial</span><span class="block text-[11px]" style="color:#64748B">Help other farmers — feature my review &amp; media</span></span>
+          <i class="fa-solid fa-bullhorn text-[13px]" style="color:#B45309"></i>
+        </label>
+      </div>
+      <div class="flex-shrink-0 px-5 pt-2" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px)">
+        <button id="baRateSubmit" class="w-full h-[50px] rounded-[12px] text-white text-[14.5px] font-extrabold" style="background:#059669;border:0;opacity:.55;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)" disabled>Submit review &amp; earn +25 coins</button>
+      </div>
+    </div>
+  </div>
+  <style>
+    #baRateStars .bar-star{font-size:30px;color:#CBD5E1;cursor:pointer;transition:transform .12s ease,color .15s ease}
+    #baRateStars .bar-star.on{color:#F59E0B}
+    #baRateStars .bar-star:active{transform:scale(.85)}
+  </style>
+  <script>
+    // Buy-again · per-product Rate option · injects a "Rate" link into each tile (hidden once rated) and opens a review modal with attachment + testimonial
+    (function(){
+      function ratedSet(){ try { return new Set(JSON.parse(localStorage.getItem('kkd.rated') || '[]')); } catch (e) { return new Set(); } }
+      const bd = document.getElementById('baRateBd'), bg = document.getElementById('baRateBackdrop'), pnl = document.getElementById('baRatePanel');
+      const nameEl = document.getElementById('baRateName'), imgEl = document.getElementById('baRateImg');
+      const stars = document.querySelectorAll('#baRateStars .bar-star');
+      const textEl = document.getElementById('baRateText'), media = document.getElementById('baRateMedia'), mediaInfo = document.getElementById('baRateMediaInfo');
+      const submit = document.getElementById('baRateSubmit'), closeBtn = document.getElementById('baRateClose');
+      let rating = 0, curName = '', curBtn = null;
+
+      function setStars(v){ rating = v; stars.forEach(function(s,i){ s.classList.toggle('on', i < v); }); submit.disabled = v === 0; submit.style.opacity = v === 0 ? '.55' : '1'; }
+      stars.forEach(function(s){ s.addEventListener('click', function(){ setStars(parseInt(s.dataset.v, 10)); }); });
+      media.addEventListener('change', function(){ const n = media.files ? media.files.length : 0; if (n) { mediaInfo.style.display = 'block'; mediaInfo.innerHTML = '<i class="fa-solid fa-paperclip"></i> ' + n + ' file' + (n > 1 ? 's' : '') + ' attached'; } else { mediaInfo.style.display = 'none'; } });
+
+      function open(name, img, btn){
+        curName = name; curBtn = btn;
+        nameEl.textContent = name; imgEl.src = img || '';
+        setStars(0); textEl.value = ''; mediaInfo.style.display = 'none'; if (media) media.value = '';
+        const t = document.getElementById('baRateTesti'); if (t) t.checked = false;
+        bd.style.display = 'block';
+        requestAnimationFrame(function(){ bg.style.opacity = '1'; pnl.style.transform = 'translateY(0)'; });
+      }
+      function close(){ bg.style.opacity = '0'; pnl.style.transform = 'translateY(100%)'; setTimeout(function(){ bd.style.display = 'none'; }, 280); }
+      if (closeBtn) closeBtn.addEventListener('click', close);
+      if (bg) bg.addEventListener('click', close);
+      submit.addEventListener('click', function(){
+        if (rating === 0) return;
+        try { var r = JSON.parse(localStorage.getItem('kkd.rated') || '[]'); if (r.indexOf(curName) < 0) r.push(curName); localStorage.setItem('kkd.rated', JSON.stringify(r)); } catch (e) {}
+        if (curBtn) { curBtn.classList.add('rated'); curBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Rated'; }
+        close();
+      });
+
+      // Inject the Rate link into every Buy-again tile (skip already-rated ones → show "Rated")
+      const rated = ratedSet();
+      document.querySelectorAll('.ba-card').forEach(function(card){
+        const body = card.querySelector('.ba-body'); if (!body) return;
+        const nm = card.querySelector('.ba-name'); const im = card.querySelector('.ba-imgwrap img');
+        const name = nm ? nm.textContent.trim() : 'Product';
+        const img = im ? im.getAttribute('src') : '';
+        const isRated = rated.has(name);
+        const btn = document.createElement('button');
+        btn.className = 'ba-rate' + (isRated ? ' rated' : '');
+        btn.innerHTML = isRated ? '<i class="fa-solid fa-circle-check"></i> Rated' : '<i class="fa-solid fa-star"></i> Rate this product';
+        btn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if (btn.classList.contains('rated')) return; open(name, img, btn); });
+        body.appendChild(btn);
+      });
     })();
   </script>
 </body>

@@ -100,6 +100,18 @@
   .wallet-apply .wal-tag i{font-size:8px}
   .wal-remain{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:#FFFFFF;border-top:1px solid #D1FAE5;font-size:12px;font-weight:700;color:#475569}
   .wal-remain .v{font-weight:900;color:#0F172A;font-variant-numeric:tabular-nums}
+
+  /* Krishi Coins · amber reward tile · earned on this order */
+  .coin-card{overflow:hidden}
+  .coin-earn{display:flex;align-items:center;gap:12px;padding:14px;background:linear-gradient(135deg,#FFFBEB 0%,#FEF9F0 100%)}
+  .coin-earn .ce-ic{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#FBBF24,#F59E0B);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 6px 14px -4px rgba(245,158,11,0.5)}
+  .coin-earn .ce-body{flex:1;line-height:1.3;min-width:0}
+  .coin-earn .ce-a{font-size:14px;font-weight:800;color:#0F172A}
+  .coin-earn .ce-a span{color:#B45309}
+  .coin-earn .ce-b{font-size:11px;color:#64748B;margin-top:2px}
+  .coin-earn .ce-tag{flex-shrink:0;display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:900;color:#FFFFFF;background:linear-gradient(135deg,#FBBF24,#F59E0B);padding:4px 10px;border-radius:9999px;box-shadow:0 3px 8px -2px rgba(245,158,11,0.5)}
+  .coin-bal{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:#FFFFFF;border-top:1px solid #FDE9C8;font-size:12px;font-weight:700;color:#475569}
+  .coin-bal .v{font-weight:900;color:#B45309;font-variant-numeric:tabular-nums}
   .saved-pill{margin-top:10px;display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;background:#ECFDF5;color:#047857;font-size:11px;font-weight:700;border:1px solid #BBF7D0}
 
   /* Sticky checkout · 2-col layout · summary on the left (item count + amount), button on the right (compact, not full-width) · Saved-520 text removed */
@@ -155,12 +167,12 @@
   .xsell-thresh .fill{height:100%;background:linear-gradient(90deg,#10B981 0%,#047857 100%);border-radius:9999px;transition:width .4s ease}
 
   /* Special-deal xsell card · CLEANED UP · drops the diagonal ribbon + the gradient bg in favour of a clean white card with hairline border · a single SAVE chip sits at the top-right · the eye lands on the image + name + price · primary ADD pill on the right */
-  .xsell-card{position:relative;border:1px solid #E5E7EB;border-radius:14px;background:#FFFFFF;padding:18px 12px 12px;margin-top:11px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 3px rgba(15,23,42,0.04);overflow:visible}
+  .xsell-card{position:relative;border:1px solid #E5E7EB;border-radius:14px;background:#FFFFFF;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(15,23,42,0.04);overflow:hidden}
+  .xsell-row{display:flex;align-items:center;gap:12px;padding:12px}
   /* Deal label · small pill tag · one per tile, each a different colour · sits on the top row next to the savings chip */
-  /* Deal badge · gradient pill with a leading icon-chip · reads as a premium tag rather than a flat label */
-  /* Deal badge · floats as a raised layer over the top-left of the tile (same gradient bg + icon + text), separated from the card by a white ring */
-  .xsell-deal{position:absolute;top:-9px;left:12px;z-index:3;display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:900;letter-spacing:0.05em;text-transform:uppercase;padding:4px 11px 4px 4px;border-radius:9999px;color:#FFFFFF;flex-shrink:0;border:1.5px solid #FFFFFF;box-shadow:0 6px 14px -4px rgba(0,0,0,0.35)}
-  .xsell-deal i{width:16px;height:16px;border-radius:9999px;background:rgba(255,255,255,0.28);display:inline-flex;align-items:center;justify-content:center;font-size:8px}
+  /* Deal marker · FULL-WIDTH coloured strip across the top of the tile (same gradient + icon + text), de-congests the body row */
+  .xsell-deal{display:flex;align-items:center;gap:7px;width:100%;padding:7px 13px;font-size:10px;font-weight:900;letter-spacing:0.06em;text-transform:uppercase;color:#FFFFFF}
+  .xsell-deal i{width:17px;height:17px;border-radius:9999px;background:rgba(255,255,255,0.28);display:inline-flex;align-items:center;justify-content:center;font-size:8.5px}
   .xsell-deal.hot{background:linear-gradient(135deg,#FB7185,#E11D48)}
   .xsell-deal.combo{background:linear-gradient(135deg,#10B981,#047857)}
   .xsell-deal.best{background:linear-gradient(135deg,#FBBF24,#F59E0B);color:#7C2D12}
@@ -170,24 +182,30 @@
   .xsell-img{width:60px;height:60px;border-radius:11px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
   .xsell-img img{max-width:100%;max-height:100%;object-fit:contain}
 
-  /* ===== Coupon-apply celebration · SOFTENED · drops the dark backdrop, the rotating sun-burst rays, the 12-piece confetti rain, the badge rotation/bounce · now: gentle dim overlay + a clean white card that fades + scales-in (no bounce), brief sparkle dots around the badge, smooth text fade · feels confident, not aggressive · ~1.8s total ===== */
+  /* ===== Coupon-apply celebration · feel-good but still soft · dim-blur backdrop + scale-in card + a single expanding glow ring, a popping checkmark, gentle sparkles, a prominent animated saved-amount, and a few soft side-confetti · NO rotating rays / confetti rain / spring-bounce · ~2.2s ===== */
   .celeb{position:fixed;inset:0;z-index:200;pointer-events:none;display:none;align-items:center;justify-content:center}
   .celeb.show{display:flex}
-  .celeb-backdrop{position:absolute;inset:0;background:rgba(15,23,42,0.42);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:celebBackdrop 1.8s ease-out forwards;opacity:0}
-  @keyframes celebBackdrop{0%{opacity:0}20%{opacity:1}80%{opacity:1}100%{opacity:0}}
-  .celeb-card{position:relative;background:#FFFFFF;border-radius:20px;padding:26px 30px;text-align:center;min-width:240px;box-shadow:0 24px 60px -10px rgba(15,23,42,0.35);transform:scale(.92);opacity:0;animation:celebCard 1.8s cubic-bezier(.22,1,.36,1) forwards;z-index:2}
-  @keyframes celebCard{0%{transform:scale(.92);opacity:0}18%{transform:scale(1);opacity:1}82%{transform:scale(1);opacity:1}100%{transform:scale(.98);opacity:0}}
-  .celeb-badge{margin:0 auto;width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#10B981 0%,#047857 100%);display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 12px 24px -8px rgba(5,150,105,0.45)}
-  .celeb-badge i{font-size:30px;color:#FFFFFF}
-  /* Small sparkle dots around the badge · soft pulse, no aggressive scale-out rays */
-  .celeb-badge::before, .celeb-badge::after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:#FCD34D;opacity:0;animation:celebSpark 1.6s ease-out .35s infinite}
-  .celeb-badge::before{top:-4px;left:-6px}
-  .celeb-badge::after{bottom:-2px;right:-8px;animation-delay:.9s;background:#10B981}
-  @keyframes celebSpark{0%{transform:scale(0);opacity:0}40%{transform:scale(1);opacity:.85}100%{transform:scale(0);opacity:0}}
-  .celeb-card .title{margin-top:14px;font-size:17px;font-weight:900;color:#0F172A;letter-spacing:-0.01em;line-height:1.1}
-  .celeb-card .save{margin-top:6px;font-size:13px;color:#64748B;font-weight:500}
-  .celeb-card .save .v{color:#047857;font-weight:800}
-  .celeb-card .code{margin-top:12px;display:inline-block;font-size:11px;font-weight:800;letter-spacing:0.16em;color:#047857;background:#ECFDF5;padding:4px 10px;border-radius:9999px;border:1px solid #A7F3D0}
+  .celeb-backdrop{position:absolute;inset:0;background:rgba(15,23,42,0.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:celebBackdrop 2.2s ease-out forwards;opacity:0}
+  @keyframes celebBackdrop{0%{opacity:0}14%{opacity:1}82%{opacity:1}100%{opacity:0}}
+  .celeb-card{position:relative;background:#FFFFFF;border-radius:22px;padding:30px 34px 26px;text-align:center;min-width:250px;box-shadow:0 24px 60px -10px rgba(15,23,42,0.35);transform:scale(.9);opacity:0;animation:celebCard 2.2s cubic-bezier(.22,1,.36,1) forwards;z-index:2}
+  @keyframes celebCard{0%{transform:scale(.9);opacity:0}13%{transform:scale(1.02);opacity:1}22%{transform:scale(1)}84%{transform:scale(1);opacity:1}100%{transform:scale(.98);opacity:0}}
+  .celeb-badge{margin:0 auto;width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,#10B981 0%,#047857 100%);display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 12px 24px -8px rgba(5,150,105,0.5)}
+  .celeb-badge i{font-size:33px;color:#FFFFFF;animation:celebCheck .5s cubic-bezier(.22,1.45,.4,1) .16s both}
+  @keyframes celebCheck{0%{transform:scale(0)}100%{transform:scale(1)}}
+  /* one soft glow ring expanding out (gentle, not rotating rays) */
+  .celeb-badge::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:3px solid rgba(16,185,129,0.4);opacity:0;animation:celebRing 1.5s ease-out .2s 2}
+  @keyframes celebRing{0%{transform:scale(.72);opacity:.8}100%{transform:scale(1.55);opacity:0}}
+  /* gentle sparkle dots around the badge */
+  .celeb-spark{position:absolute;width:7px;height:7px;border-radius:50%;opacity:0;animation:celebSpark 1.5s ease-out infinite}
+  @keyframes celebSpark{0%{transform:scale(0);opacity:0}40%{transform:scale(1);opacity:.9}100%{transform:scale(0);opacity:0}}
+  /* a few soft confetti pieces drifting down the sides */
+  .celeb-conf{position:absolute;top:-4px;width:7px;height:11px;border-radius:2px;opacity:0;animation:celebConf 1.9s ease-in forwards}
+  @keyframes celebConf{0%{transform:translateY(0) rotate(0);opacity:0}16%{opacity:1}100%{transform:translateY(165px) rotate(230deg);opacity:0}}
+  .celeb-card .title{margin-top:16px;font-size:18px;font-weight:900;color:#0F172A;letter-spacing:-0.01em;line-height:1.1}
+  .celeb-card .save{margin-top:8px;font-size:12.5px;color:#64748B;font-weight:600}
+  .celeb-card .save .v{display:block;margin-top:3px;font-size:30px;color:#047857;font-weight:900;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;animation:celebAmt .55s cubic-bezier(.22,1.45,.4,1) .3s both}
+  @keyframes celebAmt{0%{transform:scale(.55);opacity:0}100%{transform:scale(1);opacity:1}}
+  .celeb-card .code{margin-top:14px;display:inline-block;font-size:11px;font-weight:800;letter-spacing:0.16em;color:#047857;background:#ECFDF5;padding:5px 12px;border-radius:9999px;border:1px solid #A7F3D0}
 
   /* Add-to-cart toast · sits ABOVE the cross-sell sheet (z above modal) so the farmer gets clear feedback that the item went in · slides down from the top, auto-dismisses */
   .toast{position:fixed;top:14px;left:50%;transform:translate(-50%,-160%);z-index:120;display:flex;align-items:center;gap:10px;max-width:90%;padding:10px 14px;border-radius:12px;background:#0F172A;color:#FFFFFF;box-shadow:0 12px 28px -8px rgba(15,23,42,0.5);transition:transform .32s cubic-bezier(.22,1,.36,1)}
@@ -341,6 +359,20 @@
     <div class="wal-remain"><span>Remaining wallet balance</span><span class="v tnum">&#8377;0</span></div>
   </div>
 
+  <!-- Krishi Coins · reward earned on this order · amber tile, distinct from the emerald wallet -->
+  <div class="sec-title">Krishi Coins</div>
+  <div class="card coin-card">
+    <div class="coin-earn">
+      <span class="ce-ic"><i class="fa-solid fa-coins"></i></span>
+      <div class="ce-body">
+        <div class="ce-a">You'll earn <span>45 Krishi Coins</span> on this order</div>
+        <div class="ce-b">Redeem on your next purchase &middot; 1 coin = &#8377;1</div>
+      </div>
+      <span class="ce-tag"><i class="fa-solid fa-plus text-[8px]"></i> 45</span>
+    </div>
+    <div class="coin-bal"><span>Coin balance after this order</span><span class="v tnum">320</span></div>
+  </div>
+
   <!-- Deliver-to · moved below Bill summary per spec · partner-app pattern -->
   <div class="sec-title">Deliver to</div>
   <div class="addr-card">
@@ -468,8 +500,18 @@
   <div id="celeb" class="celeb">
     <div class="celeb-backdrop"></div>
     <div class="celeb-card">
-      <div class="celeb-badge"><i class="fa-solid fa-check"></i></div>
-      <div class="title">Coupon applied</div>
+      <span class="celeb-conf" style="left:11%;background:#10B981;animation-delay:.12s"></span>
+      <span class="celeb-conf" style="left:30%;background:#FBBF24;animation-delay:.34s"></span>
+      <span class="celeb-conf" style="left:70%;background:#FB7185;animation-delay:.08s"></span>
+      <span class="celeb-conf" style="left:89%;background:#34D399;animation-delay:.42s"></span>
+      <div class="celeb-badge">
+        <i class="fa-solid fa-check"></i>
+        <span class="celeb-spark" style="top:-6px;left:-8px;background:#FCD34D"></span>
+        <span class="celeb-spark" style="bottom:-4px;right:-10px;background:#10B981;animation-delay:.5s"></span>
+        <span class="celeb-spark" style="top:8px;right:-13px;background:#FB7185;animation-delay:.85s"></span>
+        <span class="celeb-spark" style="bottom:10px;left:-13px;background:#34D399;animation-delay:.3s"></span>
+      </div>
+      <div class="title">Coupon applied! 🎉</div>
       <div class="save">You saved <span class="v" id="celebSave">₹100</span></div>
       <div class="code" id="celebCode">WELCOME100</div>
     </div>
@@ -497,48 +539,63 @@
         </div>
       </div>
 
-      <div class="space-y-4">
+      <div class="space-y-3">
         <div class="xsell-card" data-name="Antivirus" data-tech="Bio bactericide + virucide" data-size="250 ml" data-price="327" data-mrp="425" data-off="23% off" data-img="../assets/AntiVirus_nobg.png">
-          <div class="xsell-img"><img src="../assets/AntiVirus_nobg.png" alt=""/></div>
-          <div class="flex-1 min-w-0 leading-tight">
-            <div class="flex items-center gap-2 flex-wrap"><span class="xsell-deal hot"><i class="fa-solid fa-bolt"></i> Special deal</span><span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹98</span></div>
-            <div class="text-[14px] font-extrabold mt-1.5 text-[#0F172A]">Antivirus</div>
-            <div class="text-[11px] font-medium" style="color:#94A3B8">250 ml</div>
-            <div class="flex items-baseline gap-1.5 mt-1.5">
-              <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;327</span>
-              <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;425</span>
-              <span class="text-[10.5px] font-bold" style="color:#047857">23% off</span>
+          <div class="xsell-deal hot"><i class="fa-solid fa-bolt"></i> Special deal</div>
+          <div class="xsell-row">
+            <div class="xsell-img"><img src="../assets/AntiVirus_nobg.png" alt=""/></div>
+            <div class="flex-1 min-w-0 leading-tight">
+              <div class="text-[14px] font-extrabold text-[#0F172A]">Antivirus</div>
+              <div class="text-[11px] font-medium" style="color:#94A3B8">250 ml</div>
+              <div class="flex items-center gap-2 mt-1.5 flex-wrap">
+                <div class="flex items-baseline gap-1.5">
+                  <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;327</span>
+                  <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;425</span>
+                  <span class="text-[10.5px] font-bold" style="color:#047857">23% off</span>
+                </div>
+                <span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹98</span>
+              </div>
             </div>
+            <button class="xsell-add">Add</button>
           </div>
-          <button class="xsell-add">Add</button>
         </div>
         <div class="xsell-card" data-name="Bhumiraja" data-tech="Soil conditioner · micronutrients" data-size="1 kg" data-price="245" data-mrp="320" data-off="24% off" data-img="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp">
-          <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" alt=""/></div>
-          <div class="flex-1 min-w-0 leading-tight">
-            <div class="flex items-center gap-2 flex-wrap"><span class="xsell-deal combo"><i class="fa-solid fa-link"></i> Best buy together</span><span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹75</span></div>
-            <div class="text-[14px] font-extrabold mt-1.5 text-[#0F172A]">Bhumiraja</div>
-            <div class="text-[11px] font-medium" style="color:#94A3B8">1 kg</div>
-            <div class="flex items-baseline gap-1.5 mt-1.5">
-              <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;245</span>
-              <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;320</span>
-              <span class="text-[10.5px] font-bold" style="color:#047857">24% off</span>
+          <div class="xsell-deal combo"><i class="fa-solid fa-link"></i> Best buy together</div>
+          <div class="xsell-row">
+            <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" alt=""/></div>
+            <div class="flex-1 min-w-0 leading-tight">
+              <div class="text-[14px] font-extrabold text-[#0F172A]">Bhumiraja</div>
+              <div class="text-[11px] font-medium" style="color:#94A3B8">1 kg</div>
+              <div class="flex items-center gap-2 mt-1.5 flex-wrap">
+                <div class="flex items-baseline gap-1.5">
+                  <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;245</span>
+                  <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;320</span>
+                  <span class="text-[10.5px] font-bold" style="color:#047857">24% off</span>
+                </div>
+                <span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹75</span>
+              </div>
             </div>
+            <button class="xsell-add">Add</button>
           </div>
-          <button class="xsell-add">Add</button>
         </div>
         <div class="xsell-card" data-name="Chakraveer 18.5%" data-tech="Chlorantraniliprole 18.5% SC" data-size="100 ml" data-price="440" data-mrp="610" data-off="28% off" data-img="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp">
-          <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" alt=""/></div>
-          <div class="flex-1 min-w-0 leading-tight">
-            <div class="flex items-center gap-2 flex-wrap"><span class="xsell-deal best"><i class="fa-solid fa-star"></i> Cart special offer</span><span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹170</span></div>
-            <div class="text-[14px] font-extrabold mt-1.5 text-[#0F172A]">Chakraveer 18.5%</div>
-            <div class="text-[11px] font-medium" style="color:#94A3B8">100 ml</div>
-            <div class="flex items-baseline gap-1.5 mt-1.5">
-              <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;440</span>
-              <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;610</span>
-              <span class="text-[10.5px] font-bold" style="color:#047857">28% off</span>
+          <div class="xsell-deal best"><i class="fa-solid fa-star"></i> Cart special offer</div>
+          <div class="xsell-row">
+            <div class="xsell-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" alt=""/></div>
+            <div class="flex-1 min-w-0 leading-tight">
+              <div class="text-[14px] font-extrabold text-[#0F172A]">Chakraveer 18.5%</div>
+              <div class="text-[11px] font-medium" style="color:#94A3B8">100 ml</div>
+              <div class="flex items-center gap-2 mt-1.5 flex-wrap">
+                <div class="flex items-baseline gap-1.5">
+                  <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;440</span>
+                  <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;610</span>
+                  <span class="text-[10.5px] font-bold" style="color:#047857">28% off</span>
+                </div>
+                <span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹170</span>
+              </div>
             </div>
+            <button class="xsell-add">Add</button>
           </div>
-          <button class="xsell-add">Add</button>
         </div>
       </div>
     </div>
@@ -635,7 +692,7 @@
             void el.offsetWidth;
             el.style.animation = '';
           });
-          setTimeout(() => { celeb.classList.remove('show'); }, 1800);
+          setTimeout(() => { celeb.classList.remove('show'); }, 2200);
         }, 150);
       }
 

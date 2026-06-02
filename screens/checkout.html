@@ -198,33 +198,7 @@
     </label>
   </div>
 
-  <!-- Krishi Coins · redeem loyalty coins against the bill · 1 coin = ₹1 · capped redemption · (separate from the money Wallet) -->
-  <div class="sec-title">Krishi Coins</div>
-  <div class="card">
-    <label class="coin-redeem">
-      <span class="coin-ic"><i class="fa-solid fa-coins"></i></span>
-      <div class="coin-body">
-        <div class="coin-a">Use Krishi Coins</div>
-        <div class="coin-b">Balance <b class="tnum">1,240</b> coins · redeem up to <b class="tnum">₹190</b> on this order</div>
-      </div>
-      <input type="checkbox" id="coinUse" class="coin-toggle"/>
-    </label>
-  </div>
-
-  <!-- Wallet · money balance · mandatorily applied to the order (not a toggle) · shows applied amount + remaining balance -->
-  <div class="sec-title">Wallet</div>
-  <div class="card wallet-card">
-    <div class="wallet-apply">
-      <span class="wal-ic"><i class="fa-solid fa-wallet"></i></span>
-      <div class="wal-body">
-        <div class="wal-a">Wallet applied <span class="wal-amt tnum">− ₹540</span></div>
-        <div class="wal-b">Auto-applied · money balance, separate from Krishi Coins</div>
-      </div>
-      <span class="wal-tag"><i class="fa-solid fa-check"></i> APPLIED</span>
-    </div>
-    <div class="wal-remain"><span>Remaining wallet balance</span><span class="v tnum" id="walRemain">₹0</span></div>
-  </div>
-
+  <!-- Bill summary · Krishi Coins + Wallet are shown here as bill lines (their standalone sections were removed) -->
   <!-- Bill summary · "Prepaid extra off" line replaces the old "UPI extra off" · shown only when Pay Now or Partial is selected -->
   <div class="sec-title">Bill summary</div>
   <div class="card">
@@ -233,8 +207,8 @@
       <div class="bill-row"><span class="lbl">Discount</span><span class="val green tnum">&minus; &#8377;300</span></div>
       <div class="bill-row"><span class="lbl">Coupon (WELCOME100)</span><span class="val green tnum">&minus; &#8377;100</span></div>
       <div class="bill-row" id="prepaidBillRow"><span class="lbl" style="color:#047857;font-weight:700">Prepaid extra off</span><span class="val green tnum" id="prepaidBillAmt">&minus; &#8377;95</span></div>
-      <div class="bill-row" id="coinBillRow" style="display:none"><span class="lbl" style="color:#047857;font-weight:700"><i class="fa-solid fa-coins text-[11px]" style="color:#F59E0B"></i> Krishi Coins</span><span class="val green tnum" id="coinBillAmt">&minus; &#8377;190</span></div>
-      <div class="bill-row"><span class="lbl" style="color:#047857;font-weight:700"><i class="fa-solid fa-wallet text-[10px]"></i> Wallet</span><span class="val green tnum">&minus; &#8377;540</span></div>
+      <div class="bill-row" id="coinBillRow"><span class="lbl" style="color:#047857;font-weight:700"><i class="fa-solid fa-coins text-[11px]" style="color:#F59E0B"></i> Krishi Coins</span><span class="val green tnum" id="coinBillAmt">&minus; &#8377;190</span></div>
+      <div class="bill-row"><span class="lbl"><i class="fa-solid fa-wallet text-[10px]" style="color:#94A3B8"></i> Wallet</span><span class="val tnum">&minus; &#8377;540</span></div>
       <div class="bill-row"><span class="lbl">Delivery</span><span class="val green">FREE</span></div>
       <div class="bill-total">
         <span class="lbl">Total to pay</span>
@@ -260,8 +234,8 @@
 
     function fmt(n){ return '₹' + n.toLocaleString('en-IN'); }
 
-    const COIN_REDEEM = 190;   // capped Krishi Coins redemption (1 coin = ₹1)
-    let coinsRedeem = 0;
+    const COIN_REDEEM = 190;   // capped Krishi Coins redemption (1 coin = ₹1) · now auto-applied (toggle section removed) and shown as a bill line
+    let coinsRedeem = COIN_REDEEM;
     const WALLET_BALANCE = 540;   // money wallet · MANDATORY auto-apply (capped to the order)
     let walletApplied = 0;
 

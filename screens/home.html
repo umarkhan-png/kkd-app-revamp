@@ -1197,19 +1197,21 @@
         <a href="orders.html" class="nu text-[12px] font-extrabold" style="color:#047857;text-decoration:none">SEE ALL</a>
       </div>
       <style>
-        /* Buy again · horizontal REORDER tiles (image-left, "Ordered <date>" meta) · deliberately distinct from the vertical product cards, like a previous-order row */
-        .ba-card{flex-shrink:0;width:264px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04);display:flex;flex-direction:row;align-items:center;gap:12px;padding:11px}
-        .ba-imgwrap{width:78px;height:78px;border-radius:12px;background:#F8FAFC;border:1px solid #F1F5F9;display:flex;align-items:center;justify-content:center;padding:8px;flex-shrink:0}
+        /* Buy again · horizontal REORDER tiles · green "Ordered <date>" strip layer on top, technical name under the product name, filled-emerald Buy-again button (same as the Add button) */
+        .ba-card{flex-shrink:0;width:264px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04);display:flex;flex-direction:column;overflow:hidden}
+        .ba-datestrip{display:flex;align-items:center;gap:6px;width:100%;padding:5px 12px;background:#059669;color:#FFFFFF;font-size:9.5px;font-weight:800;letter-spacing:0.05em;text-transform:uppercase}
+        .ba-datestrip i{font-size:9px;opacity:.9}
+        .ba-row{display:flex;align-items:center;gap:12px;padding:11px}
+        .ba-imgwrap{width:74px;height:74px;border-radius:12px;background:#F8FAFC;border:1px solid #F1F5F9;display:flex;align-items:center;justify-content:center;padding:8px;flex-shrink:0}
         .ba-imgwrap img{max-width:100%;max-height:100%;object-fit:contain}
         .ba-body{flex:1;min-width:0;display:flex;flex-direction:column}
-        .ba-meta{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;color:#94A3B8;margin-bottom:3px}
-        .ba-meta i{font-size:9px;color:#047857}
         .ba-name{font-size:13.5px;font-weight:700;color:#0F172A;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-decoration:none}
-        .ba-pricerow{display:flex;align-items:baseline;gap:6px;margin-top:4px}
+        .ba-tech{font-size:10.5px;color:#94A3B8;font-weight:500;line-height:1.2;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .ba-pricerow{display:flex;align-items:baseline;gap:6px;margin-top:5px}
         .ba-size{font-size:10px;font-weight:600;color:#475569;background:#F1F5F9;padding:1px 6px;border-radius:5px}
         .ba-price{font-size:15px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
         .ba-mrp{font-size:10.5px;color:#94A3B8;text-decoration:line-through;font-variant-numeric:tabular-nums}
-        .ba-reorder{margin-top:9px;height:34px;border-radius:9px;background:#ECFDF5;color:#047857;border:1px solid #A7F3D0;font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;text-decoration:none}
+        .ba-reorder{margin-top:9px;height:34px;border-radius:9px;background:#059669;color:#FFFFFF;border:0;font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;text-decoration:none;box-shadow:0 4px 12px -4px rgba(5,150,105,0.4)}
         .ba-reorder:active{transform:scale(.98)}
         .ba-reorder i{font-size:11px}
       </style>
@@ -1217,52 +1219,67 @@
         <div class="flex gap-3 px-4 pb-1">
 
           <div class="ba-card">
-            <a href="pdp.html" class="ba-imgwrap"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend"/></a>
-            <div class="ba-body">
-              <span class="ba-meta"><i class="fa-solid fa-clock-rotate-left"></i> Ordered 12 May</span>
-              <a href="pdp.html" class="ba-name">Humic</a>
-              <div class="ba-pricerow"><span class="ba-size">500 ml</span><span class="ba-price tnum">&#8377;276</span><span class="ba-mrp tnum">&#8377;390</span></div>
-              <a href="cart.html?reorder=humic" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+            <div class="ba-datestrip"><i class="fa-solid fa-clock-rotate-left"></i> Ordered 12 May</div>
+            <div class="ba-row">
+              <a href="pdp.html" class="ba-imgwrap"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend"/></a>
+              <div class="ba-body">
+                <a href="pdp.html" class="ba-name">Humic</a>
+                <div class="ba-tech">Activated Humic + Fulvic</div>
+                <div class="ba-pricerow"><span class="ba-size">500 ml</span><span class="ba-price tnum">&#8377;276</span><span class="ba-mrp tnum">&#8377;390</span></div>
+                <a href="cart.html?reorder=humic" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+              </div>
             </div>
           </div>
 
           <div class="ba-card">
-            <a href="pdp.html" class="ba-imgwrap"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend"/></a>
-            <div class="ba-body">
-              <span class="ba-meta"><i class="fa-solid fa-clock-rotate-left"></i> Ordered 28 Apr</span>
-              <a href="pdp.html" class="ba-name">Chakrawarti ZC</a>
-              <div class="ba-pricerow"><span class="ba-size">100 ml</span><span class="ba-price tnum">&#8377;358</span><span class="ba-mrp tnum">&#8377;495</span></div>
-              <a href="cart.html?reorder=chakrawarti" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+            <div class="ba-datestrip"><i class="fa-solid fa-clock-rotate-left"></i> Ordered 28 Apr</div>
+            <div class="ba-row">
+              <a href="pdp.html" class="ba-imgwrap"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend"/></a>
+              <div class="ba-body">
+                <a href="pdp.html" class="ba-name">Chakrawarti ZC</a>
+                <div class="ba-tech">Thiamethoxam + Lambda</div>
+                <div class="ba-pricerow"><span class="ba-size">100 ml</span><span class="ba-price tnum">&#8377;358</span><span class="ba-mrp tnum">&#8377;495</span></div>
+                <a href="cart.html?reorder=chakrawarti" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+              </div>
             </div>
           </div>
 
           <div class="ba-card">
-            <a href="pdp.html" class="ba-imgwrap"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend"/></a>
-            <div class="ba-body">
-              <span class="ba-meta"><i class="fa-solid fa-clock-rotate-left"></i> Ordered 15 Apr</span>
-              <a href="pdp.html" class="ba-name">NPK 19-19-19</a>
-              <div class="ba-pricerow"><span class="ba-size">1 kg</span><span class="ba-price tnum">&#8377;330</span></div>
-              <a href="cart.html?reorder=npk" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+            <div class="ba-datestrip"><i class="fa-solid fa-clock-rotate-left"></i> Ordered 15 Apr</div>
+            <div class="ba-row">
+              <a href="pdp.html" class="ba-imgwrap"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend"/></a>
+              <div class="ba-body">
+                <a href="pdp.html" class="ba-name">NPK 19-19-19</a>
+                <div class="ba-tech">Water-soluble fertilizer</div>
+                <div class="ba-pricerow"><span class="ba-size">1 kg</span><span class="ba-price tnum">&#8377;330</span></div>
+                <a href="cart.html?reorder=npk" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+              </div>
             </div>
           </div>
 
           <div class="ba-card">
-            <a href="pdp.html" class="ba-imgwrap"><img src="../assets/AntiVirus_nobg.png" class="img-blend"/></a>
-            <div class="ba-body">
-              <span class="ba-meta"><i class="fa-solid fa-clock-rotate-left"></i> Ordered 2 May</span>
-              <a href="pdp.html" class="ba-name">Antivirus</a>
-              <div class="ba-pricerow"><span class="ba-size">250 ml</span><span class="ba-price tnum">&#8377;327</span><span class="ba-mrp tnum">&#8377;425</span></div>
-              <a href="cart.html?reorder=antivirus" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+            <div class="ba-datestrip"><i class="fa-solid fa-clock-rotate-left"></i> Ordered 2 May</div>
+            <div class="ba-row">
+              <a href="pdp.html" class="ba-imgwrap"><img src="../assets/AntiVirus_nobg.png" class="img-blend"/></a>
+              <div class="ba-body">
+                <a href="pdp.html" class="ba-name">Antivirus</a>
+                <div class="ba-tech">Bio bactericide + virucide</div>
+                <div class="ba-pricerow"><span class="ba-size">250 ml</span><span class="ba-price tnum">&#8377;327</span><span class="ba-mrp tnum">&#8377;425</span></div>
+                <a href="cart.html?reorder=antivirus" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+              </div>
             </div>
           </div>
 
           <div class="ba-card">
-            <a href="pdp.html" class="ba-imgwrap"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" class="img-blend"/></a>
-            <div class="ba-body">
-              <span class="ba-meta"><i class="fa-solid fa-clock-rotate-left"></i> Ordered 20 Apr</span>
-              <a href="pdp.html" class="ba-name">Bhumiraja</a>
-              <div class="ba-pricerow"><span class="ba-size">1 kg</span><span class="ba-price tnum">&#8377;245</span><span class="ba-mrp tnum">&#8377;320</span></div>
-              <a href="cart.html?reorder=bhumiraja" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+            <div class="ba-datestrip"><i class="fa-solid fa-clock-rotate-left"></i> Ordered 20 Apr</div>
+            <div class="ba-row">
+              <a href="pdp.html" class="ba-imgwrap"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" class="img-blend"/></a>
+              <div class="ba-body">
+                <a href="pdp.html" class="ba-name">Bhumiraja</a>
+                <div class="ba-tech">Soil conditioner · micronutrients</div>
+                <div class="ba-pricerow"><span class="ba-size">1 kg</span><span class="ba-price tnum">&#8377;245</span><span class="ba-mrp tnum">&#8377;320</span></div>
+                <a href="cart.html?reorder=bhumiraja" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+              </div>
             </div>
           </div>
 

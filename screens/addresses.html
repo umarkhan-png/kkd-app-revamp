@@ -4,8 +4,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-  html,body{font-family:'Poppins',system-ui,sans-serif;margin:0;padding:0}
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased;box-sizing:border-box}
+  html,body{font-family:'Poppins',system-ui,sans-serif;margin:0;padding:0;overflow-x:hidden;max-width:100%}
   input,button{font-family:inherit}
   body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:100px}
   .tnum{font-variant-numeric:tabular-nums}
@@ -46,13 +46,11 @@
   </div>
 </div>
 
-<div class="px-4 pt-4 pb-3 flex items-center gap-3" style="background:#F8F8F8">
-  <button onclick="history.back()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center" style="border:1px solid #E5E7EB;box-shadow:0 1px 3px rgba(15,23,42,0.04)">
+<div class="px-4 pt-4 pb-4 flex items-center gap-3 bg-white" style="border-bottom:1px solid #F1F5F9">
+  <button onclick="history.back()" class="w-10 h-10 rounded-full bg-white flex items-center justify-center flex-shrink-0" style="border:1px solid #E5E7EB;box-shadow:0 1px 3px rgba(15,23,42,0.04)">
     <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
   </button>
-  <div class="flex-1 leading-tight">
-    <h1 class="text-[22px] font-extrabold" style="color:#0F172A">Addresses</h1>
-  </div>
+  <h1 class="flex-1 min-w-0 text-[22px] font-extrabold" style="color:#0F172A">Addresses</h1>
 </div>
 
 <!-- Address cards · cleaner spacing inside (consistent 14px padding, 12px gaps), proper hierarchy (icon+tag+default chip+actions on header row → name+phone → full address → delivery ETA pill foot) -->
@@ -117,11 +115,14 @@
 </div>
 
 <script>
+  // Tap an address tile · select it instantly, then return to the source page (cart / checkout)
   document.querySelectorAll('.addr-card').forEach(c => {
     c.addEventListener('click', e => {
       if (e.target.closest('.addr-act')) return;
       document.querySelectorAll('.addr-card').forEach(x => x.classList.remove('selected'));
       c.classList.add('selected');
+      try { localStorage.setItem('kkd.addr', c.dataset.id || ''); } catch (err) {}
+      setTimeout(() => { if (history.length > 1) history.back(); else location.href = 'cart.html'; }, 180);
     });
   });
 </script>

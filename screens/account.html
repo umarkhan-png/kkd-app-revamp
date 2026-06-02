@@ -159,11 +159,11 @@
       <span class="menu-label">Know your app</span>
       <i class="fa-solid fa-chevron-right menu-chev"></i>
     </a>
-    <a href="help.html" class="menu-row">
+    <button id="helpBtn" class="menu-row" style="width:100%;background:transparent;border:0;border-bottom:1px solid #F1F5F9;cursor:pointer;text-align:left">
       <span class="menu-ic neutral"><i class="fa-solid fa-circle-question"></i></span>
       <span class="menu-label">Help &amp; Support</span>
       <i class="fa-solid fa-chevron-right menu-chev"></i>
-    </a>
+    </button>
     <a href="about.html" class="menu-row">
       <span class="menu-ic neutral"><i class="fa-solid fa-circle-info"></i></span>
       <span class="menu-label">About Katyayani</span>
@@ -206,6 +206,53 @@
     <button onclick="location.href='splash.html'" class="w-full mt-6 h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#DC2626;color:#FFFFFF;border:0">Yes, sign out</button>
     <button id="signoutCancel" class="w-full mt-2.5 h-[52px] rounded-[12px] text-[15px] font-bold" style="background:#FFFFFF;border:1.5px solid #E5E7EB;color:#0F172A">Cancel</button>
   </div>
+
+  <!-- Help & Support · in-page bottom sheet of reach-out options (no 'Call an expert' here) · same pattern as the order-details Need-help sheet -->
+  <div id="helpBd" style="position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80"></div>
+  <div id="helpSheet" style="position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;padding:0 0 22px">
+    <div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 0"></div>
+    <div class="px-5 pt-3 pb-3 flex items-center justify-between">
+      <div class="text-[18px] font-extrabold">How can we help?</div>
+      <button id="helpClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div class="px-3 pb-2">
+      <a href="tel:18002700300" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
+        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-phone text-[15px]"></i></div>
+        <div class="flex-1 leading-tight"><div class="text-[14px] font-bold text-[#0F172A]">Call us</div><div class="text-[11.5px] text-[#64748B] mt-0.5">Toll-free 1800 270 0300 · 9am–7pm</div></div>
+        <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
+      </a>
+      <a href="mailto:care@katyayanikrishidirect.com" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
+        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#EFF6FF;color:#2563EB"><i class="fa-solid fa-envelope text-[15px]"></i></div>
+        <div class="flex-1 leading-tight"><div class="text-[14px] font-bold text-[#0F172A]">Email us</div><div class="text-[11.5px] text-[#64748B] mt-0.5">care@katyayanikrishidirect.com · reply in 24 hrs</div></div>
+        <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
+      </a>
+      <a href="#" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
+        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-comments text-[15px]"></i></div>
+        <div class="flex-1 leading-tight"><div class="text-[14px] font-bold text-[#0F172A]">Live chat</div><div class="text-[11.5px] text-[#64748B] mt-0.5">Chat with a support agent now</div></div>
+        <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
+      </a>
+      <a href="#" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
+        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;color:#25D366"><i class="fa-brands fa-whatsapp text-[17px]"></i></div>
+        <div class="flex-1 leading-tight"><div class="text-[14px] font-bold text-[#0F172A]">WhatsApp us</div><div class="text-[11.5px] text-[#64748B] mt-0.5">Message on +91 96964 00400</div></div>
+        <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Help & Support · in-page reach-out sheet
+    (function(){
+      const btn = document.getElementById('helpBtn');
+      const bd  = document.getElementById('helpBd');
+      const sht = document.getElementById('helpSheet');
+      const cls = document.getElementById('helpClose');
+      function open(){ bd.style.opacity='1'; bd.style.pointerEvents='auto'; sht.style.transform='translateY(0)'; }
+      function close(){ bd.style.opacity='0'; bd.style.pointerEvents='none'; sht.style.transform='translateY(100%)'; }
+      if (btn) btn.addEventListener('click', open);
+      if (cls) cls.addEventListener('click', close);
+      if (bd)  bd.addEventListener('click', close);
+    })();
+  </script>
 
   <script>
     // In-page sign-out sheet · keeps the profile page visible behind a dimmed backdrop · no full-page navigation

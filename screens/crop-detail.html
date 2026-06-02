@@ -33,9 +33,13 @@
 
   /* Stat strip */
   .stats{display:flex;gap:10px;margin:14px 16px 0}
-  .stat{flex:1;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:13px;padding:13px 8px;text-align:center;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
-  .stat .v{font-size:20px;font-weight:900;color:#0F172A;line-height:1}
-  .stat .k{font-size:10.5px;color:#64748B;font-weight:600;margin-top:4px;line-height:1.15}
+  .stat{flex:1;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:12px 6px 11px;text-align:center;box-shadow:0 1px 3px rgba(15,23,42,0.04);display:flex;flex-direction:column;align-items:center}
+  .stat-ic{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;margin-bottom:7px;background:#ECFDF5;color:#047857}
+  .stat-ic.warn{background:#FEF2F2;color:#DC2626}
+  .stat-ic.prod{background:#EFF6FF;color:#2563EB}
+  .stat-ic.time{background:#FEF3C7;color:#B45309}
+  .stat .v{font-size:19px;font-weight:900;color:#0F172A;line-height:1}
+  .stat .k{font-size:10px;color:#64748B;font-weight:600;margin-top:4px;line-height:1.15}
 
   /* Vertical growth-stage accordions */
   .vstages{margin:0 16px}
@@ -43,9 +47,9 @@
   .vstg.done{border-left-color:#10B981}
   .vstg.on{border-left-color:#047857}
   .vstg-head{display:flex;align-items:center;gap:12px;width:100%;padding:15px 15px;background:transparent;border:0;cursor:pointer;text-align:left}
-  .vstg-dot{width:30px;height:30px;border-radius:50%;background:#F1F5F9;border:2px solid #E5E7EB;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#94A3B8;flex-shrink:0}
-  .vstg.done .vstg-dot{background:#10B981;border-color:#10B981;color:#fff}
-  .vstg.on .vstg-dot{background:#047857;border-color:#047857;color:#fff}
+  .vstg-dot{width:30px;height:30px;border-radius:50%;background:#F1F5F9;border:2px solid #E5E7EB;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#64748B;flex-shrink:0;transition:all .15s ease}
+  /* No tick · all stages show their serial number · only the selected (open) stage's counting circle is highlighted */
+  .vstg.open .vstg-dot{background:#059669;border-color:#059669;color:#fff;box-shadow:0 4px 10px -3px rgba(5,150,105,0.5)}
   .vstg-info{flex:1;min-width:0;line-height:1.25}
   .vstg-info .nm{font-size:15.5px;font-weight:800;color:#0F172A}
   .vstg-info .meta{font-size:12px;color:#94A3B8;margin-top:2px}
@@ -322,10 +326,10 @@
       document.getElementById('cIdChips').innerHTML = c.chips.map((x,i) => '<span class="ident-chip"><i class="fa-solid ' + icons[i % icons.length] + '"></i> ' + x + '</span>').join('');
       const s = c.stats;
       document.getElementById('cStats').innerHTML =
-        '<div class="stat"><div class="v tnum">' + s.stages + '</div><div class="k">Growth stages</div></div>'
-        + '<div class="stat"><div class="v tnum">' + s.issues + '</div><div class="k">Known issues</div></div>'
-        + '<div class="stat"><div class="v tnum">' + s.products + '</div><div class="k">Products</div></div>'
-        + '<div class="stat"><div class="v tnum">' + s.dur + '</div><div class="k">Duration</div></div>';
+        '<div class="stat"><span class="stat-ic"><i class="fa-solid fa-layer-group"></i></span><div class="v tnum">' + s.stages + '</div><div class="k">Stages</div></div>'
+        + '<div class="stat"><span class="stat-ic warn"><i class="fa-solid fa-triangle-exclamation"></i></span><div class="v tnum">' + s.issues + '</div><div class="k">Known issues</div></div>'
+        + '<div class="stat"><span class="stat-ic prod"><i class="fa-solid fa-flask"></i></span><div class="v tnum">' + s.products + '</div><div class="k">Products</div></div>'
+        + '<div class="stat"><span class="stat-ic time"><i class="fa-solid fa-clock"></i></span><div class="v tnum">' + s.dur + '</div><div class="k">Duration</div></div>';
       const onIdx = (c.on || 1) - 1;
       const stEl = document.getElementById('cStages');
       if (!c.stages || !c.stages.length) {
@@ -341,7 +345,7 @@
         const body = probs.length ? probs.map(probBlock).join('')
           : '<div class="vstg-empty"><i class="fa-solid fa-circle-check"></i> No common problems reported at this stage</div>';
         return '<div class="vstg ' + cls + (i === onIdx ? ' open' : '') + '">'
-          + '<button class="vstg-head"><span class="vstg-dot">' + (i < onIdx ? '<i class="fa-solid fa-check"></i>' : (i + 1)) + '</span>'
+          + '<button class="vstg-head"><span class="vstg-dot">' + (i + 1) + '</span>'
           + '<div class="vstg-info"><div class="nm">' + g.nm + '</div><div class="meta">' + g.day + ' · ' + g.dur + ' · ' + g.pct + ' of lifecycle</div></div>'
           + iss + '<i class="fa-solid fa-chevron-down vstg-chev"></i></button>'
           + '<div class="vstg-body">' + body + '</div></div>';

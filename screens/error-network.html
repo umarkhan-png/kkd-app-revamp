@@ -15,10 +15,10 @@
       radial-gradient(circle at 70% 64%, rgba(5,120,80,0.22) 0%, transparent 46%),
       radial-gradient(circle at 24% 74%, rgba(16,185,129,0.28) 0%, transparent 44%),
       radial-gradient(circle at 50% 50%, #C5EAD1 0%, #A7DCB6 55%, #93D1A6 100%);
-    display:flex;align-items:flex-end;justify-content:center;overflow:hidden;box-shadow:inset 0 -10px 30px rgba(4,90,60,0.12)}
+    display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:inset 0 -10px 30px rgba(4,90,60,0.12)}
   /* soft hill shading at the base, like the reference */
   .tower-disc::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46%;background:radial-gradient(120% 100% at 50% 120%, rgba(4,120,87,0.20) 0%, transparent 70%);pointer-events:none}
-  .tower-disc i{position:relative;z-index:1;font-size:118px;color:#3B3A36;margin-bottom:14px;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.18))}
+  .tower-disc svg{position:relative;z-index:1;width:150px;height:150px;filter:drop-shadow(0 3px 5px rgba(0,0,0,0.15))}
 
   /* Orange alert badge clipped to the top-right of the disc */
   .alert-badge{position:absolute;top:6px;right:2px;width:62px;height:62px;border-radius:50%;
@@ -51,7 +51,36 @@
   <!-- Centred No-Internet content -->
   <div class="flex flex-col items-center text-center px-8" style="margin-top:18vh">
     <div class="tower-disc">
-      <i class="fa-solid fa-tower-broadcast"></i>
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- signal arcs -->
+        <g stroke="#3B3A36" stroke-width="3.4" stroke-linecap="round">
+          <path d="M120 60 a15 15 0 0 1 0 22"/>
+          <path d="M129 52 a27 27 0 0 1 0 38"/>
+          <path d="M80 60 a15 15 0 0 0 0 22"/>
+          <path d="M71 52 a27 27 0 0 0 0 38"/>
+        </g>
+        <!-- mast tip -->
+        <line x1="100" y1="58" x2="100" y2="76" stroke="#3B3A36" stroke-width="4.2" stroke-linecap="round"/>
+        <circle cx="100" cy="55" r="4.4" fill="#3B3A36"/>
+        <!-- lattice X-braces -->
+        <g stroke="#3B3A36" stroke-width="2.6" stroke-linecap="round">
+          <path d="M88 76 L116 94 M112 76 L84 94"/>
+          <path d="M84 94 L121 116 M116 94 L79 116"/>
+          <path d="M79 116 L127 141 M121 116 L73 141"/>
+          <path d="M73 141 L134 172 M127 141 L66 172"/>
+        </g>
+        <!-- legs + horizontal struts -->
+        <g stroke="#3B3A36" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M88 76 L66 172"/>
+          <path d="M112 76 L134 172"/>
+          <path d="M84 94 H116"/>
+          <path d="M79 116 H121"/>
+          <path d="M73 141 H127"/>
+          <path d="M66 172 H134"/>
+          <path d="M66 172 L60 181"/>
+          <path d="M134 172 L140 181"/>
+        </g>
+      </svg>
       <span class="alert-badge"><i class="fa-solid fa-exclamation"></i></span>
     </div>
 

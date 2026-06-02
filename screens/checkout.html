@@ -223,7 +223,7 @@
       <div class="ttl">3 items</div>
       <div class="amt tnum" id="ctaAmt">&#8377;1,805</div>
     </div>
-    <button onclick="location.href='order-success.html'" class="place-btn">
+    <button id="placeOrderBtn" class="place-btn">
       Place order <i class="fa-solid fa-chevron-right text-[12px]"></i>
     </button>
   </div>
@@ -307,5 +307,11 @@
     // Initial paint
     updatePartialSplit(currentPct);
     updateBill(currentMethod, currentPct);
+
+    // Place order · carries the chosen payment method to the success screen so the COD-pay option shows for COD/Partial
+    (function(){
+      const btn = document.getElementById('placeOrderBtn');
+      if (btn) btn.addEventListener('click', () => { location.href = 'order-success.html?mode=' + currentMethod; });
+    })();
   </script>
 </body></html>

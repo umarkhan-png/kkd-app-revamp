@@ -332,11 +332,11 @@
   <div class="sec-title">Bill summary</div>
   <div class="card">
     <div style="padding:14px">
-      <div class="bill-row"><span class="lbl">Items total (3)</span><span class="val tnum">&#8377;2,300</span></div>
+      <div class="bill-row"><span class="lbl" id="billItemsLbl">Items total (3)</span><span class="val tnum" id="billItemsVal">&#8377;2,300</span></div>
       <div class="bill-row"><span class="lbl">Item discount</span><span class="val green tnum">&minus; &#8377;300</span></div>
       <div class="bill-row" id="billCouponRow"><span class="lbl">Coupon (WELCOME100)</span><span class="val green tnum">&minus; &#8377;100</span></div>
       <div class="bill-row" id="coinBillRow" style="display:none"><span class="lbl" style="color:#047857;font-weight:700"><i class="fa-solid fa-coins text-[11px]" style="color:#F59E0B"></i> Krishi Coins</span><span class="val green tnum">&minus; &#8377;190</span></div>
-      <div class="bill-row"><span class="lbl" style="color:#047857;font-weight:700"><i class="fa-solid fa-wallet text-[10px]"></i> Wallet</span><span class="val green tnum">&minus; &#8377;540</span></div>
+      <div class="bill-row"><span class="lbl" style="color:#047857;font-weight:700"><i class="fa-solid fa-wallet text-[10px]"></i> Wallet</span><span class="val green tnum" id="billWalletVal">&minus; &#8377;540</span></div>
       <div class="bill-row"><span class="lbl">Delivery</span><span class="val green">FREE</span></div>
       <div class="bill-total">
         <span class="lbl">To pay</span>
@@ -614,8 +614,31 @@
   <div id="toast" class="toast"><span class="tk"><i class="fa-solid fa-check"></i></span><span class="tx" id="toastText"></span></div>
 
   <script>
-    // Shared cart state · keeps the sticky item-count + total line in sync as items are removed (trash) or added (cross-sell) · to-pay reflects the auto-applied wallet (− ₹540)
-    let cartTotal = 1360;
+    // Shared cart state · bill is derived live from item unit-price × qty · discounts/coupon fixed, wallet auto-applied (capped), coins via toggle
+    const ITEM_DISCOUNT = 300, COUPON = 100, COIN_REDEEM = 190, WALLET_BAL = 540;
+    let cartTotal = 0, coinOn = false;
+    const moneyNum = s => parseInt(String(s).replace(/[^0-9]/g,''),10) || 0;
+    function recompute(){
+      let sub = 0, lines = 0;
+      document.querySelectorAll('#cartList .cart-item').forEach(it => {
+        const priceEl = it.querySelector('.cart-price');
+        const valEl = it.querySelector('.qty .val');
+        const price = priceEl ? moneyNum(priceEl.textContent) : 0;
+        const qty = valEl ? moneyNum(valEl.textContent) : 1;
+        sub += price * qty; lines++;
+      });
+      const coin = coinOn ? COIN_REDEEM : 0;
+      const afterDisc = Math.max(0, sub - ITEM_DISCOUNT - COUPON);
+      const wallet = Math.min(WALLET_BAL, Math.max(0, afterDisc - coin));
+      cartTotal = Math.max(0, afterDisc - coin - wallet);
+      const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+      set('billItemsLbl', 'Items total (' + lines + ')');
+      set('billItemsVal', '₹' + sub.toLocaleString('en-IN'));
+      set('billWalletVal', '− ₹' + wallet.toLocaleString('en-IN'));
+      const coinRow = document.getElementById('coinBillRow'); if (coinRow) coinRow.style.display = coinOn ? 'flex' : 'none';
+      set('cartBillTotal', '₹' + cartTotal.toLocaleString('en-IN'));
+      updateSticky();
+    }
     function updateSticky(){
       const n = document.querySelectorAll('#cartList .cart-item').length;
       const sticky = document.getElementById('stickyItems');
@@ -623,6 +646,15 @@
       if (sticky) sticky.textContent = n + (n === 1 ? ' item' : ' items');
       if (amt) amt.textContent = '₹' + cartTotal.toLocaleString('en-IN');
     }
+    // Qty steppers · ± changes the line qty (min 1) and recomputes the bill
+    function wireQty(q){
+      const dec = q.querySelector('button:first-child');
+      const inc = q.querySelector('button:last-child');
+      const val = q.querySelector('.val');
+      if (dec) dec.addEventListener('click', () => { let v = moneyNum(val.textContent); if (v > 1) { val.textContent = v - 1; recompute(); } });
+      if (inc) inc.addEventListener('click', () => { val.textContent = moneyNum(val.textContent) + 1; recompute(); });
+    }
+    document.querySelectorAll('#cartList .qty').forEach(wireQty);
 
     // Toast · brief confirmation that an item went into the cart · shown above the cross-sell sheet
     let toastTimer;
@@ -649,10 +681,11 @@
           row.style.paddingBottom = '0';
           row.style.borderColor = 'transparent';
         });
-        setTimeout(() => { row.remove(); updateSticky(); }, 320);
+        setTimeout(() => { row.remove(); recompute(); }, 320);
       });
     }
     document.querySelectorAll('.trash-btn').forEach(wireTrash);
+    recompute();   // initial bill derived from item quantities
 
     // Coupon sheet open / close + apply (full-screen celebration)
     (function(){
@@ -740,20 +773,11 @@
       render();
     })();
 
-    // Krishi Coins redeem toggle · applies/removes the capped ₹190 redemption · updates the bill line, To-pay total + sticky
+    // Krishi Coins redeem toggle · applies/removes the capped ₹190 redemption · recomputes the bill
     (function(){
       const t = document.getElementById('coinUse');
-      const coinRow = document.getElementById('coinBillRow');
-      const billTotalEl = document.getElementById('cartBillTotal');
-      const BASE = 1360, COIN = 190;
       if (!t) return;
-      t.addEventListener('change', () => {
-        const on = t.checked;
-        cartTotal = on ? BASE - COIN : BASE;
-        if (coinRow) coinRow.style.display = on ? 'flex' : 'none';
-        if (billTotalEl) billTotalEl.textContent = '₹' + cartTotal.toLocaleString('en-IN');
-        updateSticky();
-      });
+      t.addEventListener('change', () => { coinOn = t.checked; recompute(); });
     })();
 
     // Checkout opens cross-sell sheet

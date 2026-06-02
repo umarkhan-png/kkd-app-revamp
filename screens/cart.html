@@ -101,17 +101,17 @@
   .wal-remain{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:#FFFFFF;border-top:1px solid #D1FAE5;font-size:12px;font-weight:700;color:#475569}
   .wal-remain .v{font-weight:900;color:#0F172A;font-variant-numeric:tabular-nums}
 
-  /* Krishi Coins · amber reward tile · earned on this order */
-  .coin-card{overflow:hidden}
-  .coin-earn{display:flex;align-items:center;gap:12px;padding:14px;background:linear-gradient(135deg,#FFFBEB 0%,#FEF9F0 100%)}
-  .coin-earn .ce-ic{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#FBBF24,#F59E0B);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 6px 14px -4px rgba(245,158,11,0.5)}
-  .coin-earn .ce-body{flex:1;line-height:1.3;min-width:0}
-  .coin-earn .ce-a{font-size:14px;font-weight:800;color:#0F172A}
-  .coin-earn .ce-a span{color:#B45309}
-  .coin-earn .ce-b{font-size:11px;color:#64748B;margin-top:2px}
-  .coin-earn .ce-tag{flex-shrink:0;display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:900;color:#FFFFFF;background:linear-gradient(135deg,#FBBF24,#F59E0B);padding:4px 10px;border-radius:9999px;box-shadow:0 3px 8px -2px rgba(245,158,11,0.5)}
-  .coin-bal{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:#FFFFFF;border-top:1px solid #FDE9C8;font-size:12px;font-weight:700;color:#475569}
-  .coin-bal .v{font-weight:900;color:#B45309;font-variant-numeric:tabular-nums}
+  /* Krishi Coins · redeem toggle tile (same as the earlier checkout tile) */
+  .coin-redeem{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer}
+  .coin-redeem .coin-ic{width:40px;height:40px;border-radius:12px;background:#FEF3C7;color:#B45309;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+  .coin-body{flex:1;line-height:1.25}
+  .coin-a{font-size:13.5px;font-weight:800;color:#0F172A}
+  .coin-b{font-size:11px;color:#64748B;margin-top:2px}
+  .coin-b b{color:#047857}
+  .coin-toggle{appearance:none;-webkit-appearance:none;width:42px;height:24px;border-radius:9999px;background:#E2E8F0;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s ease;border:0;margin:0}
+  .coin-toggle::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.2);transition:transform .2s ease}
+  .coin-toggle:checked{background:#059669}
+  .coin-toggle:checked::after{transform:translateX(18px)}
   .saved-pill{margin-top:10px;display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;background:#ECFDF5;color:#047857;font-size:11px;font-weight:700;border:1px solid #BBF7D0}
 
   /* Sticky checkout · 2-col layout · summary on the left (item count + amount), button on the right (compact, not full-width) · Saved-520 text removed */
@@ -335,11 +335,12 @@
       <div class="bill-row"><span class="lbl">Items total (3)</span><span class="val tnum">&#8377;2,300</span></div>
       <div class="bill-row"><span class="lbl">Item discount</span><span class="val green tnum">&minus; &#8377;300</span></div>
       <div class="bill-row" id="billCouponRow"><span class="lbl">Coupon (WELCOME100)</span><span class="val green tnum">&minus; &#8377;100</span></div>
+      <div class="bill-row" id="coinBillRow" style="display:none"><span class="lbl" style="color:#047857;font-weight:700"><i class="fa-solid fa-coins text-[11px]" style="color:#F59E0B"></i> Krishi Coins</span><span class="val green tnum">&minus; &#8377;190</span></div>
       <div class="bill-row"><span class="lbl" style="color:#047857;font-weight:700"><i class="fa-solid fa-wallet text-[10px]"></i> Wallet</span><span class="val green tnum">&minus; &#8377;540</span></div>
       <div class="bill-row"><span class="lbl">Delivery</span><span class="val green">FREE</span></div>
       <div class="bill-total">
         <span class="lbl">To pay</span>
-        <span class="val tnum">&#8377;1,360</span>
+        <span class="val tnum" id="cartBillTotal">&#8377;1,360</span>
       </div>
       <div class="saved-pill"><i class="fa-solid fa-circle-check text-[11px]"></i> You saved &#8377;520 on this order</div>
     </div>
@@ -359,18 +360,17 @@
     <div class="wal-remain"><span>Remaining wallet balance</span><span class="v tnum">&#8377;0</span></div>
   </div>
 
-  <!-- Krishi Coins · reward earned on this order · amber tile, distinct from the emerald wallet -->
+  <!-- Krishi Coins · redeem toggle (1 coin = ₹1, capped) · applies to the bill summary above -->
   <div class="sec-title">Krishi Coins</div>
-  <div class="card coin-card">
-    <div class="coin-earn">
-      <span class="ce-ic"><i class="fa-solid fa-coins"></i></span>
-      <div class="ce-body">
-        <div class="ce-a">You'll earn <span>45 Krishi Coins</span> on this order</div>
-        <div class="ce-b">Redeem on your next purchase &middot; 1 coin = &#8377;1</div>
+  <div class="card">
+    <label class="coin-redeem">
+      <span class="coin-ic"><i class="fa-solid fa-coins"></i></span>
+      <div class="coin-body">
+        <div class="coin-a">Use Krishi Coins</div>
+        <div class="coin-b">Balance <b class="tnum">1,240</b> coins &middot; redeem up to <b class="tnum">&#8377;190</b> on this order</div>
       </div>
-      <span class="ce-tag"><i class="fa-solid fa-plus text-[8px]"></i> 45</span>
-    </div>
-    <div class="coin-bal"><span>Coin balance after this order</span><span class="v tnum">320</span></div>
+      <input type="checkbox" id="coinUse" class="coin-toggle"/>
+    </label>
   </div>
 
   <!-- Deliver-to · moved below Bill summary per spec · partner-app pattern -->
@@ -711,22 +711,49 @@
       });
     })();
 
-    // Threshold meter · 100% flips to "unlocked" state
+    // Threshold meter · LOCKED ↔ UNLOCKED · tap to preview the unlocked state (free reward added)
     (function(){
       const fill = document.getElementById('pmeterFill');
       const title = document.getElementById('pmeterTitle');
       const meter = document.getElementById('pmeter');
-      const cur = 2200, goal = 2500;
-      const pct = Math.min(100, Math.round(cur / goal * 100));
-      fill.style.width = pct + '%';
-      if (cur >= goal) {
-        meter.classList.add('unlocked');
-        title.innerHTML = '<span class="hl">Free Humic 50 ml</span> added to your cart';
-        const tag = document.getElementById('pmeterTag');
-        if (tag) tag.innerHTML = '<i class="fa-solid fa-circle-check"></i> Reward unlocked';
-        const lock = meter.querySelector('.pmeter-thumb .lock');
-        if (lock) lock.innerHTML = '<i class="fa-solid fa-check"></i>';
+      const tag = document.getElementById('pmeterTag');
+      const lock = meter ? meter.querySelector('.pmeter-thumb .lock') : null;
+      if (!meter) return;
+      let unlocked = false;
+      function render(){
+        if (unlocked){
+          meter.classList.add('unlocked');
+          fill.style.width = '100%';
+          tag.innerHTML = '<i class="fa-solid fa-circle-check"></i> Reward unlocked';
+          title.innerHTML = '<span class="hl">Free Humic 50 ml</span> added to your cart 🎉';
+          if (lock) lock.innerHTML = '<i class="fa-solid fa-check"></i>';
+        } else {
+          meter.classList.remove('unlocked');
+          fill.style.width = '88%';
+          tag.innerHTML = '<i class="fa-solid fa-gift"></i> Free reward locked';
+          title.innerHTML = 'Add products worth <span class="hl tnum">₹300 more</span> to unlock a <span class="hl">free Humic 50 ml</span>';
+          if (lock) lock.innerHTML = '<i class="fa-solid fa-lock"></i>';
+        }
       }
+      meter.style.cursor = 'pointer';
+      meter.addEventListener('click', () => { unlocked = !unlocked; render(); });
+      render();
+    })();
+
+    // Krishi Coins redeem toggle · applies/removes the capped ₹190 redemption · updates the bill line, To-pay total + sticky
+    (function(){
+      const t = document.getElementById('coinUse');
+      const coinRow = document.getElementById('coinBillRow');
+      const billTotalEl = document.getElementById('cartBillTotal');
+      const BASE = 1360, COIN = 190;
+      if (!t) return;
+      t.addEventListener('change', () => {
+        const on = t.checked;
+        cartTotal = on ? BASE - COIN : BASE;
+        if (coinRow) coinRow.style.display = on ? 'flex' : 'none';
+        if (billTotalEl) billTotalEl.textContent = '₹' + cartTotal.toLocaleString('en-IN');
+        updateSticky();
+      });
     })();
 
     // Checkout opens cross-sell sheet

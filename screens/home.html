@@ -2653,7 +2653,8 @@
 
       const INLINE_COUNT = 8;
       function renderPicker(){
-        const allKeys = Object.keys(CROP_META);
+        // Selected crops first, then the rest (stable) · so the user's crops always lead the Shop-by-Crop strip
+        const allKeys = Object.keys(CROP_META).slice().sort(function(a,b){ return (selected.has(b)?1:0) - (selected.has(a)?1:0); });
         const inlineKeys = allKeys.slice(0, INLINE_COUNT);
         const hiddenCount = allKeys.length - inlineKeys.length;
         const chips = inlineKeys.map(function(key){

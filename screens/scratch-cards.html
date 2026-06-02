@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Scratch Cards</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased;box-sizing:border-box}
+  html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:88px}
+  .tnum{font-variant-numeric:tabular-nums}
+  .sec-title{margin:18px 16px 10px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
+
+  /* Summary strip */
+  .sum{display:flex;margin:14px 16px 0;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .sum .s{flex:1;text-align:center;padding:14px 8px}
+  .sum .s + .s{border-left:1px solid #F1F5F9}
+  .sum .v{font-size:20px;font-weight:900;color:#0F172A}
+  .sum .v.amt{color:#047857}
+  .sum .k{font-size:10.5px;color:#64748B;font-weight:600;margin-top:2px}
+
+  .sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 16px}
+
+  /* To-scratch tile · foil look */
+  .sc-tile{position:relative;height:140px;border-radius:16px;overflow:hidden;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#FFFFFF;text-align:center;padding:10px;
+    background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 55%,#B45309 120%);box-shadow:0 8px 18px -8px rgba(180,83,9,0.5)}
+  .sc-tile::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,0.10) 0 8px,transparent 8px 16px);pointer-events:none}
+  .sc-tile .sc-q{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,0.22);display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid rgba(255,255,255,0.5)}
+  .sc-tile .sc-t{font-size:12.5px;font-weight:800;line-height:1.2}
+  .sc-tile .sc-act{font-size:10px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;background:rgba(255,255,255,0.22);padding:3px 9px;border-radius:9999px}
+
+  /* Scratched (won) tile */
+  .sc-won{position:relative;height:140px;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;padding:10px;
+    background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border:1px solid #A7F3D0;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .sc-won .wtag{position:absolute;top:8px;right:8px;font-size:8.5px;font-weight:900;letter-spacing:0.06em;color:#FFFFFF;background:#059669;padding:2px 7px;border-radius:9999px}
+  .sc-won .wic{font-size:24px;line-height:1;margin-bottom:2px}
+  .sc-won .wamt{font-size:24px;font-weight:900;color:#047857;letter-spacing:-0.02em;line-height:1.05}
+  .sc-won .wsub{font-size:11px;font-weight:700;color:#0F172A}
+  .sc-won .wdate{font-size:10px;color:#94A3B8;font-weight:600;margin-top:2px}
+  .sc-won.miss{background:#F8FAFC;border-color:#E5E7EB}
+  .sc-won.miss .wamt{color:#94A3B8;font-size:15px}
+  .sc-won.miss .wtag{background:#94A3B8}
+
+  /* Scratch overlay */
+  .scratch-ov{position:fixed;inset:0;z-index:300;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:24px}
+  .scratch-ov.open{display:flex}
+  .scratch-modal{position:relative;width:100%;max-width:320px;background:#FFFFFF;border-radius:22px;padding:22px 20px 20px;box-shadow:0 24px 60px -10px rgba(0,0,0,0.45);text-align:center}
+  .scratch-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:#F1F5F9;border:0;color:#475569;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .scratch-h{font-size:15px;font-weight:800;color:#0F172A;margin-bottom:14px}
+  .scratch-card{position:relative;width:100%;height:172px;border-radius:16px;overflow:hidden;margin:0 auto;box-shadow:0 8px 20px -8px rgba(0,0,0,0.25)}
+  .scratch-prize{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:linear-gradient(135deg,#FFFBEB 0%,#FEF3C7 60%,#FDE68A 100%)}
+  .scratch-prize .sp-emoji{font-size:34px;line-height:1}
+  .scratch-prize .sp-amt{font-size:34px;font-weight:900;color:#047857;letter-spacing:-0.02em;line-height:1.05}
+  .scratch-prize .sp-label{font-size:13px;font-weight:800;color:#0F172A}
+  .scratch-prize .sp-sub{font-size:11px;color:#64748B;font-weight:500}
+  .scratch-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
+  .scratch-hint{margin-top:13px;font-size:11.5px;color:#94A3B8;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px}
+  .scratch-claim{width:100%;margin-top:13px;height:48px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:14.5px;font-weight:800;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+  .sc-conf{position:absolute;top:0;width:8px;height:13px;border-radius:2px;opacity:0;pointer-events:none}
+  .sc-conf.go{animation:scConf 1.6s ease-in forwards}
+  @keyframes scConf{0%{transform:translateY(-10px) rotate(0);opacity:0}15%{opacity:1}100%{transform:translateY(230px) rotate(260deg);opacity:0}}
+
+  .nav{position:fixed;bottom:0;left:0;right:0;height:68px;background:#FFFFFF;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04);display:flex;justify-content:space-around;align-items:center;padding:0 8px;z-index:50}
+  .nav a{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:#94A3B8;font-size:12px;font-weight:600}
+  .nav a.on{color:#0F172A;font-weight:700}
+  .nav a.on i{color:#059669}
+  .nav i{font-size:19px}
+</style></head>
+<body>
+
+  <!-- Status bar -->
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
+
+  <!-- Header -->
+  <div class="px-4 pt-4 pb-4 flex items-center gap-3 bg-white" style="border-bottom:1px solid #F1F5F9">
+    <button onclick="if(history.length>1){history.back()}else{location.href='account.html'}" class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:#FFFFFF;border:1px solid #E5E7EB"><i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i></button>
+    <h1 class="text-[22px] font-extrabold">Scratch cards</h1>
+  </div>
+
+  <!-- Summary -->
+  <div class="sum">
+    <div class="s"><div class="v" id="sumTodo">1</div><div class="k">To scratch</div></div>
+    <div class="s"><div class="v" id="sumWon">4</div><div class="k">Scratched</div></div>
+    <div class="s"><div class="v amt tnum">₹180</div><div class="k">Total won</div></div>
+  </div>
+
+  <!-- To scratch -->
+  <div class="sec-title" id="todoTitle">To scratch</div>
+  <div class="sc-grid" id="todoGrid">
+    <button type="button" class="sc-tile" data-prize="₹150" data-label="Cashback won!" data-sub="Added to your wallet" data-date="Today">
+      <span class="sc-q"><i class="fa-solid fa-gift"></i></span>
+      <span class="sc-t">Order reward</span>
+      <span class="sc-act">Tap to scratch</span>
+    </button>
+  </div>
+
+  <!-- Scratched -->
+  <div class="sec-title">Scratched</div>
+  <div class="sc-grid">
+    <div class="sc-won"><span class="wtag">WON</span><div class="wic">🎉</div><div class="wamt tnum">₹100</div><div class="wsub">Cashback</div><div class="wdate">28 May 2026</div></div>
+    <div class="sc-won"><span class="wtag">WON</span><div class="wic">🪙</div><div class="wamt tnum">50</div><div class="wsub">Krishi Coins</div><div class="wdate">20 May 2026</div></div>
+    <div class="sc-won"><span class="wtag">WON</span><div class="wic">🎉</div><div class="wamt tnum">₹30</div><div class="wsub">Cashback</div><div class="wdate">12 May 2026</div></div>
+    <div class="sc-won miss"><span class="wtag">MISSED</span><div class="wic">🙂</div><div class="wamt">Better luck</div><div class="wsub">Next time!</div><div class="wdate">2 May 2026</div></div>
+  </div>
+
+  <!-- Scratch overlay -->
+  <div id="scratchOv" class="scratch-ov">
+    <div class="scratch-modal">
+      <button class="scratch-close" id="scratchClose"><i class="fa-solid fa-xmark"></i></button>
+      <div class="scratch-h">🎁 Scratch to reveal your reward</div>
+      <div class="scratch-card" id="scratchCard">
+        <div class="scratch-prize">
+          <div class="sp-emoji">🎉</div>
+          <div class="sp-amt" id="spAmt">₹150</div>
+          <div class="sp-label" id="spLabel">Cashback won!</div>
+          <div class="sp-sub" id="spSub">Added to your wallet</div>
+        </div>
+        <canvas id="scratchCanvas" class="scratch-canvas"></canvas>
+      </div>
+      <div class="scratch-hint" id="scratchHint"><i class="fa-solid fa-hand-pointer"></i> Scratch the card with your finger</div>
+      <button class="scratch-claim" id="scratchClaim" style="display:none">Claim reward →</button>
+    </div>
+  </div>
+
+  <!-- Bottom nav -->
+  <nav class="nav">
+    <a href="home.html"><i class="fa-solid fa-house"></i>Home</a>
+    <a href="crop-detail.html"><i class="fa-solid fa-seedling"></i>Crop</a>
+    <a href="orders.html"><i class="fa-solid fa-box"></i>Orders</a>
+    <a href="account.html" class="on"><i class="fa-solid fa-user"></i>Profile</a>
+  </nav>
+
+  <script>
+    (function(){
+      const ov = document.getElementById('scratchOv');
+      const closeBtn = document.getElementById('scratchClose');
+      const claim = document.getElementById('scratchClaim');
+      const hint = document.getElementById('scratchHint');
+      const card = document.getElementById('scratchCard');
+      const cv = document.getElementById('scratchCanvas');
+      const ctx = cv.getContext('2d');
+      const spAmt = document.getElementById('spAmt'), spLabel = document.getElementById('spLabel'), spSub = document.getElementById('spSub');
+      let done = false, activeTile = null;
+
+      function paintFoil(){
+        const w = card.clientWidth, h = card.clientHeight;
+        cv.width = w; cv.height = h;
+        const g = ctx.createLinearGradient(0,0,w,h);
+        g.addColorStop(0,'#C8CCD4'); g.addColorStop(.5,'#E6EAF0'); g.addColorStop(1,'#AEB4BF');
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+        ctx.fillStyle = 'rgba(71,85,105,0.8)'; ctx.textAlign = 'center';
+        ctx.font = '800 16px Poppins, sans-serif'; ctx.fillText('SCRATCH HERE', w/2, h/2 - 4);
+        ctx.font = '600 11px Poppins, sans-serif'; ctx.fillStyle = 'rgba(100,116,139,0.8)'; ctx.fillText('Use your finger', w/2, h/2 + 15);
+      }
+      function relPos(e){ const r = cv.getBoundingClientRect(); const t = e.touches ? e.touches[0] : e; return { x: t.clientX - r.left, y: t.clientY - r.top }; }
+      function scratchAt(x,y){ ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x, y, 22, 0, Math.PI*2); ctx.fill(); }
+      function clearedPct(){ const d = ctx.getImageData(0,0,cv.width,cv.height).data; let cleared = 0, total = 0; for (let i = 3; i < d.length; i += 32){ total++; if (d[i] === 0) cleared++; } return total ? cleared/total : 0; }
+      let drawing = false;
+      function down(e){ drawing = true; const p = relPos(e); scratchAt(p.x,p.y); e.preventDefault(); }
+      function move(e){ if(!drawing) return; const p = relPos(e); scratchAt(p.x,p.y); e.preventDefault(); }
+      function up(){ if(!drawing) return; drawing = false; if(!done && clearedPct() > 0.45) reveal(); }
+
+      function reveal(){
+        done = true;
+        ctx.clearRect(0,0,cv.width,cv.height);
+        if (hint) hint.innerHTML = '<i class="fa-solid fa-circle-check" style="color:#059669"></i> Reward credited to your wallet';
+        if (claim) claim.style.display = 'block';
+        const prize = card.querySelector('.scratch-prize');
+        if (prize){ prize.style.transform = 'scale(.85)'; prize.style.transition = 'transform .5s cubic-bezier(.22,1.4,.4,1)'; requestAnimationFrame(()=>{ prize.style.transform = 'scale(1)'; }); }
+        const modal = ov.querySelector('.scratch-modal');
+        const colors = ['#10B981','#FBBF24','#FB7185','#34D399','#60A5FA'];
+        for (let i=0;i<14;i++){ const c=document.createElement('span'); c.className='sc-conf'; c.style.left=(8+Math.random()*84)+'%'; c.style.background=colors[i%colors.length]; c.style.animationDelay=(Math.random()*0.3)+'s'; modal.appendChild(c); requestAnimationFrame(()=>c.classList.add('go')); setTimeout(()=>c.remove(),2000); }
+      }
+
+      function markScratched(){
+        if (!activeTile) return;
+        const won = document.createElement('div');
+        won.className = 'sc-won';
+        won.innerHTML = '<span class="wtag">WON</span><div class="wic">🎉</div><div class="wamt tnum">'+activeTile.dataset.prize+'</div><div class="wsub">'+activeTile.dataset.sub.replace('Added to your wallet','Cashback')+'</div><div class="wdate">Today</div>';
+        // move to the Scratched grid (top) · drop from the To-scratch grid
+        const scratchedGrid = document.querySelectorAll('.sc-grid')[1];
+        if (scratchedGrid) scratchedGrid.insertBefore(won, scratchedGrid.firstChild);
+        activeTile.remove();
+        // update counts + empty state
+        const todoGrid = document.getElementById('todoGrid');
+        const left = todoGrid.querySelectorAll('.sc-tile').length;
+        document.getElementById('sumTodo').textContent = left;
+        document.getElementById('sumWon').textContent = document.querySelectorAll('.sc-grid')[1].querySelectorAll('.sc-won').length;
+        if (left === 0){ document.getElementById('todoTitle').style.display='none'; todoGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#94A3B8;font-size:12.5px;font-weight:600;padding:14px 0">No cards left to scratch — new ones arrive with every order 🎉</div>'; }
+      }
+
+      function open(tile){
+        activeTile = tile; done = false;
+        spAmt.textContent = tile.dataset.prize;
+        spLabel.textContent = tile.dataset.label || 'You won!';
+        spSub.textContent = tile.dataset.sub || '';
+        if (claim) claim.style.display = 'none';
+        if (hint) hint.innerHTML = '<i class="fa-solid fa-hand-pointer"></i> Scratch the card with your finger';
+        const prize = card.querySelector('.scratch-prize'); if (prize) prize.style.transform = '';
+        ov.classList.add('open');
+        requestAnimationFrame(paintFoil);
+      }
+      function close(){ ov.classList.remove('open'); }
+
+      document.querySelectorAll('#todoGrid .sc-tile').forEach(t => t.addEventListener('click', () => open(t)));
+      if (closeBtn) closeBtn.addEventListener('click', close);
+      if (claim) claim.addEventListener('click', function(){ markScratched(); close(); });
+      ov.addEventListener('click', function(e){ if (e.target === ov) close(); });
+      cv.addEventListener('mousedown', down); cv.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
+      cv.addEventListener('touchstart', down, {passive:false}); cv.addEventListener('touchmove', move, {passive:false}); window.addEventListener('touchend', up);
+    })();
+  </script>
+
+</body></html>

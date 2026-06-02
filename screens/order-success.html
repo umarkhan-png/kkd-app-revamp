@@ -212,12 +212,12 @@
   <!-- Rewards · scratch card + coins earned · 2-col grid -->
   <div class="sec-title">Your rewards</div>
   <div class="reward-grid">
-    <a href="#" class="reward-tile scratch">
+    <button type="button" id="scratchTile" class="reward-tile scratch" style="cursor:pointer;font-family:inherit;width:100%">
       <span class="reward-ic"><i class="fa-solid fa-gift"></i></span>
       <span class="reward-title">Scratch &amp; win</span>
       <span class="reward-sub">Up to ₹200 cashback</span>
       <span class="reward-action">Scratch now →</span>
-    </a>
+    </button>
     <a href="coins-statement.html" class="reward-tile coins">
       <span class="reward-ic"><i class="fa-solid fa-coins"></i></span>
       <span class="reward-title">+36 coins earned</span>
@@ -311,6 +311,25 @@
     .modal-sheet{position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;max-height:88vh;display:flex;flex-direction:column}
     .modal-sheet.open{transform:translateY(0)}
     .modal-handle{width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 0}
+
+    /* Scratch-card overlay */
+    .scratch-ov{position:fixed;inset:0;z-index:300;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:24px}
+    .scratch-ov.open{display:flex}
+    .scratch-modal{position:relative;width:100%;max-width:320px;background:#FFFFFF;border-radius:22px;padding:22px 20px 20px;box-shadow:0 24px 60px -10px rgba(0,0,0,0.45);text-align:center}
+    .scratch-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:#F1F5F9;border:0;color:#475569;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .scratch-h{font-size:15px;font-weight:800;color:#0F172A;margin-bottom:14px}
+    .scratch-card{position:relative;width:100%;height:172px;border-radius:16px;overflow:hidden;margin:0 auto;box-shadow:0 8px 20px -8px rgba(0,0,0,0.25)}
+    .scratch-prize{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:linear-gradient(135deg,#FFFBEB 0%,#FEF3C7 60%,#FDE68A 100%)}
+    .scratch-prize .sp-emoji{font-size:34px;line-height:1}
+    .scratch-prize .sp-amt{font-size:34px;font-weight:900;color:#047857;letter-spacing:-0.02em;line-height:1.05}
+    .scratch-prize .sp-label{font-size:13px;font-weight:800;color:#0F172A}
+    .scratch-prize .sp-sub{font-size:11px;color:#64748B;font-weight:500}
+    .scratch-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
+    .scratch-hint{margin-top:13px;font-size:11.5px;color:#94A3B8;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px}
+    .scratch-claim{width:100%;margin-top:13px;height:48px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:14.5px;font-weight:800;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+    .sc-conf{position:absolute;top:0;width:8px;height:13px;border-radius:2px;opacity:0;pointer-events:none}
+    .sc-conf.go{animation:scConf 1.6s ease-in forwards}
+    @keyframes scConf{0%{transform:translateY(-10px) rotate(0);opacity:0}15%{opacity:1}100%{transform:translateY(230px) rotate(260deg);opacity:0}}
   </style>
 
   <script>
@@ -394,6 +413,83 @@
       document.body.appendChild(ov);
       setTimeout(() => ov.remove(), 2500);
     })();
+
+    // Scratch & win · tap the reward tile → overlay with a real canvas scratch card → scratch ~45% → reveal + celebration
+    (function(){
+      const tile = document.getElementById('scratchTile');
+      const ov = document.getElementById('scratchOv');
+      const closeBtn = document.getElementById('scratchClose');
+      const claim = document.getElementById('scratchClaim');
+      const hint = document.getElementById('scratchHint');
+      const card = document.getElementById('scratchCard');
+      const cv = document.getElementById('scratchCanvas');
+      if (!tile || !ov || !cv) return;
+      const ctx = cv.getContext('2d');
+      let inited = false, done = false;
+
+      function paintFoil(){
+        const w = card.clientWidth, h = card.clientHeight;
+        cv.width = w; cv.height = h;
+        const g = ctx.createLinearGradient(0,0,w,h);
+        g.addColorStop(0,'#C8CCD4'); g.addColorStop(.5,'#E6EAF0'); g.addColorStop(1,'#AEB4BF');
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+        ctx.fillStyle = 'rgba(71,85,105,0.8)'; ctx.textAlign = 'center';
+        ctx.font = '800 16px Poppins, sans-serif'; ctx.fillText('SCRATCH HERE', w/2, h/2 - 4);
+        ctx.font = '600 11px Poppins, sans-serif'; ctx.fillStyle = 'rgba(100,116,139,0.8)'; ctx.fillText('Use your finger', w/2, h/2 + 15);
+      }
+      function relPos(e){ const r = cv.getBoundingClientRect(); const t = e.touches ? e.touches[0] : e; return { x: t.clientX - r.left, y: t.clientY - r.top }; }
+      function scratchAt(x,y){ ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x, y, 22, 0, Math.PI*2); ctx.fill(); }
+      function clearedPct(){ const d = ctx.getImageData(0,0,cv.width,cv.height).data; let cleared = 0, total = 0; for (let i = 3; i < d.length; i += 32){ total++; if (d[i] === 0) cleared++; } return total ? cleared/total : 0; }
+      let drawing = false;
+      function down(e){ drawing = true; const p = relPos(e); scratchAt(p.x,p.y); e.preventDefault(); }
+      function move(e){ if(!drawing) return; const p = relPos(e); scratchAt(p.x,p.y); e.preventDefault(); }
+      function up(){ if(!drawing) return; drawing = false; if(!done && clearedPct() > 0.45) reveal(); }
+
+      function reveal(){
+        done = true;
+        ctx.clearRect(0,0,cv.width,cv.height);
+        if (hint) hint.innerHTML = '<i class="fa-solid fa-circle-check" style="color:#059669"></i> ₹150 added to your wallet';
+        if (claim) claim.style.display = 'block';
+        const prize = card.querySelector('.scratch-prize');
+        if (prize){ prize.style.transform = 'scale(.85)'; prize.style.transition = 'transform .5s cubic-bezier(.22,1.4,.4,1)'; requestAnimationFrame(()=>{ prize.style.transform = 'scale(1)'; }); }
+        // soft confetti burst inside the modal
+        const modal = ov.querySelector('.scratch-modal');
+        const colors = ['#10B981','#FBBF24','#FB7185','#34D399','#60A5FA'];
+        for (let i=0;i<14;i++){ const c=document.createElement('span'); c.className='sc-conf'; c.style.left=(8+Math.random()*84)+'%'; c.style.background=colors[i%colors.length]; c.style.animationDelay=(Math.random()*0.3)+'s'; modal.appendChild(c); requestAnimationFrame(()=>c.classList.add('go')); setTimeout(()=>c.remove(),2000); }
+      }
+
+      function open(){
+        ov.classList.add('open');
+        requestAnimationFrame(()=>{ paintFoil(); inited = true; });
+      }
+      function close(){ ov.classList.remove('open'); }
+      tile.addEventListener('click', open);
+      if (closeBtn) closeBtn.addEventListener('click', close);
+      if (claim) claim.addEventListener('click', function(){ close(); window.location.href = 'wallet.html'; });
+      ov.addEventListener('click', function(e){ if (e.target === ov) close(); });
+      cv.addEventListener('mousedown', down); cv.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
+      cv.addEventListener('touchstart', down, {passive:false}); cv.addEventListener('touchmove', move, {passive:false}); window.addEventListener('touchend', up);
+    })();
   </script>
+
+  <!-- Scratch & win overlay -->
+  <div id="scratchOv" class="scratch-ov">
+    <div class="scratch-modal">
+      <button class="scratch-close" id="scratchClose"><i class="fa-solid fa-xmark"></i></button>
+      <div class="scratch-h">🎁 Scratch to reveal your reward</div>
+      <div class="scratch-card" id="scratchCard">
+        <div class="scratch-prize">
+          <div class="sp-emoji">🎉</div>
+          <div class="sp-amt">₹150</div>
+          <div class="sp-label">Cashback won!</div>
+          <div class="sp-sub">Added to your wallet</div>
+        </div>
+        <canvas id="scratchCanvas" class="scratch-canvas"></canvas>
+      </div>
+      <div class="scratch-hint" id="scratchHint"><i class="fa-solid fa-hand-pointer"></i> Scratch the card with your finger</div>
+      <button class="scratch-claim" id="scratchClaim" style="display:none">Claim ₹150 →</button>
+    </div>
+  </div>
 
 </body></html>

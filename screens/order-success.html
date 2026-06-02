@@ -419,7 +419,6 @@
       const tile = document.getElementById('scratchTile');
       const ov = document.getElementById('scratchOv');
       const closeBtn = document.getElementById('scratchClose');
-      const claim = document.getElementById('scratchClaim');
       const hint = document.getElementById('scratchHint');
       const card = document.getElementById('scratchCard');
       const cv = document.getElementById('scratchCanvas');
@@ -450,7 +449,6 @@
         done = true;
         ctx.clearRect(0,0,cv.width,cv.height);
         if (hint) hint.innerHTML = '<i class="fa-solid fa-circle-check" style="color:#059669"></i> ₹150 added to your wallet';
-        if (claim) claim.style.display = 'block';
         const prize = card.querySelector('.scratch-prize');
         if (prize){ prize.style.transform = 'scale(.85)'; prize.style.transition = 'transform .5s cubic-bezier(.22,1.4,.4,1)'; requestAnimationFrame(()=>{ prize.style.transform = 'scale(1)'; }); }
         // soft confetti burst inside the modal
@@ -466,7 +464,6 @@
       function close(){ ov.classList.remove('open'); }
       tile.addEventListener('click', open);
       if (closeBtn) closeBtn.addEventListener('click', close);
-      if (claim) claim.addEventListener('click', function(){ close(); window.location.href = 'wallet.html'; });
       ov.addEventListener('click', function(e){ if (e.target === ov) close(); });
       cv.addEventListener('mousedown', down); cv.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
       cv.addEventListener('touchstart', down, {passive:false}); cv.addEventListener('touchmove', move, {passive:false}); window.addEventListener('touchend', up);
@@ -488,7 +485,6 @@
         <canvas id="scratchCanvas" class="scratch-canvas"></canvas>
       </div>
       <div class="scratch-hint" id="scratchHint"><i class="fa-solid fa-hand-pointer"></i> Scratch the card with your finger</div>
-      <button class="scratch-claim" id="scratchClaim" style="display:none">Claim ₹150 →</button>
     </div>
   </div>
 

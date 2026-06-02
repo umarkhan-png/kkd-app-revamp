@@ -117,7 +117,6 @@
         <canvas id="scratchCanvas" class="scratch-canvas"></canvas>
       </div>
       <div class="scratch-hint" id="scratchHint"><i class="fa-solid fa-hand-pointer"></i> Scratch the card with your finger</div>
-      <button class="scratch-claim" id="scratchClaim" style="display:none">Claim reward →</button>
     </div>
   </div>
 
@@ -133,7 +132,6 @@
     (function(){
       const ov = document.getElementById('scratchOv');
       const closeBtn = document.getElementById('scratchClose');
-      const claim = document.getElementById('scratchClaim');
       const hint = document.getElementById('scratchHint');
       const card = document.getElementById('scratchCard');
       const cv = document.getElementById('scratchCanvas');
@@ -164,12 +162,12 @@
         done = true;
         ctx.clearRect(0,0,cv.width,cv.height);
         if (hint) hint.innerHTML = '<i class="fa-solid fa-circle-check" style="color:#059669"></i> Reward credited to your wallet';
-        if (claim) claim.style.display = 'block';
         const prize = card.querySelector('.scratch-prize');
         if (prize){ prize.style.transform = 'scale(.85)'; prize.style.transition = 'transform .5s cubic-bezier(.22,1.4,.4,1)'; requestAnimationFrame(()=>{ prize.style.transform = 'scale(1)'; }); }
         const modal = ov.querySelector('.scratch-modal');
         const colors = ['#10B981','#FBBF24','#FB7185','#34D399','#60A5FA'];
         for (let i=0;i<14;i++){ const c=document.createElement('span'); c.className='sc-conf'; c.style.left=(8+Math.random()*84)+'%'; c.style.background=colors[i%colors.length]; c.style.animationDelay=(Math.random()*0.3)+'s'; modal.appendChild(c); requestAnimationFrame(()=>c.classList.add('go')); setTimeout(()=>c.remove(),2000); }
+        markScratched();   // no Claim button · card is credited + moved to "Scratched" on reveal
       }
 
       function markScratched(){
@@ -194,7 +192,6 @@
         spAmt.textContent = tile.dataset.prize;
         spLabel.textContent = tile.dataset.label || 'You won!';
         spSub.textContent = tile.dataset.sub || '';
-        if (claim) claim.style.display = 'none';
         if (hint) hint.innerHTML = '<i class="fa-solid fa-hand-pointer"></i> Scratch the card with your finger';
         const prize = card.querySelector('.scratch-prize'); if (prize) prize.style.transform = '';
         ov.classList.add('open');
@@ -204,7 +201,6 @@
 
       document.querySelectorAll('#todoGrid .sc-tile').forEach(t => t.addEventListener('click', () => open(t)));
       if (closeBtn) closeBtn.addEventListener('click', close);
-      if (claim) claim.addEventListener('click', function(){ markScratched(); close(); });
       ov.addEventListener('click', function(e){ if (e.target === ov) close(); });
       cv.addEventListener('mousedown', down); cv.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
       cv.addEventListener('touchstart', down, {passive:false}); cv.addEventListener('touchmove', move, {passive:false}); window.addEventListener('touchend', up);

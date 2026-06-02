@@ -1083,7 +1083,7 @@
     <section class="px-4 pt-5">
       <div class="flex items-baseline justify-between mb-4">
         <h2 class="text-[21px] font-bold tracking-tight">Bestsellers</h2>
-        <a href="categories.html?sort=bestsellers" class="nu text-[13px] font-semibold" style="color:#059669">See all</a>
+        <a href="shop.html?sort=bestsellers" class="nu text-[13px] font-semibold" style="color:#059669">See all</a>
       </div>
       <div class="grid grid-cols-2 gap-3">
 
@@ -1222,6 +1222,32 @@
           </div>
         </a>
 
+      </div>
+    </section>
+
+    <!-- Recently viewed · horizontal strip of the last products the farmer opened · sits just above Buy again -->
+    <section class="mt-8">
+      <div class="px-4 mb-3 flex items-baseline justify-between">
+        <h2 class="text-[21px] font-bold tracking-tight">Recently viewed</h2>
+        <a href="categories.html" class="nu text-[13px] font-semibold" style="color:#059669">See all</a>
+      </div>
+      <style>
+        .rv-card{flex-shrink:0;width:140px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04);text-decoration:none;color:inherit;display:flex;flex-direction:column}
+        .rv-card .rv-img{height:104px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:10px;border-bottom:1px solid #F1F5F9}
+        .rv-card .rv-img img{max-width:100%;max-height:100%;object-fit:contain}
+        .rv-card .rv-b{padding:9px 10px 11px}
+        .rv-card .rv-n{font-size:13px;font-weight:700;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .rv-card .rv-p{font-size:14px;font-weight:800;color:#0F172A;margin-top:3px;font-variant-numeric:tabular-nums}
+        .rv-card .rv-p .rv-m{font-size:10.5px;font-weight:600;color:#94A3B8;text-decoration:line-through;margin-left:5px}
+      </style>
+      <div class="overflow-x-auto scroll-x">
+        <div class="flex gap-3 px-4 pb-1">
+          <a href="pdp.html" class="rv-card"><div class="rv-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend"/></div><div class="rv-b"><div class="rv-n">Humic + Fulvic</div><div class="rv-p">&#8377;276<span class="rv-m">&#8377;390</span></div></div></a>
+          <a href="pdp.html" class="rv-card"><div class="rv-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend"/></div><div class="rv-b"><div class="rv-n">Chakrawarti ZC</div><div class="rv-p">&#8377;358<span class="rv-m">&#8377;495</span></div></div></a>
+          <a href="pdp.html" class="rv-card"><div class="rv-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend"/></div><div class="rv-b"><div class="rv-n">NPK 19-19-19</div><div class="rv-p">&#8377;330</div></div></a>
+          <a href="pdp.html" class="rv-card"><div class="rv-img"><img src="../assets/AntiVirus_nobg.png" class="img-blend"/></div><div class="rv-b"><div class="rv-n">Antivirus</div><div class="rv-p">&#8377;327<span class="rv-m">&#8377;425</span></div></div></a>
+          <a href="pdp.html" class="rv-card"><div class="rv-img"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp" class="img-blend"/></div><div class="rv-b"><div class="rv-n">Bhumiraja</div><div class="rv-p">&#8377;245<span class="rv-m">&#8377;320</span></div></div></a>
+        </div>
       </div>
     </section>
 
@@ -1469,8 +1495,10 @@
         .eng-close{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:#F1F5F9;color:#475569;border:0;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer}
         .eng-q{flex:1;min-width:0;font-size:13px;font-weight:800;color:#0F172A;line-height:1.3;padding-top:2px}
         .eng-opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-        .eng-chip{padding:6px 11px;border-radius:9999px;background:#F8FAFC;border:1px solid #E5E7EB;font-size:11.5px;font-weight:700;color:#0F172A;cursor:pointer}
+        .eng-chip{padding:6px 11px;border-radius:9999px;background:#F8FAFC;border:1px solid #E5E7EB;font-size:11.5px;font-weight:700;color:#0F172A;cursor:pointer;transition:all .15s ease}
         .eng-chip:active{transform:scale(.96)}
+        .eng-chip.sel{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
+        .eng-cta:disabled{opacity:.5;cursor:not-allowed}
         .eng-cta{width:100%;height:36px;border-radius:10px;background:#059669;color:#FFFFFF;border:0;font-size:12.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;text-decoration:none;margin-top:10px}
         .eng-cta.ghost{background:#ECFDF5;color:#047857;border:1px solid #BBF7D0}
         .eng-done{position:absolute;inset:0;background:linear-gradient(135deg,rgba(5,150,105,0.97),rgba(16,185,129,0.97));color:#FFFFFF;display:none;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center;padding:14px}
@@ -1517,12 +1545,13 @@
               <span class="eng-coin"><i class="fa-solid fa-coins"></i> +15</span>
               <button class="eng-close" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="eng-opts">
-              <button class="eng-chip" data-reward>Pest</button>
-              <button class="eng-chip" data-reward>Disease</button>
-              <button class="eng-chip" data-reward>Weeds</button>
-              <button class="eng-chip" data-reward>Nutrition</button>
+            <div class="eng-opts" id="cropProbOpts">
+              <button class="eng-chip" data-ms>Pest</button>
+              <button class="eng-chip" data-ms>Disease</button>
+              <button class="eng-chip" data-ms>Weeds</button>
+              <button class="eng-chip" data-ms>Nutrition</button>
             </div>
+            <button class="eng-cta" id="cropProbSubmit" disabled style="margin-top:10px">Submit</button>
             <div class="eng-done"><div class="ic">🛡️</div><div class="t">+15 coins earned!</div><div class="s">We'll suggest the right fix</div></div>
           </div>
 
@@ -1655,6 +1684,19 @@
             if (card && !card.classList.contains('done')) card.classList.add('done');
           });
         });
+        // Crop-problem widget · MULTI-select chips + Submit to earn
+        (function(){
+          const opts = document.getElementById('cropProbOpts');
+          const sub = document.getElementById('cropProbSubmit');
+          if (!opts || !sub) return;
+          function refresh(){ sub.disabled = opts.querySelectorAll('.sel').length === 0; }
+          opts.querySelectorAll('[data-ms]').forEach(function(c){ c.addEventListener('click', function(){ c.classList.toggle('sel'); refresh(); }); });
+          sub.addEventListener('click', function(){
+            if (opts.querySelectorAll('.sel').length === 0) return;
+            const card = sub.closest('.eng-card');
+            if (card) card.classList.add('done');
+          });
+        })();
         // Close (×) · dismiss a tile
         document.querySelectorAll('#engRow .eng-close').forEach(b => b.addEventListener('click', (e) => {
           e.preventDefault(); e.stopPropagation();

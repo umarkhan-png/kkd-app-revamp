@@ -26,7 +26,8 @@
   .pcard{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06);text-decoration:none;color:#0F172A}
   .pcard-img{height:130px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:12px;position:relative;border-bottom:1px solid #F1F5F9}
   .pcard-img img{max-width:88%;max-height:100%;object-fit:contain}
-  .pcard-bs{position:absolute;top:8px;left:8px;display:inline-flex;align-items:center;gap:3px;font-size:8.5px;font-weight:900;letter-spacing:0.04em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#F59E0B,#B45309);padding:3px 7px;border-radius:9999px}
+  .pcard-bs{position:absolute;top:8px;left:8px;display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:900;letter-spacing:0.04em;text-transform:uppercase;color:#92400E;background:#FEF3C7;padding:3px 7px;border-radius:5px}
+  .pcard-bs i{font-size:7.5px}
   .pcard-star{position:absolute;top:8px;right:8px;display:inline-flex;align-items:center;gap:2px;background:#fff;color:#475569;font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:5px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
   .pcard-b{padding:10px 10px 10px;display:flex;flex-direction:column;flex:1}
   .pcard-n{font-size:14px;font-weight:700;line-height:1.2;color:#0F172A}
@@ -37,6 +38,9 @@
   .pprice .m{font-size:11.5px;color:#94A3B8;text-decoration:line-through}
   .pprice .o{font-size:10.5px;font-weight:700;color:#047857}
   .padd{height:36px;width:100%;background:#059669;color:#fff;font-size:12.5px;font-weight:800;border-radius:8px;border:0;cursor:pointer;margin-top:9px}
+  .psteps{margin-top:9px;height:36px;border-radius:8px;background:#059669;display:flex;align-items:center;justify-content:space-between;padding:0 4px}
+  .psteps button{width:34px;height:36px;background:transparent;border:0;color:#fff;font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .psteps .pqty{color:#fff;font-size:14px;font-weight:800;font-variant-numeric:tabular-nums}
 
   /* Bottom sheet */
   .sheet{position:fixed;inset:0;z-index:95;display:none}
@@ -59,8 +63,10 @@
   .sheet-cta button{width:100%;height:50px;border-radius:12px;background:#059669;color:#fff;border:0;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
   .sec-h{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:#64748B;padding:14px 20px 6px}
 
-  /* Floating cart bar */
-  #cartBar{position:fixed;left:12px;right:12px;bottom:16px;z-index:80;background:#0F172A;color:#fff;display:none;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:16px;box-shadow:0 14px 30px -10px rgba(0,0,0,0.4);text-decoration:none}
+  /* Floating cart bar · wraps to a centered pill on scroll (home pattern) */
+  #cartBar{position:fixed;left:12px;right:12px;bottom:16px;z-index:80;background:#0F172A;color:#fff;display:none;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:16px;box-shadow:0 14px 30px -10px rgba(0,0,0,0.4);text-decoration:none;transition:left .3s ease,right .3s ease,padding .3s ease,border-radius .3s ease,transform .3s ease}
+  #cartBar.compact{left:50%;right:auto;transform:translateX(-50%);padding:10px 18px;border-radius:999px;max-width:92%}
+  #cartBar.compact .cart-view{display:none}
 </style></head>
 <body>
 
@@ -89,7 +95,7 @@
   <!-- Cart bar -->
   <a href="cart.html" id="cartBar">
     <span class="flex items-center gap-3"><span class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#059669"><i class="fa-solid fa-bag-shopping text-[14px]"></i></span><span class="text-[15px] font-extrabold tnum">₹<span id="cartTotal">0</span> · <span id="cartCount">0</span> items</span></span>
-    <span class="text-[12.5px] font-bold flex items-center gap-1.5">View cart <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
+    <span class="cart-view text-[12.5px] font-bold flex items-center gap-1.5">View cart <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
   </a>
 
   <!-- Sort sheet -->
@@ -143,8 +149,13 @@
 
     function offPct(p){ return p.m ? Math.round((1 - p.p / p.m) * 100) : 0; }
 
+    const RECENT = ['Humic + Fulvic','Chakrawarti ZC','NPK 19-19-19','Antivirus','Bhumiraja'];
+    let recentView = false;
+    const cart = {};   // name -> { qty, price }
+
     function renderGrid(){
       let list = PRODUCTS.slice();
+      if (recentView) list = RECENT.map(n => PRODUCTS.find(p => p.n === n)).filter(Boolean);
       if (sort === 'best') list = list.filter(p => p.best).concat(list.filter(p => !p.best));
       if (catSel.size) list = list.filter(p => catSel.has(p.cat));
       if (ratingSel) list = list.filter(p => p.r >= parseFloat(ratingSel));
@@ -157,20 +168,39 @@
       empty.style.display = 'none';
       grid.innerHTML = list.map(p => {
         const off = offPct(p);
+        const q = cart[p.n] ? cart[p.n].qty : 0;
+        const key = encodeURIComponent(p.n);
+        const action = q > 0
+          ? '<div class="psteps"><button data-dec="' + key + '">−</button><span class="pqty">' + q + '</span><button data-inc="' + key + '">+</button></div>'
+          : '<button class="padd" data-add="' + key + '" data-p="' + p.p + '">Add</button>';
         return '<a href="pdp.html" class="pcard">'
-          + '<div class="pcard-img">' + (p.best ? '<span class="pcard-bs"><i class="fa-solid fa-bolt text-[7px]"></i> Bestseller</span>' : '') + '<span class="pcard-star"><i class="fa-solid fa-star text-[8px]" style="color:#F59E0B"></i> ' + p.r + '</span><img src="' + p.img + '" class="img-blend"/></div>'
+          + '<div class="pcard-img">' + (p.best ? '<span class="pcard-bs"><i class="fa-solid fa-crown"></i> Bestseller</span>' : '') + '<span class="pcard-star"><i class="fa-solid fa-star text-[8px]" style="color:#F59E0B"></i> ' + p.r + '</span><img src="' + p.img + '" class="img-blend"/></div>'
           + '<div class="pcard-b">'
             + '<div class="pcard-n">' + p.n + '</div>'
             + '<div class="pcard-t">' + p.t + '</div>'
             + '<span class="psize">' + p.s + '</span>'
             + '<div class="pprice"><span class="v tnum">₹' + p.p + '</span>' + (p.m ? '<span class="m tnum">₹' + p.m + '</span>' : '') + (off ? '<span class="o">' + off + '% off</span>' : '') + '</div>'
-            + '<button class="padd" onclick="addToCart(event,' + p.p + ')">Add</button>'
+            + action
           + '</div></a>';
       }).join('');
+      wireCardBtns();
+    }
+    function wireCardBtns(){
+      const grid = document.getElementById('grid');
+      grid.querySelectorAll('[data-add]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); const n = decodeURIComponent(b.dataset.add); cart[n] = { qty:((cart[n] && cart[n].qty) || 0) + 1, price:parseInt(b.dataset.p, 10) }; renderGrid(); updateCartBar(); }));
+      grid.querySelectorAll('[data-inc]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); const n = decodeURIComponent(b.dataset.inc); if (cart[n]) { cart[n].qty++; renderGrid(); updateCartBar(); } }));
+      grid.querySelectorAll('[data-dec]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); const n = decodeURIComponent(b.dataset.dec); if (cart[n]) { cart[n].qty--; if (cart[n].qty <= 0) delete cart[n]; renderGrid(); updateCartBar(); } }));
+    }
+    function updateCartBar(){
+      let n = 0, t = 0; Object.keys(cart).forEach(k => { n += cart[k].qty; t += cart[k].qty * cart[k].price; });
+      const bar = document.getElementById('cartBar');
+      if (n > 0) { bar.style.display = 'flex'; document.getElementById('cartCount').textContent = n; document.getElementById('cartTotal').textContent = t.toLocaleString('en-IN'); }
+      else { bar.style.display = 'none'; bar.classList.remove('compact'); }
     }
 
     function renderChips(){
       const chips = [];
+      if (recentView) chips.push({ id:'recent', label:'Recently viewed' });
       if (sort !== 'pop') { const so = SORTS.find(s => s.k === sort); if (so) chips.push({ id:'sort', label:'Sort: ' + so.label }); }
       catSel.forEach(c => chips.push({ id:'cat:' + c, label:CATS[c] }));
       if (ratingSel) chips.push({ id:'rating', label:ratingSel + '★ & above' });
@@ -178,7 +208,8 @@
       row.innerHTML = chips.map(c => '<span class="achip">' + c.label + '<button class="achip-close" data-rm="' + c.id + '"><i class="fa-solid fa-xmark"></i></button></span>').join('');
       row.querySelectorAll('[data-rm]').forEach(b => b.addEventListener('click', () => {
         const id = b.dataset.rm;
-        if (id === 'sort') sort = 'pop';
+        if (id === 'recent') recentView = false;
+        else if (id === 'sort') sort = 'pop';
         else if (id === 'rating') ratingSel = '';
         else if (id.indexOf('cat:') === 0) catSel.delete(id.slice(4));
         syncPills(); renderChips(); renderGrid();
@@ -186,7 +217,7 @@
     }
     function syncPills(){
       document.getElementById('sortBtn').classList.toggle('on', sort !== 'pop');
-      document.getElementById('filterBtn').classList.toggle('on', catSel.size > 0 || !!ratingSel);
+      document.getElementById('filterBtn').classList.toggle('on', catSel.size > 0 || !!ratingSel || recentView);
     }
 
     function openSheet(id){ document.getElementById(id).classList.add('open'); }
@@ -212,22 +243,19 @@
     document.getElementById('filterApply').addEventListener('click', () => { catSel.clear(); pendCat.forEach(c => catSel.add(c)); ratingSel = pendRating; syncPills(); renderChips(); renderGrid(); closeSheet('filterSheet'); });
     document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => { closeSheet('sortSheet'); closeSheet('filterSheet'); }));
 
-    let cartN = 0, cartT = 0;
-    window.addToCart = function(e, price){
-      e.preventDefault(); e.stopPropagation();
-      cartN++; cartT += price;
-      document.getElementById('cartCount').textContent = cartN;
-      document.getElementById('cartTotal').textContent = cartT.toLocaleString('en-IN');
-      document.getElementById('cartBar').style.display = 'flex';
-      const b = e.target; b.textContent = 'Added ✓'; b.style.background = '#047857';
-      setTimeout(() => { b.textContent = 'Add'; b.style.background = '#059669'; }, 900);
-    };
+    // Cart bar wraps to a centered pill on scroll (home pattern)
+    window.addEventListener('scroll', function(){
+      const bar = document.getElementById('cartBar');
+      if (bar.style.display === 'none') return;
+      bar.classList.toggle('compact', (window.scrollY || document.documentElement.scrollTop) > 60);
+    }, { passive: true });
 
-    // Auto-apply Bestsellers when arriving from the home "Bestsellers · See all"
+    // Query params · Bestsellers sort (from home See-all) and Recently-viewed view · title stays "Products", the state shows as a chip
     const qp = new URLSearchParams(location.search);
-    if (qp.get('sort') === 'bestsellers' || qp.get('sort') === 'best') { sort = 'best'; pendSort = 'best'; document.getElementById('shopTitle').textContent = 'Bestsellers'; }
-    if (qp.get('cat') && CATS[qp.get('cat')]) { catSel.add(qp.get('cat')); document.getElementById('shopTitle').textContent = CATS[qp.get('cat')]; }
+    if (qp.get('sort') === 'bestsellers' || qp.get('sort') === 'best') { sort = 'best'; pendSort = 'best'; }
+    if (qp.get('view') === 'recent') { recentView = true; }
+    if (qp.get('cat') && CATS[qp.get('cat')]) { catSel.add(qp.get('cat')); }
 
-    syncPills(); renderChips(); renderGrid();
+    syncPills(); renderChips(); renderGrid(); updateCartBar();
   </script>
 </body></html>

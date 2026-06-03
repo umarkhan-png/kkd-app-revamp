@@ -3,6 +3,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="../assets/celebrate.js"></script>
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   html,body{font-family:'Poppins',system-ui,sans-serif;margin:0;padding:0}
@@ -717,19 +718,10 @@
         applied.style.display = 'flex';
         couponMain.textContent = 'Tap to change coupon';
         close();
-        // Full-screen celebration · backdrop + radial rays + ticket badge + headline + confetti · auto-dismiss in 2.6s
+        // Same full-screen celebration as coin-earn (shared kkdCelebrate), themed for the coupon saving
         setTimeout(() => {
-          celebSave.textContent = '₹' + save;
-          celebCode.textContent = code;
-          celeb.classList.add('show');
-          // Restart animations cleanly on each apply
-          celeb.querySelectorAll('.celeb-card, .celeb-backdrop').forEach(el => {
-            el.style.animation = 'none';
-            void el.offsetWidth;
-            el.style.animation = '';
-          });
-          setTimeout(() => { celeb.classList.remove('show'); }, 2200);
-        }, 150);
+          if (window.kkdCelebrate) window.kkdCelebrate(parseInt(save, 10) || 0, { title: 'Coupon applied! 🎉', lead: 'You saved', prefix: '₹', unit: '', icon: 'fa-tag' });
+        }, 180);
       }
 
       sh.querySelectorAll('.coup-tile:not(.ineligible) .apply-btn').forEach(btn => {

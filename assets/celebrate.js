@@ -1,8 +1,9 @@
 /* KKD · shared reward celebration · full-screen immersive emerald-glow reward
-   Usage:  window.kkdCelebrate(amount)                          → "Thank you! 🎉" + "+amount coins"
+   Usage:  window.kkdCelebrate(amount)                          → "Thank you! 🎉" + "You earned +amount coins"
            window.kkdCelebrate(amount, {title})                 → custom headline
-           window.kkdCelebrate(150, {prefix:'₹', unit:''})      → "₹150" (e.g. cash/scratch prize)
-   opts: { title, prefix='+', unit='coins' }
+           window.kkdCelebrate(150, {prefix:'₹', unit:''})      → "You earned ₹150" (e.g. cash/scratch prize)
+           window.kkdCelebrate(100, {title:'Coupon applied! 🎉', lead:'You saved', prefix:'₹', unit:'', icon:'fa-tag'})
+   opts: { title, prefix='+', unit='coins', lead='You earned', icon='fa-coins' }
    Self-injects its CSS + overlay markup once; safe to load on every screen. */
 (function () {
   if (window.kkdCelebrate) return;
@@ -50,10 +51,10 @@
     '<span class="bar-glow"></span>' +
     '<span class="bar-ring"></span>' +
     '<span class="bar-ring r2"></span>' +
-    '<div class="bar-ok-coin"><i class="fa-solid fa-coins"></i></div>' +
+    '<div class="bar-ok-coin"><i class="fa-solid fa-coins bar-ok-ic"></i></div>' +
     '</div>' +
     '<div class="bar-ok-title">Thank you! 🎉</div>' +
-    '<div class="bar-ok-sub">You earned <b class="bar-ok-coins">+0 coins</b></div>' +
+    '<div class="bar-ok-sub"><span class="bar-ok-lead">You earned</span> <b class="bar-ok-coins">+0 coins</b></div>' +
     '</div>';
 
   function injectCSS() {
@@ -89,7 +90,11 @@
     var ok = document.getElementById('kkdCoinOk') || mount();
     var titleEl = ok.querySelector('.bar-ok-title');
     var sub = ok.querySelector('.bar-ok-coins');
+    var leadEl = ok.querySelector('.bar-ok-lead');
+    var iconEl = ok.querySelector('.bar-ok-ic');
     titleEl.textContent = opts.title || 'Thank you! 🎉';
+    if (leadEl) leadEl.textContent = opts.lead || 'You earned';
+    if (iconEl) iconEl.className = 'fa-solid ' + (opts.icon || 'fa-coins') + ' bar-ok-ic';
     sub.textContent = fmt(0);
     // restart the animations even if the overlay was shown moments ago
     ok.classList.remove('show');

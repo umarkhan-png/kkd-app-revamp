@@ -1048,7 +1048,7 @@
 
     <!-- Select your crop · edge-to-edge · inline multi-select chip picker · tinted bg + stateful CTA so the affordance is obvious -->
     <section class="mt-8">
-      <div class="overflow-hidden relative" style="background:linear-gradient(180deg,#F0FDF4 0%,#FFFFFF 55%,#ECFDF5 100%);border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0">
+      <div class="overflow-hidden relative" style="background:#ECFDF5;border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0">
         <!-- Faded leaf motif accents top-right + bottom-left for the harvest feel -->
         <div class="absolute -top-4 -right-3 text-[80px] leading-none pointer-events-none select-none" style="color:rgba(5,150,105,0.07);transform:rotate(20deg)">🌱</div>
         <div class="absolute -bottom-4 -left-2 text-[70px] leading-none pointer-events-none select-none" style="color:rgba(5,150,105,0.06);transform:rotate(-15deg)">🌾</div>
@@ -1062,9 +1062,15 @@
           <div id="cropInlinePicker" class="flex gap-2 px-4 min-w-max"></div>
         </div>
 
-        <!-- Products for the selected crop(s) · 2-col grid · shown once a crop is selected -->
-        <div id="cropProductsWrap" class="relative px-4 pb-1" style="display:none">
-          <div id="cropProductsHead" class="text-[11px] font-extrabold uppercase tracking-wider mb-2" style="color:#64748B"></div>
+        <!-- Products for the selected crop(s) · crop chips (All + each selected) + 2-col grid · shown once a crop is selected -->
+        <style>
+          .cropf-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 13px;border-radius:9999px;background:#FFFFFF;border:1.5px solid #E5E7EB;font-size:12px;font-weight:700;color:#0F172A;cursor:pointer;white-space:nowrap}
+          .cropf-chip.on{background:#059669;border-color:#047857;color:#FFFFFF}
+          .cropf-chip .ci{width:18px;height:18px;border-radius:50%;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;background:#ECFDF5;font-size:9px}
+          .cropf-chip .ci img{width:100%;height:100%;object-fit:cover}
+        </style>
+        <div id="cropProductsWrap" class="relative px-4 pb-3" style="display:none">
+          <div id="cropProductsChips" class="flex gap-2 overflow-x-auto scroll-x pb-2.5"></div>
           <div id="cropProductsGrid" class="grid grid-cols-2 gap-3"></div>
         </div>
 
@@ -1083,7 +1089,7 @@
     <section class="px-4 pt-5">
       <div class="flex items-baseline justify-between mb-4">
         <h2 class="text-[21px] font-bold tracking-tight">Bestsellers</h2>
-        <a href="shop.html?sort=bestsellers" class="nu text-[13px] font-semibold" style="color:#059669">See all</a>
+        <a href="categories.html?sort=bestsellers" class="nu text-[13px] font-semibold" style="color:#059669">See all</a>
       </div>
       <div class="grid grid-cols-2 gap-3">
 
@@ -1229,7 +1235,7 @@
     <section class="mt-8 py-4" style="background:#F3F1FF">
       <div class="px-4 mb-3 flex items-baseline justify-between">
         <h2 class="text-[21px] font-bold tracking-tight">Recently viewed</h2>
-        <a href="shop.html?view=recent" class="nu text-[13px] font-semibold" style="color:#059669">See all</a>
+        <a href="categories.html?view=recent" class="nu text-[13px] font-semibold" style="color:#059669">See all</a>
       </div>
       <style>
         .rv-card{flex-shrink:0;width:158px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06);text-decoration:none;color:#0F172A;display:flex;flex-direction:column}
@@ -2839,15 +2845,29 @@
         { n:'Antivirus',       t:'Bio bactericide + virucide',  s:'250 ml', p:327, m:425, img:'../assets/AntiVirus_nobg.png',                                            crops:['tomato','chilli','papaya','potato','cucumber'] },
         { n:'Chakraveer 18.5%',t:'Chlorantraniliprole 18.5% SC',s:'100 ml', p:440, m:610, img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp',crops:['paddy','maize','sugarcane','cotton','wheat'] }
       ];
+      let cropProdFilter = 'all';
       function renderCropProducts(){
         const wrap = document.getElementById('cropProductsWrap');
         const grid = document.getElementById('cropProductsGrid');
-        const head = document.getElementById('cropProductsHead');
+        const chipsEl = document.getElementById('cropProductsChips');
         if (!wrap || !grid) return;
-        if (selected.size === 0) { wrap.style.display = 'none'; grid.innerHTML = ''; return; }
-        const matches = CROP_PROD.filter(function(p){ return p.crops === 'all' || p.crops.some(function(c){ return selected.has(c); }); });
-        const names = Array.from(selected).map(function(k){ return (CROP_META[k] || {}).label || k; }).join(', ');
-        if (head) head.textContent = 'Recommended for ' + names;
+        if (selected.size === 0) { wrap.style.display = 'none'; grid.innerHTML = ''; cropProdFilter = 'all'; return; }
+        const selArr = Array.from(selected);
+        if (cropProdFilter !== 'all' && !selected.has(cropProdFilter)) cropProdFilter = 'all';
+        // Crop filter chips · "All" + one per selected crop
+        if (chipsEl) {
+          chipsEl.innerHTML = ['all'].concat(selArr).map(function(k){
+            const on = cropProdFilter === k;
+            if (k === 'all') return '<button class="cropf-chip ' + (on ? 'on' : '') + '" data-cf="all"><i class="fa-solid fa-layer-group text-[10px]"></i> All</button>';
+            const m = CROP_META[k] || {};
+            return '<button class="cropf-chip ' + (on ? 'on' : '') + '" data-cf="' + k + '"><span class="ci">' + (m.img ? '<img src="' + m.img + '" onerror="cropFallback(this,\'' + (m.emoji || '🌱') + '\',10)"/>' : (m.emoji || '🌱')) + '</span> ' + (m.label || k) + '</button>';
+          }).join('');
+          chipsEl.querySelectorAll('[data-cf]').forEach(function(b){ b.addEventListener('click', function(){ cropProdFilter = b.dataset.cf; renderCropProducts(); }); });
+        }
+        const matches = CROP_PROD.filter(function(p){
+          if (cropProdFilter === 'all') return p.crops === 'all' || p.crops.some(function(c){ return selected.has(c); });
+          return p.crops === 'all' || p.crops.some(function(c){ return c === cropProdFilter; });
+        });
         grid.innerHTML = matches.map(function(p){
           const off = p.m ? Math.round((1 - p.p / p.m) * 100) : 0;
           return '<div class="rounded-xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 1px 3px rgba(15,23,42,0.05);display:flex;flex-direction:column">'

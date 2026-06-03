@@ -551,6 +551,7 @@
     let activeCat = 'pesticide';
     let activeSub = 'all';
     let activeSort = 'pop';
+    let recentView = false;   // ?view=recent · shows a "recently viewed" set across categories with a removable tag
     let pendingSort = 'pop';  // Sort modal · tapped row is pending until the Apply button commits it
     let activeFilterTab = 'crop';
     // Multi-select filters use Set, single-select use null|val (or {min,max} for the price slider)
@@ -570,6 +571,8 @@
         btn.setAttribute('aria-pressed','true');
         activeCat = btn.dataset.cat;
         activeSub = 'all';
+        recentView = false;   // browsing a category exits the recently-viewed view
+        renderAppliedChips();
         const pm = document.getElementById('productMain');
         if (pm) pm.scrollTop = 0;
         renderSubs();
@@ -641,7 +644,7 @@
 
     function renderProducts(){
       const list = document.getElementById('productList');
-      let filtered = PRODUCTS.filter(p => p.cat === activeCat && (activeSub === 'all' || p.subs.includes(activeSub)));
+      let filtered = recentView ? PRODUCTS.slice(0, 6) : PRODUCTS.filter(p => p.cat === activeCat && (activeSub === 'all' || p.subs.includes(activeSub)));
       filtered = applyFilters(filtered);
       if (!filtered.length) {
         list.innerHTML = '<div style="grid-column:1/-1" class="text-center py-10 text-[12.5px] font-semibold text-[#94A3B8]"><i class="fa-regular fa-face-frown text-[22px] block mb-2"></i>No products match</div>';
@@ -914,6 +917,7 @@
     function renderAppliedChips(){
       const row = document.getElementById('appliedChipRow');
       const chips = [];
+      if (recentView) chips.push({ id:'recent', label:'Recently viewed' });
       if (activeSort !== 'pop') {
         const so = SORT_OPTIONS.find(s => s.key === activeSort);
         if (so) chips.push({ id:'sort:'+activeSort, label:'Sort: '+so.label });
@@ -948,7 +952,8 @@
     }
     function removeAppliedChip(id){
       const [kind, a, b] = id.split(':');
-      if (kind === 'sort') { activeSort = 'pop'; pendingSort = 'pop'; }
+      if (kind === 'recent') { recentView = false; }
+      else if (kind === 'sort') { activeSort = 'pop'; pendingSort = 'pop'; }
       else if (kind === 'sec') {
         const v = filters[a];
         if (v instanceof Set) v.delete(b); else filters[a] = null;
@@ -1026,6 +1031,7 @@
       activeSort = qp.get('sort');
       pendingSort = qp.get('sort');
     }
+    if (qp.get('view') === 'recent') { recentView = true; }
 
     renderSubs();
     renderProducts();

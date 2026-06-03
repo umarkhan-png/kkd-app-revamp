@@ -13,7 +13,8 @@
   .scroll-x::-webkit-scrollbar{display:none}
 
   /* Filter / sort pill bar */
-  .pill-bar{position:sticky;top:0;z-index:20;background:#F8F8F8;border-bottom:1px solid #ECECEC}
+  .pill-bar{background:#F8F8F8;border-bottom:1px solid #ECECEC}
+  .shop-stick{position:sticky;top:0;z-index:20;background:#FFFFFF;box-shadow:0 4px 10px -8px rgba(15,23,42,0.25)}
   .filter-pill{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:999px;background:#FFFFFF;border:1px solid #E2E8F0;font-size:12.5px;font-weight:700;color:#334155;white-space:nowrap;flex-shrink:0;cursor:pointer;box-shadow:0 1px 2px rgba(15,23,42,0.04)}
   .filter-pill .dot{width:6px;height:6px;border-radius:50%;background:#059669;display:none}
   .filter-pill.on{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
@@ -74,18 +75,27 @@
   <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
 
   <!-- Header -->
-  <div class="px-4 pt-3 pb-3 flex items-center gap-3 bg-white" style="border-bottom:1px solid #F1F5F9">
+  <div class="px-4 pt-3 pb-2 flex items-center gap-3 bg-white">
     <button onclick="if(history.length>1){history.back()}else{location.href='home.html'}" class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:#FFFFFF;border:1px solid #E5E7EB"><i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i></button>
     <h1 id="shopTitle" class="flex-1 min-w-0 text-[20px] font-extrabold" style="color:#0F172A">Products</h1>
-    <a href="search.html" class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:#FFFFFF;border:1px solid #E5E7EB"><i class="fa-solid fa-magnifying-glass text-[14px]" style="color:#0F172A"></i></a>
   </div>
 
-  <!-- Filter / Sort pill bar (category + subcategory now live inside Filter) -->
-  <div class="pill-bar">
-    <div class="flex gap-2 px-4 py-2.5 items-center scroll-x">
-      <button class="filter-pill" id="sortBtn"><i class="fa-solid fa-arrow-down-wide-short text-[10px]"></i> Sort <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
-      <button class="filter-pill" id="filterBtn"><i class="fa-solid fa-sliders text-[10px]"></i> Filter <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
-      <div id="chipRow" class="flex items-center gap-2"></div>
+  <!-- Sticky · search bar (same as home) + Filter/Sort pill bar · both freeze at the top while scrolling -->
+  <div class="shop-stick">
+    <div class="px-4 pt-1 pb-2.5 bg-white">
+      <div class="relative">
+        <input type="text" readonly onclick="location.href='search.html'" placeholder="Search products, pests, crops" class="w-full pl-11 pr-11 py-2.5 rounded-xl text-[15px] font-medium cursor-pointer" style="background:#F1F5F9;border:1px solid #E2E8F0;outline:none"/>
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-[15px]" style="color:#94A3B8"></i>
+        <a href="voice-search.html" class="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg flex items-center justify-center" style="background:#FFFFFF;text-decoration:none"><i class="fa-solid fa-microphone text-[14px]" style="color:#475569"></i></a>
+      </div>
+    </div>
+    <!-- Filter / Sort pill bar (category + subcategory now live inside Filter) -->
+    <div class="pill-bar">
+      <div class="flex gap-2 px-4 py-2.5 items-center scroll-x">
+        <button class="filter-pill" id="sortBtn"><i class="fa-solid fa-arrow-down-wide-short text-[10px]"></i> Sort <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+        <button class="filter-pill" id="filterBtn"><i class="fa-solid fa-sliders text-[10px]"></i> Filter <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+        <div id="chipRow" class="flex items-center gap-2"></div>
+      </div>
     </div>
   </div>
 

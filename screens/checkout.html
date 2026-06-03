@@ -193,6 +193,9 @@
             <span class="pay-amt tnum" id="codAmt">₹1,900</span>
           </span>
           <div class="pay-sub">Pay in cash when the order arrives</div>
+          <div id="codExtra" style="display:none;margin-top:8px;padding:8px 10px;border-radius:9px;background:#FFF7ED;border:1px solid #FED7AA;color:#9A3412;font-size:11.5px;font-weight:600;line-height:1.45">
+            <i class="fa-solid fa-circle-info" style="color:#EA580C"></i> COD costs <b id="codExtraAmt" class="tnum">₹95</b> more — prepaid orders get 5% off. <button type="button" id="codSwitchPay" style="background:none;border:0;color:#047857;font-weight:800;cursor:pointer;padding:0;text-decoration:underline">Pay now &amp; save</button>
+          </div>
         </span>
       </span>
     </label>
@@ -257,6 +260,12 @@
       total -= walletApplied;
       billRow.style.display = showOff ? 'flex' : 'none';
       billAmt.textContent = '− ' + fmt(off);
+      // COD disclosure · paying COD forgoes the 5% prepaid discount
+      const codExtra = document.getElementById('codExtra');
+      if (codExtra) {
+        if (method === 'cod') { codExtra.style.display = 'block'; document.getElementById('codExtraAmt').textContent = fmt(Math.round(SUBTOTAL * 0.05)); }
+        else codExtra.style.display = 'none';
+      }
       if (coinRow) coinRow.style.display = coinsRedeem > 0 ? 'flex' : 'none';
       const walRemain = document.getElementById('walRemain');
       if (walRemain) walRemain.textContent = fmt(WALLET_BALANCE - walletApplied);
@@ -303,6 +312,12 @@
         updatePartialSplit(currentPct);
       });
     });
+
+    // "Pay now & save" inside the COD note → switch to Pay Now (don't let it re-select the COD row)
+    (function(){
+      const b = document.getElementById('codSwitchPay');
+      if (b) b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); const pn = document.querySelector('.pay[data-pay="paynow"]'); if (pn) pn.click(); });
+    })();
 
     // Initial paint
     updatePartialSplit(currentPct);

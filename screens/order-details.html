@@ -41,9 +41,10 @@
   .card{margin:0 16px 10px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
 
   /* Unified Products + Bill card · all product calc tokens on a single inline row · matches home product-card density */
-  .prod-row{padding:12px;display:flex;gap:12px;align-items:flex-start;border-bottom:1px solid #F1F5F9}
-  .prod-reorder{display:inline-flex;align-items:center;gap:6px;margin-top:9px;height:32px;padding:0 14px;border-radius:9px;background:#ECFDF5;border:1px solid #BBF7D0;color:#047857;font-size:12px;font-weight:800;text-decoration:none;cursor:pointer}
-  .prod-reorder:active{transform:scale(.98)}
+  .prod-row{padding:12px;display:flex;gap:12px;align-items:flex-start;border-bottom:1px solid #F1F5F9;position:relative}
+  .prod-row .prod-name{padding-right:96px}
+  .prod-reorder{position:absolute;top:10px;right:10px;z-index:2;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:8px;background:#059669;border:0;color:#FFFFFF;font-size:11.5px;font-weight:800;text-decoration:none;cursor:pointer;box-shadow:0 4px 10px -4px rgba(5,150,105,0.55)}
+  .prod-reorder:active{transform:scale(.97)}
   .prod-img{width:56px;height:56px;border-radius:10px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0;border:1px solid #E5E7EB;text-decoration:none}
   .prod-img img{max-width:100%;max-height:100%;object-fit:contain}
   .prod-info{flex:1;min-width:0;line-height:1.25}
@@ -1236,13 +1237,13 @@
     // Per-product Reorder button · added under each product's price row
     (function(){
       document.querySelectorAll('.prod-row').forEach(function(row){
-        var inline = row.querySelector('.prod-inline'); if (!inline || row.querySelector('.prod-reorder')) return;
+        if (row.querySelector('.prod-reorder')) return;
         var key = row.getAttribute('data-key') || '1';
         var a = document.createElement('a');
         a.href = 'cart.html?reorder=' + encodeURIComponent(key);
         a.className = 'prod-reorder';
         a.innerHTML = '<i class="fa-solid fa-repeat"></i> Reorder';
-        inline.insertAdjacentElement('afterend', a);
+        row.appendChild(a);   // absolute top-right of the tile
       });
     })();
   </script>

@@ -1069,14 +1069,23 @@
           .cropf-chip.on{background:#059669;border-color:#047857;color:#FFFFFF}
           .cropf-chip .ci{width:18px;height:18px;border-radius:50%;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;background:#ECFDF5;font-size:9px}
           .cropf-chip .ci img{width:100%;height:100%;object-fit:cover}
-          .cprob-tile{flex-shrink:0;width:72px;text-align:center;text-decoration:none;cursor:pointer}
-          .cprob-tile:active{transform:scale(.96)}
-          .cprob-ic{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:27px;margin:0 auto;border:2px solid #FFFFFF;box-shadow:0 3px 8px -2px rgba(15,23,42,0.2);overflow:hidden}
-          .cprob-ic img{width:100%;height:100%;object-fit:cover}
-          .cprob-lbl{font-size:10.5px;font-weight:700;color:#334155;line-height:1.2;margin-top:6px;display:block}
+          /* Crop products · same card as the Bestseller / Recently-viewed tile, in a 2-col grid */
+          .cpg-card{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06);text-decoration:none;color:#0F172A;display:flex;flex-direction:column}
+          .cpg-card:active{transform:scale(.99)}
+          .cpg-img{height:130px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:12px;border-bottom:1px solid #F1F5F9}
+          .cpg-img img{max-width:88%;max-height:100%;object-fit:contain}
+          .cpg-b{padding:10px;display:flex;flex-direction:column;flex:1}
+          .cpg-n{font-size:14px;font-weight:700;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+          .cpg-t{font-size:10.5px;color:#94A3B8;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+          .cpg-sz{align-self:flex-start;background:#F1F5F9;color:#475569;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;margin-top:7px}
+          .cpg-pr{display:flex;align-items:baseline;gap:5px;margin-top:7px}
+          .cpg-pr .cur{font-size:16px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
+          .cpg-pr .mrp{font-size:11px;color:#94A3B8;text-decoration:line-through;font-weight:600;font-variant-numeric:tabular-nums}
+          .cpg-pr .off{font-size:10px;font-weight:800;color:#047857}
+          .cpg-add{margin-top:9px;height:32px;border-radius:9px;background:#059669;border:0;color:#FFFFFF;font-size:12px;font-weight:800;cursor:pointer}
+          .cpg-add:active{transform:scale(.98)}
         </style>
         <div id="cropProductsWrap" class="relative px-4 pb-3" style="display:none">
-          <div id="cropProblems" style="display:none"></div>
           <div id="cropProductsChips" class="flex gap-2 overflow-x-auto scroll-x pb-2.5"></div>
           <div id="cropProductsGrid" class="grid grid-cols-2 gap-3"></div>
         </div>
@@ -1514,7 +1523,7 @@
         .eng-chip{padding:6px 11px;border-radius:9999px;background:#F8FAFC;border:1px solid #E5E7EB;font-size:11.5px;font-weight:700;color:#0F172A;cursor:pointer;transition:all .15s ease}
         .eng-chip:active{transform:scale(.96)}
         .eng-chip.sel{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
-        .eng-chip.sel::before{content:"\2713";margin-right:5px;font-weight:900}
+        .eng-chip.sel::before{content:"\f00c";font-family:"Font Awesome 6 Free";font-weight:900;margin-right:6px;font-size:10px}
         .eng-cta:disabled{opacity:.5;cursor:not-allowed}
         .eng-cta{width:100%;height:36px;border-radius:10px;background:#059669;color:#FFFFFF;border:0;font-size:12.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;text-decoration:none;margin-top:10px}
         .eng-cta.ghost{background:#ECFDF5;color:#047857;border:1px solid #BBF7D0}
@@ -2924,37 +2933,6 @@
         { n:'Antivirus',       t:'Bio bactericide + virucide',  s:'250 ml', p:327, m:425, img:'../assets/AntiVirus_nobg.png',                                            crops:['tomato','chilli','papaya','potato','cucumber'] },
         { n:'Chakraveer 18.5%',t:'Chlorantraniliprole 18.5% SC',s:'100 ml', p:440, m:610, img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp',crops:['paddy','maize','sugarcane','cotton','wheat'] }
       ];
-      // Common problems shown per crop (visual strip) · tap → shop the category that fixes it
-      const PROBLEM_DEFS = {
-        suck:  { label:'Sucking pests', emoji:'🦟', bg:'#FEE2E2', cat:'pesticide' },
-        borer: { label:'Borers & larvae', emoji:'🐛', bg:'#FEF3C7', cat:'pesticide' },
-        thrips:{ label:'Thrips & mites', emoji:'🕷️', bg:'#FFE4E6', cat:'pesticide' },
-        fungus:{ label:'Fungal disease', emoji:'🍄', bg:'#EDE9FE', cat:'fungicide' },
-        virus: { label:'Leaf curl / virus', emoji:'🍂', bg:'#FFEDD5', cat:'fungicide' },
-        weed:  { label:'Weeds', emoji:'🌿', bg:'#DCFCE7', cat:'herbicide' },
-        nutri: { label:'Nutrient gaps', emoji:'🥀', bg:'#FEF9C3', cat:'fertilizer' }
-      };
-      const CROP_PROBLEMS = {
-        tomato:['suck','borer','fungus','virus','nutri'], chilli:['suck','thrips','virus','fungus','nutri'],
-        wheat:['weed','fungus','suck','nutri'], maize:['borer','weed','fungus','nutri'],
-        onion:['thrips','fungus','weed','nutri'], potato:['fungus','suck','borer','nutri'],
-        cotton:['suck','borer','virus','nutri'], brinjal:['borer','suck','virus','nutri'],
-        okra:['suck','virus','borer','nutri'], paddy:['borer','fungus','weed','nutri'],
-        sugarcane:['borer','suck','weed','nutri'], soyabean:['borer','fungus','weed','nutri']
-      };
-      const DEFAULT_PROBLEMS = ['suck','borer','fungus','weed','nutri'];
-      function renderCropProblems(probCrops){
-        const el = document.getElementById('cropProblems');
-        if (!el) return;
-        const keys = [];
-        probCrops.forEach(function(c){ (CROP_PROBLEMS[c] || DEFAULT_PROBLEMS).forEach(function(k){ if (keys.indexOf(k) < 0) keys.push(k); }); });
-        if (keys.length === 0) { el.style.display = 'none'; return; }
-        el.innerHTML = '<div class="text-[12px] font-extrabold text-[#0F172A] mb-2 mt-0.5">Common problems <span class="text-[11px] font-semibold" style="color:#64748B">· tap to find the fix</span></div>'
-          + '<div class="flex gap-3 overflow-x-auto scroll-x pb-2.5">'
-          + keys.map(function(k){ const d = PROBLEM_DEFS[k]; return '<a href="categories.html?cat=' + d.cat + '" class="cprob-tile nu"><span class="cprob-ic" style="background:' + d.bg + '">' + d.emoji + '</span><span class="cprob-lbl">' + d.label + '</span></a>'; }).join('')
-          + '</div>';
-        el.style.display = 'block';
-      }
       let cropProdFilter = 'all';
       function renderCropProducts(){
         const wrap = document.getElementById('cropProductsWrap');
@@ -2964,8 +2942,6 @@
         if (selected.size === 0) { wrap.style.display = 'none'; grid.innerHTML = ''; cropProdFilter = 'all'; return; }
         const selArr = Array.from(selected);
         if (cropProdFilter !== 'all' && !selected.has(cropProdFilter)) cropProdFilter = 'all';
-        // Common-problems strip · for the active filter crop, else the union of selected crops
-        renderCropProblems(cropProdFilter !== 'all' ? [cropProdFilter] : selArr);
         // Crop filter chips · "All" + one per selected crop
         if (chipsEl) {
           chipsEl.innerHTML = ['all'].concat(selArr).map(function(k){
@@ -2982,16 +2958,16 @@
         });
         grid.innerHTML = matches.map(function(p){
           const off = p.m ? Math.round((1 - p.p / p.m) * 100) : 0;
-          return '<div class="rounded-xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 1px 3px rgba(15,23,42,0.05);display:flex;flex-direction:column">'
-            + '<a href="pdp.html" style="text-decoration:none"><div style="height:98px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:8px;border-bottom:1px solid #F1F5F9"><img src="'+p.img+'" class="img-blend" style="max-width:82%;max-height:100%;object-fit:contain"/></div></a>'
-            + '<div style="padding:8px 9px 10px;display:flex;flex-direction:column;flex:1">'
-              + '<a href="pdp.html" class="text-[13px] font-extrabold" style="color:#0F172A;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+p.n+'</a>'
-              + '<div class="text-[10.5px]" style="color:#94A3B8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+p.t+'</div>'
-              + '<span class="self-start text-[10px] font-semibold mt-1.5 px-1.5 py-0.5 rounded" style="background:#F1F5F9;color:#475569">'+p.s+'</span>'
-              + '<div class="flex items-baseline gap-1.5 mt-1.5"><span class="text-[14.5px] font-extrabold tnum" style="color:#0F172A">₹'+p.p+'</span>'+(p.m?'<span class="text-[10.5px] line-through tnum" style="color:#94A3B8">₹'+p.m+'</span>':'')+(off?'<span class="text-[10px] font-bold" style="color:#047857">'+off+'% off</span>':'')+'</div>'
-              + '<button class="cropprod-add w-full mt-2 h-8 rounded-lg text-white text-[12px] font-extrabold" style="background:#059669;border:0;cursor:pointer">Add</button>'
+          return '<a href="pdp.html" class="cpg-card">'
+            + '<div class="cpg-img"><img src="'+p.img+'" class="img-blend"/></div>'
+            + '<div class="cpg-b">'
+              + '<div class="cpg-n">'+p.n+'</div>'
+              + '<div class="cpg-t">'+p.t+'</div>'
+              + '<span class="cpg-sz">'+p.s+'</span>'
+              + '<div class="cpg-pr"><span class="cur tnum">&#8377;'+p.p+'</span>'+(p.m?'<span class="mrp tnum">&#8377;'+p.m+'</span>':'')+(off?'<span class="off">'+off+'% off</span>':'')+'</div>'
+              + '<button type="button" class="cropprod-add cpg-add">Add</button>'
             + '</div>'
-          + '</div>';
+          + '</a>';
         }).join('');
         grid.querySelectorAll('.cropprod-add').forEach(function(b){
           b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if (typeof bumpCart === 'function') bumpCart(); b.textContent = 'Added ✓'; b.style.background = '#047857'; setTimeout(function(){ b.textContent = 'Add'; b.style.background = '#059669'; }, 1000); });
@@ -3457,9 +3433,9 @@
     // Product cards reliably open the PDP · bestseller cards nest a <button> inside the <a> (invalid nesting that some webviews won't navigate from), and recently-viewed / crop-problem tiles are dynamic — so navigate explicitly. Action buttons (variant / Add / qty steppers) keep their own behaviour.
     (function(){
       document.addEventListener('click', function(e){
-        const card = e.target.closest('a.rv-card, a[data-variant-card], a.cp-prod');
+        const card = e.target.closest('a.rv-card, a[data-variant-card], a.cp-prod, a.cpg-card');
         if (!card) return;
-        if (e.target.closest('.variant-btn, .cp-prod-add, .qty-wrap, .qty-steps, button')) return;
+        if (e.target.closest('.variant-btn, .cp-prod-add, .cropprod-add, .qty-wrap, .qty-steps, button')) return;
         const href = card.getAttribute('href');
         if (!href || href === '#' || e.defaultPrevented) return;
         e.preventDefault();
@@ -3672,10 +3648,13 @@
       const submit = document.getElementById('baRateSubmit'), closeBtn = document.getElementById('baRateClose');
       let rating = 0, curName = '', curRow = null, testiUp = false;
 
-      function setStars(v){ rating = v; mstars.forEach(function(s,i){ s.classList.toggle('on', i < v); }); submit.disabled = v === 0; submit.style.opacity = v === 0 ? '.55' : '1'; }
+      function setStars(v){ rating = v; mstars.forEach(function(s,i){ s.classList.toggle('on', i < v); }); }
+      // Submit enables only when a review is written OR a testimonial is added (stars alone don't enable it)
+      function syncSubmit(){ const ok = (textEl.value.trim().length > 0) || testiUp; submit.disabled = !ok; submit.style.opacity = ok ? '1' : '.55'; }
       mstars.forEach(function(s){ s.addEventListener('click', function(){ setStars(parseInt(s.dataset.v, 10)); }); });
+      if (textEl) textEl.addEventListener('input', syncSubmit);
       media.addEventListener('change', function(){ const n = media.files ? media.files.length : 0; if (n) { mediaInfo.style.display = 'block'; mediaInfo.querySelector('span').textContent = n + ' file' + (n > 1 ? 's' : '') + ' attached'; } else { mediaInfo.style.display = 'none'; } });
-      testi.addEventListener('change', function(){ testiUp = !!(testi.files && testi.files.length); if (testiUp){ testiBox.classList.add('has'); testiLabel.innerHTML = '<i class="fa-solid fa-circle-check"></i> Testimonial added'; } else { testiBox.classList.remove('has'); testiLabel.textContent = 'Upload video testimonial'; } });
+      testi.addEventListener('change', function(){ testiUp = !!(testi.files && testi.files.length); if (testiUp){ testiBox.classList.add('has'); testiLabel.innerHTML = '<i class="fa-solid fa-circle-check"></i> Testimonial added'; } else { testiBox.classList.remove('has'); testiLabel.textContent = 'Upload video testimonial'; } syncSubmit(); });
 
       function fillTileStars(row, val){
         if (!row) return;
@@ -3689,6 +3668,7 @@
         setStars(preset || 0); textEl.value = '';
         mediaInfo.style.display = 'none'; if (media) media.value = '';
         testiUp = false; if (testi) testi.value = ''; testiBox.classList.remove('has'); testiLabel.textContent = 'Upload video testimonial';
+        syncSubmit();
         bd.style.display = 'block';
         requestAnimationFrame(function(){ bg.style.opacity = '1'; pnl.style.transform = 'translateY(0)'; });
       }
@@ -3699,10 +3679,11 @@
       function celebrate(coins){ if (window.kkdCelebrate) window.kkdCelebrate(coins); }
 
       submit.addEventListener('click', function(){
-        if (rating === 0) return;
-        try { const m = ratedMap(); m[curName] = rating; localStorage.setItem('kkd.ratedMap', JSON.stringify(m)); } catch (e) {}
-        fillTileStars(curRow, rating);
-        const coins = 10 + (testiUp ? 25 : 0);   // review +10, testimonial upload +25
+        if (submit.disabled) return;   // needs a review or a testimonial
+        const r = rating || 5;
+        try { const m = ratedMap(); m[curName] = r; localStorage.setItem('kkd.ratedMap', JSON.stringify(m)); } catch (e) {}
+        fillTileStars(curRow, r);
+        const coins = (textEl.value.trim().length > 0 ? 10 : 0) + (testiUp ? 25 : 0);   // review +10, testimonial +25
         close();
         setTimeout(function(){ celebrate(coins); }, 300);
       });

@@ -119,19 +119,20 @@
 
   <script>
     const PRODUCTS = [
-      { n:'Humic + Fulvic',   t:'Bio-stimulant',          s:'500 ml', p:276, m:390, r:4.8, cat:'fertilizer', best:true,  img:'https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg' },
-      { n:'Chakrawarti ZC',   t:'Insecticide',            s:'100 ml', p:358, m:495, r:4.7, cat:'pesticide',  best:true,  img:'https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp' },
-      { n:'NPK 19-19-19',     t:'Water-soluble fertilizer',s:'1 kg',  p:330, m:0,   r:4.6, cat:'fertilizer', best:true,  img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp' },
-      { n:'Antivirus',        t:'Bio bactericide + virucide',s:'250 ml',p:327,m:425, r:4.5, cat:'pesticide',  best:true,  img:'../assets/AntiVirus_nobg.png' },
-      { n:'Chakraveer 18.5%', t:'Chlorantraniliprole 18.5% SC',s:'100 ml',p:440,m:610,r:4.7,cat:'pesticide', best:true,  img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp' },
-      { n:'Bhumiraja',        t:'Soil conditioner',       s:'1 kg',   p:245, m:320, r:4.4, cat:'fertilizer', best:false, img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' },
-      { n:'Triple Attack',    t:'Fungicide combo',        s:'250 g',  p:550, m:720, r:4.3, cat:'fungicide',  best:true,  img:'https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp' },
-      { n:'Chakraveer Combo', t:'Insecticide + booster',  s:'Combo',  p:690, m:980, r:4.6, cat:'combo',      best:true,  img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp' },
-      { n:'NPK Booster',      t:'Foliar fertilizer',      s:'500 g',  p:210, m:280, r:4.2, cat:'fertilizer', best:false, img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp' },
-      { n:'Weed Clear',       t:'Selective herbicide',    s:'500 ml', p:395, m:520, r:4.1, cat:'herbicide',  best:false, img:'https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp' },
-      { n:'Humic Gold',       t:'Soil + root tonic',      s:'1 L',    p:430, m:560, r:4.5, cat:'fertilizer', best:false, img:'https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg' },
-      { n:'Anti-Fungus Pro',  t:'Systemic fungicide',     s:'250 ml', p:360, m:470, r:4.3, cat:'fungicide',  best:false, img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' }
+      { n:'Humic + Fulvic',   t:'Bio-stimulant',          s:'500 ml', p:276, m:390, r:4.8, cat:'fertilizer', best:true,  crops:'all', img:'https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg' },
+      { n:'Chakrawarti ZC',   t:'Insecticide',            s:'100 ml', p:358, m:495, r:4.7, cat:'pesticide',  best:true,  crops:['tomato','chilli','cotton','brinjal','okra','maize','paddy','onion'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp' },
+      { n:'NPK 19-19-19',     t:'Water-soluble fertilizer',s:'1 kg',  p:330, m:0,   r:4.6, cat:'fertilizer', best:true,  crops:'all', img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp' },
+      { n:'Antivirus',        t:'Bio bactericide + virucide',s:'250 ml',p:327,m:425, r:4.5, cat:'pesticide',  best:true,  crops:['tomato','chilli','papaya','potato'], img:'../assets/AntiVirus_nobg.png' },
+      { n:'Chakraveer 18.5%', t:'Chlorantraniliprole 18.5% SC',s:'100 ml',p:440,m:610,r:4.7,cat:'pesticide', best:true,  crops:['paddy','maize','sugarcane','cotton','wheat'], img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp' },
+      { n:'Bhumiraja',        t:'Soil conditioner',       s:'1 kg',   p:245, m:320, r:4.4, cat:'fertilizer', best:false, crops:'all', img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' },
+      { n:'Triple Attack',    t:'Fungicide combo',        s:'250 g',  p:550, m:720, r:4.3, cat:'fungicide',  best:true,  crops:['tomato','chilli','potato','grapes','onion'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp' },
+      { n:'Chakraveer Combo', t:'Insecticide + booster',  s:'Combo',  p:690, m:980, r:4.6, cat:'combo',      best:true,  crops:['paddy','maize','cotton'], img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp' },
+      { n:'NPK Booster',      t:'Foliar fertilizer',      s:'500 g',  p:210, m:280, r:4.2, cat:'fertilizer', best:false, crops:'all', img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp' },
+      { n:'Weed Clear',       t:'Selective herbicide',    s:'500 ml', p:395, m:520, r:4.1, cat:'herbicide',  best:false, crops:['wheat','maize','sugarcane','paddy','soyabean'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp' },
+      { n:'Humic Gold',       t:'Soil + root tonic',      s:'1 L',    p:430, m:560, r:4.5, cat:'fertilizer', best:false, crops:'all', img:'https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg' },
+      { n:'Anti-Fungus Pro',  t:'Systemic fungicide',     s:'250 ml', p:360, m:470, r:4.3, cat:'fungicide',  best:false, crops:['tomato','chilli','potato','grapes'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' }
     ];
+    const cropLabel = k => k.charAt(0).toUpperCase() + k.slice(1);
     const CATS = { pesticide:'Pesticide', fungicide:'Fungicide', fertilizer:'Fertilizer', herbicide:'Herbicide', combo:'Combo' };
     const SORTS = [
       { k:'pop',    label:'Popularity',   ic:'fa-fire' },
@@ -144,6 +145,7 @@
 
     let sort = 'pop', pendSort = 'pop';
     const catSel = new Set();
+    const cropSel = new Set();
     let ratingSel = '';
     let pendCat = new Set(), pendRating = '';
 
@@ -158,6 +160,7 @@
       if (recentView) list = RECENT.map(n => PRODUCTS.find(p => p.n === n)).filter(Boolean);
       if (sort === 'best') list = list.filter(p => p.best).concat(list.filter(p => !p.best));
       if (catSel.size) list = list.filter(p => catSel.has(p.cat));
+      if (cropSel.size) list = list.filter(p => p.crops === 'all' || (Array.isArray(p.crops) && p.crops.some(c => cropSel.has(c))));
       if (ratingSel) list = list.filter(p => p.r >= parseFloat(ratingSel));
       if (sort === 'rating') list.sort((a,b) => b.r - a.r);
       else if (sort === 'off') list.sort((a,b) => offPct(b) - offPct(a));
@@ -203,6 +206,7 @@
       if (recentView) chips.push({ id:'recent', label:'Recently viewed' });
       if (sort !== 'pop') { const so = SORTS.find(s => s.k === sort); if (so) chips.push({ id:'sort', label:'Sort: ' + so.label }); }
       catSel.forEach(c => chips.push({ id:'cat:' + c, label:CATS[c] }));
+      cropSel.forEach(c => chips.push({ id:'crop:' + c, label:'🌱 ' + cropLabel(c) }));
       if (ratingSel) chips.push({ id:'rating', label:ratingSel + '★ & above' });
       const row = document.getElementById('chipRow');
       row.innerHTML = chips.map(c => '<span class="achip">' + c.label + '<button class="achip-close" data-rm="' + c.id + '"><i class="fa-solid fa-xmark"></i></button></span>').join('');
@@ -212,12 +216,13 @@
         else if (id === 'sort') sort = 'pop';
         else if (id === 'rating') ratingSel = '';
         else if (id.indexOf('cat:') === 0) catSel.delete(id.slice(4));
+        else if (id.indexOf('crop:') === 0) cropSel.delete(id.slice(5));
         syncPills(); renderChips(); renderGrid();
       }));
     }
     function syncPills(){
       document.getElementById('sortBtn').classList.toggle('on', sort !== 'pop');
-      document.getElementById('filterBtn').classList.toggle('on', catSel.size > 0 || !!ratingSel || recentView);
+      document.getElementById('filterBtn').classList.toggle('on', catSel.size > 0 || cropSel.size > 0 || !!ratingSel || recentView);
     }
 
     function openSheet(id){ document.getElementById(id).classList.add('open'); }
@@ -255,6 +260,9 @@
     if (qp.get('sort') === 'bestsellers' || qp.get('sort') === 'best') { sort = 'best'; pendSort = 'best'; }
     if (qp.get('view') === 'recent') { recentView = true; }
     if (qp.get('cat') && CATS[qp.get('cat')]) { catSel.add(qp.get('cat')); }
+    // Crop filter auto-applied from Shop-by-Crop "View all" (?crop=tomato or ?crops=a,b)
+    if (qp.get('crop')) cropSel.add(qp.get('crop'));
+    if (qp.get('crops')) qp.get('crops').split(',').forEach(c => { if (c) cropSel.add(c); });
 
     syncPills(); renderChips(); renderGrid(); updateCartBar();
   </script>

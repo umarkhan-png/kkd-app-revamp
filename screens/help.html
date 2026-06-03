@@ -166,14 +166,14 @@
   <!-- Ask-AI chat bot · in-page sheet · same layout as the partner-app "Ask anything" (Katyaa AI) -->
   <div id="aiBd" class="ai-bd"></div>
   <div id="aiSheet" class="ai-sheet">
-    <!-- Header -->
-    <div class="flex items-center gap-3 px-4 py-3 bg-white" style="border-bottom:1px solid #EDEDED;flex-shrink:0">
+    <!-- Header · full-page top bar with a back button · top padding clears the device status bar -->
+    <div class="flex items-center gap-3 px-4 bg-white" style="border-bottom:1px solid #EDEDED;flex-shrink:0;padding-top:calc(env(safe-area-inset-top,0px) + 16px);padding-bottom:12px">
+      <button id="aiClose" class="ai-x" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></button>
       <span class="ai-av"><i class="fa-solid fa-seedling"></i></span>
       <div class="flex-1 leading-tight">
         <div class="text-[17px] font-extrabold" style="color:#0F172A;letter-spacing:-0.02em">Krishi AI <span class="text-[11px] font-normal" style="color:#64748B">by Katyayani</span></div>
         <div class="text-[11.5px] flex items-center gap-1.5" style="color:#64748B"><span class="w-1.5 h-1.5 rounded-full inline-block" style="background:#10B981"></span> Farming AI · Available 24×7</div>
       </div>
-      <button id="aiClose" class="ai-x" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <!-- Chat thread -->
     <div class="ai-thread" id="aiMsgs">

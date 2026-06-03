@@ -327,7 +327,7 @@
     function probImg(k){ var h = 0; for (var i = 0; i < k.length; i++) h = (h + k.charCodeAt(i)) % DIMG.length; return DIMG[h]; }
     function prodRow(pk){ const p = P[pk]; return '<a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="' + p.img + '"/></div>'
       + '<div class="prod-meta"><div class="pn">' + p.n + '</div><div class="ptech">' + (p.tech || '') + '</div>'
-      + '<div class="prod-tags">' + (p.pack ? '<span class="tg"><i class="fa-solid fa-box-open" style="font-size:8px"></i> ' + p.pack + '</span>' : '') + (p.use ? '<span class="tg use">For ' + p.use + '</span>' : '') + '</div></div>'
+      + '<div class="prod-tags">' + (p.pack ? '<span class="tg"><i class="fa-solid fa-box-open" style="font-size:8px"></i> ' + p.pack + '</span>' : '') + '</div></div>'
       + '<div class="prod-price"><div class="amt tnum">' + p.p + '</div><span class="add">Add</span></div></a>'; }
     // Toggle the recommended-products list under each issue
     document.addEventListener('click', function(e){
@@ -337,14 +337,14 @@
       var open = t.classList.toggle('open');
       if (list) list.classList.toggle('open', open);
       var span = t.querySelector('span');
-      if (span) span.innerHTML = '<i class="fa-solid fa-flask" style="font-size:11px"></i> ' + (open ? 'Hide recommended products' : 'Show recommended products (' + t.dataset.count + ')');
+      if (span) span.textContent = open ? 'Hide recommended products' : 'Show recommended products (' + t.dataset.count + ')';
     });
     function probBlock(k){ const pr = PROB[k]; return '<div class="prob-block">'
       + '<div class="prob-img"><img src="' + probImg(k) + '" alt="' + pr.nm + '" onerror="this.parentNode.style.display=\'none\'"/></div>'
       + '<div class="prob-h"><span class="pic"><i class="fa-solid fa-shield-virus"></i></span>'
       + '<div><div class="pn">' + pr.nm + '</div><span class="sev ' + pr.sev + '">' + (pr.sev === 'high' ? 'High' : 'Medium') + ' · Disease</span></div></div>'
       + '<div class="prob-desc">' + pr.desc + '</div>'
-      + '<button type="button" class="rp-toggle" data-count="' + pr.prods.length + '"><span><i class="fa-solid fa-flask" style="font-size:11px"></i> Show recommended products (' + pr.prods.length + ')</span><i class="fa-solid fa-chevron-down chev"></i></button>'
+      + '<button type="button" class="rp-toggle" data-count="' + pr.prods.length + '"><span>Show recommended products (' + pr.prods.length + ')</span><i class="fa-solid fa-chevron-down chev"></i></button>'
       + '<div class="rp-list">' + pr.prods.map(prodRow).join('') + '</div></div>'; }
 
     function renderCrop(){

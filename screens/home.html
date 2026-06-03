@@ -3486,16 +3486,17 @@
           <span class="bar-star" data-v="4"><i class="fa-solid fa-star"></i></span>
           <span class="bar-star" data-v="5"><i class="fa-solid fa-star"></i></span>
         </div>
+        <div class="bar-review-h">Write a review <span>+10 coins</span></div>
         <textarea id="baRateText" placeholder="Write a quick review — how did it work on your crop?" class="bar-review"></textarea>
         <label class="bar-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input id="baRateMedia" type="file" accept="image/*,video/*" capture="environment" multiple style="display:none"/></label>
         <div id="baRateMediaInfo" class="bar-attach-info"><i class="fa-solid fa-paperclip"></i> <span></span></div>
         <div class="bar-testi">
-          <div class="bar-testi-h"><i class="fa-solid fa-bullhorn" style="color:#B45309"></i> Share a testimonial <span>Extra reward</span></div>
-          <div class="bar-testi-sub">Upload a short photo / video — we feature it to help other farmers</div>
+          <div class="bar-testi-h"><i class="fa-solid fa-bullhorn" style="color:#047857"></i> Share a testimonial <span>+25 coins</span></div>
+          <div class="bar-testi-sub">Upload a short video to help other farmers</div>
           <label class="bar-upload" id="baTestiBox">
             <i class="fa-solid fa-cloud-arrow-up"></i>
-            <span id="baTestiLabel">Upload photo / video testimonial</span>
-            <input id="baRateTesti" type="file" accept="image/*,video/*" style="display:none"/>
+            <span id="baTestiLabel">Upload video testimonial</span>
+            <input id="baRateTesti" type="file" accept="video/*" style="display:none"/>
           </label>
         </div>
       </div>
@@ -3518,6 +3519,8 @@
     #baRateStars .bar-star{font-size:32px;color:#CBD5E1;cursor:pointer;transition:transform .12s ease,color .15s ease}
     #baRateStars .bar-star.on{color:#F59E0B}
     #baRateStars .bar-star:active{transform:scale(.85)}
+    .bar-review-h{font-size:13.5px;font-weight:800;color:#0F172A;display:flex;align-items:center;gap:7px;margin-bottom:8px}
+    .bar-review-h span{margin-left:auto;font-size:9.5px;font-weight:900;color:#047857;background:#ECFDF5;border:1px solid #A7F3D0;padding:2px 8px;border-radius:9999px;text-transform:uppercase;letter-spacing:0.04em}
     .bar-review{width:100%;min-height:72px;padding:11px 13px;border-radius:12px;border:1.5px solid #E5E7EB;background:#FFFFFF;font-size:13px;font-family:inherit;color:#0F172A;outline:none;resize:none;box-sizing:border-box}
     .bar-review::placeholder{color:#94A3B8}
     .bar-review:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.1)}
@@ -3527,7 +3530,7 @@
     .bar-attach-info i{font-size:10px}
     .bar-testi{margin-top:14px;border:1px solid #E5E7EB;border-radius:14px;padding:13px;background:#F8FAFC}
     .bar-testi-h{font-size:13.5px;font-weight:800;color:#0F172A;display:flex;align-items:center;gap:7px}
-    .bar-testi-h span{margin-left:auto;font-size:9.5px;font-weight:900;color:#B45309;background:#FEF3C7;border:1px solid #FCD34D;padding:2px 8px;border-radius:9999px;text-transform:uppercase;letter-spacing:0.04em}
+    .bar-testi-h span{margin-left:auto;font-size:9.5px;font-weight:900;color:#047857;background:#ECFDF5;border:1px solid #A7F3D0;padding:2px 8px;border-radius:9999px;text-transform:uppercase;letter-spacing:0.04em}
     .bar-testi-sub{font-size:11px;color:#64748B;margin-top:3px;line-height:1.35}
     .bar-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;margin-top:11px;min-height:88px;border:1.5px dashed #A7F3D0;border-radius:12px;background:#FFFFFF;color:#047857;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center;padding:12px}
     .bar-upload i{font-size:22px}
@@ -3561,7 +3564,7 @@
       function setStars(v){ rating = v; mstars.forEach(function(s,i){ s.classList.toggle('on', i < v); }); submit.disabled = v === 0; submit.style.opacity = v === 0 ? '.55' : '1'; }
       mstars.forEach(function(s){ s.addEventListener('click', function(){ setStars(parseInt(s.dataset.v, 10)); }); });
       media.addEventListener('change', function(){ const n = media.files ? media.files.length : 0; if (n) { mediaInfo.style.display = 'block'; mediaInfo.querySelector('span').textContent = n + ' file' + (n > 1 ? 's' : '') + ' attached'; } else { mediaInfo.style.display = 'none'; } });
-      testi.addEventListener('change', function(){ testiUp = !!(testi.files && testi.files.length); if (testiUp){ testiBox.classList.add('has'); testiLabel.innerHTML = '<i class="fa-solid fa-circle-check"></i> Testimonial added'; } else { testiBox.classList.remove('has'); testiLabel.textContent = 'Upload photo / video testimonial'; } });
+      testi.addEventListener('change', function(){ testiUp = !!(testi.files && testi.files.length); if (testiUp){ testiBox.classList.add('has'); testiLabel.innerHTML = '<i class="fa-solid fa-circle-check"></i> Testimonial added'; } else { testiBox.classList.remove('has'); testiLabel.textContent = 'Upload video testimonial'; } });
 
       function fillTileStars(row, val){
         if (!row) return;
@@ -3574,7 +3577,7 @@
         nameEl.textContent = name; imgEl.src = img || '';
         setStars(preset || 0); textEl.value = '';
         mediaInfo.style.display = 'none'; if (media) media.value = '';
-        testiUp = false; if (testi) testi.value = ''; testiBox.classList.remove('has'); testiLabel.textContent = 'Upload photo / video testimonial';
+        testiUp = false; if (testi) testi.value = ''; testiBox.classList.remove('has'); testiLabel.textContent = 'Upload video testimonial';
         bd.style.display = 'block';
         requestAnimationFrame(function(){ bg.style.opacity = '1'; pnl.style.transform = 'translateY(0)'; });
       }

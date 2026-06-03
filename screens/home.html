@@ -1269,7 +1269,7 @@
         /* Buy again · horizontal REORDER tiles · green "Ordered <date>" strip layer on top, technical name under the product name, filled-emerald Buy-again button (same as the Add button) */
         .ba-card{flex-shrink:0;width:264px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04);display:flex;flex-direction:column;overflow:hidden}
         .ba-datestrip{display:flex;align-items:center;justify-content:center;width:100%;padding:6px 12px;background:#059669;color:#FFFFFF;font-size:10px;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;text-align:center}
-        .ba-row{display:flex;align-items:center;gap:12px;padding:11px}
+        .ba-row{display:flex;align-items:center;gap:12px;padding:11px;flex:1}
         .ba-imgwrap{width:74px;height:74px;border-radius:12px;background:#F8FAFC;border:1px solid #F1F5F9;display:flex;align-items:center;justify-content:center;padding:8px;flex-shrink:0}
         .ba-imgwrap img{max-width:100%;max-height:100%;object-fit:contain}
         .ba-body{flex:1;min-width:0;display:flex;flex-direction:column}
@@ -1282,13 +1282,11 @@
         .ba-reorder{margin-top:9px;height:34px;border-radius:9px;background:#059669;color:#FFFFFF;border:0;font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;text-decoration:none;box-shadow:0 4px 12px -4px rgba(5,150,105,0.4)}
         .ba-reorder:active{transform:scale(.98)}
         .ba-reorder i{font-size:11px}
-        .ba-stars{display:flex;align-items:center;gap:4px;margin-top:8px}
-        .ba-stars .bs{font-size:18px;color:#CBD5E1;cursor:pointer;line-height:1;transition:color .12s ease,transform .12s ease}
+        .ba-stars{display:flex;align-items:center;justify-content:center;gap:11px;padding:11px;border-top:1px solid #F1F5F9}
+        .ba-stars .bs{font-size:25px;color:#CBD5E1;cursor:pointer;line-height:1;transition:color .12s ease,transform .12s ease}
         .ba-stars .bs.on{color:#F59E0B}
         .ba-stars .bs:active{transform:scale(.85)}
-        .ba-stars .bs-lbl{font-size:10px;font-weight:800;color:#94A3B8;margin-left:4px;text-transform:uppercase;letter-spacing:0.04em}
         .ba-stars.rated{pointer-events:none}
-        .ba-stars.rated .bs-lbl{color:#047857}
       </style>
       <div class="overflow-x-auto scroll-x">
         <div class="flex gap-3 px-4 pb-1">
@@ -3569,7 +3567,6 @@
         if (!row) return;
         row.classList.add('rated');
         row.querySelectorAll('.bs').forEach(function(s,i){ s.classList.toggle('on', i < val); });
-        const lbl = row.querySelector('.bs-lbl'); if (lbl) lbl.textContent = 'Rated';
       }
 
       function open(name, img, row, preset){
@@ -3608,7 +3605,6 @@
       // Inject a 5-star row into each Buy-again tile · tapping a star opens the modal prefilled to that rating
       const rmap = ratedMap();
       document.querySelectorAll('.ba-card').forEach(function(card){
-        const body = card.querySelector('.ba-body'); if (!body) return;
         const nm = card.querySelector('.ba-name'); const im = card.querySelector('.ba-imgwrap img');
         const name = nm ? nm.textContent.trim() : 'Product';
         const img = im ? im.getAttribute('src') : '';
@@ -3617,10 +3613,9 @@
         row.className = 'ba-stars' + (existing ? ' rated' : '');
         let html = '';
         for (let i = 1; i <= 5; i++){ html += '<span class="bs' + (existing && i <= existing ? ' on' : '') + '" data-v="' + i + '"><i class="fa-solid fa-star"></i></span>'; }
-        html += '<span class="bs-lbl">' + (existing ? 'Rated' : 'Rate') + '</span>';
         row.innerHTML = html;
         row.querySelectorAll('.bs').forEach(function(s){ s.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if (row.classList.contains('rated')) return; open(name, img, row, parseInt(s.dataset.v, 10)); }); });
-        body.appendChild(row);
+        card.appendChild(row);
       });
     })();
   </script>

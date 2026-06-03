@@ -72,14 +72,22 @@
   /* Issue photo banner */
   .prob-img{width:100%;height:132px;background:#F1F5F9;overflow:hidden}
   .prob-img img{width:100%;height:100%;object-fit:cover;display:block}
-  .rp-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:#64748B;padding:10px 12px 6px}
-  /* Recommended-product row · roomier, no chem/bio badge, bigger Add button */
-  .prod-row{display:flex;align-items:center;gap:12px;padding:12px;border-top:1px solid #F1F5F9;text-decoration:none;color:inherit}
-  .prod-thumb{width:50px;height:50px;border-radius:11px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:6px;flex-shrink:0}
+  /* Recommended-products · collapsed behind a toggle link */
+  .rp-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;padding:11px 12px;margin-top:4px;background:#F8FAFC;border:0;border-top:1px solid #F1F5F9;font-size:12.5px;font-weight:800;color:#047857;cursor:pointer}
+  .rp-toggle .chev{transition:transform .25s ease;font-size:11px}
+  .rp-toggle.open .chev{transform:rotate(180deg)}
+  .rp-list{display:none}
+  .rp-list.open{display:block}
+  /* Recommended-product row · roomier, informative (technical + pack + use), no SKU/badge, bigger Add */
+  .prod-row{display:flex;align-items:flex-start;gap:12px;padding:12px;border-top:1px solid #F1F5F9;text-decoration:none;color:inherit}
+  .prod-thumb{width:52px;height:52px;border-radius:11px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:6px;flex-shrink:0}
   .prod-thumb img{max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:multiply}
   .prod-meta{flex:1;min-width:0;line-height:1.3}
   .prod-meta .pn{font-size:14px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .prod-meta .pc{font-size:11.5px;color:#94A3B8;font-weight:600;margin-top:2px}
+  .prod-meta .ptech{font-size:11.5px;color:#475569;font-weight:600;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prod-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+  .prod-tags .tg{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;background:#F1F5F9;color:#475569}
+  .prod-tags .tg.use{background:#ECFDF5;color:#047857}
   .prod-price{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0}
   .prod-price .amt{font-size:14px;font-weight:900;color:#0F172A}
   .prod-price .add{display:inline-flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800;color:#FFFFFF;background:#059669;padding:8px 18px;border-radius:9px;cursor:pointer;box-shadow:0 4px 10px -4px rgba(5,150,105,0.5)}
@@ -237,14 +245,14 @@
       return { name:cap, sci:'', chips:['Crop'], stats:{stages:'—',issues:'—',products:'—',dur:'—'}, on:1, stages:[], stub:true };
     }
     const P = {
-      striker:{n:'STRIKER',c:'BK-548',t:'chem',p:'₹8,789',img:'https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp'},
-      hattrick:{n:'HATTRICK',c:'BK-996',t:'chem',p:'₹24,400',img:'https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg'},
-      coc:{n:'COC 50',c:'BK-46',t:'chem',p:'₹2,800',img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp'},
-      zyme:{n:'ZYME PLUS',c:'BK-137',t:'bio',p:'₹14,850',img:'../assets/AntiVirus_nobg.png'},
-      antivirus:{n:'ANTI VIRUS',c:'BK-116',t:'bio',p:'₹1,740',img:'../assets/AntiVirus_nobg.png'},
-      kacepro:{n:'K-ACEPRO',c:'BK-5513',t:'chem',p:'₹550',img:'https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp'},
-      metamanco:{n:'META-MANCO',c:'BK-144',t:'chem',p:'₹22,500',img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp'},
-      neem:{n:'NEEM SHAKTI',c:'BK-208',t:'bio',p:'₹980',img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp'}
+      striker:{n:'STRIKER',tech:'Thiamethoxam 25% WG',pack:'100 g',use:'Sucking pests',t:'chem',p:'₹8,789',img:'https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp'},
+      hattrick:{n:'HATTRICK',tech:'NPK + micronutrient mix',pack:'1 kg',use:'Growth & vigour',t:'chem',p:'₹24,400',img:'https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg'},
+      coc:{n:'COC 50',tech:'Copper Oxychloride 50% WP',pack:'500 g',use:'Fungal disease',t:'chem',p:'₹2,800',img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp'},
+      zyme:{n:'ZYME PLUS',tech:'Bio-enzyme + seaweed',pack:'500 ml',use:'Root & soil health',t:'bio',p:'₹14,850',img:'../assets/AntiVirus_nobg.png'},
+      antivirus:{n:'ANTI VIRUS',tech:'Anti-viral biostimulant',pack:'250 ml',use:'Leaf-curl / virus',t:'bio',p:'₹1,740',img:'../assets/AntiVirus_nobg.png'},
+      kacepro:{n:'K-ACEPRO',tech:'Acephate 75% SP',pack:'250 g',use:'Thrips & aphids',t:'chem',p:'₹550',img:'https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp'},
+      metamanco:{n:'META-MANCO',tech:'Metalaxyl 8% + Mancozeb 64% WP',pack:'500 g',use:'Blight / downy mildew',t:'chem',p:'₹22,500',img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp'},
+      neem:{n:'NEEM SHAKTI',tech:'Azadirachtin 1500 ppm',pack:'500 ml',use:'Broad-spectrum bio',t:'bio',p:'₹980',img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp'}
     };
     const PROB = {
       rootrot:{nm:'Root Rot',sev:'high',desc:'Black lesions on hypocotyls, girdling of stem and seedling death. The root system rots and plants pull out easily.',prods:['striker','hattrick','coc','zyme']},
@@ -318,13 +326,26 @@
     ];
     function probImg(k){ var h = 0; for (var i = 0; i < k.length; i++) h = (h + k.charCodeAt(i)) % DIMG.length; return DIMG[h]; }
     function prodRow(pk){ const p = P[pk]; return '<a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="' + p.img + '"/></div>'
-      + '<div class="prod-meta"><div class="pn">' + p.n + '</div><div class="pc">' + p.c + '</div></div>'
+      + '<div class="prod-meta"><div class="pn">' + p.n + '</div><div class="ptech">' + (p.tech || '') + '</div>'
+      + '<div class="prod-tags">' + (p.pack ? '<span class="tg"><i class="fa-solid fa-box-open" style="font-size:8px"></i> ' + p.pack + '</span>' : '') + (p.use ? '<span class="tg use">For ' + p.use + '</span>' : '') + '</div></div>'
       + '<div class="prod-price"><div class="amt tnum">' + p.p + '</div><span class="add">Add</span></div></a>'; }
+    // Toggle the recommended-products list under each issue
+    document.addEventListener('click', function(e){
+      var t = e.target.closest('.rp-toggle'); if (!t) return;
+      e.preventDefault();
+      var list = t.nextElementSibling;
+      var open = t.classList.toggle('open');
+      if (list) list.classList.toggle('open', open);
+      var span = t.querySelector('span');
+      if (span) span.innerHTML = '<i class="fa-solid fa-flask" style="font-size:11px"></i> ' + (open ? 'Hide recommended products' : 'Show recommended products (' + t.dataset.count + ')');
+    });
     function probBlock(k){ const pr = PROB[k]; return '<div class="prob-block">'
       + '<div class="prob-img"><img src="' + probImg(k) + '" alt="' + pr.nm + '" onerror="this.parentNode.style.display=\'none\'"/></div>'
       + '<div class="prob-h"><span class="pic"><i class="fa-solid fa-shield-virus"></i></span>'
       + '<div><div class="pn">' + pr.nm + '</div><span class="sev ' + pr.sev + '">' + (pr.sev === 'high' ? 'High' : 'Medium') + ' · Disease</span></div></div>'
-      + '<div class="prob-desc">' + pr.desc + '</div><div class="rp-title">Recommended products</div>' + pr.prods.map(prodRow).join('') + '</div>'; }
+      + '<div class="prob-desc">' + pr.desc + '</div>'
+      + '<button type="button" class="rp-toggle" data-count="' + pr.prods.length + '"><span><i class="fa-solid fa-flask" style="font-size:11px"></i> Show recommended products (' + pr.prods.length + ')</span><i class="fa-solid fa-chevron-down chev"></i></button>'
+      + '<div class="rp-list">' + pr.prods.map(prodRow).join('') + '</div></div>'; }
 
     function renderCrop(){
       if (!active) { content.style.display = 'none'; emptyEl.style.display = 'block'; return; }

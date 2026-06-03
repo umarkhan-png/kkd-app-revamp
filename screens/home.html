@@ -1539,15 +1539,22 @@
         .cp-rec-h i{font-size:12px}
         .cp-rec-strip{display:flex;gap:9px;overflow-x:auto;padding:11px 2px 2px;margin:0 -2px;scrollbar-width:none}
         .cp-rec-strip::-webkit-scrollbar{display:none}
-        .cp-prod{flex-shrink:0;width:120px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:11px;padding:9px;text-decoration:none;display:flex;flex-direction:column}
+        /* Crop-problem recommended products · same card style as the Bestseller / Recently-viewed tiles */
+        .cp-prod{flex-shrink:0;width:158px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06);text-decoration:none;color:#0F172A;display:flex;flex-direction:column}
         .cp-prod:active{transform:scale(.98)}
-        .cp-prod-img{width:100%;height:62px;border-radius:8px;background:#F8FAFC;border:1px solid #F1F5F9;display:flex;align-items:center;justify-content:center;padding:6px}
-        .cp-prod-img img{max-width:100%;max-height:100%;object-fit:contain}
-        .cp-prod-nm{font-size:11.5px;font-weight:700;color:#0F172A;line-height:1.2;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .cp-prod-sub{font-size:9.5px;color:#94A3B8;font-weight:500;line-height:1.2;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .cp-prod-pr{font-size:12.5px;font-weight:800;color:#0F172A;margin-top:5px}
-        .cp-prod-pr .mrp{font-size:9.5px;color:#94A3B8;text-decoration:line-through;font-weight:600;margin-left:4px}
-        .cp-rec-all{display:flex;align-items:center;justify-content:center;gap:6px;height:34px;border-radius:9px;background:#ECFDF5;border:1px solid #BBF7D0;color:#047857;font-size:12px;font-weight:800;text-decoration:none;margin-top:9px}
+        .cp-prod-img{height:120px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:12px;border-bottom:1px solid #F1F5F9;position:relative}
+        .cp-prod-img img{max-width:88%;max-height:100%;object-fit:contain}
+        .cp-prod-b{padding:10px;display:flex;flex-direction:column;flex:1}
+        .cp-prod-nm{font-size:14px;font-weight:700;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .cp-prod-sub{font-size:10.5px;color:#94A3B8;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+        .cp-prod-sz{align-self:flex-start;display:inline-block;background:#F1F5F9;color:#475569;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;margin-top:7px}
+        .cp-prod-pr{display:flex;align-items:baseline;gap:5px;margin-top:7px}
+        .cp-prod-pr .cur{font-size:16px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
+        .cp-prod-pr .mrp{font-size:11px;color:#94A3B8;text-decoration:line-through;font-weight:600;font-variant-numeric:tabular-nums}
+        .cp-prod-pr .off{font-size:10px;font-weight:800;color:#047857}
+        .cp-prod-add{margin-top:9px;height:32px;border-radius:9px;background:#059669;border:0;color:#FFFFFF;font-size:12px;font-weight:800;cursor:pointer}
+        .cp-prod-add:active{transform:scale(.98)}
+        .cp-rec-all{display:flex;align-items:center;justify-content:center;gap:6px;height:38px;border-radius:10px;background:#047857;border:0;color:#FFFFFF;font-size:12.5px;font-weight:800;text-decoration:none;margin-top:11px;box-shadow:0 6px 16px -6px rgba(4,120,87,0.5)}
         .cp-rec-all i{font-size:10px}
       </style>
       <div class="px-4 space-y-3" id="engRow">
@@ -1733,17 +1740,17 @@
           // problem → category + the products we surface when it's picked
           const REC = {
             'Pest':      { cat:'pesticide', items:[
-              { name:'Chakrawarti ZC',  sub:'Chlorantraniliprole + Lambda', price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
-              { name:'Neem-Shield Bio', sub:'Azadirachtin 1500 ppm',        price:285, mrp:380, img:'../assets/AntiVirus_nobg.png' } ] },
+              { name:'Chakrawarti ZC',  sub:'Chlorantraniliprole + Lambda', size:'100 ml', price:358, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
+              { name:'Neem-Shield Bio', sub:'Azadirachtin 1500 ppm',        size:'500 ml', price:285, mrp:380, img:'../assets/AntiVirus_nobg.png' } ] },
             'Disease':   { cat:'fungicide', items:[
-              { name:'Azodharma',  sub:'Azoxystrobin 23% SC', price:310, mrp:420, img:'../assets/Humic_nobg.png' },
-              { name:'Blightguard', sub:'Mancozeb 75% WP',    price:285, mrp:380, img:'../assets/Humic_nobg.png' } ] },
+              { name:'Azodharma',  sub:'Azoxystrobin 23% SC', size:'100 ml', price:310, mrp:420, img:'../assets/Humic_nobg.png' },
+              { name:'Blightguard', sub:'Mancozeb 75% WP',    size:'250 g',  price:285, mrp:380, img:'../assets/Humic_nobg.png' } ] },
             'Weeds':     { cat:'herbicide', items:[
-              { name:'Glypho-Power', sub:'Glyphosate 41% SL', price:368, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
-              { name:'WeedClear-S',  sub:'2,4-D Amine 58%',   price:298, mrp:399, img:'../assets/Chakrawarti_nobg.png' } ] },
+              { name:'Glypho-Power', sub:'Glyphosate 41% SL', size:'1 L',    price:368, mrp:495, img:'../assets/Chakrawarti_nobg.png' },
+              { name:'WeedClear-S',  sub:'2,4-D Amine 58%',   size:'500 ml', price:298, mrp:399, img:'../assets/Chakrawarti_nobg.png' } ] },
             'Nutrition': { cat:'fertilizer', items:[
-              { name:'NPK 19-19-19', sub:'Water-soluble', price:330, mrp:445, img:'../assets/Humic_nobg.png' },
-              { name:'Micro-Max',    sub:'Multi-micronutrient', price:289, mrp:395, img:'../assets/Humic_nobg.png' } ] }
+              { name:'NPK 19-19-19', sub:'Water-soluble', size:'1 kg',  price:330, mrp:445, img:'../assets/Humic_nobg.png' },
+              { name:'Micro-Max',    sub:'Multi-micronutrient', size:'500 g', price:289, mrp:395, img:'../assets/Humic_nobg.png' } ] }
           };
           function refresh(){ sub.disabled = opts.querySelectorAll('.sel').length === 0; }
           opts.querySelectorAll('[data-ms]').forEach(function(c){ c.addEventListener('click', function(){ c.classList.toggle('sel'); refresh(); }); });
@@ -1752,19 +1759,30 @@
             if (sel.length === 0) return;
             const seen = {}, items = []; let firstCat = 'pesticide';
             sel.forEach(function(p){ const r = REC[p]; if (!r) return; if (items.length === 0) firstCat = r.cat; r.items.forEach(function(it){ if (!seen[it.name]) { seen[it.name] = 1; items.push(it); } }); });
-            const top = items.slice(0, 5);
+            const top = items.slice(0, 6);
             let strip = '';
             top.forEach(function(it){
+              const off = it.mrp ? Math.round((1 - it.price / it.mrp) * 100) : 0;
               strip += '<a href="pdp.html" class="cp-prod">'
                 + '<div class="cp-prod-img"><img src="' + it.img + '" class="img-blend"/></div>'
+                + '<div class="cp-prod-b">'
                 + '<div class="cp-prod-nm">' + it.name + '</div>'
                 + '<div class="cp-prod-sub">' + it.sub + '</div>'
-                + '<div class="cp-prod-pr tnum">&#8377;' + it.price + '<span class="mrp">&#8377;' + it.mrp + '</span></div>'
+                + (it.size ? '<span class="cp-prod-sz">' + it.size + '</span>' : '')
+                + '<div class="cp-prod-pr"><span class="cur tnum">&#8377;' + it.price + '</span>' + (it.mrp ? '<span class="mrp tnum">&#8377;' + it.mrp + '</span>' : '') + (off ? '<span class="off">' + off + '% off</span>' : '') + '</div>'
+                + '<button type="button" class="cp-prod-add">Add</button>'
+                + '</div>'
                 + '</a>';
             });
+            // carry the selected problem(s) so the listing opens pre-filtered to the matching category
+            const viewAllHref = 'categories.html?cat=' + firstCat + '&problem=' + encodeURIComponent(sel.join(','));
             card.innerHTML = '<div class="cp-rec-h"><i class="fa-solid fa-circle-check"></i> +15 coins earned · picked for ' + sel.join(', ') + '</div>'
               + '<div class="cp-rec-strip">' + strip + '</div>'
-              + '<a href="categories.html?cat=' + firstCat + '" class="cp-rec-all">View all products <i class="fa-solid fa-arrow-right"></i></a>';
+              + '<a href="' + viewAllHref + '" class="cp-rec-all">View all products <i class="fa-solid fa-arrow-right"></i></a>';
+            // Add buttons bump the cart without navigating to the PDP
+            card.querySelectorAll('.cp-prod-add').forEach(function(b){
+              b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if (typeof bumpCart === 'function') bumpCart(); b.textContent = 'Added ✓'; b.style.background = '#047857'; setTimeout(function(){ b.textContent = 'Add'; b.style.background = '#059669'; }, 1000); });
+            });
             try { localStorage.setItem('kkd.cropProb.done', '1'); } catch (e) {}
             if (window.kkdCelebrate) window.kkdCelebrate(15);
           });
@@ -3434,6 +3452,19 @@
         e.stopPropagation();
         openFor(card);
       }, true);
+    })();
+
+    // Product cards reliably open the PDP · bestseller cards nest a <button> inside the <a> (invalid nesting that some webviews won't navigate from), and recently-viewed / crop-problem tiles are dynamic — so navigate explicitly. Action buttons (variant / Add / qty steppers) keep their own behaviour.
+    (function(){
+      document.addEventListener('click', function(e){
+        const card = e.target.closest('a.rv-card, a[data-variant-card], a.cp-prod');
+        if (!card) return;
+        if (e.target.closest('.variant-btn, .cp-prod-add, .qty-wrap, .qty-steps, button')) return;
+        const href = card.getAttribute('href');
+        if (!href || href === '#' || e.defaultPrevented) return;
+        e.preventDefault();
+        window.location.href = href;
+      });
     })();
 
     // Delivery stack · any in-progress tile tap → opens detailed track-order bottom-sheet · pagination dots auto-render based on tile count and stay in sync with the user's horizontal swipe position

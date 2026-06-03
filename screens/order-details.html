@@ -5,6 +5,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="../assets/celebrate.js"></script>
 <script src="../assets/verify.js"></script>
+<script src="../assets/rate.js"></script>
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   html,body{font-family:'Poppins',system-ui,sans-serif}
@@ -336,7 +337,7 @@
         <div class="rate-block only-delivered" data-rating-group="humic">
           <div class="rate-head">
             <div class="ltxt" data-rate-status>Rate this product</div>
-            <span class="rate-coin-chip"><i class="fa-solid fa-coins"></i> +25 on rating</span>
+            <span class="rate-coin-chip"><i class="fa-solid fa-coins"></i> +10 on review</span>
           </div>
           <div class="rate-stars">
             <button class="star-btn" data-val="1"><i class="fa-solid fa-star"></i></button>
@@ -375,7 +376,7 @@
         <div class="rate-block only-delivered" data-rating-group="antivirus">
           <div class="rate-head">
             <div class="ltxt" data-rate-status>Rate this product</div>
-            <span class="rate-coin-chip"><i class="fa-solid fa-coins"></i> +25 on rating</span>
+            <span class="rate-coin-chip"><i class="fa-solid fa-coins"></i> +10 on review</span>
           </div>
           <div class="rate-stars">
             <button class="star-btn" data-val="1"><i class="fa-solid fa-star"></i></button>
@@ -1185,51 +1186,33 @@
         rateOkTimer = setTimeout(() => rateOk.classList.remove('show'), 2200);
       }
 
-      // Per-product star rating · selecting a star credits +25 coins immediately · the review section (textarea + Submit) reveals AFTER the first star tap · review is optional and earns no extra coins (the hint copy makes this clear)
+      // Per-product rating · tapping a star opens the SAME Rate & Review modal as the home Buy-again flow.
+      // Coins are earned for the REVIEW (+10) / TESTIMONIAL (+25) on submit — not for the stars. Attachment lives in the modal.
       document.querySelectorAll('[data-rating-group]').forEach(group => {
-        const stars = group.querySelectorAll('.star-btn');
+        const stars  = group.querySelectorAll('.star-btn');
         const status = group.querySelector('[data-rate-status]');
-        const sub    = group.querySelector('[data-rate-sub]');
         const wrap   = group.querySelector('[data-review-wrap]');
-        const text   = group.querySelector('[data-review-text]');
-        const submit = group.querySelector('[data-review-submit]');
+        const row    = group.closest('.prod-row');
+        const nameEl = row ? row.querySelector('.prod-name') : null;
+        const imgEl  = row ? row.querySelector('.prod-img img') : null;
+        const name   = nameEl ? nameEl.textContent.trim() : 'product';
+        const img    = imgEl ? imgEl.getAttribute('src') : '';
+        if (wrap) wrap.style.display = 'none';   // review now lives inside the modal
         let rated = false;
-        let okShown = false;
-
+        function fill(v){ stars.forEach(x => x.classList.toggle('on', parseInt(x.getAttribute('data-val'), 10) <= v)); }
         stars.forEach(s => {
           s.addEventListener('click', () => {
+            if (rated) return;
             const v = parseInt(s.getAttribute('data-val'), 10);
-            stars.forEach(x => {
-              const xv = parseInt(x.getAttribute('data-val'), 10);
-              x.classList.toggle('on', xv <= v);
-            });
-            const labels = ['', 'Poor', 'Fair', 'Good', 'Very good', 'Excellent'];
-            if (status){
-              status.textContent = labels[v] + ' · thanks!';
-              status.style.color = v >= 4 ? '#047857' : (v >= 3 ? '#B45309' : '#DC2626');
-            }
-            if (sub) sub.textContent = '+25 coins added to your wallet';
-            // Reveal the review section (textarea + Submit) on the first star tap
-            if (wrap) wrap.classList.add('on');
-            rated = true;
-            // Soft success gesture + coin credit · fired once on the first rating for this product
-            if (!okShown) { okShown = true; showRateOk(25); if (window.kkdCelebrate) window.kkdCelebrate(25); }
+            fill(v);
+            if (!window.kkdRate) return;
+            window.kkdRate({ name: name, img: img, rating: v, onSubmit: function(coins, r){
+              rated = true; fill(r);
+              if (status){ status.textContent = 'Rated · thanks for the review!'; status.style.color = '#047857'; }
+              stars.forEach(x => { x.style.pointerEvents = 'none'; });
+            }});
           });
         });
-
-        // Gate the Submit review button on textarea content (>=3 chars) · once submitted, the wrap flips to view-only (no lingering disabled CTA, no helper line)
-        if (text && submit) {
-          text.addEventListener('input', () => {
-            submit.disabled = (text.value || '').trim().length < 3;
-          });
-          submit.addEventListener('click', () => {
-            if (submit.disabled) return;
-            if (wrap) wrap.classList.add('submitted');
-            text.setAttribute('readonly', 'readonly');
-            // Lock the stars too · post-submit the rating is final, no edits
-            stars.forEach(s => { s.style.pointerEvents = 'none'; });
-          });
-        }
       });
     })();
   </script>

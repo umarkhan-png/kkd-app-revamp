@@ -1069,8 +1069,14 @@
           .cropf-chip.on{background:#059669;border-color:#047857;color:#FFFFFF}
           .cropf-chip .ci{width:18px;height:18px;border-radius:50%;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;background:#ECFDF5;font-size:9px}
           .cropf-chip .ci img{width:100%;height:100%;object-fit:cover}
+          .cprob-tile{flex-shrink:0;width:72px;text-align:center;text-decoration:none;cursor:pointer}
+          .cprob-tile:active{transform:scale(.96)}
+          .cprob-ic{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:27px;margin:0 auto;border:2px solid #FFFFFF;box-shadow:0 3px 8px -2px rgba(15,23,42,0.2);overflow:hidden}
+          .cprob-ic img{width:100%;height:100%;object-fit:cover}
+          .cprob-lbl{font-size:10.5px;font-weight:700;color:#334155;line-height:1.2;margin-top:6px;display:block}
         </style>
         <div id="cropProductsWrap" class="relative px-4 pb-3" style="display:none">
+          <div id="cropProblems" style="display:none"></div>
           <div id="cropProductsChips" class="flex gap-2 overflow-x-auto scroll-x pb-2.5"></div>
           <div id="cropProductsGrid" class="grid grid-cols-2 gap-3"></div>
         </div>
@@ -2900,6 +2906,37 @@
         { n:'Antivirus',       t:'Bio bactericide + virucide',  s:'250 ml', p:327, m:425, img:'../assets/AntiVirus_nobg.png',                                            crops:['tomato','chilli','papaya','potato','cucumber'] },
         { n:'Chakraveer 18.5%',t:'Chlorantraniliprole 18.5% SC',s:'100 ml', p:440, m:610, img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp',crops:['paddy','maize','sugarcane','cotton','wheat'] }
       ];
+      // Common problems shown per crop (visual strip) · tap → shop the category that fixes it
+      const PROBLEM_DEFS = {
+        suck:  { label:'Sucking pests', emoji:'🦟', bg:'#FEE2E2', cat:'pesticide' },
+        borer: { label:'Borers & larvae', emoji:'🐛', bg:'#FEF3C7', cat:'pesticide' },
+        thrips:{ label:'Thrips & mites', emoji:'🕷️', bg:'#FFE4E6', cat:'pesticide' },
+        fungus:{ label:'Fungal disease', emoji:'🍄', bg:'#EDE9FE', cat:'fungicide' },
+        virus: { label:'Leaf curl / virus', emoji:'🍂', bg:'#FFEDD5', cat:'fungicide' },
+        weed:  { label:'Weeds', emoji:'🌿', bg:'#DCFCE7', cat:'herbicide' },
+        nutri: { label:'Nutrient gaps', emoji:'🥀', bg:'#FEF9C3', cat:'fertilizer' }
+      };
+      const CROP_PROBLEMS = {
+        tomato:['suck','borer','fungus','virus','nutri'], chilli:['suck','thrips','virus','fungus','nutri'],
+        wheat:['weed','fungus','suck','nutri'], maize:['borer','weed','fungus','nutri'],
+        onion:['thrips','fungus','weed','nutri'], potato:['fungus','suck','borer','nutri'],
+        cotton:['suck','borer','virus','nutri'], brinjal:['borer','suck','virus','nutri'],
+        okra:['suck','virus','borer','nutri'], paddy:['borer','fungus','weed','nutri'],
+        sugarcane:['borer','suck','weed','nutri'], soyabean:['borer','fungus','weed','nutri']
+      };
+      const DEFAULT_PROBLEMS = ['suck','borer','fungus','weed','nutri'];
+      function renderCropProblems(probCrops){
+        const el = document.getElementById('cropProblems');
+        if (!el) return;
+        const keys = [];
+        probCrops.forEach(function(c){ (CROP_PROBLEMS[c] || DEFAULT_PROBLEMS).forEach(function(k){ if (keys.indexOf(k) < 0) keys.push(k); }); });
+        if (keys.length === 0) { el.style.display = 'none'; return; }
+        el.innerHTML = '<div class="text-[12px] font-extrabold text-[#0F172A] mb-2 mt-0.5">Common problems <span class="text-[11px] font-semibold" style="color:#64748B">· tap to find the fix</span></div>'
+          + '<div class="flex gap-3 overflow-x-auto scroll-x pb-2.5">'
+          + keys.map(function(k){ const d = PROBLEM_DEFS[k]; return '<a href="categories.html?cat=' + d.cat + '" class="cprob-tile nu"><span class="cprob-ic" style="background:' + d.bg + '">' + d.emoji + '</span><span class="cprob-lbl">' + d.label + '</span></a>'; }).join('')
+          + '</div>';
+        el.style.display = 'block';
+      }
       let cropProdFilter = 'all';
       function renderCropProducts(){
         const wrap = document.getElementById('cropProductsWrap');
@@ -2909,6 +2946,8 @@
         if (selected.size === 0) { wrap.style.display = 'none'; grid.innerHTML = ''; cropProdFilter = 'all'; return; }
         const selArr = Array.from(selected);
         if (cropProdFilter !== 'all' && !selected.has(cropProdFilter)) cropProdFilter = 'all';
+        // Common-problems strip · for the active filter crop, else the union of selected crops
+        renderCropProblems(cropProdFilter !== 'all' ? [cropProdFilter] : selArr);
         // Crop filter chips · "All" + one per selected crop
         if (chipsEl) {
           chipsEl.innerHTML = ['all'].concat(selArr).map(function(k){

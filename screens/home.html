@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="../assets/celebrate.js"></script>
 <style>
   * { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; letter-spacing: -0.01em; }
   html, body { margin: 0; padding: 0; }
@@ -1703,10 +1704,15 @@
       })();
       // Engagement widgets · reward on tap (chips / CTAs) → flip the card to its done state · Rate & review opens the bottom modal and rewards on submit
       (function(){
+        // pull the coin value out of a card's "+N" badge (skips ₹ rewards like refer)
+        function cardCoins(card){ const b = card && card.querySelector('.eng-coin'); const m = b && b.textContent.match(/\+\s*(\d+)/); return m ? parseInt(m[1], 10) : 0; }
         document.querySelectorAll('#engRow [data-reward]').forEach(el => {
           el.addEventListener('click', () => {
             const card = el.closest('.eng-card');
-            if (card && !card.classList.contains('done')) card.classList.add('done');
+            if (card && !card.classList.contains('done')) {
+              card.classList.add('done');
+              const n = cardCoins(card); if (n && window.kkdCelebrate) window.kkdCelebrate(n);
+            }
           });
         });
         // Crop-problem widget · MULTI-select chips + Submit → convert the tile to a recommended-products strip · tile auto-hides on the next page load
@@ -1754,6 +1760,7 @@
               + '<div class="cp-rec-strip">' + strip + '</div>'
               + '<a href="categories.html?cat=' + firstCat + '" class="cp-rec-all">View all products <i class="fa-solid fa-arrow-right"></i></a>';
             try { localStorage.setItem('kkd.cropProb.done', '1'); } catch (e) {}
+            if (window.kkdCelebrate) window.kkdCelebrate(15);
           });
         })();
         // Close (×) · dismiss a tile
@@ -1783,7 +1790,7 @@
           if (n > 0) { mediaInfo.style.display = 'block'; mediaInfo.innerHTML = '<i class="fa-solid fa-circle-check text-[10px]"></i> ' + n + ' file' + (n > 1 ? 's' : '') + ' attached'; }
           else mediaInfo.style.display = 'none';
         });
-        submit && submit.addEventListener('click', () => { if (!val) return; shut(); if (card) card.classList.add('done'); });
+        submit && submit.addEventListener('click', () => { if (!val) return; shut(); if (card) card.classList.add('done'); if (window.kkdCelebrate) window.kkdCelebrate(25); });
 
         // Share-testimonial flow · open the bottom sheet, gate submit on a story, attach photo/video, then flip the tile to its earned state
         const tBd = document.getElementById('engTestiBd');
@@ -1806,7 +1813,7 @@
           if (n > 0) { tInfo.style.display = 'block'; tInfo.innerHTML = '<i class="fa-solid fa-circle-check text-[10px]"></i> ' + n + ' file' + (n > 1 ? 's' : '') + ' attached'; }
           else tInfo.style.display = 'none';
         });
-        tSubmit && tSubmit.addEventListener('click', () => { if (tSubmit.disabled) return; tShut(); if (tCard) tCard.classList.add('done'); });
+        tSubmit && tSubmit.addEventListener('click', () => { if (tSubmit.disabled) return; tShut(); if (tCard) tCard.classList.add('done'); if (window.kkdCelebrate) window.kkdCelebrate(30); });
       })();
     </script>
 
@@ -2717,6 +2724,7 @@
         });
       });
       function celebrateAcres(){
+        if (window.kkdCelebrate) window.kkdCelebrate(20);
         const burst = document.getElementById('acresBurst');
         const ribbon = document.getElementById('acresSuccess');
         const card = document.getElementById('acresCard');
@@ -3042,6 +3050,7 @@
             if (s.indexOf(id) < 0) s.push(id);
             try { localStorage.setItem('kkd.quest', JSON.stringify(s)); } catch (e) {}
             renderQuestList(); renderQuestTile();
+            if (step && window.kkdCelebrate) window.kkdCelebrate(step.coins);
             // All 5 done → close the quest and reveal "Your rewards" once
             if (questAllDone() && localStorage.getItem('kkd.coins.rewardSeen') !== '1') {
               setTimeout(function(){ closeQuest(); setTimeout(showRewardsState, 320); }, 500);
@@ -3555,25 +3564,7 @@
     </div>
   </div>
 
-  <!-- Rate · feel-good celebration -->
-  <div id="baRateOk" class="bar-ok">
-    <div class="bar-ok-stage">
-      <span class="bar-tw t1"><i class="fa-solid fa-star"></i></span>
-      <span class="bar-tw t2"><i class="fa-solid fa-star"></i></span>
-      <span class="bar-tw t3"><i class="fa-solid fa-star"></i></span>
-      <span class="bar-tw t4"><i class="fa-solid fa-star"></i></span>
-      <span class="bar-tw t5"><i class="fa-solid fa-star"></i></span>
-      <span class="bar-tw t6"><i class="fa-solid fa-star"></i></span>
-      <div class="bar-ok-burst">
-        <span class="bar-glow"></span>
-        <span class="bar-ring"></span>
-        <span class="bar-ring r2"></span>
-        <div class="bar-ok-coin"><i class="fa-solid fa-coins"></i></div>
-      </div>
-      <div class="bar-ok-title">Thank you! 🎉</div>
-      <div class="bar-ok-sub">You earned <b id="baRateOkCoins">+10 coins</b></div>
-    </div>
-  </div>
+  <!-- Coin-earn celebration overlay is provided by the shared ../assets/celebrate.js (window.kkdCelebrate) -->
 
   <style>
     #baRateStars .bar-star{font-size:32px;color:#CBD5E1;cursor:pointer;transition:transform .12s ease,color .15s ease}
@@ -3597,44 +3588,6 @@
     .bar-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;margin-top:11px;min-height:88px;border:1.5px dashed #A7F3D0;border-radius:12px;background:#FFFFFF;color:#047857;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center;padding:12px}
     .bar-upload i{font-size:22px}
     .bar-upload.has{border-style:solid;border-color:#059669;background:#ECFDF5}
-    /* Full-screen immersive reward celebration · no white card · emerald-glow takeover */
-    .bar-ok{position:fixed;inset:0;z-index:130;display:none;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 42%,rgba(5,150,105,0.40),rgba(15,23,42,0.86) 72%);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
-    .bar-ok.show{display:flex}
-    .bar-ok-stage{position:relative;width:300px;max-width:86vw;text-align:center;transform:scale(.92);opacity:0}
-    .bar-ok.show .bar-ok-stage{animation:barOkIn .5s cubic-bezier(.22,.68,.3,1) forwards}
-    @keyframes barOkIn{to{transform:scale(1);opacity:1}}
-    .bar-ok-burst{position:relative;width:108px;height:108px;margin:0 auto 8px}
-    .bar-glow{position:absolute;inset:-34px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,0.6),rgba(16,185,129,0) 70%);opacity:0;z-index:0}
-    .bar-ok.show .bar-glow{animation:barGlow 2.5s ease-out .14s forwards}
-    @keyframes barGlow{0%{opacity:0;transform:scale(.5)}25%{opacity:1;transform:scale(1)}100%{opacity:.62;transform:scale(1.1)}}
-    .bar-ok-coin{position:absolute;inset:6px;border-radius:50%;background:linear-gradient(135deg,#34D399,#10B981 45%,#047857);color:#fff;display:flex;align-items:center;justify-content:center;font-size:42px;box-shadow:0 16px 38px -8px rgba(5,150,105,0.75),inset 0 2px 7px rgba(255,255,255,0.45);transform:scale(0);z-index:2}
-    .bar-ok.show .bar-ok-coin{animation:barCoinIn .64s cubic-bezier(.3,1.3,.5,1) .14s forwards}
-    @keyframes barCoinIn{0%{transform:scale(0)}100%{transform:scale(1)}}
-    .bar-ring{position:absolute;inset:6px;border-radius:50%;border:2.5px solid rgba(110,231,183,0.75);opacity:0;z-index:1}
-    .bar-ok.show .bar-ring{animation:barRing 1.7s ease-out .32s forwards}
-    .bar-ok.show .bar-ring.r2{animation-delay:.72s}
-    @keyframes barRing{0%{opacity:.85;transform:scale(.68)}100%{opacity:0;transform:scale(2.5)}}
-    .bar-tw{position:absolute;color:#FDE68A;opacity:0;pointer-events:none;z-index:3;filter:drop-shadow(0 0 6px rgba(251,191,36,0.75))}
-    .bar-tw i{display:block}
-    .bar-tw.t1{top:-8px;left:34px;font-size:16px}
-    .bar-tw.t2{top:20px;right:26px;font-size:12px}
-    .bar-tw.t3{top:104px;left:14px;font-size:11px}
-    .bar-tw.t4{top:82px;right:16px;font-size:18px}
-    .bar-tw.t5{top:4px;right:88px;font-size:10px}
-    .bar-tw.t6{top:128px;left:80px;font-size:14px}
-    .bar-ok.show .bar-tw{animation:barTw 2.1s ease-in-out forwards}
-    .bar-ok.show .bar-tw.t2{animation-delay:.24s}
-    .bar-ok.show .bar-tw.t3{animation-delay:.5s}
-    .bar-ok.show .bar-tw.t4{animation-delay:.14s}
-    .bar-ok.show .bar-tw.t5{animation-delay:.62s}
-    .bar-ok.show .bar-tw.t6{animation-delay:.4s}
-    @keyframes barTw{0%{opacity:0;transform:scale(0) rotate(-30deg)}22%{opacity:1;transform:scale(1.15) rotate(0)}50%{opacity:.8;transform:scale(.85)}74%{opacity:1;transform:scale(1.1)}100%{opacity:0;transform:scale(.5) rotate(20deg)}}
-    .bar-ok-title{font-size:24px;font-weight:900;color:#fff;margin-top:16px;position:relative;z-index:3;opacity:0;text-shadow:0 2px 12px rgba(0,0,0,0.3)}
-    .bar-ok.show .bar-ok-title{animation:barTextUp .42s ease .32s forwards}
-    .bar-ok-sub{font-size:14.5px;color:rgba(255,255,255,0.9);margin-top:6px;position:relative;z-index:3;opacity:0}
-    .bar-ok.show .bar-ok-sub{animation:barTextUp .42s ease .46s forwards}
-    .bar-ok-sub b{color:#6EE7B7;font-weight:900;font-size:16px}
-    @keyframes barTextUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
   </style>
   <script>
     // Buy-again · per-product star rating in the tile → opens review modal prefilled · review = +10 coins, testimonial upload = +25 · celebration on submit
@@ -3673,39 +3626,7 @@
       if (closeBtn) closeBtn.addEventListener('click', close);
       if (bg) bg.addEventListener('click', close);
 
-      function celebrate(coins){
-        const ok = document.getElementById('baRateOk');
-        const el = document.getElementById('baRateOkCoins');
-        const burst = ok.querySelector('.bar-ok-burst');
-        el.textContent = '+0 coins';
-        ok.classList.add('show');
-        // count the coins up for a rewarding beat, kicking in just after the coin pops
-        setTimeout(function(){
-          const steps = Math.max(1, Math.min(coins, 18)); const inc = coins / steps; let i = 0;
-          const t = setInterval(function(){ i++; let v = Math.round(inc * i); if (i >= steps) { v = coins; clearInterval(t); } el.textContent = '+' + v + ' coins'; }, 42);
-        }, 360);
-        // coin/sparkle fountain radiating up + out from the medallion, spreading across the screen
-        if (burst) {
-          const sym = ['🪙','🪙','✨','🎉','🪙','✨','🪙','🎉','✨','🪙','🪙','✨','🎉','🪙','✨','🪙'];
-          for (let i = 0; i < 16; i++) {
-            const c = document.createElement('span');
-            c.textContent = sym[i];
-            const angle = (-90 + (i - 7.5) * 11) * Math.PI / 180;
-            const dist = 120 + (i % 5) * 26;
-            const tx = Math.cos(angle) * dist;
-            const ty = Math.sin(angle) * dist - 18;
-            const rot = (i % 2 ? 1 : -1) * (14 + (i * 9) % 40);
-            c.style.cssText = 'position:absolute;left:50%;top:50%;font-size:' + (18 + (i % 5) * 3) + 'px;transform:translate(-50%,-50%) scale(.4);opacity:0;transition:transform 1.05s cubic-bezier(.18,.7,.3,1),opacity 1.05s ease;pointer-events:none;z-index:5;filter:drop-shadow(0 3px 6px rgba(0,0,0,0.3))';
-            burst.appendChild(c);
-            (function(c, tx, ty, rot, i){
-              setTimeout(function(){ c.style.opacity = '1'; c.style.transform = 'translate(calc(-50% + ' + tx + 'px), calc(-50% + ' + ty + 'px)) scale(1.2) rotate(' + rot + 'deg)'; }, 130 + i * 26);
-              setTimeout(function(){ c.style.opacity = '0'; }, 980 + i * 26);
-              setTimeout(function(){ if (c.parentNode) c.parentNode.removeChild(c); }, 1420 + i * 26);
-            })(c, tx, ty, rot, i);
-          }
-        }
-        setTimeout(function(){ ok.classList.remove('show'); }, 2500);
-      }
+      function celebrate(coins){ if (window.kkdCelebrate) window.kkdCelebrate(coins); }
 
       submit.addEventListener('click', function(){
         if (rating === 0) return;

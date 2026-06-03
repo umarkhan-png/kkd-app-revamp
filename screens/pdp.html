@@ -387,6 +387,58 @@
   </div>
 </div>
 
+<!-- Crop nudge · prompts the user to pick their crop (for the right dose & tailored advice) if they haven't already -->
+<style>
+  .cn-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;height:34px;padding:0 13px;border-radius:9999px;background:#FFFFFF;border:1.5px solid #BBF7D0;font-size:12.5px;font-weight:700;color:#0F172A;cursor:pointer;white-space:nowrap;text-decoration:none}
+  .cn-chip:active{transform:scale(.96)}
+  .cn-more{background:#059669;border-color:#047857;color:#fff}
+</style>
+<div class="px-4 mt-4" id="cropNudgeWrap">
+  <div id="cropNudge" style="position:relative;border-radius:16px;padding:14px;background:linear-gradient(135deg,#ECFDF5,#F0FDF4);border:1px solid #BBF7D0;overflow:hidden">
+    <div class="flex items-start gap-3">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:#FFFFFF;border:1px solid #BBF7D0;font-size:18px">🌱</div>
+      <div class="flex-1 min-w-0">
+        <div class="text-[13.5px] font-extrabold text-[#0F172A]">Which crop is this for?</div>
+        <div class="text-[11.5px] mt-0.5" style="color:#475569">Pick your crop to get the right dose &amp; tailored advice for this product.</div>
+      </div>
+      <button type="button" id="cropNudgeClose" class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(255,255,255,0.8);border:0;color:#64748B" aria-label="Dismiss"><i class="fa-solid fa-xmark text-[10px]"></i></button>
+    </div>
+    <div class="flex gap-2 overflow-x-auto scroll-x mt-3" id="cropNudgeChips" style="scrollbar-width:none">
+      <button type="button" class="cn-chip" data-crop="Tomato">🍅 Tomato</button>
+      <button type="button" class="cn-chip" data-crop="Chilli">🌶 Chilli</button>
+      <button type="button" class="cn-chip" data-crop="Wheat">🌾 Wheat</button>
+      <button type="button" class="cn-chip" data-crop="Cotton">🪴 Cotton</button>
+      <button type="button" class="cn-chip" data-crop="Paddy">🌾 Paddy</button>
+      <a href="my-crop.html" class="cn-chip cn-more">More <i class="fa-solid fa-arrow-right text-[9px]"></i></a>
+    </div>
+  </div>
+  <div id="cropNudgeDone" style="display:none;border-radius:14px;padding:11px 13px;background:#FFFFFF;border:1px solid #BBF7D0;align-items:center;gap:10px">
+    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full flex-shrink-0" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-seedling text-[14px]"></i></span>
+    <div class="flex-1 leading-tight text-[12.5px]" style="color:#0F172A">Showing advice for <b id="cropNudgeName" style="color:#047857">Tomato</b></div>
+    <button type="button" id="cropNudgeChange" class="text-[12px] font-extrabold" style="background:none;border:0;color:#047857;cursor:pointer">Change</button>
+  </div>
+</div>
+<script>
+  (function(){
+    var wrap = document.getElementById('cropNudgeWrap');
+    var nudge = document.getElementById('cropNudge');
+    var done = document.getElementById('cropNudgeDone');
+    var nameEl = document.getElementById('cropNudgeName');
+    if (!wrap || !nudge || !done) return;
+    var KEY = 'kkd.crop.primary';
+    function showDone(crop){ nudge.style.display = 'none'; done.style.display = 'flex'; nameEl.textContent = crop; }
+    var saved = null; try { saved = localStorage.getItem(KEY); } catch (e) {}
+    if (saved) showDone(saved);   // already selected → skip the nudge, show the confirmed state
+    document.querySelectorAll('#cropNudgeChips .cn-chip[data-crop]').forEach(function(b){
+      b.addEventListener('click', function(){ var c = b.dataset.crop; try { localStorage.setItem(KEY, c); } catch (e) {} showDone(c); });
+    });
+    var ch = document.getElementById('cropNudgeChange');
+    if (ch) ch.addEventListener('click', function(){ done.style.display = 'none'; nudge.style.display = 'block'; });
+    var cl = document.getElementById('cropNudgeClose');
+    if (cl) cl.addEventListener('click', function(){ wrap.style.display = 'none'; });
+  })();
+</script>
+
 <!-- How to use · video + tabs (Technical / Dose / Disease) · NOW sits ABOVE Product description per new ordering: Delivery → How to use → Product description -->
 <div class="px-4 mt-4">
   <div class="text-[16px] font-extrabold mb-2 text-[#0F172A]">How to use</div>

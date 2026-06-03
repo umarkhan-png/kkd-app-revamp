@@ -69,18 +69,20 @@
   .sev.high{color:#DC2626}.sev.high::before{background:#DC2626}
   .sev.med{color:#B45309}.sev.med::before{background:#F59E0B}
   .prob-desc{font-size:13px;line-height:1.55;color:#475569;padding:10px 12px 0}
+  /* Issue photo banner */
+  .prob-img{width:100%;height:132px;background:#F1F5F9;overflow:hidden}
+  .prob-img img{width:100%;height:100%;object-fit:cover;display:block}
   .rp-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:#64748B;padding:10px 12px 6px}
-  .prod-row{display:flex;align-items:center;gap:11px;padding:9px 12px;border-top:1px solid #F1F5F9;text-decoration:none;color:inherit}
-  .prod-thumb{width:42px;height:42px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
+  /* Recommended-product row · roomier, no chem/bio badge, bigger Add button */
+  .prod-row{display:flex;align-items:center;gap:12px;padding:12px;border-top:1px solid #F1F5F9;text-decoration:none;color:inherit}
+  .prod-thumb{width:50px;height:50px;border-radius:11px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:6px;flex-shrink:0}
   .prod-thumb img{max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:multiply}
-  .prod-meta{flex:1;min-width:0;line-height:1.25}
-  .prod-meta .pn{font-size:13.5px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .prod-meta .pc{font-size:11px;color:#94A3B8;font-weight:600;margin-top:2px}
-  .prod-meta .ptype{display:inline-flex;font-size:9px;font-weight:700;padding:2px 7px;border-radius:9999px;margin-top:3px}
-  .ptype.chem{background:#EFF6FF;color:#2563EB}.ptype.bio{background:#ECFDF5;color:#047857}
-  .prod-price{text-align:right;flex-shrink:0}
-  .prod-price .amt{font-size:13px;font-weight:900;color:#0F172A}
-  .prod-price .add{margin-top:4px;display:inline-flex;font-size:10px;font-weight:800;color:#FFFFFF;background:#059669;padding:4px 11px;border-radius:8px;cursor:pointer}
+  .prod-meta{flex:1;min-width:0;line-height:1.3}
+  .prod-meta .pn{font-size:14px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prod-meta .pc{font-size:11.5px;color:#94A3B8;font-weight:600;margin-top:2px}
+  .prod-price{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0}
+  .prod-price .amt{font-size:14px;font-weight:900;color:#0F172A}
+  .prod-price .add{display:inline-flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800;color:#FFFFFF;background:#059669;padding:8px 18px;border-radius:9px;cursor:pointer;box-shadow:0 4px 10px -4px rgba(5,150,105,0.5)}
 
   /* Empty state */
   .empty{margin:24px 16px 0;background:#FFFFFF;border:1px dashed #A7F3D0;border-radius:16px;padding:30px 20px;text-align:center}
@@ -306,10 +308,21 @@
       chipsEl.style.display = userCrops.length ? 'flex' : 'none';
     }
 
+    // Issue photo pool · farming/leaf images already proven to load in the app · picked deterministically per problem
+    var DIMG = [
+      'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=500&q=70',
+      'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=500&q=70',
+      'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=500&q=70',
+      'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500&q=70',
+      'https://images.unsplash.com/photo-1574226516831-e1dff420e562?w=500&q=70'
+    ];
+    function probImg(k){ var h = 0; for (var i = 0; i < k.length; i++) h = (h + k.charCodeAt(i)) % DIMG.length; return DIMG[h]; }
     function prodRow(pk){ const p = P[pk]; return '<a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="' + p.img + '"/></div>'
-      + '<div class="prod-meta"><div class="pn">' + p.n + '</div><div class="pc">' + p.c + '</div><span class="ptype ' + p.t + '">' + (p.t === 'chem' ? 'Chemical' : 'Biological') + '</span></div>'
+      + '<div class="prod-meta"><div class="pn">' + p.n + '</div><div class="pc">' + p.c + '</div></div>'
       + '<div class="prod-price"><div class="amt tnum">' + p.p + '</div><span class="add">Add</span></div></a>'; }
-    function probBlock(k){ const pr = PROB[k]; return '<div class="prob-block"><div class="prob-h"><span class="pic"><i class="fa-solid fa-shield-virus"></i></span>'
+    function probBlock(k){ const pr = PROB[k]; return '<div class="prob-block">'
+      + '<div class="prob-img"><img src="' + probImg(k) + '" alt="' + pr.nm + '" onerror="this.parentNode.style.display=\'none\'"/></div>'
+      + '<div class="prob-h"><span class="pic"><i class="fa-solid fa-shield-virus"></i></span>'
       + '<div><div class="pn">' + pr.nm + '</div><span class="sev ' + pr.sev + '">' + (pr.sev === 'high' ? 'High' : 'Medium') + ' · Disease</span></div></div>'
       + '<div class="prob-desc">' + pr.desc + '</div><div class="rp-title">Recommended products</div>' + pr.prods.map(prodRow).join('') + '</div>'; }
 

@@ -260,6 +260,8 @@
     if (qp.get('sort') === 'bestsellers' || qp.get('sort') === 'best') { sort = 'best'; pendSort = 'best'; }
     if (qp.get('view') === 'recent') { recentView = true; }
     if (qp.get('cat') && CATS[qp.get('cat')]) { catSel.add(qp.get('cat')); }
+    // Category filter(s) auto-applied — single ?cat= or comma list ?cats=pesticide,fungicide (from the crop-problem "View all")
+    if (qp.get('cats')) qp.get('cats').split(',').forEach(c => { if (CATS[c]) catSel.add(c); });
     // Crop filter auto-applied from Shop-by-Crop "View all" (?crop=tomato or ?crops=a,b)
     if (qp.get('crop')) cropSel.add(qp.get('crop'));
     if (qp.get('crops')) qp.get('crops').split(',').forEach(c => { if (c) cropSel.add(c); });

@@ -3509,8 +3509,10 @@
   <!-- Rate · feel-good celebration -->
   <div id="baRateOk" class="bar-ok">
     <div class="bar-ok-card">
+      <span class="bar-spark s1"></span>
+      <span class="bar-spark s2"></span>
       <div class="bar-ok-coin"><i class="fa-solid fa-coins"></i></div>
-      <div class="bar-ok-title">Thanks for rating! 🎉</div>
+      <div class="bar-ok-title">Thank you! 🎉</div>
       <div class="bar-ok-sub">You earned <b id="baRateOkCoins">+10 coins</b></div>
     </div>
   </div>
@@ -3537,16 +3539,19 @@
     .bar-upload.has{border-style:solid;border-color:#059669;background:#ECFDF5}
     .bar-ok{position:fixed;inset:0;z-index:130;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,0.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
     .bar-ok.show{display:flex}
-    .bar-ok-card{position:relative;background:#fff;border-radius:18px;padding:26px 30px;text-align:center;width:262px;box-shadow:0 24px 60px -10px rgba(15,23,42,0.35);transform:scale(.9);opacity:0;animation:barOkIn .42s cubic-bezier(.34,1.56,.64,1) forwards;overflow:hidden}
+    .bar-ok-card{position:relative;background:#fff;border-radius:18px;padding:26px 30px;text-align:center;width:262px;box-shadow:0 24px 60px -10px rgba(15,23,42,0.35);transform:scale(.94);opacity:0;animation:barOkIn .34s cubic-bezier(.22,.61,.36,1) forwards;overflow:hidden}
     @keyframes barOkIn{to{transform:scale(1);opacity:1}}
-    .bar-ok-coin{width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,#10B981,#047857);color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto;box-shadow:0 10px 24px -6px rgba(5,150,105,0.5);animation:barCoinPop .6s ease-out .12s both;position:relative;z-index:1}
-    @keyframes barCoinPop{0%{transform:scale(0) rotate(-18deg)}60%{transform:scale(1.14) rotate(7deg)}100%{transform:scale(1) rotate(0)}}
+    .bar-ok-coin{width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,#10B981,#047857);color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto;box-shadow:0 10px 24px -6px rgba(5,150,105,0.5);transform:scale(0);animation:barCoinIn .5s cubic-bezier(.22,.61,.36,1) .12s forwards;position:relative;z-index:1}
+    @keyframes barCoinIn{to{transform:scale(1)}}
     .bar-ok-title{font-size:18px;font-weight:900;color:#0F172A;margin-top:14px;position:relative;z-index:1}
     .bar-ok-sub{font-size:13px;color:#64748B;margin-top:4px;position:relative;z-index:1}
     .bar-ok-sub b{color:#047857}
-    .bar-conf{position:absolute;top:-6px;width:8px;height:13px;border-radius:2px;opacity:0;pointer-events:none}
-    .bar-conf.go{animation:barConf 1.5s ease-in forwards}
-    @keyframes barConf{0%{transform:translateY(0) rotate(0);opacity:0}15%{opacity:1}100%{transform:translateY(230px) rotate(250deg);opacity:0}}
+    .bar-spark{position:absolute;width:9px;height:9px;border-radius:50%;background:#34D399;box-shadow:0 0 8px 2px rgba(52,211,153,0.55);opacity:0;pointer-events:none;z-index:0}
+    .bar-spark.s1{top:18px;right:30px}
+    .bar-spark.s2{bottom:34px;left:28px;width:6px;height:6px}
+    .bar-ok.show .bar-spark{animation:barSpark 1.7s ease-in-out forwards}
+    .bar-ok.show .bar-spark.s2{animation-delay:.32s}
+    @keyframes barSpark{0%{opacity:0;transform:scale(0)}28%{opacity:1;transform:scale(1)}68%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.5)}}
   </style>
   <script>
     // Buy-again · per-product star rating in the tile → opens review modal prefilled · review = +10 coins, testimonial upload = +25 · celebration on submit
@@ -3589,11 +3594,7 @@
         const ok = document.getElementById('baRateOk');
         document.getElementById('baRateOkCoins').textContent = '+' + coins + ' coins';
         ok.classList.add('show');
-        const card = ok.querySelector('.bar-ok-card');
-        ok.querySelectorAll('.bar-conf').forEach(function(c){ c.remove(); });
-        const cols = ['#10B981','#FBBF24','#FB7185','#34D399','#60A5FA'];
-        for (let i = 0; i < 12; i++){ const c = document.createElement('span'); c.className = 'bar-conf'; c.style.left = (8 + Math.random() * 84) + '%'; c.style.background = cols[i % cols.length]; c.style.animationDelay = (Math.random() * 0.3) + 's'; card.appendChild(c); requestAnimationFrame(function(){ c.classList.add('go'); }); }
-        setTimeout(function(){ ok.classList.remove('show'); }, 2000);
+        setTimeout(function(){ ok.classList.remove('show'); }, 1800);
       }
 
       submit.addEventListener('click', function(){

@@ -46,32 +46,65 @@
   .nav a.on i{color:#059669}
   .nav i{font-size:19px}
 
-  /* Ask-AI chat bot · in-page bottom sheet (partner-app "Ask anything" style) */
+  /* Ask-AI chat bot · in-page sheet · mirrors the partner-app "Ask anything" (Katyaa AI) screen */
   .ai-bd{position:fixed;inset:0;background:rgba(15,23,42,0.5);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:90}
   .ai-bd.open{opacity:1;pointer-events:auto}
-  .ai-sheet{position:fixed;left:0;right:0;bottom:0;height:88vh;background:#F8FAFC;border-radius:22px 22px 0 0;box-shadow:0 -10px 32px rgba(0,0,0,0.2);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:95;display:flex;flex-direction:column;overflow:hidden}
+  .ai-sheet{position:fixed;left:0;right:0;bottom:0;height:94vh;background:#F8F8F8;border-radius:22px 22px 0 0;box-shadow:0 -10px 32px rgba(0,0,0,0.2);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:95;display:flex;flex-direction:column;overflow:hidden}
   .ai-sheet.open{transform:translateY(0)}
-  .ai-head{display:flex;align-items:center;gap:11px;padding:14px 16px;background:#FFFFFF;border-bottom:1px solid #F1F5F9;flex-shrink:0}
-  .ai-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#10B981,#047857);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-  .ai-hinfo{flex:1;min-width:0}
-  .ai-hname{font-size:15px;font-weight:800;color:#0F172A}
-  .ai-hsub{font-size:11px;color:#64748B;display:flex;align-items:center;gap:5px;margin-top:1px}
-  .ai-hsub .d{width:7px;height:7px;border-radius:50%;background:#10B981}
-  .ai-x{width:32px;height:32px;border-radius:50%;background:#F1F5F9;border:0;color:#475569;font-size:14px;cursor:pointer}
-  .ai-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
-  .ai-msg{max-width:82%;padding:10px 13px;border-radius:14px;font-size:13.5px;line-height:1.45}
-  .ai-msg.bot{align-self:flex-start;background:#FFFFFF;border:1px solid #E5E7EB;color:#0F172A;border-bottom-left-radius:4px}
-  .ai-msg.me{align-self:flex-end;background:#059669;color:#fff;border-bottom-right-radius:4px}
-  .ai-chips{display:flex;flex-direction:column;gap:7px;align-items:flex-start;margin-top:2px}
-  .ai-chip{background:#ECFDF5;border:1px solid #A7F3D0;color:#047857;font-size:12.5px;font-weight:700;padding:8px 13px;border-radius:9999px;cursor:pointer;text-align:left}
-  .ai-typing{align-self:flex-start;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;border-bottom-left-radius:4px;padding:13px 15px;display:flex;gap:4px}
+  .ai-x{width:36px;height:36px;border-radius:50%;background:#F1F5F9;border:0;color:#475569;font-size:14px;cursor:pointer;flex-shrink:0}
+  .ai-thread{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scrollbar-width:none}
+  .ai-thread::-webkit-scrollbar{display:none}
+  .ai-av{width:32px;height:32px;border-radius:50%;background:#ECFDF5;border:1px solid rgba(5,150,105,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#047857;font-size:15px}
+  .ai-bot{align-self:flex-start;display:flex;gap:8px;align-items:flex-end;max-width:88%}
+  .ai-bot .bub{background:#FFFFFF;border:1px solid #EDEDED;border-radius:12px;border-bottom-left-radius:4px;padding:11px 13px;font-size:14px;color:#0F172A;line-height:1.45}
+  .ai-me{align-self:flex-end;max-width:80%;background:#059669;color:#fff;border-radius:12px;border-bottom-right-radius:4px;padding:11px 13px;font-size:14px;line-height:1.45}
+  .ai-time{font-size:9px;color:#9E9E9E;font-weight:600;margin-top:5px}
+  .ai-me .ai-time{color:rgba(255,255,255,0.7);text-align:right}
+  .ai-pcard{display:flex;align-items:center;gap:9px;background:#F8FAFC;border:1px solid #EDEDED;border-radius:10px;padding:8px;text-decoration:none;margin-top:7px}
+  .ai-pcard img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:9px}
+  .ai-pcard .nm{font-size:13px;font-weight:700;color:#0F172A}
+  .ai-pcard .sb{font-size:9.5px;color:#64748B;font-weight:600}
+  .ai-pcard .pr{font-size:13px;font-weight:800;color:#0F172A;flex-shrink:0}
+  .ai-pcard .addb{background:#F7FFF9;border:1px solid #059669;color:#047857;font-size:11.5px;font-weight:800;text-transform:uppercase;padding:5px 10px;border-radius:9px;flex-shrink:0;cursor:pointer}
+  .ai-dose{display:flex;gap:8px;align-items:flex-start;background:#F8FAFC;border-radius:9px;padding:7px 10px;margin-top:6px}
+  .ai-dose .d{font-size:12px;font-weight:800;color:#047857;width:44px;flex-shrink:0}
+  .ai-dose .x{font-size:12px;color:#0F172A;font-weight:600}
+  .ai-typing{align-self:flex-start;background:#fff;border:1px solid #EDEDED;border-radius:12px;border-bottom-left-radius:4px;padding:13px 15px;display:flex;gap:4px;margin-left:40px}
   .ai-typing span{width:7px;height:7px;border-radius:50%;background:#CBD5E1;animation:aiTy 1s infinite}
   .ai-typing span:nth-child(2){animation-delay:.15s}.ai-typing span:nth-child(3){animation-delay:.3s}
   @keyframes aiTy{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-4px);opacity:1}}
-  .ai-input{display:flex;align-items:center;gap:9px;padding:12px 14px;background:#FFFFFF;border-top:1px solid #F1F5F9;flex-shrink:0;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)}
-  .ai-input input{flex:1;height:44px;border-radius:9999px;border:1.5px solid #E5E7EB;background:#F8FAFC;padding:0 16px;font-size:14px;outline:none;font-family:inherit}
-  .ai-input input:focus{border-color:#059669}
-  .ai-sendbtn{width:44px;height:44px;border-radius:50%;background:#059669;color:#fff;border:0;font-size:15px;cursor:pointer;flex-shrink:0}
+  .ai-foot{flex-shrink:0;background:#fff;border-top:1px solid #EDEDED;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 8px)}
+  .ai-chips{display:flex;gap:8px;padding:12px 12px 6px;overflow-x:auto;scrollbar-width:none}
+  .ai-chips::-webkit-scrollbar{display:none}
+  .ai-chip{flex-shrink:0;background:#ECFDF5;border:1px solid rgba(5,150,105,0.3);color:#047857;font-size:12px;font-weight:700;padding:7px 13px;border-radius:9999px;white-space:nowrap;cursor:pointer}
+  .ai-inrow{display:flex;align-items:center;gap:8px;padding:4px 12px 12px}
+  .ai-icbtn{width:40px;height:40px;border-radius:50%;border:1px solid #E5E7EB;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#475569;font-size:15px;cursor:pointer}
+  .ai-inwrap{flex:1;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:9999px;padding:0 16px;display:flex;align-items:center}
+  .ai-inwrap input{width:100%;border:0;background:transparent;outline:none;font-size:14px;padding:11px 0;font-family:inherit;color:#0F172A}
+  .ai-send{width:40px;height:40px;border-radius:50%;background:#059669;border:0;color:#fff;font-size:15px;flex-shrink:0;cursor:pointer}
+
+  /* Call an expert · confirm + video-call screen */
+  .cc-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:96;display:flex;align-items:center;justify-content:center;padding:28px}
+  .cc-bd.open{opacity:1;pointer-events:auto}
+  .cc-modal{width:100%;max-width:300px;background:#fff;border-radius:18px;padding:22px;text-align:center;transform:scale(.92);transition:transform .25s cubic-bezier(.34,1.4,.5,1)}
+  .cc-bd.open .cc-modal{transform:scale(1)}
+  .cc-ic{width:56px;height:56px;border-radius:50%;margin:0 auto;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:22px}
+  .cc-title{font-size:18px;font-weight:900;color:#0F172A;margin-top:14px}
+  .cc-sub{font-size:12.5px;color:#64748B;margin-top:6px;line-height:1.4}
+  .cc-btns{display:flex;gap:10px;margin-top:18px}
+  .cc-cancel{flex:1;height:46px;border-radius:11px;background:#fff;border:1.5px solid #E5E7EB;color:#0F172A;font-size:14px;font-weight:800;cursor:pointer}
+  .cc-yes{flex:1;height:46px;border-radius:11px;background:#059669;border:0;color:#fff;font-size:14px;font-weight:800;cursor:pointer}
+  .call-screen{position:fixed;inset:0;z-index:97;background:linear-gradient(160deg,#0B1120,#0F2A22 60%,#04130d);display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:40px 20px calc(36px + env(safe-area-inset-bottom,0px))}
+  .call-screen.open{display:flex}
+  .call-pip{position:absolute;top:24px;right:20px;width:84px;height:112px;border-radius:14px;background:#1E293B;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);font-size:22px;overflow:hidden}
+  .call-mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+  .call-avatar{width:108px;height:108px;border-radius:50%;background:#ECFDF5;display:flex;align-items:center;justify-content:center;overflow:hidden;border:3px solid rgba(255,255,255,0.25);box-shadow:0 14px 36px -10px rgba(0,0,0,0.5)}
+  .call-avatar img{width:100%;height:100%;object-fit:cover}
+  .call-name{color:#fff;font-size:20px;font-weight:800}
+  .call-status{color:rgba(255,255,255,0.75);font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px}
+  .call-status .live{width:8px;height:8px;border-radius:50%;background:#34D399;box-shadow:0 0 0 0 rgba(52,211,153,0.6);animation:ehpulse 1.6s infinite}
+  .call-connect{height:56px;padding:0 40px;border-radius:9999px;background:#059669;border:0;color:#fff;font-size:16px;font-weight:800;display:inline-flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 12px 28px -8px rgba(5,150,105,0.7)}
+  .call-end{width:64px;height:64px;border-radius:50%;background:#DC2626;border:0;color:#fff;font-size:24px;cursor:pointer;box-shadow:0 12px 28px -8px rgba(220,38,38,0.7)}
 </style></head>
 <body>
 
@@ -106,7 +139,7 @@
   <!-- Other ways to reach us -->
   <div class="sec-title">Other ways to reach us</div>
   <div class="card">
-    <a href="#" class="opt-row">
+    <a href="#" class="opt-row" id="callExpertRow">
       <span class="opt-ic" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-video"></i></span>
       <div class="opt-body"><div class="opt-a">Call an expert</div><div class="opt-b">1-on-1 video call · online now</div></div>
       <i class="fa-solid fa-chevron-right chev"></i>
@@ -128,61 +161,149 @@
     </a>
   </div>
 
-  <!-- Ask-AI chat bot · in-page bottom sheet -->
+  <!-- Ask-AI chat bot · in-page sheet · same layout as the partner-app "Ask anything" (Katyaa AI) -->
   <div id="aiBd" class="ai-bd"></div>
   <div id="aiSheet" class="ai-sheet">
-    <div class="ai-head">
-      <span class="ai-av"><i class="fa-solid fa-robot"></i></span>
-      <div class="ai-hinfo">
-        <div class="ai-hname">Krishi AI</div>
-        <div class="ai-hsub"><span class="d"></span> Online · replies instantly</div>
+    <!-- Header -->
+    <div class="flex items-center gap-3 px-4 py-3 bg-white" style="border-bottom:1px solid #EDEDED;flex-shrink:0">
+      <span class="ai-av"><i class="fa-solid fa-seedling"></i></span>
+      <div class="flex-1 leading-tight">
+        <div class="text-[17px] font-extrabold" style="color:#0F172A;letter-spacing:-0.02em">Krishi AI <span class="text-[11px] font-normal" style="color:#64748B">by Katyayani</span></div>
+        <div class="text-[11.5px] flex items-center gap-1.5" style="color:#64748B"><span class="w-1.5 h-1.5 rounded-full inline-block" style="background:#10B981"></span> Farming AI · Available 24×7</div>
       </div>
       <button id="aiClose" class="ai-x" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
     </div>
-    <div class="ai-msgs" id="aiMsgs">
-      <div class="ai-msg bot">Namaste 🙏 Main Krishi AI hoon. Crop, pest, product ya order — kuch bhi poochho!</div>
+    <!-- Chat thread -->
+    <div class="ai-thread" id="aiMsgs">
+      <div class="flex justify-center"><span class="text-[10px] font-semibold px-2.5 py-1 rounded-full" style="color:#9E9E9E;background:#fff;border:1px solid #EDEDED">Today · 2:14 PM</span></div>
+
+      <div class="ai-bot"><span class="ai-av"><i class="fa-solid fa-seedling"></i></span><div class="bub">Namaste 🙏 Main Krishi AI hoon — Katyayani ka AI farming expert. Kya problem hai aaj? 🌱<div class="ai-time">2:14 PM</div></div></div>
+
+      <div class="ai-me">Chilli plant leaves curling, koi solution?<div class="ai-time">2:14 PM</div></div>
+
+      <div class="ai-bot"><span class="ai-av"><i class="fa-solid fa-seedling"></i></span><div class="bub">Chilli leaf-curl virus hai — whitefly se failta hai. 2 products chahiye: ek virus ke liye, ek whitefly control ke liye.
+        <a href="pdp.html" class="ai-pcard"><img src="../assets/AntiVirus_nobg.png" class="img-blend"/><div class="flex-1 leading-tight"><div class="nm">Katyayani Antivirus</div><div class="sb">250 ml · Viricide</div></div><span class="pr">₹327</span></a>
+        <a href="pdp.html" class="ai-pcard"><img src="../assets/Chakrawarti_nobg.png" class="img-blend"/><div class="flex-1 leading-tight"><div class="nm">Chakrawarti ZC</div><div class="sb">100 ml · Whitefly control</div></div><span class="pr">₹358</span></a>
+        <div class="ai-time">2:15 PM</div></div></div>
+
+      <div class="ai-me">Dose kitni?<div class="ai-time">2:15 PM</div></div>
+
+      <div class="ai-bot"><span class="ai-av"><i class="fa-solid fa-seedling"></i></span><div class="bub">Per-acre dosage &amp; schedule:
+        <div class="ai-dose"><span class="d">Day 1</span><span class="x">Antivirus 2 ml/L · full spray</span></div>
+        <div class="ai-dose"><span class="d">Day 4</span><span class="x">Chakrawarti 0.4 ml/L · whitefly</span></div>
+        <div class="ai-dose"><span class="d">Day 10</span><span class="x">Antivirus repeat spray</span></div>
+        <div class="ai-time">2:16 PM</div></div></div>
+
+      <div class="ai-me">Price?<div class="ai-time">2:16 PM</div></div>
+
+      <div class="ai-bot"><span class="ai-av"><i class="fa-solid fa-seedling"></i></span><div class="bub">Yeh raha best price:
+        <a href="pdp.html" class="ai-pcard" style="border-color:rgba(5,150,105,0.35)"><img src="../assets/AntiVirus_nobg.png" class="img-blend"/><div class="flex-1 leading-tight"><div class="nm">Katyayani Antivirus</div><div class="sb">250 ml · <span style="color:#047857;font-weight:800">28% off</span></div><div class="mt-0.5"><span class="pr">₹327</span> <span class="text-[9px]" style="color:#9E9E9E;text-decoration:line-through">₹455</span></div></div><button type="button" class="addb">Add</button></a>
+        <div class="ai-time">2:17 PM</div></div></div>
+    </div>
+    <!-- Suggestion chips + input -->
+    <div class="ai-foot">
       <div class="ai-chips" id="aiChips">
-        <button type="button" class="ai-chip">Tomato me leaf curl ka ilaaj?</button>
-        <button type="button" class="ai-chip">Wheat ke liye best fertilizer?</button>
-        <button type="button" class="ai-chip">Mera order kahan hai?</button>
+        <button type="button" class="ai-chip">Check price</button>
+        <button type="button" class="ai-chip">Disease help</button>
+        <button type="button" class="ai-chip">Dose calculator</button>
+        <button type="button" class="ai-chip">Order status</button>
+      </div>
+      <div class="ai-inrow">
+        <button class="ai-icbtn" aria-label="Attach"><i class="fa-solid fa-paperclip"></i></button>
+        <button class="ai-icbtn" aria-label="Voice"><i class="fa-solid fa-microphone"></i></button>
+        <div class="ai-inwrap"><input id="aiText" type="text" placeholder="Ask Krishi AI anything..." autocomplete="off"/></div>
+        <button id="aiSend" class="ai-send" aria-label="Send"><i class="fa-solid fa-arrow-right"></i></button>
       </div>
     </div>
-    <div class="ai-input">
-      <input id="aiText" type="text" placeholder="Ask anything…" autocomplete="off"/>
-      <button id="aiSend" class="ai-sendbtn" aria-label="Send"><i class="fa-solid fa-paper-plane"></i></button>
+  </div>
+
+  <!-- Call an expert · confirmation -->
+  <div id="callConfirmBd" class="cc-bd">
+    <div class="cc-modal">
+      <div class="cc-ic"><i class="fa-solid fa-video"></i></div>
+      <div class="cc-title">Start a video call?</div>
+      <div class="cc-sub">Connect 1-on-1 with a Krishi expert. Free for every farmer.</div>
+      <div class="cc-btns">
+        <button id="callCancel" class="cc-cancel">Cancel</button>
+        <button id="callYes" class="cc-yes">Yes, start</button>
+      </div>
     </div>
   </div>
+  <!-- Call an expert · video-call screen -->
+  <div id="callScreen" class="call-screen">
+    <div class="call-pip"><i class="fa-solid fa-user"></i></div>
+    <div class="call-mid">
+      <div class="call-avatar"><img src="../assets/expert.png" alt="expert" onerror="this.outerHTML='<i class=\'fa-solid fa-user-doctor\' style=&quot;color:#047857;font-size:42px&quot;></i>'"/></div>
+      <div class="call-name">Dr. R. Verma</div>
+      <div class="call-status" id="callStatus">Krishi Agronomist · ready to connect</div>
+    </div>
+    <button id="callConnect" class="call-connect"><i class="fa-solid fa-video"></i> Connect</button>
+    <button id="callEnd" class="call-end" style="display:none" aria-label="End call"><i class="fa-solid fa-phone-slash"></i></button>
+  </div>
+
   <script>
+    // Ask-AI chat bot
     (function(){
       var openBtn = document.getElementById('askAiCta');
       var bd = document.getElementById('aiBd'), sheet = document.getElementById('aiSheet');
       var closeBtn = document.getElementById('aiClose');
       var msgs = document.getElementById('aiMsgs'), input = document.getElementById('aiText'), send = document.getElementById('aiSend');
       if (!openBtn || !sheet) return;
-      function open(){ bd.classList.add('open'); sheet.classList.add('open'); setTimeout(function(){ if (input) input.focus(); }, 320); }
+      function scroll(){ msgs.scrollTop = msgs.scrollHeight; }
+      function open(){ bd.classList.add('open'); sheet.classList.add('open'); setTimeout(function(){ scroll(); if (input) input.focus(); }, 320); }
       function close(){ bd.classList.remove('open'); sheet.classList.remove('open'); }
       openBtn.addEventListener('click', open);
       closeBtn.addEventListener('click', close);
       bd.addEventListener('click', close);
-      function addMsg(text, who){ var d = document.createElement('div'); d.className = 'ai-msg ' + who; d.textContent = text; msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; }
+      function addUser(text){ var d = document.createElement('div'); d.className = 'ai-me'; d.textContent = text; msgs.appendChild(d); scroll(); }
+      function addBot(text){ var w = document.createElement('div'); w.className = 'ai-bot'; w.innerHTML = '<span class="ai-av"><i class="fa-solid fa-seedling"></i></span><div class="bub"></div>'; w.querySelector('.bub').textContent = text; msgs.appendChild(w); scroll(); }
       function reply(q){
         var t = document.createElement('div'); t.className = 'ai-typing'; t.innerHTML = '<span></span><span></span><span></span>';
-        msgs.appendChild(t); msgs.scrollTop = msgs.scrollHeight;
+        msgs.appendChild(t); scroll();
         setTimeout(function(){
           t.remove();
-          var ql = q.toLowerCase();
-          var a;
+          var ql = q.toLowerCase(), a;
           if (ql.indexOf('order') >= 0) a = 'Aapka latest order in-transit hai aur kal tak deliver ho jaayega. Detail ke liye Orders page kholiye.';
-          else if (ql.indexOf('leaf curl') >= 0 || ql.indexOf('virus') >= 0 || ql.indexOf('tomato') >= 0) a = 'Leaf curl aksar sucking pests (whitefly) se failta hai. Chakrawarti ZC + Antivirus spray recommend karunga. 7 din ke gap me 2 spray dijiye.';
+          else if (ql.indexOf('price') >= 0 || ql.indexOf('check price') >= 0) a = 'Kis product ka price chahiye? Naam batayein, main best margin price bhej dunga.';
+          else if (ql.indexOf('dose') >= 0) a = 'Crop aur product batayein — main per-acre dose aur spray schedule bana dunga.';
+          else if (ql.indexOf('leaf') >= 0 || ql.indexOf('virus') >= 0 || ql.indexOf('disease') >= 0 || ql.indexOf('curl') >= 0) a = 'Leaf-curl aksar whitefly se failta hai. Antivirus + Chakrawarti ZC spray recommend karunga, 7 din ke gap me 2 spray.';
           else if (ql.indexOf('fertilizer') >= 0 || ql.indexOf('wheat') >= 0 || ql.indexOf('khaad') >= 0) a = 'Wheat ke liye NPK 19-19-19 (foliar) + Humic best rahega. Tillering stage par pehli dose dijiye.';
           else a = 'Samajh gaya! Thoda detail batayein (crop + problem) to main exact product aur dose suggest kar dunga. 🌱';
-          addMsg(a, 'bot');
+          addBot(a);
         }, 1100);
       }
-      function submit(q){ q = (q || '').trim(); if (!q) return; addMsg(q, 'me'); if (input) input.value = ''; var chips = document.getElementById('aiChips'); if (chips) chips.style.display = 'none'; reply(q); }
+      function submit(q){ q = (q || '').trim(); if (!q) return; addUser(q); if (input) input.value = ''; reply(q); }
       send.addEventListener('click', function(){ submit(input.value); });
       input.addEventListener('keydown', function(e){ if (e.key === 'Enter') submit(input.value); });
       document.querySelectorAll('.ai-chip').forEach(function(c){ c.addEventListener('click', function(){ submit(c.textContent); }); });
+    })();
+
+    // Call an expert · confirm → video-call screen → connect → end
+    (function(){
+      var row = document.getElementById('callExpertRow');
+      var cbd = document.getElementById('callConfirmBd');
+      var cancel = document.getElementById('callCancel'), yes = document.getElementById('callYes');
+      var screen = document.getElementById('callScreen'), status = document.getElementById('callStatus');
+      var connect = document.getElementById('callConnect'), end = document.getElementById('callEnd');
+      if (!row || !cbd) return;
+      var timer = null;
+      function openConfirm(e){ if (e) e.preventDefault(); cbd.classList.add('open'); }
+      function closeConfirm(){ cbd.classList.remove('open'); }
+      function openCall(){
+        connect.style.display = 'inline-flex'; end.style.display = 'none';
+        status.innerHTML = 'Krishi Agronomist · ready to connect';
+        screen.classList.add('open');
+      }
+      function closeCall(){ screen.classList.remove('open'); if (timer) clearTimeout(timer); }
+      row.addEventListener('click', openConfirm);
+      cancel.addEventListener('click', closeConfirm);
+      yes.addEventListener('click', function(){ closeConfirm(); openCall(); });
+      connect.addEventListener('click', function(){
+        status.textContent = 'Connecting…';
+        connect.style.display = 'none';
+        timer = setTimeout(function(){ status.innerHTML = '<span class="live"></span> Connected · live'; end.style.display = 'inline-flex'; }, 1400);
+      });
+      end.addEventListener('click', closeCall);
     })();
   </script>
 

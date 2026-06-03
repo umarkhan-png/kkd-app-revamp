@@ -111,6 +111,52 @@
     <h1 class="text-[22px] font-extrabold leading-tight" style="color:#0F172A">Checkout</h1>
   </div>
 
+  <!-- Alternate number · social-proof nudge above the delivery section -->
+  <style>
+    .alt-card{margin:0 16px;background:#FFFFFF;border:1px solid #BBF7D0;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15)}
+    .alt-row{display:flex;align-items:center;gap:11px;padding:13px;cursor:pointer}
+    .alt-ic{width:38px;height:38px;border-radius:11px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+    .alt-chev{color:#94A3B8;font-size:13px;transition:transform .25s ease;flex-shrink:0}
+    .alt-card.open .alt-chev{transform:rotate(180deg)}
+    .alt-body{display:none;padding:0 13px 13px;flex-direction:column;gap:9px}
+    .alt-card.open .alt-body{display:flex}
+    .alt-inwrap{display:flex;align-items:center;gap:8px;height:46px;border:1.5px solid #E5E7EB;border-radius:11px;padding:0 14px}
+    .alt-cc{font-size:14px;font-weight:800;color:#0F172A}
+    .alt-inwrap input{flex:1;border:0;outline:0;font-size:15px;font-family:inherit;color:#0F172A;background:transparent;min-width:0}
+    .alt-save{height:44px;border-radius:11px;background:#059669;border:0;color:#fff;font-size:14px;font-weight:800;cursor:pointer}
+    .alt-done{display:none;align-items:center;gap:7px;color:#047857;font-size:12.5px;font-weight:800;padding:2px 0}
+  </style>
+  <div class="sec-title">Faster delivery</div>
+  <div class="alt-card" id="altCard">
+    <div class="alt-row" id="altOpen">
+      <span class="alt-ic"><i class="fa-solid fa-phone-volume"></i></span>
+      <div class="flex-1 leading-tight" style="min-width:0">
+        <div class="text-[13.5px] font-extrabold text-[#0F172A]">Add an alternate number</div>
+        <div class="text-[11.5px] mt-0.5" style="color:#047857;font-weight:700"><i class="fa-solid fa-bolt text-[10px]"></i> Farmers who share an alternate number get their orders <b>~1 day earlier</b> on average</div>
+      </div>
+      <i class="fa-solid fa-chevron-down alt-chev"></i>
+    </div>
+    <div class="alt-body" id="altBody">
+      <div class="alt-inwrap"><span class="alt-cc">+91</span><input id="altNum" type="tel" maxlength="10" inputmode="numeric" placeholder="Alternate mobile number"/></div>
+      <button id="altSave" class="alt-save" type="button">Save number</button>
+      <div class="alt-done" id="altDone"><i class="fa-solid fa-circle-check"></i> Alternate number added · thanks!</div>
+    </div>
+  </div>
+  <script>
+    (function(){
+      var card = document.getElementById('altCard'), open = document.getElementById('altOpen');
+      var num = document.getElementById('altNum'), save = document.getElementById('altSave'), done = document.getElementById('altDone');
+      var inwrap = num ? num.closest('.alt-inwrap') : null;
+      if (!card) return;
+      open.addEventListener('click', function(){ card.classList.toggle('open'); if (card.classList.contains('open')) setTimeout(function(){ num.focus(); }, 250); });
+      num.addEventListener('input', function(){ num.value = num.value.replace(/[^0-9]/g, ''); });
+      save.addEventListener('click', function(){
+        if (num.value.length < 10) { inwrap.style.borderColor = '#DC2626'; return; }
+        inwrap.style.display = 'none'; save.style.display = 'none'; done.style.display = 'flex';
+      });
+    })();
+  </script>
+
   <!-- Deliver to · cart-style card (delivery time on top, address with Change at bottom) · replaces the separate Address card + Delivery ETA card -->
   <div class="sec-title">Deliver to</div>
   <div class="addr-card">
@@ -193,8 +239,15 @@
             <span class="pay-amt tnum" id="codAmt">₹1,900</span>
           </span>
           <div class="pay-sub">Pay in cash when the order arrives</div>
-          <div id="codExtra" style="display:none;margin-top:8px;padding:8px 10px;border-radius:9px;background:#FFF7ED;border:1px solid #FED7AA;color:#9A3412;font-size:11.5px;font-weight:600;line-height:1.45">
-            <i class="fa-solid fa-circle-info" style="color:#EA580C"></i> COD costs <b id="codExtraAmt" class="tnum">₹95</b> more — prepaid orders get 5% off. <span id="codSwitchPay" role="button" tabindex="0" style="color:#047857;font-weight:800;cursor:pointer;text-decoration:underline">Pay now &amp; save</span>
+          <div id="codExtra" style="display:none;margin-top:10px;border-radius:11px;background:#FFF7ED;border:1px solid #FED7AA;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:9px;padding:10px 11px">
+              <span style="width:30px;height:30px;border-radius:8px;background:#FED7AA;color:#9A3412;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px"><i class="fa-solid fa-piggy-bank"></i></span>
+              <div style="flex:1;min-width:0;line-height:1.35">
+                <div style="font-size:12.5px;font-weight:800;color:#9A3412">Paying COD costs <span id="codExtraAmt" class="tnum">₹95</span> extra</div>
+                <div style="font-size:11px;color:#B45309;font-weight:600">Prepaid orders get 5% off — instantly</div>
+              </div>
+            </div>
+            <span id="codSwitchPay" role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;gap:7px;height:40px;background:#059669;color:#fff;font-size:13px;font-weight:800;cursor:pointer"><i class="fa-solid fa-bolt text-[11px]"></i> Pay now &amp; save <span id="codSaveAmt" class="tnum">₹95</span></span>
           </div>
         </span>
       </span>
@@ -263,7 +316,7 @@
       // COD disclosure · paying COD forgoes the 5% prepaid discount
       const codExtra = document.getElementById('codExtra');
       if (codExtra) {
-        if (method === 'cod') { codExtra.style.display = 'block'; document.getElementById('codExtraAmt').textContent = fmt(Math.round(SUBTOTAL * 0.05)); }
+        if (method === 'cod') { codExtra.style.display = 'block'; const ce = fmt(Math.round(SUBTOTAL * 0.05)); document.getElementById('codExtraAmt').textContent = ce; const cs = document.getElementById('codSaveAmt'); if (cs) cs.textContent = ce; }
         else codExtra.style.display = 'none';
       }
       if (coinRow) coinRow.style.display = coinsRedeem > 0 ? 'flex' : 'none';

@@ -3558,9 +3558,18 @@
   <!-- Rate · feel-good celebration -->
   <div id="baRateOk" class="bar-ok">
     <div class="bar-ok-card">
-      <span class="bar-spark s1"></span>
-      <span class="bar-spark s2"></span>
-      <div class="bar-ok-coin"><i class="fa-solid fa-coins"></i></div>
+      <span class="bar-tw t1"><i class="fa-solid fa-star"></i></span>
+      <span class="bar-tw t2"><i class="fa-solid fa-star"></i></span>
+      <span class="bar-tw t3"><i class="fa-solid fa-star"></i></span>
+      <span class="bar-tw t4"><i class="fa-solid fa-star"></i></span>
+      <span class="bar-tw t5"><i class="fa-solid fa-star"></i></span>
+      <span class="bar-tw t6"><i class="fa-solid fa-star"></i></span>
+      <div class="bar-ok-burst">
+        <span class="bar-glow"></span>
+        <span class="bar-ring"></span>
+        <span class="bar-ring r2"></span>
+        <div class="bar-ok-coin"><i class="fa-solid fa-coins"></i></div>
+      </div>
       <div class="bar-ok-title">Thank you! 🎉</div>
       <div class="bar-ok-sub">You earned <b id="baRateOkCoins">+10 coins</b></div>
     </div>
@@ -3588,21 +3597,43 @@
     .bar-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;margin-top:11px;min-height:88px;border:1.5px dashed #A7F3D0;border-radius:12px;background:#FFFFFF;color:#047857;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center;padding:12px}
     .bar-upload i{font-size:22px}
     .bar-upload.has{border-style:solid;border-color:#059669;background:#ECFDF5}
-    .bar-ok{position:fixed;inset:0;z-index:130;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,0.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+    .bar-ok{position:fixed;inset:0;z-index:130;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,0.55);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
     .bar-ok.show{display:flex}
-    .bar-ok-card{position:relative;background:#fff;border-radius:18px;padding:26px 30px;text-align:center;width:262px;box-shadow:0 24px 60px -10px rgba(15,23,42,0.35);transform:scale(.94);opacity:0;animation:barOkIn .34s cubic-bezier(.22,.61,.36,1) forwards;overflow:hidden}
-    @keyframes barOkIn{to{transform:scale(1);opacity:1}}
-    .bar-ok-coin{width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,#10B981,#047857);color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto;box-shadow:0 10px 24px -6px rgba(5,150,105,0.5);transform:scale(0);animation:barCoinIn .5s cubic-bezier(.22,.61,.36,1) .12s forwards;position:relative;z-index:1}
-    @keyframes barCoinIn{to{transform:scale(1)}}
-    .bar-ok-title{font-size:18px;font-weight:900;color:#0F172A;margin-top:14px;position:relative;z-index:1}
-    .bar-ok-sub{font-size:13px;color:#64748B;margin-top:4px;position:relative;z-index:1}
+    .bar-ok-card{position:relative;background:#fff;border-radius:20px;padding:30px 32px 26px;text-align:center;width:270px;box-shadow:0 26px 64px -12px rgba(15,23,42,0.42);transform:scale(.9) translateY(10px);opacity:0;overflow:hidden}
+    .bar-ok.show .bar-ok-card{animation:barOkIn .46s cubic-bezier(.22,.68,.3,1) forwards}
+    @keyframes barOkIn{to{transform:scale(1) translateY(0);opacity:1}}
+    .bar-ok-burst{position:relative;width:80px;height:80px;margin:2px auto 2px}
+    .bar-glow{position:absolute;inset:-16px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,0.34),rgba(16,185,129,0) 70%);opacity:0;z-index:0}
+    .bar-ok.show .bar-glow{animation:barGlow 2.3s ease-out .14s forwards}
+    @keyframes barGlow{0%{opacity:0;transform:scale(.55)}25%{opacity:1;transform:scale(1)}100%{opacity:.5;transform:scale(1.06)}}
+    .bar-ok-coin{position:absolute;inset:4px;border-radius:50%;background:linear-gradient(135deg,#10B981,#047857);color:#fff;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 10px 24px -6px rgba(5,150,105,0.55),inset 0 2px 5px rgba(255,255,255,0.35);transform:scale(0);z-index:2}
+    .bar-ok.show .bar-ok-coin{animation:barCoinIn .6s cubic-bezier(.3,1.28,.5,1) .14s forwards}
+    @keyframes barCoinIn{0%{transform:scale(0)}100%{transform:scale(1)}}
+    .bar-ring{position:absolute;inset:4px;border-radius:50%;border:2.5px solid rgba(16,185,129,0.5);opacity:0;z-index:1}
+    .bar-ok.show .bar-ring{animation:barRing 1.5s ease-out .32s forwards}
+    .bar-ok.show .bar-ring.r2{animation-delay:.66s}
+    @keyframes barRing{0%{opacity:.7;transform:scale(.72)}100%{opacity:0;transform:scale(2.15)}}
+    .bar-tw{position:absolute;color:#FBBF24;opacity:0;pointer-events:none;z-index:3;filter:drop-shadow(0 0 4px rgba(251,191,36,0.6))}
+    .bar-tw i{display:block}
+    .bar-tw.t1{top:22px;left:30px;font-size:13px}
+    .bar-tw.t2{top:34px;right:34px;font-size:10px}
+    .bar-tw.t3{top:78px;left:22px;font-size:9px}
+    .bar-tw.t4{top:66px;right:24px;font-size:14px}
+    .bar-tw.t5{top:16px;right:70px;font-size:8px}
+    .bar-tw.t6{top:100px;left:60px;font-size:11px}
+    .bar-ok.show .bar-tw{animation:barTw 1.9s ease-in-out forwards}
+    .bar-ok.show .bar-tw.t2{animation-delay:.24s}
+    .bar-ok.show .bar-tw.t3{animation-delay:.5s}
+    .bar-ok.show .bar-tw.t4{animation-delay:.14s}
+    .bar-ok.show .bar-tw.t5{animation-delay:.6s}
+    .bar-ok.show .bar-tw.t6{animation-delay:.38s}
+    @keyframes barTw{0%{opacity:0;transform:scale(0) rotate(-30deg)}22%{opacity:1;transform:scale(1.15) rotate(0)}50%{opacity:.8;transform:scale(.85)}74%{opacity:1;transform:scale(1.1)}100%{opacity:0;transform:scale(.5) rotate(20deg)}}
+    .bar-ok-title{font-size:19px;font-weight:900;color:#0F172A;margin-top:14px;position:relative;z-index:3;opacity:0}
+    .bar-ok.show .bar-ok-title{animation:barTextUp .4s ease .3s forwards}
+    .bar-ok-sub{font-size:13px;color:#64748B;margin-top:4px;position:relative;z-index:3;opacity:0}
+    .bar-ok.show .bar-ok-sub{animation:barTextUp .4s ease .44s forwards}
     .bar-ok-sub b{color:#047857}
-    .bar-spark{position:absolute;width:9px;height:9px;border-radius:50%;background:#34D399;box-shadow:0 0 8px 2px rgba(52,211,153,0.55);opacity:0;pointer-events:none;z-index:0}
-    .bar-spark.s1{top:18px;right:30px}
-    .bar-spark.s2{bottom:34px;left:28px;width:6px;height:6px}
-    .bar-ok.show .bar-spark{animation:barSpark 1.7s ease-in-out forwards}
-    .bar-ok.show .bar-spark.s2{animation-delay:.32s}
-    @keyframes barSpark{0%{opacity:0;transform:scale(0)}28%{opacity:1;transform:scale(1)}68%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.5)}}
+    @keyframes barTextUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
   </style>
   <script>
     // Buy-again · per-product star rating in the tile → opens review modal prefilled · review = +10 coins, testimonial upload = +25 · celebration on submit
@@ -3643,9 +3674,15 @@
 
       function celebrate(coins){
         const ok = document.getElementById('baRateOk');
-        document.getElementById('baRateOkCoins').textContent = '+' + coins + ' coins';
+        const el = document.getElementById('baRateOkCoins');
+        el.textContent = '+0 coins';
         ok.classList.add('show');
-        setTimeout(function(){ ok.classList.remove('show'); }, 1800);
+        // count the coins up for a rewarding beat, kicking in just after the coin pops
+        setTimeout(function(){
+          const steps = Math.max(1, Math.min(coins, 18)); const inc = coins / steps; let i = 0;
+          const t = setInterval(function(){ i++; let v = Math.round(inc * i); if (i >= steps) { v = coins; clearInterval(t); } el.textContent = '+' + v + ' coins'; }, 42);
+        }, 360);
+        setTimeout(function(){ ok.classList.remove('show'); }, 2400);
       }
 
       submit.addEventListener('click', function(){

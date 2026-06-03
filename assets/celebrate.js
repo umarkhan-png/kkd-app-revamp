@@ -1,6 +1,8 @@
-/* KKD · shared coin-earn celebration · full-screen immersive emerald-glow reward
-   Usage:  window.kkdCelebrate(amount)            → "Thank you! 🎉" + "+amount coins"
-           window.kkdCelebrate(amount, {title})   → custom headline
+/* KKD · shared reward celebration · full-screen immersive emerald-glow reward
+   Usage:  window.kkdCelebrate(amount)                          → "Thank you! 🎉" + "+amount coins"
+           window.kkdCelebrate(amount, {title})                 → custom headline
+           window.kkdCelebrate(150, {prefix:'₹', unit:''})      → "₹150" (e.g. cash/scratch prize)
+   opts: { title, prefix='+', unit='coins' }
    Self-injects its CSS + overlay markup once; safe to load on every screen. */
 (function () {
   if (window.kkdCelebrate) return;
@@ -81,11 +83,14 @@
   window.kkdCelebrate = function (coins, opts) {
     opts = opts || {};
     coins = coins || 0;
+    var prefix = opts.prefix != null ? opts.prefix : '+';
+    var unit = opts.unit != null ? opts.unit : 'coins';
+    var fmt = function (v) { return prefix + v + (unit ? ' ' + unit : ''); };
     var ok = document.getElementById('kkdCoinOk') || mount();
     var titleEl = ok.querySelector('.bar-ok-title');
     var sub = ok.querySelector('.bar-ok-coins');
     titleEl.textContent = opts.title || 'Thank you! 🎉';
-    sub.textContent = '+0 coins';
+    sub.textContent = fmt(0);
     // restart the animations even if the overlay was shown moments ago
     ok.classList.remove('show');
     void ok.offsetWidth;
@@ -97,7 +102,7 @@
         i++;
         var v = Math.round(inc * i);
         if (i >= steps) { v = coins; clearInterval(t); }
-        sub.textContent = '+' + v + ' coins';
+        sub.textContent = fmt(v);
       }, 42);
     }, 360);
     // coin/sparkle fountain across the screen

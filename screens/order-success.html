@@ -3,6 +3,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="../assets/celebrate.js"></script>
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   html,body{margin:0;padding:0;font-family:'Poppins',system-ui,sans-serif}
@@ -455,6 +456,11 @@
         const modal = ov.querySelector('.scratch-modal');
         const colors = ['#10B981','#FBBF24','#FB7185','#34D399','#60A5FA'];
         for (let i=0;i<14;i++){ const c=document.createElement('span'); c.className='sc-conf'; c.style.left=(8+Math.random()*84)+'%'; c.style.background=colors[i%colors.length]; c.style.animationDelay=(Math.random()*0.3)+'s'; modal.appendChild(c); requestAnimationFrame(()=>c.classList.add('go')); setTimeout(()=>c.remove(),2000); }
+        // fire the shared full-screen coin-earn celebration after the scratch amount is clearly revealed
+        const rawWon = (card.querySelector('.sp-amt') && card.querySelector('.sp-amt').textContent || '').trim();
+        const won = parseInt(rawWon.replace(/[^0-9]/g,''),10) || 0;
+        const wonRupee = rawWon.indexOf('₹') >= 0;
+        if (won > 0) setTimeout(function(){ if (window.kkdCelebrate) window.kkdCelebrate(won, wonRupee ? {prefix:'₹', unit:'', title:'You won! 🎉'} : {title:'You won! 🎉'}); }, 900);
       }
 
       function open(){

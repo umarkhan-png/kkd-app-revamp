@@ -3,6 +3,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="../assets/celebrate.js"></script>
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   html,body{font-family:'Poppins',system-ui,sans-serif}
@@ -1197,7 +1198,7 @@
             if (wrap) wrap.classList.add('on');
             rated = true;
             // Soft success gesture + coin credit · fired once on the first rating for this product
-            if (!okShown) { okShown = true; showRateOk(25); }
+            if (!okShown) { okShown = true; showRateOk(25); if (window.kkdCelebrate) window.kkdCelebrate(25); }
           });
         });
 

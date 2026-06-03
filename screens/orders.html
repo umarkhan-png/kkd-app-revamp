@@ -3,6 +3,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="../assets/celebrate.js"></script>
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   html,body{margin:0;padding:0;font-family:'Poppins',system-ui,sans-serif}
@@ -398,6 +399,7 @@
           currentTrigger = null;
         }
         const coins = rated * 25;
+        if (window.kkdCelebrate) window.kkdCelebrate(coins);
         if (okSub) okSub.innerHTML = 'You earned <b>+' + coins + ' coins</b> · thanks for the feedback!';
         setTimeout(() => {
           ok.classList.add('show');
@@ -485,8 +487,10 @@
       payBt.addEventListener('click', () => {
         const v = parseInt(amtIn.value, 10) || 0;
         if (v <= 0 || v > codDue) return;
+        const earned = Math.round(v / COIN_RATE);
         close();
-        setTimeout(() => alert('COD payment of ₹' + v + ' recorded · ' + Math.round(v/COIN_RATE) + ' coins added to your wallet.'), 240);
+        if (window.kkdCelebrate) window.kkdCelebrate(earned);
+        setTimeout(() => alert('COD payment of ₹' + v + ' recorded · ' + earned + ' coins added to your wallet.'), 240);
       });
       // Trigger from any pay-banner with data-amount + data-order
       document.querySelectorAll('.cod-trigger').forEach(b => {

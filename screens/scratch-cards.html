@@ -3,6 +3,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="../assets/celebrate.js"></script>
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased;box-sizing:border-box}
   html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
@@ -167,7 +168,13 @@
         const modal = ov.querySelector('.scratch-modal');
         const colors = ['#10B981','#FBBF24','#FB7185','#34D399','#60A5FA'];
         for (let i=0;i<14;i++){ const c=document.createElement('span'); c.className='sc-conf'; c.style.left=(8+Math.random()*84)+'%'; c.style.background=colors[i%colors.length]; c.style.animationDelay=(Math.random()*0.3)+'s'; modal.appendChild(c); requestAnimationFrame(()=>c.classList.add('go')); setTimeout(()=>c.remove(),2000); }
+        // capture the won prize BEFORE markScratched() (which detaches the tile)
+        const rawPrize = activeTile ? (activeTile.dataset.prize || '') : '';
         markScratched();   // no Claim button · card is credited + moved to "Scratched" on reveal
+        // fire the shared full-screen reward celebration with the actual won amount
+        const won = parseInt(rawPrize.replace(/[^\d]/g,''), 10) || 0;
+        const wonRupee = rawPrize.indexOf('₹') >= 0;
+        if (won > 0) setTimeout(function(){ if (window.kkdCelebrate) window.kkdCelebrate(won, wonRupee ? {prefix:'₹', unit:'', title:'You won! 🎉'} : {title:'You won! 🎉'}); }, 900);
       }
 
       function markScratched(){

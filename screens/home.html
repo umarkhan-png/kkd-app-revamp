@@ -3599,7 +3599,7 @@
     .bar-upload.has{border-style:solid;border-color:#059669;background:#ECFDF5}
     .bar-ok{position:fixed;inset:0;z-index:130;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,0.55);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
     .bar-ok.show{display:flex}
-    .bar-ok-card{position:relative;background:#fff;border-radius:20px;padding:30px 32px 26px;text-align:center;width:270px;box-shadow:0 26px 64px -12px rgba(15,23,42,0.42);transform:scale(.9) translateY(10px);opacity:0;overflow:hidden}
+    .bar-ok-card{position:relative;background:#fff;border-radius:20px;padding:30px 32px 26px;text-align:center;width:270px;box-shadow:0 26px 64px -12px rgba(15,23,42,0.42);transform:scale(.9) translateY(10px);opacity:0;overflow:visible}
     .bar-ok.show .bar-ok-card{animation:barOkIn .46s cubic-bezier(.22,.68,.3,1) forwards}
     @keyframes barOkIn{to{transform:scale(1) translateY(0);opacity:1}}
     .bar-ok-burst{position:relative;width:80px;height:80px;margin:2px auto 2px}
@@ -3675,6 +3675,7 @@
       function celebrate(coins){
         const ok = document.getElementById('baRateOk');
         const el = document.getElementById('baRateOkCoins');
+        const burst = ok.querySelector('.bar-ok-burst');
         el.textContent = '+0 coins';
         ok.classList.add('show');
         // count the coins up for a rewarding beat, kicking in just after the coin pops
@@ -3682,7 +3683,27 @@
           const steps = Math.max(1, Math.min(coins, 18)); const inc = coins / steps; let i = 0;
           const t = setInterval(function(){ i++; let v = Math.round(inc * i); if (i >= steps) { v = coins; clearInterval(t); } el.textContent = '+' + v + ' coins'; }, 42);
         }, 360);
-        setTimeout(function(){ ok.classList.remove('show'); }, 2400);
+        // coin/sparkle burst radiating up + out from the medallion (the app's own celebration style)
+        if (burst) {
+          const sym = ['🪙','🪙','✨','🎉','🪙','✨','🪙','🎉','✨','🪙','🪙','✨'];
+          for (let i = 0; i < 12; i++) {
+            const c = document.createElement('span');
+            c.textContent = sym[i];
+            const angle = (-90 + (i - 5.5) * 15) * Math.PI / 180;
+            const dist = 76 + (i % 4) * 16;
+            const tx = Math.cos(angle) * dist;
+            const ty = Math.sin(angle) * dist - 14;
+            const rot = (i % 2 ? 1 : -1) * (12 + (i * 7) % 30);
+            c.style.cssText = 'position:absolute;left:50%;top:50%;font-size:' + (15 + (i % 5) * 2) + 'px;transform:translate(-50%,-50%) scale(.4);opacity:0;transition:transform .95s cubic-bezier(.2,.7,.3,1),opacity .95s ease;pointer-events:none;z-index:5;filter:drop-shadow(0 2px 5px rgba(0,0,0,0.22))';
+            burst.appendChild(c);
+            (function(c, tx, ty, rot, i){
+              setTimeout(function(){ c.style.opacity = '1'; c.style.transform = 'translate(calc(-50% + ' + tx + 'px), calc(-50% + ' + ty + 'px)) scale(1.15) rotate(' + rot + 'deg)'; }, 130 + i * 30);
+              setTimeout(function(){ c.style.opacity = '0'; }, 880 + i * 30);
+              setTimeout(function(){ if (c.parentNode) c.parentNode.removeChild(c); }, 1320 + i * 30);
+            })(c, tx, ty, rot, i);
+          }
+        }
+        setTimeout(function(){ ok.classList.remove('show'); }, 2500);
       }
 
       submit.addEventListener('click', function(){

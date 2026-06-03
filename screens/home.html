@@ -2970,7 +2970,7 @@
           if (cropProdFilter === 'all') return p.crops === 'all' || p.crops.some(function(c){ return selected.has(c); });
           return p.crops === 'all' || p.crops.some(function(c){ return c === cropProdFilter; });
         });
-        grid.innerHTML = matches.slice(0, 4).map(function(p){
+        grid.innerHTML = matches.slice(0, 2).map(function(p){
           const off = p.m ? Math.round((1 - p.p / p.m) * 100) : 0;
           return '<a href="pdp.html" class="cpg-card">'
             + '<div class="cpg-img"><img src="'+p.img+'" class="img-blend"/></div>'

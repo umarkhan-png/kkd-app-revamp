@@ -2405,7 +2405,7 @@
       if (!el) return;
       // Non-serviceable pincode → label reads "Not serviceable" (red), no rotation
       var __st = (window.kkdAppStates && window.kkdAppStates()) || {};
-      if (__st.nonservice) { el.textContent = 'Not serviceable'; el.style.color = '#DC2626'; el.style.transform = 'none'; el.style.opacity = '1'; return; }
+      if (__st.nonservice) { el.textContent = 'Not serviceable'; el.style.setProperty('color', '#DC2626', 'important'); el.style.transform = 'none'; el.style.opacity = '1'; return; }
       const states = ['Hey! Sagar', 'Deliver to'];
       let idx = 0;
       let flips = 0;
@@ -3773,7 +3773,9 @@
           + '<div style="font-size:11.5px;color:rgba(255,255,255,0.5);margin-top:16px">Ref: KKD-USR-4471</div>';
         document.body.appendChild(ov);
       } else if (st.nonservice) {
-        // only the flipping label (via the greeting rotator) reads red "Not serviceable"; the address line below stays normal
+        // flipping label → red "Not serviceable" (also set here so it sticks regardless of the rotator); address line below stays normal
+        var gl = document.getElementById('greetLabel');
+        if (gl) { gl.textContent = 'Not serviceable'; gl.style.setProperty('color', '#DC2626', 'important'); gl.style.transform = 'none'; gl.style.opacity = '1'; }
         var addr = document.getElementById('homeAddr');
         if (addr) addr.innerHTML = 'Indore 123456 <i class="fa-solid fa-chevron-down text-[10px] text-[#64748B] ml-0.5"></i>';
       }

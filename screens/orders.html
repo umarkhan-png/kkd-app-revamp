@@ -115,6 +115,15 @@
   .rate-attach i{color:#047857;font-size:13px}
   .rate-attach-info{display:none;font-size:11px;font-weight:700;color:#047857;margin-top:6px}
   .rate-attach-info i{font-size:10px}
+  /* Share-a-testimonial (video) · one per order · +25 coins */
+  .rate-testi{margin:4px 0 2px;border:1px solid #E5E7EB;border-radius:14px;padding:13px;background:#F8FAFC}
+  .rate-testi-h{font-size:13.5px;font-weight:800;color:#0F172A;display:flex;align-items:center;gap:7px}
+  .rate-testi-coin{margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:800;color:#78350F;background:linear-gradient(135deg,#FBBF24,#F59E0B);padding:3px 8px;border-radius:9999px}
+  .rate-testi-coin i{font-size:9px}
+  .rate-testi-sub{font-size:11px;color:#64748B;margin-top:3px;line-height:1.35}
+  .rate-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;margin-top:11px;min-height:84px;border:1.5px dashed #A7F3D0;border-radius:12px;background:#FFFFFF;color:#047857;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center;padding:12px}
+  .rate-upload i{font-size:22px}
+  .rate-upload.has{border-style:solid;border-color:#059669;background:#ECFDF5}
 
   /* Shared rating success · soft scale-in card + coin pop gesture · auto-dismiss */
   .rate-ok{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,0.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
@@ -326,6 +335,13 @@
       <button id="rateClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
     <div id="rateList" class="px-5 overflow-y-auto" style="flex:1"></div>
+    <div class="px-5 pb-1">
+      <div class="rate-testi">
+        <div class="rate-testi-h"><i class="fa-solid fa-bullhorn" style="color:#047857"></i> Share a testimonial <span class="rate-testi-coin"><i class="fa-solid fa-coins"></i> +25 coins</span></div>
+        <div class="rate-testi-sub">Upload a short video to help other farmers</div>
+        <label class="rate-upload" id="rateTestiBox"><i class="fa-solid fa-cloud-arrow-up"></i><span id="rateTestiLabel">Upload video testimonial</span><input id="rateTestiInput" type="file" accept="video/*" style="display:none"/></label>
+      </div>
+    </div>
     <div class="px-5 pt-3 pb-5" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">
       <button id="rateSubmit" class="w-full h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
         <i class="fa-solid fa-paper-plane text-[13px]"></i> Submit ratings
@@ -354,9 +370,15 @@
       const ok = document.getElementById('rateOk');
       const okSub = document.getElementById('rateOkSub');
       let currentTrigger = null;
+      // Share-a-testimonial (video) · one per order
+      const testiBox = document.getElementById('rateTestiBox'), testiLabel = document.getElementById('rateTestiLabel'), testiInput = document.getElementById('rateTestiInput');
+      let testiUp = false;
+      function resetTesti(){ testiUp = false; if (testiInput) testiInput.value = ''; if (testiBox) testiBox.classList.remove('has'); if (testiLabel) testiLabel.textContent = 'Upload video testimonial'; }
+      if (testiInput) testiInput.addEventListener('change', function(){ testiUp = !!(testiInput.files && testiInput.files.length); if (testiUp){ testiBox.classList.add('has'); testiLabel.innerHTML = '<i class="fa-solid fa-circle-check"></i> Testimonial added'; } else { resetTesti(); } });
       function open(orderId, products){
         ordLbl.textContent = '#' + orderId;
         list.innerHTML = '';
+        resetTesti();
         products.forEach(p => {
           const item = document.createElement('div');
           item.className = 'rate-item';
@@ -389,7 +411,7 @@
       bd.addEventListener('click', close);
       submit.addEventListener('click', () => {
         const rated = list.querySelectorAll('.rate-item.rated').length;
-        if (rated === 0) return;
+        if (rated === 0 && !testiUp) return;
         close();
         // Rated → remove the Rate button from that order card (reflow the action row)
         if (currentTrigger) {
@@ -398,7 +420,7 @@
           if (row) row.style.gridTemplateColumns = '1fr 1fr';
           currentTrigger = null;
         }
-        const coins = rated * 25;
+        const coins = rated * 25 + (testiUp ? 25 : 0);
         if (window.kkdCelebrate) window.kkdCelebrate(coins);
         if (okSub) okSub.innerHTML = 'You earned <b>+' + coins + ' coins</b> · thanks for the feedback!';
         setTimeout(() => {

@@ -114,11 +114,11 @@
         <a href="voice-search.html" class="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg flex items-center justify-center" style="background:transparent;text-decoration:none"><i class="fa-solid fa-microphone text-[14px]" style="color:#475569"></i></a>
       </div>
     </div>
-    <!-- Filter / Sort pill bar (category + subcategory now live inside Filter) -->
+    <!-- Filter pill bar · only two filters: Category + Crop -->
     <div class="pill-bar">
       <div class="flex gap-2 px-4 py-2.5 items-center scroll-x">
-        <button class="filter-pill" id="sortBtn"><i class="fa-solid fa-arrow-down-wide-short text-[10px]"></i> Sort <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
-        <button class="filter-pill" id="filterBtn"><i class="fa-solid fa-sliders text-[10px]"></i> Filter <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+        <button class="filter-pill" id="catBtn"><i class="fa-solid fa-layer-group text-[10px]"></i> Category <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+        <button class="filter-pill" id="cropBtn"><i class="fa-solid fa-seedling text-[10px]"></i> Crop <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
         <div id="chipRow" class="flex items-center gap-2"></div>
       </div>
     </div>
@@ -132,15 +132,6 @@
     <span class="flex items-center gap-3"><span class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#059669"><i class="fa-solid fa-bag-shopping text-[14px]"></i></span><span class="text-[15px] font-extrabold tnum">₹<span id="cartTotal">0</span> · <span id="cartCount">0</span> items</span></span>
     <span class="cart-view text-[12.5px] font-bold flex items-center gap-1.5">View cart <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
   </a>
-
-  <!-- Sort sheet -->
-  <div id="sortSheet" class="sheet">
-    <div class="sheet-bg" data-close></div>
-    <div class="sheet-pnl">
-      <div class="sheet-h"><div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div><div class="flex items-center justify-between"><div class="text-[18px] font-extrabold">Sort by</div><button data-close class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button></div></div>
-      <div class="sheet-list" id="sortList"></div>
-    </div>
-  </div>
 
   <!-- Filter sheet · left-rail tabs + right pane (Shop-by-Category style) -->
   <div id="filterSheet" class="sheet">
@@ -175,25 +166,11 @@
     ];
     const cropLabel = k => k.charAt(0).toUpperCase() + k.slice(1);
     const CATS = { pesticide:'Pesticide', fungicide:'Fungicide', fertilizer:'Fertilizer', herbicide:'Herbicide', combo:'Combo' };
-    const SORTS = [
-      { k:'pop',    label:'Popularity',   ic:'fa-fire' },
-      { k:'best',   label:'Bestsellers',  ic:'fa-bolt' },
-      { k:'rating', label:'Top rated',    ic:'fa-star' },
-      { k:'off',    label:'Discount — High to Low', ic:'fa-tag' },
-      { k:'price-l',label:'Price — Low to High', ic:'fa-arrow-up-wide-short' },
-      { k:'price-h',label:'Price — High to Low', ic:'fa-arrow-down-wide-short' }
-    ];
-
     const SUBS = { bio:'Bio', chemical:'Chemical', npk:'NPK', organic:'Organic', herb:'Herbicide', combo:'Combo' };
     const TAGS = { recent:'Recently viewed', bestseller:'Bestseller', bought:'Previously bought', mostselling:'Most selling in Indore' };
 
+    // Only two filters surfaced on the product page: Category and Crop
     const FILTER_SECTIONS = [
-      { key:'tags', label:'Tags', title:'Browse by', multi:true, opts:[
-        { val:'recent',      label:'Recently viewed',        icon:'fa-clock-rotate-left', color:'#7C3AED', bg:'#F3E8FF' },
-        { val:'bestseller',  label:'Bestseller',             icon:'fa-crown',             color:'#CA8A04', bg:'#FEF3C7' },
-        { val:'bought',      label:'Previously bought',      icon:'fa-rotate-left',       color:'#0891B2', bg:'#CFFAFE' },
-        { val:'mostselling', label:'Most selling in Indore', icon:'fa-fire',              color:'#DC2626', bg:'#FEE2E2' }
-      ] },
       { key:'category', label:'Category', title:'Category', multi:true, opts:[
         { val:'pesticide',  label:'Pesticide',  icon:'fa-bug',          color:'#DC2626', bg:'#FEE2E2' },
         { val:'fungicide',  label:'Fungicide',  icon:'fa-shield-virus', color:'#7C3AED', bg:'#F3E8FF' },
@@ -201,37 +178,17 @@
         { val:'herbicide',  label:'Herbicide',  icon:'fa-wheat-awn',    color:'#CA8A04', bg:'#FEF3C7' },
         { val:'combo',      label:'Combo',      icon:'fa-box',          color:'#2563EB', bg:'#DBEAFE' }
       ] },
-      { key:'sub', label:'Subcategory', title:'Subcategory', multi:true, opts:[
-        { val:'bio',      label:'Bio',        icon:'fa-leaf',       color:'#16A34A', bg:'#DCFCE7' },
-        { val:'chemical', label:'Chemical',   icon:'fa-flask',      color:'#2563EB', bg:'#DBEAFE' },
-        { val:'npk',      label:'NPK',        icon:'fa-flask-vial', color:'#DB2777', bg:'#FCE7F3' },
-        { val:'organic',  label:'Organic',    icon:'fa-recycle',    color:'#16A34A', bg:'#DCFCE7' },
-        { val:'herb',     label:'Herbicide',  icon:'fa-wheat-awn',  color:'#CA8A04', bg:'#FEF3C7' },
-        { val:'combo',    label:'Combo',      icon:'fa-box',        color:'#2563EB', bg:'#DBEAFE' }
-      ] },
       { key:'crop', label:'Crop', title:'Crop', multi:true, opts:[
         { val:'tomato', label:'Tomato', emoji:'🍅', bg:'#FEE2E2' }, { val:'chilli', label:'Chilli', emoji:'🌶', bg:'#FFEDD5' },
         { val:'wheat', label:'Wheat', emoji:'🌾', bg:'#FEF3C7' }, { val:'maize', label:'Maize', emoji:'🌽', bg:'#FEF9C3' },
         { val:'onion', label:'Onion', emoji:'🧅', bg:'#FCE7F3' }, { val:'potato', label:'Potato', emoji:'🥔', bg:'#FEF3C7' },
         { val:'cotton', label:'Cotton', emoji:'☁️', bg:'#F1F5F9' }, { val:'paddy', label:'Paddy', emoji:'🌾', bg:'#FEF3C7' }, { val:'sugarcane', label:'Sugarcane', emoji:'🎋', bg:'#DCFCE7' }
-      ] },
-      { key:'rating', label:'Rating', title:'Customer Rating', multi:false, opts:[
-        { val:'4.5', label:'4.5★ & above', icon:'fa-star', color:'#F59E0B', bg:'#FEF3C7' },
-        { val:'4',   label:'4★ & above',   icon:'fa-star', color:'#F59E0B', bg:'#FEF3C7' },
-        { val:'3.5', label:'3.5★ & above', icon:'fa-star', color:'#F59E0B', bg:'#FEF3C7' },
-        { val:'3',   label:'3★ & above',   icon:'fa-star', color:'#F59E0B', bg:'#FEF3C7' }
-      ] },
-      { key:'price', label:'Price', title:'Price Range (₹)', multi:false, kind:'slider', min:0, max:1000, step:25, opts:[] },
-      { key:'discount', label:'Discount', title:'Discount %', multi:false, opts:[
-        { val:'10', label:'10% & above', icon:'fa-percent', color:'#CA8A04', bg:'#FEF3C7' },
-        { val:'20', label:'20% & above', icon:'fa-percent', color:'#D97706', bg:'#FDE68A' },
-        { val:'30', label:'30% & above', icon:'fa-percent', color:'#BE185D', bg:'#FBCFE8' }
       ] }
     ];
 
-    let sort = 'pop', pendSort = 'pop';
+    let sort = 'pop';
     const filters = { tags:new Set(), category:new Set(), sub:new Set(), crop:new Set(), rating:null, price:null, discount:null };
-    let activeFilterTab = 'tags';
+    let activeFilterTab = 'category';
 
     function offPct(p){ return p.m ? Math.round((1 - p.p / p.m) * 100) : 0; }
     const cart = {};   // name -> { qty, price }
@@ -295,7 +252,6 @@
     function anyFilter(){ return filters.tags.size || filters.category.size || filters.sub.size || filters.crop.size || filters.rating || filters.price || filters.discount; }
     function renderChips(){
       const chips = [];
-      if (sort !== 'pop') { const so = SORTS.find(s => s.k === sort); if (so) chips.push({ id:'sort', label:'Sort: ' + so.label }); }
       ['tags','category','sub','crop'].forEach(sec => filters[sec].forEach(v => chips.push({ id:sec + ':' + v, label:chipLabel(sec, v) })));
       if (filters.rating) chips.push({ id:'rating', label:filters.rating + '★ & above' });
       if (filters.price) chips.push({ id:'price', label:'₹' + filters.price.min + '–₹' + filters.price.max });
@@ -304,8 +260,7 @@
       row.innerHTML = chips.map(c => '<span class="achip">' + c.label + '<button class="achip-close" data-rm="' + c.id + '"><i class="fa-solid fa-xmark"></i></button></span>').join('');
       row.querySelectorAll('[data-rm]').forEach(b => b.addEventListener('click', () => {
         const id = b.dataset.rm, i = id.indexOf(':');
-        if (id === 'sort') sort = 'pop';
-        else if (id === 'rating') filters.rating = null;
+        if (id === 'rating') filters.rating = null;
         else if (id === 'price') filters.price = null;
         else if (id === 'discount') filters.discount = null;
         else if (i > 0) filters[id.slice(0, i)].delete(id.slice(i + 1));
@@ -313,17 +268,12 @@
       }));
     }
     function syncPills(){
-      document.getElementById('sortBtn').classList.toggle('on', sort !== 'pop');
-      document.getElementById('filterBtn').classList.toggle('on', !!anyFilter());
+      document.getElementById('catBtn').classList.toggle('on', filters.category.size > 0);
+      document.getElementById('cropBtn').classList.toggle('on', filters.crop.size > 0);
     }
 
     function openSheet(id){ document.getElementById(id).classList.add('open'); }
     function closeSheet(id){ document.getElementById(id).classList.remove('open'); }
-    function renderSortList(){
-      const wrap = document.getElementById('sortList');
-      wrap.innerHTML = SORTS.map(s => '<div class="opt-row ' + (s.k === pendSort ? 'on' : '') + '" data-sort="' + s.k + '"><span style="width:22px;text-align:center;color:#94A3B8"><i class="fa-solid ' + s.ic + '"></i></span><span class="lbl">' + s.label + '</span><span class="rad"></span></div>').join('');
-      wrap.querySelectorAll('[data-sort]').forEach(r => r.addEventListener('click', () => { pendSort = r.dataset.sort; sort = pendSort; renderSortList(); syncPills(); renderChips(); renderGrid(); setTimeout(() => closeSheet('sortSheet'), 150); }));
-    }
 
     // ===== Filter modal · left-rail tabs + right pane (Shop-by-Category style) =====
     function renderFilterTabs(){
@@ -380,14 +330,14 @@
       paint();
     }
 
-    document.getElementById('sortBtn').addEventListener('click', () => { pendSort = sort; renderSortList(); openSheet('sortSheet'); });
-    document.getElementById('filterBtn').addEventListener('click', () => { renderFilterTabs(); renderFilterPane(); openSheet('filterSheet'); });
+    document.getElementById('catBtn').addEventListener('click', () => { activeFilterTab = 'category'; renderFilterTabs(); renderFilterPane(); openSheet('filterSheet'); });
+    document.getElementById('cropBtn').addEventListener('click', () => { activeFilterTab = 'crop'; renderFilterTabs(); renderFilterPane(); openSheet('filterSheet'); });
     document.getElementById('filterClear').addEventListener('click', () => {
       filters.tags.clear(); filters.category.clear(); filters.sub.clear(); filters.crop.clear();
       filters.rating = null; filters.price = null; filters.discount = null;
       renderFilterTabs(); renderFilterPane(); renderChips(); syncPills(); renderGrid();
     });
-    document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => { closeSheet('sortSheet'); closeSheet('filterSheet'); }));
+    document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => { closeSheet('filterSheet'); }));
 
     // Cart bar wraps to a centered pill on scroll (home pattern)
     window.addEventListener('scroll', function(){
@@ -398,7 +348,7 @@
 
     // Query params · sort=bestsellers, view=recent (tag), category (cat/cats), crop (crop/crops)
     const qp = new URLSearchParams(location.search);
-    if (qp.get('sort') === 'bestsellers' || qp.get('sort') === 'best') { sort = 'best'; pendSort = 'best'; }
+    if (qp.get('sort') === 'bestsellers' || qp.get('sort') === 'best') { sort = 'best'; }
     if (qp.get('view') === 'recent') filters.tags.add('recent');
     if (qp.get('cat') && CATS[qp.get('cat')]) filters.category.add(qp.get('cat'));
     if (qp.get('cats')) qp.get('cats').split(',').forEach(c => { if (CATS[c]) filters.category.add(c); });

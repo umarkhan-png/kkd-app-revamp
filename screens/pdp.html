@@ -616,9 +616,31 @@
     .cust-spin{width:24px;height:24px;border-radius:50%;border:3px solid #D1FAE5;border-top-color:#059669;animation:custSpin .8s linear infinite}
     .cust-load .t{font-size:10px;font-weight:700;color:#94A3B8}
     @keyframes custSpin{to{transform:rotate(360deg)}}
+    .cust-tile{cursor:pointer}
+    #reviewList img{cursor:pointer}
+    /* Review-photo lightbox · single viewer + grid "View all" mode */
+    .rev-lb{position:fixed;inset:0;z-index:140;background:rgba(8,11,18,.95);display:none;flex-direction:column}
+    .rev-lb.open{display:flex}
+    .rev-lb-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;flex-shrink:0}
+    .rev-lb-bar button{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.13);border:0;color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .rev-lb-count{color:#fff;font-size:13px;font-weight:700}
+    .rev-lb-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;position:relative;padding:0 8px}
+    .rev-lb-stage img{max-width:100%;max-height:100%;object-fit:contain;border-radius:10px}
+    .rev-lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);border:0;color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .rev-lb-nav.prev{left:10px}.rev-lb-nav.next{right:10px}
+    .rev-lb-strip{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;flex-shrink:0}
+    .rev-lb-strip img{width:54px;height:54px;border-radius:8px;object-fit:cover;flex-shrink:0;opacity:.5;cursor:pointer;border:2px solid transparent}
+    .rev-lb-strip img.on{opacity:1;border-color:#10B981}
+    .rev-lb-grid{display:none;flex:1;min-height:0;overflow-y:auto;padding:6px 16px 24px;grid-template-columns:repeat(3,1fr);gap:8px;align-content:start}
+    .rev-lb-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;cursor:pointer}
+    .rev-lb.grid .rev-lb-stage,.rev-lb.grid .rev-lb-strip{display:none}
+    .rev-lb.grid .rev-lb-grid{display:grid}
   </style>
   <div class="mt-4">
-    <div class="text-[13.5px] font-extrabold text-[#0F172A] mb-2">Photos &amp; videos from customers</div>
+    <div class="flex items-center justify-between mb-2">
+      <div class="text-[13.5px] font-extrabold text-[#0F172A]">Photos &amp; videos from customers</div>
+      <button id="viewAllPhotos" class="text-[12px] font-extrabold flex items-center gap-1" style="color:#059669">View all <i class="fa-solid fa-chevron-right text-[9px]"></i></button>
+    </div>
     <div class="overflow-x-auto scrollx -mx-4 px-4" id="custScroll">
       <div class="flex gap-2.5 min-w-max" id="custRow">
         <div class="cust-tile"><img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=400&q=80" alt=""/><span class="play"><span class="pc"><i class="fa-solid fa-play"></i></span></span><span class="dur">0:18</span></div>
@@ -663,6 +685,73 @@
       scroll.addEventListener('scroll', () => {
         if (scroll.scrollLeft + scroll.clientWidth >= scroll.scrollWidth - 60) loadMore();
       }, { passive: true });
+    })();
+  </script>
+
+  <!-- Review-photo lightbox · "View all" opens a grid of every uploaded photo; tapping any review/customer photo opens the enlarged single viewer with prev/next + thumb strip -->
+  <div id="revLightbox" class="rev-lb" aria-hidden="true">
+    <div class="rev-lb-bar">
+      <button id="rlbGrid" aria-label="View all"><i class="fa-solid fa-grip"></i></button>
+      <span class="rev-lb-count" id="rlbCount">1 / 1</span>
+      <button id="rlbClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="rev-lb-stage">
+      <button class="rev-lb-nav prev" id="rlbPrev" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>
+      <img id="rlbImg" src="" alt="Review photo"/>
+      <button class="rev-lb-nav next" id="rlbNext" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+    <div class="rev-lb-grid" id="rlbGridView"></div>
+    <div class="rev-lb-strip" id="rlbStrip"></div>
+  </div>
+  <script>
+    (function(){
+      const lb = document.getElementById('revLightbox');
+      if (!lb) return;
+      const imgEl = document.getElementById('rlbImg'), countEl = document.getElementById('rlbCount'),
+            strip = document.getElementById('rlbStrip'), gridView = document.getElementById('rlbGridView');
+      let photos = [], cur = 0;
+      const big = s => s.replace(/w=\d+/, 'w=1200');
+      // Gather every uploaded review photo currently in the DOM (customer strip + per-review cards), de-duped
+      function collect(){
+        const out = [];
+        document.querySelectorAll('#custRow img, #reviewList img').forEach(im => { if (out.indexOf(im.src) < 0) out.push(im.src); });
+        return out;
+      }
+      function renderStrip(){
+        strip.innerHTML = photos.map((s, i) => '<img src="' + s + '" data-i="' + i + '" class="' + (i === cur ? 'on' : '') + '">').join('');
+        strip.querySelectorAll('img').forEach(t => t.addEventListener('click', () => show(+t.dataset.i)));
+        const on = strip.querySelector('img.on'); if (on) on.scrollIntoView({ inline:'center', block:'nearest' });
+      }
+      function renderGrid(){
+        gridView.innerHTML = photos.map((s, i) => '<img src="' + s + '" data-i="' + i + '">').join('');
+        gridView.querySelectorAll('img').forEach(t => t.addEventListener('click', () => { lb.classList.remove('grid'); show(+t.dataset.i); }));
+      }
+      function show(i){
+        cur = (i + photos.length) % photos.length;
+        imgEl.src = big(photos[cur]);
+        countEl.textContent = (cur + 1) + ' / ' + photos.length;
+        renderStrip();
+      }
+      function gridMode(){ lb.classList.add('grid'); renderGrid(); countEl.textContent = photos.length + ' photos'; }
+      function open(i, mode){
+        photos = collect(); if (!photos.length) return;
+        lb.classList.add('open'); document.body.style.overflow = 'hidden';
+        if (mode === 'grid') gridMode(); else { lb.classList.remove('grid'); show(i || 0); }
+      }
+      function close(){ lb.classList.remove('open', 'grid'); document.body.style.overflow = ''; }
+      document.getElementById('rlbClose').addEventListener('click', close);
+      document.getElementById('rlbPrev').addEventListener('click', () => show(cur - 1));
+      document.getElementById('rlbNext').addEventListener('click', () => show(cur + 1));
+      document.getElementById('rlbGrid').addEventListener('click', gridMode);
+      lb.addEventListener('click', e => { if (e.target === lb) close(); });
+      const va = document.getElementById('viewAllPhotos'); if (va) va.addEventListener('click', () => open(0, 'grid'));
+      // Any customer-strip tile or in-review photo opens the enlarged viewer at that image
+      document.addEventListener('click', e => {
+        const tile = e.target.closest('#custRow .cust-tile');
+        if (tile) { const im = tile.querySelector('img'); if (im) open(collect().indexOf(im.src), 'single'); return; }
+        const ri = e.target.closest('#reviewList img');
+        if (ri) open(collect().indexOf(ri.src), 'single');
+      });
     })();
   </script>
 

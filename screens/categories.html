@@ -278,10 +278,9 @@
     </div>
   </div><!-- /.stk-main -->
 
-  <!-- FILTER row · single horizontal scroll containing: Sort + Filter pills, Crop + Rating quick-jump chips, then any applied-filter chips that accumulate beside them (each with × to remove) -->
+  <!-- FILTER row · single horizontal scroll containing: Filter pill, Crop + Rating quick-jump chips, then any applied-filter chips that accumulate beside them (each with × to remove) -->
   <div class="stk-filter">
     <div class="flex gap-2 px-4 py-2.5 items-center scroll-x" style="overflow-x:auto">
-      <button class="filter-pill flex-shrink-0" id="filterSortBtn" data-modal="sort"><i class="fa-solid fa-arrow-down-wide-short text-[10px]"></i> Sort <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
       <button class="filter-pill flex-shrink-0" id="filterFilterBtn" data-modal="filter"><i class="fa-solid fa-sliders text-[10px]"></i> Filter <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
       <button class="filter-pill flex-shrink-0" data-jump-filter="crop"><i class="fa-solid fa-seedling text-[10px]" style="color:#059669"></i> Crop <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
       <button class="filter-pill flex-shrink-0" data-jump-filter="rating"><i class="fa-solid fa-star text-[10px]" style="color:#F59E0B"></i> Rating <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
@@ -334,22 +333,6 @@
       <span class="text-[12.5px] font-semibold">Profile</span>
     </a>
   </nav>
-
-  <!-- SORT bottom sheet · vertical list · each row has icon + label + radio circle on the right · row taps mark a pending selection · Apply commits and closes -->
-  <div id="sortSheet" class="sheet-wrap" aria-hidden="true">
-    <div class="sheet-bg" data-sheet-close="sort"></div>
-    <div class="sheet-panel">
-      <div class="sheet-handle"></div>
-      <div class="px-5 py-3 flex items-center justify-between" style="border-bottom:1px solid #F1F5F9">
-        <div class="text-[18px] font-extrabold">Sort by</div>
-        <button data-sheet-close="sort" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #E2E8F0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
-      </div>
-      <div id="sortOptions" class="overflow-y-auto" style="max-height:55vh"></div>
-      <div class="px-5 pt-3 pb-5" style="border-top:1px solid #F1F5F9;flex-shrink:0">
-        <button id="sortApply" class="w-full h-12 rounded-xl text-[14px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0">Apply</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Variant bottom-sheet · cards with 2+ packaging sizes route here · each row has its own thumbnail + +/- qty stepper · no top hero image, no Done button (changes auto-persist) -->
   <div id="variantSheet" class="fixed inset-0" style="display:none;z-index:95">
@@ -494,16 +477,6 @@
       { cat:'combo',      subs:['saver'],         name:'Mega Combo-10',    sub:'Mixed essentials',       size:'10-pack',target:'save ₹900',          price:2099, mrp:2999, img:'../assets/Chakrawarti_nobg.png' }
     ];
 
-    // Sort options · Price options removed per spec · Margin uses the off-percentage on each product (computed from mrp/price) · Bestsellers + Newest are visual stand-ins
-    const SORT_OPTIONS = [
-      { key:'pop',          label:'Popularity',        icon:'fa-fire',                color:'#F97316' },
-      { key:'margin-high',  label:'Margin — High to Low', icon:'fa-arrow-down-wide-short', color:'#059669' },
-      { key:'margin-low',   label:'Margin — Low to High', icon:'fa-arrow-up-wide-short',   color:'#059669' },
-      { key:'rating',       label:'Top Rated',         icon:'fa-star',                color:'#F59E0B' },
-      { key:'bestsellers',  label:'Bestsellers',       icon:'fa-bolt',                color:'#F59E0B' },
-      { key:'newest',       label:'Newest first',      icon:'fa-sparkles',            color:'#8B5CF6' }
-    ];
-
     // Filter modal · LEFT tab rail definitions · each tab carries its own option set rendered in the right pane · Category/Class/Margin removed per spec · Price (two-thumb slider) and Discount % added · Pack Size uses real volumes, Rating shows the full ladder
     const FILTER_SECTIONS = [
       { key:'crop', label:'Crop', title:'Crop', multi:true, opts:[
@@ -550,9 +523,7 @@
     const cart = new Map();
     let activeCat = 'pesticide';
     let activeSub = 'all';
-    let activeSort = 'pop';
     let recentView = false;   // ?view=recent · shows a "recently viewed" set across categories with a removable tag
-    let pendingSort = 'pop';  // Sort modal · tapped row is pending until the Apply button commits it
     let activeFilterTab = 'crop';
     // Multi-select filters use Set, single-select use null|val (or {min,max} for the price slider)
     const filters = {
@@ -633,12 +604,6 @@
           return false;
         });
       }
-      // Sort
-      if (activeSort === 'margin-high')      out.sort((a,b) => offPct(b) - offPct(a));
-      else if (activeSort === 'margin-low')  out.sort((a,b) => offPct(a) - offPct(b));
-      else if (activeSort === 'rating')      out.sort((a,b) => productRating(b) - productRating(a));
-      else if (activeSort === 'newest')      out.reverse();
-      // pop + bestsellers · keep base order (PRODUCTS is already in popularity order)
       return out;
     }
 
@@ -773,25 +738,6 @@
       el.addEventListener('click', () => closeSheet(el.dataset.sheetClose));
     });
 
-    // Sort modal · renders icon + label + radio row UI · tapping a row only marks it as pendingSort · the Apply button commits to activeSort and closes the sheet
-    function renderSortOptions(){
-      const wrap = document.getElementById('sortOptions');
-      wrap.innerHTML = SORT_OPTIONS.map(o => {
-        const on = o.key === pendingSort;
-        return '<div class="sort-row '+(on?'on':'')+'" data-sort="'+o.key+'">'
-          + '<span class="sort-ic"><i class="fa-solid '+o.icon+'" style="'+(on?'':'color:'+o.color)+'"></i></span>'
-          + '<span class="sort-lbl">'+o.label+'</span>'
-          + '<span class="sort-radio"></span>'
-          + '</div>';
-      }).join('');
-      wrap.querySelectorAll('[data-sort]').forEach(row => {
-        row.addEventListener('click', () => {
-          pendingSort = row.dataset.sort;
-          renderSortOptions();
-        });
-      });
-    }
-
     // Filter modal · LEFT rail tabs (one per FILTER_SECTIONS entry) · clicking a tab swaps the right pane
     function renderFilterTabs(){
       const rail = document.getElementById('filterTabs');
@@ -918,10 +864,6 @@
       const row = document.getElementById('appliedChipRow');
       const chips = [];
       if (recentView) chips.push({ id:'recent', label:'Recently viewed' });
-      if (activeSort !== 'pop') {
-        const so = SORT_OPTIONS.find(s => s.key === activeSort);
-        if (so) chips.push({ id:'sort:'+activeSort, label:'Sort: '+so.label });
-      }
       FILTER_SECTIONS.forEach(sec => {
         const v = filters[sec.key];
         if (sec.kind === 'slider') {
@@ -953,12 +895,10 @@
     function removeAppliedChip(id){
       const [kind, a, b] = id.split(':');
       if (kind === 'recent') { recentView = false; }
-      else if (kind === 'sort') { activeSort = 'pop'; pendingSort = 'pop'; }
       else if (kind === 'sec') {
         const v = filters[a];
         if (v instanceof Set) v.delete(b); else filters[a] = null;
       }
-      renderSortOptions();
       renderFilterTabs();
       renderFilterPane();
       renderAppliedChips();
@@ -966,13 +906,11 @@
       renderProducts();
     }
     function resetAllFilters(){
-      activeSort = 'pop';
-      pendingSort = 'pop';
+      recentView = false;
       Object.keys(filters).forEach(k => {
         if (filters[k] instanceof Set) filters[k].clear();
         else filters[k] = null;
       });
-      renderSortOptions();
       renderFilterTabs();
       renderFilterPane();
       renderAppliedChips();
@@ -980,17 +918,6 @@
       renderProducts();
     }
     document.getElementById('filterClear').addEventListener('click', resetAllFilters);
-
-    // Sort sheet Apply · commits pendingSort into activeSort and runs the products refresh
-    document.getElementById('sortApply').addEventListener('click', () => {
-      activeSort = pendingSort;
-      renderAppliedChips();
-      updateFilterDots();
-      renderProducts();
-      closeSheet('sort');
-    });
-    // Opening the Sort sheet resets pendingSort to the currently committed sort so the radio matches reality
-    document.getElementById('filterSortBtn').addEventListener('click', () => { pendingSort = activeSort; renderSortOptions(); });
 
     // Crop / Rating quick-jump chips · open the Filter sheet pre-pinned to the requested section
     document.querySelectorAll('[data-jump-filter]').forEach(btn => {
@@ -1003,9 +930,7 @@
     });
 
     function updateFilterDots(){
-      const sortBtn = document.getElementById('filterSortBtn');
       const filtBtn = document.getElementById('filterFilterBtn');
-      if (sortBtn) sortBtn.setAttribute('aria-pressed', activeSort !== 'pop' ? 'true' : 'false');
       const anyFilter = FILTER_SECTIONS.some(s => {
         const v = filters[s.key];
         return v instanceof Set ? v.size > 0 : !!v;
@@ -1026,16 +951,10 @@
       activeCat = qp.get('cat');
       document.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === activeCat ? 'true' : 'false'));
     }
-    // Auto-apply a sort via ?sort= (e.g. home "Bestsellers · See all" → ?sort=bestsellers)
-    if (qp.get('sort') && SORT_OPTIONS.some(s => s.key === qp.get('sort'))) {
-      activeSort = qp.get('sort');
-      pendingSort = qp.get('sort');
-    }
     if (qp.get('view') === 'recent') { recentView = true; }
 
     renderSubs();
     renderProducts();
-    renderSortOptions();
     renderFilterTabs();
     renderFilterPane();
     renderAppliedChips();

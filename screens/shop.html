@@ -15,6 +15,29 @@
   /* Filter / sort pill bar */
   .pill-bar{background:#F8F8F8;border-bottom:1px solid #ECECEC}
   .shop-stick{position:sticky;top:0;z-index:20;background:#FFFFFF;box-shadow:0 4px 10px -8px rgba(15,23,42,0.25)}
+  /* Filter modal · left-rail tabs + right pane (same as Shop-by-Category) */
+  .filter-tab{display:block;width:100%;text-align:left;padding:15px 13px;font-size:13.5px;font-weight:600;color:#475569;background:transparent;border:0;border-left:3px solid transparent;cursor:pointer}
+  .filter-tab.on{color:#047857;border-left-color:#059669;background:#FFFFFF}
+  .filter-tab .ft-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#059669;margin-left:6px;vertical-align:middle;opacity:0}
+  .filter-tab.has-active .ft-dot{opacity:1}
+  .fpane-title{padding:16px 18px 8px;font-size:11px;font-weight:800;color:#94A3B8;text-transform:uppercase;letter-spacing:.12em}
+  .fopt-row{display:flex;align-items:center;gap:13px;padding:12px 18px;border-bottom:1px solid #F1F5F9;cursor:pointer;background:#FFFFFF}
+  .fopt-row:active{background:#F8FAFC}
+  .fopt-ic{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+  .fopt-lbl{flex:1;font-size:14px;font-weight:600;color:#0F172A;line-height:1.2}
+  .fopt-radio{width:22px;height:22px;border-radius:50%;border:1.5px solid #CBD5E1;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .fopt-row.on .fopt-lbl{color:#047857}
+  .fopt-row.on .fopt-radio{background:#059669;border-color:#059669}
+  .fopt-row.on .fopt-radio::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;color:#FFFFFF;font-size:11px}
+  .price-num-input{height:42px;padding:0 12px;border-radius:10px;border:1.5px solid #E5E7EB;background:#FFFFFF;font-size:15px;font-weight:800;color:#0F172A;outline:none;font-variant-numeric:tabular-nums;width:100%;box-sizing:border-box}
+  .price-num-input:focus{border-color:#059669}
+  .price-num-input::-webkit-outer-spin-button,.price-num-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .price-slider{position:relative;height:32px;margin:6px 4px 0}
+  .price-slider .ps-track{position:absolute;left:0;right:0;top:14px;height:4px;border-radius:999px;background:#E2E8F0}
+  .price-slider .ps-fill{position:absolute;top:14px;height:4px;border-radius:999px;background:#059669;left:0;right:0}
+  .price-slider .ps-input{position:absolute;left:0;right:0;top:0;width:100%;height:32px;background:transparent;pointer-events:none;-webkit-appearance:none;appearance:none;margin:0}
+  .price-slider .ps-input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;pointer-events:auto;width:22px;height:22px;border-radius:50%;background:#FFFFFF;border:2.5px solid #059669;box-shadow:0 2px 6px rgba(5,150,105,0.35);cursor:pointer}
+  .price-slider .ps-input::-moz-range-thumb{pointer-events:auto;width:22px;height:22px;border-radius:50%;background:#FFFFFF;border:2.5px solid #059669;cursor:pointer}
   .filter-pill{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:999px;background:#FFFFFF;border:1px solid #E2E8F0;font-size:12.5px;font-weight:700;color:#334155;white-space:nowrap;flex-shrink:0;cursor:pointer;box-shadow:0 1px 2px rgba(15,23,42,0.04)}
   .filter-pill .dot{width:6px;height:6px;border-radius:50%;background:#059669;display:none}
   .filter-pill.on{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
@@ -119,30 +142,36 @@
     </div>
   </div>
 
-  <!-- Filter sheet -->
+  <!-- Filter sheet · left-rail tabs + right pane (Shop-by-Category style) -->
   <div id="filterSheet" class="sheet">
     <div class="sheet-bg" data-close></div>
-    <div class="sheet-pnl">
-      <div class="sheet-h"><div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div><div class="flex items-center justify-between"><div class="text-[18px] font-extrabold">Filters</div><button data-close class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button></div></div>
-      <div class="sheet-list" id="filterBody"></div>
-      <div class="sheet-cta"><button id="filterApply">Show results</button></div>
+    <div class="sheet-pnl" style="display:flex;flex-direction:column;height:76vh;max-height:76vh">
+      <div class="sheet-h" style="flex-shrink:0"><div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div><div class="flex items-center justify-between"><div class="text-[18px] font-extrabold">Filters</div><button data-close class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button></div></div>
+      <div style="flex:1;min-height:0;display:flex;border-top:1px solid #F1F5F9">
+        <div id="filterTabs" style="width:114px;background:#F8FAFC;overflow-y:auto;border-right:1px solid #F1F5F9;flex-shrink:0"></div>
+        <div id="filterPane" style="flex:1;min-width:0;overflow-y:auto"></div>
+      </div>
+      <div style="flex-shrink:0;display:flex;gap:10px;padding:12px 16px calc(env(safe-area-inset-bottom,0px) + 14px);border-top:1px solid #F1F5F9">
+        <button id="filterClear" style="flex:1;height:48px;border-radius:12px;background:#FFFFFF;border:1.5px solid #E5E7EB;color:#475569;font-size:14px;font-weight:800;cursor:pointer">Clear all</button>
+        <button data-close style="flex:1;height:48px;border-radius:12px;background:#059669;border:0;color:#fff;font-size:14px;font-weight:800;cursor:pointer">Apply</button>
+      </div>
     </div>
   </div>
 
   <script>
     const PRODUCTS = [
-      { n:'Humic + Fulvic',   t:'Bio-stimulant',          s:'500 ml', p:276, m:390, r:4.8, cat:'fertilizer', best:true,  crops:'all', img:'https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg' },
-      { n:'Chakrawarti ZC',   t:'Insecticide',            s:'100 ml', p:358, m:495, r:4.7, cat:'pesticide',  best:true,  crops:['tomato','chilli','cotton','brinjal','okra','maize','paddy','onion'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp' },
-      { n:'NPK 19-19-19',     t:'Water-soluble fertilizer',s:'1 kg',  p:330, m:0,   r:4.6, cat:'fertilizer', best:true,  crops:'all', img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp' },
-      { n:'Antivirus',        t:'Bio bactericide + virucide',s:'250 ml',p:327,m:425, r:4.5, cat:'pesticide',  best:true,  crops:['tomato','chilli','papaya','potato'], img:'../assets/AntiVirus_nobg.png' },
-      { n:'Chakraveer 18.5%', t:'Chlorantraniliprole 18.5% SC',s:'100 ml',p:440,m:610,r:4.7,cat:'pesticide', best:true,  crops:['paddy','maize','sugarcane','cotton','wheat'], img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp' },
-      { n:'Bhumiraja',        t:'Soil conditioner',       s:'1 kg',   p:245, m:320, r:4.4, cat:'fertilizer', best:false, crops:'all', img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' },
-      { n:'Triple Attack',    t:'Fungicide combo',        s:'250 g',  p:550, m:720, r:4.3, cat:'fungicide',  best:true,  crops:['tomato','chilli','potato','grapes','onion'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp' },
-      { n:'Chakraveer Combo', t:'Insecticide + booster',  s:'Combo',  p:690, m:980, r:4.6, cat:'combo',      best:true,  crops:['paddy','maize','cotton'], img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp' },
-      { n:'NPK Booster',      t:'Foliar fertilizer',      s:'500 g',  p:210, m:280, r:4.2, cat:'fertilizer', best:false, crops:'all', img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp' },
-      { n:'Weed Clear',       t:'Selective herbicide',    s:'500 ml', p:395, m:520, r:4.1, cat:'herbicide',  best:false, crops:['wheat','maize','sugarcane','paddy','soyabean'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp' },
-      { n:'Humic Gold',       t:'Soil + root tonic',      s:'1 L',    p:430, m:560, r:4.5, cat:'fertilizer', best:false, crops:'all', img:'https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg' },
-      { n:'Anti-Fungus Pro',  t:'Systemic fungicide',     s:'250 ml', p:360, m:470, r:4.3, cat:'fungicide',  best:false, crops:['tomato','chilli','potato','grapes'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' }
+      { n:'Humic + Fulvic',   t:'Bio-stimulant',          s:'500 ml', p:276, m:390, r:4.8, cat:'fertilizer', sub:'bio',      best:true,  crops:'all', tags:['bestseller','recent','bought','mostselling'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg' },
+      { n:'Chakrawarti ZC',   t:'Insecticide',            s:'100 ml', p:358, m:495, r:4.7, cat:'pesticide',  sub:'chemical', best:true,  crops:['tomato','chilli','cotton','brinjal','okra','maize','paddy','onion'], tags:['bestseller','recent','mostselling'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp' },
+      { n:'NPK 19-19-19',     t:'Water-soluble fertilizer',s:'1 kg',  p:330, m:0,   r:4.6, cat:'fertilizer', sub:'npk',      best:true,  crops:'all', tags:['bestseller','recent','bought'], img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp' },
+      { n:'Antivirus',        t:'Bio bactericide + virucide',s:'250 ml',p:327,m:425, r:4.5, cat:'pesticide',  sub:'bio',      best:true,  crops:['tomato','chilli','papaya','potato'], tags:['bestseller','recent'], img:'../assets/AntiVirus_nobg.png' },
+      { n:'Chakraveer 18.5%', t:'Chlorantraniliprole 18.5% SC',s:'100 ml',p:440,m:610,r:4.7,cat:'pesticide', sub:'chemical', best:true,  crops:['paddy','maize','sugarcane','cotton','wheat'], tags:['bestseller','mostselling'], img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp' },
+      { n:'Bhumiraja',        t:'Soil conditioner',       s:'1 kg',   p:245, m:320, r:4.4, cat:'fertilizer', sub:'organic',  best:false, crops:'all', tags:['recent','bought'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' },
+      { n:'Triple Attack',    t:'Fungicide combo',        s:'250 g',  p:550, m:720, r:4.3, cat:'fungicide',  sub:'chemical', best:true,  crops:['tomato','chilli','potato','grapes','onion'], tags:['bestseller','mostselling'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp' },
+      { n:'Chakraveer Combo', t:'Insecticide + booster',  s:'Combo',  p:690, m:980, r:4.6, cat:'combo',      sub:'combo',    best:true,  crops:['paddy','maize','cotton'], tags:['bestseller'], img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp' },
+      { n:'NPK Booster',      t:'Foliar fertilizer',      s:'500 g',  p:210, m:280, r:4.2, cat:'fertilizer', sub:'npk',      best:false, crops:'all', tags:['bought'], img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp' },
+      { n:'Weed Clear',       t:'Selective herbicide',    s:'500 ml', p:395, m:520, r:4.1, cat:'herbicide',  sub:'herb',     best:false, crops:['wheat','maize','sugarcane','paddy','soyabean'], tags:['mostselling'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp' },
+      { n:'Humic Gold',       t:'Soil + root tonic',      s:'1 L',    p:430, m:560, r:4.5, cat:'fertilizer', sub:'bio',      best:false, crops:'all', tags:['bought'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg' },
+      { n:'Anti-Fungus Pro',  t:'Systemic fungicide',     s:'250 ml', p:360, m:470, r:4.3, cat:'fungicide',  sub:'chemical', best:false, crops:['tomato','chilli','potato','grapes'], tags:[], img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' }
     ];
     const cropLabel = k => k.charAt(0).toUpperCase() + k.slice(1);
     const CATS = { pesticide:'Pesticide', fungicide:'Fungicide', fertilizer:'Fertilizer', herbicide:'Herbicide', combo:'Combo' };
@@ -155,25 +184,68 @@
       { k:'price-h',label:'Price — High to Low', ic:'fa-arrow-down-wide-short' }
     ];
 
+    const SUBS = { bio:'Bio', chemical:'Chemical', npk:'NPK', organic:'Organic', herb:'Herbicide', combo:'Combo' };
+    const TAGS = { recent:'Recently viewed', bestseller:'Bestseller', bought:'Previously bought', mostselling:'Most selling in Indore' };
+
+    const FILTER_SECTIONS = [
+      { key:'tags', label:'Tags', title:'Browse by', multi:true, opts:[
+        { val:'recent',      label:'Recently viewed',        icon:'fa-clock-rotate-left', color:'#7C3AED', bg:'#F3E8FF' },
+        { val:'bestseller',  label:'Bestseller',             icon:'fa-crown',             color:'#CA8A04', bg:'#FEF3C7' },
+        { val:'bought',      label:'Previously bought',      icon:'fa-rotate-left',       color:'#0891B2', bg:'#CFFAFE' },
+        { val:'mostselling', label:'Most selling in Indore', icon:'fa-fire',              color:'#DC2626', bg:'#FEE2E2' }
+      ] },
+      { key:'category', label:'Category', title:'Category', multi:true, opts:[
+        { val:'pesticide',  label:'Pesticide',  icon:'fa-bug',          color:'#DC2626', bg:'#FEE2E2' },
+        { val:'fungicide',  label:'Fungicide',  icon:'fa-shield-virus', color:'#7C3AED', bg:'#F3E8FF' },
+        { val:'fertilizer', label:'Fertilizer', icon:'fa-seedling',     color:'#16A34A', bg:'#DCFCE7' },
+        { val:'herbicide',  label:'Herbicide',  icon:'fa-wheat-awn',    color:'#CA8A04', bg:'#FEF3C7' },
+        { val:'combo',      label:'Combo',      icon:'fa-box',          color:'#2563EB', bg:'#DBEAFE' }
+      ] },
+      { key:'sub', label:'Subcategory', title:'Subcategory', multi:true, opts:[
+        { val:'bio',      label:'Bio',        icon:'fa-leaf',       color:'#16A34A', bg:'#DCFCE7' },
+        { val:'chemical', label:'Chemical',   icon:'fa-flask',      color:'#2563EB', bg:'#DBEAFE' },
+        { val:'npk',      label:'NPK',        icon:'fa-flask-vial', color:'#DB2777', bg:'#FCE7F3' },
+        { val:'organic',  label:'Organic',    icon:'fa-recycle',    color:'#16A34A', bg:'#DCFCE7' },
+        { val:'herb',     label:'Herbicide',  icon:'fa-wheat-awn',  color:'#CA8A04', bg:'#FEF3C7' },
+        { val:'combo',    label:'Combo',      icon:'fa-box',        color:'#2563EB', bg:'#DBEAFE' }
+      ] },
+      { key:'crop', label:'Crop', title:'Crop', multi:true, opts:[
+        { val:'tomato', label:'Tomato', emoji:'🍅', bg:'#FEE2E2' }, { val:'chilli', label:'Chilli', emoji:'🌶', bg:'#FFEDD5' },
+        { val:'wheat', label:'Wheat', emoji:'🌾', bg:'#FEF3C7' }, { val:'maize', label:'Maize', emoji:'🌽', bg:'#FEF9C3' },
+        { val:'onion', label:'Onion', emoji:'🧅', bg:'#FCE7F3' }, { val:'potato', label:'Potato', emoji:'🥔', bg:'#FEF3C7' },
+        { val:'cotton', label:'Cotton', emoji:'☁️', bg:'#F1F5F9' }, { val:'paddy', label:'Paddy', emoji:'🌾', bg:'#FEF3C7' }, { val:'sugarcane', label:'Sugarcane', emoji:'🎋', bg:'#DCFCE7' }
+      ] },
+      { key:'rating', label:'Rating', title:'Customer Rating', multi:false, opts:[
+        { val:'4.5', label:'4.5★ & above', icon:'fa-star', color:'#F59E0B', bg:'#FEF3C7' },
+        { val:'4',   label:'4★ & above',   icon:'fa-star', color:'#F59E0B', bg:'#FEF3C7' },
+        { val:'3.5', label:'3.5★ & above', icon:'fa-star', color:'#F59E0B', bg:'#FEF3C7' },
+        { val:'3',   label:'3★ & above',   icon:'fa-star', color:'#F59E0B', bg:'#FEF3C7' }
+      ] },
+      { key:'price', label:'Price', title:'Price Range (₹)', multi:false, kind:'slider', min:0, max:1000, step:25, opts:[] },
+      { key:'discount', label:'Discount', title:'Discount %', multi:false, opts:[
+        { val:'10', label:'10% & above', icon:'fa-percent', color:'#CA8A04', bg:'#FEF3C7' },
+        { val:'20', label:'20% & above', icon:'fa-percent', color:'#D97706', bg:'#FDE68A' },
+        { val:'30', label:'30% & above', icon:'fa-percent', color:'#BE185D', bg:'#FBCFE8' }
+      ] }
+    ];
+
     let sort = 'pop', pendSort = 'pop';
-    const catSel = new Set();
-    const cropSel = new Set();
-    let ratingSel = '';
-    let pendCat = new Set(), pendRating = '';
+    const filters = { tags:new Set(), category:new Set(), sub:new Set(), crop:new Set(), rating:null, price:null, discount:null };
+    let activeFilterTab = 'tags';
 
     function offPct(p){ return p.m ? Math.round((1 - p.p / p.m) * 100) : 0; }
-
-    const RECENT = ['Humic + Fulvic','Chakrawarti ZC','NPK 19-19-19','Antivirus','Bhumiraja'];
-    let recentView = false;
     const cart = {};   // name -> { qty, price }
 
     function renderGrid(){
       let list = PRODUCTS.slice();
-      if (recentView) list = RECENT.map(n => PRODUCTS.find(p => p.n === n)).filter(Boolean);
       if (sort === 'best') list = list.filter(p => p.best).concat(list.filter(p => !p.best));
-      if (catSel.size) list = list.filter(p => catSel.has(p.cat));
-      if (cropSel.size) list = list.filter(p => p.crops === 'all' || (Array.isArray(p.crops) && p.crops.some(c => cropSel.has(c))));
-      if (ratingSel) list = list.filter(p => p.r >= parseFloat(ratingSel));
+      if (filters.tags.size) list = list.filter(p => p.tags && p.tags.some(t => filters.tags.has(t)));
+      if (filters.category.size) list = list.filter(p => filters.category.has(p.cat));
+      if (filters.sub.size) list = list.filter(p => filters.sub.has(p.sub));
+      if (filters.crop.size) list = list.filter(p => p.crops === 'all' || (Array.isArray(p.crops) && p.crops.some(c => filters.crop.has(c))));
+      if (filters.rating) { const thr = parseFloat(filters.rating); list = list.filter(p => p.r >= thr); }
+      if (filters.price) list = list.filter(p => p.p >= filters.price.min && p.p <= filters.price.max);
+      if (filters.discount) { const d = parseInt(filters.discount, 10); list = list.filter(p => offPct(p) >= d); }
       if (sort === 'rating') list.sort((a,b) => b.r - a.r);
       else if (sort === 'off') list.sort((a,b) => offPct(b) - offPct(a));
       else if (sort === 'price-l') list.sort((a,b) => a.p - b.p);
@@ -213,28 +285,36 @@
       else { bar.style.display = 'none'; bar.classList.remove('compact'); }
     }
 
+    function chipLabel(section, val){
+      if (section === 'tags') return TAGS[val] || val;
+      if (section === 'category') return CATS[val] || val;
+      if (section === 'sub') return SUBS[val] || val;
+      if (section === 'crop') return '🌱 ' + cropLabel(val);
+      return val;
+    }
+    function anyFilter(){ return filters.tags.size || filters.category.size || filters.sub.size || filters.crop.size || filters.rating || filters.price || filters.discount; }
     function renderChips(){
       const chips = [];
-      if (recentView) chips.push({ id:'recent', label:'Recently viewed' });
       if (sort !== 'pop') { const so = SORTS.find(s => s.k === sort); if (so) chips.push({ id:'sort', label:'Sort: ' + so.label }); }
-      catSel.forEach(c => chips.push({ id:'cat:' + c, label:CATS[c] }));
-      cropSel.forEach(c => chips.push({ id:'crop:' + c, label:'🌱 ' + cropLabel(c) }));
-      if (ratingSel) chips.push({ id:'rating', label:ratingSel + '★ & above' });
+      ['tags','category','sub','crop'].forEach(sec => filters[sec].forEach(v => chips.push({ id:sec + ':' + v, label:chipLabel(sec, v) })));
+      if (filters.rating) chips.push({ id:'rating', label:filters.rating + '★ & above' });
+      if (filters.price) chips.push({ id:'price', label:'₹' + filters.price.min + '–₹' + filters.price.max });
+      if (filters.discount) chips.push({ id:'discount', label:filters.discount + '% off+' });
       const row = document.getElementById('chipRow');
       row.innerHTML = chips.map(c => '<span class="achip">' + c.label + '<button class="achip-close" data-rm="' + c.id + '"><i class="fa-solid fa-xmark"></i></button></span>').join('');
       row.querySelectorAll('[data-rm]').forEach(b => b.addEventListener('click', () => {
-        const id = b.dataset.rm;
-        if (id === 'recent') recentView = false;
-        else if (id === 'sort') sort = 'pop';
-        else if (id === 'rating') ratingSel = '';
-        else if (id.indexOf('cat:') === 0) catSel.delete(id.slice(4));
-        else if (id.indexOf('crop:') === 0) cropSel.delete(id.slice(5));
-        syncPills(); renderChips(); renderGrid();
+        const id = b.dataset.rm, i = id.indexOf(':');
+        if (id === 'sort') sort = 'pop';
+        else if (id === 'rating') filters.rating = null;
+        else if (id === 'price') filters.price = null;
+        else if (id === 'discount') filters.discount = null;
+        else if (i > 0) filters[id.slice(0, i)].delete(id.slice(i + 1));
+        syncPills(); renderChips(); renderGrid(); renderFilterTabs(); renderFilterPane();
       }));
     }
     function syncPills(){
       document.getElementById('sortBtn').classList.toggle('on', sort !== 'pop');
-      document.getElementById('filterBtn').classList.toggle('on', catSel.size > 0 || cropSel.size > 0 || !!ratingSel || recentView);
+      document.getElementById('filterBtn').classList.toggle('on', !!anyFilter());
     }
 
     function openSheet(id){ document.getElementById(id).classList.add('open'); }
@@ -244,20 +324,69 @@
       wrap.innerHTML = SORTS.map(s => '<div class="opt-row ' + (s.k === pendSort ? 'on' : '') + '" data-sort="' + s.k + '"><span style="width:22px;text-align:center;color:#94A3B8"><i class="fa-solid ' + s.ic + '"></i></span><span class="lbl">' + s.label + '</span><span class="rad"></span></div>').join('');
       wrap.querySelectorAll('[data-sort]').forEach(r => r.addEventListener('click', () => { pendSort = r.dataset.sort; sort = pendSort; renderSortList(); syncPills(); renderChips(); renderGrid(); setTimeout(() => closeSheet('sortSheet'), 150); }));
     }
-    function renderFilterBody(){
-      const body = document.getElementById('filterBody');
-      let html = '<div class="sec-h">Category</div>';
-      html += Object.keys(CATS).map(c => '<div class="opt-row ' + (pendCat.has(c) ? 'on' : '') + '" data-cat="' + c + '"><span class="chk"><i class="fa-solid fa-check"></i></span><span class="lbl">' + CATS[c] + '</span></div>').join('');
-      html += '<div class="sec-h">Customer rating</div>';
-      [['4','4★ & above'],['3','3★ & above']].forEach(o => { html += '<div class="opt-row ' + (pendRating === o[0] ? 'on' : '') + '" data-rating="' + o[0] + '"><span class="rad"></span><span class="lbl">' + o[1] + '</span></div>'; });
-      body.innerHTML = html;
-      body.querySelectorAll('[data-cat]').forEach(r => r.addEventListener('click', () => { const c = r.dataset.cat; if (pendCat.has(c)) pendCat.delete(c); else pendCat.add(c); renderFilterBody(); }));
-      body.querySelectorAll('[data-rating]').forEach(r => r.addEventListener('click', () => { pendRating = (pendRating === r.dataset.rating) ? '' : r.dataset.rating; renderFilterBody(); }));
+
+    // ===== Filter modal · left-rail tabs + right pane (Shop-by-Category style) =====
+    function renderFilterTabs(){
+      const rail = document.getElementById('filterTabs');
+      rail.innerHTML = FILTER_SECTIONS.map(s => {
+        const f = filters[s.key];
+        const hasActive = (f instanceof Set) ? f.size > 0 : !!f;
+        return '<button class="filter-tab ' + (s.key === activeFilterTab ? 'on' : '') + (hasActive ? ' has-active' : '') + '" data-ftab="' + s.key + '">' + s.label + '<span class="ft-dot"></span></button>';
+      }).join('');
+      rail.querySelectorAll('[data-ftab]').forEach(btn => btn.addEventListener('click', () => { activeFilterTab = btn.dataset.ftab; renderFilterTabs(); renderFilterPane(); }));
+    }
+    function renderFilterPane(){
+      const pane = document.getElementById('filterPane');
+      const section = FILTER_SECTIONS.find(s => s.key === activeFilterTab) || FILTER_SECTIONS[0];
+      if (section.kind === 'slider') { renderPriceSlider(pane, section); return; }
+      const state = filters[section.key];
+      const isOn = (val) => section.multi ? state.has(val) : state === val;
+      const ic = (o) => o.emoji
+        ? '<div class="fopt-ic" style="background:' + o.bg + ';font-size:20px">' + o.emoji + '</div>'
+        : '<div class="fopt-ic" style="background:' + o.bg + '"><i class="fa-solid ' + o.icon + '" style="color:' + o.color + '"></i></div>';
+      pane.innerHTML = '<div class="fpane-title">' + section.title + '</div>'
+        + section.opts.map(o => '<div class="fopt-row ' + (isOn(o.val) ? 'on' : '') + '" data-fopt="' + section.key + '" data-fval="' + o.val + '">' + ic(o) + '<span class="fopt-lbl">' + o.label + '</span><span class="fopt-radio"></span></div>').join('');
+      pane.querySelectorAll('[data-fopt]').forEach(row => row.addEventListener('click', () => {
+        const k = row.dataset.fopt, v = row.dataset.fval, sec = FILTER_SECTIONS.find(s => s.key === k);
+        if (sec.multi) { if (filters[k].has(v)) filters[k].delete(v); else filters[k].add(v); }
+        else { filters[k] = filters[k] === v ? null : v; }
+        renderFilterTabs(); renderFilterPane(); renderChips(); syncPills(); renderGrid();
+      }));
+    }
+    function renderPriceSlider(pane, section){
+      const cur = filters.price || { min:section.min, max:section.max };
+      pane.innerHTML = '<div class="fpane-title">' + section.title + '</div><div style="padding:6px 18px 18px">'
+        + '<div class="flex items-center gap-2 mb-4"><div class="flex-1"><label class="text-[10px] font-bold" style="color:#94A3B8;letter-spacing:.08em;text-transform:uppercase">Min ₹</label><input type="number" id="pminInp" inputmode="numeric" value="' + cur.min + '" class="price-num-input mt-1"></div><div class="text-[#94A3B8] font-bold pt-5">—</div><div class="flex-1"><label class="text-[10px] font-bold" style="color:#94A3B8;letter-spacing:.08em;text-transform:uppercase">Max ₹</label><input type="number" id="pmaxInp" inputmode="numeric" value="' + cur.max + '" class="price-num-input mt-1"></div></div>'
+        + '<div class="price-slider"><div class="ps-track"></div><div id="psFill" class="ps-fill"></div><input type="range" id="psMin" min="' + section.min + '" max="' + section.max + '" step="' + section.step + '" value="' + cur.min + '" class="ps-input"><input type="range" id="psMax" min="' + section.min + '" max="' + section.max + '" step="' + section.step + '" value="' + cur.max + '" class="ps-input"></div>'
+        + '<div class="flex items-center justify-between mt-3 text-[10.5px] font-semibold" style="color:#94A3B8"><span>₹' + section.min + '</span><span>₹' + section.max + '</span></div></div>';
+      const minSl = pane.querySelector('#psMin'), maxSl = pane.querySelector('#psMax'), minIn = pane.querySelector('#pminInp'), maxIn = pane.querySelector('#pmaxInp'), fill = pane.querySelector('#psFill');
+      const span = section.max - section.min;
+      function clamp(n){ return Math.max(section.min, Math.min(section.max, n)); }
+      function paint(src){
+        let lo = parseInt(minSl.value, 10), hi = parseInt(maxSl.value, 10);
+        if (lo > hi - section.step) { if (src === 'min' || src === 'minIn') lo = hi - section.step; else hi = lo + section.step; }
+        minSl.value = lo; maxSl.value = hi;
+        if (src !== 'minIn') minIn.value = lo;
+        if (src !== 'maxIn') maxIn.value = hi;
+        fill.style.left = ((lo - section.min) / span * 100) + '%';
+        fill.style.right = (100 - (hi - section.min) / span * 100) + '%';
+        filters.price = (lo === section.min && hi === section.max) ? null : { min:lo, max:hi };
+        renderFilterTabs(); renderChips(); syncPills(); renderGrid();
+      }
+      minSl.addEventListener('input', () => paint('min'));
+      maxSl.addEventListener('input', () => paint('max'));
+      minIn.addEventListener('input', () => { const v = parseInt(minIn.value, 10); if (isNaN(v)) return; minSl.value = clamp(v); paint('minIn'); });
+      maxIn.addEventListener('input', () => { const v = parseInt(maxIn.value, 10); if (isNaN(v)) return; maxSl.value = clamp(v); paint('maxIn'); });
+      paint();
     }
 
     document.getElementById('sortBtn').addEventListener('click', () => { pendSort = sort; renderSortList(); openSheet('sortSheet'); });
-    document.getElementById('filterBtn').addEventListener('click', () => { pendCat = new Set(catSel); pendRating = ratingSel; renderFilterBody(); openSheet('filterSheet'); });
-    document.getElementById('filterApply').addEventListener('click', () => { catSel.clear(); pendCat.forEach(c => catSel.add(c)); ratingSel = pendRating; syncPills(); renderChips(); renderGrid(); closeSheet('filterSheet'); });
+    document.getElementById('filterBtn').addEventListener('click', () => { renderFilterTabs(); renderFilterPane(); openSheet('filterSheet'); });
+    document.getElementById('filterClear').addEventListener('click', () => {
+      filters.tags.clear(); filters.category.clear(); filters.sub.clear(); filters.crop.clear();
+      filters.rating = null; filters.price = null; filters.discount = null;
+      renderFilterTabs(); renderFilterPane(); renderChips(); syncPills(); renderGrid();
+    });
     document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => { closeSheet('sortSheet'); closeSheet('filterSheet'); }));
 
     // Cart bar wraps to a centered pill on scroll (home pattern)
@@ -267,16 +396,14 @@
       bar.classList.toggle('compact', (window.scrollY || document.documentElement.scrollTop) > 60);
     }, { passive: true });
 
-    // Query params · Bestsellers sort (from home See-all) and Recently-viewed view · title stays "Products", the state shows as a chip
+    // Query params · sort=bestsellers, view=recent (tag), category (cat/cats), crop (crop/crops)
     const qp = new URLSearchParams(location.search);
     if (qp.get('sort') === 'bestsellers' || qp.get('sort') === 'best') { sort = 'best'; pendSort = 'best'; }
-    if (qp.get('view') === 'recent') { recentView = true; }
-    if (qp.get('cat') && CATS[qp.get('cat')]) { catSel.add(qp.get('cat')); }
-    // Category filter(s) auto-applied — single ?cat= or comma list ?cats=pesticide,fungicide (from the crop-problem "View all")
-    if (qp.get('cats')) qp.get('cats').split(',').forEach(c => { if (CATS[c]) catSel.add(c); });
-    // Crop filter auto-applied from Shop-by-Crop "View all" (?crop=tomato or ?crops=a,b)
-    if (qp.get('crop')) cropSel.add(qp.get('crop'));
-    if (qp.get('crops')) qp.get('crops').split(',').forEach(c => { if (c) cropSel.add(c); });
+    if (qp.get('view') === 'recent') filters.tags.add('recent');
+    if (qp.get('cat') && CATS[qp.get('cat')]) filters.category.add(qp.get('cat'));
+    if (qp.get('cats')) qp.get('cats').split(',').forEach(c => { if (CATS[c]) filters.category.add(c); });
+    if (qp.get('crop')) filters.crop.add(qp.get('crop'));
+    if (qp.get('crops')) qp.get('crops').split(',').forEach(c => { if (c) filters.crop.add(c); });
 
     syncPills(); renderChips(); renderGrid(); updateCartBar();
   </script>

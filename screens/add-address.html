@@ -66,18 +66,7 @@
   </button>
   <div class="flex-1 min-w-0 leading-tight">
     <h1 class="text-[22px] font-extrabold">Add new address</h1>
-    <div class="text-[12px] mt-0.5" style="color:#64748B">We use this for delivery</div>
   </div>
-</div>
-
-<!-- Locate-me banner -->
-<div class="locate mt-2" onclick="navigator.geolocation && navigator.geolocation.getCurrentPosition && navigator.geolocation.getCurrentPosition(()=>{},()=>{})">
-  <span class="ic"><i class="fa-solid fa-location-crosshairs"></i></span>
-  <div class="body">
-    <div class="a">Use my current location</div>
-    <div class="b">Auto-fill pincode + state from GPS</div>
-  </div>
-  <i class="fa-solid fa-chevron-right arrow"></i>
 </div>
 
 <!-- Contact + address form · grouped into a single design-system card with field-by-field separators -->
@@ -104,17 +93,10 @@
 <div class="sec-title">Address</div>
 <div class="card">
   <div class="field">
-    <span class="field-lbl">House / Plot · Building</span>
-    <div class="field-in">
-      <i class="fa-solid fa-house lead"></i>
-      <input id="house" type="text" placeholder="Plot 22, Khasra No. 145"/>
-    </div>
-  </div>
-  <div class="field">
-    <span class="field-lbl">Area · Village · Landmark</span>
+    <span class="field-lbl">Address</span>
     <div class="field-in row-2">
-      <i class="fa-solid fa-map-location-dot lead"></i>
-      <textarea id="area" placeholder="Village Bawadia, near SBI branch"></textarea>
+      <i class="fa-solid fa-house lead"></i>
+      <textarea id="house" placeholder="House / Plot, area, village, landmark"></textarea>
     </div>
   </div>
   <div class="field">
@@ -193,9 +175,9 @@
   // Edit mode (?edit=1) · same form, prefilled, retitled
   (function(){
     if (new URLSearchParams(location.search).get('edit') !== '1') return;
-    var h1 = document.querySelector('h1'); if (h1) { h1.textContent = 'Edit address'; var sub = h1.nextElementSibling; if (sub) sub.textContent = 'Update your delivery address'; }
+    var h1 = document.querySelector('h1'); if (h1) h1.textContent = 'Edit address';
     var set = function(id, v){ var e = document.getElementById(id); if (e) e.value = v; };
-    set('house', 'Plot 22, Khasra No. 145'); set('area', 'Village Bawadia, near SBI branch');
+    set('house', 'Plot 22, Khasra No. 145, Village Bawadia, near SBI branch');
     set('pin', '452001'); set('city', 'Indore'); set('state', 'Madhya Pradesh');
   })();
 </script>

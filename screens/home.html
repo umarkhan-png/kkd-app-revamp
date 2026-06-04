@@ -3773,9 +3773,9 @@
           + '<div style="font-size:11.5px;color:rgba(255,255,255,0.5);margin-top:16px">Ref: KKD-USR-4471</div>';
         document.body.appendChild(ov);
       } else if (st.nonservice) {
-        // top section reads red "Not serviceable" — greeting (via rotator) + the address line
+        // only the flipping label (via the greeting rotator) reads red "Not serviceable"; the address line below stays normal
         var addr = document.getElementById('homeAddr');
-        if (addr) addr.innerHTML = '<span style="color:#DC2626">Not serviceable · 123456</span> <i class="fa-solid fa-chevron-down text-[10px] ml-0.5" style="color:#DC2626"></i>';
+        if (addr) addr.innerHTML = 'Indore 123456 <i class="fa-solid fa-chevron-down text-[10px] text-[#64748B] ml-0.5"></i>';
       }
     })();
     // Chakrawarti ZC cards open the product-aware Chakrawarti PDP (so the banned-in-state case is viewable)

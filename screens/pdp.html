@@ -621,9 +621,15 @@
     /* Review-photo lightbox · white app-page base · single viewer + grid "View all" mode */
     .rev-lb{position:fixed;inset:0;z-index:140;background:#FFFFFF;display:none;flex-direction:column}
     .rev-lb.open{display:flex}
-    .rev-lb-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;flex-shrink:0;border-bottom:1px solid #F1F5F9}
-    .rev-lb-bar button{width:38px;height:38px;border-radius:50%;background:#F1F5F9;border:0;color:#0F172A;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .rev-lb-bar{display:flex;align-items:center;gap:10px;padding:12px 14px;flex-shrink:0;border-bottom:1px solid #F1F5F9}
+    .rev-lb-bar button{width:38px;height:38px;border-radius:50%;background:#F1F5F9;border:0;color:#0F172A;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
     .rev-lb-count{color:#0F172A;font-size:13.5px;font-weight:700}
+    .rev-lb-title{color:#0F172A;font-size:15px;font-weight:800}
+    /* Bar adapts to mode · single viewer = close + count · gallery page = back + title */
+    .rev-lb .rlb-back,.rev-lb .rlb-title{display:none}
+    .rev-lb.grid .rlb-close,.rev-lb.grid .rlb-count{display:none}
+    .rev-lb.grid .rlb-back{display:flex}
+    .rev-lb.grid .rlb-title{display:inline}
     .rev-lb-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;position:relative;padding:8px;background:#F8FAFC;touch-action:pan-y;overflow:hidden}
     .rev-lb-stage img{max-width:100%;max-height:100%;object-fit:contain;border-radius:10px;user-select:none;-webkit-user-drag:none}
     .rev-lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:#FFFFFF;border:1px solid #E5E7EB;color:#0F172A;font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(15,23,42,0.12);z-index:2}
@@ -632,14 +638,17 @@
     .rev-lb-strip img{width:54px;height:54px;border-radius:8px;object-fit:cover;flex-shrink:0;opacity:.45;cursor:pointer;border:2px solid transparent}
     .rev-lb-strip img.on{opacity:1;border-color:#059669}
     .rev-lb-grid{display:none;flex:1;min-height:0;overflow-y:auto;padding:12px 16px 24px;grid-template-columns:repeat(3,1fr);gap:8px;align-content:start}
-    .rev-lb-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;cursor:pointer;border:1px solid #E5E7EB}
+    .rev-lb-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;cursor:pointer;border:1px solid #E5E7EB;display:block}
+    .rev-lb-grid .rlb-cell{position:relative;padding:0;border:0;background:none;cursor:pointer}
+    .rev-lb-grid .rlb-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+    .rev-lb-grid .rlb-play i{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.92);color:#0F172A;display:flex;align-items:center;justify-content:center;font-size:11px;padding-left:2px;box-shadow:0 2px 6px rgba(0,0,0,.18)}
     .rev-lb.grid .rev-lb-stage,.rev-lb.grid .rev-lb-strip{display:none}
     .rev-lb.grid .rev-lb-grid{display:grid}
   </style>
   <div class="mt-4">
     <div class="flex items-center justify-between mb-2">
       <div class="text-[13.5px] font-extrabold text-[#0F172A]">Photos &amp; videos from customers</div>
-      <button id="viewAllPhotos" class="text-[12px] font-semibold flex items-center gap-1" style="color:#64748B">View all <i class="fa-solid fa-chevron-right text-[9px]"></i></button>
+      <button id="viewAllPhotos" class="text-[12.5px] font-bold" style="color:#059669">View all</button>
     </div>
     <div class="overflow-x-auto scrollx -mx-4 px-4" id="custScroll">
       <div class="flex gap-2.5 min-w-max" id="custRow">
@@ -691,9 +700,10 @@
   <!-- Review-photo lightbox · "View all" opens a grid of every uploaded photo; tapping any review/customer photo opens the enlarged single viewer with prev/next + thumb strip -->
   <div id="revLightbox" class="rev-lb" aria-hidden="true">
     <div class="rev-lb-bar">
-      <button id="rlbGrid" aria-label="View all"><i class="fa-solid fa-grip"></i></button>
-      <span class="rev-lb-count" id="rlbCount">1 / 1</span>
-      <button id="rlbClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      <button class="rlb-back" id="rlbBack" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></button>
+      <button class="rlb-close" id="rlbClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      <span class="rev-lb-title rlb-title" id="rlbTitle"></span>
+      <span class="rev-lb-count rlb-count" id="rlbCount">1 / 1</span>
     </div>
     <div class="rev-lb-stage">
       <button class="rev-lb-nav prev" id="rlbPrev" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>
@@ -708,41 +718,55 @@
       const lb = document.getElementById('revLightbox');
       if (!lb) return;
       const imgEl = document.getElementById('rlbImg'), countEl = document.getElementById('rlbCount'),
-            strip = document.getElementById('rlbStrip'), gridView = document.getElementById('rlbGridView');
-      let photos = [], cur = 0;
+            titleEl = document.getElementById('rlbTitle'), strip = document.getElementById('rlbStrip'),
+            gridView = document.getElementById('rlbGridView');
+      let media = [], cur = 0;
       const big = s => s.replace(/w=\d+/, 'w=1200');
-      // Gather every uploaded review photo currently in the DOM (customer strip + per-review cards), de-duped
+      // Gather every uploaded review photo + video in the DOM (customer strip + per-review cards), de-duped, tagged photo vs video
       function collect(){
-        const out = [];
-        document.querySelectorAll('#custRow img, #reviewList img').forEach(im => { if (out.indexOf(im.src) < 0) out.push(im.src); });
+        const out = [], seen = {};
+        document.querySelectorAll('#custRow .cust-tile').forEach(t => {
+          const im = t.querySelector('img'); if (!im || seen[im.src]) return;
+          seen[im.src] = 1; out.push({ src: im.src, vid: !!t.querySelector('.play') });
+        });
+        document.querySelectorAll('#reviewList img').forEach(im => {
+          if (seen[im.src]) return; seen[im.src] = 1; out.push({ src: im.src, vid: false });
+        });
         return out;
       }
+      function titleText(){
+        const np = media.filter(m => !m.vid).length, nv = media.length - np;
+        let s = np + ' photo' + (np === 1 ? '' : 's');
+        if (nv) s += ' · ' + nv + ' video' + (nv === 1 ? '' : 's');
+        return s;
+      }
+      function idxOf(src){ for (let i = 0; i < media.length; i++) if (media[i].src === src) return i; return 0; }
       function renderStrip(){
-        strip.innerHTML = photos.map((s, i) => '<img src="' + s + '" data-i="' + i + '" class="' + (i === cur ? 'on' : '') + '">').join('');
+        strip.innerHTML = media.map((m, i) => '<img src="' + m.src + '" data-i="' + i + '" class="' + (i === cur ? 'on' : '') + '">').join('');
         strip.querySelectorAll('img').forEach(t => t.addEventListener('click', () => show(+t.dataset.i)));
         const on = strip.querySelector('img.on'); if (on) on.scrollIntoView({ inline:'center', block:'nearest' });
       }
       function renderGrid(){
-        gridView.innerHTML = photos.map((s, i) => '<img src="' + s + '" data-i="' + i + '">').join('');
-        gridView.querySelectorAll('img').forEach(t => t.addEventListener('click', () => { lb.classList.remove('grid'); show(+t.dataset.i); }));
+        gridView.innerHTML = media.map((m, i) => '<button class="rlb-cell" data-i="' + i + '"><img src="' + m.src + '">' + (m.vid ? '<span class="rlb-play"><i class="fa-solid fa-play"></i></span>' : '') + '</button>').join('');
+        gridView.querySelectorAll('[data-i]').forEach(t => t.addEventListener('click', () => { lb.classList.remove('grid'); show(+t.dataset.i); }));
       }
       function show(i){
-        cur = (i + photos.length) % photos.length;
-        imgEl.src = big(photos[cur]);
-        countEl.textContent = (cur + 1) + ' / ' + photos.length;
+        cur = (i + media.length) % media.length;
+        imgEl.src = big(media[cur].src);
+        countEl.textContent = (cur + 1) + ' / ' + media.length;
         renderStrip();
       }
-      function gridMode(){ lb.classList.add('grid'); renderGrid(); countEl.textContent = photos.length + ' photos'; }
-      function open(i, mode){
-        photos = collect(); if (!photos.length) return;
+      function gridMode(){ lb.classList.add('grid'); renderGrid(); titleEl.textContent = titleText(); }
+      function open(src, mode){
+        media = collect(); if (!media.length) return;
         lb.classList.add('open'); document.body.style.overflow = 'hidden';
-        if (mode === 'grid') gridMode(); else { lb.classList.remove('grid'); show(i || 0); }
+        if (mode === 'grid') gridMode(); else { lb.classList.remove('grid'); show(typeof src === 'string' ? idxOf(src) : (src || 0)); }
       }
       function close(){ lb.classList.remove('open', 'grid'); document.body.style.overflow = ''; }
       document.getElementById('rlbClose').addEventListener('click', close);
+      document.getElementById('rlbBack').addEventListener('click', close);
       document.getElementById('rlbPrev').addEventListener('click', () => show(cur - 1));
       document.getElementById('rlbNext').addEventListener('click', () => show(cur + 1));
-      document.getElementById('rlbGrid').addEventListener('click', gridMode);
       lb.addEventListener('click', e => { if (e.target === lb) close(); });
       // Swipe left/right on the image stage to move to the next / previous photo
       const stage = document.querySelector('.rev-lb-stage');
@@ -763,9 +787,9 @@
       // Any customer-strip tile or in-review photo opens the enlarged viewer at that image
       document.addEventListener('click', e => {
         const tile = e.target.closest('#custRow .cust-tile');
-        if (tile) { const im = tile.querySelector('img'); if (im) open(collect().indexOf(im.src), 'single'); return; }
+        if (tile) { const im = tile.querySelector('img'); if (im) open(im.src, 'single'); return; }
         const ri = e.target.closest('#reviewList img');
-        if (ri) open(collect().indexOf(ri.src), 'single');
+        if (ri) open(ri.src, 'single');
       });
     })();
   </script>

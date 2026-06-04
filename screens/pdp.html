@@ -372,7 +372,7 @@
 
 <!-- Delivery card · drop FREE pill + fulfillment chips per spec · just date + dispatch line + address-change row -->
 <div class="px-4 mt-5">
-  <div class="deliv-card">
+  <div class="deliv-card" id="delivCard">
     <div class="deliv-top">
       <span class="deliv-ic"><i class="fa-solid fa-truck-fast"></i></span>
       <div class="flex-1 leading-tight">
@@ -950,6 +950,26 @@
       });
       shown += batch.length;
       if (shown >= pool.length) btn.style.display = 'none';
+    });
+  })();
+</script>
+<script>
+  // Demo app-state · banned product in your state (?st=bannedproduct)
+  (function(){
+    var s = new URLSearchParams(location.search).get('st'), APPSTATE;
+    try { if (s !== null) { if (s === 'clear' || s === '') localStorage.removeItem('kkd.appState'); else localStorage.setItem('kkd.appState', s); } APPSTATE = localStorage.getItem('kkd.appState') || ''; } catch (e) { APPSTATE = s || ''; }
+    if (APPSTATE !== 'bannedproduct') return;
+    var card = document.getElementById('delivCard');
+    if (card) {
+      card.style.border = '1px solid #FECACA';
+      card.innerHTML = '<div style="display:flex;align-items:flex-start;gap:11px;padding:13px 14px;background:#FEF2F2">'
+        + '<span style="width:32px;height:32px;border-radius:10px;background:#FEE2E2;color:#DC2626;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px"><i class="fa-solid fa-ban"></i></span>'
+        + '<div style="flex:1;line-height:1.4"><div style="font-size:13.5px;font-weight:800;color:#B91C1C">Not available in Madhya Pradesh</div><div style="font-size:11.5px;color:#B91C1C;opacity:.85;margin-top:2px">This product is restricted for sale in your state, so it can’t be delivered to your address.</div></div></div>';
+    }
+    // Disable any Add / pack-size buttons
+    document.querySelectorAll('button').forEach(function(b){
+      var t = (b.textContent || '').trim().toLowerCase();
+      if (t === 'add' || t.indexOf('add to cart') >= 0 || t.indexOf('add ') === 0) { b.disabled = true; b.style.opacity = '.45'; b.style.pointerEvents = 'none'; }
     });
   })();
 </script>

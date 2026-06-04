@@ -284,7 +284,7 @@
   <!-- Info bar: address (tap to change theme) + coin + profile · breathing space below the system status row + below the row -->
   <div class="flex items-center justify-between px-4 pt-3 pb-2.5 relative">
     <button id="addressBtn" class="flex items-center gap-2.5 min-w-0 flex-1 text-left relative z-10" style="background:transparent;border:0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;outline:none">
-      <img src="../assets/kkd-logo.png" alt="KKD" class="flex-shrink-0" style="width:36px;height:36px;border-radius:9px;object-fit:cover"/>
+      <img src="../assets/kkd-logo.png" alt="KKD" id="kkdLogo" class="flex-shrink-0" style="width:36px;height:36px;border-radius:9px;object-fit:cover;cursor:pointer"/>
       <div class="leading-tight min-w-0">
         <!-- Greeting · scrolls upward continuously (current text exits up, new text enters from below) · normal Title-Case ("Hey! Sagar"), no all-caps -->
         <div style="overflow:hidden;height:14px;line-height:14px"><div id="greetLabel" class="text-[11px] font-semibold text-[#94A3B8] tracking-wide" style="transition:transform .45s cubic-bezier(.5,0,.3,1),opacity .35s ease;display:block">Hey! Sagar</div></div>
@@ -2399,13 +2399,21 @@
     }
     if(input) type();
 
+    // Render the greeting label as a clearly-visible red "Not serviceable" pill (works on any header theme)
+    function setNotServiceable(el){
+      if (!el) return;
+      el.textContent = 'Not serviceable';
+      el.style.cssText = 'display:inline-block;background:#FFFFFF;color:#DC2626;font-weight:800;font-size:10.5px;letter-spacing:0.02em;line-height:1.1;padding:2px 9px;border-radius:9999px;box-shadow:0 1px 3px rgba(0,0,0,0.12)';
+      if (el.parentNode) { el.parentNode.style.overflow = 'visible'; el.parentNode.style.height = 'auto'; }
+    }
+
     // Greeting label · flips between "Hey! Sagar" and "Deliver to" every 5s in a single upward direction · current text slides UP out of the clip-mask, new text enters from BELOW and rolls UP into place · 3 full cycles, final resting state "Deliver to"
     (function(){
       const el = document.getElementById('greetLabel');
       if (!el) return;
       // Non-serviceable pincode → label reads "Not serviceable" (red), no rotation
       var __st = (window.kkdAppStates && window.kkdAppStates()) || {};
-      if (__st.nonservice) { el.textContent = 'Not serviceable'; el.style.setProperty('color', '#DC2626', 'important'); el.style.transform = 'none'; el.style.opacity = '1'; return; }
+      if (__st.nonservice) { setNotServiceable(el); return; }
       const states = ['Hey! Sagar', 'Deliver to'];
       let idx = 0;
       let flips = 0;
@@ -2470,6 +2478,14 @@
     }, 700); }, { passive: true });
     addressBtn.addEventListener('touchend', e => { if (pressTimer === 'fired') { e.preventDefault(); } pressTimer && clearTimeout(pressTimer); pressTimer = null; });
     addressBtn.addEventListener('touchcancel', () => { pressTimer && clearTimeout(pressTimer); pressTimer = null; });
+    // Tap the KKD logo → cycle the header theme (green → rain → festival)
+    const kkdLogo = document.getElementById('kkdLogo');
+    if (kkdLogo) kkdLogo.addEventListener('click', (e) => {
+      e.stopPropagation(); e.preventDefault();
+      themeIdx = (themeIdx + 1) % themes.length;
+      themeRoot.setAttribute('data-theme', themes[themeIdx]);
+      themeRoot.classList.remove('bloom'); void themeRoot.offsetWidth; themeRoot.classList.add('bloom');
+    });
 
     // Detected location handoff · if locating.html persisted a village (kkd.village), swap the address label and play a brief highlight ring so the user feels "current location is selected"
     (function(){
@@ -3775,7 +3791,7 @@
       } else if (st.nonservice) {
         // flipping label → red "Not serviceable" (also set here so it sticks regardless of the rotator); address line below stays normal
         var gl = document.getElementById('greetLabel');
-        if (gl) { gl.textContent = 'Not serviceable'; gl.style.setProperty('color', '#DC2626', 'important'); gl.style.transform = 'none'; gl.style.opacity = '1'; }
+        if (gl) { gl.textContent = 'Not serviceable'; gl.style.cssText = 'display:inline-block;background:#FFFFFF;color:#DC2626;font-weight:800;font-size:10.5px;letter-spacing:0.02em;line-height:1.1;padding:2px 9px;border-radius:9999px;box-shadow:0 1px 3px rgba(0,0,0,0.12)'; if (gl.parentNode) { gl.parentNode.style.overflow = 'visible'; gl.parentNode.style.height = 'auto'; } }
         var addr = document.getElementById('homeAddr');
         if (addr) addr.innerHTML = 'Indore 123456 <i class="fa-solid fa-chevron-down text-[10px] text-[#64748B] ml-0.5"></i>';
       }

@@ -197,8 +197,8 @@
   <span class="live-view mb-2" style="display:inline-flex"><span class="live-dot"></span> Highly viewed today</span>
   <div class="flex items-start justify-between gap-3">
     <div class="flex-1 min-w-0">
-      <h1 class="text-[24px] font-extrabold leading-tight text-[#0F172A]">Humic</h1>
-      <div class="text-[12.5px] text-[#475569] mt-1 font-medium">Activated Humic + Fulvic 98</div>
+      <h1 class="text-[24px] font-extrabold leading-tight text-[#0F172A]" id="pName">Humic</h1>
+      <div class="text-[12.5px] text-[#475569] mt-1 font-medium" id="pTech">Activated Humic + Fulvic 98</div>
     </div>
     <a href="categories.html" class="flex-shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-extrabold uppercase tracking-[0.06em]" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0">
       <i class="fa-solid fa-flask text-[9px]"></i> Fertilizer
@@ -377,7 +377,7 @@
     <div class="deliv-top">
       <span class="deliv-ic"><i class="fa-solid fa-truck-fast"></i></span>
       <div class="flex-1 leading-tight">
-        <div class="text-[14.5px] font-extrabold text-[#0F172A]">Tomorrow, 28 May</div>
+        <div class="text-[14.5px] font-extrabold text-[#0F172A]" id="pdpDelivDate">Tomorrow, 28 May</div>
         <div class="text-[11.5px] mt-0.5" style="color:#64748B">Order before <span class="font-extrabold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
       </div>
     </div>
@@ -955,10 +955,25 @@
   })();
 </script>
 <script>
-  // App-state · banned product (Chakrawarti ZC in cart) · handled via the Add button → opens a detail bottom-sheet (no special delivery tile)
+  // Product-aware PDP · ?p=chakrawarti swaps the product identity so the banned-in-state case is viewable
+  var PDP_IS_CHAKRA = new URLSearchParams(location.search).get('p') === 'chakrawarti';
+  (function(){
+    if (!PDP_IS_CHAKRA) return;
+    var IMG = '../assets/Chakrawarti_nobg.png';
+    document.querySelectorAll('img').forEach(function(im){ if ((im.getAttribute('src') || '').indexOf('Humic_1') >= 0) im.setAttribute('src', IMG); });
+    var n = document.getElementById('pName'); if (n) n.textContent = 'Chakrawarti ZC';
+    var tch = document.getElementById('pTech'); if (tch) tch.textContent = 'Chlorantraniliprole 9.3% + Lambda-Cyhalothrin 4.6% ZC';
+    var snm = document.querySelector('.stickyhd .nm'); if (snm) snm.innerHTML = 'Chakrawarti ZC <span class="font-medium" style="color:#64748B">· 100 ml</span>';
+  })();
+  // App-state · non-serviceable pincode → delivery card date turns red "Not serviceable"
   (function(){
     var st = (window.kkdAppStates && window.kkdAppStates()) || {};
-    if (!st.bannedproduct) return;
+    if (st.nonservice) { var d = document.getElementById('pdpDelivDate'); if (d) { d.textContent = 'Not serviceable'; d.style.color = '#DC2626'; } }
+  })();
+  // App-state · banned product · on the Chakrawarti PDP (or when it's in cart) → Add opens a detail bottom-sheet (no special delivery tile)
+  (function(){
+    var st = (window.kkdAppStates && window.kkdAppStates()) || {};
+    if (!st.bannedproduct && !PDP_IS_CHAKRA) return;
     var bd = document.createElement('div');
     bd.style.cssText = 'position:fixed;inset:0;z-index:300;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease';
     var sh = document.createElement('div');

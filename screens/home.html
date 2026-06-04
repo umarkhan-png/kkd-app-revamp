@@ -1103,6 +1103,19 @@
       </div>
     </section>
 
+    <!-- Wallet balance nudge · push the user to spend their wallet money · Use now → Shop by Category -->
+    <section class="px-4 mt-6" id="walletNudge">
+      <a href="categories.html" style="display:flex;align-items:center;gap:13px;padding:14px;border-radius:16px;background:linear-gradient(135deg,#ECFDF5,#F0FDF4);border:1px solid #BBF7D0;text-decoration:none;position:relative;overflow:hidden">
+        <span style="position:absolute;right:-20px;top:-20px;width:110px;height:110px;border-radius:50%;background:rgba(5,150,105,0.07)"></span>
+        <span style="width:46px;height:46px;border-radius:12px;background:#059669;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 8px 18px -6px rgba(5,150,105,0.5)"><i class="fa-solid fa-wallet"></i></span>
+        <span style="flex:1;line-height:1.35;min-width:0;position:relative">
+          <span style="display:block;font-size:15px;font-weight:900;color:#0F172A">&#8377;540 sitting in your wallet</span>
+          <span style="display:block;font-size:12px;color:#475569;font-weight:500;margin-top:1px">Use it on your next order — auto-applied at checkout</span>
+        </span>
+        <span style="flex-shrink:0;position:relative;background:#059669;color:#fff;font-size:12.5px;font-weight:800;padding:8px 16px;border-radius:10px">Use now</span>
+      </a>
+    </section>
+
     <!-- Bestsellers (moved up — first section under categories) -->
     <section class="px-4 pt-5">
       <div class="flex items-baseline justify-between mb-4">
@@ -2390,6 +2403,9 @@
     (function(){
       const el = document.getElementById('greetLabel');
       if (!el) return;
+      // Non-serviceable pincode → label reads "Not serviceable" (red), no rotation
+      var __st = (window.kkdAppStates && window.kkdAppStates()) || {};
+      if (__st.nonservice) { el.textContent = 'Not serviceable'; el.style.color = '#DC2626'; el.style.transform = 'none'; el.style.opacity = '1'; return; }
       const states = ['Hey! Sagar', 'Deliver to'];
       let idx = 0;
       let flips = 0;
@@ -3757,11 +3773,13 @@
           + '<div style="font-size:11.5px;color:rgba(255,255,255,0.5);margin-top:16px">Ref: KKD-USR-4471</div>';
         document.body.appendChild(ov);
       } else if (st.nonservice) {
-        // communicate non-serviceability in the deliver-to text (no separate tile)
+        // label ("Not serviceable") is handled by the greeting rotator; address line stays normal, just reflect the pincode
         var addr = document.getElementById('homeAddr');
-        if (addr) addr.innerHTML = '<span style="color:#DC2626">123456</span> <span style="font-size:10.5px;font-weight:800;color:#DC2626;background:#FEE2E2;border:1px solid #FECACA;padding:2px 7px;border-radius:9999px">NOT SERVICEABLE</span><i class="fa-solid fa-chevron-down text-[10px] text-[#64748B] ml-0.5"></i>';
+        if (addr) addr.innerHTML = 'Indore 123456 <i class="fa-solid fa-chevron-down text-[10px] text-[#64748B] ml-0.5"></i>';
       }
     })();
+    // Chakrawarti ZC cards open the product-aware Chakrawarti PDP (so the banned-in-state case is viewable)
+    document.querySelectorAll('a[href="pdp.html"]').forEach(function(a){ if (/Chakrawarti\s*ZC/i.test(a.textContent || '')) a.setAttribute('href', 'pdp.html?p=chakrawarti'); });
   </script>
 </body>
 </html>

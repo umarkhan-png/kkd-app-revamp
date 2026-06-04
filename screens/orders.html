@@ -15,7 +15,7 @@
   .scrollx::-webkit-scrollbar{display:none}
   /* Tabs — underline on active */
   .tab{flex:1;padding:10px 4px;text-align:center;font-size:14px;font-weight:700;color:#94A3B8;border-bottom:2.5px solid transparent;cursor:pointer;transition:all .15s ease;background:transparent;border-top:0;border-left:0;border-right:0}
-  .tab.active{color:#047857;border-bottom-color:#047857}
+  .tab.active{color:#258046;border-bottom-color:#258046}
 
   /* Order card · outer is a DIV (so the action buttons can be valid anchors next to the inner link, no nested <a>) · matches partner-app pattern · sits on the F8F8F8 page so the card visibly elevates */
   .ord-card{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
@@ -29,12 +29,12 @@
   .status-pill.transit{color:#B45309}
   .status-pill.transit::before{content:"";width:7px;height:7px;border-radius:50%;background:#F59E0B;animation:dot 1.6s ease-in-out infinite}
   @keyframes dot{0%,100%{opacity:1}50%{opacity:.55}}
-  .status-pill.delivered{color:#047857}
-  .status-pill.delivered i{font-size:11px;color:#047857}
+  .status-pill.delivered{color:#258046}
+  .status-pill.delivered i{font-size:11px;color:#258046}
   .ord-date{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:500;color:#94A3B8}
   /* Order ID · made prominent (was 11.5px/500/#94A3B8 muted) so it's easy to read + quote on support calls */
   .ord-id{font-size:14px;font-weight:800;color:#0F172A;letter-spacing:0.01em;margin-bottom:10px;font-variant-numeric:tabular-nums}
-  .ord-saved{font-size:11.5px;font-weight:700;color:#047857;margin-top:3px;display:inline-flex;align-items:center;gap:4px}
+  .ord-saved{font-size:11.5px;font-weight:700;color:#258046;margin-top:3px;display:inline-flex;align-items:center;gap:4px}
   .ord-saved i{font-size:10px}
 
   /* Lifetime savings banner · emerald, sits below the tabs */
@@ -42,7 +42,7 @@
   .ord-summary{margin:12px 16px 0;display:flex;align-items:center;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
   .ord-summary .os{flex:1;text-align:center}
   .ord-summary .os .v{font-size:20px;font-weight:900;color:#0F172A;line-height:1}
-  .ord-summary .os .v.green{color:#047857}
+  .ord-summary .os .v.green{color:#258046}
   .ord-summary .os .k{font-size:11px;color:#64748B;font-weight:600;margin-top:4px}
   .ord-summary .os-div{width:1px;align-self:stretch;background:#F1F5F9;margin:2px 0}
 
@@ -62,7 +62,7 @@
   /* Amount · matches home product price (18px font-extrabold) — was 21px-900 which felt heavier than the rest of the app */
   .ord-amt{font-size:18px;font-weight:800;color:#0F172A;line-height:1}
   .ord-meta{font-size:11.5px;color:#64748B;margin-top:3px}
-  .ord-arrive{font-size:12.5px;font-weight:700;color:#047857;display:inline-flex;align-items:center;gap:5px}
+  .ord-arrive{font-size:12.5px;font-weight:700;color:#258046;display:inline-flex;align-items:center;gap:5px}
   .ord-rate{font-size:12.5px;font-weight:600;color:#B45309;display:inline-flex;align-items:center;gap:5px}
 
   /* COD pending banner · sits flush inside the card · same edge-to-edge cream strip as before */
@@ -71,14 +71,14 @@
   .pay-banner-text > span{overflow:hidden;text-overflow:ellipsis}
   .pay-banner-amt{font-weight:900;color:#0F172A}
   .pay-banner-bonus{font-weight:800;color:#F59E0B}
-  .pay-now-btn{flex-shrink:0;padding:8px 14px;background:#059669;color:#FFFFFF;border:0;border-radius:8px;font-size:12.5px;font-weight:800;cursor:pointer;text-decoration:none}
+  .pay-now-btn{flex-shrink:0;padding:8px 14px;background:#258046;color:#FFFFFF;border:0;border-radius:8px;font-size:12.5px;font-weight:800;cursor:pointer;text-decoration:none}
 
   /* Action row · sits INSIDE the same card · 3-column grid, padded so buttons don't touch the card edges · Reorder is filled emerald (primary), Invoice + Return are SOFT outline secondaries (lighter slate text + 1px hairline border so they don't compete with the primary) */
   .ord-actions{padding:0 14px 14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
   .act-btn{height:38px;display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;border:1px solid transparent;transition:transform .12s ease;background:transparent}
   .act-btn:active{transform:scale(.97)}
   .act-btn i{font-size:11px}
-  .act-btn.primary{background:#059669;color:#FFFFFF;border-color:#059669}
+  .act-btn.primary{background:#258046;color:#FFFFFF;border-color:#258046}
   .act-btn.primary i{color:#FFFFFF}
   .act-btn.outline{background:#FFFFFF;color:#475569;border-color:#E5E7EB;font-weight:600}
   .act-btn.outline i{color:#94A3B8}
@@ -90,7 +90,7 @@
   .modal-sheet.open{transform:translateY(0)}
   .modal-handle{width:40px;height:4px;border-radius:999px;background:#E2E8F0;margin:10px auto 0}
   .cod-input-wrap{display:flex;align-items:center;gap:8px;background:#F8FAFC;border:1.5px solid #E5E7EB;border-radius:10px;padding:10px 14px;transition:border-color .15s ease}
-  .cod-input-wrap:focus-within{border-color:#047857;box-shadow:0 0 0 3px rgba(4,120,87,0.12)}
+  .cod-input-wrap:focus-within{border-color:#258046;box-shadow:0 0 0 3px rgba(4,120,87,0.12)}
   .cod-input-wrap .rs{font-size:22px;font-weight:900;color:#0F172A}
   .cod-input-wrap input{flex:1;font-size:22px;font-weight:900;color:#0F172A;background:transparent;outline:none;border:0;width:0;font-variant-numeric:tabular-nums}
   .cod-coin-strip{margin-top:10px;display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;background:#ECFDF5;border:1px solid #BBF7D0}
@@ -112,8 +112,8 @@
   /* Attach photo/video · reveals with the review after the first star */
   .rate-attach{display:none;align-items:center;gap:7px;margin-top:8px;height:38px;padding:0 14px;border-radius:10px;border:1.5px dashed #CBD5E1;background:#FFFFFF;color:#475569;font-size:12px;font-weight:700;cursor:pointer}
   .rate-item.rated .rate-attach{display:inline-flex}
-  .rate-attach i{color:#047857;font-size:13px}
-  .rate-attach-info{display:none;font-size:11px;font-weight:700;color:#047857;margin-top:6px}
+  .rate-attach i{color:#258046;font-size:13px}
+  .rate-attach-info{display:none;font-size:11px;font-weight:700;color:#258046;margin-top:6px}
   .rate-attach-info i{font-size:10px}
   /* Share-a-testimonial (video) · one per order · +25 coins */
   .rate-testi{margin:4px 0 2px;border:1px solid #E5E7EB;border-radius:14px;padding:13px;background:#F8FAFC}
@@ -121,9 +121,9 @@
   .rate-testi-coin{margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:800;color:#78350F;background:linear-gradient(135deg,#FBBF24,#F59E0B);padding:3px 8px;border-radius:9999px}
   .rate-testi-coin i{font-size:9px}
   .rate-testi-sub{font-size:11px;color:#64748B;margin-top:3px;line-height:1.35}
-  .rate-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;margin-top:11px;min-height:84px;border:1.5px dashed #A7F3D0;border-radius:12px;background:#FFFFFF;color:#047857;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center;padding:12px}
+  .rate-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;margin-top:11px;min-height:84px;border:1.5px dashed #A7F3D0;border-radius:12px;background:#FFFFFF;color:#258046;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center;padding:12px}
   .rate-upload i{font-size:22px}
-  .rate-upload.has{border-style:solid;border-color:#059669;background:#ECFDF5}
+  .rate-upload.has{border-style:solid;border-color:#258046;background:#ECFDF5}
   /* Per-product testimonial · revealed after the first star tap */
   .rate-item .rate-testi{display:none;margin-top:10px}
   .rate-item.rated .rate-testi{display:block}
@@ -283,7 +283,7 @@
       <span class="text-[12.5px] font-semibold">Crop</span>
     </a>
     <a href="orders.html" class="flex flex-col items-center gap-1" style="text-decoration:none">
-      <i class="fa-solid fa-box text-[20px]" style="color:#059669"></i>
+      <i class="fa-solid fa-box text-[20px]" style="color:#258046"></i>
       <span class="text-[12.5px] font-bold" style="color:#0F172A">Orders</span>
     </a>
     <a href="account.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none">
@@ -311,7 +311,7 @@
       </div>
       <div class="flex items-center justify-between text-[11.5px] mt-2">
         <span style="color:#64748B">Total COD: <b class="text-[#0F172A]" id="codTotalLbl">&#8377;0</b></span>
-        <span class="font-extrabold" style="color:#047857">Earn <span id="codCoinsLbl">+0</span> <i class="fa-solid fa-coins text-[10px]" style="color:#F59E0B"></i></span>
+        <span class="font-extrabold" style="color:#258046">Earn <span id="codCoinsLbl">+0</span> <i class="fa-solid fa-coins text-[10px]" style="color:#F59E0B"></i></span>
       </div>
       <div id="codErr" class="text-[11px] font-bold" style="color:#DC2626;display:none;margin-top:4px">Amount cannot exceed total COD due</div>
       <div class="cod-coin-strip mt-3">
@@ -320,7 +320,7 @@
       </div>
     </div>
     <div class="px-5 pt-3 pb-5" style="padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">
-      <button id="codPayBtn" class="w-full h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+      <button id="codPayBtn" class="w-full h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#258046;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
         Pay <span id="codPayBtnAmt" class="tnum">&#8377;0</span> COD
       </button>
     </div>
@@ -339,7 +339,7 @@
     </div>
     <div id="rateList" class="px-5 overflow-y-auto" style="flex:1"></div>
     <div class="px-5 pt-3 pb-5" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">
-      <button id="rateSubmit" class="w-full h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+      <button id="rateSubmit" class="w-full h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#258046;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
         <i class="fa-solid fa-paper-plane text-[13px]"></i> Submit ratings
       </button>
     </div>
@@ -379,7 +379,7 @@
             + '<textarea class="rate-review" placeholder="Write a review (optional)…"></textarea>'
             + '<label class="rate-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input type="file" accept="image/*,video/*" capture="environment" multiple style="display:none"/></label>'
             + '<div class="rate-attach-info"></div>'
-            + '<div class="rate-testi"><div class="rate-testi-h"><i class="fa-solid fa-bullhorn" style="color:#047857"></i> Share a video testimonial <span class="rate-testi-coin"><i class="fa-solid fa-coins"></i> +25</span></div><div class="rate-testi-sub">Upload a short video for this product</div><label class="rate-upload"><i class="fa-solid fa-cloud-arrow-up"></i><span class="rt-label">Upload video testimonial</span><input class="rt-input" type="file" accept="video/*" style="display:none"/></label></div>';
+            + '<div class="rate-testi"><div class="rate-testi-h"><i class="fa-solid fa-bullhorn" style="color:#258046"></i> Share a video testimonial <span class="rate-testi-coin"><i class="fa-solid fa-coins"></i> +25</span></div><div class="rate-testi-sub">Upload a short video for this product</div><label class="rate-upload"><i class="fa-solid fa-cloud-arrow-up"></i><span class="rt-label">Upload video testimonial</span><input class="rt-input" type="file" accept="video/*" style="display:none"/></label></div>';
           const stars = item.querySelectorAll('.star');
           stars.forEach(s => s.addEventListener('click', () => {
             const v = parseInt(s.dataset.val, 10);

@@ -26,13 +26,13 @@
     '.qrs-hint{color:rgba(255,255,255,0.7);font-size:12.5px;text-align:center;max-width:240px;margin-top:22px;line-height:1.5}' +
     '.qrs-result{display:none;flex-direction:column;align-items:center;text-align:center;animation:qrsIn .4s ease}' +
     '@keyframes qrsIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}' +
-    '.qrs-badge{width:84px;height:84px;border-radius:50%;background:linear-gradient(135deg,#34D399,#047857);color:#fff;display:flex;align-items:center;justify-content:center;font-size:42px;box-shadow:0 14px 34px -8px rgba(5,150,105,0.7)}' +
+    '.qrs-badge{width:84px;height:84px;border-radius:50%;background:linear-gradient(135deg,#34D399,#258046);color:#fff;display:flex;align-items:center;justify-content:center;font-size:42px;box-shadow:0 14px 34px -8px rgba(5,150,105,0.7)}' +
     '.qrs-badge.bad{background:linear-gradient(135deg,#F87171,#DC2626);box-shadow:0 14px 34px -8px rgba(220,38,38,0.6)}' +
     '.qrs-rtitle{color:#fff;font-size:19px;font-weight:900;margin-top:18px}' +
     '.qrs-rprod{font-size:14px;font-weight:700;margin-top:6px}' +
     '.qrs-rmeta{color:rgba(255,255,255,0.6);font-size:11.5px;margin-top:10px;max-width:260px;line-height:1.5}' +
     '.qrs-rmeta b{color:rgba(255,255,255,0.85)}' +
-    '.qrs-done{margin-top:28px;height:48px;padding:0 44px;border-radius:12px;background:#059669;color:#fff;border:0;font-size:14.5px;font-weight:800;cursor:pointer;box-shadow:0 10px 24px -8px rgba(5,150,105,0.6)}' +
+    '.qrs-done{margin-top:28px;height:48px;padding:0 44px;border-radius:12px;background:#258046;color:#fff;border:0;font-size:14.5px;font-weight:800;cursor:pointer;box-shadow:0 10px 24px -8px rgba(5,150,105,0.6)}' +
     '.qrs-fbtns{display:flex;gap:10px;margin-top:26px}' +
     '.qrs-report{height:48px;padding:0 22px;border-radius:12px;background:#DC2626;color:#fff;border:0;font-size:14px;font-weight:800;cursor:pointer}' +
     '.qrs-again{height:48px;padding:0 22px;border-radius:12px;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.3);font-size:14px;font-weight:800;cursor:pointer}';

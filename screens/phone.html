@@ -14,14 +14,14 @@
   body { min-height: 100vh; background: #F8F8F8; color: #0F172A; }
   .tnum { font-variant-numeric: tabular-nums; letter-spacing: 0.05em; }
   .num-input { transition: border-color .15s ease, box-shadow .15s ease; }
-  .num-input:focus-within { border-color: #047857; box-shadow: 0 0 0 3px rgba(4,120,87,0.10); }
+  .num-input:focus-within { border-color: #258046; box-shadow: 0 0 0 3px rgba(4,120,87,0.10); }
 
   /* White top bar ABOVE the emerald hero · KKD logo is the image directly with border-radius + object-fit:cover (matches the home page address-bar treatment) — no wrapper square around it */
   .topbar { padding: 10px 16px 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .brand-img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; display: block; }
   /* Language chip · clean white pill · text + chevron centred via line-height:1 on every child so the Devanagari "shirorekha" doesn't push the label off the chevron baseline · pill padding bumped to feel less cramped */
   .lang-chip { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; color: #0F172A; font-size: 13px; font-weight: 700; cursor: pointer; line-height: 1; transition: border-color .15s ease, transform .12s ease; }
-  .lang-chip:active { transform: scale(.97); border-color: #047857; }
+  .lang-chip:active { transform: scale(.97); border-color: #258046; }
   .lang-chip > span { display: inline-flex; align-items: center; line-height: 1; }
   .lang-chip .chev { font-size: 10px; color: #94A3B8; line-height: 1; display: inline-flex; align-items: center; }
 
@@ -50,12 +50,12 @@
   .modal-sheet { position:fixed; left:0; right:0; bottom:0; background:#FFFFFF; border-radius:24px 24px 0 0; box-shadow:0 -8px 32px rgba(0,0,0,0.18); transform:translateY(100%); transition:transform .3s cubic-bezier(.32,.72,0,1); z-index:90; max-height:78vh; display:flex; flex-direction:column; }
   .modal-sheet.open { transform:translateY(0); }
   .lang-tile { background:#FFFFFF; border:1px solid #E5E7EB; border-radius:12px; padding:14px; text-align:left; cursor:pointer; transition:transform .12s ease, border-color .15s ease, background .15s ease; }
-  .lang-tile:active, .lang-tile.on { background:#ECFDF5; border-color:#047857; transform:scale(.98); }
+  .lang-tile:active, .lang-tile.on { background:#ECFDF5; border-color:#258046; transform:scale(.98); }
 
   /* Emerald hero · product line-up + tagline + 2-cell stat banner · no top-bar items inside */
   .hero-card {
     position: relative; overflow: hidden;
-    background: linear-gradient(165deg, #022C22 0%, #047857 38%, #059669 72%, #10B981 100%);
+    background: linear-gradient(165deg, #022C22 0%, #258046 38%, #258046 72%, #10B981 100%);
     border-radius: 22px;
     margin: 4px 14px 0;
     padding: 18px 18px 22px;
@@ -101,7 +101,7 @@
   .hero-stat-cell + .hero-stat-cell {
     border-left: 1px solid #E5E7EB;
   }
-  .hero-stat-num { font-size: 17px; font-weight: 900; color: #047857; letter-spacing: -0.01em; }
+  .hero-stat-num { font-size: 17px; font-weight: 900; color: #258046; letter-spacing: -0.01em; }
   .hero-stat-lbl { font-size: 10.5px; font-weight: 600; color: #475569; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
 </style>
 </head>
@@ -194,12 +194,12 @@
 
   <!-- Refer code · centred toggle link · expands to a full-width input row that spans the SAME width as the mobile-number input (px-6 outer padding), with a clear gap between the input and the Apply link -->
   <div class="mt-3 text-center">
-    <button id="referToggle" class="text-[11.5px] font-bold" style="color:#047857;background:transparent;border:0;cursor:pointer">Have a referral code?</button>
+    <button id="referToggle" class="text-[11.5px] font-bold" style="color:#258046;background:transparent;border:0;cursor:pointer">Have a referral code?</button>
   </div>
   <div id="referBox" class="px-6 mt-3 hidden">
     <div class="flex items-center gap-3 h-[44px] px-4 rounded-[10px] bg-white" style="border:1px solid #E5E7EB">
       <input id="referCode" type="text" placeholder="Enter referral code" class="flex-1 outline-none text-[14px] font-semibold bg-transparent placeholder:text-[#94A3B8] placeholder:font-medium" style="text-transform:uppercase;letter-spacing:0.06em"/>
-      <button id="referApply" class="text-[12px] font-extrabold flex-shrink-0" style="color:#047857">Apply</button>
+      <button id="referApply" class="text-[12px] font-extrabold flex-shrink-0" style="color:#258046">Apply</button>
     </div>
   </div>
 
@@ -209,7 +209,7 @@
     .cbx input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
     .cbx .box{width:20px;height:20px;border-radius:6px;border:2px solid #CBD5E1;background:#fff;display:flex;align-items:center;justify-content:center;transition:background .15s ease,border-color .15s ease}
     .cbx .box i{font-size:10px;color:#fff;opacity:0;transform:scale(.6);transition:opacity .15s ease,transform .15s ease}
-    .cbx input:checked + .box{background:#059669;border-color:#059669}
+    .cbx input:checked + .box{background:#258046;border-color:#258046}
     .cbx input:checked + .box i{opacity:1;transform:scale(1)}
   </style>
 
@@ -218,14 +218,14 @@
     <div id="consentWrap" class="space-y-3 mb-3.5">
       <label class="flex items-start gap-3 cursor-pointer">
         <span class="cbx"><input type="checkbox" id="consentTerms" checked/><span class="box"><i class="fa-solid fa-check"></i></span></span>
-        <span class="text-[11.5px] leading-snug text-[#475569]">By continuing you agree that you have read and accept our <span class="font-bold" style="color:#047857">terms &amp; conditions</span> and <span class="font-bold" style="color:#047857">privacy policy</span>.</span>
+        <span class="text-[11.5px] leading-snug text-[#475569]">By continuing you agree that you have read and accept our <span class="font-bold" style="color:#258046">terms &amp; conditions</span> and <span class="font-bold" style="color:#258046">privacy policy</span>.</span>
       </label>
       <label class="flex items-start gap-3 cursor-pointer">
         <span class="cbx"><input type="checkbox" id="consentSms" checked/><span class="box"><i class="fa-solid fa-check"></i></span></span>
         <span class="text-[11.5px] leading-snug text-[#475569]">I hereby authorize KKD to send notifications on SMS / Promotional / Information messages.</span>
       </label>
     </div>
-    <button id="sendOtpBtn" class="w-full h-[52px] rounded-[12px] text-white text-[15px] font-extrabold flex items-center justify-center gap-2" style="background:#059669;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+    <button id="sendOtpBtn" class="w-full h-[52px] rounded-[12px] text-white text-[15px] font-extrabold flex items-center justify-center gap-2" style="background:#258046;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
       Send OTP
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
     </button>

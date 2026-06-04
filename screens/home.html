@@ -25,7 +25,7 @@
   .top-theme { transition: background .6s ease; position: relative; overflow: clip; }
   /* Default: bold KKD emerald top section — fully filled with a gradient (no fade to white) · text + icons in this region flip to white via the rules below */
   .top-theme[data-theme="green"] {
-    background: linear-gradient(180deg, #047857 0%, #059669 55%, #10B981 100%);
+    background: linear-gradient(180deg, #258046 0%, #258046 55%, #10B981 100%);
   }
   /* White text + white SVG strokes when the top is filled with bold emerald */
   .top-theme[data-theme="green"] .sticky-status { color: #FFFFFF; }
@@ -161,7 +161,7 @@
     50%      { transform: scale(1.15) rotate(3deg); opacity: 0.85; }
   }
   /* Flash-sale qty stepper · replaces the "+" after first add · sits in the image corner */
-  .flash-step{position:absolute;bottom:6px;right:6px;display:inline-flex;align-items:center;height:32px;background:#059669;border-radius:9px;box-shadow:0 2px 8px rgba(5,150,105,0.4);overflow:hidden;z-index:2}
+  .flash-step{position:absolute;bottom:6px;right:6px;display:inline-flex;align-items:center;height:32px;background:#258046;border-radius:9px;box-shadow:0 2px 8px rgba(5,150,105,0.4);overflow:hidden;z-index:2}
   .flash-step button{width:28px;height:32px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:800;background:transparent;border:0;cursor:pointer;line-height:1}
   .flash-step .n{min-width:18px;text-align:center;color:#fff;font-size:13px;font-weight:800;font-variant-numeric:tabular-nums}
   /* Select-your-crop View Products CTA — gentle pulse so user notices the tap target once a crop is picked */
@@ -190,7 +190,7 @@
   .delivery-stack.single .ds-dots-row,
   body.scrolled .delivery-stack .ds-dots-row{ display:none !important; }
   .ds-dots .dot{ width:6px; height:6px; border-radius:9999px; background:#A7F3D0; transition: all .2s ease; }
-  .ds-dots .dot.on{ background:#047857; width:18px; }
+  .ds-dots .dot.on{ background:#258046; width:18px; }
   /* Pulsing dot for live status */
   @keyframes dtPulse { 0% { transform: scale(1); opacity: 0.75; } 100% { transform: scale(2.4); opacity: 0; } }
   /* Truck icon bounce for current stage */
@@ -297,7 +297,7 @@
     <div class="flex items-center gap-2 flex-shrink-0">
       <!-- Wallet balance pill · shown only when the money wallet has a balance -->
       <a href="wallet.html" id="walletPill" class="flex items-center gap-1.5 h-10 px-2.5 rounded-full" style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgba(15,23,42,0.04);text-decoration:none">
-        <i class="fa-solid fa-wallet text-[13px]" style="color:#047857"></i>
+        <i class="fa-solid fa-wallet text-[13px]" style="color:#258046"></i>
         <span class="text-[14px] font-extrabold tnum" style="color:#0F172A">&#8377;<span id="walletAmt">540</span></span>
       </a>
       <a href="coins-statement.html" id="coinPill" class="flex items-center gap-1.5 h-10 px-2.5 rounded-full relative" style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgba(15,23,42,0.04);text-decoration:none;transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .35s ease,border-color .35s ease">
@@ -421,7 +421,7 @@
               <path d="M19 33 C20 24 22 16 25 8 C22 16 20.5 24 18 33 Z"/>
             </g>
             <!-- MID green between for extra body -->
-            <g fill="#16A34A">
+            <g fill="#258046">
               <path d="M14 33 C13.5 24 13 16 12 7 C14 16 14.5 24 15 33 Z"/>
               <path d="M22 33 C22.5 24 23 16 24 7 C22 16 21.5 24 21 33 Z"/>
             </g>
@@ -442,8 +442,8 @@
             <line x1="6" y1="18" x2="30" y2="18" stroke="#B45309" stroke-width="1"/>
             <!-- Top box (smallest, green) -->
             <rect x="10" y="4" width="16" height="10" rx="1.5" fill="#10B981"/>
-            <line x1="18" y1="4" x2="18" y2="14" stroke="#047857" stroke-width="1"/>
-            <line x1="10" y1="9" x2="26" y2="9" stroke="#047857" stroke-width="1"/>
+            <line x1="18" y1="4" x2="18" y2="14" stroke="#258046" stroke-width="1"/>
+            <line x1="10" y1="9" x2="26" y2="9" stroke="#258046" stroke-width="1"/>
           </svg>
         </div>
         <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Combo</span>
@@ -460,13 +460,13 @@
         <div class="flex items-center justify-between mb-2 dt-statusrow">
           <div class="flex items-center gap-2 min-w-0">
             <span class="relative flex items-center justify-center flex-shrink-0">
-              <span class="block w-2 h-2 rounded-full" style="background:#059669"></span>
-              <span class="absolute inset-0 w-2 h-2 rounded-full" style="background:#059669;animation:dtPulse 1.6s ease-out infinite"></span>
+              <span class="block w-2 h-2 rounded-full" style="background:#258046"></span>
+              <span class="absolute inset-0 w-2 h-2 rounded-full" style="background:#258046;animation:dtPulse 1.6s ease-out infinite"></span>
             </span>
-            <span class="text-[11px] font-extrabold uppercase tracking-wider truncate" style="color:#047857">Out for Delivery</span>
+            <span class="text-[11px] font-extrabold uppercase tracking-wider truncate" style="color:#258046">Out for Delivery</span>
             <span class="dt-compact-id text-[11px] font-extrabold flex-shrink-0" style="color:#0F172A;display:none">· #KKD-26194</span>
           </div>
-          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF">
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold flex-shrink-0" style="background:#258046;color:#FFFFFF">
             Track <i class="fa-solid fa-arrow-right text-[9px]" style="color:#FFFFFF"></i>
           </span>
         </div>
@@ -474,7 +474,7 @@
           <div class="flex flex-shrink-0" style="margin-right:-4px">
             <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);margin-right:-6px;z-index:3"><img src="../assets/Chakrawarti_nobg.png" class="w-6 h-6 object-contain"/></div>
             <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);margin-right:-6px;z-index:2"><img src="../assets/Humic_nobg.png" class="w-6 h-6 object-contain"/></div>
-            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-extrabold" style="background:#FFFFFF;color:#047857;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);z-index:1">+1</div>
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-extrabold" style="background:#FFFFFF;color:#258046;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);z-index:1">+1</div>
           </div>
           <div class="flex-1 min-w-0 leading-tight">
             <div class="text-[12.5px] font-extrabold truncate" style="color:#0F172A">#KKD-26194 &middot; &#8377;2,140</div>
@@ -483,21 +483,21 @@
         </div>
         <div class="dt-detail">
           <div class="flex items-center gap-1">
-            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-            <div class="w-2 h-2 rounded-full" style="background:#059669"></div>
-            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-            <div class="w-2 h-2 rounded-full" style="background:#059669"></div>
-            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+            <div class="flex-1 h-1.5 rounded-full" style="background:#258046"></div>
+            <div class="w-2 h-2 rounded-full" style="background:#258046"></div>
+            <div class="flex-1 h-1.5 rounded-full" style="background:#258046"></div>
+            <div class="w-2 h-2 rounded-full" style="background:#258046"></div>
+            <div class="flex-1 h-1.5 rounded-full" style="background:#258046"></div>
             <span class="relative flex items-center justify-center flex-shrink-0" style="width:14px;height:14px">
               <span class="absolute w-4 h-4 rounded-full" style="background:rgba(5,150,105,0.25);animation:dtPulse 1.4s ease-out infinite"></span>
-              <span class="relative w-3.5 h-3.5 rounded-full" style="background:#047857;border:2px solid #FFFFFF;box-shadow:0 1px 4px rgba(4,120,87,0.6)"></span>
+              <span class="relative w-3.5 h-3.5 rounded-full" style="background:#258046;border:2px solid #FFFFFF;box-shadow:0 1px 4px rgba(4,120,87,0.6)"></span>
             </span>
             <div class="flex-1 h-1.5 rounded-full" style="background:#6EE7B7"></div>
             <div class="w-2 h-2 rounded-full" style="background:#6EE7B7"></div>
           </div>
           <div class="flex justify-between mt-1.5 text-[9.5px] font-semibold">
-            <span style="color:#047857">Placed</span>
-            <span style="color:#047857">Packed</span>
+            <span style="color:#258046">Placed</span>
+            <span style="color:#258046">Packed</span>
             <span class="dt-stage-current" style="color:#064E3B;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;font-size:10.5px">Out</span>
             <span style="color:#64748B">Delivered</span>
           </div>
@@ -515,7 +515,7 @@
             <span class="text-[11px] font-extrabold uppercase tracking-wider truncate" style="color:#0E7490">Packed &middot; Dispatching</span>
             <span class="dt-compact-id text-[11px] font-extrabold flex-shrink-0" style="color:#0F172A;display:none">&middot; #KKD-26195</span>
           </div>
-          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF">
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold flex-shrink-0" style="background:#258046;color:#FFFFFF">
             Track <i class="fa-solid fa-arrow-right text-[9px]" style="color:#FFFFFF"></i>
           </span>
         </div>
@@ -531,9 +531,9 @@
         </div>
         <div class="dt-detail">
           <div class="flex items-center gap-1">
-            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
-            <div class="w-2 h-2 rounded-full" style="background:#059669"></div>
-            <div class="flex-1 h-1.5 rounded-full" style="background:#059669"></div>
+            <div class="flex-1 h-1.5 rounded-full" style="background:#258046"></div>
+            <div class="w-2 h-2 rounded-full" style="background:#258046"></div>
+            <div class="flex-1 h-1.5 rounded-full" style="background:#258046"></div>
             <!-- Current 'Packed' marker · enlarged, cyan halo -->
             <span class="relative flex items-center justify-center flex-shrink-0" style="width:14px;height:14px">
               <span class="absolute w-4 h-4 rounded-full" style="background:rgba(8,145,178,0.25);animation:dtPulse 1.4s ease-out infinite"></span>
@@ -545,7 +545,7 @@
             <div class="w-2 h-2 rounded-full" style="background:#6EE7B7"></div>
           </div>
           <div class="flex justify-between mt-1.5 text-[9.5px] font-semibold">
-            <span style="color:#047857">Placed</span>
+            <span style="color:#258046">Placed</span>
             <span class="dt-stage-current" style="color:#0E7490;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;font-size:10.5px">Packed</span>
             <span style="color:#64748B">Out</span>
             <span style="color:#64748B">Delivered</span>
@@ -557,7 +557,7 @@
     <!-- Pagination dots row · only shown when there are 2+ tiles · dots + inline "1 of N" counter centred together as one unit · index syncs with scroll position (JS) -->
     <div class="ds-dots-row dt-detail flex items-center justify-center gap-3 pb-2 px-5">
       <div id="deliveryDots" class="ds-dots flex items-center gap-1.5"></div>
-      <span class="text-[10.5px] font-extrabold tracking-[0.1em] uppercase" style="color:#047857"><span id="dsIndex">1</span> of <span id="dsTotal">2</span></span>
+      <span class="text-[10.5px] font-extrabold tracking-[0.1em] uppercase" style="color:#258046"><span id="dsIndex">1</span> of <span id="dsTotal">2</span></span>
     </div>
   </div>
 
@@ -570,27 +570,27 @@
       <button type="button" id="onboardingTile" class="w-full text-left rounded-2xl relative overflow-hidden block" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 4px 14px -6px rgba(5,150,105,0.18);cursor:pointer">
         <!-- STATE A · EARN -->
         <style>
-          .qs-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;background:#FFFFFF;border:1.5px solid #BBF7D0;color:#059669;transition:all .25s ease}
-          .qs-dot.done{background:linear-gradient(135deg,#047857,#10B981);border-color:#047857;color:#FFFFFF;box-shadow:0 4px 10px -3px rgba(5,150,105,0.5)}
+          .qs-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;background:#FFFFFF;border:1.5px solid #BBF7D0;color:#258046;transition:all .25s ease}
+          .qs-dot.done{background:linear-gradient(135deg,#258046,#10B981);border-color:#258046;color:#FFFFFF;box-shadow:0 4px 10px -3px rgba(5,150,105,0.5)}
           .qs-line{flex:1;height:2.5px;border-radius:9999px;background:#D1FAE5;margin:0 3px;transition:background .25s ease}
           .qs-line.done{background:#10B981}
         </style>
         <div class="ob-state-earn relative">
           <span class="absolute pointer-events-none" style="top:-34px;right:-34px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,0.14) 0%,transparent 70%)"></span>
           <div class="flex items-center gap-1.5 px-3.5 py-2 relative" style="background:linear-gradient(90deg,#ECFDF5 0%,#F0FDF4 100%);border-bottom:1px solid #BBF7D0">
-            <i class="fa-solid fa-trophy text-[11px]" style="color:#047857"></i>
-            <span class="text-[10px] font-extrabold tracking-[0.14em] uppercase" style="color:#047857">Earn Krishi Coins</span>
-            <span class="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold" style="background:#FFFFFF;color:#047857;border:1px solid #BBF7D0"><span id="questDoneCount">0</span> of 5 done</span>
+            <i class="fa-solid fa-trophy text-[11px]" style="color:#258046"></i>
+            <span class="text-[10px] font-extrabold tracking-[0.14em] uppercase" style="color:#258046">Earn Krishi Coins</span>
+            <span class="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold" style="background:#FFFFFF;color:#258046;border:1px solid #BBF7D0"><span id="questDoneCount">0</span> of 5 done</span>
           </div>
           <div class="px-3.5 pt-3.5 flex items-center gap-3 relative">
-            <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%);box-shadow:0 6px 16px -4px rgba(5,150,105,0.5),0 0 0 4px rgba(5,150,105,0.1)">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%);box-shadow:0 6px 16px -4px rgba(5,150,105,0.5),0 0 0 4px rgba(5,150,105,0.1)">
               <i class="fa-solid fa-coins text-[19px]" style="color:#FFFFFF"></i>
             </div>
             <div class="flex-1 leading-tight min-w-0">
               <div class="text-[15.5px] font-extrabold" style="color:#0F172A">Complete 5 quick steps</div>
-              <div class="text-[11.5px] font-semibold mt-0.5" style="color:#64748B">Earn up to <span style="color:#047857;font-weight:800"><span id="questMaxCoins">95</span> coins</span></div>
+              <div class="text-[11.5px] font-semibold mt-0.5" style="color:#64748B">Earn up to <span style="color:#258046;font-weight:800"><span id="questMaxCoins">95</span> coins</span></div>
             </div>
-            <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF;box-shadow:0 4px 10px -3px rgba(5,150,105,0.45)">View all <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i></span>
+            <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-extrabold flex-shrink-0" style="background:#258046;color:#FFFFFF;box-shadow:0 4px 10px -3px rgba(5,150,105,0.45)">View all <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i></span>
           </div>
           <div class="px-4 pt-4 pb-3.5 relative">
             <div class="flex items-center" id="questSteps"></div>
@@ -599,21 +599,21 @@
         <!-- STATE B · SPEND · revealed once user earns coins · clean emerald wallet treatment (no yellow) · prompts the user to spend the FULL wallet balance (not just the freshly-earned chunk) · no step-progress bar since onboarding is complete -->
         <div class="ob-state-shop" style="display:none">
           <div class="flex items-center gap-1.5 px-3.5 py-2" style="background:#ECFDF5;border-bottom:1px solid #BBF7D0">
-            <i class="fa-solid fa-circle-check text-[11px]" style="color:#047857"></i>
-            <span class="text-[10px] font-extrabold tracking-[0.14em] uppercase" style="color:#047857">Your rewards</span>
-            <span class="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold" style="background:#FFFFFF;color:#047857;border:1px solid #BBF7D0">
+            <i class="fa-solid fa-circle-check text-[11px]" style="color:#258046"></i>
+            <span class="text-[10px] font-extrabold tracking-[0.14em] uppercase" style="color:#258046">Your rewards</span>
+            <span class="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold" style="background:#FFFFFF;color:#258046;border:1px solid #BBF7D0">
               <i class="fa-solid fa-coins text-[9px]" style="color:#F59E0B"></i> <span id="obWalletChip">270</span> coins
             </span>
           </div>
           <div class="px-3.5 py-3.5 flex items-center gap-3">
-            <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%);box-shadow:0 4px 12px -2px rgba(5,150,105,0.4)">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%);box-shadow:0 4px 12px -2px rgba(5,150,105,0.4)">
               <i class="fa-solid fa-wallet text-[18px]" style="color:#FFFFFF"></i>
             </div>
             <div class="flex-1 leading-tight min-w-0">
               <div class="text-[15.5px] font-extrabold truncate" style="color:#0F172A">Use your <span id="obWalletAmt">270</span> coins</div>
               <div class="text-[11px] font-semibold mt-0.5 truncate" style="color:#64748B">Apply at checkout for instant savings</div>
             </div>
-            <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-extrabold flex-shrink-0" style="background:#059669;color:#FFFFFF;box-shadow:0 3px 8px -2px rgba(5,150,105,0.4)">
+            <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-extrabold flex-shrink-0" style="background:#258046;color:#FFFFFF;box-shadow:0 3px 8px -2px rgba(5,150,105,0.4)">
               Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i>
             </span>
           </div>
@@ -659,7 +659,7 @@
 
         <!-- Header: emerald deal pill + appealing 3-box countdown clock — wrapped in its own px-4 so the wrapper itself can be full-bleed (no horizontal padding) and the scroll container below can reach the right viewport edge naturally -->
         <div class="relative flex items-center justify-between mb-3 px-4">
-          <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-[12px] font-extrabold tracking-[0.12em] text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%);box-shadow:0 4px 10px -2px rgba(5,150,105,0.5)">⚡ FLASH DEALS</span>
+          <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-[12px] font-extrabold tracking-[0.12em] text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%);box-shadow:0 4px 10px -2px rgba(5,150,105,0.5)">⚡ FLASH DEALS</span>
           <!-- Countdown clock: 3 separate dark tiles for H : M : S with amber digits + glow -->
           <div class="flex items-center gap-1">
             <span class="px-2 py-1.5 rounded-md tnum text-[14px] font-extrabold leading-none" id="flashTimerH" style="background:#0F172A;color:#FBBF24;min-width:34px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">02</span>
@@ -676,14 +676,14 @@
 
             <!-- Card 1 · Chakrawarti -->
             <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:160px;border:1px solid #E5E7EB;box-shadow:0 2px 10px rgba(15,23,42,0.06)">
-              <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
+              <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
                 <span class="text-[13px] font-extrabold">Save ₹247</span>
                 <span class="text-[11.5px] font-extrabold px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">50% OFF</span>
               </div>
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
                   <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full object-contain"/>
-                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-bold bg-white" style="border:1.5px solid #059669;color:#059669;line-height:1" aria-label="Add to cart">+</button>
+                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-bold bg-white" style="border:1.5px solid #258046;color:#258046;line-height:1" aria-label="Add to cart">+</button>
                 </div>
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
@@ -701,14 +701,14 @@
 
             <!-- Card 2 · Humic + Fulvic -->
             <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:160px;border:1px solid #E5E7EB;box-shadow:0 2px 10px rgba(15,23,42,0.06)">
-              <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
+              <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
                 <span class="text-[13px] font-extrabold">Save ₹208</span>
                 <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">40% OFF</span>
               </div>
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
                   <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/>
-                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-bold bg-white" style="border:1.5px solid #059669;color:#059669;line-height:1" aria-label="Add to cart">+</button>
+                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-bold bg-white" style="border:1.5px solid #258046;color:#258046;line-height:1" aria-label="Add to cart">+</button>
                 </div>
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
@@ -726,14 +726,14 @@
 
             <!-- Card 3 · NPK -->
             <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:160px;border:1px solid #E5E7EB;box-shadow:0 2px 10px rgba(15,23,42,0.06)">
-              <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
+              <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
                 <span class="text-[13px] font-extrabold">Save ₹119</span>
                 <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">35% OFF</span>
               </div>
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
                   <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend max-h-full object-contain"/>
-                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-bold bg-white" style="border:1.5px solid #059669;color:#059669;line-height:1" aria-label="Add to cart">+</button>
+                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-bold bg-white" style="border:1.5px solid #258046;color:#258046;line-height:1" aria-label="Add to cart">+</button>
                 </div>
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
@@ -751,14 +751,14 @@
 
             <!-- Card 4 · Triple Attack -->
             <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:160px;border:1px solid #E5E7EB;box-shadow:0 2px 10px rgba(15,23,42,0.06)">
-              <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
+              <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
                 <span class="text-[13px] font-extrabold">Save ₹410</span>
                 <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">45% OFF</span>
               </div>
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
                   <img src="https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp" class="img-blend max-h-full object-contain"/>
-                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-bold bg-white" style="border:1.5px solid #059669;color:#059669;line-height:1" aria-label="Add to cart">+</button>
+                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-bold bg-white" style="border:1.5px solid #258046;color:#258046;line-height:1" aria-label="Add to cart">+</button>
                 </div>
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
@@ -880,7 +880,7 @@
             <span class="text-[18px] leading-none">🌾</span>
             <span class="text-[16px] text-[#0F172A] font-extrabold tracking-tight">Select your crop</span>
           </div>
-          <button id="addCropBtn_legacy" class="flex items-center gap-1 text-[12.5px] font-bold px-2.5 py-1 rounded-full" style="color:#059669;background:#ECFDF5;border:1px solid #BBF7D0">
+          <button id="addCropBtn_legacy" class="flex items-center gap-1 text-[12.5px] font-bold px-2.5 py-1 rounded-full" style="color:#258046;background:#ECFDF5;border:1px solid #BBF7D0">
             <i class="fa-solid fa-plus text-[10px]"></i>
             Add
           </button>
@@ -910,7 +910,7 @@
                 <img src="https://images.unsplash.com/photo-1591885503007-9b80d9c89a52?w=64&q=80&fit=crop" class="w-7 h-7 rounded-full object-cover" onerror="cropFallback(this,'☁️',16)"/>
                 <span class="text-[12.5px] font-bold text-[#0F172A]">Cotton</span>
               </button>
-              <button id="addCropBtnInline" class="flex items-center gap-1 px-2.5 py-1 rounded-full text-[12.5px] font-bold flex-shrink-0" style="color:#059669;background:#ECFDF5;border:1px dashed #10B981">
+              <button id="addCropBtnInline" class="flex items-center gap-1 px-2.5 py-1 rounded-full text-[12.5px] font-bold flex-shrink-0" style="color:#258046;background:#ECFDF5;border:1px dashed #10B981">
                 <i class="fa-solid fa-plus text-[9px]"></i> More
               </button>
             </div>
@@ -978,7 +978,7 @@
               <div class="flex items-baseline gap-1 mt-1.5 flex-wrap">
                 <span class="text-[16px] font-extrabold tnum text-[#0F172A]">₹358</span>
                 <span class="text-[11px] text-[#94A3B8] line-through tnum">₹495</span>
-                <span class="text-[10px] font-extrabold" style="color:#047857">28% off</span>
+                <span class="text-[10px] font-extrabold" style="color:#258046">28% off</span>
               </div>
               <button class="w-full mt-2 h-8 rounded-lg bg-emerald-600 text-white text-[12px] font-semibold">Add</button>
             </a>
@@ -1014,7 +1014,7 @@
               <div class="flex items-baseline gap-1 mt-1.5 flex-wrap">
                 <span class="text-[16px] font-extrabold tnum text-[#0F172A]">₹289</span>
                 <span class="text-[11px] text-[#94A3B8] line-through tnum">₹340</span>
-                <span class="text-[10px] font-extrabold" style="color:#047857">15% off</span>
+                <span class="text-[10px] font-extrabold" style="color:#258046">15% off</span>
               </div>
               <button class="w-full mt-2 h-8 rounded-lg bg-emerald-600 text-white text-[12px] font-semibold">Add</button>
             </a>
@@ -1033,7 +1033,7 @@
               <div class="flex items-baseline gap-1 mt-1.5 flex-wrap">
                 <span class="text-[16px] font-extrabold tnum text-[#0F172A]">₹712</span>
                 <span class="text-[11px] text-[#94A3B8] line-through tnum">₹910</span>
-                <span class="text-[10px] font-extrabold" style="color:#047857">22% off</span>
+                <span class="text-[10px] font-extrabold" style="color:#258046">22% off</span>
               </div>
               <button class="w-full mt-2 h-8 rounded-lg bg-emerald-600 text-white text-[12px] font-semibold">Add</button>
             </a>
@@ -1068,7 +1068,7 @@
         <!-- Products for the selected crop(s) · crop chips (All + each selected) + 2-col grid · shown once a crop is selected -->
         <style>
           .cropf-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 13px;border-radius:9999px;background:#FFFFFF;border:1.5px solid #E5E7EB;font-size:12px;font-weight:700;color:#0F172A;cursor:pointer;white-space:nowrap}
-          .cropf-chip.on{background:#059669;border-color:#047857;color:#FFFFFF}
+          .cropf-chip.on{background:#258046;border-color:#258046;color:#FFFFFF}
           .cropf-chip .ci{width:18px;height:18px;border-radius:50%;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;background:#ECFDF5;font-size:9px}
           .cropf-chip .ci img{width:100%;height:100%;object-fit:cover}
           /* Crop products · same card as the Bestseller / Recently-viewed tile, in a 2-col grid */
@@ -1083,8 +1083,8 @@
           .cpg-pr{display:flex;align-items:baseline;gap:5px;margin-top:7px}
           .cpg-pr .cur{font-size:16px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
           .cpg-pr .mrp{font-size:11px;color:#94A3B8;text-decoration:line-through;font-weight:600;font-variant-numeric:tabular-nums}
-          .cpg-pr .off{font-size:10px;font-weight:800;color:#047857}
-          .cpg-add{margin-top:9px;height:32px;border-radius:9px;background:#059669;border:0;color:#FFFFFF;font-size:12px;font-weight:800;cursor:pointer}
+          .cpg-pr .off{font-size:10px;font-weight:800;color:#258046}
+          .cpg-add{margin-top:9px;height:32px;border-radius:9px;background:#258046;border:0;color:#FFFFFF;font-size:12px;font-weight:800;cursor:pointer}
           .cpg-add:active{transform:scale(.98)}
         </style>
         <div id="cropProductsWrap" class="relative px-4 pb-3" style="display:none">
@@ -1107,12 +1107,12 @@
     <section class="px-4 mt-6" id="walletNudge">
       <a href="categories.html" style="display:flex;align-items:center;gap:13px;padding:14px;border-radius:16px;background:linear-gradient(135deg,#ECFDF5,#F0FDF4);border:1px solid #BBF7D0;text-decoration:none;position:relative;overflow:hidden">
         <span style="position:absolute;right:-20px;top:-20px;width:110px;height:110px;border-radius:50%;background:rgba(5,150,105,0.07)"></span>
-        <span style="width:46px;height:46px;border-radius:12px;background:#059669;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 8px 18px -6px rgba(5,150,105,0.5)"><i class="fa-solid fa-wallet"></i></span>
+        <span style="width:46px;height:46px;border-radius:12px;background:#258046;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 8px 18px -6px rgba(5,150,105,0.5)"><i class="fa-solid fa-wallet"></i></span>
         <span style="flex:1;line-height:1.35;min-width:0;position:relative">
           <span style="display:block;font-size:15px;font-weight:900;color:#0F172A">&#8377;540 sitting in your wallet</span>
           <span style="display:block;font-size:12px;color:#475569;font-weight:500;margin-top:1px">Use it on your next order — auto-applied at checkout</span>
         </span>
-        <span style="flex-shrink:0;position:relative;background:#059669;color:#fff;font-size:12.5px;font-weight:800;padding:8px 16px;border-radius:10px">Use now</span>
+        <span style="flex-shrink:0;position:relative;background:#258046;color:#fff;font-size:12.5px;font-weight:800;padding:8px 16px;border-radius:10px">Use now</span>
       </a>
     </section>
 
@@ -1120,7 +1120,7 @@
     <section class="px-4 pt-5">
       <div class="flex items-baseline justify-between mb-4">
         <h2 class="text-[21px] font-bold tracking-tight">Bestsellers</h2>
-        <a href="shop.html?sort=bestsellers" class="nu text-[13px] font-semibold" style="color:#059669">See all</a>
+        <a href="shop.html?sort=bestsellers" class="nu text-[13px] font-semibold" style="color:#258046">See all</a>
       </div>
       <div class="grid grid-cols-2 gap-3">
 
@@ -1153,10 +1153,10 @@
             <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
               <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹210</span>
               <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹290</span>
-              <span class="text-[10.5px] font-extrabold" style="color:#047857">28% off</span>
+              <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
             </div>
             <div class="mt-2">
-              <button class="variant-btn w-full h-8 rounded-lg text-[12.5px] font-semibold text-white" style="background:#059669">2 Options</button>
+              <button class="variant-btn w-full h-8 rounded-lg text-[12.5px] font-semibold text-white" style="background:#258046">2 Options</button>
             </div>
           </div>
         </a>
@@ -1189,10 +1189,10 @@
             <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
               <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹358</span>
               <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹495</span>
-              <span class="text-[10.5px] font-extrabold" style="color:#047857">28% off</span>
+              <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
             </div>
             <div class="mt-2">
-              <button class="variant-btn w-full h-8 rounded-lg text-[12.5px] font-semibold text-white" style="background:#059669">2 Options</button>
+              <button class="variant-btn w-full h-8 rounded-lg text-[12.5px] font-semibold text-white" style="background:#258046">2 Options</button>
             </div>
           </div>
         </a>
@@ -1216,11 +1216,11 @@
             <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
               <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹440</span>
               <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹610</span>
-              <span class="text-[10.5px] font-extrabold" style="color:#047857">28% off</span>
+              <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
             </div>
             <div class="mt-2 qty-wrap">
-              <button class="qty-add w-full h-8 rounded-lg text-white text-[12.5px] font-semibold" style="background:#059669">Add</button>
-              <div class="qty-steps w-full h-8 rounded-lg text-white items-center justify-between px-1" style="background:#059669;display:none">
+              <button class="qty-add w-full h-8 rounded-lg text-white text-[12.5px] font-semibold" style="background:#258046">Add</button>
+              <div class="qty-steps w-full h-8 rounded-lg text-white items-center justify-between px-1" style="background:#258046;display:none">
                 <button class="qty-dec w-8 h-8 flex items-center justify-center text-[18px] font-bold">−</button>
                 <span class="qty-val text-[14px] font-bold tnum">1</span>
                 <button class="qty-inc w-8 h-8 flex items-center justify-center text-[18px] font-bold">+</button>
@@ -1249,8 +1249,8 @@
               <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹327</span>
             </div>
             <div class="mt-2 qty-wrap">
-              <button class="qty-add w-full h-8 rounded-lg text-white text-[12.5px] font-semibold" style="background:#059669">Add</button>
-              <div class="qty-steps w-full h-8 rounded-lg text-white items-center justify-between px-1" style="background:#059669;display:none">
+              <button class="qty-add w-full h-8 rounded-lg text-white text-[12.5px] font-semibold" style="background:#258046">Add</button>
+              <div class="qty-steps w-full h-8 rounded-lg text-white items-center justify-between px-1" style="background:#258046;display:none">
                 <button class="qty-dec w-8 h-8 flex items-center justify-center text-[18px] font-bold">−</button>
                 <span class="qty-val text-[14px] font-bold tnum">1</span>
                 <button class="qty-inc w-8 h-8 flex items-center justify-center text-[18px] font-bold">+</button>
@@ -1266,7 +1266,7 @@
     <section class="mt-8 py-4" style="background:#F3F1FF">
       <div class="px-4 mb-3 flex items-baseline justify-between">
         <h2 class="text-[21px] font-bold tracking-tight">Recently viewed</h2>
-        <a href="shop.html?view=recent" class="nu text-[13px] font-semibold" style="color:#059669">See all</a>
+        <a href="shop.html?view=recent" class="nu text-[13px] font-semibold" style="color:#258046">See all</a>
       </div>
       <style>
         .rv-card{flex-shrink:0;width:172px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06);text-decoration:none;color:#0F172A;display:flex;flex-direction:column}
@@ -1281,8 +1281,8 @@
         .rv-card .rv-p{display:flex;align-items:baseline;gap:6px;margin-top:7px}
         .rv-card .rv-p .cur{font-size:18px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
         .rv-card .rv-p .rv-m{font-size:11.5px;font-weight:600;color:#94A3B8;text-decoration:line-through;font-variant-numeric:tabular-nums}
-        .rv-card .rv-p .rv-o{font-size:10.5px;font-weight:800;color:#047857}
-        .rv-card .rv-add{width:100%;height:32px;margin-top:9px;border-radius:8px;background:#059669;border:0;color:#FFFFFF;font-size:12.5px;font-weight:700;cursor:pointer}
+        .rv-card .rv-p .rv-o{font-size:10.5px;font-weight:800;color:#258046}
+        .rv-card .rv-add{width:100%;height:32px;margin-top:9px;border-radius:8px;background:#258046;border:0;color:#FFFFFF;font-size:12.5px;font-weight:700;cursor:pointer}
         .rv-card .rv-add:active{transform:scale(.98)}
       </style>
       <div class="overflow-x-auto scroll-x">
@@ -1300,12 +1300,12 @@
     <section class="mt-8">
       <div class="px-4 mb-3 flex items-baseline justify-between">
         <h2 class="text-[21px] font-bold tracking-tight">Buy again</h2>
-        <a href="orders.html" class="nu text-[12px] font-extrabold" style="color:#047857;text-decoration:none">SEE ALL</a>
+        <a href="orders.html" class="nu text-[12px] font-extrabold" style="color:#258046;text-decoration:none">SEE ALL</a>
       </div>
       <style>
         /* Buy again · horizontal REORDER tiles · green "Ordered <date>" strip layer on top, technical name under the product name, filled-emerald Buy-again button (same as the Add button) */
         .ba-card{flex-shrink:0;width:264px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04);display:flex;flex-direction:column;overflow:hidden}
-        .ba-datestrip{display:flex;align-items:center;justify-content:center;width:100%;padding:6px 12px;background:#059669;color:#FFFFFF;font-size:10px;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;text-align:center}
+        .ba-datestrip{display:flex;align-items:center;justify-content:center;width:100%;padding:6px 12px;background:#258046;color:#FFFFFF;font-size:10px;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;text-align:center}
         .ba-row{display:flex;align-items:center;gap:12px;padding:11px;flex:1}
         .ba-imgwrap{width:74px;height:74px;border-radius:12px;background:#F8FAFC;border:1px solid #F1F5F9;display:flex;align-items:center;justify-content:center;padding:8px;flex-shrink:0}
         .ba-imgwrap img{max-width:100%;max-height:100%;object-fit:contain}
@@ -1316,7 +1316,7 @@
         .ba-size{font-size:10px;font-weight:600;color:#475569;background:#F1F5F9;padding:1px 6px;border-radius:5px}
         .ba-price{font-size:15px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
         .ba-mrp{font-size:10.5px;color:#94A3B8;text-decoration:line-through;font-variant-numeric:tabular-nums}
-        .ba-reorder{margin-top:9px;height:34px;border-radius:9px;background:#059669;color:#FFFFFF;border:0;font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;text-decoration:none;box-shadow:0 4px 12px -4px rgba(5,150,105,0.4)}
+        .ba-reorder{margin-top:9px;height:34px;border-radius:9px;background:#258046;color:#FFFFFF;border:0;font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;text-decoration:none;box-shadow:0 4px 12px -4px rgba(5,150,105,0.4)}
         .ba-reorder:active{transform:scale(.98)}
         .ba-reorder i{font-size:11px}
         .ba-stars{display:flex;align-items:center;justify-content:center;gap:11px;padding:11px;border-top:1px solid #F1F5F9}
@@ -1402,7 +1402,7 @@
       <div class="overflow-x-auto scroll-x" style="scroll-snap-type:x mandatory;scroll-padding-left:16px">
         <div class="flex gap-4 pb-2" style="padding-left:16px;padding-right:24px">
 
-          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative flex flex-col" style="width:300px;height:360px;scroll-snap-align:start;background:linear-gradient(155deg,#022C22 0%,#047857 40%,#059669 80%,#10B981 100%);box-shadow:0 14px 30px -10px rgba(4,78,57,0.45)">
+          <a href="pdp.html" class="nu flex-shrink-0 rounded-2xl overflow-hidden relative flex flex-col" style="width:300px;height:360px;scroll-snap-align:start;background:linear-gradient(155deg,#022C22 0%,#258046 40%,#258046 80%,#10B981 100%);box-shadow:0 14px 30px -10px rgba(4,78,57,0.45)">
             <div class="absolute inset-0 pointer-events-none" style="background:repeating-linear-gradient(135deg,rgba(255,255,255,0.04) 0,rgba(255,255,255,0.04) 1px,transparent 1px,transparent 14px)"></div>
             <div class="absolute pointer-events-none" style="top:-20px;right:-30px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.28) 0%,transparent 65%)"></div>
             <div class="absolute pointer-events-none" style="bottom:-30px;left:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,0.55) 0%,transparent 70%)"></div>
@@ -1500,7 +1500,7 @@
     <section id="acresWidget" class="mt-4 px-4" style="transition:max-height .55s ease,opacity .35s ease,margin .55s ease,padding .55s ease;max-height:200px;overflow:hidden">
       <div id="acresCard" class="rounded-xl p-3.5 relative overflow-hidden" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15);transition:transform .35s cubic-bezier(.34,1.56,.64,1)">
         <div class="flex items-center gap-2">
-          <i class="fa-solid fa-circle-question text-[14px] flex-shrink-0" style="color:#059669"></i>
+          <i class="fa-solid fa-circle-question text-[14px] flex-shrink-0" style="color:#258046"></i>
           <div class="flex-1 min-w-0 text-[13.5px] font-extrabold text-[#0F172A] leading-tight">How many acres of land do you farm?</div>
           <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[10.5px] font-extrabold flex-shrink-0" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#78350F">
             <i class="fa-solid fa-coins text-[9px]"></i> +20
@@ -1535,7 +1535,7 @@
         /* Compact poll tile · mirrors the "How many acres" widget: header row (icon + question + coin + close), options below · question wraps aligned to its own left edge (parallel to line 1) */
         .eng-card{position:relative;background:#FFFFFF;border:1px solid #BBF7D0;border-radius:14px;padding:12px 13px;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15);overflow:hidden}
         .eng-head{display:flex;align-items:flex-start;gap:9px}
-        .eng-ic{width:30px;height:30px;border-radius:9px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+        .eng-ic{width:30px;height:30px;border-radius:9px;background:#ECFDF5;color:#258046;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
         .eng-coin{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:9999px;font-size:10.5px;font-weight:800;background:linear-gradient(135deg,#FBBF24,#F59E0B);color:#78350F}
         .eng-coin i{font-size:9px}
         .eng-close{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:#F1F5F9;color:#475569;border:0;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer}
@@ -1543,12 +1543,12 @@
         .eng-opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
         .eng-chip{padding:6px 11px;border-radius:9999px;background:#F8FAFC;border:1px solid #E5E7EB;font-size:11.5px;font-weight:700;color:#0F172A;cursor:pointer;transition:all .15s ease}
         .eng-chip:active{transform:scale(.96)}
-        .eng-chip.sel{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
+        .eng-chip.sel{background:#ECFDF5;border-color:#258046;color:#258046;font-weight:800}
         .eng-chip.sel::before{content:"\f00c";font-family:"Font Awesome 6 Free";font-weight:900;margin-right:6px;font-size:10px}
         .eng-cta:disabled{opacity:.5;cursor:not-allowed}
         /* All widget CTAs are secondary buttons (same as the Rate widget) */
-        .eng-cta{width:100%;height:36px;border-radius:10px;background:#ECFDF5;color:#047857;border:1px solid #BBF7D0;font-size:12.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;text-decoration:none;margin-top:10px}
-        .eng-cta.ghost{background:#ECFDF5;color:#047857;border:1px solid #BBF7D0}
+        .eng-cta{width:100%;height:36px;border-radius:10px;background:#ECFDF5;color:#258046;border:1px solid #BBF7D0;font-size:12.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;text-decoration:none;margin-top:10px}
+        .eng-cta.ghost{background:#ECFDF5;color:#258046;border:1px solid #BBF7D0}
         .eng-done{position:absolute;inset:0;background:linear-gradient(135deg,rgba(5,150,105,0.97),rgba(16,185,129,0.97));color:#FFFFFF;display:none;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center;padding:14px}
         .eng-card.done .eng-done{display:flex}
         .eng-done .ic{font-size:26px}
@@ -1563,13 +1563,13 @@
         .eng-stars .s.on{color:#F59E0B}
         .eng-stars .s:active{transform:scale(.85)}
         .eng-attach{display:inline-flex;align-items:center;gap:7px;margin-top:10px;height:42px;padding:0 14px;border-radius:10px;border:1.5px dashed #CBD5E1;background:#FFFFFF;color:#475569;font-size:12.5px;font-weight:700;cursor:pointer}
-        .eng-attach i{color:#047857;font-size:13px}
-        .eng-attach-info{font-size:11.5px;font-weight:700;color:#047857;margin-top:7px;display:none}
+        .eng-attach i{color:#258046;font-size:13px}
+        .eng-attach-info{font-size:11.5px;font-weight:700;color:#258046;margin-top:7px;display:none}
         /* Crop-problem · converted state · selected problem → recommended products strip */
         .cp-rec-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
         .cp-rec-lbl{font-size:12px;font-weight:800;color:#475569}
         .cp-rec-pills{display:inline-flex;gap:6px;flex-wrap:wrap}
-        .cp-rec-pill{font-size:11px;font-weight:800;color:#047857;background:#ECFDF5;border:1px solid #A7F3D0;padding:3px 11px;border-radius:9999px}
+        .cp-rec-pill{font-size:11px;font-weight:800;color:#258046;background:#ECFDF5;border:1px solid #A7F3D0;padding:3px 11px;border-radius:9999px}
         .cp-rec-strip{display:flex;gap:9px;overflow-x:auto;padding:11px 2px 2px;margin:0 -2px;scrollbar-width:none}
         .cp-rec-strip::-webkit-scrollbar{display:none}
         /* Crop-problem recommended products · same card style as the Bestseller / Recently-viewed tiles */
@@ -1586,10 +1586,10 @@
         .cp-prod-pr{display:flex;align-items:baseline;gap:5px;margin-top:7px}
         .cp-prod-pr .cur{font-size:16px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
         .cp-prod-pr .mrp{font-size:11px;color:#94A3B8;text-decoration:line-through;font-weight:600;font-variant-numeric:tabular-nums}
-        .cp-prod-pr .off{font-size:10px;font-weight:800;color:#047857}
-        .cp-prod-add{margin-top:9px;height:32px;border-radius:9px;background:#059669;border:0;color:#FFFFFF;font-size:12px;font-weight:800;cursor:pointer}
+        .cp-prod-pr .off{font-size:10px;font-weight:800;color:#258046}
+        .cp-prod-add{margin-top:9px;height:32px;border-radius:9px;background:#258046;border:0;color:#FFFFFF;font-size:12px;font-weight:800;cursor:pointer}
         .cp-prod-add:active{transform:scale(.98)}
-        .cp-rec-all{display:flex;align-items:center;justify-content:center;gap:6px;height:38px;border-radius:10px;background:#ECFDF5;border:1px solid #BBF7D0;color:#047857;font-size:12.5px;font-weight:800;text-decoration:none;margin-top:11px}
+        .cp-rec-all{display:flex;align-items:center;justify-content:center;gap:6px;height:38px;border-radius:10px;background:#ECFDF5;border:1px solid #BBF7D0;color:#258046;font-size:12.5px;font-weight:800;text-decoration:none;margin-top:11px}
         .cp-rec-all i{font-size:10px}
       </style>
       <div class="px-4 space-y-3" id="engRow">
@@ -1696,7 +1696,7 @@
       <textarea id="engTestiText" placeholder="What result did you see? How many days? Any tips for other farmers…" class="w-full mt-1.5 rounded-[10px] text-[12.5px] outline-none" style="border:1px solid #E5E7EB;background:#FAFAFA;padding:10px 12px;min-height:74px;resize:none;font-family:inherit;color:#0F172A"></textarea>
       <div><label class="eng-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input type="file" accept="image/*,video/*" capture="environment" multiple id="engTestiMedia" style="display:none"/></label></div>
       <div class="eng-attach-info" id="engTestiAttachInfo"></div>
-      <button id="engTestiSubmit" class="w-full h-[50px] mt-3 rounded-[12px] text-white text-[14.5px] font-extrabold" style="background:#059669;border:0;opacity:.55" disabled><i class="fa-solid fa-paper-plane text-[12px]"></i> Submit story &amp; earn +30</button>
+      <button id="engTestiSubmit" class="w-full h-[50px] mt-3 rounded-[12px] text-white text-[14.5px] font-extrabold" style="background:#258046;border:0;opacity:.55" disabled><i class="fa-solid fa-paper-plane text-[12px]"></i> Submit story &amp; earn +30</button>
     </div>
 
     <!-- Rate & review bottom modal -->
@@ -1720,7 +1720,7 @@
       <textarea id="engRateText" placeholder="Write a quick review (optional)…" class="w-full rounded-[10px] text-[12.5px] outline-none" style="border:1px solid #E5E7EB;background:#FAFAFA;padding:10px 12px;min-height:60px;resize:none;font-family:inherit;color:#0F172A"></textarea>
       <div><label class="eng-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input type="file" accept="image/*,video/*" capture="environment" multiple id="engRateMedia" style="display:none"/></label></div>
       <div class="eng-attach-info" id="engRateAttachInfo"></div>
-      <button id="engRateSubmit" class="w-full h-[50px] mt-3 rounded-[12px] text-white text-[14.5px] font-extrabold" style="background:#059669;border:0;opacity:.55" disabled>Submit &amp; earn +25 coins</button>
+      <button id="engRateSubmit" class="w-full h-[50px] mt-3 rounded-[12px] text-white text-[14.5px] font-extrabold" style="background:#258046;border:0;opacity:.55" disabled>Submit &amp; earn +25 coins</button>
     </div>
 
     <!-- "Sorry to hear" sheet · shown when the user says their last order did NOT arrive OK -->
@@ -1733,7 +1733,7 @@
         </div>
         <div class="text-[19px] font-extrabold text-center leading-tight text-[#0F172A]">Sorry to hear that</div>
         <p class="text-[13px] text-center mt-2 leading-relaxed" style="color:#64748B">We're really sorry your order didn't arrive as expected. Our support team will make it right — please reach out and we'll help you straight away.</p>
-        <a href="help.html" class="w-full mt-5 h-[52px] rounded-[12px] text-[15px] font-extrabold inline-flex items-center justify-center gap-2" style="background:#059669;color:#FFFFFF;text-decoration:none;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)"><i class="fa-solid fa-headset text-[14px]"></i> Reach out to us</a>
+        <a href="help.html" class="w-full mt-5 h-[52px] rounded-[12px] text-[15px] font-extrabold inline-flex items-center justify-center gap-2" style="background:#258046;color:#FFFFFF;text-decoration:none;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)"><i class="fa-solid fa-headset text-[14px]"></i> Reach out to us</a>
         <button id="sorryClose" class="w-full mt-2.5 h-[48px] rounded-[12px] text-[14px] font-bold" style="background:#FFFFFF;border:1.5px solid #E5E7EB;color:#0F172A">Not now</button>
       </div>
     </div>
@@ -1818,7 +1818,7 @@
               + '<a href="' + viewAllHref + '" class="cp-rec-all">View all products <i class="fa-solid fa-arrow-right"></i></a>';
             // Add buttons bump the cart without navigating to the PDP
             card.querySelectorAll('.cp-prod-add').forEach(function(b){
-              b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if (typeof bumpCart === 'function') bumpCart(); b.textContent = 'Added ✓'; b.style.background = '#047857'; setTimeout(function(){ b.textContent = 'Add'; b.style.background = '#059669'; }, 1000); });
+              b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if (typeof bumpCart === 'function') bumpCart(); b.textContent = 'Added ✓'; b.style.background = '#258046'; setTimeout(function(){ b.textContent = 'Add'; b.style.background = '#258046'; }, 1000); });
             });
             try { localStorage.setItem('kkd.cropProb.done', '1'); } catch (e) {}
             if (window.kkdCelebrate) window.kkdCelebrate(15);
@@ -1954,7 +1954,7 @@
           loader.id = 'testiLoader';
           loader.className = 'flex-shrink-0 flex flex-col items-center justify-center gap-2';
           loader.style.cssText = 'width:108px;height:200px;border-radius:12px;border:1px solid #E5E7EB;background:#fff';
-          loader.innerHTML = '<div style="width:24px;height:24px;border-radius:50%;border:3px solid #D1FAE5;border-top-color:#059669;animation:tspin .8s linear infinite"></div><div class="text-[10px] font-bold" style="color:#94A3B8">Loading…</div>';
+          loader.innerHTML = '<div style="width:24px;height:24px;border-radius:50%;border:3px solid #D1FAE5;border-top-color:#258046;animation:tspin .8s linear infinite"></div><div class="text-[10px] font-bold" style="color:#94A3B8">Loading…</div>';
           row.appendChild(loader);
           setTimeout(() => {
             loader.remove();
@@ -1973,13 +1973,13 @@
     <section class="mt-8">
       <div class="px-4 mb-3 flex items-baseline justify-between">
         <h2 class="text-[21px] font-bold tracking-tight">Most selling in Indore</h2>
-        <a href="shop.html?sort=bestsellers" class="nu text-[13px] font-semibold" style="color:#059669">See all</a>
+        <a href="shop.html?sort=bestsellers" class="nu text-[13px] font-semibold" style="color:#258046">See all</a>
       </div>
       <div class="overflow-x-auto scroll-x">
         <div class="flex gap-3 px-4 pb-1">
 
           <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06)">
-            <div class="px-3 py-2 flex items-center justify-center gap-1.5 text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
+            <div class="px-3 py-2 flex items-center justify-center gap-1.5 text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
               <i class="fa-solid fa-fire text-[11px]" style="color:#FBBF24"></i>
               <span class="text-[11.5px] font-extrabold tracking-wide">134 bought last week</span>
             </div>
@@ -1998,7 +1998,7 @@
               <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
                 <span class="text-[17px] font-extrabold tnum text-[#0F172A]">&#8377;358</span>
                 <span class="text-[11.5px] text-[#94A3B8] line-through tnum">&#8377;495</span>
-                <span class="text-[10.5px] font-extrabold" style="color:#047857">28% off</span>
+                <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
               </div>
               <div class="mt-2 qty-wrap">
                 <button class="qty-add w-full h-9 rounded-lg bg-emerald-600 text-white text-[12.5px] font-semibold">Add</button>
@@ -2007,7 +2007,7 @@
           </a>
 
           <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06)">
-            <div class="px-3 py-2 flex items-center justify-center gap-1.5 text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
+            <div class="px-3 py-2 flex items-center justify-center gap-1.5 text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
               <i class="fa-solid fa-fire text-[11px]" style="color:#FBBF24"></i>
               <span class="text-[11.5px] font-extrabold tracking-wide">98 bought last week</span>
             </div>
@@ -2026,7 +2026,7 @@
               <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
                 <span class="text-[17px] font-extrabold tnum text-[#0F172A]">&#8377;376</span>
                 <span class="text-[11.5px] text-[#94A3B8] line-through tnum">&#8377;520</span>
-                <span class="text-[10.5px] font-extrabold" style="color:#047857">28% off</span>
+                <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
               </div>
               <div class="mt-2 qty-wrap">
                 <button class="qty-add w-full h-9 rounded-lg bg-emerald-600 text-white text-[12.5px] font-semibold">Add</button>
@@ -2035,7 +2035,7 @@
           </a>
 
           <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06)">
-            <div class="px-3 py-2 flex items-center justify-center gap-1.5 text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
+            <div class="px-3 py-2 flex items-center justify-center gap-1.5 text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
               <i class="fa-solid fa-fire text-[11px]" style="color:#FBBF24"></i>
               <span class="text-[11.5px] font-extrabold tracking-wide">76 bought last week</span>
             </div>
@@ -2054,7 +2054,7 @@
               <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
                 <span class="text-[17px] font-extrabold tnum text-[#0F172A]">&#8377;289</span>
                 <span class="text-[11.5px] text-[#94A3B8] line-through tnum">&#8377;340</span>
-                <span class="text-[10.5px] font-extrabold" style="color:#047857">15% off</span>
+                <span class="text-[10.5px] font-extrabold" style="color:#258046">15% off</span>
               </div>
               <div class="mt-2 qty-wrap">
                 <button class="qty-add w-full h-9 rounded-lg bg-emerald-600 text-white text-[12.5px] font-semibold">Add</button>
@@ -2063,7 +2063,7 @@
           </a>
 
           <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06)">
-            <div class="px-3 py-2 flex items-center justify-center gap-1.5 text-white" style="background:linear-gradient(135deg,#047857 0%,#10B981 100%)">
+            <div class="px-3 py-2 flex items-center justify-center gap-1.5 text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
               <i class="fa-solid fa-fire text-[11px]" style="color:#FBBF24"></i>
               <span class="text-[11.5px] font-extrabold tracking-wide">54 bought last week</span>
             </div>
@@ -2082,7 +2082,7 @@
               <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
                 <span class="text-[17px] font-extrabold tnum text-[#0F172A]">&#8377;440</span>
                 <span class="text-[11.5px] text-[#94A3B8] line-through tnum">&#8377;610</span>
-                <span class="text-[10.5px] font-extrabold" style="color:#047857">28% off</span>
+                <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
               </div>
               <div class="mt-2 qty-wrap">
                 <button class="qty-add w-full h-9 rounded-lg bg-emerald-600 text-white text-[12.5px] font-semibold">Add</button>
@@ -2098,20 +2098,20 @@
     <section class="mt-8 px-4">
       <button type="button" onclick="window.kkdVerify&&window.kkdVerify()" style="width:100%;display:flex;align-items:center;gap:13px;padding:16px;border-radius:18px;background:linear-gradient(135deg,#ECFDF5,#F0FDF4);border:1px solid #BBF7D0;text-align:left;cursor:pointer;position:relative;overflow:hidden">
         <span style="position:absolute;right:-20px;top:-20px;width:110px;height:110px;border-radius:50%;background:rgba(5,150,105,0.07)"></span>
-        <span style="width:52px;height:52px;border-radius:14px;background:#059669;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 8px 18px -6px rgba(5,150,105,0.5)"><i class="fa-solid fa-qrcode"></i></span>
+        <span style="width:52px;height:52px;border-radius:14px;background:#258046;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 8px 18px -6px rgba(5,150,105,0.5)"><i class="fa-solid fa-qrcode"></i></span>
         <span style="flex:1;line-height:1.35;position:relative;min-width:0">
           <span style="display:block;font-size:15.5px;font-weight:900;color:#0F172A">Verify a genuine product</span>
           <span style="display:block;font-size:12px;color:#475569;font-weight:500;margin-top:2px">Scan the QR on any Katyayani pack to confirm it's 100% authentic</span>
         </span>
-        <i class="fa-solid fa-chevron-right" style="position:relative;flex-shrink:0;color:#047857;font-size:16px"></i>
+        <i class="fa-solid fa-chevron-right" style="position:relative;flex-shrink:0;color:#258046;font-size:16px"></i>
       </button>
     </section>
 
     <!-- Brand illustration footer with "Jump to top" pill overlayed on the illustration's top edge so it visually sits on top of the artwork (not floating in white space above) -->
     <section id="endHint" class="relative" style="background:#FFFFFF;line-height:0;margin-top:64px">
       <div class="absolute left-0 right-0 flex items-center justify-center" style="top:0;transform:translateY(-50%);z-index:5;line-height:1">
-        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="nu inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12.5px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0;box-shadow:0 6px 18px -4px rgba(5,150,105,0.35)">
-          <i class="fa-solid fa-arrow-up text-[11px]" style="color:#047857"></i> Jump to top
+        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="nu inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12.5px] font-extrabold" style="background:#ECFDF5;color:#258046;border:1px solid #BBF7D0;box-shadow:0 6px 18px -4px rgba(5,150,105,0.35)">
+          <i class="fa-solid fa-arrow-up text-[11px]" style="color:#258046"></i> Jump to top
         </button>
       </div>
       <img src="../assets/brand-illustration.png" class="w-full block" alt="Katyayani Krishi Direct · Direct from Manufacturer · Crafted for Better Farming" style="-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 60px,#000 100%);mask-image:linear-gradient(180deg,transparent 0%,#000 60px,#000 100%);display:block;margin-bottom:-1px"/>
@@ -2168,35 +2168,35 @@
       <div class="overflow-y-auto px-5" style="flex:1">
         <!-- Live status banner -->
         <div class="rounded-xl p-3 mb-4 flex items-center gap-3" style="background:linear-gradient(135deg,#ECFDF5 0%,#D1FAE5 100%);border:1px solid #BBF7D0">
-          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:#059669">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:#258046">
             <i class="fa-solid fa-truck-fast text-[16px]" style="color:#FFFFFF"></i>
           </div>
           <div class="flex-1 leading-tight">
-            <div class="text-[13.5px] font-extrabold" style="color:#047857">Out for delivery</div>
+            <div class="text-[13.5px] font-extrabold" style="color:#258046">Out for delivery</div>
             <div class="text-[11.5px] font-semibold" style="color:#065F46">Arriving today by 5:00 PM</div>
           </div>
-          <span class="text-[10.5px] font-extrabold uppercase tracking-wider px-2 py-1 rounded-md" style="background:#FFFFFF;color:#047857;border:1px solid #BBF7D0">Live</span>
+          <span class="text-[10.5px] font-extrabold uppercase tracking-wider px-2 py-1 rounded-md" style="background:#FFFFFF;color:#258046;border:1px solid #BBF7D0">Live</span>
         </div>
         <!-- Timeline -->
         <div class="text-[12px] font-extrabold uppercase tracking-wider mb-3" style="color:#64748B">Order timeline</div>
         <div class="relative pl-7 pb-2" style="border-left:2px dashed #BBF7D0;margin-left:8px">
-          <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full flex items-center justify-center" style="background:#059669;border:2px solid #FFFFFF;box-shadow:0 0 0 2px #BBF7D0"><i class="fa-solid fa-check text-white text-[8px]"></i></div>
+          <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full flex items-center justify-center" style="background:#258046;border:2px solid #FFFFFF;box-shadow:0 0 0 2px #BBF7D0"><i class="fa-solid fa-check text-white text-[8px]"></i></div>
           <div class="text-[13px] font-extrabold text-[#0F172A]">Order placed</div>
           <div class="text-[11px]" style="color:#64748B">22 May, 11:42 AM</div>
           <div class="text-[11px] mt-1" style="color:#475569">Payment received · UPI ₹2,140</div>
         </div>
         <div class="relative pl-7 pb-2" style="border-left:2px dashed #BBF7D0;margin-left:8px">
-          <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full flex items-center justify-center" style="background:#059669;border:2px solid #FFFFFF;box-shadow:0 0 0 2px #BBF7D0"><i class="fa-solid fa-check text-white text-[8px]"></i></div>
+          <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full flex items-center justify-center" style="background:#258046;border:2px solid #FFFFFF;box-shadow:0 0 0 2px #BBF7D0"><i class="fa-solid fa-check text-white text-[8px]"></i></div>
           <div class="text-[13px] font-extrabold text-[#0F172A]">Packed at warehouse</div>
           <div class="text-[11px]" style="color:#64748B">23 May, 09:15 AM</div>
           <div class="text-[11px] mt-1" style="color:#475569">Quality checked &middot; Sealed by Katyayani Indore</div>
         </div>
-        <div class="relative pl-7 pb-2" style="border-left:2px dashed #059669;margin-left:8px">
-          <div class="absolute -left-[10px] top-0 w-5 h-5 rounded-full flex items-center justify-center" style="background:#059669;border:2px solid #FFFFFF;box-shadow:0 0 0 3px rgba(5,150,105,0.25);animation:dtPulse 1.6s ease-out infinite"><i class="fa-solid fa-truck-fast text-white text-[9px]"></i></div>
-          <div class="text-[13px] font-extrabold" style="color:#047857">Out for delivery <span class="text-[10px] font-bold uppercase ml-1 px-1.5 py-0.5 rounded" style="background:#059669;color:#FFFFFF">Now</span></div>
+        <div class="relative pl-7 pb-2" style="border-left:2px dashed #258046;margin-left:8px">
+          <div class="absolute -left-[10px] top-0 w-5 h-5 rounded-full flex items-center justify-center" style="background:#258046;border:2px solid #FFFFFF;box-shadow:0 0 0 3px rgba(5,150,105,0.25);animation:dtPulse 1.6s ease-out infinite"><i class="fa-solid fa-truck-fast text-white text-[9px]"></i></div>
+          <div class="text-[13px] font-extrabold" style="color:#258046">Out for delivery <span class="text-[10px] font-bold uppercase ml-1 px-1.5 py-0.5 rounded" style="background:#258046;color:#FFFFFF">Now</span></div>
           <div class="text-[11px]" style="color:#64748B">Today, 02:45 PM</div>
           <div class="text-[11px] mt-1" style="color:#475569">Suresh Yadav (rider) · arriving by 5:00 PM</div>
-          <a href="tel:+919999999999" class="inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-1 rounded-md text-[11px] font-extrabold" style="background:#FFFFFF;color:#047857;border:1px solid #BBF7D0"><i class="fa-solid fa-phone text-[9px]" style="color:#059669"></i> Call rider</a>
+          <a href="tel:+919999999999" class="inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-1 rounded-md text-[11px] font-extrabold" style="background:#FFFFFF;color:#258046;border:1px solid #BBF7D0"><i class="fa-solid fa-phone text-[9px]" style="color:#258046"></i> Call rider</a>
         </div>
         <div class="relative pl-7" style="margin-left:8px">
           <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full" style="background:#FFFFFF;border:2px solid #CBD5E1"></div>
@@ -2206,7 +2206,7 @@
         <!-- Delivery address -->
         <div class="text-[12px] font-extrabold uppercase tracking-wider mb-3 mt-5" style="color:#64748B">Delivery address</div>
         <div class="rounded-xl p-3 flex items-start gap-2.5" style="background:#F8FAFC;border:1px solid #E5E7EB">
-          <i class="fa-solid fa-location-dot text-[14px] mt-1 flex-shrink-0" style="color:#059669"></i>
+          <i class="fa-solid fa-location-dot text-[14px] mt-1 flex-shrink-0" style="color:#258046"></i>
           <div class="flex-1 leading-tight">
             <div class="text-[12.5px] font-extrabold text-[#0F172A]">Home · Indore 452001</div>
             <div class="text-[11px] mt-0.5" style="color:#64748B">Plot 14, Khasra Road, Vijay Nagar, Indore, MP</div>
@@ -2243,7 +2243,7 @@
       </div>
       <div class="flex-shrink-0 px-5 py-3 flex gap-2" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)">
         <a href="help.html" class="nu flex-1 h-12 rounded-xl flex items-center justify-center text-[13px] font-extrabold" style="background:#F1F5F9;color:#0F172A">Need help?</a>
-        <a href="order-details.html" class="nu flex-1 h-12 rounded-xl flex items-center justify-center gap-1.5 text-[13px] font-extrabold" style="background:#059669;color:#FFFFFF">View full <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i></a>
+        <a href="order-details.html" class="nu flex-1 h-12 rounded-xl flex items-center justify-center gap-1.5 text-[13px] font-extrabold" style="background:#258046;color:#FFFFFF">View full <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i></a>
       </div>
     </div>
   </div>
@@ -2266,7 +2266,7 @@
       </div>
       <div id="cropSheetGrid" class="grid grid-cols-3 gap-2.5 px-5 py-3 overflow-y-auto" style="flex:1"></div>
       <div class="flex-shrink-0 px-5 py-3" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)">
-        <button id="cropSheetDone" class="w-full h-12 rounded-xl text-white text-[14px] font-extrabold" style="background:#059669">Done</button>
+        <button id="cropSheetDone" class="w-full h-12 rounded-xl text-white text-[14px] font-extrabold" style="background:#258046">Done</button>
       </div>
     </div>
   </div>
@@ -2303,7 +2303,7 @@
   <!-- Bottom nav — Home / Category / Crop / Profile -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white flex justify-around items-center px-2 py-2 z-50" style="height:68px;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04)">
     <a href="home.html" class="nu flex flex-col items-center gap-1">
-      <i class="fa-solid fa-house text-[20px]" style="color:#059669"></i>
+      <i class="fa-solid fa-house text-[20px]" style="color:#258046"></i>
       <span class="text-[12.5px] font-bold" style="color:#0F172A">Home</span>
     </a>
     <a href="crop-detail.html" class="nu flex flex-col items-center gap-1" style="color:#94A3B8">
@@ -2378,7 +2378,7 @@
       </div>
       <!-- Apply -->
       <div class="px-5 py-3 flex-shrink-0" style="border-top:1px solid #F1F5F9">
-        <button id="applyCropsBtn" class="w-full h-12 rounded-xl text-white text-[14px] font-extrabold" style="background:#059669">Add 0 crops</button>
+        <button id="applyCropsBtn" class="w-full h-12 rounded-xl text-white text-[14px] font-extrabold" style="background:#258046">Add 0 crops</button>
       </div>
     </div>
   </div>
@@ -2530,7 +2530,7 @@
         const l = b.querySelector('.crop-label');  if (l) l.style.color = '#0F172A';
       });
       btn.style.background = '#ECFDF5';
-      btn.style.borderColor = '#059669';
+      btn.style.borderColor = '#258046';
       const label = btn.querySelector('.crop-label');
       if (label) label.style.color = '#0E7A4E';
       const crop = btn.dataset.crop;
@@ -2579,7 +2579,7 @@
       let idx = 0, timer;
       function updateDots(i){
         dots.forEach((d, k) => {
-          d.style.background = k === i ? '#059669' : '#CBD5E1';
+          d.style.background = k === i ? '#258046' : '#CBD5E1';
           d.style.width = k === i ? '14px' : '6px';
         });
       }
@@ -2763,11 +2763,11 @@
           const chk = b.querySelector('.choice-chk'); if (chk) chk.remove();
         } else {
           picked.add(c);
-          b.style.borderColor = '#059669';
+          b.style.borderColor = '#258046';
           b.style.background = '#ECFDF5';
           const chk = document.createElement('span');
           chk.className = 'choice-chk absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center';
-          chk.style.background = '#059669';
+          chk.style.background = '#258046';
           chk.innerHTML = '<i class="fa-solid fa-check text-white text-[9px]"></i>';
           b.appendChild(chk);
         }
@@ -2882,9 +2882,9 @@
       function paint(btn, on){
         if (on) {
           btn.style.background = '#ECFDF5';
-          btn.style.borderColor = '#059669';
-          btn.style.color = '#047857';
-          const i = btn.querySelector('i'); if (i) i.style.color = '#059669';
+          btn.style.borderColor = '#258046';
+          btn.style.color = '#258046';
+          const i = btn.querySelector('i'); if (i) i.style.color = '#258046';
         } else {
           btn.style.background = '#F8FAFC';
           btn.style.borderColor = '#E5E7EB';
@@ -2941,14 +2941,14 @@
         const chips = inlineKeys.map(function(key){
           const m = CROP_META[key];
           const sel = selected.has(key);
-          const borderColor = sel ? '#059669' : '#E5E7EB';
-          const tileBg      = sel ? '#059669' : '#FFFFFF';
+          const borderColor = sel ? '#258046' : '#E5E7EB';
+          const tileBg      = sel ? '#258046' : '#FFFFFF';
           const shadow      = sel ? '0 8px 18px -4px rgba(5,150,105,0.4)' : '0 1px 3px rgba(0,0,0,0.05)';
           const labelColor  = sel ? '#FFFFFF' : '#0F172A';
           // Tick lives INSIDE the image area at top-right so the outer overflow:hidden doesn't clip it
           // Unselected state shows a blank check-circle so the tile reads as a selectable affordance
           const tick        = sel
-            ? '<span class="absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center" style="background:#059669;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff;z-index:2">'
+            ? '<span class="absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center" style="background:#258046;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff;z-index:2">'
               + '<i class="fa-solid fa-check text-white text-[9px]"></i></span>'
             : '<span class="absolute top-1 right-1 w-5 h-5 rounded-full" style="background:rgba(255,255,255,0.95);border:1.5px solid #CBD5E1;box-shadow:0 1px 3px rgba(15,23,42,0.18);z-index:2"></span>';
           return '<button type="button" data-crop-key="'+key+'" class="flex-shrink-0 rounded-xl overflow-hidden transition-all"'
@@ -2966,7 +2966,7 @@
         const moreChip = '<button type="button" id="cropMoreBtn" class="flex-shrink-0 rounded-xl overflow-hidden transition-all"'
           + ' style="background:#FFFFFF;border:1.5px solid #E5E7EB;width:84px;height:100px;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(0,0,0,0.05)">'
           + '<div class="w-full flex items-center justify-center" style="height:78px;background:#ECFDF5;flex-shrink:0">'
-          + '<div class="rounded-full flex items-center justify-center" style="width:40px;height:40px;background:#059669;box-shadow:0 4px 10px -2px rgba(5,150,105,0.45)">'
+          + '<div class="rounded-full flex items-center justify-center" style="width:40px;height:40px;background:#258046;box-shadow:0 4px 10px -2px rgba(5,150,105,0.45)">'
           + '<i class="fa-solid fa-plus text-[16px]" style="color:#FFFFFF"></i></div>'
           + '</div>'
           + '<div class="flex-1 flex items-center justify-center px-1" style="background:#FFFFFF">'
@@ -3033,7 +3033,7 @@
           + '</a>';
         }).join('');
         grid.querySelectorAll('.cropprod-add').forEach(function(b){
-          b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if (typeof bumpCart === 'function') bumpCart(); b.textContent = 'Added ✓'; b.style.background = '#047857'; setTimeout(function(){ b.textContent = 'Add'; b.style.background = '#059669'; }, 1000); });
+          b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if (typeof bumpCart === 'function') bumpCart(); b.textContent = 'Added ✓'; b.style.background = '#258046'; setTimeout(function(){ b.textContent = 'Add'; b.style.background = '#258046'; }, 1000); });
         });
         wrap.style.display = 'block';
       }
@@ -3085,9 +3085,9 @@
       const QUEST = [
         { id:'notif',  icon:'fa-bell',             bg:'#EFF6FF', color:'#2563EB', title:'Allow notifications', coins:10, kind:'action', action:'Allow' },
         { id:'loc',    icon:'fa-location-dot',     bg:'#FEF2F2', color:'#DC2626', title:'Allow location',      coins:10, kind:'action', action:'Allow' },
-        { id:'cart',   icon:'fa-cart-shopping',    bg:'#ECFDF5', color:'#047857', title:'Add to cart',         coins:15, kind:'status' },
+        { id:'cart',   icon:'fa-cart-shopping',    bg:'#ECFDF5', color:'#258046', title:'Add to cart',         coins:15, kind:'status' },
         { id:'search', icon:'fa-magnifying-glass', bg:'#FEF3C7', color:'#B45309', title:'Search product',      coins:10, kind:'status' },
-        { id:'crop',   icon:'fa-wheat-awn',        bg:'#ECFDF5', color:'#047857', title:'Add crop',            coins:50, kind:'crop', action:'Add crop', crop:true }
+        { id:'crop',   icon:'fa-wheat-awn',        bg:'#ECFDF5', color:'#258046', title:'Add crop',            coins:50, kind:'crop', action:'Add crop', crop:true }
       ];
       function questDoneSet(){
         let s = [];
@@ -3122,12 +3122,12 @@
           const isDone = done.has(q.id);
           let right;
           if (isDone) {
-            right = '<span class="flex-shrink-0 inline-flex items-center gap-1.5 px-3 h-9 rounded-lg text-[12px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #A7F3D0"><i class="fa-solid fa-check"></i> Earned</span>';
+            right = '<span class="flex-shrink-0 inline-flex items-center gap-1.5 px-3 h-9 rounded-lg text-[12px] font-extrabold" style="background:#ECFDF5;color:#258046;border:1px solid #A7F3D0"><i class="fa-solid fa-check"></i> Earned</span>';
           } else if (q.kind === 'status') {
             // passive step · no action, just a status
             right = '<span class="flex-shrink-0 inline-flex items-center gap-1.5 px-3 h-9 rounded-lg text-[12px] font-bold" style="background:#F1F5F9;color:#64748B"><i class="fa-regular fa-clock text-[11px]"></i> Pending</span>';
           } else {
-            right = '<button data-quest="'+q.id+'" class="flex-shrink-0 inline-flex items-center justify-center px-4 h-9 rounded-lg text-[12.5px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;box-shadow:0 4px 10px -3px rgba(5,150,105,0.45)">'+q.action+'</button>';
+            right = '<button data-quest="'+q.id+'" class="flex-shrink-0 inline-flex items-center justify-center px-4 h-9 rounded-lg text-[12.5px] font-extrabold" style="background:#258046;color:#FFFFFF;border:0;box-shadow:0 4px 10px -3px rgba(5,150,105,0.45)">'+q.action+'</button>';
           }
           return '<div class="flex items-center gap-3 py-3.5" style="border-bottom:1px solid #F1F5F9;'+(isDone ? 'opacity:.65' : '')+'">'
             + '<span class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:'+q.bg+';color:'+q.color+';font-size:17px"><i class="fa-solid '+q.icon+'"></i></span>'
@@ -3208,11 +3208,11 @@
         sheetGrid.innerHTML = Object.keys(CROP_META).map(function(key){
           const m = CROP_META[key];
           const sel = selected.has(key);
-          const borderColor = sel ? '#059669' : '#E5E7EB';
+          const borderColor = sel ? '#258046' : '#E5E7EB';
           const shadow      = sel ? '0 6px 14px -4px rgba(5,150,105,0.32)' : '0 1px 3px rgba(0,0,0,0.05)';
-          const labelColor  = sel ? '#047857' : '#0F172A';
+          const labelColor  = sel ? '#258046' : '#0F172A';
           const tick = sel
-            ? '<span class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center" style="background:#059669;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff;z-index:2"><i class="fa-solid fa-check text-white text-[9px]"></i></span>'
+            ? '<span class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center" style="background:#258046;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff;z-index:2"><i class="fa-solid fa-check text-white text-[9px]"></i></span>'
             : '<span class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full" style="background:rgba(255,255,255,0.95);border:1.5px solid #CBD5E1;box-shadow:0 1px 3px rgba(15,23,42,0.18);z-index:2"></span>';
           return '<button type="button" data-sheet-crop="'+key+'" class="rounded-xl overflow-hidden transition-all"'
             + ' style="background:#FFFFFF;border:1.5px solid '+borderColor+';box-shadow:'+shadow+';height:120px;display:flex;flex-direction:column">'
@@ -3360,9 +3360,9 @@
           cta.href = 'javascript:void(0)';
           return;
         }
-        cta.style.background = '#059669';
+        cta.style.background = '#258046';
         cta.style.color = '#FFFFFF';
-        cta.style.border = '1.5px solid #047857';
+        cta.style.border = '1.5px solid #258046';
         cta.style.boxShadow = '0 4px 12px -4px rgba(5,150,105,0.35)';
         cta.style.animation = 'none';
         if (selected.size === 1) {
@@ -3401,12 +3401,12 @@
         const k = variantKey(card, idx);
         const qty = cartQty[k] || 0;
         const stepper = qty > 0
-          ? '<div class="h-9 rounded-lg flex items-center justify-between px-1" style="background:#059669;min-width:104px">'
+          ? '<div class="h-9 rounded-lg flex items-center justify-between px-1" style="background:#258046;min-width:104px">'
               + '<button data-vs-act="dec" data-vs-key="'+k+'" class="w-8 h-9 flex items-center justify-center text-white text-[18px] font-bold">−</button>'
               + '<span class="text-white text-[14px] font-bold tnum">'+qty+'</span>'
               + '<button data-vs-act="inc" data-vs-key="'+k+'" class="w-8 h-9 flex items-center justify-center text-white text-[18px] font-bold">+</button>'
             + '</div>'
-          : '<button data-vs-act="inc" data-vs-key="'+k+'" class="h-9 px-5 rounded-lg text-white text-[12.5px] font-extrabold flex-shrink-0" style="background:#059669">Add</button>';
+          : '<button data-vs-act="inc" data-vs-key="'+k+'" class="h-9 px-5 rounded-lg text-white text-[12.5px] font-extrabold flex-shrink-0" style="background:#258046">Add</button>';
         // Per-row product thumbnail · same grey card treatment as the home product-card image area · uses the card-level product image (single asset, per-variant images can plug in later via v.img)
         const imgSrc = v.img || card.dataset.productImg || '';
         const thumb = '<div class="w-14 h-14 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#F8FAFC;border:1px solid #E5E7EB"><img src="'+imgSrc+'" class="w-12 h-12 object-contain"/></div>';
@@ -3421,7 +3421,7 @@
             + '<div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">'
               + '<span class="text-[16px] font-extrabold tnum text-[#0F172A]">₹'+v.price+'</span>'
               + (v.mrp ? '<span class="text-[11.5px] tnum line-through" style="color:#94A3B8">₹'+v.mrp+'</span>' : '')
-              + (v.off ? '<span class="text-[10.5px] font-extrabold" style="color:#047857">'+v.off+'% off</span>' : '')
+              + (v.off ? '<span class="text-[10.5px] font-extrabold" style="color:#258046">'+v.off+'% off</span>' : '')
             + '</div>'
           + '</div>'
           + stepper
@@ -3510,8 +3510,8 @@
         if (!b) return;
         e.preventDefault(); e.stopPropagation();
         if (typeof bumpCart === 'function') bumpCart();
-        b.textContent = 'Added ✓'; b.style.background = '#047857';
-        setTimeout(function(){ b.textContent = 'Add'; b.style.background = '#059669'; }, 1000);
+        b.textContent = 'Added ✓'; b.style.background = '#258046';
+        setTimeout(function(){ b.textContent = 'Add'; b.style.background = '#258046'; }, 1000);
       });
     })();
 
@@ -3667,7 +3667,7 @@
         <label class="bar-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input id="baRateMedia" type="file" accept="image/*,video/*" capture="environment" multiple style="display:none"/></label>
         <div id="baRateMediaInfo" class="bar-attach-info"><i class="fa-solid fa-paperclip"></i> <span></span></div>
         <div class="bar-testi">
-          <div class="bar-testi-h"><i class="fa-solid fa-bullhorn" style="color:#047857"></i> Share a testimonial <span><i class="fa-solid fa-coins"></i> +25 coins</span></div>
+          <div class="bar-testi-h"><i class="fa-solid fa-bullhorn" style="color:#258046"></i> Share a testimonial <span><i class="fa-solid fa-coins"></i> +25 coins</span></div>
           <div class="bar-testi-sub">Upload a short video to help other farmers</div>
           <label class="bar-upload" id="baTestiBox">
             <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -3677,7 +3677,7 @@
         </div>
       </div>
       <div class="flex-shrink-0 px-5 pt-2" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px)">
-        <button id="baRateSubmit" class="w-full h-[50px] rounded-[12px] text-white text-[14.5px] font-extrabold" style="background:#059669;border:0;opacity:.55;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)" disabled>Submit review</button>
+        <button id="baRateSubmit" class="w-full h-[50px] rounded-[12px] text-white text-[14.5px] font-extrabold" style="background:#258046;border:0;opacity:.55;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)" disabled>Submit review</button>
       </div>
     </div>
   </div>
@@ -3693,19 +3693,19 @@
     .bar-review-h span i{font-size:9px}
     .bar-review{width:100%;min-height:72px;padding:11px 13px;border-radius:12px;border:1.5px solid #E5E7EB;background:#FFFFFF;font-size:13px;font-family:inherit;color:#0F172A;outline:none;resize:none;box-sizing:border-box}
     .bar-review::placeholder{color:#94A3B8}
-    .bar-review:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.1)}
+    .bar-review:focus{border-color:#258046;box-shadow:0 0 0 3px rgba(5,150,105,0.1)}
     .bar-attach{display:inline-flex;align-items:center;gap:7px;margin-top:10px;height:40px;padding:0 16px;border-radius:10px;border:1.5px dashed #CBD5E1;background:#FFFFFF;color:#475569;font-size:12.5px;font-weight:700;cursor:pointer}
-    .bar-attach i{color:#047857;font-size:13px}
-    .bar-attach-info{display:none;font-size:11px;font-weight:700;color:#047857;margin-top:7px}
+    .bar-attach i{color:#258046;font-size:13px}
+    .bar-attach-info{display:none;font-size:11px;font-weight:700;color:#258046;margin-top:7px}
     .bar-attach-info i{font-size:10px}
     .bar-testi{margin-top:14px;border:1px solid #E5E7EB;border-radius:14px;padding:13px;background:#F8FAFC}
     .bar-testi-h{font-size:13.5px;font-weight:800;color:#0F172A;display:flex;align-items:center;gap:7px}
     .bar-testi-h span{margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:800;color:#78350F;background:linear-gradient(135deg,#FBBF24,#F59E0B);padding:3px 8px;border-radius:9999px}
     .bar-testi-h span i{font-size:9px}
     .bar-testi-sub{font-size:11px;color:#64748B;margin-top:3px;line-height:1.35}
-    .bar-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;margin-top:11px;min-height:88px;border:1.5px dashed #A7F3D0;border-radius:12px;background:#FFFFFF;color:#047857;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center;padding:12px}
+    .bar-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;margin-top:11px;min-height:88px;border:1.5px dashed #A7F3D0;border-radius:12px;background:#FFFFFF;color:#258046;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center;padding:12px}
     .bar-upload i{font-size:22px}
-    .bar-upload.has{border-style:solid;border-color:#059669;background:#ECFDF5}
+    .bar-upload.has{border-style:solid;border-color:#258046;background:#ECFDF5}
   </style>
   <script>
     // Buy-again · per-product star rating in the tile → opens review modal prefilled · review = +10 coins, testimonial upload = +25 · celebration on submit
@@ -3787,7 +3787,7 @@
         ov.innerHTML = '<div style="width:84px;height:84px;border-radius:50%;background:rgba(220,38,38,0.15);color:#F87171;display:flex;align-items:center;justify-content:center;font-size:38px"><i class="fa-solid fa-user-lock"></i></div>'
           + '<div style="font-size:21px;font-weight:900;margin-top:20px">Account suspended</div>'
           + '<div style="font-size:13.5px;color:rgba(255,255,255,0.75);margin-top:10px;max-width:300px;line-height:1.5">Your account has been temporarily blocked due to a policy issue. Please contact support to restore access.</div>'
-          + '<a href="help.html" style="margin-top:24px;height:50px;padding:0 28px;border-radius:12px;background:#059669;color:#fff;font-size:14.5px;font-weight:800;display:inline-flex;align-items:center;gap:9px;text-decoration:none"><i class="fa-solid fa-headset"></i> Contact support</a>'
+          + '<a href="help.html" style="margin-top:24px;height:50px;padding:0 28px;border-radius:12px;background:#258046;color:#fff;font-size:14.5px;font-weight:800;display:inline-flex;align-items:center;gap:9px;text-decoration:none"><i class="fa-solid fa-headset"></i> Contact support</a>'
           + '<div style="font-size:11.5px;color:rgba(255,255,255,0.5);margin-top:16px">Ref: KKD-USR-4471</div>';
         document.body.appendChild(ov);
       } else if (st.nonservice) {

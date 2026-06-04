@@ -26,7 +26,7 @@
   body.state-delivered .hero-ic{border-color:rgba(5,150,105,0.35);box-shadow:0 6px 16px -4px rgba(5,150,105,0.3)}
   body.state-transit  .hero-ic{border-color:rgba(245,158,11,0.45);box-shadow:0 6px 16px -4px rgba(245,158,11,0.35)}
   .hero-ic i{font-size:24px}
-  body.state-delivered .hero-ic i{color:#047857}
+  body.state-delivered .hero-ic i{color:#258046}
   body.state-transit  .hero-ic i{color:#B45309}
   .hero h2{font-size:20px;font-weight:800;line-height:1;margin:0;color:#0F172A}
   .hero-sub{font-size:13px;color:#475569;margin-top:5px}
@@ -44,7 +44,7 @@
   /* Unified Products + Bill card · all product calc tokens on a single inline row · matches home product-card density */
   .prod-row{padding:12px;display:flex;gap:12px;align-items:flex-start;border-bottom:1px solid #F1F5F9;position:relative}
   .prod-row .prod-name{padding-right:96px}
-  .prod-reorder{position:absolute;top:10px;right:10px;z-index:2;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:8px;background:#059669;border:0;color:#FFFFFF;font-size:11.5px;font-weight:800;text-decoration:none;cursor:pointer;box-shadow:0 4px 10px -4px rgba(5,150,105,0.55)}
+  .prod-reorder{position:absolute;top:10px;right:10px;z-index:2;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:8px;background:#258046;border:0;color:#FFFFFF;font-size:11.5px;font-weight:800;text-decoration:none;cursor:pointer;box-shadow:0 4px 10px -4px rgba(5,150,105,0.55)}
   .prod-reorder:active{transform:scale(.97)}
   .prod-img{width:56px;height:56px;border-radius:10px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0;border:1px solid #E5E7EB;text-decoration:none}
   .prod-img img{max-width:100%;max-height:100%;object-fit:contain}
@@ -57,7 +57,7 @@
   .prod-size{display:inline-flex;align-items:center;padding:2px 8px;border-radius:5px;background:#F1F5F9;color:#475569;font-size:10.5px;font-weight:600}
   .prod-calc-text{font-size:12.5px;color:#475569;font-weight:600}
   .prod-calc-text .pc{font-weight:800;color:#0F172A}
-  .prod-calc-text .qty{display:inline-flex;align-items:center;padding:1px 7px;border-radius:4px;background:#ECFDF5;color:#047857;font-size:10.5px;font-weight:800;margin-left:2px}
+  .prod-calc-text .qty{display:inline-flex;align-items:center;padding:1px 7px;border-radius:4px;background:#ECFDF5;color:#258046;font-size:10.5px;font-weight:800;margin-left:2px}
   /* Line total · softened weight + size so it no longer overpowers the per-pc × qty text on its left (was 15px/800) */
   .prod-total{font-size:13.5px;font-weight:700;color:#0F172A;line-height:1;white-space:nowrap}
 
@@ -66,7 +66,7 @@
   .bill-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:3px 0}
   .bill-row .lbl{color:#64748B}
   .bill-row .val{color:#0F172A;font-weight:600}
-  .bill-row .val.green{color:#047857;font-weight:700}
+  .bill-row .val.green{color:#258046;font-weight:700}
   .bill-total{border-top:1px dashed #CBD5E1;margin-top:8px;padding-top:10px;display:flex;align-items:center;justify-content:space-between}
   .bill-total .lbl{font-size:14px;font-weight:700;color:#0F172A}
   .bill-total .val{font-size:18px;font-weight:800;color:#0F172A}
@@ -89,19 +89,19 @@
   .review-wrap{display:none;margin-top:10px}
   .review-wrap.on{display:block}
   .review-wrap textarea{width:100%;min-height:70px;padding:10px 12px;border-radius:10px;border:1px solid #E5E7EB;background:#FAFAFA;font-size:12.5px;font-family:inherit;color:#0F172A;outline:none;resize:none;box-sizing:border-box;transition:border-color .15s ease, background .15s ease}
-  .review-wrap textarea:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.10);background:#FFFFFF}
+  .review-wrap textarea:focus{border-color:#258046;box-shadow:0 0 0 3px rgba(5,150,105,0.10);background:#FFFFFF}
   .review-wrap .review-hint{font-size:10.5px;color:#94A3B8;margin-top:4px}
   /* Submit review button · sentence-case, outline emerald so it doesn't compete with the main sticky CTAs · disabled until the textarea has 3+ chars · ENTIRELY hidden after submission (no lingering disabled state) */
-  .review-submit{margin-top:8px;width:100%;height:40px;border-radius:10px;background:#FFFFFF;color:#047857;border:1.5px solid #BBF7D0;font-size:12.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all .15s ease}
+  .review-submit{margin-top:8px;width:100%;height:40px;border-radius:10px;background:#FFFFFF;color:#258046;border:1.5px solid #BBF7D0;font-size:12.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all .15s ease}
   .review-submit:disabled{opacity:.55;cursor:not-allowed}
   .review-submit i{font-size:11px}
   /* Submitted state · the wrap class flips on after submit · textarea reads as a read-only paragraph and a small badge says it's posted · the button is hidden entirely */
   .review-wrap.submitted .review-submit{display:none}
   .review-wrap.submitted .review-hint{display:none}
   .review-wrap.submitted textarea{background:#F8FAFC;color:#0F172A;border-color:#E5E7EB;cursor:default}
-  .review-submitted-badge{display:none;align-items:center;gap:6px;margin-top:8px;font-size:11.5px;font-weight:700;color:#047857}
+  .review-submitted-badge{display:none;align-items:center;gap:6px;margin-top:8px;font-size:11.5px;font-weight:700;color:#258046}
   .review-wrap.submitted .review-submitted-badge{display:inline-flex}
-  .review-submitted-badge i{font-size:11px;color:#047857}
+  .review-submitted-badge i{font-size:11px;color:#258046}
 
   /* Rating success · soft scale-in card + coin pop gesture · shared look with the My-Orders rate sheet */
   .rate-ok{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,0.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
@@ -116,7 +116,7 @@
 
   /* Address */
   .addr{padding:14px;display:flex;gap:12px}
-  .addr-ic{width:36px;height:36px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#047857}
+  .addr-ic{width:36px;height:36px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#258046}
   .addr-body{flex:1;line-height:1.25}
   .addr-name{font-size:14px;font-weight:700;color:#0F172A}
   .addr-line{font-size:12px;color:#64748B;margin-top:2px}
@@ -126,11 +126,11 @@
   .tl-item{position:relative;padding-left:38px;padding-bottom:14px}
   .tl-item:last-child{padding-bottom:0}
   .tl-badge{position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:1;background:#E5E7EB;color:#94A3B8;font-size:11px}
-  .tl-badge.done{background:#059669;color:#FFFFFF}
+  .tl-badge.done{background:#258046;color:#FFFFFF}
   .tl-badge.cur{background:#F59E0B;color:#FFFFFF;animation:pulseDot 1.6s ease-out infinite}
   @keyframes pulseDot{0%,100%{box-shadow:0 0 0 4px rgba(245,158,11,0.18)}50%{box-shadow:0 0 0 8px rgba(245,158,11,0.05)}}
   .tl-line{position:absolute;left:12px;top:26px;bottom:0;width:2px;background:#E5E7EB;z-index:0}
-  .tl-line.done{background:#059669}
+  .tl-line.done{background:#258046}
   .tl-title{font-size:13px;font-weight:700;color:#0F172A}
   .tl-time{font-size:10.5px;color:#94A3B8;margin-top:2px}
   .tl-item.cur .tl-title{color:#B45309}
@@ -138,7 +138,7 @@
 
   /* Payment · fully paid · single row with chip */
   .pay-row{padding:14px;display:flex;align-items:center;gap:12px}
-  .pay-ic{width:40px;height:40px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;color:#047857;flex-shrink:0}
+  .pay-ic{width:40px;height:40px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;color:#258046;flex-shrink:0}
   .pay-info{flex:1;line-height:1.25;min-width:0}
   .pay-info .a{font-size:14px;font-weight:700;color:#0F172A}
   .pay-info .b{font-size:11.5px;color:#64748B;margin-top:2px}
@@ -149,19 +149,19 @@
   /* Partial-paid · TWO fuller stacked cells (paid card + due card) · paid details live inside the paid card, Pay button lives inside the due card · no external CTA */
   .partial{padding:14px}
   .partial-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
-  .partial-head .pay-ic{background:#ECFDF5;color:#047857}
+  .partial-head .pay-ic{background:#ECFDF5;color:#258046}
   .partial-meta{flex:1;line-height:1.25;min-width:0}
   .partial-meta .a{font-size:14px;font-weight:800;color:#0F172A}
   .partial-meta .b{font-size:11.5px;color:#64748B;margin-top:2px}
   .partial-bar{height:8px;background:#F1F5F9;border-radius:999px;overflow:hidden;margin-bottom:12px}
-  .partial-bar-fill{height:100%;background:linear-gradient(90deg,#047857,#10B981);border-radius:999px;transition:width .35s ease}
+  .partial-bar-fill{height:100%;background:linear-gradient(90deg,#258046,#10B981);border-radius:999px;transition:width .35s ease}
   .pcard{border-radius:12px;border:1px solid #E5E7EB;padding:12px 14px;margin-bottom:10px}
   .pcard:last-child{margin-bottom:0}
   .pcard.paid{background:#F0FDF4;border-color:#BBF7D0}
   .pcard.due{background:#FFFBEB;border-color:#FDE68A}
   .pcard-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px}
   .pcard-head .lbl{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em}
-  .pcard.paid .pcard-head .lbl{color:#047857}
+  .pcard.paid .pcard-head .lbl{color:#258046}
   .pcard.due  .pcard-head .lbl{color:#B45309}
   .pcard-head .val{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
   .pcard.paid .pcard-head .val{color:#0F172A}
@@ -175,7 +175,7 @@
   .pcard-paystrip-text i{font-size:14px;color:#B45309;flex-shrink:0}
   .pcard-paystrip-text b{color:#0F172A;font-weight:900}
   /* Pay button anchored to the right · widened (more horizontal padding) · Pay text only (no amount, see HTML) */
-  .pcard-paystrip-btn{flex-shrink:0;margin-left:auto;padding:10px 24px;background:#059669;color:#FFFFFF;border:0;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;text-decoration:none;box-shadow:0 6px 14px -4px rgba(5,150,105,0.45);letter-spacing:0.02em}
+  .pcard-paystrip-btn{flex-shrink:0;margin-left:auto;padding:10px 24px;background:#258046;color:#FFFFFF;border:0;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;text-decoration:none;box-shadow:0 6px 14px -4px rgba(5,150,105,0.45);letter-spacing:0.02em}
 
   /* Need help · neutral slate */
   .support-row{padding:14px;display:flex;align-items:center;gap:12px;text-decoration:none}
@@ -188,7 +188,7 @@
   .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;padding:10px 12px;z-index:50;display:flex;gap:10px}
   .cta-out{flex:1;height:52px;border-radius:12px;background:#FFFFFF;color:#0F172A;border:1.5px solid #E5E7EB;font-size:14px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
   .cta-out i{font-size:13px;color:#475569}
-  .cta-pri{flex:1.2;height:52px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+  .cta-pri{flex:1.2;height:52px;border-radius:12px;background:#258046;color:#FFFFFF;border:0;font-size:15px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
   .cta-pri i{font-size:13px}
 
   /* Kebab dropdown · Cancel order (transit) + Contact support · Download invoice MOVED out into the sticky footer */
@@ -209,19 +209,19 @@
   .reason-opt{display:flex;align-items:center;gap:12px;padding:13px 20px;border-bottom:1px solid #F1F5F9;cursor:pointer;background:#FFFFFF}
   .reason-opt:last-child{border-bottom:0}
   .reason-opt .ric{width:22px;height:22px;border-radius:50%;border:1.5px solid #CBD5E1;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-  .reason-opt.on .ric{background:#059669;border-color:#059669}
+  .reason-opt.on .ric{background:#258046;border-color:#258046}
   .reason-opt.on .ric::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;color:#FFFFFF;font-size:11px}
   .reason-lbl{flex:1;font-size:14px;font-weight:600;color:#0F172A}
-  .reason-opt.on .reason-lbl{color:#047857}
+  .reason-opt.on .reason-lbl{color:#258046}
   /* Other-reason textarea · only renders after "Other" is picked */
   .reason-other-wrap{display:none;padding:14px 20px;border-top:1px solid #F1F5F9;background:#F8FAFC}
   .reason-other-wrap.open{display:block}
   .reason-other-wrap textarea{width:100%;min-height:90px;padding:10px 12px;border-radius:10px;border:1.5px solid #E5E7EB;font-size:13.5px;font-family:inherit;background:#FFFFFF;color:#0F172A;outline:none;resize:none;box-sizing:border-box}
-  .reason-other-wrap textarea:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.12)}
+  .reason-other-wrap textarea:focus{border-color:#258046;box-shadow:0 0 0 3px rgba(5,150,105,0.12)}
 
   /* COD pay sheet · same partner-app style */
   .cod-input-wrap{display:flex;align-items:center;gap:8px;background:#F8FAFC;border:1.5px solid #E5E7EB;border-radius:10px;padding:10px 14px;transition:border-color .15s ease}
-  .cod-input-wrap:focus-within{border-color:#047857;box-shadow:0 0 0 3px rgba(4,120,87,0.12)}
+  .cod-input-wrap:focus-within{border-color:#258046;box-shadow:0 0 0 3px rgba(4,120,87,0.12)}
   .cod-input-wrap .rs{font-size:22px;font-weight:900;color:#0F172A}
   .cod-input-wrap input{flex:1;font-size:22px;font-weight:900;color:#0F172A;background:transparent;outline:none;border:0;width:0;font-variant-numeric:tabular-nums}
   .cod-coin-strip{margin-top:10px;display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;background:#ECFDF5;border:1px solid #BBF7D0}
@@ -486,12 +486,12 @@
 
   <!-- Verify authenticity · scan the QR on the Katyayani pack to confirm a genuine product -->
   <button type="button" id="verifyCard" onclick="window.kkdVerify&&window.kkdVerify()" class="card" style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;width:calc(100% - 32px);text-align:left;background:#FFFFFF">
-    <div class="w-10 h-10 rounded-[11px] flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-qrcode text-[16px]"></i></div>
+    <div class="w-10 h-10 rounded-[11px] flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;color:#258046"><i class="fa-solid fa-qrcode text-[16px]"></i></div>
     <div class="flex-1 leading-tight">
       <div class="text-[14px] font-bold text-[#0F172A]">Verify genuine product</div>
       <div class="text-[11.5px] mt-0.5" style="color:#64748B">Scan the QR on the pack to confirm it's authentic Katyayani</div>
     </div>
-    <span class="inline-flex items-center justify-center w-9 h-9 rounded-full flex-shrink-0" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-expand text-[13px]"></i></span>
+    <span class="inline-flex items-center justify-center w-9 h-9 rounded-full flex-shrink-0" style="background:#ECFDF5;color:#258046"><i class="fa-solid fa-expand text-[13px]"></i></span>
   </button>
 
 
@@ -568,12 +568,12 @@
     <div class="modal-handle"></div>
     <div style="padding-top:22px;text-align:center">
       <div class="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-3" style="background:#ECFDF5;border:1.5px solid #BBF7D0;box-shadow:0 8px 20px -6px rgba(5,150,105,0.35)">
-        <i class="fa-solid fa-circle-check text-[28px]" style="color:#047857"></i>
+        <i class="fa-solid fa-circle-check text-[28px]" style="color:#258046"></i>
       </div>
       <div class="text-[20px] font-extrabold leading-tight">Order cancelled</div>
       <p class="text-[12.5px] mt-2 leading-relaxed" style="color:#64748B">Your advance of <b id="cancelOkAmt" class="text-[#0F172A]">&#8377;70</b> will be refunded to your UPI within 3–5 working days. You'll get an SMS confirmation shortly.</p>
     </div>
-    <button id="cancelOkDone" class="w-full mt-5 h-[48px] rounded-[10px] text-[14px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0">Done</button>
+    <button id="cancelOkDone" class="w-full mt-5 h-[48px] rounded-[10px] text-[14px] font-extrabold" style="background:#258046;color:#FFFFFF;border:0">Done</button>
   </div>
 
   <!-- Help bottom sheet · opens when Need-help row OR the sticky Return CTA is tapped · Return / Replace tile carries a 7-day badge and auto-hides once the return window expires -->
@@ -587,7 +587,7 @@
     <div class="px-3 pb-2">
       <!-- Call us -->
       <a href="tel:18002700300" class="hopt" style="display:flex;align-items:center;gap:12px;padding:13px;border-radius:12px;text-decoration:none">
-        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-phone text-[15px]"></i></div>
+        <div class="w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;color:#258046"><i class="fa-solid fa-phone text-[15px]"></i></div>
         <div class="flex-1 leading-tight">
           <div class="text-[14px] font-bold text-[#0F172A]">Call us</div>
           <div class="text-[11.5px] text-[#64748B] mt-0.5">Toll-free 1800 270 0300 · 9am–7pm</div>
@@ -633,10 +633,10 @@
     .rtn-seg{display:flex;gap:8px}
     .rtn-seg-btn{flex:1;height:46px;border-radius:11px;border:1.5px solid #E5E7EB;background:#FFFFFF;color:#475569;font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
     .rtn-seg-btn i{font-size:12px}
-    .rtn-seg-btn.active{border-color:#059669;background:#ECFDF5;color:#047857}
+    .rtn-seg-btn.active{border-color:#258046;background:#ECFDF5;color:#258046}
     .rtn-prod{display:flex;align-items:center;gap:10px;padding:10px;border:1.5px solid #E5E7EB;border-radius:12px;cursor:pointer}
-    .rtn-prod.sel{border-color:#059669;background:#ECFDF5}
-    .rtn-prod input{width:18px;height:18px;accent-color:#059669;flex-shrink:0}
+    .rtn-prod.sel{border-color:#258046;background:#ECFDF5}
+    .rtn-prod input{width:18px;height:18px;accent-color:#258046;flex-shrink:0}
     .rtn-prod .pimg{width:40px;height:40px;border-radius:9px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:4px;flex-shrink:0}
     .rtn-prod .pimg img{max-width:100%;max-height:100%;object-fit:contain}
     .rtn-prod .pn{font-size:13px;font-weight:700;color:#0F172A;line-height:1.2}
@@ -644,28 +644,28 @@
     /* clickable part + return-qty stepper (capped at ordered qty) */
     .rtn-prod-main{display:flex;align-items:center;gap:10px;flex:1;min-width:0;cursor:pointer}
     .rtn-qty{display:inline-flex;align-items:center;height:32px;border-radius:9px;border:1px solid #BBF7D0;background:#ECFDF5;overflow:hidden;flex-shrink:0}
-    .rtn-qty button{width:30px;height:32px;display:flex;align-items:center;justify-content:center;color:#047857;font-size:15px;font-weight:800;background:transparent;border:0;cursor:pointer}
+    .rtn-qty button{width:30px;height:32px;display:flex;align-items:center;justify-content:center;color:#258046;font-size:15px;font-weight:800;background:transparent;border:0;cursor:pointer}
     .rtn-qty button:disabled{color:#A7F3D0;cursor:not-allowed}
-    .rtn-qty .qv{min-width:18px;text-align:center;font-size:13px;font-weight:800;color:#047857;font-variant-numeric:tabular-nums}
+    .rtn-qty .qv{min-width:18px;text-align:center;font-size:13px;font-weight:800;color:#258046;font-variant-numeric:tabular-nums}
     .rtn-select,.rtn-desc{width:100%;border:1.5px solid #E5E7EB;border-radius:10px;background:#FAFAFA;font-size:13px;font-family:inherit;color:#0F172A;outline:none;box-sizing:border-box;padding:11px 12px}
-    .rtn-select:focus,.rtn-desc:focus{border-color:#047857}
+    .rtn-select:focus,.rtn-desc:focus{border-color:#258046}
     .rtn-desc{min-height:64px;resize:none;margin-top:8px}
     .rtn-attach{flex:1;height:46px;border-radius:11px;border:1.5px dashed #CBD5E1;background:#FFFFFF;color:#475569;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
-    .rtn-attach i{font-size:13px;color:#047857}
+    .rtn-attach i{font-size:13px;color:#258046}
     .rtn-attach.rec{border-color:#FCA5A5;background:#FEF2F2;color:#DC2626}
     .rtn-attach.rec i{color:#DC2626}
     /* success */
-    .rate-ok-coin.check{background:linear-gradient(135deg,#10B981,#047857)}
+    .rate-ok-coin.check{background:linear-gradient(135deg,#10B981,#258046)}
     /* Return T&C modal */
     .tnc-li{display:flex;gap:8px;font-size:12.5px;line-height:1.5;color:#475569;margin-bottom:8px}
-    .tnc-li i{font-size:10px;color:#047857;margin-top:4px;flex-shrink:0}
+    .tnc-li i{font-size:10px;color:#258046;margin-top:4px;flex-shrink:0}
     .tnc-check{display:flex;align-items:flex-start;gap:9px;margin-top:14px;padding:12px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;cursor:pointer;font-size:12.5px;font-weight:600;color:#0F172A;line-height:1.4}
-    .tnc-check input{width:18px;height:18px;accent-color:#059669;flex-shrink:0;margin-top:1px}
+    .tnc-check input{width:18px;height:18px;accent-color:#258046;flex-shrink:0;margin-top:1px}
     /* Return form · order-id chip (de-congested header) */
     .rtn-oid{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#475569;background:#F1F5F9;padding:4px 10px;border-radius:9999px;font-variant-numeric:tabular-nums}
     /* Voice note · substitute for typing the description */
     .rtn-voice-pill{display:inline-flex;align-items:center;gap:8px;margin-top:8px;height:42px;padding:0 14px;border-radius:10px;border:1.5px dashed #CBD5E1;background:#FFFFFF;color:#475569;font-size:12.5px;font-weight:700;cursor:pointer}
-    .rtn-voice-pill i{color:#047857;font-size:13px}
+    .rtn-voice-pill i{color:#258046;font-size:13px}
     .rtn-voice-pill.rec{border-color:#FCA5A5;background:#FEF2F2;color:#DC2626}
     .rtn-voice-pill.rec i{color:#DC2626}
     /* Attached-file previews */
@@ -676,7 +676,7 @@
     .rtn-thumb .rm{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(15,23,42,0.72);color:#fff;display:flex;align-items:center;justify-content:center;font-size:8px;border:0;cursor:pointer}
     /* Camera / gallery choice */
     .rtn-src{display:flex;flex-direction:column;align-items:center;gap:9px;padding:18px;border:1.5px solid #E5E7EB;border-radius:14px;background:#FFFFFF;cursor:pointer;font-size:13px;font-weight:800;color:#0F172A}
-    .rtn-src i{font-size:23px;color:#047857}
+    .rtn-src i{font-size:23px;color:#258046}
     .rtn-src:active{transform:scale(.98)}
     /* Return status · tappable status banner on the product row (whole strip opens details) */
     .ret-status{display:flex;align-items:center;gap:10px;width:100%;margin-top:10px;padding:9px 11px;border-radius:11px;background:#FFFBEB;border:1px solid #FCD34D;cursor:pointer;text-align:left}
@@ -689,7 +689,7 @@
     .rtl:last-child{padding-bottom:0}
     .rtl .dot{width:24px;height:24px;border-radius:50%;background:#F1F5F9;border:2px solid #E5E7EB;display:flex;align-items:center;justify-content:center;font-size:9px;color:#94A3B8;flex-shrink:0;z-index:1}
     .rtl.done .dot{background:#10B981;border-color:#10B981;color:#fff}
-    .rtl.on .dot{background:#047857;border-color:#047857;color:#fff}
+    .rtl.on .dot{background:#258046;border-color:#258046;color:#fff}
     .rtl.on .dot::after{content:"";position:absolute;left:-3px;top:-3px;width:30px;height:30px;border-radius:50%;border:2px solid rgba(4,120,87,0.35);animation:rtlPulse 1.6s ease-out infinite}
     @keyframes rtlPulse{0%{transform:scale(0.7);opacity:.8}100%{transform:scale(1.3);opacity:0}}
     .rtl:not(:last-child)::before{content:"";position:absolute;left:11px;top:24px;bottom:0;width:2px;background:#E5E7EB}
@@ -714,11 +714,11 @@
       <div class="tnc-li"><i class="fa-solid fa-circle"></i> An <b>unboxing video</b> speeds up approval.</div>
       <div class="tnc-li"><i class="fa-solid fa-circle"></i> Free reverse pickup in 24–48 hrs.</div>
       <div class="tnc-li"><i class="fa-solid fa-circle"></i> Refund to your <b>Wallet</b> or original payment method in 3–5 days after quality check; replacement ships after pickup.</div>
-      <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-1 text-[12px] font-bold" style="color:#047857;text-decoration:none"><i class="fa-solid fa-up-right-from-square text-[10px]"></i> Read full policy</a>
+      <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-1 text-[12px] font-bold" style="color:#258046;text-decoration:none"><i class="fa-solid fa-up-right-from-square text-[10px]"></i> Read full policy</a>
       <label class="tnc-check"><input type="checkbox" id="rtnTncAgree"/> I have read and agree to the Return &amp; Refund Terms &amp; Conditions.</label>
     </div>
     <div class="px-5 pt-3 pb-5" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">
-      <button id="rtnTncProceed" disabled class="w-full h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45);opacity:.55">
+      <button id="rtnTncProceed" disabled class="w-full h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#258046;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45);opacity:.55">
         Proceed to Return &amp; Refund <i class="fa-solid fa-arrow-right text-[12px]"></i>
       </button>
     </div>
@@ -766,16 +766,16 @@
       <textarea class="rtn-desc" id="rtnDesc" placeholder="Type the issue in your words…"></textarea>
       <!-- Voice note · substitute for typing the description (NOT a photo/video proof) -->
       <button type="button" class="rtn-voice-pill" id="rtnVoice"><i class="fa-solid fa-microphone"></i> Record a voice note instead</button>
-      <div id="rtnVoiceStatus" class="text-[11.5px] font-bold mt-2" style="color:#047857;display:none"><i class="fa-solid fa-circle-check text-[10px]"></i> Voice note recorded</div>
+      <div id="rtnVoiceStatus" class="text-[11.5px] font-bold mt-2" style="color:#258046;display:none"><i class="fa-solid fa-circle-check text-[10px]"></i> Voice note recorded</div>
 
       <div class="text-[11px] font-extrabold uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Add proof (photo / video)</div>
       <button type="button" id="rtnProofBtn" class="rtn-attach" style="width:100%"><i class="fa-solid fa-camera"></i> Add photo / video</button>
       <div id="rtnPreview" class="rtn-preview"></div>
 
-      <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-4 text-[12px] font-bold" style="color:#047857;text-decoration:none"><i class="fa-solid fa-circle-info text-[11px]"></i> Read returns &amp; refund policy</a>
+      <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-4 text-[12px] font-bold" style="color:#258046;text-decoration:none"><i class="fa-solid fa-circle-info text-[11px]"></i> Read returns &amp; refund policy</a>
     </div>
     <div class="px-5 pt-3 pb-5" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">
-      <button id="rtnSubmit" class="w-full h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+      <button id="rtnSubmit" class="w-full h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#258046;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
         <i class="fa-solid fa-paper-plane text-[13px]"></i> Submit request
       </button>
     </div>
@@ -828,7 +828,7 @@
         <div class="rtl"><div class="dot"></div><div><div class="a">Item picked up</div><div class="b">Quality check on arrival</div></div></div>
         <div class="rtl"><div class="dot"></div><div><div class="a" id="rtnDetLast">Refund to wallet</div><div class="b">3–5 days after quality check</div></div></div>
       </div>
-      <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-4 text-[12px] font-bold" style="color:#047857;text-decoration:none"><i class="fa-solid fa-circle-info text-[11px]"></i> Returns &amp; refund policy</a>
+      <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-4 text-[12px] font-bold" style="color:#258046;text-decoration:none"><i class="fa-solid fa-circle-info text-[11px]"></i> Returns &amp; refund policy</a>
     </div>
   </div>
 
@@ -851,7 +851,7 @@
       </div>
       <div class="flex items-center justify-between text-[11.5px] mt-2">
         <span style="color:#64748B">Total COD: <b class="text-[#0F172A]" id="codTotalLbl">&#8377;628</b></span>
-        <span class="font-extrabold" style="color:#047857">Earn <span id="codCoinsLbl">+50</span> <i class="fa-solid fa-coins text-[10px]" style="color:#F59E0B"></i></span>
+        <span class="font-extrabold" style="color:#258046">Earn <span id="codCoinsLbl">+50</span> <i class="fa-solid fa-coins text-[10px]" style="color:#F59E0B"></i></span>
       </div>
       <div id="codErr" class="text-[11px] font-bold" style="color:#DC2626;display:none;margin-top:4px">Amount cannot exceed total COD due</div>
       <div class="cod-coin-strip mt-3">
@@ -860,7 +860,7 @@
       </div>
     </div>
     <div class="px-5 pt-3 pb-5" style="padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">
-      <button id="codPayBtn" class="w-full h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+      <button id="codPayBtn" class="w-full h-[52px] rounded-[12px] text-[15px] font-extrabold" style="background:#258046;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
         Pay <span id="codPayBtnAmt" class="tnum">&#8377;628</span> COD
       </button>
     </div>
@@ -1208,7 +1208,7 @@
             if (!window.kkdRate) return;
             window.kkdRate({ name: name, img: img, rating: v, onSubmit: function(coins, r){
               rated = true; fill(r);
-              if (status){ status.textContent = 'Rated · thanks for the review!'; status.style.color = '#047857'; }
+              if (status){ status.textContent = 'Rated · thanks for the review!'; status.style.color = '#258046'; }
               var chip = group.querySelector('.rate-coin-chip'); if (chip) chip.style.display = 'none';   // earned — hide the +10 badge
               stars.forEach(x => { x.style.pointerEvents = 'none'; });
             }});

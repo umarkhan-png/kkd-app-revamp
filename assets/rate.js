@@ -15,19 +15,19 @@
     '.kr-review-h span i{font-size:9px}' +
     '.kr-review{width:100%;min-height:72px;padding:11px 13px;border-radius:12px;border:1.5px solid #E5E7EB;background:#FFFFFF;font-size:13px;font-family:inherit;color:#0F172A;outline:none;resize:none;box-sizing:border-box}' +
     '.kr-review::placeholder{color:#94A3B8}' +
-    '.kr-review:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.1)}' +
+    '.kr-review:focus{border-color:#258046;box-shadow:0 0 0 3px rgba(5,150,105,0.1)}' +
     '.kr-attach{display:inline-flex;align-items:center;gap:7px;margin-top:10px;height:40px;padding:0 16px;border-radius:10px;border:1.5px dashed #CBD5E1;background:#FFFFFF;color:#475569;font-size:12.5px;font-weight:700;cursor:pointer}' +
-    '.kr-attach i{color:#047857;font-size:13px}' +
-    '.kr-attach-info{display:none;font-size:11px;font-weight:700;color:#047857;margin-top:7px}' +
+    '.kr-attach i{color:#258046;font-size:13px}' +
+    '.kr-attach-info{display:none;font-size:11px;font-weight:700;color:#258046;margin-top:7px}' +
     '.kr-attach-info i{font-size:10px}' +
     '.kr-testi{margin-top:14px;border:1px solid #E5E7EB;border-radius:14px;padding:13px;background:#F8FAFC}' +
     '.kr-testi-h{font-size:13.5px;font-weight:800;color:#0F172A;display:flex;align-items:center;gap:7px}' +
     '.kr-testi-h span{margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:800;color:#78350F;background:linear-gradient(135deg,#FBBF24,#F59E0B);padding:3px 8px;border-radius:9999px}' +
     '.kr-testi-h span i{font-size:9px}' +
     '.kr-testi-sub{font-size:11px;color:#64748B;margin-top:3px;line-height:1.35}' +
-    '.kr-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;margin-top:11px;min-height:88px;border:1.5px dashed #A7F3D0;border-radius:12px;background:#FFFFFF;color:#047857;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center;padding:12px}' +
+    '.kr-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;margin-top:11px;min-height:88px;border:1.5px dashed #A7F3D0;border-radius:12px;background:#FFFFFF;color:#258046;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center;padding:12px}' +
     '.kr-upload i{font-size:22px}' +
-    '.kr-upload.has{border-style:solid;border-color:#059669;background:#ECFDF5}';
+    '.kr-upload.has{border-style:solid;border-color:#258046;background:#ECFDF5}';
 
   var MARKUP = '' +
     '<div class="kr-backdrop" style="position:absolute;inset:0;background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>' +
@@ -49,13 +49,13 @@
         '<label class="kr-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input class="kr-media" type="file" accept="image/*,video/*" capture="environment" multiple style="display:none"/></label>' +
         '<div class="kr-attach-info"><i class="fa-solid fa-paperclip"></i> <span></span></div>' +
         '<div class="kr-testi">' +
-          '<div class="kr-testi-h"><i class="fa-solid fa-bullhorn" style="color:#047857"></i> Share a testimonial <span><i class="fa-solid fa-coins"></i> +25 coins</span></div>' +
+          '<div class="kr-testi-h"><i class="fa-solid fa-bullhorn" style="color:#258046"></i> Share a testimonial <span><i class="fa-solid fa-coins"></i> +25 coins</span></div>' +
           '<div class="kr-testi-sub">Upload a short video to help other farmers</div>' +
           '<label class="kr-upload kr-testibox"><i class="fa-solid fa-cloud-arrow-up"></i><span class="kr-testilabel">Upload video testimonial</span><input class="kr-testi-input" type="file" accept="video/*" style="display:none"/></label>' +
         '</div>' +
       '</div>' +
       '<div style="flex-shrink:0;padding:8px 20px;border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px)">' +
-        '<button class="kr-submit" disabled style="width:100%;height:50px;border-radius:12px;color:#fff;font-size:14.5px;font-weight:800;background:#059669;border:0;opacity:.55;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45);cursor:pointer">Submit review</button>' +
+        '<button class="kr-submit" disabled style="width:100%;height:50px;border-radius:12px;color:#fff;font-size:14.5px;font-weight:800;background:#258046;border:0;opacity:.55;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45);cursor:pointer">Submit review</button>' +
       '</div>' +
     '</div>';
 

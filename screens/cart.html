@@ -28,22 +28,22 @@
   .cart-price-row{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
   .cart-price{font-size:16px;font-weight:700;color:#0F172A;line-height:1}
   .cart-mrp{font-size:11px;color:#94A3B8;text-decoration:line-through}
-  .cart-discount{font-size:10.5px;font-weight:800;color:#047857}
+  .cart-discount{font-size:10.5px;font-weight:800;color:#258046}
   /* Trash icon · softened red (lighter tone), generous tap target far from the qty stepper · sits at top-right but visually subtle so the eye lands on price/qty first */
   .trash-btn{position:absolute;top:10px;right:8px;background:transparent;border:0;color:#FCA5A5;cursor:pointer;padding:10px;font-size:14px;line-height:1;width:38px;height:38px;display:flex;align-items:center;justify-content:center}
   .trash-btn:active{transform:scale(.88);color:#DC2626}
   /* Qty stepper · LARGER · 40px tall pill with 38px tap targets · sits on the price row anchored right via margin-left:auto · pushed down via margin-top so it never sits on the same row as the trash icon (avoids accidental taps) */
   .qty{display:inline-flex;align-items:center;height:40px;border-radius:9999px;border:1px solid #BBF7D0;background:#ECFDF5;overflow:hidden;margin-left:auto}
-  .qty button{width:38px;height:38px;display:flex;align-items:center;justify-content:center;color:#047857;background:transparent;border:0;cursor:pointer;font-size:14px}
-  .qty .val{padding:0 10px;font-size:14px;font-weight:800;color:#047857;font-variant-numeric:tabular-nums;min-width:18px;text-align:center}
+  .qty button{width:38px;height:38px;display:flex;align-items:center;justify-content:center;color:#258046;background:transparent;border:0;cursor:pointer;font-size:14px}
+  .qty .val{padding:0 10px;font-size:14px;font-weight:800;color:#258046;font-variant-numeric:tabular-nums;min-width:18px;text-align:center}
 
   /* Deliver-to card · partner-app pattern · moves below Bill summary per spec */
   .addr-card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
   .addr-top{display:flex;align-items:center;gap:10px;padding:12px 14px}
-  .addr-ic{width:34px;height:34px;border-radius:10px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+  .addr-ic{width:34px;height:34px;border-radius:10px;background:#ECFDF5;color:#258046;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
   .addr-body{flex:1;line-height:1.3;min-width:0}
   .addr-row-bottom{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F8FAFC;border-top:1px solid #F1F5F9}
-  .addr-change{font-size:12px;font-weight:800;color:#047857;background:transparent;border:0;cursor:pointer;letter-spacing:0.02em;text-transform:uppercase}
+  .addr-change{font-size:12px;font-weight:800;color:#258046;background:transparent;border:0;cursor:pointer;letter-spacing:0.02em;text-transform:uppercase}
 
   /* Welcome-offer meter · LOCKED look · amber/cream gradient bg (distinct from neutral white cards) · shows the reward product (Humic 50 ml) thumbnail with a corner lock badge · highlighted amount + emerald progress · flips to a clean unlocked state at 100% (no overlay/lock, emerald-tinted bg) */
   .pmeter{position:relative;margin:0 16px;background:linear-gradient(135deg,#FFFBEB 0%,#FEF3C7 100%);border:1px solid #FCD34D;border-radius:14px;padding:14px;box-shadow:0 4px 14px -8px rgba(180,83,9,0.25);overflow:hidden}
@@ -66,26 +66,26 @@
   .pmeter.unlocked .pmeter-thumb{border-color:#A7F3D0;filter:none}
   .pmeter.unlocked .pmeter-thumb::after{display:none}
   .pmeter.unlocked .pmeter-thumb img{opacity:1}
-  .pmeter.unlocked .pmeter-thumb .lock{background:linear-gradient(135deg,#10B981,#047857);border-color:#ECFDF5}
-  .pmeter.unlocked .pmeter-tag{color:#047857;background:#ECFDF5;border-color:#A7F3D0}
+  .pmeter.unlocked .pmeter-thumb .lock{background:linear-gradient(135deg,#10B981,#258046);border-color:#ECFDF5}
+  .pmeter.unlocked .pmeter-tag{color:#258046;background:#ECFDF5;border-color:#A7F3D0}
   .pmeter.unlocked .pmeter-title{color:#064E3B}
-  .pmeter.unlocked .pmeter-title .hl{color:#047857}
+  .pmeter.unlocked .pmeter-title .hl{color:#258046}
   .pmeter.unlocked .pmeter-bar{border-color:#A7F3D0}
-  .pmeter.unlocked .pmeter-fill{background:linear-gradient(90deg,#10B981,#047857)}
+  .pmeter.unlocked .pmeter-fill{background:linear-gradient(90deg,#10B981,#258046)}
 
   /* Coupon entry card · still combines Apply + Applied chip */
   .coupon-card{margin:0 16px;background:#FFFFFF;border:1px dashed #BBF7D0;border-radius:14px;padding:12px 14px;cursor:pointer}
   .coupon-row{display:flex;align-items:center;gap:12px}
-  .coupon-row .coup-ic{width:34px;height:34px;border-radius:10px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+  .coupon-row .coup-ic{width:34px;height:34px;border-radius:10px;background:#ECFDF5;color:#258046;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
   .applied-chip{display:flex;align-items:center;gap:8px;margin-top:10px;padding:10px 12px;border-radius:10px;background:#ECFDF5;border:1px solid #A7F3D0}
-  .applied-chip .ck{width:22px;height:22px;border-radius:9999px;background:#059669;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+  .applied-chip .ck{width:22px;height:22px;border-radius:9999px;background:#258046;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
   .applied-chip .x-btn{background:transparent;border:0;color:#94A3B8;cursor:pointer;font-size:11px}
 
   /* Bill summary */
   .bill-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:3px 0}
   .bill-row .lbl{color:#64748B}
   .bill-row .val{color:#0F172A;font-weight:500}
-  .bill-row .val.green{color:#047857;font-weight:600}
+  .bill-row .val.green{color:#258046;font-weight:600}
   .bill-total{border-top:1px dashed #CBD5E1;margin-top:8px;padding-top:10px;display:flex;align-items:baseline;justify-content:space-between}
   .bill-total .lbl{font-size:14px;font-weight:700}
   .bill-total .val{font-size:18px;font-weight:700}
@@ -93,12 +93,12 @@
   /* Wallet · polished emerald tile (same as checkout) · money balance auto-applied */
   .wallet-card{overflow:hidden}
   .wallet-apply{display:flex;align-items:center;gap:12px;padding:14px;background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%)}
-  .wallet-apply .wal-ic{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#10B981,#047857);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 6px 14px -4px rgba(5,150,105,0.45)}
+  .wallet-apply .wal-ic{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#10B981,#258046);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 6px 14px -4px rgba(5,150,105,0.45)}
   .wallet-apply .wal-body{flex:1;line-height:1.3;min-width:0}
   .wallet-apply .wal-a{font-size:14px;font-weight:800;color:#0F172A}
-  .wallet-apply .wal-a .wal-amt{color:#047857;font-weight:900}
+  .wallet-apply .wal-a .wal-amt{color:#258046;font-weight:900}
   .wallet-apply .wal-b{font-size:11px;color:#64748B;margin-top:2px}
-  .wallet-apply .wal-tag{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:900;letter-spacing:0.06em;color:#FFFFFF;background:linear-gradient(135deg,#10B981,#047857);padding:4px 9px;border-radius:9999px;box-shadow:0 3px 8px -2px rgba(5,150,105,0.5)}
+  .wallet-apply .wal-tag{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:900;letter-spacing:0.06em;color:#FFFFFF;background:linear-gradient(135deg,#10B981,#258046);padding:4px 9px;border-radius:9999px;box-shadow:0 3px 8px -2px rgba(5,150,105,0.5)}
   .wallet-apply .wal-tag i{font-size:8px}
   .wal-remain{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:#FFFFFF;border-top:1px solid #D1FAE5;font-size:12px;font-weight:700;color:#475569}
   .wal-remain .v{font-weight:900;color:#0F172A;font-variant-numeric:tabular-nums}
@@ -109,12 +109,12 @@
   .coin-body{flex:1;line-height:1.25}
   .coin-a{font-size:13.5px;font-weight:800;color:#0F172A}
   .coin-b{font-size:11px;color:#64748B;margin-top:2px}
-  .coin-b b{color:#047857}
+  .coin-b b{color:#258046}
   .coin-toggle{appearance:none;-webkit-appearance:none;width:42px;height:24px;border-radius:9999px;background:#E2E8F0;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s ease;border:0;margin:0}
   .coin-toggle::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.2);transition:transform .2s ease}
-  .coin-toggle:checked{background:#059669}
+  .coin-toggle:checked{background:#258046}
   .coin-toggle:checked::after{transform:translateX(18px)}
-  .saved-pill{margin-top:10px;display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;background:#ECFDF5;color:#047857;font-size:11px;font-weight:700;border:1px solid #BBF7D0}
+  .saved-pill{margin-top:10px;display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;background:#ECFDF5;color:#258046;font-size:11px;font-weight:700;border:1px solid #BBF7D0}
 
   /* Sticky checkout · 2-col layout · summary on the left (item count + amount), button on the right (compact, not full-width) · Saved-520 text removed */
   .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 14px;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -122,7 +122,7 @@
   .sticky-sum .ttl{font-size:11px;color:#64748B;font-weight:500}
   .sticky-sum .amt{font-size:20px;font-weight:700;color:#0F172A;letter-spacing:-0.01em;font-variant-numeric:tabular-nums}
   /* Wider checkout pill · takes ~60% of the row so the CTA reads as the primary action */
-  .sticky-cta-btn{flex:2;height:52px;padding:0 18px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+  .sticky-cta-btn{flex:2;height:52px;padding:0 18px;border-radius:12px;background:#258046;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
 
   /* Modals */
   .modal-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80}
@@ -134,17 +134,17 @@
   /* Coupon tile · proper ticket shape · emerald discount stub on the left, code+description in middle, Apply on the right · dashed vertical divider between stub and body · CSS-only notch using two pseudo-elements positioned over the dashed line */
   /* Coupon tile · cleaner · notch circles removed (they overlapped + read poorly) · dashed seam between stub and body keeps the ticket feel · MAX SAVING badge moved INLINE next to the code name */
   .coup-tile{position:relative;display:flex;align-items:stretch;background:#FFFFFF;border:1px solid #BBF7D0;border-radius:14px;overflow:hidden;min-height:88px;box-shadow:0 2px 8px -2px rgba(5,150,105,0.12)}
-  .coup-stub{background:linear-gradient(160deg,#047857 0%,#10B981 100%);color:#FFFFFF;padding:12px 12px;min-width:88px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative}
+  .coup-stub{background:linear-gradient(160deg,#258046 0%,#10B981 100%);color:#FFFFFF;padding:12px 12px;min-width:88px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative}
   .coup-stub .amt{font-size:20px;font-weight:900;letter-spacing:-0.02em;line-height:1;font-variant-numeric:tabular-nums}
   .coup-stub .off-lbl{font-size:9.5px;font-weight:800;letter-spacing:0.12em;opacity:.92}
   .coup-body{flex:1;min-width:0;padding:12px 12px 12px 16px;display:flex;flex-direction:column;justify-content:center;border-left:2px dashed #BBF7D0;line-height:1.3}
   .coup-name-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .coup-body .code-name{font-size:13.5px;font-weight:900;color:#047857;letter-spacing:0.04em}
+  .coup-body .code-name{font-size:13.5px;font-weight:900;color:#258046;letter-spacing:0.04em}
   .coup-body .code-desc{font-size:11px;color:#64748B;margin-top:4px}
   /* MAX SAVING chip · inline with the code name · gold pill · readable, in-flow */
   .max-save{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#FBBF24,#F59E0B);color:#0F172A;font-size:8.5px;font-weight:900;letter-spacing:0.1em;padding:2px 7px;border-radius:9999px;box-shadow:0 2px 5px -1px rgba(245,158,11,0.45)}
   .max-save i{font-size:7.5px}
-  .coup-tile .apply-btn{flex-shrink:0;align-self:center;margin-right:12px;padding:9px 16px;border-radius:9px;background:#059669;color:#FFFFFF;border:0;font-size:11.5px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 10px -3px rgba(5,150,105,0.45)}
+  .coup-tile .apply-btn{flex-shrink:0;align-self:center;margin-right:12px;padding:9px 16px;border-radius:9px;background:#258046;color:#FFFFFF;border:0;font-size:11.5px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 10px -3px rgba(5,150,105,0.45)}
   .coup-tile .apply-btn:active{transform:scale(.96)}
   /* Ineligible variant · greyscale, lock icon, no-action button */
   .coup-tile.ineligible{border-color:#E5E7EB;opacity:.85;box-shadow:none}
@@ -155,18 +155,18 @@
   .coup-lock{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:10.5px;font-weight:700;color:#B45309}
   .coup-lock i{font-size:9px}
 
-  .xsell-add{padding:7px 16px;border-radius:9px;background:#059669;color:#FFFFFF;border:0;font-size:12.5px;font-weight:800;letter-spacing:0.04em;cursor:pointer;flex-shrink:0;text-transform:uppercase;box-shadow:0 4px 10px -3px rgba(5,150,105,0.5)}
+  .xsell-add{padding:7px 16px;border-radius:9px;background:#258046;color:#FFFFFF;border:0;font-size:12.5px;font-weight:800;letter-spacing:0.04em;cursor:pointer;flex-shrink:0;text-transform:uppercase;box-shadow:0 4px 10px -3px rgba(5,150,105,0.5)}
   .xsell-add:active{transform:scale(.96)}
-  .xsell-add.added{background:#ECFDF5;color:#047857}
+  .xsell-add.added{background:#ECFDF5;color:#258046}
   /* Free-delivery threshold strip · animation removed (no more water-flow stripes or truck) · simpler · gradient fill, just bar + the highlighted amount line · in-cart / goal labels dropped per spec */
   .xsell-thresh{position:relative;padding:12px 12px 14px;border-radius:14px;background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border:1px solid #A7F3D0;margin-bottom:14px;box-shadow:0 4px 14px -8px rgba(5,150,105,0.35)}
   .xsell-thresh .head{display:flex;align-items:center;gap:10px}
-  .xsell-thresh .ic{width:34px;height:34px;border-radius:10px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#047857;flex-shrink:0;box-shadow:0 2px 6px rgba(5,150,105,0.2)}
+  .xsell-thresh .ic{width:34px;height:34px;border-radius:10px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#258046;flex-shrink:0;box-shadow:0 2px 6px rgba(5,150,105,0.2)}
   .xsell-thresh .copy{flex:1;line-height:1.25;color:#0F172A;font-size:12.5px;font-weight:600}
-  .xsell-thresh .copy .hl{color:#047857;font-weight:900}
+  .xsell-thresh .copy .hl{color:#258046;font-weight:900}
   .xsell-thresh .pill{margin-left:auto;flex-shrink:0;font-size:9.5px;font-weight:900;background:#FBBF24;color:#0F172A;padding:3px 8px;border-radius:9999px;letter-spacing:0.06em}
   .xsell-thresh .bar-wrap{position:relative;height:8px;margin-top:10px;background:#FFFFFF;border-radius:9999px;border:1px solid #A7F3D0;overflow:hidden}
-  .xsell-thresh .fill{height:100%;background:linear-gradient(90deg,#10B981 0%,#047857 100%);border-radius:9999px;transition:width .4s ease}
+  .xsell-thresh .fill{height:100%;background:linear-gradient(90deg,#10B981 0%,#258046 100%);border-radius:9999px;transition:width .4s ease}
 
   /* Special-deal xsell card · CLEANED UP · drops the diagonal ribbon + the gradient bg in favour of a clean white card with hairline border · a single SAVE chip sits at the top-right · the eye lands on the image + name + price · primary ADD pill on the right */
   .xsell-card{position:relative;border:1px solid #E5E7EB;border-radius:14px;background:#FFFFFF;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(15,23,42,0.04);overflow:hidden}
@@ -176,10 +176,10 @@
   .xsell-deal{display:flex;align-items:center;gap:7px;width:100%;padding:7px 13px;font-size:10px;font-weight:900;letter-spacing:0.06em;text-transform:uppercase;color:#FFFFFF}
   .xsell-deal i{width:17px;height:17px;border-radius:9999px;background:rgba(255,255,255,0.28);display:inline-flex;align-items:center;justify-content:center;font-size:8.5px}
   .xsell-deal.hot{background:linear-gradient(135deg,#FB7185,#E11D48)}
-  .xsell-deal.combo{background:linear-gradient(135deg,#10B981,#047857)}
+  .xsell-deal.combo{background:linear-gradient(135deg,#10B981,#258046)}
   .xsell-deal.best{background:linear-gradient(135deg,#FBBF24,#F59E0B);color:#7C2D12}
   .xsell-deal.best i{background:rgba(124,45,18,0.18)}
-  .xsell-card .saving{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:900;color:#047857;background:#ECFDF5;border:1px solid #A7F3D0;padding:3px 8px;border-radius:9999px;letter-spacing:0.04em}
+  .xsell-card .saving{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:900;color:#258046;background:#ECFDF5;border:1px solid #A7F3D0;padding:3px 8px;border-radius:9999px;letter-spacing:0.04em}
   .xsell-card .saving i{font-size:8px}
   .xsell-img{width:60px;height:60px;border-radius:11px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:5px;flex-shrink:0}
   .xsell-img img{max-width:100%;max-height:100%;object-fit:contain}
@@ -191,7 +191,7 @@
   @keyframes celebBackdrop{0%{opacity:0}14%{opacity:1}82%{opacity:1}100%{opacity:0}}
   .celeb-card{position:relative;background:#FFFFFF;border-radius:22px;padding:30px 34px 26px;text-align:center;min-width:250px;box-shadow:0 24px 60px -10px rgba(15,23,42,0.35);transform:scale(.9);opacity:0;animation:celebCard 2.2s cubic-bezier(.22,1,.36,1) forwards;z-index:2}
   @keyframes celebCard{0%{transform:scale(.9);opacity:0}13%{transform:scale(1.02);opacity:1}22%{transform:scale(1)}84%{transform:scale(1);opacity:1}100%{transform:scale(.98);opacity:0}}
-  .celeb-badge{margin:0 auto;width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,#10B981 0%,#047857 100%);display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 12px 24px -8px rgba(5,150,105,0.5)}
+  .celeb-badge{margin:0 auto;width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,#10B981 0%,#258046 100%);display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 12px 24px -8px rgba(5,150,105,0.5)}
   .celeb-badge i{font-size:33px;color:#FFFFFF;animation:celebCheck .5s cubic-bezier(.22,1.45,.4,1) .16s both}
   @keyframes celebCheck{0%{transform:scale(0)}100%{transform:scale(1)}}
   /* one soft glow ring expanding out (gentle, not rotating rays) */
@@ -205,9 +205,9 @@
   @keyframes celebConf{0%{transform:translateY(0) rotate(0);opacity:0}16%{opacity:1}100%{transform:translateY(165px) rotate(230deg);opacity:0}}
   .celeb-card .title{margin-top:16px;font-size:18px;font-weight:900;color:#0F172A;letter-spacing:-0.01em;line-height:1.1}
   .celeb-card .save{margin-top:8px;font-size:12.5px;color:#64748B;font-weight:600}
-  .celeb-card .save .v{display:block;margin-top:3px;font-size:30px;color:#047857;font-weight:900;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;animation:celebAmt .55s cubic-bezier(.22,1.45,.4,1) .3s both}
+  .celeb-card .save .v{display:block;margin-top:3px;font-size:30px;color:#258046;font-weight:900;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;animation:celebAmt .55s cubic-bezier(.22,1.45,.4,1) .3s both}
   @keyframes celebAmt{0%{transform:scale(.55);opacity:0}100%{transform:scale(1);opacity:1}}
-  .celeb-card .code{margin-top:14px;display:inline-block;font-size:11px;font-weight:800;letter-spacing:0.16em;color:#047857;background:#ECFDF5;padding:5px 12px;border-radius:9999px;border:1px solid #A7F3D0}
+  .celeb-card .code{margin-top:14px;display:inline-block;font-size:11px;font-weight:800;letter-spacing:0.16em;color:#258046;background:#ECFDF5;padding:5px 12px;border-radius:9999px;border:1px solid #A7F3D0}
 
   /* Add-to-cart toast · sits ABOVE the cross-sell sheet (z above modal) so the farmer gets clear feedback that the item went in · slides down from the top, auto-dismisses */
   .toast{position:fixed;top:14px;left:50%;transform:translate(-50%,-160%);z-index:120;display:flex;align-items:center;gap:10px;max-width:90%;padding:10px 14px;border-radius:12px;background:#0F172A;color:#FFFFFF;box-shadow:0 12px 28px -8px rgba(15,23,42,0.5);transition:transform .32s cubic-bezier(.22,1,.36,1)}
@@ -323,7 +323,7 @@
     <div class="applied-chip" id="appliedChip" style="display:none">
       <span class="ck"><i class="fa-solid fa-check"></i></span>
       <div class="flex-1 leading-tight">
-        <div class="text-[12.5px] font-bold" style="color:#047857" id="appliedName">WELCOME100 applied</div>
+        <div class="text-[12.5px] font-bold" style="color:#258046" id="appliedName">WELCOME100 applied</div>
         <div class="text-[10.5px]" style="color:#64748B" id="appliedSave">You saved ₹100</div>
       </div>
       <button class="x-btn" id="removeCoupon"><i class="fa-solid fa-xmark text-[13px]"></i></button>
@@ -337,7 +337,7 @@
       <div class="bill-row"><span class="lbl" id="billItemsLbl">Items total (3)</span><span class="val tnum" id="billItemsVal">&#8377;2,300</span></div>
       <div class="bill-row"><span class="lbl">Item discount</span><span class="val green tnum">&minus; &#8377;300</span></div>
       <div class="bill-row" id="billCouponRow"><span class="lbl">Coupon (WELCOME100)</span><span class="val green tnum">&minus; &#8377;100</span></div>
-      <div class="bill-row" id="coinBillRow" style="display:none"><span class="lbl" style="color:#047857;font-weight:700"><i class="fa-solid fa-coins text-[11px]" style="color:#F59E0B"></i> Krishi Coins</span><span class="val green tnum">&minus; &#8377;190</span></div>
+      <div class="bill-row" id="coinBillRow" style="display:none"><span class="lbl" style="color:#258046;font-weight:700"><i class="fa-solid fa-coins text-[11px]" style="color:#F59E0B"></i> Krishi Coins</span><span class="val green tnum">&minus; &#8377;190</span></div>
       <div class="bill-row"><span class="lbl"><i class="fa-solid fa-wallet text-[10px]" style="color:#94A3B8"></i> Wallet</span><span class="val tnum" id="billWalletVal">&minus; &#8377;540</span></div>
       <div class="bill-row"><span class="lbl">Delivery</span><span class="val green">FREE</span></div>
       <div class="bill-total">
@@ -383,7 +383,7 @@
       <div class="addr-body">
         <div class="flex items-center gap-1.5">
           <span class="text-[14.5px] font-bold text-[#0F172A]" id="cartDelivDate">Tomorrow, 28 May</span>
-          <span class="text-[9px] font-bold text-[#047857] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider" id="cartDelivFree">Free</span>
+          <span class="text-[9px] font-bold text-[#258046] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider" id="cartDelivFree">Free</span>
         </div>
         <div class="text-[11.5px] text-[#64748B] mt-0.5" id="cartDelivSub">Order before <span class="font-bold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
       </div>
@@ -424,7 +424,7 @@
           <i class="fa-solid fa-ticket text-[12px]" style="color:#94A3B8"></i>
           <input id="coupInput" type="text" placeholder="Have a code? Enter here" class="flex-1 outline-none text-[13px] font-semibold bg-transparent placeholder:text-[#94A3B8] placeholder:font-medium" style="text-transform:uppercase"/>
         </div>
-        <button id="coupCheck" class="px-4 h-[44px] rounded-[10px] text-[12.5px] font-extrabold" style="background:#ECFDF5;color:#047857;border:1px solid #BBF7D0">Check</button>
+        <button id="coupCheck" class="px-4 h-[44px] rounded-[10px] text-[12.5px] font-extrabold" style="background:#ECFDF5;color:#258046;border:1px solid #BBF7D0">Check</button>
       </div>
       <div class="text-[10.5px] font-extrabold uppercase tracking-wider mb-2" style="color:#64748B">Available offers</div>
     </div>
@@ -553,7 +553,7 @@
                 <div class="flex items-baseline gap-1.5">
                   <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;327</span>
                   <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;425</span>
-                  <span class="text-[10.5px] font-bold" style="color:#047857">23% off</span>
+                  <span class="text-[10.5px] font-bold" style="color:#258046">23% off</span>
                 </div>
                 <span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹98</span>
               </div>
@@ -572,7 +572,7 @@
                 <div class="flex items-baseline gap-1.5">
                   <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;245</span>
                   <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;320</span>
-                  <span class="text-[10.5px] font-bold" style="color:#047857">24% off</span>
+                  <span class="text-[10.5px] font-bold" style="color:#258046">24% off</span>
                 </div>
                 <span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹75</span>
               </div>
@@ -591,7 +591,7 @@
                 <div class="flex items-baseline gap-1.5">
                   <span class="text-[14.5px] font-extrabold tnum text-[#0F172A]">&#8377;440</span>
                   <span class="text-[11px] line-through tnum" style="color:#94A3B8">&#8377;610</span>
-                  <span class="text-[10.5px] font-bold" style="color:#047857">28% off</span>
+                  <span class="text-[10.5px] font-bold" style="color:#258046">28% off</span>
                 </div>
                 <span class="saving"><i class="fa-solid fa-tag"></i> SAVE ₹170</span>
               </div>
@@ -606,7 +606,7 @@
         <div class="text-[11px] font-medium" style="color:#64748B" id="xsellSummItems">3 items</div>
         <div class="text-[20px] font-bold tnum" style="color:#0F172A;letter-spacing:-0.01em" id="xsellSummVal">₹1,900</div>
       </div>
-      <button id="xsellContinue" class="h-[52px] rounded-[12px] text-white text-[15px] font-extrabold inline-flex items-center justify-center gap-2" style="flex:2;background:#059669;border:0;padding:0 18px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+      <button id="xsellContinue" class="h-[52px] rounded-[12px] text-white text-[15px] font-extrabold inline-flex items-center justify-center gap-2" style="flex:2;background:#258046;border:0;padding:0 18px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
         Continue <i class="fa-solid fa-arrow-right text-[12px]"></i>
       </button>
     </div>

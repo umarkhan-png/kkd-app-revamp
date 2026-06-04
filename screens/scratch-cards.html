@@ -16,7 +16,7 @@
   .sum .s{flex:1;text-align:center;padding:14px 8px}
   .sum .s + .s{border-left:1px solid #F1F5F9}
   .sum .v{font-size:20px;font-weight:900;color:#0F172A}
-  .sum .v.amt{color:#047857}
+  .sum .v.amt{color:#258046}
   .sum .k{font-size:10.5px;color:#64748B;font-weight:600;margin-top:2px}
 
   .sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 16px}
@@ -32,9 +32,9 @@
   /* Scratched (won) tile */
   .sc-won{position:relative;height:140px;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;padding:10px;
     background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border:1px solid #A7F3D0;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
-  .sc-won .wtag{position:absolute;top:8px;right:8px;font-size:8.5px;font-weight:900;letter-spacing:0.06em;color:#FFFFFF;background:#059669;padding:2px 7px;border-radius:9999px}
+  .sc-won .wtag{position:absolute;top:8px;right:8px;font-size:8.5px;font-weight:900;letter-spacing:0.06em;color:#FFFFFF;background:#258046;padding:2px 7px;border-radius:9999px}
   .sc-won .wic{font-size:24px;line-height:1;margin-bottom:2px}
-  .sc-won .wamt{font-size:24px;font-weight:900;color:#047857;letter-spacing:-0.02em;line-height:1.05}
+  .sc-won .wamt{font-size:24px;font-weight:900;color:#258046;letter-spacing:-0.02em;line-height:1.05}
   .sc-won .wsub{font-size:11px;font-weight:700;color:#0F172A}
   .sc-won .wdate{font-size:10px;color:#94A3B8;font-weight:600;margin-top:2px}
   .sc-won.miss{background:#F8FAFC;border-color:#E5E7EB}
@@ -50,12 +50,12 @@
   .scratch-card{position:relative;width:100%;height:172px;border-radius:16px;overflow:hidden;margin:0 auto;box-shadow:0 8px 20px -8px rgba(0,0,0,0.25)}
   .scratch-prize{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:linear-gradient(135deg,#FFFBEB 0%,#FEF3C7 60%,#FDE68A 100%)}
   .scratch-prize .sp-emoji{font-size:34px;line-height:1}
-  .scratch-prize .sp-amt{font-size:34px;font-weight:900;color:#047857;letter-spacing:-0.02em;line-height:1.05}
+  .scratch-prize .sp-amt{font-size:34px;font-weight:900;color:#258046;letter-spacing:-0.02em;line-height:1.05}
   .scratch-prize .sp-label{font-size:13px;font-weight:800;color:#0F172A}
   .scratch-prize .sp-sub{font-size:11px;color:#64748B;font-weight:500}
   .scratch-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
   .scratch-hint{margin-top:13px;font-size:11.5px;color:#94A3B8;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px}
-  .scratch-claim{width:100%;margin-top:13px;height:48px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:14.5px;font-weight:800;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+  .scratch-claim{width:100%;margin-top:13px;height:48px;border-radius:12px;background:#258046;color:#FFFFFF;border:0;font-size:14.5px;font-weight:800;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
   .sc-conf{position:absolute;top:0;width:8px;height:13px;border-radius:2px;opacity:0;pointer-events:none}
   .sc-conf.go{animation:scConf 1.6s ease-in forwards}
   @keyframes scConf{0%{transform:translateY(-10px) rotate(0);opacity:0}15%{opacity:1}100%{transform:translateY(230px) rotate(260deg);opacity:0}}
@@ -63,7 +63,7 @@
   .nav{position:fixed;bottom:0;left:0;right:0;height:68px;background:#FFFFFF;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04);display:flex;justify-content:space-around;align-items:center;padding:0 8px;z-index:50}
   .nav a{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:#94A3B8;font-size:12px;font-weight:600}
   .nav a.on{color:#0F172A;font-weight:700}
-  .nav a.on i{color:#059669}
+  .nav a.on i{color:#258046}
   .nav i{font-size:19px}
 </style></head>
 <body>
@@ -162,7 +162,7 @@
       function reveal(){
         done = true;
         ctx.clearRect(0,0,cv.width,cv.height);
-        if (hint) hint.innerHTML = '<i class="fa-solid fa-circle-check" style="color:#059669"></i> Reward credited to your wallet';
+        if (hint) hint.innerHTML = '<i class="fa-solid fa-circle-check" style="color:#258046"></i> Reward credited to your wallet';
         const prize = card.querySelector('.scratch-prize');
         if (prize){ prize.style.transform = 'scale(.85)'; prize.style.transition = 'transform .5s cubic-bezier(.22,1.4,.4,1)'; requestAnimationFrame(()=>{ prize.style.transform = 'scale(1)'; }); }
         const modal = ov.querySelector('.scratch-modal');

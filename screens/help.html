@@ -12,7 +12,7 @@
   .card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
 
   /* Prominent "Call an expert" video-call hero */
-  .expert-hero{margin:0 16px;border-radius:18px;background:linear-gradient(135deg,#047857 0%,#059669 55%,#10B981 100%);padding:16px;color:#FFFFFF;box-shadow:0 16px 32px -12px rgba(5,150,105,0.55);position:relative;overflow:hidden}
+  .expert-hero{margin:0 16px;border-radius:18px;background:linear-gradient(135deg,#258046 0%,#258046 55%,#10B981 100%);padding:16px;color:#FFFFFF;box-shadow:0 16px 32px -12px rgba(5,150,105,0.55);position:relative;overflow:hidden}
   .expert-hero::after{content:"";position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.08)}
   .eh-top{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
   /* Circular avatar (same as the home Ask-Expert pill) · NOT clipped, so the video badge isn't cropped */
@@ -26,7 +26,7 @@
   .eh-online{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:10.5px;font-weight:800;background:rgba(255,255,255,0.18);padding:4px 11px;border-radius:9999px;letter-spacing:0.02em}
   .eh-online .dot{width:7px;height:7px;border-radius:50%;background:#86EFAC;animation:ehpulse 1.6s infinite}
   @keyframes ehpulse{0%{box-shadow:0 0 0 0 rgba(134,239,172,0.6)}70%{box-shadow:0 0 0 7px rgba(134,239,172,0)}100%{box-shadow:0 0 0 0 rgba(134,239,172,0)}}
-  .eh-cta{width:100%;margin-top:14px;height:50px;border-radius:12px;background:#FFFFFF;color:#047857;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;box-shadow:0 8px 18px -6px rgba(0,0,0,0.28);position:relative;z-index:1}
+  .eh-cta{width:100%;margin-top:14px;height:50px;border-radius:12px;background:#FFFFFF;color:#258046;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;box-shadow:0 8px 18px -6px rgba(0,0,0,0.28);position:relative;z-index:1}
   .eh-cta i{font-size:15px}
   .eh-cta:active{transform:scale(.99)}
   .eh-note{margin-top:10px;font-size:11px;text-align:center;opacity:.9;font-weight:500;position:relative;z-index:1}
@@ -43,7 +43,7 @@
   .nav{position:fixed;bottom:0;left:0;right:0;height:68px;background:#FFFFFF;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04);display:flex;justify-content:space-around;align-items:center;padding:0 8px;z-index:50}
   .nav a{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:#94A3B8;font-size:12px;font-weight:600}
   .nav a.on{color:#0F172A;font-weight:700}
-  .nav a.on i{color:#059669}
+  .nav a.on i{color:#258046}
   .nav i{font-size:19px}
 
   /* Ask-AI chat bot · in-page sheet · mirrors the partner-app "Ask anything" (Katyaa AI) screen */
@@ -55,10 +55,10 @@
   .ai-x{width:36px;height:36px;border-radius:50%;background:#F1F5F9;border:0;color:#475569;font-size:14px;cursor:pointer;flex-shrink:0}
   .ai-thread{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scrollbar-width:none}
   .ai-thread::-webkit-scrollbar{display:none}
-  .ai-av{width:32px;height:32px;border-radius:50%;background:#ECFDF5;border:1px solid rgba(5,150,105,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#047857;font-size:15px}
+  .ai-av{width:32px;height:32px;border-radius:50%;background:#ECFDF5;border:1px solid rgba(5,150,105,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#258046;font-size:15px}
   .ai-bot{align-self:flex-start;display:flex;gap:8px;align-items:flex-end;max-width:88%}
   .ai-bot .bub{background:#FFFFFF;border:1px solid #EDEDED;border-radius:12px;border-bottom-left-radius:4px;padding:11px 13px;font-size:14px;color:#0F172A;line-height:1.45}
-  .ai-me{align-self:flex-end;max-width:80%;background:#059669;color:#fff;border-radius:12px;border-bottom-right-radius:4px;padding:11px 13px;font-size:14px;line-height:1.45}
+  .ai-me{align-self:flex-end;max-width:80%;background:#258046;color:#fff;border-radius:12px;border-bottom-right-radius:4px;padding:11px 13px;font-size:14px;line-height:1.45}
   .ai-time{font-size:9px;color:#9E9E9E;font-weight:600;margin-top:5px}
   .ai-me .ai-time{color:rgba(255,255,255,0.7);text-align:right}
   .ai-pcard{display:flex;align-items:center;gap:9px;background:#F8FAFC;border:1px solid #EDEDED;border-radius:10px;padding:8px;text-decoration:none;margin-top:7px}
@@ -66,9 +66,9 @@
   .ai-pcard .nm{font-size:13px;font-weight:700;color:#0F172A}
   .ai-pcard .sb{font-size:9.5px;color:#64748B;font-weight:600}
   .ai-pcard .pr{font-size:13px;font-weight:800;color:#0F172A;flex-shrink:0}
-  .ai-pcard .addb{background:#F7FFF9;border:1px solid #059669;color:#047857;font-size:11.5px;font-weight:800;text-transform:uppercase;padding:5px 10px;border-radius:9px;flex-shrink:0;cursor:pointer}
+  .ai-pcard .addb{background:#F7FFF9;border:1px solid #258046;color:#258046;font-size:11.5px;font-weight:800;text-transform:uppercase;padding:5px 10px;border-radius:9px;flex-shrink:0;cursor:pointer}
   .ai-dose{display:flex;gap:8px;align-items:flex-start;background:#F8FAFC;border-radius:9px;padding:7px 10px;margin-top:6px}
-  .ai-dose .d{font-size:12px;font-weight:800;color:#047857;width:44px;flex-shrink:0}
+  .ai-dose .d{font-size:12px;font-weight:800;color:#258046;width:44px;flex-shrink:0}
   .ai-dose .x{font-size:12px;color:#0F172A;font-weight:600}
   .ai-typing{align-self:flex-start;background:#fff;border:1px solid #EDEDED;border-radius:12px;border-bottom-left-radius:4px;padding:13px 15px;display:flex;gap:4px;margin-left:40px}
   .ai-typing span{width:7px;height:7px;border-radius:50%;background:#CBD5E1;animation:aiTy 1s infinite}
@@ -77,24 +77,24 @@
   .ai-foot{flex-shrink:0;background:#fff;border-top:1px solid #EDEDED;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 8px)}
   .ai-chips{display:flex;gap:8px;padding:12px 12px 6px;overflow-x:auto;scrollbar-width:none}
   .ai-chips::-webkit-scrollbar{display:none}
-  .ai-chip{flex-shrink:0;background:#ECFDF5;border:1px solid rgba(5,150,105,0.3);color:#047857;font-size:12px;font-weight:700;padding:7px 13px;border-radius:9999px;white-space:nowrap;cursor:pointer}
+  .ai-chip{flex-shrink:0;background:#ECFDF5;border:1px solid rgba(5,150,105,0.3);color:#258046;font-size:12px;font-weight:700;padding:7px 13px;border-radius:9999px;white-space:nowrap;cursor:pointer}
   .ai-inrow{display:flex;align-items:center;gap:8px;padding:4px 12px 12px}
   .ai-icbtn{width:40px;height:40px;border-radius:50%;border:1px solid #E5E7EB;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#475569;font-size:15px;cursor:pointer}
   .ai-inwrap{flex:1;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:9999px;padding:0 16px;display:flex;align-items:center}
   .ai-inwrap input{width:100%;border:0;background:transparent;outline:none;font-size:14px;padding:11px 0;font-family:inherit;color:#0F172A}
-  .ai-send{width:40px;height:40px;border-radius:50%;background:#059669;border:0;color:#fff;font-size:15px;flex-shrink:0;cursor:pointer}
+  .ai-send{width:40px;height:40px;border-radius:50%;background:#258046;border:0;color:#fff;font-size:15px;flex-shrink:0;cursor:pointer}
 
   /* Call an expert · confirm + video-call screen */
   .cc-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:96;display:flex;align-items:center;justify-content:center;padding:28px}
   .cc-bd.open{opacity:1;pointer-events:auto}
   .cc-modal{width:100%;max-width:300px;background:#fff;border-radius:18px;padding:22px;text-align:center;transform:scale(.92);transition:transform .25s cubic-bezier(.34,1.4,.5,1)}
   .cc-bd.open .cc-modal{transform:scale(1)}
-  .cc-ic{width:56px;height:56px;border-radius:50%;margin:0 auto;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:22px}
+  .cc-ic{width:56px;height:56px;border-radius:50%;margin:0 auto;background:#ECFDF5;color:#258046;display:flex;align-items:center;justify-content:center;font-size:22px}
   .cc-title{font-size:18px;font-weight:900;color:#0F172A;margin-top:14px}
   .cc-sub{font-size:12.5px;color:#64748B;margin-top:6px;line-height:1.4}
   .cc-btns{display:flex;gap:10px;margin-top:18px}
   .cc-cancel{flex:1;height:46px;border-radius:11px;background:#fff;border:1.5px solid #E5E7EB;color:#0F172A;font-size:14px;font-weight:800;cursor:pointer}
-  .cc-yes{flex:1;height:46px;border-radius:11px;background:#059669;border:0;color:#fff;font-size:14px;font-weight:800;cursor:pointer}
+  .cc-yes{flex:1;height:46px;border-radius:11px;background:#258046;border:0;color:#fff;font-size:14px;font-weight:800;cursor:pointer}
   .call-screen{position:fixed;inset:0;z-index:97;background:linear-gradient(160deg,#0B1120,#0F2A22 60%,#04130d);display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:40px 20px calc(36px + env(safe-area-inset-bottom,0px))}
   .call-screen.open{display:flex}
   .call-pip{position:absolute;top:24px;right:20px;width:84px;height:112px;border-radius:14px;background:#1E293B;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);font-size:22px;overflow:hidden}
@@ -104,7 +104,7 @@
   .call-name{color:#fff;font-size:20px;font-weight:800}
   .call-status{color:rgba(255,255,255,0.75);font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px}
   .call-status .live{width:8px;height:8px;border-radius:50%;background:#34D399;box-shadow:0 0 0 0 rgba(52,211,153,0.6);animation:ehpulse 1.6s infinite}
-  .call-connect{height:56px;padding:0 40px;border-radius:9999px;background:#059669;border:0;color:#fff;font-size:16px;font-weight:800;display:inline-flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 12px 28px -8px rgba(5,150,105,0.7)}
+  .call-connect{height:56px;padding:0 40px;border-radius:9999px;background:#258046;border:0;color:#fff;font-size:16px;font-weight:800;display:inline-flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 12px 28px -8px rgba(5,150,105,0.7)}
   .call-end{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:54px;padding:0 34px;border-radius:9999px;background:#DC2626;border:0;color:#fff;font-size:15.5px;font-weight:800;cursor:pointer;box-shadow:0 12px 28px -8px rgba(220,38,38,0.7)}
   .call-end i{font-size:16px}
 </style></head>
@@ -124,8 +124,8 @@
     <div class="expert-hero">
       <div class="eh-top">
         <div class="eh-avatar" style="display:flex;align-items:center;justify-content:center;background:#FFFFFF;border-radius:50%;border:2px solid rgba(255,255,255,0.7);box-shadow:0 0 0 4px rgba(255,255,255,0.12),0 6px 16px -6px rgba(0,0,0,0.3)">
-          <i class="fa-solid fa-robot" style="font-size:30px;color:#047857"></i>
-          <span class="eh-vbadge" style="background:#059669"><i class="fa-solid fa-bolt text-[9px]"></i></span>
+          <i class="fa-solid fa-robot" style="font-size:30px;color:#258046"></i>
+          <span class="eh-vbadge" style="background:#258046"><i class="fa-solid fa-bolt text-[9px]"></i></span>
         </div>
         <div class="eh-info">
           <div class="eh-title">Ask AI</div>
@@ -142,7 +142,7 @@
   <div class="sec-title">Other ways to reach us</div>
   <div class="card">
     <a href="#" class="opt-row" id="callExpertRow">
-      <span class="opt-ic" style="background:#ECFDF5;color:#047857"><i class="fa-solid fa-video"></i></span>
+      <span class="opt-ic" style="background:#ECFDF5;color:#258046"><i class="fa-solid fa-video"></i></span>
       <div class="opt-body"><div class="opt-a">Call an expert</div><div class="opt-b">1-on-1 video call · online now</div></div>
       <i class="fa-solid fa-chevron-right chev"></i>
     </a>
@@ -199,7 +199,7 @@
       <div class="ai-me">Price?<div class="ai-time">2:16 PM</div></div>
 
       <div class="ai-bot"><span class="ai-av"><i class="fa-solid fa-seedling"></i></span><div class="bub">Yeh raha best price:
-        <a href="pdp.html" class="ai-pcard" style="border-color:rgba(5,150,105,0.35)"><img src="../assets/AntiVirus_nobg.png" class="img-blend"/><div class="flex-1 leading-tight"><div class="nm">Katyayani Antivirus</div><div class="sb">250 ml · <span style="color:#047857;font-weight:800">28% off</span></div><div class="mt-0.5"><span class="pr">₹327</span> <span class="text-[9px]" style="color:#9E9E9E;text-decoration:line-through">₹455</span></div></div><button type="button" class="addb">Add</button></a>
+        <a href="pdp.html" class="ai-pcard" style="border-color:rgba(5,150,105,0.35)"><img src="../assets/AntiVirus_nobg.png" class="img-blend"/><div class="flex-1 leading-tight"><div class="nm">Katyayani Antivirus</div><div class="sb">250 ml · <span style="color:#258046;font-weight:800">28% off</span></div><div class="mt-0.5"><span class="pr">₹327</span> <span class="text-[9px]" style="color:#9E9E9E;text-decoration:line-through">₹455</span></div></div><button type="button" class="addb">Add</button></a>
         <div class="ai-time">2:17 PM</div></div></div>
     </div>
     <!-- Suggestion chips + input -->
@@ -235,7 +235,7 @@
   <div id="callScreen" class="call-screen">
     <div class="call-pip"><i class="fa-solid fa-user"></i></div>
     <div class="call-mid">
-      <div class="call-avatar"><img src="../assets/expert.png" alt="expert" onerror="this.outerHTML='<i class=\'fa-solid fa-user-doctor\' style=&quot;color:#047857;font-size:42px&quot;></i>'"/></div>
+      <div class="call-avatar"><img src="../assets/expert.png" alt="expert" onerror="this.outerHTML='<i class=\'fa-solid fa-user-doctor\' style=&quot;color:#258046;font-size:42px&quot;></i>'"/></div>
       <div class="call-name">Dr. R. Verma</div>
       <div class="call-status" id="callStatus">Krishi Agronomist · ready to connect</div>
     </div>

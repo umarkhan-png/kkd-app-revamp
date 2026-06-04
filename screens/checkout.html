@@ -16,9 +16,9 @@
   /* Deliver-to card · same pattern as cart · combines delivery date + address with Change · drops the standalone Delivery ETA card */
   .addr-card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
   .addr-top{display:flex;align-items:center;gap:10px;padding:12px 14px}
-  .addr-ic{width:34px;height:34px;border-radius:10px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+  .addr-ic{width:34px;height:34px;border-radius:10px;background:#ECFDF5;color:#258046;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
   .addr-row-bottom{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:#F8FAFC;border-top:1px solid #F1F5F9}
-  .addr-change{font-size:12px;font-weight:800;color:#047857;background:transparent;border:0;cursor:pointer;letter-spacing:0.02em;text-transform:uppercase;flex-shrink:0;align-self:flex-start;margin-top:1px}
+  .addr-change{font-size:12px;font-weight:800;color:#258046;background:transparent;border:0;cursor:pointer;letter-spacing:0.02em;text-transform:uppercase;flex-shrink:0;align-self:flex-start;margin-top:1px}
 
   /* Payment method · richer · each row shows name + amount + benefit pill · payment-icon column dropped per spec · RECOMMENDED chip sits INLINE next to the name (no longer overlaps the amount) · Partial row has its amount hidden so the %-tray drives the breakdown */
   .pay-card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
@@ -27,16 +27,16 @@
   .pay.active{background:#ECFDF5}
   .pay-head{display:flex;align-items:flex-start;gap:12px}
   .pay-radio{width:20px;height:20px;border-radius:9999px;border:2px solid #CBD5E1;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s ease;margin-top:4px}
-  .pay.active .pay-radio{border-color:#059669;background:#059669}
+  .pay.active .pay-radio{border-color:#258046;background:#258046}
   .pay.active .pay-radio::after{content:'';width:8px;height:8px;border-radius:9999px;background:#FFFFFF}
   .pay-body{flex:1;min-width:0;line-height:1.3}
   .pay-toprow{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
   .pay-name-row{display:inline-flex;align-items:center;gap:7px;flex-wrap:wrap}
   .pay-name{font-size:14.5px;font-weight:800;color:#0F172A;line-height:1.1}
   .pay-amt{font-size:14.5px;font-weight:800;color:#0F172A;line-height:1;font-variant-numeric:tabular-nums;margin-left:auto}
-  .pay.active .pay-amt{color:#047857}
+  .pay.active .pay-amt{color:#258046}
   .pay-sub{font-size:11.5px;color:#64748B;margin-top:3px}
-  .pay-bene{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:4px 9px;border-radius:9999px;background:#ECFDF5;border:1px solid #A7F3D0;color:#047857;font-size:10.5px;font-weight:800;letter-spacing:0.02em}
+  .pay-bene{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:4px 9px;border-radius:9999px;background:#ECFDF5;border:1px solid #A7F3D0;color:#258046;font-size:10.5px;font-weight:800;letter-spacing:0.02em}
   .pay-bene i{font-size:9px}
   .pay-bene.gold{background:#FEF3C7;border-color:#FDE68A;color:#B45309}
   .pay-best{display:inline-block;background:#FBBF24;color:#0F172A;font-size:9px;font-weight:900;letter-spacing:0.08em;padding:2px 7px;border-radius:9999px;box-shadow:0 2px 6px rgba(251,191,36,0.4)}
@@ -47,38 +47,38 @@
   .pp-head{font-size:11px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
   .pp-opts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
   .pp-opt{padding:9px 4px;border-radius:10px;border:1.5px solid #BBF7D0;background:#FFFFFF;color:#0F172A;font-size:13px;font-weight:800;cursor:pointer;transition:all .15s ease;text-align:center}
-  .pp-opt.active{background:#047857;color:#FFFFFF;border-color:#047857;box-shadow:0 4px 10px -2px rgba(4,120,87,0.45)}
+  .pp-opt.active{background:#258046;color:#FFFFFF;border-color:#258046;box-shadow:0 4px 10px -2px rgba(4,120,87,0.45)}
   .pp-split{background:#FFFFFF;border:1px solid #BBF7D0;border-radius:10px;padding:10px 12px}
   .pp-split .row{display:flex;align-items:baseline;justify-content:space-between;font-size:12.5px;padding:3px 0}
   .pp-split .row .lbl{color:#64748B}
   .pp-split .row .val{font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
-  .pp-split .row .val.green{color:#047857}
+  .pp-split .row .val.green{color:#258046}
 
   /* Bill · same pattern as cart */
   .bill-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:3px 0}
   .bill-row .lbl{color:#64748B}
   .bill-row .val{color:#0F172A;font-weight:600}
-  .bill-row .val.green{color:#047857;font-weight:700}
+  .bill-row .val.green{color:#258046;font-weight:700}
   /* Krishi Coins wallet redeem row + toggle */
   .coin-redeem{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer}
   .coin-redeem .coin-ic{width:40px;height:40px;border-radius:12px;background:#FEF3C7;color:#B45309;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
   .coin-body{flex:1;line-height:1.25}
   .coin-a{font-size:13.5px;font-weight:800;color:#0F172A}
   .coin-b{font-size:11px;color:#64748B;margin-top:2px}
-  .coin-b b{color:#047857}
+  .coin-b b{color:#258046}
   .coin-toggle{appearance:none;-webkit-appearance:none;width:42px;height:24px;border-radius:9999px;background:#E2E8F0;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s ease;border:0;margin:0}
   .coin-toggle::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.2);transition:transform .2s ease}
-  .coin-toggle:checked{background:#059669}
+  .coin-toggle:checked{background:#258046}
   .coin-toggle:checked::after{transform:translateX(18px)}
   /* Wallet · money balance · MANDATORY auto-apply (no toggle) · polished emerald tile */
   .wallet-card{overflow:hidden}
   .wallet-apply{display:flex;align-items:center;gap:12px;padding:14px;background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%)}
-  .wallet-apply .wal-ic{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#10B981,#047857);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 6px 14px -4px rgba(5,150,105,0.45)}
+  .wallet-apply .wal-ic{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#10B981,#258046);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 6px 14px -4px rgba(5,150,105,0.45)}
   .wallet-apply .wal-body{flex:1;line-height:1.3;min-width:0}
   .wallet-apply .wal-a{font-size:14px;font-weight:800;color:#0F172A}
-  .wallet-apply .wal-a .wal-amt{color:#047857;font-weight:900}
+  .wallet-apply .wal-a .wal-amt{color:#258046;font-weight:900}
   .wallet-apply .wal-b{font-size:11px;color:#64748B;margin-top:2px}
-  .wallet-apply .wal-tag{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:900;letter-spacing:0.06em;color:#FFFFFF;background:linear-gradient(135deg,#10B981,#047857);padding:4px 9px;border-radius:9999px;box-shadow:0 3px 8px -2px rgba(5,150,105,0.5)}
+  .wallet-apply .wal-tag{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:900;letter-spacing:0.06em;color:#FFFFFF;background:linear-gradient(135deg,#10B981,#258046);padding:4px 9px;border-radius:9999px;box-shadow:0 3px 8px -2px rgba(5,150,105,0.5)}
   .wallet-apply .wal-tag i{font-size:8px}
   /* Remaining-balance strip below the wallet row */
   .wal-remain{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:#FFFFFF;border-top:1px solid #D1FAE5;font-size:12px;font-weight:700;color:#475569}
@@ -92,7 +92,7 @@
   .sticky-sum{display:flex;flex-direction:column;line-height:1.15;flex-shrink:0;min-width:90px}
   .sticky-sum .ttl{font-size:11px;color:#64748B;font-weight:500}
   .sticky-sum .amt{font-size:20px;font-weight:700;color:#0F172A;letter-spacing:-0.01em;font-variant-numeric:tabular-nums}
-  .place-btn{flex:2;height:52px;border-radius:12px;background:#059669;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 18px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+  .place-btn{flex:2;height:52px;border-radius:12px;background:#258046;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 18px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
 </style></head>
 <body>
 
@@ -123,9 +123,9 @@
   <style>
     .alt-card{margin:0 16px;background:#FFFFFF;border:1px solid #BBF7D0;border-radius:14px;padding:13px;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15)}
     .alt-head{display:flex;align-items:center;gap:11px}
-    .alt-ic{width:38px;height:38px;border-radius:11px;background:#ECFDF5;color:#047857;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+    .alt-ic{width:38px;height:38px;border-radius:11px;background:#ECFDF5;color:#258046;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
     .alt-inwrap{display:flex;align-items:center;gap:8px;height:46px;border:1.5px solid #E5E7EB;border-radius:11px;padding:0 14px;margin-top:11px}
-    .alt-inwrap:focus-within{border-color:#059669}
+    .alt-inwrap:focus-within{border-color:#258046}
     .alt-cc{font-size:14px;font-weight:800;color:#0F172A}
     .alt-inwrap input{flex:1;border:0;outline:0;font-size:15px;font-family:inherit;color:#0F172A;background:transparent;min-width:0}
   </style>
@@ -169,7 +169,7 @@
       <div class="flex-1 leading-tight">
         <div class="flex items-center gap-1.5">
           <span class="text-[14.5px] font-bold text-[#0F172A]" id="delivDate">Tomorrow, 28 May</span>
-          <span class="text-[9px] font-bold text-[#047857] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider" id="delivFree">Free</span>
+          <span class="text-[9px] font-bold text-[#258046] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider" id="delivFree">Free</span>
         </div>
         <div class="text-[11.5px] text-[#64748B] mt-0.5" id="delivSub">Order before <span class="font-bold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
       </div>
@@ -201,8 +201,8 @@
           </span>
           <div class="pay-sub">UPI &middot; Cards &middot; Net banking &middot; Wallets</div>
           <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:5px">
-            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#047857;background:#ECFDF5;border:1px solid #BBF7D0;padding:3px 9px;border-radius:9999px"><i class="fa-solid fa-tag text-[9px]"></i> 5% instant off · save ₹95</span>
-            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#047857;background:#ECFDF5;border:1px solid #BBF7D0;padding:3px 9px;border-radius:9999px"><i class="fa-solid fa-bolt text-[9px]"></i> Faster order processing</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#258046;background:#ECFDF5;border:1px solid #BBF7D0;padding:3px 9px;border-radius:9999px"><i class="fa-solid fa-tag text-[9px]"></i> 5% instant off · save ₹95</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#258046;background:#ECFDF5;border:1px solid #BBF7D0;padding:3px 9px;border-radius:9999px"><i class="fa-solid fa-bolt text-[9px]"></i> Faster order processing</span>
           </div>
         </span>
       </span>
@@ -248,7 +248,7 @@
           <div class="pay-sub">Pay in cash when the order arrives</div>
           <div class="pay-sub" style="color:#B45309;margin-top:3px"><i class="fa-solid fa-phone-volume text-[10px]"></i> We'll call to confirm — please pick up calls starting from 92019</div>
           <div id="codExtra" style="display:none;margin-top:9px;padding:10px 12px;border-radius:10px;background:#FFF7ED;border:1px solid #FED7AA;color:#9A3412;font-size:11.5px;font-weight:600;line-height:1.55">
-            <i class="fa-solid fa-circle-info" style="color:#EA580C"></i> COD costs <b id="codExtraAmt" class="tnum">₹95</b> more — prepaid orders get 5% off. <span id="codSwitchPay" role="button" tabindex="0" style="color:#047857;font-weight:800;cursor:pointer;text-decoration:underline;white-space:nowrap">Pay now &amp; save</span>
+            <i class="fa-solid fa-circle-info" style="color:#EA580C"></i> COD costs <b id="codExtraAmt" class="tnum">₹95</b> more — prepaid orders get 5% off. <span id="codSwitchPay" role="button" tabindex="0" style="color:#258046;font-weight:800;cursor:pointer;text-decoration:underline;white-space:nowrap">Pay now &amp; save</span>
           </div>
         </span>
       </span>
@@ -263,7 +263,7 @@
       <div class="bill-row"><span class="lbl">Items (3)</span><span class="val tnum">&#8377;2,300</span></div>
       <div class="bill-row"><span class="lbl">Discount</span><span class="val green tnum">&minus; &#8377;300</span></div>
       <div class="bill-row"><span class="lbl">Coupon (WELCOME100)</span><span class="val green tnum">&minus; &#8377;100</span></div>
-      <div class="bill-row" id="prepaidBillRow"><span class="lbl" style="color:#047857;font-weight:700">Prepaid extra off</span><span class="val green tnum" id="prepaidBillAmt">&minus; &#8377;95</span></div>
+      <div class="bill-row" id="prepaidBillRow"><span class="lbl" style="color:#258046;font-weight:700">Prepaid extra off</span><span class="val green tnum" id="prepaidBillAmt">&minus; &#8377;95</span></div>
       <div class="bill-row" id="coinBillRow"><span class="lbl"><i class="fa-solid fa-coins text-[11px]" style="color:#94A3B8"></i> Krishi Coins</span><span class="val tnum" id="coinBillAmt">&minus; &#8377;190</span></div>
       <div class="bill-row"><span class="lbl"><i class="fa-solid fa-wallet text-[10px]" style="color:#94A3B8"></i> Wallet</span><span class="val tnum">&minus; &#8377;540</span></div>
       <div class="bill-row"><span class="lbl">Delivery</span><span class="val green">FREE</span></div>

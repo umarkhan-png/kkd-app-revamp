@@ -22,28 +22,28 @@
   .cat-emoji{font-size:34px;line-height:1}
   .cat-svg{width:36px;height:36px;display:block}
   .cat-label{transition:color .35s ease}
-  .cat-tile[aria-pressed="true"] .cat-circle{background:linear-gradient(135deg,#047857 0%,#10B981 100%);border-color:#047857;box-shadow:0 8px 18px -4px rgba(5,150,105,0.45),0 0 0 4px rgba(5,150,105,0.12)}
+  .cat-tile[aria-pressed="true"] .cat-circle{background:linear-gradient(135deg,#258046 0%,#10B981 100%);border-color:#258046;box-shadow:0 8px 18px -4px rgba(5,150,105,0.45),0 0 0 4px rgba(5,150,105,0.12)}
   .cat-tile[aria-pressed="true"] .cat-emoji{filter:drop-shadow(0 1px 1px rgba(0,0,0,0.25))}
-  .cat-tile[aria-pressed="true"] .cat-label{color:#047857;font-weight:800}
+  .cat-tile[aria-pressed="true"] .cat-label{color:#258046;font-weight:800}
   /* Selected SVG: invert dark strokes to white-ish for legibility on emerald fill */
   .cat-tile[aria-pressed="true"] .cat-svg [fill="#22C55E"],
-  .cat-tile[aria-pressed="true"] .cat-svg [fill="#16A34A"],
+  .cat-tile[aria-pressed="true"] .cat-svg [fill="#258046"],
   .cat-tile[aria-pressed="true"] .cat-svg [fill="#15803D"]{fill:#FFFFFF}
   .cat-tile[aria-pressed="true"] .cat-svg [stroke="#15803D"]{stroke:#FFFFFF}
 
   /* White top · selected tile gets emerald-gradient circle, others stay neutral light-grey */
-  .cat-tile[aria-pressed="true"] .cat-circle{background:linear-gradient(135deg,#047857 0%,#10B981 100%);border-color:#047857;box-shadow:0 8px 18px -4px rgba(5,150,105,0.45),0 0 0 4px rgba(5,150,105,0.12)}
+  .cat-tile[aria-pressed="true"] .cat-circle{background:linear-gradient(135deg,#258046 0%,#10B981 100%);border-color:#258046;box-shadow:0 8px 18px -4px rgba(5,150,105,0.45),0 0 0 4px rgba(5,150,105,0.12)}
   .cat-tile[aria-pressed="true"] .cat-emoji{filter:drop-shadow(0 1px 1px rgba(0,0,0,0.25))}
-  .cat-tile[aria-pressed="true"] .cat-label{color:#047857;font-weight:800}
+  .cat-tile[aria-pressed="true"] .cat-label{color:#258046;font-weight:800}
   .cat-tile[aria-pressed="true"] .cat-svg [fill="#22C55E"],
-  .cat-tile[aria-pressed="true"] .cat-svg [fill="#16A34A"],
+  .cat-tile[aria-pressed="true"] .cat-svg [fill="#258046"],
   .cat-tile[aria-pressed="true"] .cat-svg [fill="#15803D"]{fill:#FFFFFF}
   .cat-tile[aria-pressed="true"] .cat-svg [stroke="#15803D"]{stroke:#FFFFFF}
 
   /* Left sub-cat rail · subtle grey separator · slightly larger label (11.5px) and thumbnail (42px) for legibility */
   .subcat-btn{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;text-align:center;padding:12px 4px;font-size:11.5px;font-weight:600;color:#475569;border-left:4px solid transparent;background:transparent;transition:all .15s ease;line-height:1.2;cursor:pointer}
   /* Selected sub-cat · white card lifted off the green rail with a thicker emerald bar + shadow so it clearly reads as selected */
-  .subcat-btn[aria-pressed="true"]{background:#FFFFFF;color:#047857;border-left:4px solid #059669;font-weight:800;box-shadow:0 3px 10px -3px rgba(5,150,105,0.3);position:relative;z-index:1}
+  .subcat-btn[aria-pressed="true"]{background:#FFFFFF;color:#258046;border-left:4px solid #258046;font-weight:800;box-shadow:0 3px 10px -3px rgba(5,150,105,0.3);position:relative;z-index:1}
   .subcat-btn:not([aria-pressed="true"]):hover{background:rgba(5,150,105,0.06)}
   .subcat-ic{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:10px;font-size:20px;line-height:1;border:1px solid rgba(15,23,42,0.06);box-shadow:0 1px 3px rgba(15,23,42,0.05)}
   .subcat-btn[aria-pressed="true"] .subcat-ic{box-shadow:0 4px 10px -2px rgba(5,150,105,0.35);transform:scale(1.04)}
@@ -51,8 +51,8 @@
   /* Filter pills · roomier · taller · tap opens a bottom modal */
   .filter-pill{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:999px;background:#FFFFFF;border:1px solid #E2E8F0;font-size:12.5px;font-weight:600;color:#334155;white-space:nowrap;flex-shrink:0;cursor:pointer;transition:all .15s ease;box-shadow:0 1px 2px rgba(15,23,42,0.04)}
   .filter-pill:active{transform:scale(.97)}
-  .filter-pill[aria-pressed="true"]{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
-  .filter-pill .dot{width:6px;height:6px;border-radius:50%;background:#059669;display:none}
+  .filter-pill[aria-pressed="true"]{background:#ECFDF5;border-color:#258046;color:#258046;font-weight:800}
+  .filter-pill .dot{width:6px;height:6px;border-radius:50%;background:#258046;display:none}
   .filter-pill[aria-pressed="true"] .dot{display:inline-block}
 
   /* Product card · matches home most-selling typography exactly · taller image, name 14px, technical sub 11px, size chip 10.5px, price 17px, MRP-strike 11.5px, h-9 Add */
@@ -71,10 +71,10 @@
   .pprice-row{display:flex;align-items:baseline;gap:6px;margin-top:6px;flex-wrap:wrap}
   .pprice{font-size:17px;font-weight:800;color:#0F172A;line-height:1}
   .pmrp{font-size:11.5px;color:#94A3B8;text-decoration:line-through;font-weight:500;line-height:1}
-  .poff{font-size:10.5px;font-weight:800;color:#047857;line-height:1}
-  .padd{height:36px;width:100%;background:#059669;color:#FFFFFF;font-size:12.5px;font-weight:600;border-radius:8px;border:0;cursor:pointer;transition:transform .15s ease;margin-top:8px}
+  .poff{font-size:10.5px;font-weight:800;color:#258046;line-height:1}
+  .padd{height:36px;width:100%;background:#258046;color:#FFFFFF;font-size:12.5px;font-weight:600;border-radius:8px;border:0;cursor:pointer;transition:transform .15s ease;margin-top:8px}
   .padd:active{transform:scale(.96)}
-  .padd.in-cart{background:#059669;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:space-between;padding:0 4px;gap:0}
+  .padd.in-cart{background:#258046;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:space-between;padding:0 4px;gap:0}
   .padd.in-cart .qty-btn{color:#FFFFFF}
   .qty-btn{width:34px;height:36px;display:inline-flex;align-items:center;justify-content:center;color:#FFFFFF;background:transparent;border:0;font-size:18px;font-weight:700;cursor:pointer}
   .qty-num{flex:1;text-align:center;font-size:14px;font-weight:700}
@@ -117,14 +117,14 @@
   .sheet-handle{width:40px;height:4px;border-radius:999px;background:#E2E8F0;margin:10px auto 0}
   .sheet-row{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-top:1px solid #F1F5F9;font-size:14px;font-weight:600;color:#0F172A;cursor:pointer}
   .sheet-row:first-of-type{border-top:0}
-  .sheet-row.selected{color:#047857;font-weight:800}
+  .sheet-row.selected{color:#258046;font-weight:800}
   .sheet-row .check{width:20px;height:20px;border-radius:50%;border:1.5px solid #CBD5E1;display:flex;align-items:center;justify-content:center}
-  .sheet-row.selected .check{background:#059669;border-color:#059669}
+  .sheet-row.selected .check{background:#258046;border-color:#258046}
   .sheet-row.selected .check i{color:#FFFFFF;font-size:10px}
   .sheet-section-title{padding:14px 20px 6px;font-size:11px;font-weight:800;color:#94A3B8;text-transform:uppercase;letter-spacing:.08em}
   .sheet-chips{display:flex;gap:8px;flex-wrap:wrap;padding:4px 20px 14px}
   .sheet-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:#F8FAFC;border:1px solid #E2E8F0;font-size:12px;font-weight:600;color:#475569;cursor:pointer;transition:all .15s ease}
-  .sheet-chip.on{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
+  .sheet-chip.on{background:#ECFDF5;border-color:#258046;color:#258046;font-weight:800}
 
   /* Sort modal · vertical row list · icon + label on the left, radio circle on the right · selected row paints icon/label emerald + fills the circle */
   .sort-row{display:flex;align-items:center;gap:14px;padding:18px 20px;border-bottom:1px solid #F1F5F9;cursor:pointer;background:#FFFFFF;transition:background .15s ease}
@@ -132,15 +132,15 @@
   .sort-row .sort-ic{width:24px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#94A3B8;flex-shrink:0}
   .sort-row .sort-lbl{flex:1;font-size:15.5px;font-weight:600;color:#0F172A;line-height:1.2}
   .sort-row .sort-radio{width:22px;height:22px;border-radius:50%;border:1.5px solid #CBD5E1;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s ease}
-  .sort-row.on .sort-ic{color:#059669}
-  .sort-row.on .sort-lbl{color:#047857;font-weight:800}
-  .sort-row.on .sort-radio{border-color:#059669}
-  .sort-row.on .sort-radio::after{content:'';width:11px;height:11px;border-radius:50%;background:#059669}
+  .sort-row.on .sort-ic{color:#258046}
+  .sort-row.on .sort-lbl{color:#258046;font-weight:800}
+  .sort-row.on .sort-radio{border-color:#258046}
+  .sort-row.on .sort-radio::after{content:'';width:11px;height:11px;border-radius:50%;background:#258046}
 
   /* Filter modal · LEFT rail tabs · single column of section names · active tab gets a subtle emerald left-border + emerald label · NO weight/bg jump so the row doesn't visually 'grow' when picked */
   .filter-tab{display:block;width:100%;text-align:left;padding:16px 14px;font-size:14px;font-weight:600;color:#475569;background:transparent;border:0;border-left:3px solid transparent;cursor:pointer;transition:color .15s ease, border-color .15s ease}
-  .filter-tab.on{color:#047857;border-left-color:#059669;background:#FFFFFF}
-  .filter-tab .ft-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#059669;margin-left:6px;vertical-align:middle;opacity:0}
+  .filter-tab.on{color:#258046;border-left-color:#258046;background:#FFFFFF}
+  .filter-tab .ft-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#258046;margin-left:6px;vertical-align:middle;opacity:0}
   .filter-tab.has-active .ft-dot{opacity:1}
 
   /* Filter modal · RIGHT pane · section title + option rows · selected option keeps the same line-height + weight as the rest so picking an item doesn't make it visually 'bigger' · only the radio fill (and label tint) signals selection */
@@ -150,27 +150,27 @@
   .fopt-row .fopt-ic{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
   .fopt-row .fopt-lbl{flex:1;font-size:14.5px;font-weight:600;color:#0F172A;line-height:1.2}
   .fopt-row .fopt-radio{width:22px;height:22px;border-radius:50%;border:1.5px solid #CBD5E1;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s ease}
-  .fopt-row.on .fopt-lbl{color:#047857}
-  .fopt-row.on .fopt-radio{background:#059669;border-color:#059669}
+  .fopt-row.on .fopt-lbl{color:#258046}
+  .fopt-row.on .fopt-radio{background:#258046;border-color:#258046}
   .fopt-row.on .fopt-radio::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;color:#FFFFFF;font-size:11px}
 
   /* Price number input · matches the existing form aesthetic · used above the slider for direct min/max entry */
   .price-num-input{height:42px;padding:0 12px;border-radius:10px;border:1.5px solid #E5E7EB;background:#FFFFFF;font-size:15px;font-weight:800;color:#0F172A;outline:none;font-variant-numeric:tabular-nums;transition:border-color .15s ease}
-  .price-num-input:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.12)}
+  .price-num-input:focus{border-color:#258046;box-shadow:0 0 0 3px rgba(5,150,105,0.12)}
   .price-num-input::-webkit-outer-spin-button,
   .price-num-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
   .price-num-input{-moz-appearance:textfield}
   /* Price-range two-thumb slider · track is a thin grey bar with an emerald fill spanning the selected range · both <input type=range> elements overlay the same rail with thumbs surfaced via pointer-events */
   .price-slider{position:relative;height:32px;margin:6px 4px 0}
   .price-slider .ps-track{position:absolute;left:0;right:0;top:14px;height:4px;border-radius:999px;background:#E2E8F0}
-  .price-slider .ps-fill {position:absolute;top:14px;height:4px;border-radius:999px;background:#059669;left:0;right:0}
+  .price-slider .ps-fill {position:absolute;top:14px;height:4px;border-radius:999px;background:#258046;left:0;right:0}
   .price-slider .ps-input{position:absolute;left:0;right:0;top:0;width:100%;height:32px;background:transparent;pointer-events:none;-webkit-appearance:none;appearance:none;margin:0}
-  .price-slider .ps-input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;pointer-events:auto;width:22px;height:22px;border-radius:50%;background:#FFFFFF;border:2.5px solid #059669;box-shadow:0 2px 6px rgba(5,150,105,0.35);cursor:pointer}
-  .price-slider .ps-input::-moz-range-thumb{pointer-events:auto;width:22px;height:22px;border-radius:50%;background:#FFFFFF;border:2.5px solid #059669;box-shadow:0 2px 6px rgba(5,150,105,0.35);cursor:pointer}
+  .price-slider .ps-input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;pointer-events:auto;width:22px;height:22px;border-radius:50%;background:#FFFFFF;border:2.5px solid #258046;box-shadow:0 2px 6px rgba(5,150,105,0.35);cursor:pointer}
+  .price-slider .ps-input::-moz-range-thumb{pointer-events:auto;width:22px;height:22px;border-radius:50%;background:#FFFFFF;border:2.5px solid #258046;box-shadow:0 2px 6px rgba(5,150,105,0.35);cursor:pointer}
 
   /* Applied-filter chip row · accumulates every active filter (sort + quick + sidebar) · each chip carries a leading dot + label + × to remove that single filter without opening the modal */
-  .achip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 6px 0 12px;border-radius:999px;background:#ECFDF5;border:1px solid #BBF7D0;font-size:12px;font-weight:700;color:#047857;white-space:nowrap;flex-shrink:0}
-  .achip .achip-close{width:20px;height:20px;border-radius:50%;background:#059669;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:center;font-size:9px;border:0;cursor:pointer}
+  .achip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 6px 0 12px;border-radius:999px;background:#ECFDF5;border:1px solid #BBF7D0;font-size:12px;font-weight:700;color:#258046;white-space:nowrap;flex-shrink:0}
+  .achip .achip-close{width:20px;height:20px;border-radius:50%;background:#258046;color:#FFFFFF;display:inline-flex;align-items:center;justify-content:center;font-size:9px;border:0;cursor:pointer}
   .achip-clear{display:inline-flex;align-items:center;gap:4px;height:30px;padding:0 10px;border-radius:999px;background:transparent;color:#94A3B8;font-size:12px;font-weight:700;border:0;cursor:pointer;flex-shrink:0}
   .achip-divider{display:inline-block;width:1px;height:18px;background:#E2E8F0;margin:0 4px;flex-shrink:0}
 </style></head>
@@ -251,7 +251,7 @@
               <path d="M17 33 C16 24 14 16 11 8 C14 16 15.5 24 18 33 Z"/>
               <path d="M19 33 C20 24 22 16 25 8 C22 16 20.5 24 18 33 Z"/>
             </g>
-            <g fill="#16A34A">
+            <g fill="#258046">
               <path d="M14 33 C13.5 24 13 16 12 7 C14 16 14.5 24 15 33 Z"/>
               <path d="M22 33 C22.5 24 23 16 24 7 C22 16 21.5 24 21 33 Z"/>
             </g>
@@ -269,8 +269,8 @@
             <line x1="18" y1="13" x2="18" y2="23" stroke="#B45309" stroke-width="1"/>
             <line x1="6" y1="18" x2="30" y2="18" stroke="#B45309" stroke-width="1"/>
             <rect x="10" y="4" width="16" height="10" rx="1.5" fill="#10B981"/>
-            <line x1="18" y1="4" x2="18" y2="14" stroke="#047857" stroke-width="1"/>
-            <line x1="10" y1="9" x2="26" y2="9" stroke="#047857" stroke-width="1"/>
+            <line x1="18" y1="4" x2="18" y2="14" stroke="#258046" stroke-width="1"/>
+            <line x1="10" y1="9" x2="26" y2="9" stroke="#258046" stroke-width="1"/>
           </svg>
         </div>
         <span class="cat-label text-[13px] font-semibold text-center leading-tight" style="color:#0F172A">Combo</span>
@@ -282,7 +282,7 @@
   <div class="stk-filter">
     <div class="flex gap-2 px-4 py-2.5 items-center scroll-x" style="overflow-x:auto">
       <button class="filter-pill flex-shrink-0" id="filterFilterBtn" data-modal="filter"><i class="fa-solid fa-sliders text-[10px]"></i> Filter <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
-      <button class="filter-pill flex-shrink-0" data-jump-filter="crop"><i class="fa-solid fa-seedling text-[10px]" style="color:#059669"></i> Crop <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
+      <button class="filter-pill flex-shrink-0" data-jump-filter="crop"><i class="fa-solid fa-seedling text-[10px]" style="color:#258046"></i> Crop <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
       <button class="filter-pill flex-shrink-0" data-jump-filter="rating"><i class="fa-solid fa-star text-[10px]" style="color:#F59E0B"></i> Rating <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
       <!-- Applied-filter chips inline · accumulate beside the pills, divider sits between only when at least one chip is present -->
       <div id="appliedChipRow" class="flex items-center gap-2" style="display:none"></div>
@@ -300,7 +300,7 @@
   <!-- Floating cart bar · full-width by default, shrinks to centre pill on scroll -->
   <a href="cart.html" id="cartBar">
     <div class="cart-summary flex items-center gap-3 min-w-0">
-      <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:#059669">
+      <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:#258046">
         <i class="fa-solid fa-bag-shopping text-white text-[14px]"></i>
       </div>
       <div class="flex items-baseline gap-1.5 min-w-0">
@@ -366,7 +366,7 @@
       </div>
       <div class="px-5 pt-3 pb-5 flex gap-2" style="border-top:1px solid #F1F5F9;flex-shrink:0">
         <button id="filterClear" class="flex-1 h-12 rounded-xl text-[14px] font-extrabold" style="background:#FFFFFF;border:1.5px solid #E5E7EB;color:#475569">Clear all</button>
-        <button data-sheet-close="filter" class="flex-1 h-12 rounded-xl text-[14px] font-extrabold" style="background:#059669;color:#FFFFFF;border:0">Apply</button>
+        <button data-sheet-close="filter" class="flex-1 h-12 rounded-xl text-[14px] font-extrabold" style="background:#258046;color:#FFFFFF;border:0">Apply</button>
       </div>
     </div>
   </div>
@@ -481,7 +481,7 @@
     const FILTER_SECTIONS = [
       { key:'tags', label:'Tags', title:'Browse by', multi:true, opts:[
         { val:'bestseller',  label:'Bestseller',   icon:'fa-crown',    color:'#CA8A04', bg:'#FEF3C7' },
-        { val:'new',         label:'New launched',  icon:'fa-seedling', color:'#16A34A', bg:'#DCFCE7' },
+        { val:'new',         label:'New launched',  icon:'fa-seedling', color:'#258046', bg:'#DCFCE7' },
         { val:'mostselling', label:'Most selling',  icon:'fa-fire',     color:'#DC2626', bg:'#FEE2E2' },
         { val:'toprated',    label:'Top rated',     icon:'fa-star',     color:'#F59E0B', bg:'#FEF3C7' }
       ] },
@@ -511,8 +511,8 @@
         { val:'40', label:'40% & above', icon:'fa-percent', color:'#9D174D', bg:'#FCE7F3' }
       ] },
       { key:'packSize', label:'Pack Size', title:'Pack Size', multi:true, opts:[
-        { val:'100ml', label:'100 ml', icon:'fa-bottle-droplet', color:'#16A34A', bg:'#DCFCE7' },
-        { val:'250ml', label:'250 ml', icon:'fa-bottle-droplet', color:'#16A34A', bg:'#DCFCE7' },
+        { val:'100ml', label:'100 ml', icon:'fa-bottle-droplet', color:'#258046', bg:'#DCFCE7' },
+        { val:'250ml', label:'250 ml', icon:'fa-bottle-droplet', color:'#258046', bg:'#DCFCE7' },
         { val:'500ml', label:'500 ml', icon:'fa-bottle-droplet', color:'#0891B2', bg:'#CFFAFE' },
         { val:'1L',    label:'1 Liter', icon:'fa-bottle-droplet', color:'#2563EB', bg:'#DBEAFE' },
         { val:'500g',  label:'500 g',   icon:'fa-box',           color:'#CA8A04', bg:'#FEF3C7' },
@@ -521,7 +521,7 @@
         { val:'10kg',  label:'10 kg',   icon:'fa-box',           color:'#BE185D', bg:'#FBCFE8' }
       ] },
       { key:'stock', label:'Stock', title:'Availability', multi:true, opts:[
-        { val:'instock',    label:'In stock',     icon:'fa-circle-check',  color:'#16A34A', bg:'#DCFCE7' },
+        { val:'instock',    label:'In stock',     icon:'fa-circle-check',  color:'#258046', bg:'#DCFCE7' },
         { val:'outofstock', label:'Out of stock', icon:'fa-circle-xmark',  color:'#DC2626', bg:'#FEE2E2' }
       ] }
     ];
@@ -1008,12 +1008,12 @@
         const k = variantKey(card, idx);
         const qty = cartQty[k] || 0;
         const stepper = qty > 0
-          ? '<div style="height:36px;border-radius:8px;background:#059669;display:flex;align-items:center;justify-content:space-between;padding:0 4px;min-width:104px">'
+          ? '<div style="height:36px;border-radius:8px;background:#258046;display:flex;align-items:center;justify-content:space-between;padding:0 4px;min-width:104px">'
               + '<button data-vs-act="dec" data-vs-key="'+k+'" style="width:32px;height:36px;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:18px;font-weight:700;background:transparent;border:0">−</button>'
               + '<span style="color:#FFFFFF;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums">'+qty+'</span>'
               + '<button data-vs-act="inc" data-vs-key="'+k+'" style="width:32px;height:36px;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:18px;font-weight:700;background:transparent;border:0">+</button>'
             + '</div>'
-          : '<button data-vs-act="inc" data-vs-key="'+k+'" style="height:36px;padding:0 20px;border-radius:8px;background:#059669;color:#FFFFFF;font-size:12.5px;font-weight:800;border:0;flex-shrink:0">Add</button>';
+          : '<button data-vs-act="inc" data-vs-key="'+k+'" style="height:36px;padding:0 20px;border-radius:8px;background:#258046;color:#FFFFFF;font-size:12.5px;font-weight:800;border:0;flex-shrink:0">Add</button>';
         // Per-row product thumbnail · same grey card treatment as the home product-card image area
         const imgSrc = v.img || card.dataset.productImg || '';
         const thumb = '<div style="width:56px;height:56px;border-radius:8px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex-shrink:0"><img src="'+imgSrc+'" style="width:48px;height:48px;object-fit:contain"/></div>';
@@ -1025,7 +1025,7 @@
             + '<div style="display:flex;align-items:baseline;gap:6px;margin-top:6px;flex-wrap:wrap">'
               + '<span style="font-size:16px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums">₹'+v.price+'</span>'
               + (v.mrp ? '<span style="font-size:11.5px;color:#94A3B8;text-decoration:line-through;font-variant-numeric:tabular-nums">₹'+v.mrp+'</span>' : '')
-              + (v.off ? '<span style="font-size:10.5px;font-weight:800;color:#047857">'+v.off+'% off</span>' : '')
+              + (v.off ? '<span style="font-size:10.5px;font-weight:800;color:#258046">'+v.off+'% off</span>' : '')
             + '</div>'
           + '</div>'
           + stepper

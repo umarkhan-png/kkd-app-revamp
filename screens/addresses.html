@@ -57,7 +57,7 @@
 <!-- Address cards · cleaner spacing inside (consistent 14px padding, 12px gaps), proper hierarchy (icon+tag+default chip+actions on header row → name+phone → full address → delivery ETA pill foot) -->
 <div class="px-4 mt-2 space-y-3">
 
-  <div class="addr-card selected" data-id="home">
+  <div class="addr-card selected" data-id="home" data-pin="452001">
     <div class="addr-head">
       <span class="addr-ic"><i class="fa-solid fa-house"></i></span>
       <span class="addr-tag">Home</span>
@@ -74,7 +74,7 @@
     <div class="addr-body">Plot 22, Khasra No. 145, Village Bawadia<br/>Indore — 452001, Madhya Pradesh</div>
   </div>
 
-  <div class="addr-card" data-id="farm">
+  <div class="addr-card" data-id="farm" data-pin="453555">
     <div class="addr-head">
       <span class="addr-ic work"><i class="fa-solid fa-wheat-awn"></i></span>
       <span class="addr-tag">Farm</span>
@@ -90,7 +90,7 @@
     <div class="addr-body">Farm Plot 8, Survey 312, Sanwer Road<br/>Indore — 453555, Madhya Pradesh</div>
   </div>
 
-  <div class="addr-card" data-id="shop">
+  <div class="addr-card" data-id="shop" data-pin="452002">
     <div class="addr-head">
       <span class="addr-ic other"><i class="fa-solid fa-store"></i></span>
       <span class="addr-tag">Shop</span>
@@ -104,6 +104,22 @@
       <span class="addr-phone tnum">· +91 98123 45678</span>
     </div>
     <div class="addr-body">Shop 14, Sadar Bazaar, Old City Road<br/>Indore — 452002, Madhya Pradesh</div>
+  </div>
+
+  <div class="addr-card" data-id="field" data-pin="123456">
+    <div class="addr-head">
+      <span class="addr-ic work"><i class="fa-solid fa-tractor"></i></span>
+      <span class="addr-tag">Field</span>
+      <div class="addr-actions">
+        <button class="addr-act" aria-label="Edit" onclick="location.href='add-address.html?edit=1'"><i class="fa-solid fa-pen"></i></button>
+        <button class="addr-act del" aria-label="Delete"><i class="fa-solid fa-trash-can"></i></button>
+      </div>
+    </div>
+    <div>
+      <span class="addr-name">Ramesh Patel</span>
+      <span class="addr-phone tnum">· +91 98765 43210</span>
+    </div>
+    <div class="addr-body">Survey 47, Tilgara village<br/>Dhar — 123456, Madhya Pradesh</div>
   </div>
 
 </div>
@@ -122,15 +138,14 @@
       if (e.target.closest('.addr-act')) return;
       document.querySelectorAll('.addr-card').forEach(x => x.classList.remove('selected'));
       c.classList.add('selected');
-      try { localStorage.setItem('kkd.addr', c.dataset.id || ''); } catch (err) {}
+      // Selecting an address drives the serviceable/non-serviceable state by its pincode (and clears any manual ?st= override)
+      try { localStorage.setItem('kkd.addr', c.dataset.id || ''); localStorage.setItem('kkd.pincode', c.dataset.pin || ''); localStorage.removeItem('kkd.stOverride'); } catch (err) {}
       setTimeout(() => { if (history.length > 1) history.back(); else location.href = 'cart.html'; }, 180);
     });
   });
-  // App-state · non-serviceable pincode (123456) · via appstate.js · flag the default address
+  // Always flag the non-serviceable (123456) address card so the user knows which one triggers it
   (function(){
-    var st = (window.kkdAppStates && window.kkdAppStates()) || {};
-    if (!st.nonservice) return;
-    var card = document.querySelector('.addr-card');
+    var card = document.querySelector('.addr-card[data-pin="123456"]');
     if (!card) return;
     card.style.borderColor = '#FECACA';
     var tag = document.createElement('span');
@@ -140,7 +155,7 @@
     if (head) { var actions = head.querySelector('.addr-actions'); head.insertBefore(tag, actions || null); }
     var n = document.createElement('div');
     n.style.cssText = 'margin-top:10px;display:flex;align-items:center;gap:7px;background:#FEF2F2;border:1px solid #FECACA;border-radius:9px;padding:8px 10px;font-size:11px;font-weight:700;color:#B91C1C';
-    n.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> We don\'t deliver to 123456 yet — pick another address';
+    n.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> We don\'t deliver to 123456 yet';
     card.appendChild(n);
   })();
 </script>

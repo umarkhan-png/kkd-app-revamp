@@ -479,6 +479,12 @@
 
     // Filter modal · LEFT tab rail definitions · each tab carries its own option set rendered in the right pane · Category/Class/Margin removed per spec · Price (two-thumb slider) and Discount % added · Pack Size uses real volumes, Rating shows the full ladder
     const FILTER_SECTIONS = [
+      { key:'tags', label:'Tags', title:'Browse by', multi:true, opts:[
+        { val:'bestseller',  label:'Bestseller',   icon:'fa-crown',    color:'#CA8A04', bg:'#FEF3C7' },
+        { val:'new',         label:'New launched',  icon:'fa-seedling', color:'#16A34A', bg:'#DCFCE7' },
+        { val:'mostselling', label:'Most selling',  icon:'fa-fire',     color:'#DC2626', bg:'#FEE2E2' },
+        { val:'toprated',    label:'Top rated',     icon:'fa-star',     color:'#F59E0B', bg:'#FEF3C7' }
+      ] },
       { key:'crop', label:'Crop', title:'Crop', multi:true, opts:[
         { val:'tomato',    label:'Tomato',    emoji:'🍅', bg:'#FEE2E2' },
         { val:'chilli',    label:'Chilli',    emoji:'🌶',  bg:'#FFEDD5' },
@@ -527,6 +533,7 @@
     let activeFilterTab = 'crop';
     // Multi-select filters use Set, single-select use null|val (or {min,max} for the price slider)
     const filters = {
+      tags:     new Set(),
       crop:     new Set(),
       rating:   null,
       price:    null,             // {min,max} or null
@@ -534,6 +541,14 @@
       packSize: new Set(),
       stock:    new Set()
     };
+    // Derive demo "tags" so the Tags filter has data to work with (categories products carry no explicit tag field)
+    PRODUCTS.forEach((p, i) => {
+      p.tags = [];
+      if (p.variants || i % 4 === 0) p.tags.push('bestseller');
+      if (i % 5 === 1)               p.tags.push('new');
+      if (i % 3 === 0)               p.tags.push('mostselling');
+      if (productRating(p) >= 4.8)   p.tags.push('toprated');
+    });
 
     // Main-cat tile clicks · resets product scroll back to top + refreshes quick-filter counts since they're scoped to the active cat/sub
     document.querySelectorAll('[data-cat]').forEach(btn => {
@@ -582,6 +597,9 @@
 
     function applyFilters(list){
       let out = list.slice();
+      if (filters.tags.size) {
+        out = out.filter(p => Array.isArray(p.tags) && p.tags.some(t => filters.tags.has(t)));
+      }
       if (filters.rating) {
         const min = filters.rating === '5' ? 5
                   : filters.rating === '4plus' ? 4

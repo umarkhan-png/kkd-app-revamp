@@ -618,28 +618,28 @@
     @keyframes custSpin{to{transform:rotate(360deg)}}
     .cust-tile{cursor:pointer}
     #reviewList img{cursor:pointer}
-    /* Review-photo lightbox · single viewer + grid "View all" mode */
-    .rev-lb{position:fixed;inset:0;z-index:140;background:rgba(8,11,18,.95);display:none;flex-direction:column}
+    /* Review-photo lightbox · white app-page base · single viewer + grid "View all" mode */
+    .rev-lb{position:fixed;inset:0;z-index:140;background:#FFFFFF;display:none;flex-direction:column}
     .rev-lb.open{display:flex}
-    .rev-lb-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;flex-shrink:0}
-    .rev-lb-bar button{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.13);border:0;color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-    .rev-lb-count{color:#fff;font-size:13px;font-weight:700}
-    .rev-lb-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;position:relative;padding:0 8px}
-    .rev-lb-stage img{max-width:100%;max-height:100%;object-fit:contain;border-radius:10px}
-    .rev-lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);border:0;color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .rev-lb-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;flex-shrink:0;border-bottom:1px solid #F1F5F9}
+    .rev-lb-bar button{width:38px;height:38px;border-radius:50%;background:#F1F5F9;border:0;color:#0F172A;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .rev-lb-count{color:#0F172A;font-size:13.5px;font-weight:700}
+    .rev-lb-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;position:relative;padding:8px;background:#F8FAFC;touch-action:pan-y;overflow:hidden}
+    .rev-lb-stage img{max-width:100%;max-height:100%;object-fit:contain;border-radius:10px;user-select:none;-webkit-user-drag:none}
+    .rev-lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:#FFFFFF;border:1px solid #E5E7EB;color:#0F172A;font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(15,23,42,0.12);z-index:2}
     .rev-lb-nav.prev{left:10px}.rev-lb-nav.next{right:10px}
-    .rev-lb-strip{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;flex-shrink:0}
-    .rev-lb-strip img{width:54px;height:54px;border-radius:8px;object-fit:cover;flex-shrink:0;opacity:.5;cursor:pointer;border:2px solid transparent}
-    .rev-lb-strip img.on{opacity:1;border-color:#10B981}
-    .rev-lb-grid{display:none;flex:1;min-height:0;overflow-y:auto;padding:6px 16px 24px;grid-template-columns:repeat(3,1fr);gap:8px;align-content:start}
-    .rev-lb-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;cursor:pointer}
+    .rev-lb-strip{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;flex-shrink:0;border-top:1px solid #F1F5F9}
+    .rev-lb-strip img{width:54px;height:54px;border-radius:8px;object-fit:cover;flex-shrink:0;opacity:.45;cursor:pointer;border:2px solid transparent}
+    .rev-lb-strip img.on{opacity:1;border-color:#059669}
+    .rev-lb-grid{display:none;flex:1;min-height:0;overflow-y:auto;padding:12px 16px 24px;grid-template-columns:repeat(3,1fr);gap:8px;align-content:start}
+    .rev-lb-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;cursor:pointer;border:1px solid #E5E7EB}
     .rev-lb.grid .rev-lb-stage,.rev-lb.grid .rev-lb-strip{display:none}
     .rev-lb.grid .rev-lb-grid{display:grid}
   </style>
   <div class="mt-4">
     <div class="flex items-center justify-between mb-2">
       <div class="text-[13.5px] font-extrabold text-[#0F172A]">Photos &amp; videos from customers</div>
-      <button id="viewAllPhotos" class="text-[12px] font-extrabold flex items-center gap-1" style="color:#059669">View all <i class="fa-solid fa-chevron-right text-[9px]"></i></button>
+      <button id="viewAllPhotos" class="text-[12px] font-semibold flex items-center gap-1" style="color:#64748B">View all <i class="fa-solid fa-chevron-right text-[9px]"></i></button>
     </div>
     <div class="overflow-x-auto scrollx -mx-4 px-4" id="custScroll">
       <div class="flex gap-2.5 min-w-max" id="custRow">
@@ -744,6 +744,21 @@
       document.getElementById('rlbNext').addEventListener('click', () => show(cur + 1));
       document.getElementById('rlbGrid').addEventListener('click', gridMode);
       lb.addEventListener('click', e => { if (e.target === lb) close(); });
+      // Swipe left/right on the image stage to move to the next / previous photo
+      const stage = document.querySelector('.rev-lb-stage');
+      if (stage) {
+        let sx = 0, sy = 0, swiping = false;
+        stage.addEventListener('touchstart', e => { const t = e.touches[0]; sx = t.clientX; sy = t.clientY; swiping = true; }, { passive: true });
+        stage.addEventListener('touchend', e => {
+          if (!swiping) return; swiping = false;
+          const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+          if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) show(dx < 0 ? cur + 1 : cur - 1);
+        }, { passive: true });
+        // Mouse drag (desktop preview) mirrors the swipe
+        let mx = null;
+        stage.addEventListener('mousedown', e => { mx = e.clientX; });
+        stage.addEventListener('mouseup', e => { if (mx === null) return; const dx = e.clientX - mx; mx = null; if (Math.abs(dx) > 45) show(dx < 0 ? cur + 1 : cur - 1); });
+      }
       const va = document.getElementById('viewAllPhotos'); if (va) va.addEventListener('click', () => open(0, 'grid'));
       // Any customer-strip tile or in-review photo opens the enlarged viewer at that image
       document.addEventListener('click', e => {

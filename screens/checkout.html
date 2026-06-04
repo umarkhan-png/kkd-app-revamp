@@ -144,7 +144,7 @@
     document.addEventListener('DOMContentLoaded', function(){
       var card = document.getElementById('altCard'), section = document.getElementById('altSection');
       var addr = document.getElementById('addrName'), n = document.getElementById('altNum');
-      function showInAddr(num){ if (addr && num){ var base = addr.textContent.split(' · Alt')[0]; addr.innerHTML = base + ' <span style="color:#047857;font-weight:700;white-space:nowrap">· Alt +91 ' + num + '</span>'; } }
+      function showInAddr(num){ if (addr && num){ var base = addr.textContent.split(' · Alternate')[0]; addr.innerHTML = base + ' <span style="color:#64748B;font-weight:500;white-space:nowrap">· Alternate +91 ' + num + '</span>'; } }
       var saved = ''; try { saved = localStorage.getItem('kkd.altNumber') || ''; } catch (e) {}
       if (saved) {
         // Already added (from Profile / a previous checkout) → hide the Faster-delivery card, show it beside the mobile number

@@ -166,7 +166,7 @@
 
 <!-- Sticky save -->
 <div class="stk">
-  <button onclick="location.href='addresses.html'" class="save-btn">
+  <button id="addrSave" class="save-btn">
     <i class="fa-solid fa-circle-check text-[13px]"></i> Save address
   </button>
 </div>
@@ -176,6 +176,20 @@
     document.querySelectorAll('.tag').forEach(x => x.classList.remove('active'));
     t.classList.add('active');
   }));
+  // Save · persist pincode/city/state so app-states (non-serviceable pincode 123456) can react
+  (function(){
+    var btn = document.getElementById('addrSave');
+    if (!btn) return;
+    btn.addEventListener('click', function(){
+      try {
+        var pin = (document.getElementById('pin') || {}).value || '';
+        localStorage.setItem('kkd.pincode', pin.replace(/\D/g, ''));
+        var city = (document.getElementById('city') || {}).value; if (city) localStorage.setItem('kkd.city', city);
+        var state = (document.getElementById('state') || {}).value; if (state) localStorage.setItem('kkd.state', state);
+      } catch (e) {}
+      location.href = 'addresses.html';
+    });
+  })();
   // Edit mode (?edit=1) · same form, prefilled, retitled
   (function(){
     if (new URLSearchParams(location.search).get('edit') !== '1') return;

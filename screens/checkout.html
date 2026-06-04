@@ -3,6 +3,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="../assets/appstate.js"></script>
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   html,body{margin:0;padding:0;font-family:'Poppins',system-ui,sans-serif}
@@ -380,9 +381,9 @@
       if (btn) btn.addEventListener('click', () => { if (btn.disabled) return; location.href = 'order-success.html?mode=' + currentMethod; });
     })();
 
-    // ===== Demo app-states · ?st=nonservice | bannedproduct | codoff (persisted to localStorage; ?st=clear resets) =====
-    const APPSTATE = (function(){ const s = new URLSearchParams(location.search).get('st'); try { if (s !== null) { if (s === 'clear' || s === '') localStorage.removeItem('kkd.appState'); else localStorage.setItem('kkd.appState', s); } return localStorage.getItem('kkd.appState') || ''; } catch (e) { return s || ''; } })();
+    // ===== App-states (data-driven via appstate.js) · nonservice (pincode 123456) / bannedproduct (Chakrawarti in cart) / codoff (mobile 12345) =====
     (function(){
+      const st = (window.kkdAppStates && window.kkdAppStates()) || {};
       const banner = document.getElementById('stateBanner');
       function show(bg, bd, col, ic, icbg, iccol, title, sub, action, href){
         banner.style.display = 'flex'; banner.style.background = bg; banner.style.border = '1px solid ' + bd;
@@ -393,13 +394,14 @@
       }
       const place = document.getElementById('placeOrderBtn');
       function block(){ if (place) { place.disabled = true; place.style.opacity = '.5'; } }
-      if (APPSTATE === 'nonservice') {
-        show('#FEF2F2','#FECACA','#B91C1C','fa-location-crosshairs','#FEE2E2','#DC2626','This address isn\'t serviceable yet','We don\'t deliver to 452001 — please pick another address','Change','addresses.html'); block();
-      } else if (APPSTATE === 'bannedproduct') {
-        show('#FFF7ED','#FED7AA','#9A3412','fa-ban','#FED7AA','#9A3412','A product isn\'t allowed in your state','Remove the restricted item from your cart to place this order','Edit cart','cart.html'); block();
-      } else if (APPSTATE === 'codoff') {
+      if (st.nonservice) {
+        show('#FEF2F2','#FECACA','#B91C1C','fa-location-crosshairs','#FEE2E2','#DC2626','This address isn\'t serviceable yet','We don\'t deliver to 123456 — please pick another address','Change','addresses.html'); block();
+      } else if (st.bannedproduct) {
+        show('#FFF7ED','#FED7AA','#9A3412','fa-ban','#FED7AA','#9A3412','A product isn\'t allowed in your state','Remove Chakrawarti ZC from your cart to place this order','Edit cart','cart.html'); block();
+      }
+      if (st.codoff) {
         const cod = document.querySelector('.pay[data-pay="cod"]');
-        if (cod) { cod.style.opacity = '.55'; cod.style.pointerEvents = 'none'; const sub = cod.querySelector('.pay-sub'); if (sub) sub.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:#DC2626"></i> COD is unavailable for this order'; }
+        if (cod) { cod.style.opacity = '.55'; cod.style.pointerEvents = 'none'; const sub = cod.querySelector('.pay-sub'); if (sub) sub.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:#DC2626"></i> COD is unavailable for your account'; }
         if (currentMethod === 'cod') { const pn = document.querySelector('.pay[data-pay="paynow"]'); if (pn) pn.click(); }
       }
     })();

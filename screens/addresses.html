@@ -3,6 +3,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="../assets/appstate.js"></script>
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased;box-sizing:border-box}
   html,body{font-family:'Poppins',system-ui,sans-serif;margin:0;padding:0;overflow-x:hidden;max-width:100%}
@@ -125,11 +126,10 @@
       setTimeout(() => { if (history.length > 1) history.back(); else location.href = 'cart.html'; }, 180);
     });
   });
-  // Demo app-state · non-serviceable pincode (?st=nonservice) · flag the default address
+  // App-state · non-serviceable pincode (123456) · via appstate.js · flag the default address
   (function(){
-    var s = new URLSearchParams(location.search).get('st'), APPSTATE;
-    try { if (s !== null) { if (s === 'clear' || s === '') localStorage.removeItem('kkd.appState'); else localStorage.setItem('kkd.appState', s); } APPSTATE = localStorage.getItem('kkd.appState') || ''; } catch (e) { APPSTATE = s || ''; }
-    if (APPSTATE !== 'nonservice') return;
+    var st = (window.kkdAppStates && window.kkdAppStates()) || {};
+    if (!st.nonservice) return;
     var card = document.querySelector('.addr-card');
     if (!card) return;
     card.style.borderColor = '#FECACA';
@@ -140,7 +140,7 @@
     if (head) { var actions = head.querySelector('.addr-actions'); head.insertBefore(tag, actions || null); }
     var n = document.createElement('div');
     n.style.cssText = 'margin-top:10px;display:flex;align-items:center;gap:7px;background:#FEF2F2;border:1px solid #FECACA;border-radius:9px;padding:8px 10px;font-size:11px;font-weight:700;color:#B91C1C';
-    n.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> We don\'t deliver to 452001 yet — pick another address';
+    n.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> We don\'t deliver to 123456 yet — pick another address';
     card.appendChild(n);
   })();
 </script>

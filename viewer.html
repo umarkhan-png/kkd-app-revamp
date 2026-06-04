@@ -166,10 +166,13 @@
       'settings.html','signout-confirm.html',
       'addresses.html','add-address.html','notifications.html','help.html',
       'error-network.html',
-      'design-system.html','philosophy.html'
+      'philosophy.html'
     ];
+    // design-system.html is a full desktop page — open it directly (screens/design-system.html), never inside the phone frame
     const params = new URLSearchParams(location.search);
     const screen = params.get('s') || 'splash.html';
+    // The design system is a full desktop page, not a phone screen — bypass the mockup frame entirely
+    if (screen === 'design-system.html') { location.replace('screens/design-system.html'); }
     document.getElementById('frame').src = 'screens/' + screen;
     document.getElementById('title').textContent = screen;
     document.title = 'KKD · ' + screen.replace('.html','');

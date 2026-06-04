@@ -20,7 +20,7 @@
   .field-in{display:flex;align-items:center;gap:10px;height:46px;padding:0 12px;border-radius:11px;background:#F8FAFC;border:1.5px solid #E5E7EB;transition:border-color .15s ease,box-shadow .15s ease}
   .field-in:focus-within{border-color:#047857;background:#FFFFFF;box-shadow:0 0 0 3px rgba(4,120,87,0.10)}
   .field-in i.lead{font-size:13px;color:#94A3B8;flex-shrink:0}
-  .field-in input,.field-in textarea{flex:1;outline:0;background:transparent;font-size:14px;font-weight:600;color:#0F172A;border:0;resize:none}
+  .field-in input,.field-in textarea{flex:1;min-width:0;width:100%;outline:0;background:transparent;font-size:14px;font-weight:600;color:#0F172A;border:0;resize:none}
   .field-in input::placeholder,.field-in textarea::placeholder{color:#94A3B8;font-weight:500}
   .field-in.row-2{height:auto;padding:12px;align-items:flex-start}
   .field-in.row-2 i.lead{margin-top:2px}
@@ -28,7 +28,7 @@
 
   /* Two-col grid for pincode + state */
   .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:0}
-  .grid-2 .field{border-right:1px solid #F1F5F9}
+  .grid-2 .field{border-right:1px solid #F1F5F9;min-width:0}
   .grid-2 .field:nth-child(2n){border-right:0}
 
   /* Tag selector · Home / Work / Farm / Other · primary emerald active state */
@@ -107,27 +107,34 @@
     <span class="field-lbl">House / Plot · Building</span>
     <div class="field-in">
       <i class="fa-solid fa-house lead"></i>
-      <input type="text" placeholder="Plot 22, Khasra No. 145"/>
+      <input id="house" type="text" placeholder="Plot 22, Khasra No. 145"/>
     </div>
   </div>
   <div class="field">
     <span class="field-lbl">Area · Village · Landmark</span>
     <div class="field-in row-2">
       <i class="fa-solid fa-map-location-dot lead"></i>
-      <textarea placeholder="Village Bawadia, near SBI branch"></textarea>
+      <textarea id="area" placeholder="Village Bawadia, near SBI branch"></textarea>
+    </div>
+  </div>
+  <div class="field">
+    <span class="field-lbl">Pincode</span>
+    <div class="field-in">
+      <i class="fa-solid fa-location-dot lead"></i>
+      <input id="pin" type="tel" maxlength="6" placeholder="452001" class="tnum"/>
     </div>
   </div>
   <div class="grid-2">
     <div class="field">
-      <span class="field-lbl">Pincode</span>
+      <span class="field-lbl">City</span>
       <div class="field-in">
-        <input type="tel" maxlength="6" placeholder="452001" class="tnum"/>
+        <input id="city" type="text" placeholder="Indore"/>
       </div>
     </div>
     <div class="field">
       <span class="field-lbl">State</span>
       <div class="field-in">
-        <input type="text" placeholder="Madhya Pradesh" value="Madhya Pradesh"/>
+        <input id="state" type="text" placeholder="Madhya Pradesh"/>
       </div>
     </div>
   </div>
@@ -169,5 +176,13 @@
     document.querySelectorAll('.tag').forEach(x => x.classList.remove('active'));
     t.classList.add('active');
   }));
+  // Edit mode (?edit=1) · same form, prefilled, retitled
+  (function(){
+    if (new URLSearchParams(location.search).get('edit') !== '1') return;
+    var h1 = document.querySelector('h1'); if (h1) { h1.textContent = 'Edit address'; var sub = h1.nextElementSibling; if (sub) sub.textContent = 'Update your delivery address'; }
+    var set = function(id, v){ var e = document.getElementById(id); if (e) e.value = v; };
+    set('house', 'Plot 22, Khasra No. 145'); set('area', 'Village Bawadia, near SBI branch');
+    set('pin', '452001'); set('city', 'Indore'); set('state', 'Madhya Pradesh');
+  })();
 </script>
 </body></html>

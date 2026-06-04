@@ -111,6 +111,13 @@
     <h1 class="text-[22px] font-extrabold leading-tight" style="color:#0F172A">Checkout</h1>
   </div>
 
+  <!-- State banner · shown for non-serviceable address / banned product (demo via ?st=) -->
+  <div id="stateBanner" style="display:none;margin:8px 16px 0;border-radius:12px;padding:12px 13px;display:none;align-items:flex-start;gap:10px">
+    <span id="sbIc" style="width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px"></span>
+    <div style="flex:1;min-width:0;line-height:1.4"><div id="sbTitle" style="font-size:13px;font-weight:800"></div><div id="sbSub" style="font-size:11.5px;font-weight:600;margin-top:1px"></div></div>
+    <a id="sbAction" href="addresses.html" style="flex-shrink:0;font-size:11.5px;font-weight:800;text-decoration:underline;align-self:center"></a>
+  </div>
+
   <!-- Alternate number · always-visible input (no save button) above the delivery section -->
   <style>
     .alt-card{margin:0 16px;background:#FFFFFF;border:1px solid #BBF7D0;border-radius:14px;padding:13px;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15)}
@@ -370,7 +377,31 @@
     // Place order · carries the chosen payment method to the success screen so the COD-pay option shows for COD/Partial
     (function(){
       const btn = document.getElementById('placeOrderBtn');
-      if (btn) btn.addEventListener('click', () => { location.href = 'order-success.html?mode=' + currentMethod; });
+      if (btn) btn.addEventListener('click', () => { if (btn.disabled) return; location.href = 'order-success.html?mode=' + currentMethod; });
+    })();
+
+    // ===== Demo app-states · ?st=nonservice | bannedproduct | codoff (persisted to localStorage; ?st=clear resets) =====
+    const APPSTATE = (function(){ const s = new URLSearchParams(location.search).get('st'); try { if (s !== null) { if (s === 'clear' || s === '') localStorage.removeItem('kkd.appState'); else localStorage.setItem('kkd.appState', s); } return localStorage.getItem('kkd.appState') || ''; } catch (e) { return s || ''; } })();
+    (function(){
+      const banner = document.getElementById('stateBanner');
+      function show(bg, bd, col, ic, icbg, iccol, title, sub, action, href){
+        banner.style.display = 'flex'; banner.style.background = bg; banner.style.border = '1px solid ' + bd;
+        const i = document.getElementById('sbIc'); i.style.background = icbg; i.style.color = iccol; i.innerHTML = '<i class="fa-solid ' + ic + '"></i>';
+        const t = document.getElementById('sbTitle'); t.style.color = col; t.textContent = title;
+        const s2 = document.getElementById('sbSub'); s2.style.color = col; s2.style.opacity = '.85'; s2.textContent = sub;
+        const a = document.getElementById('sbAction'); a.style.color = col; a.textContent = action || ''; a.style.display = action ? 'inline' : 'none'; if (href) a.href = href;
+      }
+      const place = document.getElementById('placeOrderBtn');
+      function block(){ if (place) { place.disabled = true; place.style.opacity = '.5'; } }
+      if (APPSTATE === 'nonservice') {
+        show('#FEF2F2','#FECACA','#B91C1C','fa-location-crosshairs','#FEE2E2','#DC2626','This address isn\'t serviceable yet','We don\'t deliver to 452001 — please pick another address','Change','addresses.html'); block();
+      } else if (APPSTATE === 'bannedproduct') {
+        show('#FFF7ED','#FED7AA','#9A3412','fa-ban','#FED7AA','#9A3412','A product isn\'t allowed in your state','Remove the restricted item from your cart to place this order','Edit cart','cart.html'); block();
+      } else if (APPSTATE === 'codoff') {
+        const cod = document.querySelector('.pay[data-pay="cod"]');
+        if (cod) { cod.style.opacity = '.55'; cod.style.pointerEvents = 'none'; const sub = cod.querySelector('.pay-sub'); if (sub) sub.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:#DC2626"></i> COD is unavailable for this order'; }
+        if (currentMethod === 'cod') { const pn = document.querySelector('.pay[data-pay="paynow"]'); if (pn) pn.click(); }
+      }
     })();
   </script>
 </body></html>

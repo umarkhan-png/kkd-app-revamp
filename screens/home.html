@@ -3742,5 +3742,31 @@
       });
     })();
   </script>
+  <script>
+    // ===== Demo app-states · ?st=banneduser | nonservice (persisted; ?st=clear resets) =====
+    (function(){
+      var s = new URLSearchParams(location.search).get('st'), APPSTATE;
+      try { if (s !== null) { if (s === 'clear' || s === '') localStorage.removeItem('kkd.appState'); else localStorage.setItem('kkd.appState', s); } APPSTATE = localStorage.getItem('kkd.appState') || ''; } catch (e) { APPSTATE = s || ''; }
+      if (APPSTATE === 'banneduser') {
+        var ov = document.createElement('div');
+        ov.style.cssText = 'position:fixed;inset:0;z-index:400;background:#0B1120;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px';
+        ov.innerHTML = '<div style="width:84px;height:84px;border-radius:50%;background:rgba(220,38,38,0.15);color:#F87171;display:flex;align-items:center;justify-content:center;font-size:38px"><i class="fa-solid fa-user-lock"></i></div>'
+          + '<div style="font-size:21px;font-weight:900;margin-top:20px">Account suspended</div>'
+          + '<div style="font-size:13.5px;color:rgba(255,255,255,0.75);margin-top:10px;max-width:300px;line-height:1.5">Your account has been temporarily blocked due to a policy issue. Please contact support to restore access.</div>'
+          + '<a href="help.html" style="margin-top:24px;height:50px;padding:0 28px;border-radius:12px;background:#059669;color:#fff;font-size:14.5px;font-weight:800;display:inline-flex;align-items:center;gap:9px;text-decoration:none"><i class="fa-solid fa-headset"></i> Contact support</a>'
+          + '<div style="font-size:11.5px;color:rgba(255,255,255,0.5);margin-top:16px">Ref: KKD-USR-4471</div>';
+        document.body.appendChild(ov);
+      } else if (APPSTATE === 'nonservice') {
+        var b = document.createElement('div');
+        b.style.cssText = 'margin:10px 16px 0;border-radius:12px;background:#FEF2F2;border:1px solid #FECACA;padding:12px 13px;display:flex;align-items:flex-start;gap:10px';
+        b.innerHTML = '<span style="width:30px;height:30px;border-radius:8px;background:#FEE2E2;color:#DC2626;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-location-crosshairs"></i></span>'
+          + '<div style="flex:1;line-height:1.4"><div style="font-size:13px;font-weight:800;color:#B91C1C">We don\'t deliver to 452001 yet</div><div style="font-size:11.5px;color:#B91C1C;opacity:.85;margin-top:1px">Change your pincode to see available products &amp; prices</div></div>'
+          + '<a href="addresses.html" style="flex-shrink:0;align-self:center;font-size:11.5px;font-weight:800;color:#B91C1C;text-decoration:underline">Change</a>';
+        var anchor = document.querySelector('.sticky-actions');
+        if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(b, anchor.nextSibling);
+        else document.body.insertBefore(b, document.body.firstChild);
+      }
+    })();
+  </script>
 </body>
 </html>

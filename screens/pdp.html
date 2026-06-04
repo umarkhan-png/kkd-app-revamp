@@ -625,7 +625,8 @@
     .rev-lb-bar button{width:38px;height:38px;border-radius:50%;background:#F1F5F9;border:0;color:#0F172A;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
     .rev-lb-count{color:#0F172A;font-size:13.5px;font-weight:700}
     .rev-lb-title{color:#0F172A;font-size:15px;font-weight:800}
-    /* Bar adapts to mode · single viewer = close + count · gallery page = back + title */
+    /* Bar adapts to mode · single viewer = count (left) + close (right) · gallery page = back + title */
+    .rev-lb .rlb-close{margin-left:auto}
     .rev-lb .rlb-back,.rev-lb .rlb-title{display:none}
     .rev-lb.grid .rlb-close,.rev-lb.grid .rlb-count{display:none}
     .rev-lb.grid .rlb-back{display:flex}
@@ -701,9 +702,9 @@
   <div id="revLightbox" class="rev-lb" aria-hidden="true">
     <div class="rev-lb-bar">
       <button class="rlb-back" id="rlbBack" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></button>
-      <button class="rlb-close" id="rlbClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
       <span class="rev-lb-title rlb-title" id="rlbTitle"></span>
       <span class="rev-lb-count rlb-count" id="rlbCount">1 / 1</span>
+      <button class="rlb-close" id="rlbClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="rev-lb-stage">
       <button class="rev-lb-nav prev" id="rlbPrev" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>

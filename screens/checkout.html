@@ -121,8 +121,8 @@
     .alt-cc{font-size:14px;font-weight:800;color:#0F172A}
     .alt-inwrap input{flex:1;border:0;outline:0;font-size:15px;font-family:inherit;color:#0F172A;background:transparent;min-width:0}
   </style>
-  <div class="sec-title">Faster delivery</div>
-  <div class="alt-card">
+  <div class="sec-title" id="altSection">Faster delivery</div>
+  <div class="alt-card" id="altCard">
     <div class="alt-head">
       <span class="alt-ic"><i class="fa-solid fa-phone-volume"></i></span>
       <div class="flex-1 leading-tight" style="min-width:0">
@@ -133,7 +133,24 @@
     <div class="alt-inwrap"><span class="alt-cc">+91</span><input id="altNum" type="tel" maxlength="10" inputmode="numeric" placeholder="Alternate mobile number"/></div>
   </div>
   <script>
-    (function(){ var n = document.getElementById('altNum'); if (n) n.addEventListener('input', function(){ n.value = n.value.replace(/[^0-9]/g, ''); }); })();
+    (function(){
+      var card = document.getElementById('altCard'), section = document.getElementById('altSection');
+      var addr = document.getElementById('addrName'), n = document.getElementById('altNum');
+      function showInAddr(num){ if (addr && num){ var base = addr.textContent.split(' · Alt')[0]; addr.innerHTML = base + ' <span style="color:#047857;font-weight:700;white-space:nowrap">· Alt +91 ' + num + '</span>'; } }
+      var saved = ''; try { saved = localStorage.getItem('kkd.altNumber') || ''; } catch (e) {}
+      if (saved) {
+        // Already added (from Profile / a previous checkout) → hide the Faster-delivery card, show it beside the mobile number
+        if (card) card.style.display = 'none';
+        if (section) section.style.display = 'none';
+        showInAddr(saved);
+      } else if (n) {
+        // Not added yet → keep the card; persist + reflect in the address once a full number is typed
+        n.addEventListener('input', function(){
+          n.value = n.value.replace(/[^0-9]/g, '');
+          if (n.value.length === 10) { try { localStorage.setItem('kkd.altNumber', n.value); } catch (e) {} showInAddr(n.value); }
+        });
+      }
+    })();
   </script>
 
   <!-- Deliver to · cart-style card (delivery time on top, address with Change at bottom) · replaces the separate Address card + Delivery ETA card -->
@@ -152,7 +169,7 @@
     <div class="addr-row-bottom">
       <i class="fa-solid fa-location-dot text-[14px] mt-0.5" style="color:#94A3B8"></i>
       <div class="flex-1 min-w-0 text-[12.5px] leading-tight" style="color:#475569">
-        <div class="font-bold text-[#0F172A]">Ramesh Patel · +91 98765 43210</div>
+        <div class="font-bold text-[#0F172A]" id="addrName">Ramesh Patel · +91 98765 43210</div>
         <div class="mt-0.5 font-medium">Plot 22, Khasra No. 145, Village Bawadia, Indore — 452001, MP</div>
       </div>
       <a href="addresses.html" class="addr-change">Change</a>

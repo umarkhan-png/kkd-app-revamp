@@ -141,7 +141,7 @@
     <div class="alt-inwrap"><span class="alt-cc">+91</span><input id="altNum" type="tel" maxlength="10" inputmode="numeric" placeholder="Alternate mobile number"/></div>
   </div>
   <script>
-    (function(){
+    document.addEventListener('DOMContentLoaded', function(){
       var card = document.getElementById('altCard'), section = document.getElementById('altSection');
       var addr = document.getElementById('addrName'), n = document.getElementById('altNum');
       function showInAddr(num){ if (addr && num){ var base = addr.textContent.split(' · Alt')[0]; addr.innerHTML = base + ' <span style="color:#047857;font-weight:700;white-space:nowrap">· Alt +91 ' + num + '</span>'; } }
@@ -158,7 +158,7 @@
           if (n.value.length === 10) { try { localStorage.setItem('kkd.altNumber', n.value); } catch (e) {} showInAddr(n.value); }
         });
       }
-    })();
+    });
   </script>
 
   <!-- Deliver to · cart-style card (delivery time on top, address with Change at bottom) · replaces the separate Address card + Delivery ETA card -->
@@ -171,7 +171,7 @@
           <span class="text-[14.5px] font-bold text-[#0F172A]" id="delivDate">Tomorrow, 28 May</span>
           <span class="text-[9px] font-bold text-[#047857] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider" id="delivFree">Free</span>
         </div>
-        <div class="text-[11.5px] text-[#64748B] mt-0.5">Order before <span class="font-bold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
+        <div class="text-[11.5px] text-[#64748B] mt-0.5" id="delivSub">Order before <span class="font-bold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
       </div>
     </div>
     <div class="addr-row-bottom">
@@ -200,7 +200,10 @@
             <span class="pay-amt tnum" id="payNowAmt">₹1,805</span>
           </span>
           <div class="pay-sub">UPI &middot; Cards &middot; Net banking &middot; Wallets</div>
-          <span class="pay-bene"><i class="fa-solid fa-tag"></i> 5% instant off · save ₹95 &nbsp;&nbsp;<span style="color:#047857"><i class="fa-solid fa-bolt"></i> Faster order processing</span></span>
+          <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:5px">
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#047857;background:#ECFDF5;border:1px solid #BBF7D0;padding:3px 9px;border-radius:9999px"><i class="fa-solid fa-tag text-[9px]"></i> 5% instant off · save ₹95</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#047857;background:#ECFDF5;border:1px solid #BBF7D0;padding:3px 9px;border-radius:9999px"><i class="fa-solid fa-bolt text-[9px]"></i> Faster order processing</span>
+          </div>
         </span>
       </span>
     </label>
@@ -397,6 +400,7 @@
         // show non-serviceable inside the delivery card (date line → red), address stays normal
         var dd = document.getElementById('delivDate'); if (dd) { dd.textContent = 'Not serviceable'; dd.style.color = '#DC2626'; }
         var df = document.getElementById('delivFree'); if (df) df.style.display = 'none';
+        var ds = document.getElementById('delivSub'); if (ds) ds.style.display = 'none';
         // CTA → Change address
         if (place) { place.innerHTML = 'Change address <i class="fa-solid fa-chevron-right text-[12px]"></i>'; place.addEventListener('click', function(e){ e.preventDefault(); e.stopImmediatePropagation(); location.href = 'addresses.html'; }, true); }
       } else if (st.bannedproduct) {

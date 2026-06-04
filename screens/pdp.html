@@ -378,7 +378,7 @@
       <span class="deliv-ic"><i class="fa-solid fa-truck-fast"></i></span>
       <div class="flex-1 leading-tight">
         <div class="text-[14.5px] font-extrabold text-[#0F172A]" id="pdpDelivDate">Tomorrow, 28 May</div>
-        <div class="text-[11.5px] mt-0.5" style="color:#64748B">Order before <span class="font-extrabold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
+        <div class="text-[11.5px] mt-0.5" style="color:#64748B" id="pdpDelivSub">Order before <span class="font-extrabold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
       </div>
     </div>
     <div class="deliv-bottom">
@@ -968,7 +968,7 @@
   // App-state · non-serviceable pincode → delivery card date turns red "Not serviceable"
   (function(){
     var st = (window.kkdAppStates && window.kkdAppStates()) || {};
-    if (st.nonservice) { var d = document.getElementById('pdpDelivDate'); if (d) { d.textContent = 'Not serviceable'; d.style.color = '#DC2626'; } }
+    if (st.nonservice) { var d = document.getElementById('pdpDelivDate'); if (d) { d.textContent = 'Not serviceable'; d.style.color = '#DC2626'; } var ds = document.getElementById('pdpDelivSub'); if (ds) ds.style.display = 'none'; }
   })();
   // App-state · banned product · on the Chakrawarti PDP (or when it's in cart) → Add opens a detail bottom-sheet (no special delivery tile)
   (function(){

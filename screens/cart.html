@@ -385,7 +385,7 @@
           <span class="text-[14.5px] font-bold text-[#0F172A]" id="cartDelivDate">Tomorrow, 28 May</span>
           <span class="text-[9px] font-bold text-[#047857] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider" id="cartDelivFree">Free</span>
         </div>
-        <div class="text-[11.5px] text-[#64748B] mt-0.5">Order before <span class="font-bold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
+        <div class="text-[11.5px] text-[#64748B] mt-0.5" id="cartDelivSub">Order before <span class="font-bold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
       </div>
     </div>
     <div class="addr-row-bottom">
@@ -852,7 +852,7 @@
 
       var st = (window.kkdAppStates && window.kkdAppStates()) || {};
       // Non-serviceable pincode → delivery card date turns red "Not serviceable"
-      if (st.nonservice) { var dd = document.getElementById('cartDelivDate'); if (dd) { dd.textContent = 'Not serviceable'; dd.style.color = '#DC2626'; } var df = document.getElementById('cartDelivFree'); if (df) df.style.display = 'none'; }
+      if (st.nonservice) { var dd = document.getElementById('cartDelivDate'); if (dd) { dd.textContent = 'Not serviceable'; dd.style.color = '#DC2626'; } var df = document.getElementById('cartDelivFree'); if (df) df.style.display = 'none'; var ds2 = document.getElementById('cartDelivSub'); if (ds2) ds2.style.display = 'none'; }
       // Banned product (Chakrawarti ZC) · keep its trash usable so it can be deleted; block checkout until removed
       if (!st.bannedproduct) return;
       var it = document.querySelector('.cart-item[data-item="chakrawarti"]');

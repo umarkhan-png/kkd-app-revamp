@@ -3,217 +3,820 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>KKD Design System</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Hind:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>KKD · Katyayani Krishi Direct — Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
-  * { font-family: 'Poppins', 'Hind', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-  .hi, [lang="hi"] { font-family: 'Noto Sans Devanagari', 'Hind', sans-serif; }
-  body { background: #FAFAFA; color: #1C1C1C; }
-  .swatch { width: 56px; height: 56px; border-radius: 10px; border: 1px solid #EDEDED; }
-  .swatch-lg { width: 100%; height: 80px; border-radius: 10px; border: 1px solid #EDEDED; }
-  .token { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; color: #606060; }
-  h2 { letter-spacing: -0.02em; }
+  /* ---- export / download chrome ---- */
+  .ds-export-host { position: relative; }
+  .ds-dl-btn {
+    position: absolute; top: 4px; right: 4px;
+    width: 22px; height: 22px; border-radius: 999px;
+    background: rgba(15,23,42,.72); border: none; color: #fff;
+    cursor: pointer; opacity: .55; transition: opacity .15s, background .15s, transform .15s;
+    display: flex; align-items: center; justify-content: center; z-index: 5;
+  }
+  .ds-export-host:hover .ds-dl-btn { opacity: 1; transform: scale(1.05); }
+  .ds-dl-btn:hover { background: #059669; }
+  .ds-section-dl {
+    background: linear-gradient(135deg,#059669,#047857); color: #fff;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.03em;
+    padding: 6px 14px; border-radius: 999px; border: none; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; vertical-align: middle;
+  }
+  .ds-section-dl:hover { filter: brightness(1.08); }
+  .ds-section-dl[disabled] { opacity:.6; cursor: wait; }
+  .ds-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background:#0F172A; color:#fff; font-size:13px; font-weight:600; padding:10px 18px; border-radius:99px; opacity:0; transition: all .2s; z-index:2000; box-shadow:0 8px 24px rgba(0,0,0,.4); }
+  .ds-toast.show { opacity:1; transform: translateX(-50%) translateY(0); }
+</style>
+<style>
+  * { font-family: 'Poppins', sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #fff; }
+  .section-title { font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #6B7280; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 1px solid #1C1C1C; }
+  .sub-title { font-size: 12px; font-weight: 700; color: #cbd5e1; margin: 22px 0 12px; }
+  .token-label { font-size: 11px; color: #94A3B8; font-weight: 600; margin-top: 8px; }
+  .token-value { font-size: 10.5px; color: #64748B; font-family: 'Courier New', monospace; margin-top: 2px; }
+  .copyable { cursor: pointer; }
+  .copyable:hover .token-value { color: #10B981; }
+  .swatch { width: 100%; height: 60px; border-radius: 10px; border: 1px solid rgba(255,255,255,.08); }
+  .note { font-size: 12.5px; color: #94A3B8; line-height: 1.6; }
+  .note b { color: #e2e8f0; font-weight: 700; }
+  pre { background: #111; border: 1px solid #1C1C1C; border-radius: 10px; padding: 14px; font-size: 11px; color: #aaa; overflow-x: auto; line-height: 1.7; }
+  code { font-family: 'Courier New', monospace; color: #9CA3AF; }
+  .sticky-header { position: sticky; top: 0; background: rgba(10,10,10,.92); backdrop-filter: blur(8px); z-index: 50; border-bottom: 1px solid #1a1a1a; }
+  .anchor-link { color: #34D399; font-size: 11.5px; text-decoration: none; font-weight: 600; }
+  .anchor-link:hover { text-decoration: underline; }
+  .card-light { background:#fff; color:#0F172A; border-radius:14px; }
+  .icon-demo svg, .text-center > svg { display: block; }
+  /* live component styles pulled verbatim from the app */
+  .cat-circle { width:72px;height:72px;border-radius:9999px;background:#F1F5F9;border:1.5px solid #E2E8F0;display:flex;align-items:center;justify-content:center; }
+  .cat-emoji { font-size:34px;line-height:1; }
+  .cat-svg { width:36px;height:36px;display:block; }
+  .pcard{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06);color:#0F172A}
+  .pcard-img{height:130px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:12px;position:relative;border-bottom:1px solid #F1F5F9}
+  .pcard-img img{max-width:88%;max-height:100%;object-fit:contain}
+  .pcard-bs{position:absolute;top:8px;left:8px;display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:900;letter-spacing:0.04em;text-transform:uppercase;color:#92400E;background:#FEF3C7;padding:3px 7px;border-radius:5px}
+  .pcard-bs i{font-size:7.5px}
+  .pcard-star{position:absolute;top:8px;right:8px;display:inline-flex;align-items:center;gap:2px;background:#fff;color:#475569;font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:5px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+  .pcard-b{padding:10px;display:flex;flex-direction:column;flex:1}
+  .pcard-n{font-size:14px;font-weight:700;line-height:1.2;color:#0F172A}
+  .pcard-t{font-size:11px;color:#94A3B8;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .psize{align-self:flex-start;background:#F1F5F9;color:#475569;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:5px;margin-top:8px}
+  .pprice{display:flex;align-items:baseline;gap:6px;margin-top:7px}
+  .pprice .v{font-size:17px;font-weight:800;color:#0F172A}
+  .pprice .m{font-size:11.5px;color:#94A3B8;text-decoration:line-through}
+  .pprice .o{font-size:10.5px;font-weight:700;color:#047857}
+  .padd{height:36px;width:100%;background:#059669;color:#fff;font-size:12.5px;font-weight:800;border-radius:8px;border:0;cursor:pointer;margin-top:9px}
+  .psteps{margin-top:9px;height:36px;border-radius:8px;background:#059669;display:flex;align-items:center;justify-content:space-between;padding:0 4px}
+  .psteps button{width:34px;height:36px;background:transparent;border:0;color:#fff;font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .psteps .pqty{color:#fff;font-size:14px;font-weight:800}
+  .filter-pill{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:999px;background:#FFFFFF;border:1px solid #E2E8F0;font-size:12.5px;font-weight:700;color:#334155;white-space:nowrap;box-shadow:0 1px 2px rgba(15,23,42,0.04)}
+  .filter-pill.on{background:#ECFDF5;border-color:#059669;color:#047857;font-weight:800}
+  .achip{display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 6px 0 11px;border-radius:999px;background:#ECFDF5;border:1px solid #A7F3D0;color:#047857;font-size:12px;font-weight:700}
+  .achip-close{width:18px;height:18px;border-radius:50%;background:#059669;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:9px;border:0;cursor:pointer}
+  .status-pill{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;display:inline-flex;align-items:center;gap:6px}
+  .cta{height:52px;border-radius:12px;background:#059669;color:#fff;font-size:16px;font-weight:800;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45);cursor:pointer;width:100%}
+  .cta-outline{height:48px;border-radius:10px;background:#fff;border:1.5px solid #E5E7EB;color:#0F172A;font-size:14px;font-weight:700;cursor:pointer;width:100%}
+  .nav-demo{display:flex;justify-content:space-around;background:#fff;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04);padding:10px 8px;border-radius:0 0 16px 16px}
+  .nav-tab{display:flex;flex-direction:column;align-items:center;gap:4px;color:#94A3B8}
+  .nav-tab.active{color:#059669}
+  .nav-tab .lbl{font-size:12.5px;font-weight:600}
+  .nav-tab.active .lbl{font-weight:700}
+  .icon-tile{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .grid-assets { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:14px; }
+  .asset-cell { background:#fff; border:1px solid #E5E7EB; border-radius:12px; padding:10px; }
+  .asset-cell .ph { height:96px; display:flex; align-items:center; justify-content:center; background:#F8FAFC; border-radius:8px; overflow:hidden; }
+  .asset-cell img { max-width:100%; max-height:96px; object-fit:contain; }
+  .asset-cell.crop .ph img { width:100%; height:96px; object-fit:cover; }
+  .asset-name { font-size:10.5px; color:#475569; font-weight:600; margin-top:7px; text-align:center; word-break:break-word; }
+  @keyframes dtPulse { 0%{transform:scale(1);opacity:.55} 70%{transform:scale(2.6);opacity:0} 100%{opacity:0} }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes shimmer { 0%{background-position:-300px 0} 100%{background-position:300px 0} }
+  .shimmer{background:linear-gradient(90deg,#F1F5F9 25%,#E2E8F0 37%,#F1F5F9 63%);background-size:600px 100%;animation:shimmer 1.4s infinite}
 </style>
 </head>
-<body>
-<div class="max-w-[1100px] mx-auto px-6 py-10">
+<body class="min-h-screen">
 
-  <!-- Header -->
-  <div class="mb-12">
-    <div class="flex items-center gap-3 mb-3">
-      <div class="w-10 h-10 rounded-[10px] flex items-center justify-center font-extrabold text-white" style="background:linear-gradient(135deg,#0E7A4E 0%,#D4A537 100%)">K</div>
+<!-- Sticky header + section nav -->
+<div class="sticky-header">
+  <div class="max-w-[1200px] mx-auto px-6 py-3 flex items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-[10px] flex items-center justify-center font-extrabold text-white text-sm" style="background:linear-gradient(135deg,#059669 0%,#10B981 100%)">K</div>
       <div>
-        <h1 class="text-[28px] font-extrabold tracking-tight">KKD Design System</h1>
-        <p class="text-[12px] text-[#606060]">Katyayani Krishi Direct · farmer-tuned visual language · v1 · 2026-05-14</p>
+        <div class="text-[15px] font-extrabold tracking-tight">KKD Design System</div>
+        <div class="text-[10px] text-[#64748B] font-semibold uppercase tracking-wider">Katyayani Krishi Direct · v1.0</div>
       </div>
     </div>
-    <p class="text-[14px] text-[#606060] max-w-[720px]">Distinct from Partner App. Built for farmers: bigger touch, larger icons, vernacular-first copy, voice-friendly entry points everywhere, trust-led PDPs (license + lab cert + factory-direct badge). Quality floor = Partner App level; KKD must exceed.</p>
+    <div class="flex items-center gap-x-2 gap-y-1 text-[11px] flex-wrap justify-end max-w-[760px]">
+      <a href="#colors" class="anchor-link">Colors</a>
+      <a href="#type" class="anchor-link">Type</a>
+      <a href="#buttons" class="anchor-link">Buttons</a>
+      <a href="#cards" class="anchor-link">Cards</a>
+      <a href="#price" class="anchor-link">Price</a>
+      <a href="#pills" class="anchor-link">Pills</a>
+      <a href="#icons" class="anchor-link">Icons</a>
+      <a href="#category-icons" class="anchor-link">Categories</a>
+      <a href="#nav" class="anchor-link">Nav</a>
+      <a href="#backgrounds" class="anchor-link">Backgrounds</a>
+      <a href="#spacing" class="anchor-link">Spacing</a>
+      <a href="#shadows" class="anchor-link">Shadows</a>
+      <a href="#zindex" class="anchor-link">Z-Index</a>
+      <a href="#motion" class="anchor-link">Motion</a>
+      <a href="#forms" class="anchor-link">Forms</a>
+      <a href="#assets" class="anchor-link">Assets</a>
+      <a href="#crops" class="anchor-link">Crops</a>
+      <a href="#modules" class="anchor-link">Modules</a>
+      <a href="#patterns" class="anchor-link">Patterns</a>
+      <a href="#states" class="anchor-link">States</a>
+      <a href="#tokens" class="anchor-link">Tokens</a>
+      <a href="#handoff" class="anchor-link">Hand-off</a>
+    </div>
   </div>
-
-  <!-- Principles -->
-  <section class="mb-12">
-    <h2 class="text-[20px] font-extrabold mb-4">Principles</h2>
-    <div class="grid grid-cols-2 gap-3">
-      <div class="bg-white border border-[#EDEDED] rounded-[10px] p-4">
-        <div class="text-[14px] font-bold mb-1">1 · Vernacular-first</div>
-        <p class="text-[12px] text-[#606060]">Hindi (Devanagari) is the primary script on every screen. English sits below as smaller secondary. Hindi default on first launch — never auto-pick English.</p>
-      </div>
-      <div class="bg-white border border-[#EDEDED] rounded-[10px] p-4">
-        <div class="text-[14px] font-bold mb-1">2 · Voice-friendly</div>
-        <p class="text-[12px] text-[#606060]">Mic FAB visible on Home + Shop + Search + Advisory. Tap-and-hold or single-tap. Direct-to-cart from voice. Biggest single win per data + Krishify validation.</p>
-      </div>
-      <div class="bg-white border border-[#EDEDED] rounded-[10px] p-4">
-        <div class="text-[14px] font-bold mb-1">3 · Buy-ready on first session</div>
-        <p class="text-[12px] text-[#606060]">43% of all purchasers convert on day-0. No tutorial walls. Permissions deferred. Home shows price + ADD on hero SKUs immediately.</p>
-      </div>
-      <div class="bg-white border border-[#EDEDED] rounded-[10px] p-4">
-        <div class="text-[14px] font-bold mb-1">4 · Trust-led PDP</div>
-        <p class="text-[12px] text-[#606060]">License + lab cert + factory-direct + batch expiry + real-farmer photos. Counters every K1–K5 review complaint.</p>
-      </div>
-      <div class="bg-white border border-[#EDEDED] rounded-[10px] p-4">
-        <div class="text-[14px] font-bold mb-1">5 · Bigger touch + icons</div>
-        <p class="text-[12px] text-[#606060]">Minimum touch target 48px (vs 44 standard). Icons 28–32px on primary nav (vs 24 in Partner App). Body 14–15px minimum.</p>
-      </div>
-      <div class="bg-white border border-[#EDEDED] rounded-[10px] p-4">
-        <div class="text-[14px] font-bold mb-1">6 · Single splash, no loaders</div>
-        <p class="text-[12px] text-[#606060]">Existing app has 4 loaders. KKD has ONE 2.5s splash → straight to language picker. No "Parichay splash", no homepage loader.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Colors -->
-  <section class="mb-12">
-    <h2 class="text-[20px] font-extrabold mb-4">Colors</h2>
-
-    <div class="text-[13px] font-bold mb-2 text-[#606060] uppercase tracking-wide">Brand</div>
-    <div class="grid grid-cols-4 gap-3 mb-6">
-      <div><div class="swatch-lg" style="background:#0E7A4E"></div><div class="mt-1.5 text-[12px] font-semibold">Emerald</div><div class="token">#0E7A4E</div></div>
-      <div><div class="swatch-lg" style="background:#0C831F"></div><div class="mt-1.5 text-[12px] font-semibold">CTA Green</div><div class="token">#0C831F</div></div>
-      <div><div class="swatch-lg" style="background:#D4A537"></div><div class="mt-1.5 text-[12px] font-semibold">Gold accent</div><div class="token">#D4A537</div></div>
-      <div><div class="swatch-lg" style="background:linear-gradient(180deg,#021710 0%,#062A1B 40%,#083D28 80%,#0A4A30 100%)"></div><div class="mt-1.5 text-[12px] font-semibold">Hero dark gradient</div><div class="token">Splash + Home hero</div></div>
-    </div>
-
-    <div class="text-[13px] font-bold mb-2 text-[#606060] uppercase tracking-wide">Trust + status</div>
-    <div class="grid grid-cols-4 gap-3 mb-6">
-      <div><div class="swatch-lg" style="background:#1565C0"></div><div class="mt-1.5 text-[12px] font-semibold">Trust blue</div><div class="token">License / verified</div></div>
-      <div><div class="swatch-lg" style="background:#E8F2FB; border:1px dashed #1565C0/30"></div><div class="mt-1.5 text-[12px] font-semibold">Trust light bg</div><div class="token">#E8F2FB</div></div>
-      <div><div class="swatch-lg" style="background:#F0FDF5"></div><div class="mt-1.5 text-[12px] font-semibold">Success light</div><div class="token">#F0FDF5</div></div>
-      <div><div class="swatch-lg" style="background:#E23744"></div><div class="mt-1.5 text-[12px] font-semibold">Danger</div><div class="token">#E23744</div></div>
-    </div>
-
-    <div class="text-[13px] font-bold mb-2 text-[#606060] uppercase tracking-wide">Neutrals</div>
-    <div class="grid grid-cols-6 gap-3">
-      <div><div class="swatch" style="background:#1C1C1C"></div><div class="mt-1 text-[11px] font-semibold">Text 1</div><div class="token">#1C1C1C</div></div>
-      <div><div class="swatch" style="background:#606060"></div><div class="mt-1 text-[11px] font-semibold">Text 2</div><div class="token">#606060</div></div>
-      <div><div class="swatch" style="background:#9E9E9E"></div><div class="mt-1 text-[11px] font-semibold">Muted</div><div class="token">#9E9E9E</div></div>
-      <div><div class="swatch" style="background:#EDEDED"></div><div class="mt-1 text-[11px] font-semibold">Border</div><div class="token">#EDEDED</div></div>
-      <div><div class="swatch" style="background:#F8F8F8"></div><div class="mt-1 text-[11px] font-semibold">Bg subtle</div><div class="token">#F8F8F8</div></div>
-      <div><div class="swatch" style="background:#FFFFFF; border:1px solid #EDEDED"></div><div class="mt-1 text-[11px] font-semibold">Bg base</div><div class="token">#FFFFFF</div></div>
-    </div>
-  </section>
-
-  <!-- Typography -->
-  <section class="mb-12">
-    <h2 class="text-[20px] font-extrabold mb-4">Typography</h2>
-    <div class="bg-white border border-[#EDEDED] rounded-[10px] p-6 space-y-5">
-      <div>
-        <div class="hi text-[36px] font-extrabold leading-tight">किसान का अपना ऐप</div>
-        <div class="text-[16px] text-[#606060] mt-1">Hero — Noto Sans Devanagari Black 36px / Poppins Medium 16px</div>
-      </div>
-      <div>
-        <div class="hi text-[22px] font-bold">आपकी फसल, आपका मुनाफा</div>
-        <div class="text-[14px] text-[#606060] mt-1">Section title — 22px Bold / 14px sub</div>
-      </div>
-      <div>
-        <div class="text-[17px] font-bold">Activated Humic + Fulvic 98</div>
-        <div class="hi text-[13px] text-[#606060] mt-0.5">बायो-स्टिमुलेंट · 1 लीटर</div>
-        <div class="text-[22px] font-black mt-1">₹376 <span class="text-[12px] font-medium text-[#9E9E9E] line-through">₹520</span></div>
-        <div class="text-[12px] text-[#606060]">Product card — name 17px Bold · subtitle 13px · price 22px Black</div>
-      </div>
-      <div class="grid grid-cols-3 gap-3 pt-3 border-t border-[#EDEDED]">
-        <div>
-          <div class="text-[11px] font-bold text-[#606060] uppercase mb-1">Latin</div>
-          <div class="text-[13px]">Poppins · 400/500/600/700/800/900</div>
-        </div>
-        <div>
-          <div class="text-[11px] font-bold text-[#606060] uppercase mb-1">Devanagari</div>
-          <div class="text-[13px]">Noto Sans Devanagari · 400–800</div>
-        </div>
-        <div>
-          <div class="text-[11px] font-bold text-[#606060] uppercase mb-1">Min body</div>
-          <div class="text-[13px]">14–15px (vs 12 in Partner App)</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Components -->
-  <section class="mb-12">
-    <h2 class="text-[20px] font-extrabold mb-4">Components</h2>
-    <div class="grid grid-cols-2 gap-4">
-
-      <!-- Buttons -->
-      <div class="bg-white border border-[#EDEDED] rounded-[10px] p-5">
-        <div class="text-[13px] font-bold uppercase tracking-wide text-[#606060] mb-3">Buttons</div>
-        <div class="space-y-2.5">
-          <button class="w-full h-[52px] rounded-[10px] bg-[#0C831F] text-white text-[16px] font-bold">आगे बढ़ें · Continue</button>
-          <button class="w-full h-[52px] rounded-[10px] bg-white border-2 border-[#0E7A4E] text-[#0E7A4E] text-[16px] font-bold">अभी नहीं · Not Now</button>
-          <button class="w-full h-[48px] rounded-[10px] bg-[#1C1C1C] text-white text-[14px] font-bold">Secondary action</button>
-        </div>
-        <div class="token mt-3">Primary CTA min height 52px (farmers)</div>
-      </div>
-
-      <!-- Input -->
-      <div class="bg-white border border-[#EDEDED] rounded-[10px] p-5">
-        <div class="text-[13px] font-bold uppercase tracking-wide text-[#606060] mb-3">Input</div>
-        <label class="hi text-[13px] text-[#606060] block mb-1.5">मोबाइल नंबर</label>
-        <div class="flex items-center gap-2 h-[56px] px-4 rounded-[10px] border-2 border-[#0E7A4E] bg-white">
-          <span class="text-[16px] font-bold text-[#1C1C1C]">+91</span>
-          <span class="w-px h-6 bg-[#EDEDED]"></span>
-          <span class="text-[18px] font-bold tracking-wider">98XXX 43210</span>
-        </div>
-        <div class="token mt-2">56px height · 2px focus border · 18px input text</div>
-      </div>
-
-      <!-- Trust badge -->
-      <div class="bg-white border border-[#EDEDED] rounded-[10px] p-5">
-        <div class="text-[13px] font-bold uppercase tracking-wide text-[#606060] mb-3">Trust badges</div>
-        <div class="flex flex-wrap gap-2">
-          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold" style="background:#E8F2FB;color:#1565C0">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4M12 2l8 4v6c0 5-3.5 9.5-8 10-4.5-.5-8-5-8-10V6l8-4z"/></svg>
-            CIB-CR Licence
-          </span>
-          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold" style="background:#FFF8E6;color:#8B6914">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-5"/></svg>
-            Lab-tested
-          </span>
-          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold" style="background:#F0FDF5;color:#0C831F">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-5 9 5v13M9 21v-6h6v6"/></svg>
-            Direct from factory
-          </span>
-        </div>
-        <div class="token mt-3">Counters K1/K4/K5 — surface trust on PDP + cart</div>
-      </div>
-
-      <!-- Bottom nav -->
-      <div class="bg-white border border-[#EDEDED] rounded-[10px] p-5">
-        <div class="text-[13px] font-bold uppercase tracking-wide text-[#606060] mb-3">Bottom nav · 5 tabs</div>
-        <div class="grid grid-cols-5 gap-2 text-center text-[11px]">
-          <div class="flex flex-col items-center gap-1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0E7A4E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg><span class="text-[#0E7A4E] font-bold">Home</span></div>
-          <div class="flex flex-col items-center gap-1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9E9E9E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2l1.5 3h9L18 2M5 5h14l-1 14H6L5 5z"/></svg><span class="text-[#606060]">Shop</span></div>
-          <div class="flex flex-col items-center gap-1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9E9E9E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8M8 6l4-4 4 4M5 22V12h14v10M9 16v6M15 16v6"/></svg><span class="text-[#606060]">My Crop</span></div>
-          <div class="flex flex-col items-center gap-1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9E9E9E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.5-6.9M21 4v6h-6"/></svg><span class="text-[#606060]">Advisory</span></div>
-          <div class="flex flex-col items-center gap-1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9E9E9E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 5-7 8-7s7 2 8 7"/></svg><span class="text-[#606060]">Account</span></div>
-        </div>
-        <div class="token mt-3">26×26 icons (vs 24 in Partner App) · 11px labels</div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Anti-patterns -->
-  <section class="mb-12">
-    <h2 class="text-[20px] font-extrabold mb-4">Anti-patterns (do NOT do)</h2>
-    <div class="bg-white border border-[#EDEDED] rounded-[10px] p-5">
-      <ul class="text-[13px] text-[#1C1C1C] space-y-2">
-        <li class="flex gap-2"><span class="text-[#E23744] font-bold">✗</span> 4 splash loaders chained — KKD has one</li>
-        <li class="flex gap-2"><span class="text-[#E23744] font-bold">✗</span> Permission popups before value comm — show what user gets first</li>
-        <li class="flex gap-2"><span class="text-[#E23744] font-bold">✗</span> Side popup that appears twice (Eng + Hindi) — single language-aware popup</li>
-        <li class="flex gap-2"><span class="text-[#E23744] font-bold">✗</span> Default-to-English language — Hindi default, picker first</li>
-        <li class="flex gap-2"><span class="text-[#E23744] font-bold">✗</span> Naming clash ("My farm" vs "My crop") — single canonical: <strong>My Crop</strong></li>
-        <li class="flex gap-2"><span class="text-[#E23744] font-bold">✗</span> Naming clash ("Track order" vs "Order tracking") — single canonical: <strong>Track Order</strong></li>
-        <li class="flex gap-2"><span class="text-[#E23744] font-bold">✗</span> 10-min delivery / lightning badges — agri ships in 5–7 days</li>
-        <li class="flex gap-2"><span class="text-[#E23744] font-bold">✗</span> Lifestyle photography — real Katyayani SKU photos only</li>
-        <li class="flex gap-2"><span class="text-[#E23744] font-bold">✗</span> Colorful filled icons — outline only, 2px stroke</li>
-        <li class="flex gap-2"><span class="text-[#E23744] font-bold">✗</span> Variant selector that eats vertical space — chip row + "see all" sheet</li>
-        <li class="flex gap-2"><span class="text-[#E23744] font-bold">✗</span> Rating math that double-counts delay + product — show breakdown</li>
-        <li class="flex gap-2"><span class="text-[#E23744] font-bold">✗</span> Signout without confirm — destructive confirm sheet</li>
-      </ul>
-    </div>
-  </section>
-
-  <a href="../index.html" class="inline-block text-[13px] text-[#0E7A4E] font-bold">← Back to gallery</a>
 </div>
+
+<div class="max-w-[1200px] mx-auto px-6 py-12 space-y-20">
+
+  <!-- ===================== 01 · COLORS ===================== -->
+  <section id="colors">
+    <div class="section-title">01 · Color Palette <span class="text-[#475569] normal-case tracking-normal font-medium">— click any swatch to copy its hex</span></div>
+
+    <div class="sub-title">Emerald — primary brand (CTAs, badges, active states). No gold/amber as a theme colour.</div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+      <div class="copyable" data-copy="#047857"><div class="swatch" style="background:#047857"></div><div class="token-label">Emerald 700 · text/icon</div><div class="token-value">#047857</div></div>
+      <div class="copyable" data-copy="#059669"><div class="swatch" style="background:#059669"></div><div class="token-label">Emerald 600 · primary CTA</div><div class="token-value">#059669</div></div>
+      <div class="copyable" data-copy="#10B981"><div class="swatch" style="background:#10B981"></div><div class="token-label">Emerald 500 · gradient end</div><div class="token-value">#10B981</div></div>
+      <div class="copyable" data-copy="#16A34A"><div class="swatch" style="background:#16A34A"></div><div class="token-label">Green 600 · icon mid</div><div class="token-value">#16A34A</div></div>
+      <div class="copyable" data-copy="#22C55E"><div class="swatch" style="background:#22C55E"></div><div class="token-label">Green 500 · icon bright</div><div class="token-value">#22C55E</div></div>
+      <div class="copyable" data-copy="#15803D"><div class="swatch" style="background:#15803D"></div><div class="token-label">Green 800 · icon stroke</div><div class="token-value">#15803D</div></div>
+    </div>
+
+    <div class="sub-title">Emerald tints — badge / icon-tile / hero backgrounds & tinted borders</div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+      <div class="copyable" data-copy="#ECFDF5"><div class="swatch" style="background:#ECFDF5"></div><div class="token-label">badge / icon-tile bg</div><div class="token-value">#ECFDF5</div></div>
+      <div class="copyable" data-copy="#D1FAE5"><div class="swatch" style="background:#D1FAE5"></div><div class="token-label">hero / delivery strip</div><div class="token-value">#D1FAE5</div></div>
+      <div class="copyable" data-copy="#DCFCE7"><div class="swatch" style="background:#DCFCE7"></div><div class="token-label">option-tile bg</div><div class="token-value">#DCFCE7</div></div>
+      <div class="copyable" data-copy="#BBF7D0"><div class="swatch" style="background:#BBF7D0"></div><div class="token-label">tinted border</div><div class="token-value">#BBF7D0</div></div>
+      <div class="copyable" data-copy="#A7F3D0"><div class="swatch" style="background:#A7F3D0"></div><div class="token-label">chip border</div><div class="token-value">#A7F3D0</div></div>
+    </div>
+
+    <div class="sub-title">Slate / neutrals — text & meta</div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+      <div class="copyable" data-copy="#0F172A"><div class="swatch" style="background:#0F172A"></div><div class="token-label">primary text</div><div class="token-value">#0F172A</div></div>
+      <div class="copyable" data-copy="#334155"><div class="swatch" style="background:#334155"></div><div class="token-label">pill text</div><div class="token-value">#334155</div></div>
+      <div class="copyable" data-copy="#475569"><div class="swatch" style="background:#475569"></div><div class="token-label">secondary text</div><div class="token-value">#475569</div></div>
+      <div class="copyable" data-copy="#64748B"><div class="swatch" style="background:#64748B"></div><div class="token-label">muted / meta</div><div class="token-value">#64748B</div></div>
+      <div class="copyable" data-copy="#94A3B8"><div class="swatch" style="background:#94A3B8"></div><div class="token-label">placeholder / sub</div><div class="token-value">#94A3B8</div></div>
+      <div class="copyable" data-copy="#CBD5E1"><div class="swatch" style="background:#CBD5E1"></div><div class="token-label">input placeholder</div><div class="token-value">#CBD5E1</div></div>
+    </div>
+
+    <div class="sub-title">Chrome — page & card surfaces, borders, dividers</div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+      <div class="copyable" data-copy="#FFFFFF"><div class="swatch" style="background:#FFFFFF"></div><div class="token-label">card / form bg</div><div class="token-value">#FFFFFF</div></div>
+      <div class="copyable" data-copy="#F8F8F8"><div class="swatch" style="background:#F8F8F8"></div><div class="token-label">page bg (w/ cards)</div><div class="token-value">#F8F8F8</div></div>
+      <div class="copyable" data-copy="#F8FAFC"><div class="swatch" style="background:#F8FAFC"></div><div class="token-label">image area bg</div><div class="token-value">#F8FAFC</div></div>
+      <div class="copyable" data-copy="#F1F5F9"><div class="swatch" style="background:#F1F5F9"></div><div class="token-label">neutral tile / divider</div><div class="token-value">#F1F5F9</div></div>
+      <div class="copyable" data-copy="#E5E7EB"><div class="swatch" style="background:#E5E7EB"></div><div class="token-label">card border</div><div class="token-value">#E5E7EB</div></div>
+      <div class="copyable" data-copy="#E2E8F0"><div class="swatch" style="background:#E2E8F0"></div><div class="token-label">light divider / input</div><div class="token-value">#E2E8F0</div></div>
+    </div>
+
+    <div class="sub-title">Status & accents — use sparingly, per state only</div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+      <div class="copyable" data-copy="#DC2626"><div class="swatch" style="background:#DC2626"></div><div class="token-label">danger / cancel text</div><div class="token-value">#DC2626</div></div>
+      <div class="copyable" data-copy="#FEE2E2"><div class="swatch" style="background:#FEE2E2"></div><div class="token-label">danger bg</div><div class="token-value">#FEE2E2</div></div>
+      <div class="copyable" data-copy="#B45309"><div class="swatch" style="background:#B45309"></div><div class="token-label">amber text (COD/transit)</div><div class="token-value">#B45309</div></div>
+      <div class="copyable" data-copy="#FEF3C7"><div class="swatch" style="background:#FEF3C7"></div><div class="token-label">amber bg (warning)</div><div class="token-value">#FEF3C7</div></div>
+      <div class="copyable" data-copy="#F59E0B"><div class="swatch" style="background:#F59E0B"></div><div class="token-label">star rating / coin</div><div class="token-value">#F59E0B</div></div>
+      <div class="copyable" data-copy="#FBBF24"><div class="swatch" style="background:#FBBF24"></div><div class="token-label">rating fill (light)</div><div class="token-value">#FBBF24</div></div>
+    </div>
+
+    <div class="sub-title">Category-icon accents — blue/purple/cyan/brown used inside illustrated SVGs</div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+      <div class="copyable" data-copy="#2563EB"><div class="swatch" style="background:#2563EB"></div><div class="token-label">combo blue</div><div class="token-value">#2563EB</div></div>
+      <div class="copyable" data-copy="#7C3AED"><div class="swatch" style="background:#7C3AED"></div><div class="token-label">tag purple</div><div class="token-value">#7C3AED</div></div>
+      <div class="copyable" data-copy="#F3E8FF"><div class="swatch" style="background:#F3E8FF"></div><div class="token-label">purple tint</div><div class="token-value">#F3E8FF</div></div>
+      <div class="copyable" data-copy="#0891B2"><div class="swatch" style="background:#0891B2"></div><div class="token-label">cyan</div><div class="token-value">#0891B2</div></div>
+      <div class="copyable" data-copy="#92400E"><div class="swatch" style="background:#92400E"></div><div class="token-label">soil brown</div><div class="token-value">#92400E</div></div>
+      <div class="copyable" data-copy="#DBEAFE"><div class="swatch" style="background:#DBEAFE"></div><div class="token-label">blue tint</div><div class="token-value">#DBEAFE</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== 02 · TYPOGRAPHY ===================== -->
+  <section id="type">
+    <div class="section-title">02 · Typography — Poppins (system-ui fallback)</div>
+    <div class="card-light p-6 space-y-4">
+      <div style="font-size:26px;font-weight:800;color:#0F172A">H1 Page title — 26px / 800</div>
+      <div style="font-size:20px;font-weight:800;color:#0F172A">H2 Screen heading — 20px / 800</div>
+      <div style="font-size:16px;font-weight:800;color:#0F172A">H3 Card heading — 16px / 800</div>
+      <div style="font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#64748B">Section label — 11.5px / 800 / upper / 0.06em</div>
+      <div style="font-size:14.5px;font-weight:700;color:#0F172A">Product name — 14.5px / 700</div>
+      <div style="font-size:15px;font-weight:500;color:#0F172A">Body / input — 15px / 500</div>
+      <div style="font-size:13.5px;font-weight:500;color:#475569">Body small — 13.5px / 500 / secondary</div>
+      <div style="font-size:11.5px;font-weight:500;color:#64748B">Meta / muted — 11.5px / 500</div>
+      <div style="font-size:11.5px;color:#94A3B8">Card sub / tech line — 11.5px / 400 · #94A3B8</div>
+      <div><span style="font-size:18px;font-weight:800;color:#0F172A">₹276</span> <span style="font-size:11.5px;color:#94A3B8;text-decoration:line-through">₹390</span> <span style="font-size:10.5px;font-weight:800;color:#047857">29% off</span> &nbsp;— price block (18/800 · 11.5 strike · 10.5/800 emerald)</div>
+    </div>
+    <pre><code>font-family: 'Poppins', system-ui, sans-serif;
+weights in use: 400 500 600 700 800 900   /* reserve 800-900 for ONE hero per section */
+-webkit-font-smoothing: antialiased;
+font-variant-numeric: tabular-nums;  /* on every price / qty / id (.tnum) */</code></pre>
+  </section>
+
+  <!-- ===================== 03 · BUTTONS ===================== -->
+  <section id="buttons">
+    <div class="section-title">03 · Buttons & Actions</div>
+    <div class="card-light p-6 grid sm:grid-cols-2 gap-6">
+      <div><button class="cta"><i class="fa-solid fa-bag-shopping"></i> Primary CTA</button><div class="token-value mt-2" style="color:#94A3B8">#059669 · h52 · r12 · 800 · shadow 0 8px 20px -6px rgba(5,150,105,.45)</div></div>
+      <div><button class="cta-outline">Secondary outline</button><div class="token-value mt-2" style="color:#94A3B8">#FFF · 1.5px #E5E7EB · h48 · r10 · 700</div></div>
+      <div><button class="padd" style="max-width:160px">Add</button><div class="token-value mt-2" style="color:#94A3B8">.padd · #059669 · h36 · r8 · 800 / 12.5px</div></div>
+      <div><div class="psteps" style="max-width:160px"><button>&minus;</button><span class="pqty">2</span><button>+</button></div><div class="token-value mt-2" style="color:#94A3B8">.psteps · emerald stepper · h36 · r8</div></div>
+      <div class="sm:col-span-2">
+        <div class="grid grid-cols-3 gap-2" style="max-width:380px">
+          <button style="height:38px;border-radius:10px;background:#059669;color:#fff;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border:0">Reorder</button>
+          <button style="height:38px;border-radius:10px;background:#fff;border:1.5px solid #E5E7EB;color:#0F172A;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em">Invoice</button>
+          <button style="height:38px;border-radius:10px;background:#fff;border:1.5px solid #E5E7EB;color:#0F172A;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em">Return</button>
+        </div>
+        <div class="token-value mt-2" style="color:#94A3B8">Action row (inside the same card) · h38 · r10 · 700 · upper · 0.04em — primary filled + outlines</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 04 · CARDS ===================== -->
+  <section id="cards">
+    <div class="section-title">04 · Cards</div>
+    <div class="grid sm:grid-cols-3 gap-5">
+      <div class="pcard">
+        <div class="pcard-img"><span class="pcard-bs"><i class="fa-solid fa-crown"></i> Bestseller</span><span class="pcard-star"><i class="fa-solid fa-star" style="color:#F59E0B;font-size:8px"></i> 4.8</span><img src="../assets/Humic_nobg.png" alt="product"/></div>
+        <div class="pcard-b">
+          <div class="pcard-n">Humic + Fulvic</div>
+          <div class="pcard-t">Bio-stimulant</div>
+          <span class="psize">500 ml</span>
+          <div class="pprice"><span class="v">₹276</span><span class="m">₹390</span><span class="o">29% off</span></div>
+          <button class="padd">Add</button>
+        </div>
+      </div>
+      <div class="sm:col-span-2 card-light p-5">
+        <div class="note">
+          <b>Product / order / generic card</b><br>
+          <code>background:#FFFFFF; border:1px solid #E5E7EB; border-radius:14px; box-shadow:0 1px 3px rgba(15,23,42,0.04);</code><br><br>
+          <b>Product card (.pcard)</b> uses r16 + <code>0 2px 8px -2px rgba(15,23,42,.06)</code>.<br>
+          <b>Image area</b>: <code>background:#F8FAFC; border-bottom:1px solid #F1F5F9;</code> · product PNG <code>max-width:88%</code>.<br>
+          <b>Inner divider</b>: <code>1px solid #F1F5F9</code> hairline · <code>1px dashed #E5E7EB</code> only for sub-totals.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 05 · PRICE & BADGES ===================== -->
+  <section id="price">
+    <div class="section-title">05 · Price, Size badge & Bestseller</div>
+    <div class="card-light p-6 flex flex-wrap items-center gap-6">
+      <div class="pprice"><span class="v">₹330</span></div>
+      <div class="pprice"><span class="v">₹276</span><span class="m">₹390</span><span class="o">29% off</span></div>
+      <span class="psize">500 ml</span>
+      <span class="pcard-bs" style="position:static"><i class="fa-solid fa-crown"></i> Bestseller</span>
+      <span class="pcard-star" style="position:static"><i class="fa-solid fa-star" style="color:#F59E0B;font-size:8px"></i> 4.6</span>
+    </div>
+    <div class="token-value mt-2" style="color:#94A3B8">Price 17-18/800 · MRP 11.5 strike #94A3B8 · off 10.5/800 #047857 · size pill #F1F5F9/#475569 r5 · bestseller #FEF3C7/#92400E r5</div>
+  </section>
+
+  <!-- ===================== 06 · PILLS / CHIPS / STATUS ===================== -->
+  <section id="pills">
+    <div class="section-title">06 · Pills, Chips & Status</div>
+    <div class="card-light p-6 space-y-5">
+      <div class="flex flex-wrap gap-2 items-center">
+        <button class="filter-pill"><i class="fa-solid fa-layer-group text-[10px]"></i> Category <i class="fa-solid fa-chevron-down text-[8px]"></i></button>
+        <button class="filter-pill on"><i class="fa-solid fa-seedling text-[10px]"></i> Crop <span style="width:6px;height:6px;border-radius:50%;background:#059669;display:inline-block"></span></button>
+        <span class="achip">Tomato <button class="achip-close"><i class="fa-solid fa-xmark"></i></button></span>
+      </div>
+      <div class="flex flex-wrap gap-4 items-center">
+        <span class="status-pill" style="color:#047857"><span style="width:8px;height:8px;border-radius:50%;background:#059669;display:inline-block"></span> Delivered</span>
+        <span class="status-pill" style="color:#B45309"><span style="width:8px;height:8px;border-radius:50%;background:#F59E0B;display:inline-block"></span> Out for delivery</span>
+        <span class="status-pill" style="color:#DC2626"><span style="width:8px;height:8px;border-radius:50%;background:#DC2626;display:inline-block"></span> Cancelled</span>
+        <span style="font-size:9.5px;font-weight:900;letter-spacing:.06em;background:#FEE2E2;color:#DC2626;border:1px solid #FECACA;padding:2px 7px;border-radius:999px">NOT SERVICEABLE</span>
+        <span style="font-size:9.5px;font-weight:900;letter-spacing:.08em;background:#ECFDF5;color:#047857;border:1px solid #A7F3D0;padding:2px 7px;border-radius:999px">DEFAULT</span>
+      </div>
+    </div>
+    <div class="token-value mt-2" style="color:#94A3B8">filter-pill h36 r999 (.on → #ECFDF5/#059669/#047857) · achip #ECFDF5/#A7F3D0/#047857 · deal markers = small label pills, never full-width strips</div>
+  </section>
+
+  <!-- ===================== 07 · ICONS ===================== -->
+  <section id="icons">
+    <div class="section-title">07 · Icon Tiles &amp; Iconography (Font Awesome 6.5.1)</div>
+    <div class="card-light p-6">
+      <div class="flex flex-wrap gap-5 items-start">
+        <div class="text-center"><div class="icon-tile" style="background:#ECFDF5;color:#047857;margin:auto"><i class="fa-solid fa-house"></i></div><div class="token-value mt-2">emerald</div></div>
+        <div class="text-center"><div class="icon-tile" style="background:#F1F5F9;color:#475569;margin:auto"><i class="fa-solid fa-circle-info"></i></div><div class="token-value mt-2">neutral</div></div>
+        <div class="text-center"><div class="icon-tile" style="background:#FEF3C7;color:#B45309;margin:auto"><i class="fa-solid fa-truck"></i></div><div class="token-value mt-2">amber</div></div>
+        <div class="text-center"><div class="icon-tile" style="background:#FEE2E2;color:#DC2626;margin:auto"><i class="fa-solid fa-circle-xmark"></i></div><div class="token-value mt-2">danger</div></div>
+      </div>
+      <div class="note mt-5"><b>Rule:</b> default info tiles are <b>emerald</b> (#ECFDF5/#047857). Use <b>neutral</b> slate for secondary/help, <b>amber</b> only for cash/warning, <b>danger</b> for cancel/error. Tile = 36-40px, r10. Inline icons inherit text colour.</div>
+    </div>
+  </section>
+
+  <!-- ===================== 08 · CATEGORY ICONS (downloadable) ===================== -->
+  <section id="category-icons">
+    <div class="section-title">08 · Category Icons — illustrated, 36×36 viewBox</div>
+    <div class="card-light p-6">
+      <div class="flex flex-wrap gap-8 items-start">
+        <div class="text-center">
+          <div class="cat-circle" style="margin:auto"><span class="cat-emoji" data-export-emoji="🐛" data-export-name="pesticide">🐛</span></div>
+          <div class="token-value mt-2">Pesticide (emoji 🐛)</div>
+        </div>
+        <div class="text-center">
+          <div class="cat-circle" style="margin:auto">
+            <svg class="cat-svg" data-export-name="fungicide" viewBox="0 0 36 36" fill="none">
+              <path d="M18 3 C8 6 4 16 6 26 C7 30 11 33 18 33 C25 33 29 30 30 26 C32 16 28 6 18 3 Z" fill="#22C55E"/>
+              <line x1="18" y1="5" x2="18" y2="32" stroke="#15803D" stroke-width="1.2" stroke-linecap="round"/>
+              <circle cx="12" cy="14" r="2" fill="#7C2D12"/><circle cx="24" cy="12" r="1.6" fill="#78350F"/>
+              <circle cx="13" cy="24" r="2.2" fill="#7C2D12"/><circle cx="24" cy="23" r="1.8" fill="#78350F"/>
+              <circle cx="19" cy="18" r="1.4" fill="#92400E"/>
+            </svg>
+          </div>
+          <div class="token-value mt-2">Fungicide</div>
+        </div>
+        <div class="text-center">
+          <div class="cat-circle" style="margin:auto">
+            <svg class="cat-svg" data-export-name="fertilizer" viewBox="0 0 36 36" fill="none">
+              <path d="M3 30 Q18 26 33 30 L33 33 L3 33 Z" fill="#92400E"/>
+              <path d="M18 30 L18 6" stroke="#15803D" stroke-width="2.4" stroke-linecap="round"/>
+              <path d="M18 24 C12 23 8 20 6 16 C10 16 14 18 18 22" fill="#22C55E"/>
+              <path d="M18 24 C24 23 28 20 30 16 C26 16 22 18 18 22" fill="#22C55E"/>
+              <path d="M18 16 C13 14 10 11 9 7 C13 8 16 11 18 14" fill="#22C55E"/>
+              <path d="M18 16 C23 14 26 11 27 7 C23 8 20 11 18 14" fill="#22C55E"/>
+              <circle cx="18" cy="5" r="2.2" fill="#22C55E"/>
+              <g stroke="#FBBF24" stroke-width="1.3" stroke-linecap="round"><path d="M27 4 L27 1.5"/><path d="M25.5 2.7 L28.5 2.7"/></g>
+              <circle cx="6" cy="29" r="1.4" fill="#D9A441"/><circle cx="11" cy="28" r="1.2" fill="#FBBF24"/>
+              <circle cx="25" cy="28" r="1.2" fill="#D9A441"/><circle cx="30" cy="29" r="1.4" fill="#FBBF24"/>
+            </svg>
+          </div>
+          <div class="token-value mt-2">Fertilizer</div>
+        </div>
+        <div class="text-center">
+          <div class="cat-circle" style="margin:auto">
+            <svg class="cat-svg" data-export-name="herbicide" viewBox="0 0 36 36" fill="none">
+              <g fill="#15803D">
+                <path d="M16 33 C13 24 9 16 5 9 C10 16 14 24 17 33 Z"/>
+                <path d="M16.5 33 C16 22 16 12 15 2 C17 12 17.5 22 17.5 33 Z"/>
+                <path d="M20 33 C23 24 27 16 31 9 C26 16 22 24 19 33 Z"/>
+                <path d="M19.5 33 C19 22 20 12 21 2 C20 12 20.5 22 20.5 33 Z"/>
+              </g>
+              <g fill="#22C55E">
+                <path d="M17.25 33 C16.5 21 17.5 10 18 0 C18.5 10 19.5 21 18.75 33 Z"/>
+                <path d="M17 33 C16 24 14 16 11 8 C14 16 15.5 24 18 33 Z"/>
+                <path d="M19 33 C20 24 22 16 25 8 C22 16 20.5 24 18 33 Z"/>
+              </g>
+              <g fill="#16A34A"><path d="M14 33 C13.5 24 13 16 12 7 C14 16 14.5 24 15 33 Z"/><path d="M22 33 C22.5 24 23 16 24 7 C22 16 21.5 24 21 33 Z"/></g>
+            </svg>
+          </div>
+          <div class="token-value mt-2">Herbicide</div>
+        </div>
+        <div class="text-center">
+          <div class="cat-circle" style="margin:auto">
+            <svg class="cat-svg" data-export-name="combo" viewBox="0 0 36 36" fill="none">
+              <rect x="3" y="22" width="30" height="11" rx="1.5" fill="#2563EB"/>
+              <line x1="18" y1="22" x2="18" y2="33" stroke="#1E40AF" stroke-width="1"/><line x1="3" y1="27" x2="33" y2="27" stroke="#1E40AF" stroke-width="1"/>
+              <rect x="6" y="13" width="24" height="10" rx="1.5" fill="#F59E0B"/>
+              <line x1="18" y1="13" x2="18" y2="23" stroke="#B45309" stroke-width="1"/><line x1="6" y1="18" x2="30" y2="18" stroke="#B45309" stroke-width="1"/>
+              <rect x="10" y="4" width="16" height="10" rx="1.5" fill="#10B981"/>
+              <line x1="18" y1="4" x2="18" y2="14" stroke="#047857" stroke-width="1"/><line x1="10" y1="9" x2="26" y2="9" stroke="#047857" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="token-value mt-2">Combo</div>
+        </div>
+      </div>
+      <div class="note mt-5">Each sits in a <b>72px circle</b> (#F1F5F9 / 1.5px #E2E8F0). Hover any icon for an individual WebP download, or use <b>Download all</b> above.</div>
+    </div>
+  </section>
+
+  <!-- ===================== 09 · BOTTOM NAV ===================== -->
+  <section id="nav">
+    <div class="section-title">09 · Bottom Navigation — 4 tabs</div>
+    <div class="card-light overflow-hidden" style="max-width:420px">
+      <div class="h-20 flex items-center justify-center text-[#94A3B8] text-[12px]">screen content</div>
+      <div class="nav-demo">
+        <div class="nav-tab active"><i class="fa-solid fa-house text-[20px]"></i><span class="lbl">Home</span></div>
+        <div class="nav-tab"><i class="fa-solid fa-seedling text-[20px]"></i><span class="lbl">Crop</span></div>
+        <div class="nav-tab"><i class="fa-solid fa-box text-[20px]"></i><span class="lbl">Orders</span></div>
+        <div class="nav-tab"><i class="fa-solid fa-user text-[20px]"></i><span class="lbl">Profile</span></div>
+      </div>
+    </div>
+    <div class="token-value mt-2" style="color:#94A3B8">h68 · #FFF · border-top #F1F5F9 · shadow 0 -4px 16px rgba(0,0,0,.04) · icon 20px · label 12.5px · active #059669 / inactive #94A3B8</div>
+  </section>
+
+  <!-- ===================== 10 · BACKGROUNDS ===================== -->
+  <section id="backgrounds">
+    <div class="section-title">10 · Backgrounds &amp; Gradients</div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div><div class="swatch" style="height:80px;background:#F8F8F8"></div><div class="token-label">Page w/ cards</div><div class="token-value">#F8F8F8</div></div>
+      <div><div class="swatch" style="height:80px;background:#FFFFFF"></div><div class="token-label">Form page</div><div class="token-value">#FFFFFF</div></div>
+      <div><div class="swatch" style="height:80px;background:linear-gradient(135deg,#FAF7F2,#F5F1E8,#ECFDF5)"></div><div class="token-label">Splash gradient</div><div class="token-value">#FAF7F2→#F5F1E8→#ECFDF5</div></div>
+      <div><div class="swatch" style="height:80px;background:#D1FAE5;border:1px solid #BBF7D0"></div><div class="token-label">Delivery strip</div><div class="token-value">#D1FAE5 / #BBF7D0</div></div>
+      <div><div class="swatch" style="height:80px;background:linear-gradient(135deg,#059669,#10B981)"></div><div class="token-label">Brand gradient</div><div class="token-value">#059669→#10B981</div></div>
+      <div><div class="swatch" style="height:80px;background:#F8FAFC;border:1px solid #E5E7EB"></div><div class="token-label">Image area</div><div class="token-value">#F8FAFC</div></div>
+    </div>
+    <div class="note mt-4">Don't use warm cream <code>#FAF7F2</code> page bg or cream <code>#EEE5D8</code> borders outside the splash.</div>
+  </section>
+
+  <!-- ===================== 11 · SPACING ===================== -->
+  <section id="spacing">
+    <div class="section-title">11 · Spacing &amp; Radius</div>
+    <div class="card-light p-6">
+      <div class="flex items-end gap-3 flex-wrap">
+        <div class="text-center"><div style="width:4px;height:32px;background:#059669;margin:auto"></div><div class="token-value">4</div></div>
+        <div class="text-center"><div style="width:8px;height:32px;background:#059669;margin:auto"></div><div class="token-value">8</div></div>
+        <div class="text-center"><div style="width:10px;height:32px;background:#059669;margin:auto"></div><div class="token-value">10</div></div>
+        <div class="text-center"><div style="width:12px;height:32px;background:#059669;margin:auto"></div><div class="token-value">12</div></div>
+        <div class="text-center"><div style="width:14px;height:32px;background:#059669;margin:auto"></div><div class="token-value">14</div></div>
+        <div class="text-center"><div style="width:16px;height:32px;background:#059669;margin:auto"></div><div class="token-value">16</div></div>
+        <div class="text-center"><div style="width:20px;height:32px;background:#059669;margin:auto"></div><div class="token-value">20</div></div>
+        <div class="text-center"><div style="width:24px;height:32px;background:#059669;margin:auto"></div><div class="token-value">24</div></div>
+      </div>
+      <div class="flex items-center gap-4 mt-6 flex-wrap">
+        <div class="text-center"><div style="width:48px;height:36px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:5px;margin:auto"></div><div class="token-value mt-1">r5 · pill/size</div></div>
+        <div class="text-center"><div style="width:48px;height:36px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:8px;margin:auto"></div><div class="token-value mt-1">r8 · add/step</div></div>
+        <div class="text-center"><div style="width:48px;height:36px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:10px;margin:auto"></div><div class="token-value mt-1">r10 · tile/btn</div></div>
+        <div class="text-center"><div style="width:48px;height:36px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:12px;margin:auto"></div><div class="token-value mt-1">r12 · CTA</div></div>
+        <div class="text-center"><div style="width:48px;height:36px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:14px;margin:auto"></div><div class="token-value mt-1">r14 · card</div></div>
+        <div class="text-center"><div style="width:48px;height:36px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:16px;margin:auto"></div><div class="token-value mt-1">r16 · pcard</div></div>
+        <div class="text-center"><div style="width:48px;height:36px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:999px;margin:auto"></div><div class="token-value mt-1">r999 · pill</div></div>
+      </div>
+    </div>
+    <div class="note mt-3">Base unit 4px. Page gutter = <code>16px (px-4)</code>. Card padding = <code>14-16px</code>. Bottom-sheet top radius = <code>24px</code>.</div>
+  </section>
+
+  <!-- ===================== 12 · SHADOWS ===================== -->
+  <section id="shadows">
+    <div class="section-title">12 · Elevation / Shadows</div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-5">
+      <div class="card-light p-5" style="box-shadow:0 1px 3px rgba(15,23,42,0.04)"><div style="font-weight:700;color:#0F172A">Card</div><div class="token-value">0 1px 3px rgba(15,23,42,.04)</div></div>
+      <div class="card-light p-5" style="box-shadow:0 2px 8px -2px rgba(15,23,42,0.06)"><div style="font-weight:700;color:#0F172A">Product card</div><div class="token-value">0 2px 8px -2px rgba(15,23,42,.06)</div></div>
+      <div class="card-light p-5" style="box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)"><div style="font-weight:700;color:#0F172A">CTA glow</div><div class="token-value">0 8px 20px -6px rgba(5,150,105,.45)</div></div>
+      <div class="card-light p-5" style="box-shadow:0 -8px 32px rgba(0,0,0,0.18)"><div style="font-weight:700;color:#0F172A">Bottom sheet</div><div class="token-value">0 -8px 32px rgba(0,0,0,.18)</div></div>
+      <div class="card-light p-5" style="box-shadow:0 -4px 16px rgba(0,0,0,0.04)"><div style="font-weight:700;color:#0F172A">Bottom nav</div><div class="token-value">0 -4px 16px rgba(0,0,0,.04)</div></div>
+      <div class="card-light p-5" style="box-shadow:0 6px 14px -6px rgba(5,150,105,0.25),0 0 0 2px rgba(5,150,105,0.12)"><div style="font-weight:700;color:#0F172A">Selected ring</div><div class="token-value">+ 0 0 0 2px rgba(5,150,105,.12)</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== 13 · Z-INDEX ===================== -->
+  <section id="zindex">
+    <div class="section-title">13 · Z-Index Scale</div>
+    <pre><code>50    sticky header · sticky category bar · bottom nav
+50    floating add-address footer (.stk)
+95    variant bottom-sheet
+120   review-photo full overlay / app-state overlays
+140   review-photo lightbox
+301   dynamic bottom sheets
+1000  celebrate / earn overlay
+2000  design-system toast</code></pre>
+  </section>
+
+  <!-- ===================== 14 · MOTION ===================== -->
+  <section id="motion">
+    <div class="section-title">14 · Motion</div>
+    <div class="card-light p-6 space-y-4">
+      <div class="flex items-center gap-4"><span class="relative flex items-center justify-center"><span style="width:10px;height:10px;border-radius:50%;background:#059669;display:block"></span><span style="position:absolute;inset:0;width:10px;height:10px;border-radius:50%;background:#059669;animation:dtPulse 1.6s ease-out infinite"></span></span><span class="note"><b>Live order pulse</b> · <code>dtPulse 1.6s ease-out infinite</code></span></div>
+      <div class="flex items-center gap-4"><span style="width:22px;height:22px;border-radius:50%;border:3px solid #D1FAE5;border-top-color:#059669;animation:spin .8s linear infinite;display:inline-block"></span><span class="note"><b>Spinner</b> · <code>spin .8s linear infinite</code></span></div>
+      <div class="flex items-center gap-4"><span class="shimmer" style="width:120px;height:14px;border-radius:6px;display:inline-block"></span><span class="note"><b>Skeleton shimmer</b> · <code>shimmer 1.4s infinite</code></span></div>
+      <div class="note"><b>Easing:</b> UI transitions <code>.15s / .25s ease</code> · bottom-sheet slide <code>.3s cubic-bezier(.32,.72,0,1)</code> · earn celebration <code>~1.8s</code> (dim-blur backdrop + scale-in card + 2 sparkle dots — no rotating rays / confetti / spring-bounce).</div>
+    </div>
+  </section>
+
+  <!-- ===================== 15 · FORMS ===================== -->
+  <section id="forms">
+    <div class="section-title">15 · Forms &amp; Inputs</div>
+    <div class="card-light p-6 space-y-4" style="max-width:460px">
+      <div class="relative">
+        <input type="text" placeholder="Search products, pests, crops" style="width:100%;padding:10px 16px 10px 42px;border-radius:12px;background:#F1F5F9;border:1px solid #E2E8F0;font-size:15px;color:#0F172A;outline:none"/>
+        <i class="fa-solid fa-magnifying-glass" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#94A3B8;font-size:14px"></i>
+      </div>
+      <input type="text" placeholder="Full name" style="width:100%;padding:12px 14px;border-radius:12px;background:#fff;border:1.5px solid #E2E8F0;font-size:15px;color:#0F172A;outline:none"/>
+      <input type="text" value="9876543210" style="width:100%;padding:12px 14px;border-radius:12px;background:#fff;border:1.5px solid #059669;font-size:15px;color:#0F172A;outline:none"/>
+      <div class="token-value" style="color:#94A3B8">Search: #F1F5F9 fill · r12 · 15px. Field: #FFF / 1.5px #E2E8F0, focus border #059669. Placeholder #CBD5E1/#94A3B8.</div>
+    </div>
+  </section>
+
+  <!-- ===================== 16 · ASSETS (downloadable) ===================== -->
+  <section id="assets">
+    <div class="section-title">16 · Product &amp; Brand Assets</div>
+    <div class="grid-assets">
+      <div class="asset-cell"><div class="ph"><img src="../assets/Humic_nobg.png" alt="humic-fulvic"/></div><div class="asset-name">Humic_nobg.png</div></div>
+      <div class="asset-cell"><div class="ph"><img src="../assets/AntiVirus_nobg.png" alt="antivirus"/></div><div class="asset-name">AntiVirus_nobg.png</div></div>
+      <div class="asset-cell"><div class="ph"><img src="../assets/Chakrawarti_nobg.png" alt="chakrawarti-zc"/></div><div class="asset-name">Chakrawarti_nobg.png</div></div>
+      <div class="asset-cell"><div class="ph" style="background:#0F172A"><img src="../assets/kd-logo-white.png" alt="kkd-logo-white"/></div><div class="asset-name">kd-logo-white.png</div></div>
+      <div class="asset-cell"><div class="ph"><img src="../assets/kkd-logo.png" alt="kkd-logo"/></div><div class="asset-name">kkd-logo.png</div></div>
+      <div class="asset-cell"><div class="ph"><img src="../assets/expert.png" alt="expert"/></div><div class="asset-name">expert.png</div></div>
+      <div class="asset-cell"><div class="ph"><img src="../assets/brand-illustration.png" alt="brand-illustration"/></div><div class="asset-name">brand-illustration.png</div></div>
+    </div>
+    <div class="note mt-3">Hover any asset for a single WebP download, or use <b>Download all</b> beside the heading for the full set as a zip.</div>
+  </section>
+
+  <!-- ===================== 17 · CROP THUMBNAILS (downloadable) ===================== -->
+  <section id="crops">
+    <div class="section-title">17 · Crop Thumbnails (assets/crops)</div>
+    <div class="grid-assets">
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/banana.jpg" alt="banana"/></div><div class="asset-name">banana</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/blackgram.jpg" alt="blackgram"/></div><div class="asset-name">blackgram</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/brinjal.jpg" alt="brinjal"/></div><div class="asset-name">brinjal</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/cabbage.jpg" alt="cabbage"/></div><div class="asset-name">cabbage</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/cardamom.jpg" alt="cardamom"/></div><div class="asset-name">cardamom</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/cauliflower.jpg" alt="cauliflower"/></div><div class="asset-name">cauliflower</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/chickpea.jpg" alt="chickpea"/></div><div class="asset-name">chickpea</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/chilli.jpg" alt="chilli"/></div><div class="asset-name">chilli</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/cumin.jpg" alt="cumin"/></div><div class="asset-name">cumin</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/garlic.jpg" alt="garlic"/></div><div class="asset-name">garlic</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/grapes.jpg" alt="grapes"/></div><div class="asset-name">grapes</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/maize.jpg" alt="maize"/></div><div class="asset-name">maize</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/mango.jpg" alt="mango"/></div><div class="asset-name">mango</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/okra.jpg" alt="okra"/></div><div class="asset-name">okra</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/onion.jpg" alt="onion"/></div><div class="asset-name">onion</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/orange.jpg" alt="orange"/></div><div class="asset-name">orange</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/papaya.jpg" alt="papaya"/></div><div class="asset-name">papaya</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/pomegranate.jpg" alt="pomegranate"/></div><div class="asset-name">pomegranate</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/potato.jpg" alt="potato"/></div><div class="asset-name">potato</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/soyabean.jpg" alt="soyabean"/></div><div class="asset-name">soyabean</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/sugarcane.jpg" alt="sugarcane"/></div><div class="asset-name">sugarcane</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/tomato.jpg" alt="tomato"/></div><div class="asset-name">tomato</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/watermelon.jpg" alt="watermelon"/></div><div class="asset-name">watermelon</div></div>
+      <div class="asset-cell crop"><div class="ph"><img src="../assets/crops/wheat.jpg" alt="wheat"/></div><div class="asset-name">wheat</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== 18 · SHARED MODULES ===================== -->
+  <section id="modules">
+    <div class="section-title">18 · Shared JS Modules (assets/)</div>
+    <pre><code>celebrate.js   window.kkdCelebrate(amount, {prefix, unit, title})  — full-screen earn animation, reuse for every coin/reward earn
+verify.js      window.kkdVerify(...)                                — verification sheet
+rate.js        window.kkdRate(...)                                  — rating sheet
+appstate.js    window.kkdAppStates() -> {nonservice, bannedproduct, banneduser, codoff}
+               drivers: kkd.pincode==='123456' -> nonservice · 'chakrawarti' in kkd.cart -> bannedproduct
+                        kkd.mobile==='12345' -> banneduser + codoff · ?st=&lt;state&gt; override via kkd.stOverride
+
+Each self-injects. Include with: &lt;script src="../assets/&lt;module&gt;.js"&gt;&lt;/script&gt;</code></pre>
+  </section>
+
+  <!-- ===================== 19 · PATTERNS ===================== -->
+  <section id="patterns">
+    <div class="section-title">19 · Core Patterns</div>
+    <div class="grid sm:grid-cols-2 gap-5">
+      <div class="card-light p-5"><div style="font-weight:800;color:#0F172A;margin-bottom:6px">Bottom-sheet modal</div><div class="note"><code>border-radius:24px 24px 0 0</code> · handle 40×4 #E2E8F0 · <code>box-shadow:0 -8px 32px rgba(0,0,0,.18)</code> · slide <code>.3s cubic-bezier(.32,.72,0,1)</code>.</div></div>
+      <div class="card-light p-5"><div style="font-weight:800;color:#0F172A;margin-bottom:6px">Sticky CTA footer</div><div class="note">White bg, <code>border-top:1px solid #F1F5F9</code>, single emerald primary button, <code>padding-bottom: calc(env(safe-area-inset-bottom,0px) + 12px)</code>.</div></div>
+      <div class="card-light p-5"><div style="font-weight:800;color:#0F172A;margin-bottom:6px">Order / product tile</div><div class="note">Outer card wraps an <code>&lt;a&gt;</code> (head → id → thumbs → divider → bottom); action row sits <b>inside</b> the same card, padded — never nested anchors, never a flush full-width strip.</div></div>
+      <div class="card-light p-5"><div style="font-weight:800;color:#0F172A;margin-bottom:6px">Safe area</div><div class="note">Use <code>env(safe-area-inset-top/bottom, 0px)</code> with the <b>0px</b> fallback so the declaration survives on browsers without <code>env()</code>.</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== 20 · STATES ===================== -->
+  <section id="states">
+    <div class="section-title">20 · Conditional / Empty / System States</div>
+    <div class="grid sm:grid-cols-2 gap-5">
+      <div class="card-light p-5">
+        <div style="font-weight:800;color:#0F172A;margin-bottom:8px">Demo app-states (?st=&lt;state&gt;)</div>
+        <div class="flex flex-wrap gap-2">
+          <span class="achip" style="background:#FEE2E2;border-color:#FECACA;color:#DC2626">nonservice</span>
+          <span class="achip" style="background:#FEF3C7;border-color:#FDE68A;color:#B45309">bannedproduct</span>
+          <span class="achip" style="background:#FEE2E2;border-color:#FECACA;color:#DC2626">banneduser</span>
+          <span class="achip">codoff</span>
+        </div>
+        <div class="note mt-3"><code>?st=clear</code> resets · persisted to <code>localStorage kkd.appState</code>.</div>
+      </div>
+      <div class="card-light p-5">
+        <div style="font-weight:800;color:#0F172A;margin-bottom:8px">Empty / loading / network</div>
+        <div class="text-center py-3" style="color:#94A3B8;font-size:13px;font-weight:600"><i class="fa-regular fa-face-frown text-[24px] block mb-1"></i>No products match your filters</div>
+        <div class="flex gap-2 mt-2"><span class="shimmer" style="width:60px;height:60px;border-radius:10px"></span><div class="flex-1"><span class="shimmer" style="display:block;height:12px;border-radius:6px;width:70%"></span><span class="shimmer" style="display:block;height:10px;border-radius:6px;width:40%;margin-top:8px"></span></div></div>
+        <div class="note mt-3">Empty = frown + muted line. Loading = shimmer skeleton. Slow / No-internet = <code>error-network.html</code> (tower + orange badge).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 21 · TOKENS (CSS vars) ===================== -->
+  <section id="tokens">
+    <div class="section-title">21 · Copy-paste Tokens</div>
+    <pre><code>:root {
+  /* brand */
+  --kkd-emerald-700:#047857; --kkd-emerald-600:#059669; --kkd-emerald-500:#10B981;
+  --kkd-green-600:#16A34A;   --kkd-green-500:#22C55E;   --kkd-green-800:#15803D;
+  /* tints */
+  --kkd-tint-50:#ECFDF5; --kkd-tint-100:#D1FAE5; --kkd-tint-200:#DCFCE7;
+  --kkd-border-emerald:#A7F3D0;
+  /* text */
+  --kkd-ink:#0F172A; --kkd-ink-2:#475569; --kkd-muted:#64748B; --kkd-sub:#94A3B8;
+  /* surfaces */
+  --kkd-card:#FFFFFF; --kkd-page:#F8F8F8; --kkd-image:#F8FAFC;
+  --kkd-line:#F1F5F9; --kkd-border:#E5E7EB; --kkd-divider:#E2E8F0;
+  /* status */
+  --kkd-danger:#DC2626; --kkd-danger-bg:#FEE2E2; --kkd-warn:#B45309; --kkd-warn-bg:#FEF3C7;
+  --kkd-star:#F59E0B;
+  /* radius */
+  --kkd-r-pill:5px; --kkd-r-btn:8px; --kkd-r-tile:10px; --kkd-r-cta:12px; --kkd-r-card:14px; --kkd-r-pcard:16px; --kkd-r-full:999px;
+  /* shadow */
+  --kkd-sh-card:0 1px 3px rgba(15,23,42,.04);
+  --kkd-sh-pcard:0 2px 8px -2px rgba(15,23,42,.06);
+  --kkd-sh-cta:0 8px 20px -6px rgba(5,150,105,.45);
+  --kkd-sh-sheet:0 -8px 32px rgba(0,0,0,.18);
+  --kkd-sh-nav:0 -4px 16px rgba(0,0,0,.04);
+  /* type */
+  --kkd-font:'Poppins',system-ui,sans-serif;
+}</code></pre>
+  </section>
+
+  <!-- ===================== 22 · HAND-OFF ===================== -->
+  <section id="handoff">
+    <div class="section-title">22 · Developer Hand-off Notes</div>
+    <div class="card-light p-6 note space-y-2">
+      <div>• <b>Fonts:</b> Poppins 400-900 (Google Fonts). Always set <code>font-variant-numeric:tabular-nums</code> on prices, quantities and IDs.</div>
+      <div>• <b>Icons:</b> Font Awesome 6.5.1 (CDN) for UI glyphs; illustrated category icons are inline 36×36 SVG (download above).</div>
+      <div>• <b>Images:</b> product cut-outs ship as <code>*_nobg.png</code>; crop thumbnails as JPG. Hover-download converts to WebP at native size.</div>
+      <div>• <b>No gold/amber theme:</b> amber is reserved for COD / in-transit / warnings only — never the brand colour.</div>
+      <div>• <b>Weights:</b> default 500-700; reserve 800-900 for one hero per section.</div>
+      <div>• <b>Format on download:</b> all assets export as WebP (q 0.92); SVGs rasterise at 256px on the long edge.</div>
+      <div class="mt-3 text-[#475569]">Generated from the live <code>screens/</code> source · keep this file in sync when tokens change.</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============================================================
+     COPY-HEX helper
+     ============================================================ -->
+<script>
+(function(){
+  function toast(msg){
+    let t = document.getElementById('ds-toast');
+    if (!t){ t = document.createElement('div'); t.id='ds-toast'; t.className='ds-toast'; document.body.appendChild(t); }
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove('show'), 1800);
+  }
+  document.querySelectorAll('.copyable[data-copy]').forEach(el => {
+    el.addEventListener('click', () => {
+      const v = el.dataset.copy;
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(v).then(()=>toast('Copied ' + v)).catch(()=>toast(v));
+      else toast(v);
+    });
+  });
+})();
+</script>
+
+<!-- ============================================================
+     WebP export — individual hover button + section-bulk zip
+     Wired sections: #category-icons · #assets · #crops
+     ============================================================ -->
+<script>
+(function(){
+  const QUALITY = 0.92;
+  const SVG_TARGET_PX = 256;
+
+  function safeName(s){ return (s||'asset').toString().trim().replace(/[^\w-]+/g,'-').replace(/^-+|-+$/g,'').toLowerCase().slice(0,80) || 'asset'; }
+  function nameFromImg(img){
+    if (img.alt && img.alt.trim()) return safeName(img.alt);
+    const u = (img.src || '').split('/').pop().split('?')[0];
+    return safeName(u.replace(/\.[a-z0-9]+$/i,''));
+  }
+  function nameFromSvg(svg, idx){
+    if (svg.dataset.exportName) return safeName(svg.dataset.exportName);
+    if (svg.getAttribute('aria-label')) return safeName(svg.getAttribute('aria-label'));
+    const next = svg.parentElement && Array.from(svg.parentElement.children).find(el => el !== svg && /div|span/i.test(el.tagName) && el.textContent.trim());
+    if (next) return safeName(next.textContent.trim());
+    return 'svg-' + idx;
+  }
+  function showToast(msg){
+    let t = document.getElementById('ds-toast');
+    if (!t){ t = document.createElement('div'); t.id='ds-toast'; t.className='ds-toast'; document.body.appendChild(t); }
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove('show'), 2200);
+  }
+
+  async function imgElToBlob(img){
+    return new Promise((resolve, reject) => {
+      const probe = new Image();
+      probe.crossOrigin = 'anonymous';
+      probe.onload = () => {
+        const w = probe.naturalWidth || 512, h = probe.naturalHeight || 512;
+        const c = document.createElement('canvas'); c.width = w; c.height = h;
+        try { c.getContext('2d').drawImage(probe, 0, 0, w, h);
+          c.toBlob(b => b ? resolve(b) : reject(new Error('toBlob failed')), 'image/webp', QUALITY);
+        } catch(e){ reject(e); }
+      };
+      probe.onerror = () => reject(new Error('image load failed (CORS?)'));
+      probe.src = img.src;
+    });
+  }
+  async function svgElToBlob(svg){
+    return new Promise((resolve, reject) => {
+      const clone = svg.cloneNode(true);
+      const vb = clone.getAttribute('viewBox');
+      let vbW = SVG_TARGET_PX, vbH = SVG_TARGET_PX;
+      if (vb){ const p = vb.split(/\s+/).map(parseFloat); vbW = p[2]||vbW; vbH = p[3]||vbH; }
+      const scale = SVG_TARGET_PX / Math.max(vbW, vbH);
+      const outW = Math.round(vbW * scale), outH = Math.round(vbH * scale);
+      clone.setAttribute('width', outW); clone.setAttribute('height', outH);
+      if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns','http://www.w3.org/2000/svg');
+      const xml = new XMLSerializer().serializeToString(clone);
+      const url = URL.createObjectURL(new Blob([xml], {type:'image/svg+xml;charset=utf-8'}));
+      const img = new Image();
+      img.onload = () => {
+        const c = document.createElement('canvas'); c.width = outW; c.height = outH;
+        try { c.getContext('2d').drawImage(img, 0, 0, outW, outH);
+          c.toBlob(b => { URL.revokeObjectURL(url); b ? resolve(b) : reject(new Error('toBlob failed')); }, 'image/webp', QUALITY);
+        } catch(e){ URL.revokeObjectURL(url); reject(e); }
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('svg to img failed')); };
+      img.src = url;
+    });
+  }
+  async function emojiElToBlob(el){
+    return new Promise((resolve, reject) => {
+      const emoji = el.dataset.exportEmoji || el.textContent.trim();
+      const size = SVG_TARGET_PX;
+      const c = document.createElement('canvas'); c.width = size; c.height = size;
+      const ctx = c.getContext('2d');
+      ctx.font = '600 ' + Math.round(size * 0.72) + 'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      try { ctx.fillText(emoji, size/2, size/2 + Math.round(size*0.04));
+        c.toBlob(b => b ? resolve(b) : reject(new Error('toBlob failed')), 'image/webp', QUALITY);
+      } catch(e){ reject(e); }
+    });
+  }
+  async function exportElement(el){
+    if (el.dataset && el.dataset.exportEmoji) return emojiElToBlob(el);
+    if (el.tagName.toLowerCase() === 'img') return imgElToBlob(el);
+    return svgElToBlob(el);
+  }
+  function downloadBlob(blob, filename){
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  }
+  function injectDlButton(host, el, name){
+    if (!host || host.querySelector(':scope > .ds-dl-btn')) return;
+    host.classList.add('ds-export-host');
+    if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
+    const btn = document.createElement('button');
+    btn.className = 'ds-dl-btn';
+    btn.title = 'Download "' + name + '" as WebP';
+    btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+    btn.onclick = async (e) => {
+      e.preventDefault(); e.stopPropagation(); btn.disabled = true;
+      try { const blob = await exportElement(el); downloadBlob(blob, name + '.webp'); showToast('Downloaded ' + name + '.webp'); }
+      catch(err){
+        if (el.tagName.toLowerCase() === 'img' && el.src){ showToast('Opening original (CORS blocked convert)'); window.open(el.src, '_blank'); }
+        else showToast('Export failed: ' + err.message);
+      } finally { btn.disabled = false; }
+    };
+    host.appendChild(btn);
+  }
+  function collectExportables(sectionEl){
+    if (!sectionEl) return [];
+    const items = []; const used = new Set();
+    function add(el, name, host){ let final = name, n = 1; while (used.has(final)) final = name + '-' + (++n); used.add(final); items.push({ el, name: final, host }); }
+    sectionEl.querySelectorAll('img').forEach(img => { if (img.dataset.dlSkip === 'true') return; add(img, nameFromImg(img), img.parentElement); });
+    sectionEl.querySelectorAll('.cat-svg, svg[data-export-name]').forEach((svg, i) => {
+      const w = svg.clientWidth || parseFloat(svg.getAttribute('width')) || 36;
+      if (w < 14) return;
+      const host = svg.closest('.cat-circle') || svg.parentElement;
+      add(svg, nameFromSvg(svg, i), host);
+    });
+    sectionEl.querySelectorAll('[data-export-emoji]').forEach((el, i) => { add(el, el.dataset.exportName || ('emoji-' + i), el); });
+    return items;
+  }
+  function mountSection(sectionId, label){
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+    const items = collectExportables(section);
+    if (!items.length) return;
+    items.forEach(({el, name, host}) => injectDlButton(host, el, name));
+    const title = section.querySelector('.section-title');
+    if (!title || title.querySelector('.ds-section-dl')) return;
+    const btn = document.createElement('button');
+    btn.className = 'ds-section-dl';
+    btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download all (' + items.length + ' WebP)';
+    btn.onclick = async () => {
+      if (typeof JSZip === 'undefined'){ showToast('JSZip not loaded'); return; }
+      btn.disabled = true; const original = btn.innerHTML;
+      btn.innerHTML = 'Zipping ' + items.length + '…';
+      const zip = new JSZip(); let ok = 0, fail = 0;
+      for (const {el, name} of items){
+        try { const blob = await exportElement(el); zip.file(name + '.webp', blob); ok++; }
+        catch(e){ fail++; console.warn('Skip', name, e.message); }
+      }
+      try { const out = await zip.generateAsync({type:'blob'}); downloadBlob(out, 'kkd-' + label + '-webp.zip'); showToast('Saved ' + ok + ' files' + (fail ? ' · ' + fail + ' failed' : '')); }
+      catch(e){ showToast('Zip failed: ' + e.message); }
+      btn.innerHTML = original; btn.disabled = false;
+    };
+    title.appendChild(btn);
+  }
+  function mountAll(){
+    mountSection('category-icons', 'category-icons');
+    mountSection('assets', 'assets');
+    mountSection('crops', 'crops');
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountAll);
+  else mountAll();
+  window.addEventListener('load', mountAll);
+})();
+</script>
+
 </body>
 </html>

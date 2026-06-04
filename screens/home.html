@@ -2399,12 +2399,14 @@
     }
     if(input) type();
 
-    // Render the greeting label as a clearly-visible red "Not serviceable" pill (works on any header theme)
+    // Greeting label reads "Not serviceable" in a light red (visible on the green/dark header themes), no badge
     function setNotServiceable(el){
       if (!el) return;
       el.textContent = 'Not serviceable';
-      el.style.cssText = 'display:inline-block;background:#FFFFFF;color:#DC2626;font-weight:800;font-size:10.5px;letter-spacing:0.02em;line-height:1.1;padding:2px 9px;border-radius:9999px;box-shadow:0 1px 3px rgba(0,0,0,0.12)';
-      if (el.parentNode) { el.parentNode.style.overflow = 'visible'; el.parentNode.style.height = 'auto'; }
+      el.style.setProperty('color', '#FCA5A5', 'important');
+      el.style.fontWeight = '800';
+      el.style.transform = 'none';
+      el.style.opacity = '1';
     }
 
     // Greeting label · flips between "Hey! Sagar" and "Deliver to" every 5s in a single upward direction · current text slides UP out of the clip-mask, new text enters from BELOW and rolls UP into place · 3 full cycles, final resting state "Deliver to"
@@ -3791,7 +3793,7 @@
       } else if (st.nonservice) {
         // flipping label → red "Not serviceable" (also set here so it sticks regardless of the rotator); address line below stays normal
         var gl = document.getElementById('greetLabel');
-        if (gl) { gl.textContent = 'Not serviceable'; gl.style.cssText = 'display:inline-block;background:#FFFFFF;color:#DC2626;font-weight:800;font-size:10.5px;letter-spacing:0.02em;line-height:1.1;padding:2px 9px;border-radius:9999px;box-shadow:0 1px 3px rgba(0,0,0,0.12)'; if (gl.parentNode) { gl.parentNode.style.overflow = 'visible'; gl.parentNode.style.height = 'auto'; } }
+        if (gl) { gl.textContent = 'Not serviceable'; gl.style.setProperty('color', '#FCA5A5', 'important'); gl.style.fontWeight = '800'; gl.style.transform = 'none'; gl.style.opacity = '1'; }
         var addr = document.getElementById('homeAddr');
         if (addr) addr.innerHTML = 'Indore 123456 <i class="fa-solid fa-chevron-down text-[10px] text-[#64748B] ml-0.5"></i>';
       }

@@ -837,16 +837,29 @@
     })();
   </script>
   <script>
-    // App-state · banned product (Chakrawarti ZC in cart) · via appstate.js. Also persists the cart contents so checkout/PDP can detect it.
+    // Cart contents are the source of truth via localStorage kkd.cart · reconcile the static markup so removals stick, and persist for checkout/PDP
     (function(){
-      function persistCart(){ try { var ids = Array.prototype.map.call(document.querySelectorAll('#cartList .cart-item[data-item]'), function(el){ return el.getAttribute('data-item'); }); localStorage.setItem('kkd.cart', JSON.stringify(ids)); } catch (e) {} }
-      persistCart();
+      function curIds(){ return Array.prototype.map.call(document.querySelectorAll('#cartList .cart-item[data-item]'), function(el){ return el.getAttribute('data-item'); }); }
+      function persist(){ try { localStorage.setItem('kkd.cart', JSON.stringify(curIds())); } catch (e) {} }
+      var saved = null; try { saved = JSON.parse(localStorage.getItem('kkd.cart') || 'null'); } catch (e) {}
+      if (saved && Array.isArray(saved)) {
+        document.querySelectorAll('#cartList .cart-item[data-item]').forEach(function(el){ if (saved.indexOf(el.getAttribute('data-item')) < 0) el.remove(); });
+        if (typeof recompute === 'function') recompute();
+      }
+      persist();
+      // any trash removal updates the saved cart
+      document.querySelectorAll('.trash-btn').forEach(function(b){ b.addEventListener('click', function(){ setTimeout(persist, 360); }); });
+
+      // Banned product (Chakrawarti ZC) · keep its trash usable so it can be deleted; block checkout until removed
       var st = (window.kkdAppStates && window.kkdAppStates()) || {};
       if (!st.bannedproduct) return;
       var it = document.querySelector('.cart-item[data-item="chakrawarti"]');
       var note = null;
       if (it) {
-        it.style.opacity = '.5'; it.style.pointerEvents = 'none';
+        var trash = it.querySelector('.trash-btn');
+        Array.prototype.forEach.call(it.children, function(c){ if (c !== trash) c.style.opacity = '.5'; });
+        it.querySelectorAll('.qty button').forEach(function(q){ q.style.pointerEvents = 'none'; });
+        if (trash) { trash.style.color = '#DC2626'; trash.style.opacity = '1'; trash.addEventListener('click', function(){ setTimeout(function(){ location.reload(); }, 380); }); }
         note = document.createElement('div');
         note.style.cssText = 'margin:0 14px 6px;display:flex;align-items:center;gap:8px;background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:9px 11px;font-size:11.5px;font-weight:700;color:#B91C1C';
         note.innerHTML = '<i class="fa-solid fa-ban"></i> Chakrawarti ZC is banned in your state — remove it to checkout';
@@ -856,13 +869,7 @@
       if (btn) {
         btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-[12px]"></i> Remove restricted item';
         btn.style.background = '#DC2626';
-        btn.addEventListener('click', function(e){
-          e.preventDefault(); e.stopImmediatePropagation();
-          if (it) it.remove();
-          if (note) note.remove();
-          persistCart();   // kkd.cart no longer has chakrawarti → banned clears
-          location.reload();
-        }, true);
+        btn.addEventListener('click', function(e){ e.preventDefault(); e.stopImmediatePropagation(); if (it) it.remove(); if (note) note.remove(); persist(); location.reload(); }, true);
       }
     })();
   </script>

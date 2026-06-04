@@ -288,7 +288,7 @@
       <div class="leading-tight min-w-0">
         <!-- Greeting · scrolls upward continuously (current text exits up, new text enters from below) · normal Title-Case ("Hey! Sagar"), no all-caps -->
         <div style="overflow:hidden;height:14px;line-height:14px"><div id="greetLabel" class="text-[11px] font-semibold text-[#94A3B8] tracking-wide" style="transition:transform .45s cubic-bezier(.5,0,.3,1),opacity .35s ease;display:block">Hey! Sagar</div></div>
-        <div class="flex items-center gap-1 text-[16px] font-bold text-[#0F172A] mt-0.5">
+        <div id="homeAddr" class="flex items-center gap-1 text-[16px] font-bold text-[#0F172A] mt-0.5">
           Indore 452001
           <i class="fa-solid fa-chevron-down text-[10px] text-[#64748B] ml-0.5"></i>
         </div>
@@ -3757,14 +3757,9 @@
           + '<div style="font-size:11.5px;color:rgba(255,255,255,0.5);margin-top:16px">Ref: KKD-USR-4471</div>';
         document.body.appendChild(ov);
       } else if (st.nonservice) {
-        var b = document.createElement('div');
-        b.style.cssText = 'margin:10px 16px 0;border-radius:12px;background:#FEF2F2;border:1px solid #FECACA;padding:12px 13px;display:flex;align-items:flex-start;gap:10px';
-        b.innerHTML = '<span style="width:30px;height:30px;border-radius:8px;background:#FEE2E2;color:#DC2626;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-location-crosshairs"></i></span>'
-          + '<div style="flex:1;line-height:1.4"><div style="font-size:13px;font-weight:800;color:#B91C1C">We don\'t deliver to 123456 yet</div><div style="font-size:11.5px;color:#B91C1C;opacity:.85;margin-top:1px">Change your pincode to see available products &amp; prices</div></div>'
-          + '<a href="addresses.html" style="flex-shrink:0;align-self:center;font-size:11.5px;font-weight:800;color:#B91C1C;text-decoration:underline">Change</a>';
-        var anchor = document.querySelector('.sticky-actions');
-        if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(b, anchor.nextSibling);
-        else document.body.insertBefore(b, document.body.firstChild);
+        // communicate non-serviceability in the deliver-to text (no separate tile)
+        var addr = document.getElementById('homeAddr');
+        if (addr) addr.innerHTML = '<span style="color:#DC2626">123456</span> <span style="font-size:10.5px;font-weight:800;color:#DC2626;background:#FEE2E2;border:1px solid #FECACA;padding:2px 7px;border-radius:9999px">NOT SERVICEABLE</span><i class="fa-solid fa-chevron-down text-[10px] text-[#64748B] ml-0.5"></i>';
       }
     })();
   </script>

@@ -955,22 +955,29 @@
   })();
 </script>
 <script>
-  // App-state · banned product in your state (Chakrawarti ZC in cart) · via appstate.js
+  // App-state · banned product (Chakrawarti ZC in cart) · handled via the Add button → opens a detail bottom-sheet (no special delivery tile)
   (function(){
     var st = (window.kkdAppStates && window.kkdAppStates()) || {};
     if (!st.bannedproduct) return;
-    var card = document.getElementById('delivCard');
-    if (card) {
-      card.style.border = '1px solid #FECACA';
-      card.innerHTML = '<div style="display:flex;align-items:flex-start;gap:11px;padding:13px 14px;background:#FEF2F2">'
-        + '<span style="width:32px;height:32px;border-radius:10px;background:#FEE2E2;color:#DC2626;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px"><i class="fa-solid fa-ban"></i></span>'
-        + '<div style="flex:1;line-height:1.4"><div style="font-size:13.5px;font-weight:800;color:#B91C1C">Not available in Madhya Pradesh</div><div style="font-size:11.5px;color:#B91C1C;opacity:.85;margin-top:2px">This product is restricted for sale in your state, so it can’t be delivered to your address.</div></div></div>';
-    }
-    // Disable any Add / pack-size buttons
-    document.querySelectorAll('button').forEach(function(b){
+    var bd = document.createElement('div');
+    bd.style.cssText = 'position:fixed;inset:0;z-index:300;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease';
+    var sh = document.createElement('div');
+    sh.style.cssText = 'position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:22px 22px 0 0;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:301;padding:20px 20px calc(env(safe-area-inset-bottom,0px) + 20px);box-shadow:0 -10px 32px rgba(0,0,0,0.2)';
+    sh.innerHTML = '<div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:0 auto 16px"></div>'
+      + '<div style="display:flex;gap:12px;align-items:flex-start"><span style="width:44px;height:44px;border-radius:12px;background:#FEE2E2;color:#DC2626;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0"><i class="fa-solid fa-ban"></i></span>'
+      + '<div style="flex:1"><div style="font-size:17px;font-weight:900;color:#0F172A">Not available in your state</div><div style="font-size:13px;color:#64748B;margin-top:6px;line-height:1.5">This product is restricted for sale in <b>Madhya Pradesh</b> as per regulations, so it can’t be added to your cart or delivered to your address.</div></div></div>'
+      + '<button id="banClose" style="width:100%;height:50px;border-radius:12px;background:#059669;color:#fff;border:0;font-size:14.5px;font-weight:800;margin-top:20px;cursor:pointer">Got it</button>';
+    document.body.appendChild(bd); document.body.appendChild(sh);
+    function open(){ bd.style.pointerEvents = 'auto'; bd.style.opacity = '1'; requestAnimationFrame(function(){ sh.style.transform = 'translateY(0)'; }); }
+    function close(){ bd.style.opacity = '0'; bd.style.pointerEvents = 'none'; sh.style.transform = 'translateY(100%)'; }
+    bd.addEventListener('click', close);
+    sh.querySelector('#banClose').addEventListener('click', close);
+    // Intercept any Add / pack-size add → show the detail sheet instead of adding
+    document.addEventListener('click', function(e){
+      var b = e.target.closest('button'); if (!b) return;
       var t = (b.textContent || '').trim().toLowerCase();
-      if (t === 'add' || t.indexOf('add to cart') >= 0 || t.indexOf('add ') === 0) { b.disabled = true; b.style.opacity = '.45'; b.style.pointerEvents = 'none'; }
-    });
+      if (t === 'add' || t.indexOf('add to cart') >= 0 || t.indexOf('add ') === 0) { e.preventDefault(); e.stopImmediatePropagation(); open(); }
+    }, true);
   })();
 </script>
 

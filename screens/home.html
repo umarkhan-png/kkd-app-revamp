@@ -175,9 +175,13 @@
   body.scrolled .sticky-status { background: #FFFFFF; box-shadow: 0 1px 0 rgba(15,23,42,0.04); }
   .sticky-actions { position: sticky; top: 32px; z-index: 60; background: #FFFFFF; }
   /* Delivery tile compact state — when body.scrolled, sub-line hides, icon + paddings shrink so it doesn't eat too much height while staying frozen below the categories */
-  .delivery-tile { transition: padding .25s ease; }
+  /* Expanded state · each in-progress order is a floating premium white card on the soft emerald band */
+  .delivery-tile { width: calc(100% - 28px); margin: 0 14px; border-radius: 18px; background: linear-gradient(180deg,#FFFFFF 0%,#F2FCF6 100%); border: 1px solid #BBF7D0; box-shadow: 0 12px 26px -14px rgba(4,120,87,0.42), 0 2px 6px -3px rgba(4,120,87,0.14); transition: padding .25s ease, box-shadow .2s ease, margin .25s ease, border-radius .25s ease, background .25s ease; }
+  .delivery-tile:active { box-shadow: 0 6px 16px -10px rgba(4,120,87,0.45); }
   .delivery-tile .dt-statusrow { margin-bottom: 8px; }
-  body.scrolled .delivery-tile { padding-top: 5px; padding-bottom: 5px; }
+  /* Compact (pinned-below-categories) state · collapse back to an efficient flush bar */
+  body.scrolled .delivery-tile { padding-top: 6px; padding-bottom: 6px; margin: 0; width: 100%; border-radius: 0; border-left: 0; border-right: 0; box-shadow: none; background: transparent; }
+  body.scrolled #deliveryStack { padding-top: 0 !important; padding-bottom: 0 !important; }
   body.scrolled .delivery-tile .dt-statusrow { margin-bottom: 0; }
   body.scrolled .delivery-tile .dt-detail { display: none; }
   /* On scroll-compact, surface the order ID inline next to the status pill so the user still knows which order is moving */
@@ -452,11 +456,11 @@
   </div>
 
   <!-- Delivery status stack · solid light green strip that holds 1..N ongoing orders · when more than one is live, the tiles become a horizontal scroll-snap carousel and a row of pagination dots (with inline "1 of N" counter) pins below -->
-  <div id="deliveryStack" class="delivery-stack" style="background:#D1FAE5;border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0">
+  <div id="deliveryStack" class="delivery-stack" style="background:linear-gradient(180deg,#ECFDF5 0%,#D1FAE5 100%);border-top:1px solid #BBF7D0;border-bottom:1px solid #BBF7D0;padding:9px 0;transition:padding .25s ease">
 
     <div id="deliveryScroller" class="delivery-scroller flex" style="overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none">
       <!-- ORDER 1 · Out for Delivery -->
-      <button type="button" data-track-order="KKD-26194" class="delivery-tile delivery-card w-full flex-shrink-0 text-left px-5 py-2.5" style="scroll-snap-align:start;background:transparent;border:0;cursor:pointer">
+      <button type="button" data-track-order="KKD-26194" class="delivery-tile delivery-card flex-shrink-0 text-left px-5 py-3" style="scroll-snap-align:start;cursor:pointer">
         <div class="flex items-center justify-between mb-2 dt-statusrow">
           <div class="flex items-center gap-2 min-w-0">
             <span class="relative flex items-center justify-center flex-shrink-0">
@@ -466,7 +470,7 @@
             <span class="text-[11px] font-extrabold uppercase tracking-wider truncate" style="color:#258046">Out for Delivery</span>
             <span class="dt-compact-id text-[11px] font-extrabold flex-shrink-0" style="color:#0F172A;display:none">· #KKD-26194</span>
           </div>
-          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold flex-shrink-0" style="background:#258046;color:#FFFFFF">
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-extrabold flex-shrink-0" style="background:linear-gradient(135deg,#1F7A40 0%,#258046 55%,#34A853 100%);color:#FFFFFF;box-shadow:0 4px 10px -3px rgba(4,120,87,0.55)">
             Track <i class="fa-solid fa-arrow-right text-[9px]" style="color:#FFFFFF"></i>
           </span>
         </div>
@@ -505,7 +509,7 @@
       </button>
 
       <!-- ORDER 2 · Packed · second in-progress order · same structure, earlier stage so the progress bar shows a different milestone -->
-      <button type="button" data-track-order="KKD-26195" class="delivery-tile delivery-card w-full flex-shrink-0 text-left px-5 py-2.5" style="scroll-snap-align:start;background:transparent;border:0;cursor:pointer">
+      <button type="button" data-track-order="KKD-26195" class="delivery-tile delivery-card flex-shrink-0 text-left px-5 py-3" style="scroll-snap-align:start;cursor:pointer">
         <div class="flex items-center justify-between mb-2 dt-statusrow">
           <div class="flex items-center gap-2 min-w-0">
             <span class="relative flex items-center justify-center flex-shrink-0">
@@ -515,7 +519,7 @@
             <span class="text-[11px] font-extrabold uppercase tracking-wider truncate" style="color:#0E7490">Packed &middot; Dispatching</span>
             <span class="dt-compact-id text-[11px] font-extrabold flex-shrink-0" style="color:#0F172A;display:none">&middot; #KKD-26195</span>
           </div>
-          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-extrabold flex-shrink-0" style="background:#258046;color:#FFFFFF">
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-extrabold flex-shrink-0" style="background:linear-gradient(135deg,#1F7A40 0%,#258046 55%,#34A853 100%);color:#FFFFFF;box-shadow:0 4px 10px -3px rgba(4,120,87,0.55)">
             Track <i class="fa-solid fa-arrow-right text-[9px]" style="color:#FFFFFF"></i>
           </span>
         </div>

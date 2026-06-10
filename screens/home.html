@@ -193,6 +193,9 @@
   /* Single-order mode (set by JS): hide the dots row · scrolled compact mode also hides it · the row carries both the dots and the inline "1 of N" counter so a single rule controls both */
   .delivery-stack.single .ds-dots-row,
   body.scrolled .delivery-stack .ds-dots-row{ display:none !important; }
+  /* Single-order mode: with one card there's nothing to scroll, so drop the flex scroll-overflow and lay the lone "banner" card out as a centred block. The flex carousel was letting the card's min-content (the wide Placed→Delivered progress row) override its calc width, so it spilled past the right margin and sat flush to the screen edge. As a padded block the card fills the strip with equal 14px gutters and the full progress bar stays inside it. */
+  .delivery-stack.single .delivery-scroller{ display:block !important; overflow-x:visible !important; padding:0 14px; }
+  .delivery-stack.single .delivery-tile{ width:auto !important; margin:0 !important; }
   .ds-dots .dot{ width:6px; height:6px; border-radius:9999px; background:#A7F3D0; transition: all .2s ease; }
   .ds-dots .dot.on{ background:#258046; width:18px; }
   /* Pulsing dot for live status */

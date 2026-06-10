@@ -187,15 +187,14 @@
   /* On scroll-compact, surface the order ID inline next to the status pill so the user still knows which order is moving */
   body.scrolled .delivery-tile .dt-compact-id { display: inline !important; }
   /* Delivery stack · horizontal scroll-snap carousel for 2+ in-progress orders · header + dots auto-hide in single-order mode and in compact (scrolled) state since the carousel header would steal too much height */
-  .delivery-scroller{ -webkit-overflow-scrolling:touch; }
+  .delivery-scroller{ -webkit-overflow-scrolling:touch; scroll-padding-inline:14px; }
   .delivery-scroller::-webkit-scrollbar{ display:none; }
   .delivery-card{ scroll-snap-stop:always; }
   /* Single-order mode (set by JS): hide the dots row · scrolled compact mode also hides it · the row carries both the dots and the inline "1 of N" counter so a single rule controls both */
   .delivery-stack.single .ds-dots-row,
   body.scrolled .delivery-stack .ds-dots-row{ display:none !important; }
-  /* Single-order mode: with one card there's nothing to scroll, so drop the flex scroll-overflow and lay the lone "banner" card out as a centred block. The flex carousel was letting the card's min-content (the wide Placed→Delivered progress row) override its calc width, so it spilled past the right margin and sat flush to the screen edge. As a padded block the card fills the strip with equal 14px gutters and the full progress bar stays inside it. */
-  .delivery-stack.single .delivery-scroller{ display:block !important; overflow-x:visible !important; padding:0 14px; }
-  .delivery-stack.single .delivery-tile{ width:auto !important; margin:0 !important; }
+  /* Centre every delivery "banner" card in the green strip. scroll-snap was aligning to the card's BORDER edge, which ate the 14px left gutter (scrollLeft snapped to 14) and shoved the card off-centre against one side. Snapping to the card CENTRE with the snap-port inset by the gutter (scroll-padding-inline above) keeps the card centred — scrollLeft 0, equal 14px gutters — for both the single-order card and the multi-order carousel. */
+  .delivery-card{ scroll-snap-align:center !important; }
   .ds-dots .dot{ width:6px; height:6px; border-radius:9999px; background:#A7F3D0; transition: all .2s ease; }
   .ds-dots .dot.on{ background:#258046; width:18px; }
   /* Pulsing dot for live status */

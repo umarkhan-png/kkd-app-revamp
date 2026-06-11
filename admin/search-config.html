@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Search & Discovery</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Search &amp; Discovery</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Tune what farmers see when they search.</p>
+        </div>
+      </div>
+
+      <div class="grid-cards" style="grid-template-columns:1fr 1fr">
+
+        <!-- Basics -->
+        <div class="card">
+          <div class="card-head"><h3>Basics</h3></div>
+          <div class="card-pad">
+            <div class="field"><label>Search placeholder</label><input class="input" id="cfPlaceholder" oninput="saveBasics()" placeholder="Search products, pests, crops"/></div>
+            <div class="field"><label>No-result message</label><input class="input" id="cfNoResult" oninput="saveBasics()" placeholder="No products match this search"/></div>
+            <div class="field" style="margin-bottom:0"><label>Crop-poll reward coins</label><input class="input" type="number" id="cfReward" oninput="saveBasics()" min="0"/>
+              <div class="hint">Coins earned when a farmer answers the in-search crop poll.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trending searches -->
+        <div class="card">
+          <div class="card-head"><h3>Trending searches</h3></div>
+          <div class="card-pad">
+            <div class="flex gap-2" id="trendChips" style="flex-wrap:wrap;margin-bottom:14px"></div>
+            <div class="flex gap-2">
+              <input class="input" id="trendInput" placeholder="Add term…" onkeydown="if(event.key==='Enter')addTrend()"/>
+              <button class="btn btn-soft" style="flex-shrink:0" onclick="addTrend()"><i class="fa-solid fa-plus"></i> Add term</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Voice search hints -->
+        <div class="card">
+          <div class="card-head"><h3>Voice search hints</h3></div>
+          <div id="voiceList"></div>
+          <div class="card-pad">
+            <div class="flex gap-2">
+              <input class="input" id="voiceInput" placeholder="Add a voice hint…" onkeydown="if(event.key==='Enter')addVoice()"/>
+              <button class="btn btn-soft" style="flex-shrink:0" onclick="addVoice()"><i class="fa-solid fa-plus"></i> Add</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Smart suggestions -->
+        <div class="card">
+          <div class="card-head">
+            <h3>Smart suggestions</h3>
+            <button class="btn btn-soft btn-sm" style="margin-left:auto" onclick="openSugg()"><i class="fa-solid fa-plus"></i> Add group</button>
+          </div>
+          <div id="suggList"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: suggestion group -->
+<div class="scrim" id="sgDrawerScrim" onclick="AdminShell.close('sgDrawer')"></div>
+<aside class="drawer" id="sgDrawer">
+  <div class="drawer-head">
+    <h3>New suggestion group</h3>
+    <button class="x-btn" onclick="AdminShell.close('sgDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Term</label><input class="input" id="sgTerm" placeholder="e.g. tomato"/>
+      <div class="hint">When a farmer types this term, show the suggestions below.</div>
+    </div>
+    <div class="field" style="margin-bottom:0"><label>Mapped suggestions</label>
+      <textarea class="input" id="sgMaps" placeholder="One suggestion per line&#10;Tomato crop&#10;Tomato wilt &amp; blight"></textarea>
+      <div class="hint">One suggestion per line.</div>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('sgDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveSugg()"><i class="fa-solid fa-check"></i> Save to draft</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active:'search', title:'Search & Discovery', crumb:'Merchandising', controls:'Search screen — placeholder, trending, suggestions', preview:'search.html' });
+  let data = KKD.load();
+  const sc = data.searchConfig;
+
+  // ---- Basics ----
+  document.getElementById('cfPlaceholder').value = sc.placeholder;
+  document.getElementById('cfNoResult').value = sc.noResult;
+  document.getElementById('cfReward').value = sc.engagementReward;
+  function saveBasics(){
+    sc.placeholder = document.getElementById('cfPlaceholder').value;
+    sc.noResult = document.getElementById('cfNoResult').value;
+    sc.engagementReward = parseInt(document.getElementById('cfReward').value,10) || 0;
+    KKD.save(data); AdminShell.refreshPending();
+  }
+
+  // ---- Trending chips ----
+  function renderTrend(){
+    document.getElementById('trendChips').innerHTML = sc.trending.map((t,i)=>`
+      <span class="tag tag-green" style="font-size:11.5px;padding:5px 10px;gap:6px">
+        ${esc(t)}
+        <i class="fa-solid fa-xmark" style="cursor:pointer;opacity:.7" onclick="delTrend(${i})"></i>
+      </span>`).join('') || '<span class="muted" style="font-size:12.5px">No trending terms yet.</span>';
+  }
+  function addTrend(){
+    const v = document.getElementById('trendInput').value.trim(); if(!v) return;
+    sc.trending.push(v); document.getElementById('trendInput').value='';
+    KKD.save(data); renderTrend(); AdminShell.saved('Trending term added');
+  }
+  function delTrend(i){ sc.trending.splice(i,1); KKD.save(data); renderTrend(); AdminShell.saved('Removed'); }
+
+  // ---- Voice hints ----
+  function renderVoice(){
+    document.getElementById('voiceList').innerHTML = sc.voiceHints.map((v,i)=>`
+      <div class="lrow">
+        <div class="iconbox ic-slate"><i class="fa-solid fa-microphone"></i></div>
+        <div class="l-main">${esc(v)}</div>
+        <div class="l-right"><button class="btn btn-danger btn-sm" onclick="delVoice(${i})"><i class="fa-solid fa-trash"></i></button></div>
+      </div>`).join('') || '<div class="lrow"><span class="muted" style="font-size:12.5px">No voice hints yet.</span></div>';
+  }
+  function addVoice(){
+    const v = document.getElementById('voiceInput').value.trim(); if(!v) return;
+    sc.voiceHints.push(v); document.getElementById('voiceInput').value='';
+    KKD.save(data); renderVoice(); AdminShell.saved('Voice hint added');
+  }
+  function delVoice(i){ sc.voiceHints.splice(i,1); KKD.save(data); renderVoice(); AdminShell.saved('Removed'); }
+
+  // ---- Smart suggestions ----
+  function renderSugg(){
+    document.getElementById('suggList').innerHTML = sc.suggestions.map((g,i)=>`
+      <div class="lrow" style="align-items:flex-start">
+        <div style="min-width:0;flex:1">
+          <div class="l-main" style="margin-bottom:6px"><span class="tag" style="margin-right:6px">${esc(g.term)}</span></div>
+          <div class="flex gap-2" style="flex-wrap:wrap">${g.maps.map(m=>`<span class="tag tag-green">${esc(m)}</span>`).join('') || '<span class="muted" style="font-size:11.5px">No mapped suggestions</span>'}</div>
+        </div>
+        <div class="l-right"><button class="btn btn-danger btn-sm" onclick="delSugg(${i})"><i class="fa-solid fa-trash"></i></button></div>
+      </div>`).join('') || '<div class="lrow"><span class="muted" style="font-size:12.5px">No suggestion groups yet.</span></div>';
+  }
+  function openSugg(){
+    document.getElementById('sgTerm').value='';
+    document.getElementById('sgMaps').value='';
+    AdminShell.open('sgDrawer');
+  }
+  function saveSugg(){
+    const term = document.getElementById('sgTerm').value.trim();
+    if(!term){ AdminShell.toast('Enter a term first','triangle-exclamation'); return; }
+    const maps = document.getElementById('sgMaps').value.split('\n').map(s=>s.trim()).filter(Boolean);
+    sc.suggestions.push({ term, maps });
+    KKD.save(data); AdminShell.close('sgDrawer'); renderSugg(); AdminShell.saved('Suggestion group added');
+  }
+  function delSugg(i){ sc.suggestions.splice(i,1); KKD.save(data); renderSugg(); AdminShell.saved('Group removed'); }
+
+  renderTrend(); renderVoice(); renderSugg();
+</script>
+</body></html>

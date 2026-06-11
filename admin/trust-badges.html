@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Trust Badges</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Trust Badges</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">The reassurance badges shown on every product.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openBadge()"><i class="fa-solid fa-plus"></i> New badge</button>
+      </div>
+
+      <div class="card card-pad">
+        <p class="muted" style="margin:0 0 14px;font-size:12.5px"><i class="fa-solid fa-arrows-up-down" style="margin-right:6px"></i> Drag to reorder — the order here is the order shown on the product page.</p>
+        <div id="list"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: new / edit badge -->
+<div class="scrim" id="tbDrawerScrim" onclick="AdminShell.close('tbDrawer')"></div>
+<aside class="drawer" id="tbDrawer">
+  <div class="drawer-head">
+    <h3 id="tbDrawerTitle">New badge</h3>
+    <button class="x-btn" onclick="AdminShell.close('tbDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Title</label><input class="input" id="tbTitle" placeholder="e.g. 7-Day Return"/></div>
+    <div class="field"><label>Description</label><input class="input" id="tbDesc" placeholder="e.g. Easy returns within 7 days"/></div>
+    <div class="field">
+      <label>Icon</label>
+      <div class="flex gap-2" id="iconPicker" style="flex-wrap:wrap"></div>
+      <div class="hint">Pick the Font Awesome icon shown beside the badge.</div>
+    </div>
+    <div class="field flex items-center justify-between" style="padding:12px 14px;background:var(--slate-50);border-radius:10px;border:1px solid var(--slate-200)">
+      <div><label style="margin:0">Active</label><div class="hint" style="margin-top:2px">Show this badge on product pages</div></div>
+      <label class="switch"><input type="checkbox" id="tbActive" checked><span class="track"></span></label>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('tbDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveBadge()"><i class="fa-solid fa-check"></i> Save to draft</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active:'trust', title:'Trust Badges', crumb:'Catalog', controls:'Trust badges on product pages', preview:'pdp.html' });
+  let data = KKD.load();
+  const ICONS = ['shield-halved','rotate-left','money-bill-wave','flask-vial','truck-fast','certificate'];
+  let selectedIcon = ICONS[0];
+
+  function renderList(){
+    document.getElementById('list').innerHTML = data.trustBadges.map((b,i)=>`
+      <div class="drag-item" draggable="true" data-i="${i}">
+        <i class="fa-solid fa-grip-vertical grip"></i>
+        <div class="iconbox ic-green"><i class="fa-solid fa-${esc(b.icon)}"></i></div>
+        <div style="min-width:0">
+          <div class="l-main">${esc(b.title)}</div>
+          <div class="l-sub">${esc(b.desc)}</div>
+        </div>
+        <div class="l-right" style="margin-left:auto">
+          <label class="switch"><input type="checkbox" ${b.active?'checked':''} onchange="toggle('${b.id}',this.checked)"><span class="track"></span></label>
+          <button class="btn btn-ghost btn-sm" onclick="openBadge('${b.id}')"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="delBadge('${b.id}')"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>`).join('') || '<div class="empty"><i class="fa-solid fa-shield-halved"></i><div>No trust badges yet.</div></div>';
+    wireDnd();
+  }
+
+  // ---- Drag & drop reorder ----
+  let dragFrom = null;
+  function wireDnd(){
+    document.querySelectorAll('#list .drag-item').forEach(el=>{
+      el.addEventListener('dragstart', e=>{ dragFrom=+el.dataset.i; el.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; });
+      el.addEventListener('dragend', ()=>{ el.classList.remove('dragging'); document.querySelectorAll('#list .drag-item').forEach(x=>x.classList.remove('over')); });
+      el.addEventListener('dragover', e=>{ e.preventDefault(); el.classList.add('over'); });
+      el.addEventListener('dragleave', ()=>el.classList.remove('over'));
+      el.addEventListener('drop', e=>{
+        e.preventDefault();
+        const to = +el.dataset.i;
+        if(dragFrom===null || dragFrom===to) return;
+        const [moved] = data.trustBadges.splice(dragFrom,1);
+        data.trustBadges.splice(to,0,moved);
+        dragFrom=null; KKD.save(data); renderList(); AdminShell.saved('Order updated');
+      });
+    });
+  }
+
+  function toggle(id, on){
+    const b = data.trustBadges.find(x=>x.id===id); if(!b) return;
+    b.active = on; KKD.save(data); AdminShell.saved(on?'Badge enabled':'Badge disabled');
+  }
+
+  let editId = null;
+  function openBadge(id){
+    editId = id || null;
+    const b = id ? data.trustBadges.find(x=>x.id===id) : null;
+    document.getElementById('tbDrawerTitle').textContent = id ? 'Edit badge' : 'New badge';
+    document.getElementById('tbTitle').value = b? b.title : '';
+    document.getElementById('tbDesc').value = b? b.desc : '';
+    document.getElementById('tbActive').checked = b? b.active : true;
+    selectedIcon = b? b.icon : ICONS[0];
+    renderIconPicker();
+    AdminShell.open('tbDrawer');
+  }
+  function renderIconPicker(){
+    document.getElementById('iconPicker').innerHTML = ICONS.map(ic=>`
+      <button type="button" class="btn-icon ${ic===selectedIcon?'btn-soft':'btn-ghost'}" style="border:1px solid ${ic===selectedIcon?'var(--green-100)':'var(--slate-200)'}" onclick="selectedIcon='${ic}';renderIconPicker()">
+        <i class="fa-solid fa-${ic}"></i>
+      </button>`).join('');
+  }
+  function saveBadge(){
+    const rec = {
+      title: document.getElementById('tbTitle').value.trim() || 'Untitled badge',
+      desc: document.getElementById('tbDesc').value.trim(),
+      icon: selectedIcon,
+      active: document.getElementById('tbActive').checked,
+    };
+    if(editId){ Object.assign(data.trustBadges.find(x=>x.id===editId), rec); }
+    else { rec.id = 'tb'+Date.now(); data.trustBadges.push(rec); }
+    KKD.save(data); AdminShell.close('tbDrawer'); renderList(); AdminShell.saved(editId?'Badge updated':'Badge added to draft');
+  }
+  function delBadge(id){ data.trustBadges = data.trustBadges.filter(b=>b.id!==id); KKD.save(data); renderList(); AdminShell.saved('Badge removed'); }
+
+  renderList();
+</script>
+</body></html>

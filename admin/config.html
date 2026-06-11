@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · App Config</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>.cfg-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 20px;border-bottom:1px solid var(--slate-100)}.cfg-row:last-child{border-bottom:0}.st-row{cursor:pointer}.st-radio{width:18px;height:18px;border-radius:9999px;border:2px solid var(--slate-300);flex-shrink:0;position:relative}.st-radio.on{border-color:var(--green)}.st-radio.on::after{content:"";position:absolute;inset:3px;border-radius:9999px;background:var(--green)}</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">App Config</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Feature flags, limits and app states — applied live, no app update needed.</p>
+        </div>
+        <button class="btn btn-primary" onclick="AdminShell.publish()"><i class="fa-solid fa-rocket"></i> Publish changes</button>
+      </div>
+
+      <!-- Feature flags & limits -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h3>Feature flags &amp; limits</h3><span class="sub">Toggle features and tune limits across the app</span></div>
+        <div id="cfgList"></div>
+      </div>
+
+      <!-- App state -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h3>App state</h3><span class="sub">Mirrors the app's ?st= demo states — exactly one is live</span></div>
+        <div class="card-pad" style="padding-bottom:6px"><p class="muted" style="margin:0 0 4px;font-size:13px">Pick the state every user's app should reflect right now.</p></div>
+        <div id="stList"></div>
+      </div>
+
+      <!-- Note -->
+      <div class="card card-pad" style="display:flex;align-items:center;gap:12px">
+        <i class="fa-solid fa-circle-info" style="color:var(--green)"></i>
+        <span class="muted" style="font-size:13px">Changes here ship to all users on the next Publish — no store release.</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'config', title: 'App Config', crumb: 'Media & Config' });
+  let data = KKD.load();
+
+  function control(c, i){
+    if(c.type==='toggle')
+      return `<label class="switch"><input type="checkbox" ${c.value?'checked':''} onchange="setCfg(${i}, this.checked)"><span class="track"></span></label>`;
+    if(c.type==='number')
+      return `<input class="input" type="number" style="width:120px" value="${esc(c.value)}" onchange="setCfg(${i}, this.valueAsNumber)">`;
+    return `<input class="input" type="text" style="width:220px" value="${esc(c.value)}" onchange="setCfg(${i}, this.value)">`;
+  }
+
+  function renderCfg(){
+    document.getElementById('cfgList').innerHTML = data.config.map((c,i)=>`
+      <div class="cfg-row">
+        <div style="min-width:0">
+          <div style="font-weight:700;font-size:13.5px">${esc(c.label)}</div>
+          <div class="cell-sub" style="margin-top:2px">${esc(c.desc)}</div>
+        </div>
+        <div>${control(c,i)}</div>
+      </div>`).join('');
+  }
+  function setCfg(i, v){
+    if(typeof v==='number' && isNaN(v)) v = 0;
+    data.config[i].value = v;
+    KKD.save(data); AdminShell.saved('Config updated');
+  }
+
+  function renderStates(){
+    document.getElementById('stList').innerHTML = data.appStates.map((s,i)=>`
+      <div class="cfg-row st-row" onclick="setState(${i})">
+        <div class="flex items-center gap-3" style="min-width:0">
+          <span class="st-radio ${s.active?'on':''}"></span>
+          <div style="min-width:0">
+            <div style="font-weight:700;font-size:13.5px">${esc(s.label)}</div>
+            <div class="cell-sub" style="margin-top:2px">${esc(s.desc)}</div>
+          </div>
+        </div>
+        <span class="badge ${s.active?'b-active':'b-off'}"><span class="dot"></span> ${s.active?'Active':'Off'}</span>
+      </div>`).join('');
+  }
+  function setState(i){
+    data.appStates.forEach((s,j)=> s.active = (j===i));
+    KKD.save(data); renderStates(); AdminShell.saved('App state set to ' + data.appStates[i].label);
+  }
+
+  renderCfg(); renderStates();
+</script>
+</body></html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Media Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>.m-thumb{height:110px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;position:relative}.m-tile{cursor:pointer;overflow:hidden;transition:.15s}.m-tile:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Media Library</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Every uploaded image and asset, ready to reuse.</p>
+        </div>
+        <button class="btn btn-primary" onclick="fakeUpload()"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="flex items-center gap-3" style="margin-bottom:16px">
+        <div class="search" style="flex:1;max-width:340px">
+          <i class="fa-solid fa-magnifying-glass" style="font-size:12px"></i>
+          <input id="mSearch" placeholder="Search assets…" oninput="renderGrid()"/>
+        </div>
+        <select class="select" id="mType" style="width:180px" onchange="renderGrid()">
+          <option value="all">All types</option>
+          <option value="Banners">Banners</option>
+          <option value="Products">Products</option>
+          <option value="Crops">Crops</option>
+          <option value="Icons">Icons</option>
+        </select>
+      </div>
+
+      <!-- Dropzone -->
+      <div class="dropzone" id="dz" onclick="fakeUpload()" style="margin-bottom:20px">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <div class="t">Click or drop files to upload</div>
+        <div class="s">JPG / PNG / WebP · max 2 MB each</div>
+      </div>
+
+      <!-- Asset grid -->
+      <div class="grid-cards" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))" id="grid"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal: asset detail -->
+<div class="scrim" id="mModalScrim" onclick="AdminShell.close('mModal')"></div>
+<div class="modal" id="mModal">
+  <div class="drawer-head">
+    <h3>Asset</h3>
+    <button class="x-btn" onclick="AdminShell.close('mModal')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body" id="mModalBody"></div>
+  <div class="drawer-foot">
+    <button class="btn btn-danger" id="mDelBtn"><i class="fa-solid fa-trash"></i> Delete</button>
+    <button class="btn btn-primary" id="mCopyBtn"><i class="fa-solid fa-link"></i> Copy URL</button>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'media', title: 'Media Library', crumb: 'Media & Config' });
+
+  const TYPE_ICON = { Banners:'fa-image', Products:'fa-flask', Crops:'fa-seedling', Icons:'fa-shapes' };
+  const COLORS = ['#258046','#2563EB','#B45309','#7C3AED','#DC2626','#0891B2','#DB2777','#65A30D'];
+  const TYPES = ['Banners','Products','Crops','Icons'];
+  const USES = ['Home · Hero','Category top','Product page','Cart banner','Crop picker','Offers listing','Unused'];
+
+  function rnd(a){ return a[Math.floor(Math.random()*a.length)]; }
+
+  // ~14 mock assets
+  let media = [
+    { id:'m1', name:'monsoon-sale.webp', color:'#258046', w:1080, h:480, type:'Banners', usedIn:['Home · Hero'] },
+    { id:'m2', name:'free-delivery.webp', color:'#2563EB', w:1080, h:480, type:'Banners', usedIn:['Home · Hero','Cart banner'] },
+    { id:'m3', name:'chakravarti-ins.webp', color:'#7C3AED', w:800, h:800, type:'Products', usedIn:['Product page'] },
+    { id:'m4', name:'humic-acid-plus.webp', color:'#B45309', w:800, h:800, type:'Products', usedIn:['Product page','Offers listing'] },
+    { id:'m5', name:'npk-191919.webp', color:'#0891B2', w:800, h:800, type:'Products', usedIn:['Product page'] },
+    { id:'m6', name:'wheat-crop.webp', color:'#65A30D', w:600, h:600, type:'Crops', usedIn:['Crop picker'] },
+    { id:'m7', name:'cotton-crop.webp', color:'#DB2777', w:600, h:600, type:'Crops', usedIn:['Crop picker'] },
+    { id:'m8', name:'paddy-crop.webp', color:'#258046', w:600, h:600, type:'Crops', usedIn:['Crop picker'] },
+    { id:'m9', name:'icon-pesticide.webp', color:'#DC2626', w:120, h:120, type:'Icons', usedIn:['Home · Hero'] },
+    { id:'m10', name:'icon-fungicide.webp', color:'#2563EB', w:120, h:120, type:'Icons', usedIn:['Home · Hero'] },
+    { id:'m11', name:'icon-fertilizer.webp', color:'#B45309', w:120, h:120, type:'Icons', usedIn:['Home · Hero'] },
+    { id:'m12', name:'icon-coins.webp', color:'#7C3AED', w:120, h:120, type:'Icons', usedIn:['Unused'] },
+    { id:'m13', name:'diwali-old.webp', color:'#DC2626', w:1080, h:480, type:'Banners', usedIn:['Unused'] },
+    { id:'m14', name:'combo-spray-kit.webp', color:'#0891B2', w:800, h:800, type:'Products', usedIn:['Product page','Offers listing'] },
+  ];
+
+  function estSize(a){ return ((a.w*a.h)/45000).toFixed(0); }
+
+  function renderGrid(){
+    const q = (document.getElementById('mSearch').value||'').toLowerCase();
+    const ty = document.getElementById('mType').value;
+    const list = media.filter(a =>
+      (ty==='all' || a.type===ty) &&
+      (!q || a.name.toLowerCase().includes(q))
+    );
+    document.getElementById('grid').innerHTML = list.map(a => `
+      <div class="card m-tile" onclick="openAsset('${a.id}')">
+        <div class="m-thumb" style="background:linear-gradient(135deg,${a.color},${a.color}cc)">
+          <i class="fa-solid ${TYPE_ICON[a.type]||'fa-image'}"></i>
+          <span class="tag" style="position:absolute;top:8px;left:8px">${a.type}</span>
+        </div>
+        <div class="card-pad" style="padding:10px 12px">
+          <div style="font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(a.name)}</div>
+          <div class="cell-sub" style="margin-top:2px">${a.w}×${a.h}</div>
+        </div>
+      </div>`).join('') || '<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-photo-film"></i><div>No assets match your search.</div></div>';
+  }
+
+  function openAsset(id){
+    const a = media.find(x=>x.id===id); if(!a) return;
+    document.getElementById('mModalBody').innerHTML = `
+      <div class="m-thumb" style="height:200px;border-radius:12px;background:linear-gradient(135deg,${a.color},${a.color}cc);font-size:48px">
+        <i class="fa-solid ${TYPE_ICON[a.type]||'fa-image'}"></i>
+      </div>
+      <div style="font-size:15px;font-weight:800;margin:16px 0 4px">${esc(a.name)}</div>
+      <div class="flex items-center gap-2" style="margin-bottom:16px">
+        <span class="tag tag-green">${a.type}</span>
+        <span class="cell-sub">${a.w}×${a.h} px · ~${estSize(a)} KB</span>
+      </div>
+      <div class="section-title">Used in</div>
+      <div class="flex items-center gap-2" style="flex-wrap:wrap">
+        ${a.usedIn.map(u=>`<span class="tag">${esc(u)}</span>`).join('')}
+      </div>`;
+    document.getElementById('mCopyBtn').onclick = () => AdminShell.toast('URL copied', 'link');
+    document.getElementById('mDelBtn').onclick = () => {
+      media = media.filter(x=>x.id!==id);
+      AdminShell.close('mModal'); renderGrid(); AdminShell.saved('Asset deleted');
+    };
+    AdminShell.open('mModal');
+  }
+
+  function fakeUpload(){
+    const a = {
+      id:'m'+Date.now(),
+      name:'upload-'+Date.now().toString().slice(-5)+'.webp',
+      color: rnd(COLORS), w:1080, h:480, type:'Banners',
+      usedIn:['Unused']
+    };
+    media.unshift(a); renderGrid(); AdminShell.saved('1 asset uploaded');
+  }
+
+  renderGrid();
+</script>
+</body></html>

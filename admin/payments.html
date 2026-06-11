@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Payments</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+  .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;padding:6px 10px;border-radius:9px;background:var(--green-50);color:var(--green)}
+  .chip .rm{cursor:pointer;opacity:.6}.chip .rm:hover{opacity:1}
+  .chip-add{display:flex;gap:8px;margin-top:14px;max-width:300px}
+</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Payments</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Which payment methods are on, and their rules.</p>
+        </div>
+      </div>
+
+      <!-- Methods -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h3>Methods</h3><span class="sub">Toggle the payment options shown at checkout</span></div>
+        <div id="methodList"></div>
+      </div>
+
+      <!-- Rules -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h3>Rules</h3><span class="sub">Discounts, surcharges and coin earning</span></div>
+        <div id="rulesList"></div>
+      </div>
+
+      <!-- Partial payment options -->
+      <div class="card">
+        <div class="card-head"><h3>Partial payment options</h3><span class="sub">% the buyer can pay now, rest on delivery</span></div>
+        <div class="card-pad">
+          <div class="chips" id="partChips"></div>
+          <div class="chip-add">
+            <input class="input" id="partAdd" type="number" min="1" max="99" placeholder="Add % (1–99)" onkeydown="if(event.key==='Enter')addPart()">
+            <button class="btn btn-soft" onclick="addPart()"><i class="fa-solid fa-plus"></i> Add</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active:'payments', title:'Payments', crumb:'Store Setup', controls:'Payment methods + COD rules at checkout', preview:'checkout.html' });
+  let data = KKD.load();
+  const P = data.payments;
+
+  function renderMethods(){
+    document.getElementById('methodList').innerHTML = P.methods.map((m,i)=>`
+      <div class="lrow">
+        <div style="min-width:0">
+          <div class="l-main">${esc(m.label)}</div>
+          ${m.note?`<div class="l-sub">${esc(m.note)}</div>`:''}
+        </div>
+        <div class="l-right">
+          <label class="switch"><input type="checkbox" ${m.enabled?'checked':''} onchange="setMethod(${i}, this.checked)"><span class="track"></span></label>
+        </div>
+      </div>`).join('');
+  }
+  function setMethod(i, on){ P.methods[i].enabled = on; KKD.save(data); AdminShell.saved((on?'Enabled ':'Disabled ')+P.methods[i].label); }
+
+  function rulesRow(label, sub, field, prefix, suffix){
+    return `<div class="lrow">
+        <div style="min-width:0"><div class="l-main">${label}</div><div class="l-sub">${sub}</div></div>
+        <div class="l-right">
+          ${prefix?`<span class="muted" style="font-weight:700">${prefix}</span>`:''}
+          <input class="input" type="number" min="0" style="width:120px" value="${esc(P[field])}" onchange="setRule('${field}', this.valueAsNumber)">
+          ${suffix?`<span class="muted" style="font-weight:700">${suffix}</span>`:''}
+        </div>
+      </div>`;
+  }
+  function renderRules(){
+    document.getElementById('rulesList').innerHTML =
+      rulesRow('Prepaid discount','Instant off when paying online','prepaidDiscountPct','','%') +
+      rulesRow('COD surcharge','Extra fee added on Cash-on-Delivery','codSurcharge','₹','') +
+      rulesRow('Coins on prepaid','Krishi Coins earned on prepaid orders','coinsOnPrepaidPct','','%');
+  }
+  function setRule(field, v){ if(isNaN(v)) v=0; P[field]=v; KKD.save(data); AdminShell.saved('Payment rules updated'); }
+
+  function renderParts(){
+    document.getElementById('partChips').innerHTML = P.partialOptions.map((p,i)=>
+      `<span class="chip">${esc(p)}%<span class="rm" onclick="rmPart(${i})"><i class="fa-solid fa-xmark"></i></span></span>`).join('')
+      || '<span class="muted" style="font-size:12.5px">No partial options.</span>';
+  }
+  function addPart(){
+    const inp = document.getElementById('partAdd');
+    const v = Math.round(inp.valueAsNumber);
+    if(isNaN(v) || v<1 || v>99){ AdminShell.toast('Enter a percent between 1 and 99','triangle-exclamation'); return; }
+    if(P.partialOptions.includes(v)){ AdminShell.toast('Option already added','circle-info'); inp.value=''; return; }
+    P.partialOptions.push(v); P.partialOptions.sort((a,b)=>a-b);
+    inp.value=''; KKD.save(data); renderParts(); AdminShell.saved('Partial option added');
+  }
+  function rmPart(i){ P.partialOptions.splice(i,1); KKD.save(data); renderParts(); AdminShell.saved('Partial option removed'); }
+
+  renderMethods(); renderRules(); renderParts();
+</script>
+</body></html>

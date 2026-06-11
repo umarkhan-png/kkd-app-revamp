@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · App Text &amp; Pages</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">App Text &amp; Pages</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Edit static pages and the short strings on each screen.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openPage()"><i class="fa-solid fa-plus"></i> New page</button>
+      </div>
+
+      <div class="tabs" id="tabs"></div>
+
+      <!-- Pages tab -->
+      <div class="card" id="pagesCard">
+        <div class="card-head"><h3>Static pages</h3><span class="sub">About, policies and help articles rendered inside the app</span></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Title</th><th>Key</th><th>Updated</th><th>Length</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead>
+            <tbody id="pagesBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Screen copy tab -->
+      <div class="card" id="copyCard" style="display:none">
+        <div class="card-head"><h3>Screen copy</h3><span class="sub">Short strings — empty states, errors and CTAs. Edit a value and click away to save.</span></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Screen</th><th>Label</th><th style="width:46%">Value</th></tr></thead>
+            <tbody id="copyBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: edit page -->
+<div class="scrim" id="pgDrawerScrim" onclick="AdminShell.close('pgDrawer')"></div>
+<aside class="drawer" id="pgDrawer">
+  <div class="drawer-head">
+    <h3 id="pgDrawerTitle">Edit page</h3>
+    <button class="x-btn" onclick="AdminShell.close('pgDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Title</label><input class="input" id="pgTitle" placeholder="e.g. About Katyayani"/></div>
+    <div class="field"><label>Body</label>
+      <textarea class="input" id="pgBody" style="min-height:300px" placeholder="Write the full page content here. This long-form copy is rendered inside the app's web view — headings, paragraphs and lists are supported."></textarea>
+      <div class="hint">Long-form content shown on the page. Word count updates on save.</div>
+    </div>
+    <div class="field"><label>Status</label>
+      <select class="select" id="pgStatus">
+        <option value="published">Published</option>
+        <option value="draft">Draft</option>
+      </select>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('pgDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="savePage()"><i class="fa-solid fa-check"></i> Save page</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active:'apptext', title:'App Text & Pages', crumb:'Content & Languages', controls:'Static pages (About/Policy/Help) + per-screen copy', preview:'about.html' });
+  let data = KKD.load();
+  const TODAY = '2026-06-11';
+  let tab = 'pages';
+
+  function statusBadge(s){ return s==='published' ? `<span class="badge b-active"><span class="dot"></span> Published</span>` : `<span class="badge b-draft"><span class="dot"></span> Draft</span>`; }
+
+  function bodyStub(p){ return `# ${p.title}\n\nThis is the ${p.title} page content shown in the app. Edit it here and it ships on the next Publish — no app update needed.`; }
+
+  function renderTabs(){
+    const t = [['pages','Pages',data.staticPages.length],['copy','Screen copy',data.screenCopy.length]];
+    document.getElementById('tabs').innerHTML = t.map(([k,v,n])=>
+      `<div class="tab ${tab===k?'active':''}" onclick="setTab('${k}')">${v} <span style="opacity:.6">${n}</span></div>`).join('');
+  }
+  function setTab(k){ tab=k; renderTabs();
+    document.getElementById('pagesCard').style.display = k==='pages'?'':'none';
+    document.getElementById('copyCard').style.display = k==='copy'?'':'none';
+  }
+
+  function renderPages(){
+    document.getElementById('pagesBody').innerHTML = data.staticPages.map((p,i)=>`
+      <tr>
+        <td class="cell-main">${esc(p.title)}</td>
+        <td><span class="tag" style="font-family:monospace">${esc(p.key)}</span></td>
+        <td class="cell-sub">${esc(p.updated)}</td>
+        <td class="cell-sub">${p.words} words</td>
+        <td>${statusBadge(p.status)}</td>
+        <td style="text-align:right">
+          <button class="btn btn-ghost btn-sm" onclick="openPage(${i})"><i class="fa-solid fa-pen"></i></button>
+        </td>
+      </tr>`).join('') || `<tr><td colspan="6"><div class="empty"><i class="fa-solid fa-file-lines"></i><div>No pages yet.</div></div></td></tr>`;
+  }
+
+  function renderCopy(){
+    document.getElementById('copyBody').innerHTML = data.screenCopy.map((c,i)=>`
+      <tr>
+        <td><span class="tag" style="font-family:monospace">${esc(c.screen)}</span></td>
+        <td class="cell-main">${esc(c.label)}</td>
+        <td><input class="input" value="${esc(c.value)}" onchange="setCopy(${i}, this.value)"></td>
+      </tr>`).join('') || `<tr><td colspan="3"><div class="empty"><i class="fa-solid fa-quote-left"></i><div>No screen copy yet.</div></div></td></tr>`;
+  }
+  function setCopy(i, v){ data.screenCopy[i].value = v; KKD.save(data); AdminShell.saved('Copy updated'); }
+
+  let editIdx = null;
+  function openPage(i){
+    editIdx = (i===undefined) ? null : i;
+    const p = editIdx===null ? null : data.staticPages[editIdx];
+    document.getElementById('pgDrawerTitle').textContent = p ? 'Edit page' : 'New page';
+    document.getElementById('pgTitle').value = p ? p.title : '';
+    document.getElementById('pgBody').value = p ? bodyStub(p) : '';
+    document.getElementById('pgStatus').value = p ? p.status : 'draft';
+    AdminShell.open('pgDrawer');
+  }
+  function savePage(){
+    const title = document.getElementById('pgTitle').value.trim() || 'Untitled page';
+    const body = document.getElementById('pgBody').value.trim();
+    const words = body ? body.split(/\s+/).filter(Boolean).length : 0;
+    const status = document.getElementById('pgStatus').value;
+    if(editIdx===null){
+      const key = title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,16) || 'page';
+      data.staticPages.unshift({ key, title, updated:TODAY, words, status });
+    } else {
+      Object.assign(data.staticPages[editIdx], { title, updated:TODAY, words, status });
+    }
+    KKD.save(data); AdminShell.close('pgDrawer'); renderTabs(); renderPages();
+    AdminShell.saved(editIdx===null ? 'Page created' : 'Page updated');
+  }
+
+  renderTabs(); renderPages(); renderCopy();
+</script>
+</body></html>

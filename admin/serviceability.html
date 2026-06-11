@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Serviceability</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+  .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;padding:6px 10px;border-radius:9px;background:var(--slate-100);color:var(--slate-600)}
+  .chip.red{background:var(--red-bg);color:var(--red)}
+  .chip .rm{cursor:pointer;opacity:.6}.chip .rm:hover{opacity:1}
+  .chip-add{display:flex;gap:8px;margin-top:14px;max-width:340px}
+</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Serviceability</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Where you deliver, what it costs, and how long it takes.</p>
+        </div>
+      </div>
+
+      <!-- Delivery rules -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h3>Delivery rules</h3><span class="sub">Fees and ETA shown at checkout</span></div>
+        <div id="rulesList"></div>
+      </div>
+
+      <!-- Serviceable pincodes -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h3>Serviceable pincodes</h3><span class="sub">Delivery is available in these pincodes</span></div>
+        <div class="card-pad">
+          <div class="chips" id="svcChips"></div>
+          <div class="chip-add">
+            <input class="input" id="svcAdd" inputmode="numeric" maxlength="6" placeholder="Add pincode (6 digits)" onkeydown="if(event.key==='Enter')addPin('service')">
+            <button class="btn btn-soft" onclick="addPin('service')"><i class="fa-solid fa-plus"></i> Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Blocked pincodes -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h3>Blocked / non-serviceable pincodes</h3><span class="sub">Orders to these pincodes are refused at checkout</span></div>
+        <div class="card-pad">
+          <div class="chips" id="blkChips"></div>
+          <div class="chip-add">
+            <input class="input" id="blkAdd" inputmode="numeric" maxlength="6" placeholder="Add pincode (6 digits)" onkeydown="if(event.key==='Enter')addPin('blocked')">
+            <button class="btn btn-soft" onclick="addPin('blocked')"><i class="fa-solid fa-plus"></i> Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- State product bans -->
+      <div class="card">
+        <div class="card-head"><h3>State product bans</h3><span class="sub">Products restricted in specific states</span>
+          <button class="btn btn-soft btn-sm" style="margin-left:auto" onclick="openBan()"><i class="fa-solid fa-plus"></i> Add ban</button>
+        </div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>State</th><th>Product</th><th style="text-align:right">Actions</th></tr></thead>
+            <tbody id="banBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: add ban -->
+<div class="scrim" id="banDrawerScrim" onclick="AdminShell.close('banDrawer')"></div>
+<aside class="drawer" id="banDrawer">
+  <div class="drawer-head">
+    <h3>Add state ban</h3>
+    <button class="x-btn" onclick="AdminShell.close('banDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>State</label>
+      <select class="select" id="banState">
+        <option>Andhra Pradesh</option><option>Bihar</option><option>Gujarat</option><option>Karnataka</option>
+        <option>Kerala</option><option>Madhya Pradesh</option><option>Maharashtra</option><option>Punjab</option>
+        <option>Rajasthan</option><option>Tamil Nadu</option><option>Telangana</option><option>Uttar Pradesh</option><option>West Bengal</option>
+      </select>
+    </div>
+    <div class="field"><label>Product</label>
+      <select class="select" id="banProduct"></select>
+      <div class="hint">This product won't be sold/delivered in the chosen state.</div>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('banDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveBan()"><i class="fa-solid fa-check"></i> Add ban</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active:'serviceability', title:'Serviceability', crumb:'Store Setup', controls:'Delivery coverage, fees and ETAs at checkout', preview:'checkout.html' });
+  let data = KKD.load();
+  const S = data.serviceability;
+
+  function rulesRow(label, sub, field, prefix){
+    return `<div class="lrow">
+        <div style="min-width:0"><div class="l-main">${label}</div><div class="l-sub">${sub}</div></div>
+        <div class="l-right">
+          ${prefix?`<span class="muted" style="font-weight:700">${prefix}</span>`:''}
+          <input class="input" type="number" min="0" style="width:130px" value="${esc(S[field])}" onchange="setRule('${field}', this.valueAsNumber)">
+        </div>
+      </div>`;
+  }
+  function renderRules(){
+    document.getElementById('rulesList').innerHTML =
+      rulesRow('Delivery fee','Flat fee added at checkout','deliveryFee','₹') +
+      rulesRow('Free delivery above','Order value that unlocks free delivery','freeThreshold','₹') +
+      rulesRow('Default ETA days','Estimated delivery time shown to buyers','etaDays','days');
+  }
+  function setRule(field, v){ if(isNaN(v)) v=0; S[field]=v; KKD.save(data); AdminShell.saved('Delivery rules updated'); }
+
+  function renderChips(){
+    document.getElementById('svcChips').innerHTML = S.servicePincodes.map((p,i)=>
+      `<span class="chip">${esc(p)}<span class="rm" onclick="rmPin('service',${i})"><i class="fa-solid fa-xmark"></i></span></span>`).join('')
+      || '<span class="muted" style="font-size:12.5px">No pincodes yet.</span>';
+    document.getElementById('blkChips').innerHTML = S.blockedPincodes.map((p,i)=>
+      `<span class="chip red">${esc(p)}<span class="rm" onclick="rmPin('blocked',${i})"><i class="fa-solid fa-xmark"></i></span></span>`).join('')
+      || '<span class="muted" style="font-size:12.5px">None blocked.</span>';
+  }
+  function listOf(kind){ return kind==='service'?S.servicePincodes:S.blockedPincodes; }
+  function addPin(kind){
+    const inp = document.getElementById(kind==='service'?'svcAdd':'blkAdd');
+    const v = inp.value.replace(/\D/g,'').slice(0,6);
+    if(v.length!==6){ AdminShell.toast('Enter a valid 6-digit pincode','triangle-exclamation'); return; }
+    if(listOf(kind).includes(v)){ AdminShell.toast('Pincode already added','circle-info'); inp.value=''; return; }
+    listOf(kind).push(v); inp.value=''; KKD.save(data); renderChips(); AdminShell.saved('Pincode added');
+  }
+  function rmPin(kind,i){ listOf(kind).splice(i,1); KKD.save(data); renderChips(); AdminShell.saved('Pincode removed'); }
+
+  function renderBans(){
+    document.getElementById('banBody').innerHTML = S.stateBans.map((b,i)=>`
+      <tr>
+        <td class="cell-main">${esc(b.state)}</td>
+        <td>${esc(b.product)}</td>
+        <td style="text-align:right"><button class="btn btn-danger btn-sm" onclick="rmBan(${i})"><i class="fa-solid fa-trash"></i></button></td>
+      </tr>`).join('') || `<tr><td colspan="3"><div class="empty"><i class="fa-solid fa-ban"></i><div>No state bans configured.</div></div></td></tr>`;
+  }
+  function openBan(){
+    document.getElementById('banProduct').innerHTML = data.products.map(p=>`<option>${esc(p.name)}</option>`).join('');
+    AdminShell.open('banDrawer');
+  }
+  function saveBan(){
+    const state = document.getElementById('banState').value;
+    const product = document.getElementById('banProduct').value;
+    S.stateBans.push({ state, product });
+    KKD.save(data); AdminShell.close('banDrawer'); renderBans(); AdminShell.saved('Ban added');
+  }
+  function rmBan(i){ S.stateBans.splice(i,1); KKD.save(data); renderBans(); AdminShell.saved('Ban removed'); }
+
+  renderRules(); renderChips(); renderBans();
+</script>
+</body></html>

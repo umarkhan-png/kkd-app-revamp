@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Orders &amp; Returns</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+  .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;padding:6px 10px;border-radius:9px;background:var(--slate-100);color:var(--slate-600)}
+  .chip .rm{cursor:pointer;opacity:.6}.chip .rm:hover{opacity:1}
+  .chip-add{display:flex;gap:8px;margin-top:14px;max-width:360px}
+  .stepno{width:26px;height:26px;border-radius:8px;background:var(--green-50);color:var(--green);font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Orders &amp; Returns</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Configure the order lifecycle and returns.</p>
+        </div>
+      </div>
+
+      <!-- Order statuses -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h3>Order statuses</h3><span class="sub">The tracking timeline buyers see · edit the sub-copy under each step</span></div>
+        <div id="statusList"></div>
+      </div>
+
+      <!-- Delivery partners -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h3>Delivery partners</h3><span class="sub">Carriers available for fulfilment</span></div>
+        <div id="partnerList"></div>
+        <div class="card-pad" style="border-top:1px solid var(--slate-100)">
+          <div class="chip-add" style="margin-top:0">
+            <input class="input" id="partnerAdd" placeholder="Add partner (e.g. Blue Dart)" onkeydown="if(event.key==='Enter')addPartner()">
+            <button class="btn btn-soft" onclick="addPartner()"><i class="fa-solid fa-plus"></i> Add partner</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cancellation reasons -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h3>Cancellation reasons</h3><span class="sub">Shown when a buyer cancels an order</span></div>
+        <div class="card-pad">
+          <div class="chips" id="cancelChips"></div>
+          <div class="chip-add">
+            <input class="input" id="cancelAdd" placeholder="Add reason" onkeydown="if(event.key==='Enter')addReason('cancel')">
+            <button class="btn btn-soft" onclick="addReason('cancel')"><i class="fa-solid fa-plus"></i> Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Return reasons -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h3>Return reasons</h3><span class="sub">Shown when a buyer requests a return</span></div>
+        <div class="card-pad">
+          <div class="chips" id="returnChips"></div>
+          <div class="chip-add">
+            <input class="input" id="returnAdd" placeholder="Add reason" onkeydown="if(event.key==='Enter')addReason('return')">
+            <button class="btn btn-soft" onclick="addReason('return')"><i class="fa-solid fa-plus"></i> Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Refund SLA -->
+      <div class="card">
+        <div class="card-head"><h3>Refund SLA</h3><span class="sub">How fast refunds are promised to buyers</span></div>
+        <div class="lrow">
+          <div style="min-width:0"><div class="l-main">Refund completes within</div><div class="l-sub">Business days after a return is approved</div></div>
+          <div class="l-right">
+            <input class="input" type="number" min="0" style="width:110px" id="slaInput" value="" onchange="setSla(this.valueAsNumber)">
+            <span class="muted" style="font-weight:700">business days</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active:'orders', title:'Orders & Returns', crumb:'Store Setup', controls:'Order statuses, delivery partners, return/refund reasons', preview:'order-details.html' });
+  let data = KKD.load();
+  const O = data.ordersConfig;
+
+  function renderStatuses(){
+    document.getElementById('statusList').innerHTML = O.statuses.map((s,i)=>`
+      <div class="lrow">
+        <span class="stepno">${i+1}</span>
+        <div style="min-width:0;flex:1">
+          <div class="l-main">${esc(s.label)} <span class="tag" style="font-family:monospace;margin-left:4px">${esc(s.key)}</span></div>
+          <input class="input" style="height:34px;margin-top:6px;max-width:420px" value="${esc(s.copy)}" onchange="setCopy(${i}, this.value)">
+        </div>
+      </div>`).join('');
+  }
+  function setCopy(i, v){ O.statuses[i].copy = v; KKD.save(data); AdminShell.saved('Status copy updated'); }
+
+  function renderPartners(){
+    document.getElementById('partnerList').innerHTML = O.partners.map((p,i)=>`
+      <div class="lrow">
+        <div class="iconbox ic-slate"><i class="fa-solid fa-truck"></i></div>
+        <div style="min-width:0"><div class="l-main">${esc(p.name)}</div><div class="l-sub">${p.active?'Active carrier':'Disabled'}</div></div>
+        <div class="l-right">
+          <button class="btn btn-danger btn-sm" onclick="rmPartner(${i})"><i class="fa-solid fa-trash"></i></button>
+          <label class="switch"><input type="checkbox" ${p.active?'checked':''} onchange="setPartner(${i}, this.checked)"><span class="track"></span></label>
+        </div>
+      </div>`).join('') || '<div class="empty" style="padding:28px"><i class="fa-solid fa-truck"></i><div>No delivery partners.</div></div>';
+  }
+  function setPartner(i, on){ O.partners[i].active = on; KKD.save(data); renderPartners(); AdminShell.saved((on?'Enabled ':'Disabled ')+O.partners[i].name); }
+  function addPartner(){
+    const inp = document.getElementById('partnerAdd');
+    const name = inp.value.trim();
+    if(!name){ AdminShell.toast('Enter a partner name','triangle-exclamation'); return; }
+    if(O.partners.some(p=>p.name.toLowerCase()===name.toLowerCase())){ AdminShell.toast('Partner already added','circle-info'); inp.value=''; return; }
+    O.partners.push({ name, active:true }); inp.value=''; KKD.save(data); renderPartners(); AdminShell.saved('Partner added');
+  }
+  function rmPartner(i){ O.partners.splice(i,1); KKD.save(data); renderPartners(); AdminShell.saved('Partner removed'); }
+
+  function listOf(kind){ return kind==='cancel'?O.cancelReasons:O.returnReasons; }
+  function renderReasons(){
+    document.getElementById('cancelChips').innerHTML = O.cancelReasons.map((r,i)=>
+      `<span class="chip">${esc(r)}<span class="rm" onclick="rmReason('cancel',${i})"><i class="fa-solid fa-xmark"></i></span></span>`).join('')
+      || '<span class="muted" style="font-size:12.5px">No reasons yet.</span>';
+    document.getElementById('returnChips').innerHTML = O.returnReasons.map((r,i)=>
+      `<span class="chip">${esc(r)}<span class="rm" onclick="rmReason('return',${i})"><i class="fa-solid fa-xmark"></i></span></span>`).join('')
+      || '<span class="muted" style="font-size:12.5px">No reasons yet.</span>';
+  }
+  function addReason(kind){
+    const inp = document.getElementById(kind+'Add');
+    const v = inp.value.trim();
+    if(!v){ AdminShell.toast('Enter a reason','triangle-exclamation'); return; }
+    if(listOf(kind).some(r=>r.toLowerCase()===v.toLowerCase())){ AdminShell.toast('Reason already added','circle-info'); inp.value=''; return; }
+    listOf(kind).push(v); inp.value=''; KKD.save(data); renderReasons(); AdminShell.saved('Reason added');
+  }
+  function rmReason(kind,i){ listOf(kind).splice(i,1); KKD.save(data); renderReasons(); AdminShell.saved('Reason removed'); }
+
+  function setSla(v){ if(isNaN(v)||v<0) v=0; O.refundSlaDays=v; KKD.save(data); AdminShell.saved('Refund SLA set to '+v+' days'); }
+
+  document.getElementById('slaInput').value = O.refundSlaDays;
+  renderStatuses(); renderPartners(); renderReasons();
+</script>
+</body></html>

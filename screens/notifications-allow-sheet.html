@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Allow notifications</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{font-family:'Poppins',system-ui,sans-serif;margin:0;padding:0}
+  input,button{font-family:inherit}
+  /* Backdrop fills the device · a soft dim over whatever screen launched the sheet (same tint as the app's track-order sheet) */
+  body{min-height:100vh;background:#0F172A;color:#0F172A;position:relative;overflow:hidden}
+
+  /* Sheet shell · matches the app bottom-sheet chrome: dim backdrop fades in, white panel rounded-t slides up with the same easing as trackSheet */
+  .sheet{position:fixed;inset:0;z-index:90}
+  .sheet-backdrop{position:absolute;inset:0;background:rgba(15,23,42,0.55);opacity:0;transition:opacity .28s ease}
+  .sheet-panel{position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:26px 26px 0 0;display:flex;flex-direction:column;max-height:94vh;transform:translateY(100%);transition:transform .34s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18);padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+  .sheet.open .sheet-backdrop{opacity:1}
+  .sheet.open .sheet-panel{transform:translateY(0)}
+  .grip{margin:10px auto 2px;width:40px;height:4px;border-radius:9999px;background:#E2E8F0}
+
+  /* Bell hero · gentle tilt + emerald gradient circle + red dot · same as the full page, scaled to sit nicely in a sheet */
+  .bell-wrap{display:flex;align-items:center;justify-content:center;margin:14px auto 16px;width:108px;height:108px;border-radius:50%;background:linear-gradient(135deg,#ECFDF5 0%,#D1FAE5 100%);position:relative;box-shadow:0 14px 30px -10px rgba(5,150,105,0.25)}
+  .bell-wrap::before{content:"";position:absolute;inset:7px;border-radius:50%;border:2px dashed rgba(5,150,105,0.3);animation:ringSpin 14s linear infinite}
+  @keyframes ringSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  .bell-ic{width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#10B981,#258046);display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:26px;box-shadow:0 10px 22px -6px rgba(4,120,87,0.5);animation:bellTilt 2.4s ease-in-out infinite;position:relative;z-index:1}
+  @keyframes bellTilt{0%,100%{transform:rotate(0)}15%{transform:rotate(-12deg)}30%{transform:rotate(12deg)}45%{transform:rotate(-8deg)}60%{transform:rotate(0)}}
+  .bell-dot{position:absolute;top:18px;right:20px;width:17px;height:17px;border-radius:50%;background:#DC2626;color:#FFFFFF;font-size:9.5px;font-weight:900;display:flex;align-items:center;justify-content:center;border:2.5px solid #ECFDF5;z-index:2;box-shadow:0 2px 6px rgba(220,38,38,0.4)}
+  .bell-dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(220,38,38,0.5);animation:dotPulse 1.6s ease-out infinite}
+  @keyframes dotPulse{0%{transform:scale(.8);opacity:.7}100%{transform:scale(1.8);opacity:0}}
+
+  /* Headline + sub-copy */
+  .head-wrap{padding:0 24px;text-align:center}
+  .head-wrap h1{font-size:22px;font-weight:900;letter-spacing:-0.01em;line-height:1.15}
+  .head-wrap p{font-size:13px;color:#64748B;margin-top:8px;line-height:1.5;font-weight:500;max-width:300px;margin-left:auto;margin-right:auto}
+
+  /* 3 reasons · white card with hairline border · same rows as the page */
+  .reasons{margin:20px 16px 0;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .reason{display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid #F1F5F9}
+  .reason:last-child{border-bottom:0}
+  .reason .ic{width:38px;height:38px;border-radius:10px;background:#ECFDF5;color:#258046;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+  .reason .ic.amber{background:#FEF3C7;color:#B45309}
+  .reason .ic.slate{background:#F1F5F9;color:#475569}
+  .reason .body{flex:1;line-height:1.3}
+  .reason .body .a{font-size:13.5px;font-weight:800;color:#0F172A}
+  .reason .body .b{font-size:11.5px;color:#64748B;margin-top:2px;font-weight:500}
+
+  /* CTAs · live inside the sheet (not fixed to the viewport like the full page) */
+  .cta-wrap{padding:18px 16px 4px}
+  .allow-btn{width:100%;height:54px;border-radius:12px;background:#258046;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45);text-decoration:none}
+  .skip-btn{display:block;width:100%;text-align:center;margin-top:8px;font-size:13px;font-weight:700;color:#64748B;background:transparent;border:0;cursor:pointer;text-decoration:none;padding:9px 0}
+</style></head>
+<body>
+
+<!-- Allow-notifications bottom sheet · same content as notifications-allow.html, presented as a slide-up modal · backdrop tap or 'Maybe later' dismisses, 'Allow' routes to home -->
+<div id="sheet" class="sheet">
+  <div id="sheetBackdrop" class="sheet-backdrop"></div>
+  <div class="sheet-panel">
+    <div class="grip"></div>
+
+    <!-- Bell hero -->
+    <div class="bell-wrap">
+      <span class="bell-ic"><i class="fa-solid fa-bell"></i></span>
+      <span class="bell-dot">3</span>
+    </div>
+
+    <!-- Headline -->
+    <div class="head-wrap">
+      <h1>Get important updates</h1>
+      <p>Turn on notifications so you never miss an update about your orders, weather and offers.</p>
+    </div>
+
+    <!-- 3 reasons -->
+    <div class="reasons">
+      <div class="reason">
+        <span class="ic"><i class="fa-solid fa-truck-fast"></i></span>
+        <div class="body">
+          <div class="a">Order tracking</div>
+          <div class="b">Know when your order is packed, dispatched and delivered</div>
+        </div>
+      </div>
+      <div class="reason">
+        <span class="ic amber"><i class="fa-solid fa-cloud-sun-rain"></i></span>
+        <div class="body">
+          <div class="a">Weather &amp; spray alerts</div>
+          <div class="b">Get rain warnings and the right time to spray for your crop</div>
+        </div>
+      </div>
+      <div class="reason">
+        <span class="ic slate"><i class="fa-solid fa-tag"></i></span>
+        <div class="body">
+          <div class="a">Offers &amp; coin rewards</div>
+          <div class="b">Personalised coupons + bonus coins on every order</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTAs -->
+    <div class="cta-wrap">
+      <a href="home.html" class="allow-btn">
+        <i class="fa-solid fa-bell text-[14px]"></i> Allow notifications
+      </a>
+      <a href="home.html" class="skip-btn">Maybe later</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Open with the slide-up + backdrop fade on first paint (next frame so the transition runs)
+  const sheet = document.getElementById('sheet');
+  requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add('open')));
+
+  // Tap the dim backdrop to dismiss · let the slide-down play, then route to home (same as 'Maybe later')
+  document.getElementById('sheetBackdrop').addEventListener('click', () => {
+    sheet.classList.remove('open');
+    setTimeout(() => { window.location.href = 'home.html'; }, 300);
+  });
+</script>
+
+</body></html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Onboarding</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Onboarding</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Edit the first-run experience copy and lists.</p>
+        </div>
+        <button class="btn btn-primary" onclick="AdminShell.saved('Onboarding saved')"><i class="fa-solid fa-check"></i> Save all</button>
+      </div>
+
+      <div class="grid-cards" style="grid-template-columns:repeat(2,1fr)">
+
+        <!-- Languages offered -->
+        <div class="card">
+          <div class="card-head"><h3>Languages offered</h3><span class="sub" style="margin-left:auto" id="langCount"></span></div>
+          <div class="card-pad">
+            <div class="flex gap-2" style="flex-wrap:wrap;margin-bottom:12px" id="langChips"></div>
+            <div class="flex gap-2">
+              <input class="input" id="langInput" placeholder="Add a language…" onkeydown="if(event.key==='Enter'){addChip('languages','langInput');}"/>
+              <button class="btn btn-soft btn-sm" onclick="addChip('languages','langInput')"><i class="fa-solid fa-plus"></i> Add</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Crop picker -->
+        <div class="card">
+          <div class="card-head"><h3>Crop picker (first run)</h3><span class="sub" style="margin-left:auto" id="cropCount"></span></div>
+          <div class="card-pad">
+            <div class="flex gap-2" style="flex-wrap:wrap;margin-bottom:12px" id="cropChips"></div>
+            <div class="flex gap-2">
+              <input class="input" id="cropInput" placeholder="Add a crop…" onkeydown="if(event.key==='Enter'){addChip('cropPicker','cropInput');}"/>
+              <button class="btn btn-soft btn-sm" onclick="addChip('cropPicker','cropInput')"><i class="fa-solid fa-plus"></i> Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Welcome screens copy -->
+      <div class="card" style="margin-top:16px">
+        <div class="card-head"><h3>Welcome screens copy</h3></div>
+        <div class="card-pad">
+          <div class="row2">
+            <div>
+              <p class="section-title">Welcome Aboard (new user)</p>
+              <div class="field"><label>Eyebrow</label><input class="input" id="waEyebrow" oninput="saveWelcome()"/></div>
+              <div class="field"><label>Headline</label><input class="input" id="waHeadline" oninput="saveWelcome()"/></div>
+              <div class="field"><label>Sub</label><textarea class="input" id="waSub" oninput="saveWelcome()"></textarea></div>
+            </div>
+            <div>
+              <p class="section-title">Welcome Back (returning)</p>
+              <div class="field"><label>Eyebrow</label><input class="input" id="wbEyebrow" oninput="saveWelcome()"/></div>
+              <div class="field"><label>Headline</label><input class="input" id="wbHeadline" oninput="saveWelcome()"/></div>
+              <div class="field"><label>Sub</label><textarea class="input" id="wbSub" oninput="saveWelcome()"></textarea></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Permission reasons -->
+      <div class="card" style="margin-top:16px">
+        <div class="card-head"><h3>Permission reasons</h3><span class="sub" style="margin-left:auto">Shown on the notifications-allow screen</span></div>
+        <div id="permRows"></div>
+        <div class="card-pad" style="border-top:1px solid var(--slate-100)">
+          <div class="flex gap-2">
+            <input class="input" id="permIcon" placeholder="Icon (e.g. bell)" style="max-width:160px"/>
+            <input class="input" id="permText" placeholder="Reason text…" onkeydown="if(event.key==='Enter'){addPerm();}"/>
+            <button class="btn btn-soft btn-sm" onclick="addPerm()"><i class="fa-solid fa-plus"></i> Add</button>
+          </div>
+          <div class="hint">Use any Font Awesome solid icon name (truck-fast, wheat-awn, cloud-sun-rain…).</div>
+        </div>
+      </div>
+
+      <!-- OTP screen facts -->
+      <div class="card" style="margin-top:16px">
+        <div class="card-head"><h3>OTP screen facts</h3><span class="sub" style="margin-left:auto">Rotating selling points on the OTP screen</span></div>
+        <div id="otpRows"></div>
+        <div class="card-pad" style="border-top:1px solid var(--slate-100)">
+          <div class="flex gap-2">
+            <input class="input" id="otpInput" placeholder="Add a fact…" onkeydown="if(event.key==='Enter'){addOtp();}"/>
+            <button class="btn btn-soft btn-sm" onclick="addOtp()"><i class="fa-solid fa-plus"></i> Add</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'onboarding', title: 'Onboarding', crumb: 'Engagement',
+    controls: 'Onboarding screens — languages, crop picker, welcome copy', preview: 'welcome-aboard.html' });
+  let data = KKD.load();
+  const ob = data.onboarding;
+
+  function persist(){ KKD.save(data); AdminShell.saved(); }
+
+  /* ---- chip lists (languages / cropPicker) ---- */
+  function renderChips(listKey, mountId, countId){
+    document.getElementById(mountId).innerHTML = ob[listKey].map((v,i)=>`
+      <span class="tag" style="font-size:12px;padding:5px 6px 5px 10px;gap:6px">
+        ${esc(v)}
+        <i class="fa-solid fa-xmark" style="cursor:pointer;opacity:.55" onclick="removeChip('${listKey}',${i})"></i>
+      </span>`).join('') || '<span class="muted" style="font-size:12.5px">No items yet.</span>';
+    if(countId) document.getElementById(countId).textContent = ob[listKey].length + ' total';
+  }
+  function addChip(listKey, inputId){
+    const el = document.getElementById(inputId); const v = el.value.trim();
+    if(!v) return; ob[listKey].push(v); el.value=''; persist(); renderAll();
+  }
+  function removeChip(listKey, i){ ob[listKey].splice(i,1); persist(); renderAll(); }
+
+  /* ---- welcome copy ---- */
+  function fillWelcome(){
+    document.getElementById('waEyebrow').value = ob.welcomeAboard.eyebrow;
+    document.getElementById('waHeadline').value = ob.welcomeAboard.headline;
+    document.getElementById('waSub').value = ob.welcomeAboard.sub;
+    document.getElementById('wbEyebrow').value = ob.welcomeBack.eyebrow;
+    document.getElementById('wbHeadline').value = ob.welcomeBack.headline;
+    document.getElementById('wbSub').value = ob.welcomeBack.sub;
+  }
+  function saveWelcome(){
+    ob.welcomeAboard.eyebrow = document.getElementById('waEyebrow').value;
+    ob.welcomeAboard.headline = document.getElementById('waHeadline').value;
+    ob.welcomeAboard.sub = document.getElementById('waSub').value;
+    ob.welcomeBack.eyebrow = document.getElementById('wbEyebrow').value;
+    ob.welcomeBack.headline = document.getElementById('wbHeadline').value;
+    ob.welcomeBack.sub = document.getElementById('wbSub').value;
+    persist();
+  }
+
+  /* ---- permission bullets ---- */
+  function renderPerms(){
+    document.getElementById('permRows').innerHTML = ob.permissionBullets.map((b,i)=>`
+      <div class="lrow">
+        <div class="iconbox ic-green"><i class="fa-solid fa-${esc(b.icon)}"></i></div>
+        <input class="input" value="${esc(b.text)}" oninput="editPerm(${i},this.value)"/>
+        <div class="l-right">
+          <button class="btn btn-danger btn-sm" onclick="removePerm(${i})"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>`).join('') || '<div class="card-pad"><span class="muted" style="font-size:12.5px">No reasons yet.</span></div>';
+  }
+  function editPerm(i,v){ ob.permissionBullets[i].text = v; persist(); }
+  function addPerm(){
+    const icon = document.getElementById('permIcon').value.trim() || 'circle-check';
+    const text = document.getElementById('permText').value.trim();
+    if(!text) return;
+    ob.permissionBullets.push({ icon, text });
+    document.getElementById('permIcon').value=''; document.getElementById('permText').value='';
+    persist(); renderPerms();
+  }
+  function removePerm(i){ ob.permissionBullets.splice(i,1); persist(); renderPerms(); }
+
+  /* ---- OTP facts ---- */
+  function renderOtp(){
+    document.getElementById('otpRows').innerHTML = ob.otpFacts.map((f,i)=>`
+      <div class="lrow">
+        <div class="iconbox ic-slate"><i class="fa-solid fa-circle-info"></i></div>
+        <input class="input" value="${esc(f)}" oninput="editOtp(${i},this.value)"/>
+        <div class="l-right">
+          <button class="btn btn-danger btn-sm" onclick="removeOtp(${i})"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>`).join('') || '<div class="card-pad"><span class="muted" style="font-size:12.5px">No facts yet.</span></div>';
+  }
+  function editOtp(i,v){ ob.otpFacts[i] = v; persist(); }
+  function addOtp(){
+    const el = document.getElementById('otpInput'); const v = el.value.trim();
+    if(!v) return; ob.otpFacts.push(v); el.value=''; persist(); renderOtp();
+  }
+  function removeOtp(i){ ob.otpFacts.splice(i,1); persist(); renderOtp(); }
+
+  function renderAll(){
+    renderChips('languages','langChips','langCount');
+    renderChips('cropPicker','cropChips','cropCount');
+  }
+
+  renderAll(); fillWelcome(); renderPerms(); renderOtp();
+</script>
+</body></html>

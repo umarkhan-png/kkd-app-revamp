@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Polls &amp; Surveys</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Polls &amp; Surveys</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Ask quick questions and reward answers with coins.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openPoll()"><i class="fa-solid fa-plus"></i> New poll</button>
+      </div>
+
+      <!-- Poll cards -->
+      <div class="grid-cards" style="grid-template-columns:repeat(2,1fr)" id="grid"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: new / edit poll -->
+<div class="scrim" id="plDrawerScrim" onclick="AdminShell.close('plDrawer')"></div>
+<aside class="drawer" id="plDrawer">
+  <div class="drawer-head">
+    <h3 id="plDrawerTitle">New poll</h3>
+    <button class="x-btn" onclick="AdminShell.close('plDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Question</label><input class="input" id="plQ" placeholder="e.g. Which crop do you grow most?"/></div>
+    <div class="field"><label>Options</label>
+      <textarea class="input" id="plOpts" placeholder="One option per line&#10;Wheat&#10;Cotton&#10;Tomato"></textarea>
+      <div class="hint">One option per line.</div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Reward coins</label><input class="input" type="number" id="plReward" min="0" value="15"/></div>
+      <div class="field"><label>Placement</label>
+        <select class="select" id="plPlace">
+          <option value="Home">Home</option>
+          <option value="Search">Search</option>
+          <option value="Home + Search">Home + Search</option>
+        </select>
+      </div>
+    </div>
+    <div class="field flex items-center justify-between" style="padding:12px 14px;background:var(--slate-50);border-radius:10px;border:1px solid var(--slate-200)">
+      <div><label style="margin:0">Active</label><div class="hint" style="margin-top:2px">Show this poll widget in the app</div></div>
+      <label class="switch"><input type="checkbox" id="plActive" checked><span class="track"></span></label>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('plDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="savePoll()"><i class="fa-solid fa-check"></i> Save to draft</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'polls', title: 'Polls & Surveys', crumb: 'Engagement',
+    controls: 'Poll widgets on Home & Search', preview: 'home.html' });
+  let data = KKD.load();
+
+  function renderGrid(){
+    document.getElementById('grid').innerHTML = data.polls.map(p=>`
+      <div class="card">
+        <div class="card-head">
+          <h3 style="flex:1">${esc(p.question)}</h3>
+          <label class="switch"><input type="checkbox" ${p.active?'checked':''} onchange="togglePoll('${p.id}',this.checked)"><span class="track"></span></label>
+        </div>
+        <div class="card-pad">
+          <div class="flex gap-2" style="flex-wrap:wrap;margin-bottom:12px">
+            ${p.options.map(o=>`<span class="tag">${esc(o)}</span>`).join('')}
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex gap-2 items-center">
+              <span class="tag tag-green"><i class="fa-solid fa-coins" style="margin-right:4px"></i> +${p.reward} coins</span>
+              <span class="muted" style="font-size:12px"><i class="fa-solid fa-location-dot"></i> ${esc(p.placement)}</span>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-ghost btn-sm" onclick="openPoll('${p.id}')"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-danger btn-sm" onclick="delPoll('${p.id}')"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>`).join('') || '<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-square-poll-vertical"></i><div>No polls yet. Create your first one.</div></div>';
+  }
+
+  function togglePoll(id, on){ const p=data.polls.find(x=>x.id===id); if(p){ p.active=on; KKD.save(data); AdminShell.saved(on?'Poll activated':'Poll paused'); } }
+
+  let editId = null;
+  function openPoll(id){
+    editId = id || null;
+    document.getElementById('plDrawerTitle').textContent = id ? 'Edit poll' : 'New poll';
+    const p = id ? data.polls.find(x=>x.id===id) : null;
+    document.getElementById('plQ').value = p? p.question : '';
+    document.getElementById('plOpts').value = p? p.options.join('\n') : '';
+    document.getElementById('plReward').value = p? p.reward : 15;
+    document.getElementById('plPlace').value = p? p.placement : 'Home';
+    document.getElementById('plActive').checked = p? !!p.active : true;
+    AdminShell.open('plDrawer');
+  }
+
+  function savePoll(){
+    const question = document.getElementById('plQ').value.trim() || 'Untitled poll';
+    const options = document.getElementById('plOpts').value.split('\n').map(o=>o.trim()).filter(Boolean);
+    const reward = parseInt(document.getElementById('plReward').value,10) || 0;
+    const placement = document.getElementById('plPlace').value;
+    const active = document.getElementById('plActive').checked;
+    const rec = { question, options, reward, placement, active };
+    if(editId){ Object.assign(data.polls.find(x=>x.id===editId), rec); }
+    else { rec.id='pl'+Date.now(); data.polls.unshift(rec); }
+    KKD.save(data); AdminShell.close('plDrawer'); renderGrid();
+    AdminShell.saved(editId?'Poll updated':'Poll added to draft');
+  }
+
+  function delPoll(id){ data.polls = data.polls.filter(p=>p.id!==id); KKD.save(data); renderGrid(); AdminShell.saved('Poll removed'); }
+
+  renderGrid();
+</script>
+</body></html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Notifications</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Notifications</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Create push templates and schedule campaigns.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openNotif()"><i class="fa-solid fa-plus"></i> New notification</button>
+      </div>
+
+      <!-- Type filter tabs -->
+      <div class="tabs" id="tabs"></div>
+
+      <!-- Templates table -->
+      <div class="card">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr>
+              <th>Title</th><th>Type</th><th>Segment</th><th>Schedule</th><th>Status</th><th style="text-align:right">Actions</th>
+            </tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: new / edit notification -->
+<div class="scrim" id="ntDrawerScrim" onclick="AdminShell.close('ntDrawer')"></div>
+<aside class="drawer" id="ntDrawer">
+  <div class="drawer-head">
+    <h3 id="ntDrawerTitle">New notification</h3>
+    <button class="x-btn" onclick="AdminShell.close('ntDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Title</label><input class="input" id="ntTitle" placeholder="e.g. Monsoon Sale is live"/></div>
+    <div class="field"><label>Body</label>
+      <textarea class="input" id="ntBody" placeholder="Up to 40% off on sprays. Shop now!"></textarea>
+      <div class="hint">use {name} {crop} {id} {n} placeholders</div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Type</label>
+        <select class="select" id="ntType">
+          <option value="order">order</option>
+          <option value="crop">crop</option>
+          <option value="offer">offer</option>
+          <option value="coins">coins</option>
+        </select>
+      </div>
+      <div class="field"><label>Segment</label>
+        <select class="select" id="ntSegment">
+          <option value="All users">All users</option>
+          <option value="Buyers">Buyers</option>
+          <option value="Crop set">Crop set</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Schedule</label>
+      <select class="select" id="ntSchedMode" onchange="toggleSched()">
+        <option value="triggered">Triggered (auto)</option>
+        <option value="scheduled">Schedule a date &amp; time</option>
+      </select>
+      <div id="ntSchedWrap" style="display:none;margin-top:10px">
+        <input class="input" type="datetime-local" id="ntSchedAt" value="2026-06-12T10:00"/>
+      </div>
+      <div class="hint">Triggered notifications fire automatically on app events; scheduled ones go out at the set time.</div>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('ntDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveNotif()"><i class="fa-solid fa-check"></i> Save to draft</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'notifications', title: 'Notifications', crumb: 'Engagement',
+    controls: 'Push templates + the in-app notification inbox', preview: 'notifications.html' });
+  let data = KKD.load();
+  const TYPES = { all:'All', order:'order', crop:'crop', offer:'offer', coins:'coins' };
+  let filter = 'all';
+
+  function statusBadge(s){ const m={active:['b-active','Active'],scheduled:['b-scheduled','Scheduled'],off:['b-off','Off']}; const [c,t]=m[s]||m.off; return `<span class="badge ${c}"><span class="dot"></span> ${t}</span>`; }
+
+  function renderTabs(){
+    document.getElementById('tabs').innerHTML = Object.entries(TYPES).map(([k,v])=>{
+      const n = k==='all'? data.pushTemplates.length : data.pushTemplates.filter(p=>p.type===k).length;
+      return `<div class="tab ${filter===k?'active':''}" onclick="filter='${k}';renderTabs();renderRows()">${v} <span style="opacity:.6">${n}</span></div>`;
+    }).join('');
+  }
+
+  function schedCell(p){
+    if(p.schedule==='Triggered') return `<span class="badge b-off"><span class="dot"></span> Auto</span>`;
+    return `<span class="badge b-scheduled"><span class="dot"></span> ${esc(p.schedule)}</span>`;
+  }
+
+  function renderRows(){
+    const list = data.pushTemplates.filter(p=> filter==='all' || p.type===filter);
+    document.getElementById('rows').innerHTML = list.map(p=>`
+      <tr>
+        <td style="max-width:280px">
+          <div class="cell-main">${esc(p.title)}</div>
+          <div class="cell-sub" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px">${esc(p.body)}</div>
+        </td>
+        <td><span class="tag">${esc(p.type)}</span></td>
+        <td><span class="tag">${esc(p.segment)}</span></td>
+        <td>${schedCell(p)}</td>
+        <td>${statusBadge(p.status)}</td>
+        <td>
+          <div class="flex gap-2" style="justify-content:flex-end">
+            <button class="btn btn-ghost btn-sm" onclick="sendTest()"><i class="fa-solid fa-paper-plane"></i> Send test</button>
+            <button class="btn btn-ghost btn-sm" onclick="openNotif('${p.id}')"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="delNotif('${p.id}')"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>`).join('') || '<tr><td colspan="6"><div class="empty"><i class="fa-solid fa-bell"></i><div>No notifications of this type yet.</div></div></td></tr>';
+  }
+
+  function sendTest(){ AdminShell.toast('Test push sent', 'paper-plane'); }
+
+  function toggleSched(){
+    document.getElementById('ntSchedWrap').style.display =
+      document.getElementById('ntSchedMode').value==='scheduled' ? '' : 'none';
+  }
+
+  let editId = null;
+  function openNotif(id){
+    editId = id || null;
+    document.getElementById('ntDrawerTitle').textContent = id ? 'Edit notification' : 'New notification';
+    const p = id ? data.pushTemplates.find(x=>x.id===id) : null;
+    document.getElementById('ntTitle').value = p? p.title : '';
+    document.getElementById('ntBody').value = p? p.body : '';
+    document.getElementById('ntType').value = p? p.type : 'order';
+    document.getElementById('ntSegment').value = p? p.segment : 'All users';
+    const triggered = !p || p.schedule==='Triggered';
+    document.getElementById('ntSchedMode').value = triggered ? 'triggered' : 'scheduled';
+    if(!triggered){
+      // convert 'YYYY-MM-DD HH:MM' to datetime-local 'YYYY-MM-DDTHH:MM'
+      document.getElementById('ntSchedAt').value = p.schedule.replace(' ','T');
+    } else {
+      document.getElementById('ntSchedAt').value = '2026-06-12T10:00';
+    }
+    toggleSched();
+    AdminShell.open('ntDrawer');
+  }
+
+  function saveNotif(){
+    const title = document.getElementById('ntTitle').value.trim() || 'Untitled notification';
+    const body  = document.getElementById('ntBody').value.trim();
+    const type  = document.getElementById('ntType').value;
+    const segment = document.getElementById('ntSegment').value;
+    const mode  = document.getElementById('ntSchedMode').value;
+    let schedule, status;
+    if(mode==='scheduled'){
+      schedule = document.getElementById('ntSchedAt').value.replace('T',' ');
+      status = 'scheduled';
+    } else {
+      schedule = 'Triggered';
+      status = 'active';
+    }
+    const rec = { type, title, body, segment, schedule, status };
+    if(editId){ Object.assign(data.pushTemplates.find(x=>x.id===editId), rec); }
+    else { rec.id='pt'+Date.now(); data.pushTemplates.unshift(rec); }
+    KKD.save(data); AdminShell.close('ntDrawer'); renderTabs(); renderRows();
+    AdminShell.saved(editId?'Notification updated':'Notification added to draft');
+  }
+
+  function delNotif(id){ data.pushTemplates = data.pushTemplates.filter(p=>p.id!==id); KKD.save(data); renderTabs(); renderRows(); AdminShell.saved('Notification removed'); }
+
+  renderTabs(); renderRows();
+</script>
+</body></html>

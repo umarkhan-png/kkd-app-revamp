@@ -185,3 +185,20 @@ textarea.input{height:auto;padding:10px 12px;resize:vertical;min-height:84px;lin
 .empty{text-align:center;padding:48px 20px;color:var(--slate-500)}
 .empty i{font-size:30px;color:var(--slate-300);margin-bottom:12px}
 .grid-cards{display:grid;gap:16px}
+
+/* ---------- Friendliness: context bar + in-portal app preview ---------- */
+.context-bar{display:flex;align-items:center;gap:10px;background:var(--green-50);border:1px solid var(--green-100);color:#15603A;border-radius:10px;padding:9px 14px;font-size:12.5px;margin-bottom:18px}
+.context-bar i{color:var(--green)}
+.context-bar b{font-weight:700}
+.app-preview{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%) scale(.98);z-index:90;background:#fff;border-radius:18px;box-shadow:var(--shadow-lg);padding:16px;opacity:0;visibility:hidden;transition:.22s;display:flex;flex-direction:column;align-items:center}
+.app-preview.open{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1)}
+.app-preview-head{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:12px;font-weight:700;font-size:13px;color:var(--slate-600);gap:12px}
+
+/* ---------- Reusable list-row (for config/settings style rows) ---------- */
+.lrow{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid var(--slate-100)}
+.lrow:last-child{border-bottom:0}
+.lrow .l-main{font-weight:700;font-size:13.5px}
+.lrow .l-sub{font-size:11.5px;color:var(--slate-500);margin-top:2px}
+.lrow .l-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.iconbox{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:20px}

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Coupons</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+.mono{font-family:'SF Mono',ui-monospace,Menlo,Consolas,monospace;letter-spacing:.02em}
+.tag-gold{background:var(--amber-bg);color:var(--amber)}
+</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Coupons</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Create and schedule discount codes.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openCoupon()"><i class="fa-solid fa-plus"></i> New coupon</button>
+      </div>
+
+      <!-- KPI row -->
+      <div class="kpi" id="kpi"></div>
+
+      <!-- Status filter tabs -->
+      <div class="tabs" id="tabs"></div>
+
+      <!-- Coupons table -->
+      <div class="card">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr>
+              <th>Code</th><th>Discount</th><th>Min order</th><th>Applies to</th>
+              <th>Validity</th><th>Used</th><th>Status</th><th style="text-align:right">Actions</th>
+            </tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: new / edit coupon -->
+<div class="scrim" id="cpDrawerScrim" onclick="AdminShell.close('cpDrawer')"></div>
+<aside class="drawer" id="cpDrawer">
+  <div class="drawer-head">
+    <h3 id="cpDrawerTitle">New coupon</h3>
+    <button class="x-btn" onclick="AdminShell.close('cpDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Code</label><input class="input mono" id="cpCode" placeholder="e.g. WELCOME100" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"/></div>
+    <div class="row2">
+      <div class="field"><label>Type</label>
+        <select class="select" id="cpType">
+          <option value="flat">Flat (₹)</option>
+          <option value="percent">Percentage (%)</option>
+        </select>
+      </div>
+      <div class="field"><label>Value</label><input class="input" type="number" id="cpValue" placeholder="100"/></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Min order (₹)</label><input class="input" type="number" id="cpMin" placeholder="0"/></div>
+      <div class="field"><label>Scope</label>
+        <select class="select" id="cpScope">
+          <option value="All products">All products</option>
+          <option value="First order">First order</option>
+          <option value="Category · Fertilizer">Category · Fertilizer</option>
+          <option value="Category · Fungicide">Category · Fungicide</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Description</label><input class="input" id="cpDesc" placeholder="e.g. On your first order"/></div>
+    <div class="row2">
+      <div class="field"><label>Start date</label><input class="input" type="date" id="cpStart" value="2026-06-11"/></div>
+      <div class="field"><label>End date</label><input class="input" type="date" id="cpEnd" value="2026-07-11"/></div>
+    </div>
+    <div class="field flex items-center justify-between" style="padding:12px 14px;background:var(--slate-50);border-radius:10px;border:1px solid var(--slate-200)">
+      <div><label style="margin:0">Mark as MAX SAVING badge</label><div class="hint" style="margin-top:2px">Highlights this code in the app as the best saving</div></div>
+      <label class="switch"><input type="checkbox" id="cpMax"><span class="track"></span></label>
+    </div>
+    <div class="field flex items-center justify-between" style="padding:12px 14px;background:var(--slate-50);border-radius:10px;border:1px solid var(--slate-200);margin-bottom:0">
+      <div><label style="margin:0">Active</label><div class="hint" style="margin-top:2px">Live and redeemable at checkout</div></div>
+      <label class="switch"><input type="checkbox" id="cpActive" checked><span class="track"></span></label>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('cpDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveCoupon()"><i class="fa-solid fa-check"></i> Save to draft</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'coupons', title: 'Coupons', crumb: 'Offers & Rewards', controls: 'Coupon codes shown at cart & checkout', preview: 'cart.html' });
+  let data = KKD.load();
+  const FILTERS = { all:'All', active:'Active', scheduled:'Scheduled', off:'Inactive' };
+  let filter = 'all';
+
+  function statusBadge(s){ const m={active:['b-active','Active'],scheduled:['b-scheduled','Scheduled'],off:['b-off','Inactive']}; const [c,t]=m[s]||m.off; return `<span class="badge ${c}"><span class="dot"></span> ${t}</span>`; }
+  function discountText(c){ return c.type==='flat' ? `₹${c.value}` : `${c.value}%`; }
+
+  function renderKpi(){
+    const active = data.coupons.filter(c=>c.status==='active').length;
+    const redemptions = data.coupons.reduce((s,c)=>s+(c.used||0),0);
+    const scheduled = data.coupons.filter(c=>c.status==='scheduled').length;
+    document.getElementById('kpi').innerHTML = `
+      <div class="stat"><div class="ic ic-green"><i class="fa-solid fa-ticket"></i></div><div class="num">${active}</div><div class="lbl">Active coupons</div></div>
+      <div class="stat"><div class="ic ic-blue"><i class="fa-solid fa-arrow-down-up-across-line"></i></div><div class="num">${redemptions.toLocaleString()}</div><div class="lbl">Total redemptions</div></div>
+      <div class="stat"><div class="ic ic-amber"><i class="fa-solid fa-clock"></i></div><div class="num">${scheduled}</div><div class="lbl">Scheduled</div></div>`;
+  }
+
+  function renderTabs(){
+    document.getElementById('tabs').innerHTML = Object.entries(FILTERS).map(([k,v])=>{
+      const n = k==='all'? data.coupons.length : data.coupons.filter(c=>c.status===k).length;
+      return `<div class="tab ${filter===k?'active':''}" onclick="filter='${k}';renderTabs();renderRows()">${v} <span style="opacity:.6">${n}</span></div>`;
+    }).join('');
+  }
+
+  function renderRows(){
+    const list = data.coupons.filter(c=> filter==='all' || c.status===filter);
+    document.getElementById('rows').innerHTML = list.map(c=>`
+      <tr>
+        <td><span class="cell-main mono">${esc(c.code)}</span>${c.maxSaving?' <span class="tag tag-gold">MAX SAVING</span>':''}</td>
+        <td><span class="cell-main">${discountText(c)}</span></td>
+        <td>${c.minOrder ? '₹'+c.minOrder : '—'}</td>
+        <td><span class="tag">${esc(c.scope)}</span></td>
+        <td class="cell-sub">${c.start} → ${c.end}</td>
+        <td>${(c.used||0).toLocaleString()} redemptions</td>
+        <td>${statusBadge(c.status)}</td>
+        <td style="text-align:right"><div class="flex gap-2" style="justify-content:flex-end">
+          <button class="btn btn-ghost btn-sm" onclick="openCoupon('${c.id}')"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="delCoupon('${c.id}')"><i class="fa-solid fa-trash"></i></button>
+        </div></td>
+      </tr>`).join('') || `<tr><td colspan="8"><div class="empty"><i class="fa-solid fa-ticket"></i><div>No coupons in this status yet.</div></div></td></tr>`;
+  }
+
+  let editId = null;
+  function openCoupon(id){
+    editId = id || null;
+    document.getElementById('cpDrawerTitle').textContent = id ? 'Edit coupon' : 'New coupon';
+    const c = id ? data.coupons.find(x=>x.id===id) : null;
+    document.getElementById('cpCode').value = c? c.code : '';
+    document.getElementById('cpType').value = c? c.type : 'flat';
+    document.getElementById('cpValue').value = c? c.value : '';
+    document.getElementById('cpMin').value = c? c.minOrder : '';
+    document.getElementById('cpScope').value = c? c.scope : 'All products';
+    document.getElementById('cpDesc').value = c? c.desc : '';
+    document.getElementById('cpStart').value = c? c.start : '2026-06-11';
+    document.getElementById('cpEnd').value = c? c.end : '2026-07-11';
+    document.getElementById('cpMax').checked = c? !!c.maxSaving : false;
+    document.getElementById('cpActive').checked = c? c.status!=='off' : true;
+    AdminShell.open('cpDrawer');
+  }
+
+  function saveCoupon(){
+    const code = (document.getElementById('cpCode').value.trim().toUpperCase())||'NEWCODE';
+    const active = document.getElementById('cpActive').checked;
+    const rec = {
+      code, type: document.getElementById('cpType').value,
+      value: parseFloat(document.getElementById('cpValue').value)||0,
+      minOrder: parseFloat(document.getElementById('cpMin').value)||0,
+      scope: document.getElementById('cpScope').value,
+      desc: document.getElementById('cpDesc').value.trim(),
+      start: document.getElementById('cpStart').value,
+      end: document.getElementById('cpEnd').value,
+      maxSaving: document.getElementById('cpMax').checked,
+      status: active ? 'active' : 'off',
+    };
+    if(editId){ rec.used = data.coupons.find(x=>x.id===editId).used||0; Object.assign(data.coupons.find(x=>x.id===editId), rec); }
+    else { rec.id='cp'+Date.now(); rec.used=0; data.coupons.unshift(rec); }
+    KKD.save(data); AdminShell.close('cpDrawer'); renderKpi(); renderTabs(); renderRows(); AdminShell.saved(editId?'Coupon updated':'Coupon added to draft');
+  }
+  function delCoupon(id){ data.coupons=data.coupons.filter(c=>c.id!==id); KKD.save(data); renderKpi(); renderTabs(); renderRows(); AdminShell.saved('Coupon removed'); }
+
+  renderKpi(); renderTabs(); renderRows();
+</script>
+</body></html>

@@ -115,6 +115,190 @@
       { name: 'Offers', route: 'shop.html', params: '?cat=offers' },
     ],
 
+    // ---------------- Offers & Rewards ----------------
+    coupons: [
+      { id: 'cp1', code: 'WELCOME100', type: 'flat', value: 100, minOrder: 300, desc: 'On your first order', scope: 'First order', start: '2026-06-01', end: '2026-06-30', status: 'active', maxSaving: true, used: 4120 },
+      { id: 'cp2', code: 'HUMIC50', type: 'flat', value: 50, minOrder: 0, desc: 'Flat ₹50 on Humic range', scope: 'Category · Fertilizer', start: '2026-06-05', end: '2026-06-20', status: 'active', maxSaving: false, used: 880 },
+      { id: 'cp3', code: 'KKD200', type: 'flat', value: 200, minOrder: 1500, desc: '₹200 off above ₹1500', scope: 'All products', start: '2026-06-10', end: '2026-07-10', status: 'active', maxSaving: false, used: 312 },
+      { id: 'cp4', code: 'MONSOON15', type: 'percent', value: 15, minOrder: 800, desc: '15% off · max ₹300', scope: 'All products', start: '2026-06-15', end: '2026-06-25', status: 'scheduled', maxSaving: false, used: 0 },
+      { id: 'cp5', code: 'DIWALI25', type: 'percent', value: 25, minOrder: 1000, desc: 'Festive 25% off', scope: 'All products', start: '2025-10-20', end: '2025-11-05', status: 'off', maxSaving: false, used: 9540 },
+    ],
+    flashDeals: [
+      { id: 'fd1', title: 'Monsoon Flash Sale', start: '2026-06-11 09:00', end: '2026-06-11 21:00', products: ['p1','p3','p4'], discount: 40, status: 'active' },
+      { id: 'fd2', title: 'Weekend Spray Kit', start: '2026-06-14 00:00', end: '2026-06-15 23:59', products: ['p7','p5'], discount: 30, status: 'scheduled' },
+    ],
+    coinSettings: { ratePerCoin: 1, redeemCapPct: 10, expiryDays: 0, prepaidEarnPct: 2 },
+    coinRules: [
+      { id: 'cn1', action: 'first_order', label: 'First order bonus', coins: 100, active: true },
+      { id: 'cn2', action: 'enable_notifs', label: 'Enable notifications', coins: 50, active: true },
+      { id: 'cn3', action: 'crop_setup', label: 'Set up your crops', coins: 15, active: true },
+      { id: 'cn4', action: 'rate_order', label: 'Rate a delivered order', coins: 10, active: true },
+      { id: 'cn5', action: 'video_review', label: 'Upload a video testimonial', coins: 25, active: true },
+      { id: 'cn6', action: 'refer_friend', label: 'Refer a friend (per join)', coins: 60, active: true },
+    ],
+    earnSteps: [ // the home "Earn Krishi Coins · 5 steps" widget
+      { id: 'es1', label: 'Complete your profile', coins: 20, done: false },
+      { id: 'es2', label: 'Add your first crop', coins: 15, done: true },
+      { id: 'es3', label: 'Place your first order', coins: 100, done: false },
+      { id: 'es4', label: 'Rate a product', coins: 10, done: false },
+      { id: 'es5', label: 'Refer a friend', coins: 60, done: false },
+    ],
+    scratchCampaigns: [
+      { id: 'sc1', name: 'Order reward card', trigger: 'On every delivered order', active: true, distributed: 2140,
+        prizes: [ { tier: 'Cashback ₹150', type: 'cashback', value: 150, odds: 5 }, { tier: 'Cashback ₹50', type: 'cashback', value: 50, odds: 20 }, { tier: '100 Coins', type: 'coins', value: 100, odds: 30 }, { tier: 'Better luck', type: 'none', value: 0, odds: 45 } ] },
+      { id: 'sc2', name: 'Festive mega card', trigger: 'Manual · festival', active: false, distributed: 0,
+        prizes: [ { tier: 'Cashback ₹200', type: 'cashback', value: 200, odds: 2 }, { tier: '50 Coins', type: 'coins', value: 50, odds: 48 }, { tier: 'Better luck', type: 'none', value: 0, odds: 50 } ] },
+    ],
+    referral: { referrerCoins: 60, refereeOff: 100, shareCopy: 'Get ₹100 off your first order on KKD! Use my code {code}.',
+      milestones: [ { count: 5, bonus: 500 }, { count: 10, bonus: 1200 } ],
+      leaderboard: [ { name: 'Mithun', count: 2211 }, { name: 'Sumit', count: 1611 }, { name: 'Ravindra', count: 1414 }, { name: 'Sorabh', count: 1181 } ] },
+
+    // ---------------- Catalog extras ----------------
+    reviews: [
+      { id: 'rv1', product: 'Chakravarti Insecticide', user: 'Ramesh P.', rating: 5, text: 'Bahut accha result mila cotton me.', photos: 2, status: 'pending', date: '2026-06-10' },
+      { id: 'rv2', product: 'Humic Acid Plus', user: 'Sunita D.', rating: 4, text: 'Growth improved in 7 days.', photos: 0, status: 'approved', date: '2026-06-09' },
+      { id: 'rv3', product: 'Anti-Virus Bio Tonic', user: 'Anonymous', rating: 1, text: 'Spam link http://x.co buy now', photos: 0, status: 'pending', date: '2026-06-11' },
+      { id: 'rv4', product: 'NPK 19:19:19', user: 'Vikram S.', rating: 5, text: 'Paddy me zabardast.', photos: 1, status: 'approved', date: '2026-06-08' },
+      { id: 'rv5', product: 'Sulphur 80% WDG', user: 'Mahesh K.', rating: 2, text: 'Packaging damaged tha.', photos: 3, status: 'rejected', date: '2026-06-07' },
+    ],
+    trustBadges: [
+      { id: 'tb1', title: '7-Day Return', desc: 'Easy returns within 7 days', icon: 'rotate-left', active: true },
+      { id: 'tb2', title: 'Cash on Delivery', desc: 'Available across serviceable pincodes', icon: 'money-bill-wave', active: true },
+      { id: 'tb3', title: 'Katyayani Assured', desc: '100% genuine, direct from factory', icon: 'shield-halved', active: true },
+      { id: 'tb4', title: 'Verified by lab', desc: 'Quality lab-tested batches', icon: 'flask-vial', active: false },
+    ],
+    crossSell: [
+      { id: 'xs1', trigger: 'In cart', label: 'Special deal', products: ['p3'], save: 98, active: true },
+      { id: 'xs2', trigger: 'Buy together', label: 'Best buy together', products: ['p2','p5'], save: 120, active: true },
+      { id: 'xs3', trigger: 'Cart special', label: 'Cart special offer', products: ['p7'], save: 150, active: true },
+    ],
+    searchConfig: {
+      placeholder: 'Search products, pests, crops',
+      engagementReward: 15,
+      noResult: 'No products match this search',
+      trending: ['Wheat protect','Bhumiraja','Imida','Cotton care','Bio stimulant'],
+      voiceHints: ['मिर्च के लिए दवा','NPK 19-19-19 खरीदना है','टमाटर में फंगस'],
+      suggestions: [
+        { term: 'tomato', maps: ['Tomato crop','Tomato in Fertilizer','Tomato wilt & blight'] },
+        { term: 'humic', maps: ['Humic + Fulvic','Humic for wheat','Humic dosage'] },
+      ],
+    },
+
+    // ---------------- Crop Help ----------------
+    cropStages: [ // crop calendar — stages with dated tasks (per crop key)
+      { crop: 'chilli', stages: [
+        { name: 'Sowing', hindi: 'बुवाई', dayFrom: 1, dayTo: 7, tasks: ['Treat seeds before sowing', 'Apply Humic + Fulvic 98'] },
+        { name: 'Vegetative', hindi: 'शाकीय', dayFrom: 8, dayTo: 40, tasks: ['Nitrogen-rich feed', 'Watch for sucking pests'] },
+        { name: 'Flowering', hindi: 'फूल', dayFrom: 41, dayTo: 75, tasks: ['Spray Chakravarti', 'Boron foliar spray'] },
+        { name: 'Fruiting', hindi: 'फल', dayFrom: 76, dayTo: 110, tasks: ['Calcium spray', 'Harvest scouting'] },
+      ]},
+      { crop: 'tomato', stages: [
+        { name: 'Nursery', hindi: 'नर्सरी', dayFrom: 0, dayTo: 20, tasks: ['Damping-off watch', 'Seedling drench'] },
+        { name: 'Transplant', hindi: 'रोपाई', dayFrom: 21, dayTo: 40, tasks: ['Root dip', 'Starter fertilizer'] },
+        { name: 'Flowering', hindi: 'फूल', dayFrom: 41, dayTo: 75, tasks: ['Pollination support', 'Fungicide rotation'] },
+      ]},
+    ],
+    diseases: [
+      { id: 'ds1', name: 'Yellow Mosaic Virus', hindi: 'पीला मोज़ेक वायरस', crop: 'chilli', severity: 'High', desc: 'Spread by aphids. Yellow patches on leaves, stunted growth.', products: ['p3'] },
+      { id: 'ds2', name: 'Root Rot', hindi: 'जड़ सड़न', crop: 'tomato', severity: 'High', desc: 'Black lesions on hypocotyls; wilting.', products: ['p4'] },
+      { id: 'ds3', name: 'Leaf Curl', hindi: 'पत्ती मोड़', crop: 'chilli', severity: 'Medium', desc: 'Curling, thickened leaves; whitefly vector.', products: ['p1'] },
+      { id: 'ds4', name: 'Powdery Mildew', hindi: 'चूर्णिल आसिता', crop: 'tomato', severity: 'Medium', desc: 'White powder on leaf surface.', products: ['p4'] },
+    ],
+    advisory: [
+      { id: 'ad1', title: 'Best time to spray for chilli yellow mosaic', crop: 'chilli', topic: 'Pest', answers: 3, status: 'published' },
+      { id: 'ad2', title: 'Humic acid: dosage by crop stage', crop: 'all', topic: 'Nutrition', answers: 5, status: 'published' },
+      { id: 'ad3', title: 'Monsoon fungicide rotation guide', crop: 'tomato', topic: 'Disease', answers: 2, status: 'draft' },
+    ],
+    mandi: [
+      { crop: 'Tomato', location: 'Indore', price: 18, unit: 'kg', change: 2 },
+      { crop: 'Chilli', location: 'Indore', price: 92, unit: 'kg', change: -4 },
+      { crop: 'Wheat', location: 'Ujjain', price: 24, unit: 'kg', change: 1 },
+      { crop: 'Soybean', location: 'Dewas', price: 46, unit: 'kg', change: -2 },
+    ],
+    experts: [
+      { id: 'ex1', name: 'Dr. Priya Sharma', title: 'Senior Agronomist', exp: 8, langs: ['Hindi','Marathi'], rating: 4.9, calls: 2140, available: true },
+      { id: 'ex2', name: 'Dr. R. Verma', title: 'Krishi Agronomist', exp: 6, langs: ['Hindi','English'], rating: 4.8, calls: 1530, available: true },
+      { id: 'ex3', name: 'Dr. S. Patil', title: 'Crop Specialist', exp: 11, langs: ['Marathi','Hindi'], rating: 4.7, calls: 980, available: false },
+    ],
+    askAi: { greeting: 'Namaste 🙏 Main Krishi AI hoon — crops, pests, products ya order ke baare me poochiye.', persona: 'Friendly Hinglish agronomy assistant', chips: ['Check price','Disease help','Track order','Dosage'] },
+
+    // ---------------- Engagement ----------------
+    pushTemplates: [
+      { id: 'pt1', type: 'order', title: 'Order delivered', body: 'Your order {id} was delivered. Rate it for +10 coins!', segment: 'Buyers', schedule: 'Triggered', status: 'active' },
+      { id: 'pt2', type: 'crop', title: 'Crop calendar reminder', body: '{crop} is in {stage} — time to spray {product}.', segment: 'Crop set', schedule: 'Triggered', status: 'active' },
+      { id: 'pt3', type: 'offer', title: 'Monsoon Sale is live', body: 'Up to 40% off on sprays. Shop now!', segment: 'All users', schedule: '2026-06-11 10:00', status: 'scheduled' },
+      { id: 'pt4', type: 'coins', title: 'You earned coins', body: '+{n} Krishi Coins added to your wallet.', segment: 'Buyers', schedule: 'Triggered', status: 'active' },
+    ],
+    polls: [
+      { id: 'pl1', question: 'Which crop do you grow most?', options: ['Wheat','Cotton','Tomato','Other'], reward: 15, placement: 'Home + Search', active: true },
+      { id: 'pl2', question: 'How do you usually buy inputs?', options: ['Local dealer','Online','Co-op'], reward: 10, placement: 'Home', active: false },
+    ],
+    onboarding: {
+      languages: ['Hindi','English','Hinglish','Marathi','Gujarati','Punjabi','Telugu','Tamil','Kannada','Malayalam','Odia','Bengali'],
+      cropPicker: ['Wheat','Rice','Tomato','Chilli','Maize','Soybean','Cotton','Sugarcane','More'],
+      welcomeAboard: { eyebrow: 'Welcome aboard', headline: 'Namaste,', sub: "You've joined the Katyayani family. Let's grow together." },
+      welcomeBack: { eyebrow: 'Welcome back', headline: 'Hey,', sub: 'Good to see you again. Your farm has been waiting for you.' },
+      permissionBullets: [
+        { icon: 'truck-fast', text: 'Faster, accurate delivery to your farm' },
+        { icon: 'wheat-awn', text: 'Product recommendations for your area' },
+        { icon: 'cloud-sun-rain', text: 'Local weather & spray alerts' },
+      ],
+      otpFacts: [
+        'Free doctor calls with every order',
+        'Direct-from-factory pricing',
+        'New launch: Bhumiraja bio-stimulant',
+        'Licensed & lab-tested products',
+      ],
+    },
+
+    // ---------------- Content & static pages ----------------
+    staticPages: [
+      { key: 'about', title: 'About Katyayani', updated: '2026-05-14', words: 180, status: 'published' },
+      { key: 'privacy', title: 'Privacy Policy', updated: '2026-06-01', words: 640, status: 'published' },
+      { key: 'terms', title: 'Terms of Service', updated: '2026-06-01', words: 520, status: 'published' },
+      { key: 'returns', title: 'Returns & Refund Policy', updated: '2026-06-01', words: 410, status: 'published' },
+      { key: 'help', title: 'Help & FAQ', updated: '2026-05-20', words: 300, status: 'published' },
+      { key: 'know', title: 'Know your app', updated: '2026-05-10', words: 220, status: 'published' },
+    ],
+    screenCopy: [ // per-screen short strings (empty/error/loading/cta) admins tweak
+      { screen: 'empty-cart', label: 'Empty cart title', value: 'कार्ट खाली है' },
+      { screen: 'empty-orders', label: 'No orders title', value: 'अभी कोई ऑर्डर नहीं' },
+      { screen: 'error-network', label: 'No-internet heading', value: 'No Internet' },
+      { screen: 'error-payment', label: 'Payment failed title', value: 'Payment fail ho gaya' },
+      { screen: 'search', label: 'Search empty state', value: 'No products match this search' },
+    ],
+
+    // ---------------- Store Setup ----------------
+    serviceability: {
+      deliveryFee: 0, freeThreshold: 499, etaDays: 1,
+      servicePincodes: ['452001','452010','456001','456440','453111'],
+      blockedPincodes: ['123456'],
+      stateBans: [ { state: 'Kerala', product: 'Glyphosate 41% SL' } ],
+    },
+    payments: {
+      methods: [
+        { key: 'upi', label: 'UPI', enabled: true, note: '5% instant off · faster' },
+        { key: 'card', label: 'Cards', enabled: true, note: 'Visa / Master / RuPay' },
+        { key: 'netbank', label: 'Net banking', enabled: true, note: '' },
+        { key: 'partial', label: 'Partial payment', enabled: true, note: 'Pay % now, rest COD' },
+        { key: 'cod', label: 'Cash on Delivery', enabled: true, note: '₹95 surcharge' },
+      ],
+      prepaidDiscountPct: 5, codSurcharge: 95, coinsOnPrepaidPct: 2, partialOptions: [10,25,50,75],
+    },
+    ordersConfig: {
+      statuses: [
+        { key: 'placed', label: 'Order Placed', copy: 'Payment received' },
+        { key: 'packed', label: 'Packed', copy: 'Packed at warehouse' },
+        { key: 'dispatched', label: 'Dispatched', copy: 'Out for last-mile' },
+        { key: 'out', label: 'Out for Delivery', copy: 'Arriving today' },
+        { key: 'delivered', label: 'Delivered', copy: 'Delivered to address' },
+      ],
+      cancelReasons: ['Ordered by mistake','Found cheaper','Wrong product','Delivery slow','Change qty/address','Other'],
+      returnReasons: ['Damaged','Wrong product','Defective','Not as described','Other'],
+      refundSlaDays: 5,
+      partners: [ { name: 'Delhivery', active: true }, { name: 'Ecom Express', active: true }, { name: 'India Post', active: false } ],
+    },
+
     versions: [
       { v: 'v128', when: '2026-06-11 11:40', by: 'Admin', note: 'Centered delivery banner copy', live: true },
       { v: 'v127', when: '2026-06-10 18:05', by: 'Admin', note: 'Monsoon Sale banner + 2 products', live: false },
@@ -125,8 +309,12 @@
 
   const KEY = 'kkdAdmin.data';
   function load() {
-    try { const s = localStorage.getItem(KEY); if (s) return JSON.parse(s); } catch (e) {}
-    return JSON.parse(JSON.stringify(SEED));
+    const seed = JSON.parse(JSON.stringify(SEED));
+    try {
+      const s = localStorage.getItem(KEY);
+      if (s) { const stored = JSON.parse(s); return Object.assign({}, seed, stored); } // new SEED collections fill in over older saved state
+    } catch (e) {}
+    return seed;
   }
   function save(d) { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} bumpPending(); }
   function reset() { try { localStorage.removeItem(KEY); localStorage.removeItem('kkdAdmin.pending'); } catch (e) {} }

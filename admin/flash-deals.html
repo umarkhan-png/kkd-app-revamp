@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Flash Deals</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+.disc-chip{display:inline-flex;align-items:baseline;gap:3px;font-weight:800;font-size:26px;color:var(--green);background:var(--green-50);border:1px solid var(--green-100);border-radius:12px;padding:8px 14px;letter-spacing:-.02em}
+.disc-chip span{font-size:14px;font-weight:700}
+.checklist{max-height:220px;overflow-y:auto;border:1px solid var(--slate-200);border-radius:10px}
+.checklist label{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--slate-100);font-size:13px;font-weight:600;cursor:pointer}
+.checklist label:last-child{border-bottom:0}
+</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Flash Deals</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Run time-boxed sales with a countdown on Home.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openDeal()"><i class="fa-solid fa-plus"></i> New flash deal</button>
+      </div>
+
+      <!-- Flash deal cards -->
+      <div class="grid-cards" style="grid-template-columns:repeat(2,1fr)" id="grid"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: new / edit flash deal -->
+<div class="scrim" id="fdDrawerScrim" onclick="AdminShell.close('fdDrawer')"></div>
+<aside class="drawer" id="fdDrawer">
+  <div class="drawer-head">
+    <h3 id="fdDrawerTitle">New flash deal</h3>
+    <button class="x-btn" onclick="AdminShell.close('fdDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Title</label><input class="input" id="fdTitle" placeholder="e.g. Monsoon Flash Sale"/></div>
+    <div class="field"><label>Discount %</label><input class="input" type="number" id="fdDiscount" placeholder="40"/></div>
+    <div class="row2">
+      <div class="field"><label>Start</label><input class="input" type="datetime-local" id="fdStart" value="2026-06-11T09:00"/></div>
+      <div class="field"><label>End</label><input class="input" type="datetime-local" id="fdEnd" value="2026-06-11T21:00"/></div>
+    </div>
+    <div class="field">
+      <label>Products in this deal</label>
+      <div class="checklist" id="fdProducts"></div>
+      <div class="hint">Pick the products that go on sale during this window.</div>
+    </div>
+    <div class="field flex items-center justify-between" style="padding:12px 14px;background:var(--slate-50);border-radius:10px;border:1px solid var(--slate-200);margin-bottom:0">
+      <div><label style="margin:0">Active</label><div class="hint" style="margin-top:2px">Show this deal strip on Home</div></div>
+      <label class="switch"><input type="checkbox" id="fdActive" checked><span class="track"></span></label>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('fdDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveDeal()"><i class="fa-solid fa-check"></i> Save to draft</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'flashdeals', title: 'Flash Deals', crumb: 'Offers & Rewards', controls: 'The timed Flash Deals strip on Home', preview: 'home.html' });
+  let data = KKD.load();
+  const NOW = new Date('2026-06-11T12:00:00');
+
+  function statusBadge(s){ const m={active:['b-active','Active'],scheduled:['b-scheduled','Scheduled'],off:['b-off','Inactive']}; const [c,t]=m[s]||m.off; return `<span class="badge ${c}"><span class="dot"></span> ${t}</span>`; }
+  function prodName(id){ const p=data.products.find(x=>x.id===id); return p? p.name : id; }
+
+  function countdown(end){
+    const e = new Date(end.replace(' ','T'));
+    const ms = e - NOW;
+    if(ms <= 0) return 'Ended';
+    const h = Math.floor(ms/3600000), d = Math.floor(h/24);
+    if(d >= 1) return `ends in ${d}d ${h%24}h`;
+    if(h >= 1) return `ends in ${h}h`;
+    return `ends in ${Math.max(1,Math.floor(ms/60000))}m`;
+  }
+
+  function renderGrid(){
+    document.getElementById('grid').innerHTML = data.flashDeals.map(f=>`
+      <div class="card">
+        <div class="card-head">
+          <h3>${esc(f.title)}</h3>
+          <div style="margin-left:auto">${statusBadge(f.status)}</div>
+        </div>
+        <div class="card-pad">
+          <div class="flex items-center gap-4" style="margin-bottom:14px">
+            <div class="disc-chip">${f.discount}<span>% OFF</span></div>
+            <div>
+              <div class="cell-sub" style="margin-bottom:4px"><i class="fa-regular fa-clock"></i> ${f.start} → ${f.end}</div>
+              <div class="badge ${(new Date(f.end.replace(' ','T'))>NOW)?'b-red':'b-off'}"><span class="dot"></span> ${countdown(f.end)}</div>
+            </div>
+          </div>
+          <div class="flex gap-2" style="flex-wrap:wrap;margin-bottom:14px">
+            ${f.products.map(id=>`<span class="tag tag-green">${esc(prodName(id))}</span>`).join('') || '<span class="muted" style="font-size:12px">No products</span>'}
+          </div>
+          <div class="flex items-center justify-between" style="border-top:1px solid var(--slate-100);padding-top:12px">
+            <label class="switch"><input type="checkbox" ${f.status!=='off'?'checked':''} onchange="toggleDeal('${f.id}',this.checked)"><span class="track"></span></label>
+            <div class="flex gap-2">
+              <button class="btn btn-ghost btn-sm" onclick="openDeal('${f.id}')"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-danger btn-sm" onclick="delDeal('${f.id}')"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>`).join('') || '<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-bolt"></i><div>No flash deals yet.</div></div>';
+  }
+
+  let editId = null;
+  function openDeal(id){
+    editId = id || null;
+    document.getElementById('fdDrawerTitle').textContent = id ? 'Edit flash deal' : 'New flash deal';
+    const f = id ? data.flashDeals.find(x=>x.id===id) : null;
+    document.getElementById('fdTitle').value = f? f.title : '';
+    document.getElementById('fdDiscount').value = f? f.discount : '';
+    document.getElementById('fdStart').value = f? f.start.replace(' ','T') : '2026-06-11T09:00';
+    document.getElementById('fdEnd').value = f? f.end.replace(' ','T') : '2026-06-11T21:00';
+    document.getElementById('fdActive').checked = f? f.status!=='off' : true;
+    const chosen = f? f.products : [];
+    document.getElementById('fdProducts').innerHTML = data.products.map(p=>`
+      <label><input type="checkbox" class="fdp" value="${p.id}" ${chosen.includes(p.id)?'checked':''}/> ${esc(p.name)}</label>`).join('');
+    AdminShell.open('fdDrawer');
+  }
+
+  function saveDeal(){
+    const active = document.getElementById('fdActive').checked;
+    const products = Array.from(document.querySelectorAll('.fdp:checked')).map(c=>c.value);
+    const rec = {
+      title: document.getElementById('fdTitle').value.trim()||'Untitled deal',
+      discount: parseInt(document.getElementById('fdDiscount').value,10)||0,
+      start: document.getElementById('fdStart').value.replace('T',' '),
+      end: document.getElementById('fdEnd').value.replace('T',' '),
+      products,
+      status: active ? 'active' : 'off',
+    };
+    if(editId){ Object.assign(data.flashDeals.find(x=>x.id===editId), rec); }
+    else { rec.id='fd'+Date.now(); data.flashDeals.unshift(rec); }
+    KKD.save(data); AdminShell.close('fdDrawer'); renderGrid(); AdminShell.saved(editId?'Flash deal updated':'Flash deal added to draft');
+  }
+  function toggleDeal(id,on){ const f=data.flashDeals.find(x=>x.id===id); f.status = on?'active':'off'; KKD.save(data); renderGrid(); AdminShell.saved(on?'Flash deal activated':'Flash deal paused'); }
+  function delDeal(id){ data.flashDeals=data.flashDeals.filter(f=>f.id!==id); KKD.save(data); renderGrid(); AdminShell.saved('Flash deal removed'); }
+
+  renderGrid();
+</script>
+</body></html>

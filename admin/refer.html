@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Refer & Earn</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Refer &amp; Earn</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Tune referral rewards, milestones and share copy.</p>
+        </div>
+        <button class="btn btn-primary" onclick="saveRewards()"><i class="fa-solid fa-check"></i> Save rewards</button>
+      </div>
+
+      <!-- Rewards -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-head"><h3>Rewards</h3><span class="sub">What each side gets on a successful referral</span></div>
+        <div class="card-pad">
+          <div class="row2">
+            <div class="field"><label>You earn (coins)</label>
+              <input class="input" type="number" min="0" id="rfReferrer" value="">
+              <div class="hint">Coins credited to the referrer when a friend joins & orders.</div>
+            </div>
+            <div class="field"><label>Friend gets ₹ off</label>
+              <input class="input" type="number" min="0" id="rfReferee" value="">
+              <div class="hint">Discount applied on the new friend's first order.</div>
+            </div>
+          </div>
+          <div class="field" style="margin-bottom:0"><label>Share message</label>
+            <textarea class="input" id="rfShare"></textarea>
+            <div class="hint">You can use <code>{code}</code> — it's replaced with the farmer's referral code.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Milestone bonuses -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-head">
+          <h3>Milestone bonuses</h3>
+          <span class="sub">Extra ₹ when a farmer hits a referral count</span>
+          <button class="btn btn-soft btn-sm" style="margin-left:auto" onclick="addMilestone()"><i class="fa-solid fa-plus"></i> Add milestone</button>
+        </div>
+        <div id="milestones"></div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="card">
+        <div class="card-head">
+          <h3>Leaderboard (preview)</h3>
+          <span class="sub">Top referrers</span>
+          <span class="tag" style="margin-left:auto"><i class="fa-solid fa-lock" style="margin-right:5px"></i> Live data — read only</span>
+        </div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th style="width:70px">Rank</th><th>Name</th><th style="text-align:right">Referrals</th></tr></thead>
+            <tbody id="leaderboard"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active:'refer', title:'Refer & Earn', crumb:'Offers & Rewards', controls:'Referral program + leaderboard', preview:'refer.html' });
+  let data = KKD.load();
+  const R = data.referral;
+
+  /* ---------- Rewards ---------- */
+  function fillRewards(){
+    document.getElementById('rfReferrer').value = R.referrerCoins;
+    document.getElementById('rfReferee').value = R.refereeOff;
+    document.getElementById('rfShare').value = R.shareCopy;
+  }
+  function saveRewards(){
+    R.referrerCoins = parseInt(document.getElementById('rfReferrer').value,10)||0;
+    R.refereeOff = parseInt(document.getElementById('rfReferee').value,10)||0;
+    R.shareCopy = document.getElementById('rfShare').value;
+    KKD.save(data); AdminShell.saved('Referral rewards saved');
+  }
+
+  /* ---------- Milestones ---------- */
+  function renderMilestones(){
+    document.getElementById('milestones').innerHTML = R.milestones.map((m,i)=>`
+      <div class="lrow">
+        <div class="iconbox ic-blue"><i class="fa-solid fa-trophy"></i></div>
+        <div class="flex items-center gap-2" style="flex-wrap:wrap">
+          <span class="l-main">Refer</span>
+          <input class="input" type="number" min="1" style="width:80px;height:36px" value="${m.count}" onchange="updMilestone(${i},'count',this.value)">
+          <span class="l-main">friends &nbsp;→&nbsp; +₹</span>
+          <input class="input" type="number" min="0" style="width:100px;height:36px" value="${m.bonus}" onchange="updMilestone(${i},'bonus',this.value)">
+          <span class="l-main">bonus</span>
+        </div>
+        <div class="l-right">
+          <button class="btn btn-danger btn-sm" onclick="rmMilestone(${i})"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>`).join('') || '<div class="empty"><i class="fa-solid fa-trophy"></i><div>No milestones yet — add one.</div></div>';
+  }
+  function updMilestone(i,key,val){ R.milestones[i][key] = parseInt(val,10)||0; KKD.save(data); AdminShell.saved('Milestone updated'); }
+  function addMilestone(){ R.milestones.push({ count: (R.milestones.length?R.milestones[R.milestones.length-1].count+5:5), bonus: 0 }); KKD.save(data); renderMilestones(); AdminShell.saved('Milestone added'); }
+  function rmMilestone(i){ R.milestones.splice(i,1); KKD.save(data); renderMilestones(); AdminShell.saved('Milestone removed'); }
+
+  /* ---------- Leaderboard ---------- */
+  function renderLeaderboard(){
+    const sorted = [...R.leaderboard].sort((a,b)=>b.count-a.count);
+    document.getElementById('leaderboard').innerHTML = sorted.map((l,i)=>{
+      const medal = i<3 ? ['#B45309','#64748B','#92400E'][i] : null;
+      return `<tr>
+        <td><span class="badge ${i===0?'b-active':'b-off'}" style="${medal?'':''}"><span class="dot"></span> #${i+1}</span></td>
+        <td><span class="cell-main">${esc(l.name)}</span></td>
+        <td style="text-align:right;font-weight:800">${l.count.toLocaleString()}</td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="3"><div class="empty"><i class="fa-solid fa-user-group"></i><div>No referrers yet.</div></div></td></tr>';
+  }
+
+  fillRewards(); renderMilestones(); renderLeaderboard();
+</script>
+</body></html>

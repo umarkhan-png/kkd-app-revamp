@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Scratch Cards</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Scratch Cards</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Design scratch-card campaigns and prize odds.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openCampaign()"><i class="fa-solid fa-plus"></i> New campaign</button>
+      </div>
+
+      <div class="grid-cards" style="grid-template-columns:repeat(2,1fr)" id="grid"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: new / edit campaign -->
+<div class="scrim" id="scScrim" onclick="AdminShell.close('sc')"></div>
+<aside class="drawer" id="sc">
+  <div class="drawer-head">
+    <h3 id="scTitle">New campaign</h3>
+    <button class="x-btn" onclick="AdminShell.close('sc')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Campaign name</label><input class="input" id="scName" placeholder="e.g. Order reward card"/></div>
+    <div class="field"><label>Trigger</label>
+      <select class="select" id="scTrigger">
+        <option value="On every delivered order">On every delivered order</option>
+        <option value="Manual · festival">Manual · festival</option>
+        <option value="On first order">On first order</option>
+      </select>
+      <div class="hint">When a farmer is granted this card.</div>
+    </div>
+
+    <div class="field" style="margin-bottom:8px">
+      <label>Prizes & odds</label>
+      <div class="hint">Odds across all prizes should total 100%.</div>
+    </div>
+    <div id="scPrizes"></div>
+    <div class="flex items-center justify-between" style="margin:4px 0 16px">
+      <span class="muted" style="font-size:12px;font-weight:700" id="scOddsLine"></span>
+      <button class="btn btn-ghost btn-sm" onclick="addPrizeRow()"><i class="fa-solid fa-plus"></i> Add prize</button>
+    </div>
+
+    <div class="field flex items-center justify-between" style="padding:12px 14px;background:var(--slate-50);border-radius:10px;border:1px solid var(--slate-200)">
+      <div><label style="margin:0">Active</label><div class="hint" style="margin-top:2px">Cards are handed out while active</div></div>
+      <label class="switch"><input type="checkbox" id="scActive" checked><span class="track"></span></label>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('sc')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveCampaign()"><i class="fa-solid fa-check"></i> Save campaign</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active:'scratch', title:'Scratch Cards', crumb:'Offers & Rewards', controls:'Scratch cards farmers get after orders', preview:'scratch-cards.html' });
+  let data = KKD.load();
+
+  const TYPE_META = { cashback:['ic-green','₹'], coins:['ic-amber','coins'], none:['ic-slate',''] };
+
+  function totalOdds(prizes){ return prizes.reduce((s,p)=>s+(parseFloat(p.odds)||0),0); }
+
+  function renderGrid(){
+    document.getElementById('grid').innerHTML = data.scratchCampaigns.map(c=>{
+      const total = totalOdds(c.prizes);
+      const off = Math.round(total)!==100;
+      const rows = c.prizes.map(p=>{
+        const [icCls] = TYPE_META[p.type]||TYPE_META.none;
+        return `<tr>
+          <td><span class="cell-main">${esc(p.tier)}</span></td>
+          <td><span class="tag ${p.type==='cashback'?'tag-green':''}">${p.type==='none'?'no prize':esc(p.type)}</span></td>
+          <td style="min-width:120px">
+            <div class="flex items-center gap-2">
+              <span style="font-weight:700;width:34px">${p.odds}%</span>
+              <div style="flex:1;height:6px;border-radius:9999px;background:var(--slate-100);overflow:hidden">
+                <div style="height:100%;width:${Math.min(100,p.odds)}%;background:var(--green);border-radius:9999px"></div>
+              </div>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+      return `
+      <div class="card" style="overflow:hidden">
+        <div class="card-head">
+          <h3>${esc(c.name)}</h3>
+          <label class="switch" style="margin-left:auto" title="Active"><input type="checkbox" ${c.active?'checked':''} onchange="toggleCampaign('${c.id}',this.checked)"><span class="track"></span></label>
+        </div>
+        <div class="card-pad" style="padding:0 0 14px">
+          <div class="flex items-center justify-between" style="padding:12px 20px 10px">
+            <span class="cell-sub"><i class="fa-solid fa-bolt"></i> ${esc(c.trigger)}</span>
+            <span class="cell-sub"><i class="fa-solid fa-gift"></i> ${c.distributed.toLocaleString()} distributed</span>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th>Prize</th><th>Type</th><th>Odds</th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+          <div class="flex items-center justify-between" style="padding:12px 20px 0">
+            <span class="badge ${off?'b-red':'b-active'}"><span class="dot"></span> Total odds: ${total}%${off?' · should be 100%':''}</span>
+            <div class="flex gap-2">
+              <button class="btn btn-ghost btn-sm" onclick="openCampaign('${c.id}')"><i class="fa-solid fa-pen"></i> Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="delCampaign('${c.id}')"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }).join('') || '<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-gift"></i><div>No scratch-card campaigns yet.</div></div>';
+  }
+
+  function toggleCampaign(id,on){ data.scratchCampaigns.find(c=>c.id===id).active = on; KKD.save(data); renderGrid(); AdminShell.saved(on?'Campaign activated':'Campaign paused'); }
+  function delCampaign(id){ data.scratchCampaigns = data.scratchCampaigns.filter(c=>c.id!==id); KKD.save(data); renderGrid(); AdminShell.saved('Campaign deleted'); }
+
+  /* ---------- Drawer ---------- */
+  let scEditId = null;
+  let draftPrizes = [];
+
+  function openCampaign(id){
+    scEditId = id || null;
+    const c = id ? data.scratchCampaigns.find(x=>x.id===id) : null;
+    document.getElementById('scTitle').textContent = id ? 'Edit campaign' : 'New campaign';
+    document.getElementById('scName').value = c? c.name : '';
+    document.getElementById('scTrigger').value = c? c.trigger : 'On every delivered order';
+    document.getElementById('scActive').checked = c? c.active : true;
+    draftPrizes = c ? JSON.parse(JSON.stringify(c.prizes)) : [{ tier:'Better luck', type:'none', value:0, odds:100 }];
+    renderPrizeRows();
+    AdminShell.open('sc');
+  }
+  function renderPrizeRows(){
+    document.getElementById('scPrizes').innerHTML = draftPrizes.map((p,i)=>`
+      <div class="card" style="padding:12px;margin-bottom:10px">
+        <div class="row2" style="margin-bottom:10px">
+          <div class="field" style="margin:0"><label>Tier label</label><input class="input" value="${esc(p.tier)}" oninput="updPrize(${i},'tier',this.value)"></div>
+          <div class="field" style="margin:0"><label>Type</label>
+            <select class="select" onchange="updPrize(${i},'type',this.value)">
+              <option value="cashback" ${p.type==='cashback'?'selected':''}>Cashback</option>
+              <option value="coins" ${p.type==='coins'?'selected':''}>Coins</option>
+              <option value="none" ${p.type==='none'?'selected':''}>No prize</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="field" style="margin:0;flex:1"><label>Value</label><input class="input" type="number" min="0" value="${p.value}" oninput="updPrize(${i},'value',this.value)"></div>
+          <div class="field" style="margin:0;flex:1"><label>Odds %</label><input class="input" type="number" min="0" max="100" value="${p.odds}" oninput="updPrize(${i},'odds',this.value)"></div>
+          <button class="btn btn-danger btn-sm" style="margin-top:22px" onclick="rmPrizeRow(${i})"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>`).join('');
+    updOddsLine();
+  }
+  function updOddsLine(){
+    const t = totalOdds(draftPrizes);
+    const off = Math.round(t)!==100;
+    const el = document.getElementById('scOddsLine');
+    el.innerHTML = `<i class="fa-solid fa-percent"></i> Total odds: <span style="color:${off?'var(--red)':'var(--green)'}">${t}%</span>${off?' (should be 100%)':''}`;
+  }
+  function updPrize(i,key,val){ draftPrizes[i][key] = (key==='value'||key==='odds') ? (parseFloat(val)||0) : val; if(key==='odds') updOddsLine(); }
+  function addPrizeRow(){ draftPrizes.push({ tier:'New prize', type:'cashback', value:50, odds:0 }); renderPrizeRows(); }
+  function rmPrizeRow(i){ draftPrizes.splice(i,1); renderPrizeRows(); }
+
+  function saveCampaign(){
+    const rec = {
+      name: document.getElementById('scName').value.trim() || 'Untitled campaign',
+      trigger: document.getElementById('scTrigger').value,
+      active: document.getElementById('scActive').checked,
+      prizes: JSON.parse(JSON.stringify(draftPrizes)),
+    };
+    if(scEditId){
+      const c = data.scratchCampaigns.find(x=>x.id===scEditId);
+      Object.assign(c, rec);
+    } else {
+      rec.id = 'sc'+Date.now(); rec.distributed = 0;
+      data.scratchCampaigns.push(rec);
+    }
+    KKD.save(data); AdminShell.close('sc'); renderGrid(); AdminShell.saved(scEditId?'Campaign updated':'Campaign created');
+  }
+
+  renderGrid();
+</script>
+</body></html>

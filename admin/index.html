@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <!-- Welcome -->
+      <div class="flex items-center justify-between" style="margin-bottom:22px">
+        <div>
+          <h2 style="font-size:22px;font-weight:800;margin:0 0 3px">Good afternoon, Admin 👋</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Here's what's happening across the KKD app today.</p>
+        </div>
+        <button class="btn btn-soft" onclick="location.href='banners.html'"><i class="fa-solid fa-plus"></i> Quick add</button>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="stats" style="margin-bottom:24px">
+        <div class="stat">
+          <div class="ic ic-green"><i class="fa-solid fa-images"></i></div>
+          <div class="num">4</div><div class="lbl">Active banners</div>
+          <div class="delta up"><i class="fa-solid fa-arrow-up" style="font-size:9px"></i> 2 scheduled next</div>
+        </div>
+        <div class="stat">
+          <div class="ic ic-blue"><i class="fa-solid fa-box-open"></i></div>
+          <div class="num">203</div><div class="lbl">Live products</div>
+          <div class="delta down"><i class="fa-solid fa-triangle-exclamation" style="font-size:9px"></i> 2 out of stock</div>
+        </div>
+        <div class="stat">
+          <div class="ic ic-amber"><i class="fa-solid fa-language"></i></div>
+          <div class="num">68%</div><div class="lbl">Translation coverage</div>
+          <div class="delta down">Marathi 41% complete</div>
+        </div>
+        <div class="stat">
+          <div class="ic ic-slate"><i class="fa-solid fa-code-branch"></i></div>
+          <div class="num">v128</div><div class="lbl">Live content version</div>
+          <div class="delta up">Published today 11:40</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:20px">
+        <!-- Pending changes -->
+        <div class="card">
+          <div class="card-head">
+            <h3>Unpublished changes</h3>
+            <span class="badge b-draft" style="margin-left:8px"><span class="dot"></span> Draft</span>
+            <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="AdminShell.publish()"><i class="fa-solid fa-rocket"></i> Publish all</button>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th>Change</th><th>Section</th><th>By</th><th>When</th></tr></thead>
+              <tbody>
+                <tr><td class="cell-main">Monsoon Mega Sale banner edited</td><td><span class="tag tag-green">Banners</span></td><td>Admin</td><td class="cell-sub">2 min ago</td></tr>
+                <tr><td class="cell-main">Humic Acid Plus price → ₹247</td><td><span class="tag">Products</span></td><td>Admin</td><td class="cell-sub">18 min ago</td></tr>
+                <tr><td class="cell-main">Hindi string · home.most_selling</td><td><span class="tag">Translations</span></td><td>Admin</td><td class="cell-sub">1 hr ago</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Quick actions -->
+        <div class="card card-pad">
+          <p class="section-title">Quick actions</p>
+          <div style="display:grid;gap:10px">
+            <a class="drag-item" style="margin:0;cursor:pointer" href="banners.html"><div class="ic ic-green" style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-image"></i></div><div><div style="font-weight:700;font-size:13px">Upload a banner</div><div class="cell-sub">Hero, category or PDP slot</div></div><i class="fa-solid fa-angle-right" style="margin-left:auto;color:var(--slate-400)"></i></a>
+            <a class="drag-item" style="margin:0;cursor:pointer" href="translations.html"><div class="ic ic-amber" style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-language"></i></div><div><div style="font-weight:700;font-size:13px">Translate a page</div><div class="cell-sub">Fill missing Marathi strings</div></div><i class="fa-solid fa-angle-right" style="margin-left:auto;color:var(--slate-400)"></i></a>
+            <a class="drag-item" style="margin:0;cursor:pointer" href="homepage.html"><div class="ic ic-blue" style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-table-cells-large"></i></div><div><div style="font-weight:700;font-size:13px">Reorder homepage</div><div class="cell-sub">Drag sections, toggle visibility</div></div><i class="fa-solid fa-angle-right" style="margin-left:auto;color:var(--slate-400)"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Health row -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px">
+        <div class="card card-pad"><p class="section-title">Translation coverage</p>
+          <div id="covList"></div>
+        </div>
+        <div class="card card-pad"><p class="section-title">Low / out of stock</p>
+          <div id="stockList"></div>
+        </div>
+        <div class="card card-pad"><p class="section-title">App state</p>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><span class="badge b-active"><span class="dot"></span> Normal</span><span class="cell-sub">All systems available</span></div>
+          <p class="cell-sub" style="margin:10px 0 14px">COD enabled · Min order ₹499 · Maintenance off</p>
+          <button class="btn btn-ghost btn-sm btn-block" onclick="location.href='config.html'"><i class="fa-solid fa-sliders"></i> Manage app config</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'dashboard', title: 'Dashboard', crumb: 'KKD App' });
+  const d = KKD.load();
+  // translation coverage bars
+  document.getElementById('covList').innerHTML = d.locales.map(l => {
+    const pct = l.code === 'en' ? 100 : l.code === 'hi' ? 92 : l.code === 'mr' ? 41 : 12;
+    return `<div style="margin-bottom:12px"><div class="flex items-center justify-between" style="margin-bottom:5px"><span style="font-size:12.5px;font-weight:600">${l.label}</span><span class="cell-sub">${pct}%</span></div>
+      <div style="height:7px;border-radius:9999px;background:var(--slate-100)"><div style="height:100%;width:${pct}%;border-radius:9999px;background:${pct>80?'var(--green)':pct>40?'#F59E0B':'var(--red)'}"></div></div></div>`;
+  }).join('');
+  // low stock
+  document.getElementById('stockList').innerHTML = d.products.filter(p => p.stock <= 10).map(p =>
+    `<div class="flex items-center gap-3" style="margin-bottom:10px"><div class="thumb" style="width:34px;height:34px"><i class="fa-solid fa-flask"></i></div>
+      <div style="min-width:0"><div style="font-weight:700;font-size:12.5px">${p.name}</div><div class="cell-sub">${p.sku}</div></div>
+      <span class="badge ${p.stock===0?'b-red':'b-draft'}" style="margin-left:auto"><span class="dot"></span> ${p.stock===0?'Out':p.stock+' left'}</span></div>`).join('')
+    || '<p class="cell-sub">All products well stocked.</p>';
+</script>
+</body></html>

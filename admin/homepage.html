@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Homepage Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+.hp-grid{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start}
+.hp-tile{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.drag-item.off{opacity:.55}
+.pen-btn{width:30px;height:30px;border-radius:8px;border:1px solid var(--slate-200);background:#fff;color:var(--slate-600);cursor:pointer;flex-shrink:0}
+.pen-btn:hover{background:var(--slate-100)}
+</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Homepage Builder</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Drag to reorder sections and toggle what shows on the app home screen.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openSection()"><i class="fa-solid fa-plus"></i> Add section</button>
+      </div>
+
+      <div class="hp-grid">
+        <!-- LEFT: ordered section list -->
+        <div class="card">
+          <div class="card-pad" style="padding:18px 20px;border-bottom:1px solid var(--slate-100)">
+            <div style="font-weight:700;font-size:14px">Home sections (top → bottom)</div>
+          </div>
+          <div class="card-pad" style="padding:16px 18px">
+            <div id="list"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: live preview -->
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--slate-500);margin-bottom:10px">Live preview</div>
+          <div class="phone">
+            <div class="phone-screen"><iframe src="../screens/home.html"></iframe></div>
+          </div>
+          <div class="muted" style="font-size:11.5px;margin-top:10px;max-width:300px">Preview reflects the last published version.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal: add / edit section -->
+<div class="scrim" id="secModalScrim" onclick="AdminShell.close('secModal')"></div>
+<div class="modal" id="secModal">
+  <div class="drawer-head">
+    <h3 id="secModalTitle">Add section</h3>
+    <button class="x-btn" onclick="AdminShell.close('secModal')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div style="padding:22px">
+    <div class="field"><label>Type</label>
+      <select class="select" id="secType">
+        <option value="banner">Banner carousel</option>
+        <option value="category_grid">Category grid</option>
+        <option value="product_rail">Product rail</option>
+        <option value="deals">Flash deals</option>
+        <option value="coins">Krishi Coins widget</option>
+        <option value="crop_picker">Shop by crop</option>
+      </select>
+    </div>
+    <div class="field"><label>Title</label><input class="input" id="secTitle" placeholder="e.g. Most selling"/></div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('secModal')">Cancel</button>
+    <button class="btn btn-primary" id="secSaveBtn" onclick="saveSection()"><i class="fa-solid fa-check"></i> Add</button>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'homepage', title: 'Homepage Builder', crumb: 'Content' });
+  let data = KKD.load();
+
+  // type → { icon, ic-helper bg class }
+  const TYPES = {
+    banner:        { icon: 'images',    ic: 'ic-green' },
+    category_grid: { icon: 'shapes',    ic: 'ic-blue'  },
+    product_rail:  { icon: 'box-open',  ic: 'ic-amber' },
+    deals:         { icon: 'bolt',      ic: 'ic-red'   },
+    coins:         { icon: 'coins',     ic: 'ic-green' },
+    crop_picker:   { icon: 'seedling',  ic: 'ic-green' },
+  };
+  function tname(t){ return ({banner:'Banner carousel',category_grid:'Category grid',product_rail:'Product rail',deals:'Flash deals',coins:'Krishi Coins widget',crop_picker:'Shop by crop'})[t] || t; }
+
+  let dragId = null;
+
+  function render(){
+    document.getElementById('list').innerHTML = data.homepage.map(s=>{
+      const t = TYPES[s.type] || { icon:'cube', ic:'ic-slate' };
+      return `
+      <div class="drag-item ${s.visible?'':'off'}" draggable="true" data-id="${s.id}">
+        <i class="fa-solid fa-grip-vertical grip"></i>
+        <div class="hp-tile ${t.ic}"><i class="fa-solid fa-${t.icon}"></i></div>
+        <div style="min-width:0">
+          <div style="font-weight:700;font-size:13.5px">${esc(s.title)}</div>
+          <div class="cell-sub">${esc(s.detail||'')}</div>
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+          <label class="switch"><input type="checkbox" ${s.visible?'checked':''} onchange="toggle('${s.id}',this.checked)"><span class="track"></span></label>
+          <button class="pen-btn" onclick="openSection('${s.id}')"><i class="fa-solid fa-pen" style="font-size:12px"></i></button>
+        </div>
+      </div>`;
+    }).join('') || '<div class="empty"><i class="fa-solid fa-table-cells-large"></i><div>No sections yet.</div></div>';
+    bindDrag();
+  }
+
+  function toggle(id, on){
+    const s = data.homepage.find(x=>x.id===id); if(!s) return;
+    s.visible = on; KKD.save(data); render(); AdminShell.saved(on?'Section shown':'Section hidden');
+  }
+
+  // ---- HTML5 drag-and-drop reorder ----
+  function bindDrag(){
+    document.querySelectorAll('#list .drag-item').forEach(row=>{
+      row.addEventListener('dragstart', e=>{
+        dragId = row.dataset.id; row.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        try { e.dataTransfer.setData('text/plain', dragId); } catch(_){}
+      });
+      row.addEventListener('dragend', ()=>{
+        row.classList.remove('dragging');
+        document.querySelectorAll('#list .drag-item.over').forEach(x=>x.classList.remove('over'));
+        dragId = null;
+      });
+      row.addEventListener('dragover', e=>{
+        e.preventDefault(); e.dataTransfer.dropEffect='move';
+        if(row.dataset.id !== dragId) row.classList.add('over');
+      });
+      row.addEventListener('dragleave', ()=> row.classList.remove('over'));
+      row.addEventListener('drop', e=>{
+        e.preventDefault(); row.classList.remove('over');
+        const targetId = row.dataset.id;
+        if(!dragId || dragId===targetId) return;
+        const from = data.homepage.findIndex(x=>x.id===dragId);
+        const to   = data.homepage.findIndex(x=>x.id===targetId);
+        if(from<0 || to<0) return;
+        const [moved] = data.homepage.splice(from,1);
+        data.homepage.splice(to,0,moved);
+        KKD.save(data); render(); AdminShell.saved('Order updated');
+      });
+    });
+  }
+
+  // ---- add / edit modal ----
+  let editId = null;
+  function openSection(id){
+    editId = id || null;
+    const s = id ? data.homepage.find(x=>x.id===id) : null;
+    document.getElementById('secModalTitle').textContent = id ? 'Edit section' : 'Add section';
+    document.getElementById('secSaveBtn').innerHTML = id ? '<i class="fa-solid fa-check"></i> Save' : '<i class="fa-solid fa-check"></i> Add';
+    document.getElementById('secType').value = s ? s.type : 'banner';
+    document.getElementById('secTitle').value = s ? s.title : '';
+    AdminShell.open('secModal');
+  }
+  function saveSection(){
+    const type = document.getElementById('secType').value;
+    const title = document.getElementById('secTitle').value.trim() || tname(type);
+    if(editId){
+      const s = data.homepage.find(x=>x.id===editId);
+      if(s){ s.type=type; s.title=title; }
+    } else {
+      data.homepage.push({ id:'h'+Date.now(), type, title, detail:'New section', visible:true });
+    }
+    KKD.save(data); AdminShell.close('secModal'); render(); AdminShell.saved(editId?'Section updated':'Section added');
+  }
+
+  render();
+</script>
+</body></html>

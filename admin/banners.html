@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Banners</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Banners</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Upload, schedule and slot promotional banners across the app.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openBanner()"><i class="fa-solid fa-plus"></i> New banner</button>
+      </div>
+
+      <!-- Slot filter tabs -->
+      <div class="tabs" id="tabs"></div>
+
+      <!-- Banner cards grid -->
+      <div class="grid-cards" style="grid-template-columns:repeat(3,1fr)" id="grid"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: new / edit banner -->
+<div class="scrim" id="bnDrawerScrim" onclick="AdminShell.close('bnDrawer')"></div>
+<aside class="drawer" id="bnDrawer">
+  <div class="drawer-head">
+    <h3 id="bnDrawerTitle">New banner</h3>
+    <button class="x-btn" onclick="AdminShell.close('bnDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field">
+      <label>Banner image</label>
+      <div class="dropzone" id="dz" onclick="fakeUpload()">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <div class="t">Click or drop an image</div>
+        <div class="s">Recommended 1080×480 · JPG / PNG / WebP · max 2 MB</div>
+      </div>
+      <div id="dzPreview" style="display:none;margin-top:10px"></div>
+    </div>
+    <div class="field"><label>Title</label><input class="input" id="bnTitle" placeholder="e.g. Monsoon Mega Sale"/></div>
+    <div class="field"><label>Slot</label>
+      <select class="select" id="bnSlot">
+        <option value="home_hero">Home · Hero carousel</option>
+        <option value="category_top">Category · Top strip</option>
+        <option value="pdp">Product page · Inline</option>
+        <option value="cart">Cart · Banner</option>
+      </select>
+    </div>
+    <div class="field"><label>Tap target (deep link)</label>
+      <select class="select" id="bnTarget">
+        <option value="home.html">Home</option>
+        <option value="shop.html?cat=offers">Offers listing</option>
+        <option value="shop.html?cat=fungicide">Category · Fungicide</option>
+        <option value="wallet.html">Wallet · Krishi Coins</option>
+        <option value="pdp.html?id=KKD-INS-001">Product · Chakravarti</option>
+      </select>
+      <div class="hint">Where users land when they tap the banner.</div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Start date</label><input class="input" type="date" id="bnStart" value="2026-06-12"/></div>
+      <div class="field"><label>End date</label><input class="input" type="date" id="bnEnd" value="2026-07-12"/></div>
+    </div>
+    <div class="field flex items-center justify-between" style="padding:12px 14px;background:var(--slate-50);border-radius:10px;border:1px solid var(--slate-200)">
+      <div><label style="margin:0">Active immediately</label><div class="hint" style="margin-top:2px">Goes live as soon as you publish</div></div>
+      <label class="switch"><input type="checkbox" id="bnActive" checked><span class="track"></span></label>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('bnDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveBanner()"><i class="fa-solid fa-check"></i> Save to draft</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'banners', title: 'Banners', crumb: 'Content' });
+  let data = KKD.load();
+  const SLOTS = { all:'All slots', home_hero:'Home hero', category_top:'Category top', pdp:'Product page', cart:'Cart' };
+  let filter = 'all';
+
+  function statusBadge(s){ const m={active:['b-active','Active'],scheduled:['b-scheduled','Scheduled'],off:['b-off','Inactive']}; const [c,t]=m[s]||m.off; return `<span class="badge ${c}"><span class="dot"></span> ${t}</span>`; }
+
+  function renderTabs(){
+    document.getElementById('tabs').innerHTML = Object.entries(SLOTS).map(([k,v])=>{
+      const n = k==='all'? data.banners.length : data.banners.filter(b=>b.slot===k).length;
+      return `<div class="tab ${filter===k?'active':''}" onclick="filter='${k}';renderTabs();renderGrid()">${v} <span style="opacity:.6">${n}</span></div>`;
+    }).join('');
+  }
+  function renderGrid(){
+    const list = data.banners.filter(b=> filter==='all' || b.slot===filter);
+    document.getElementById('grid').innerHTML = list.map(b=>`
+      <div class="card" style="overflow:hidden">
+        <div style="height:120px;background:linear-gradient(135deg,${b.img},${b.img}cc);position:relative;display:flex;align-items:flex-end;padding:12px">
+          <span style="position:absolute;top:10px;left:10px">${statusBadge(b.status)}</span>
+          <span style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,.35);color:#fff;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:7px">${SLOTS[b.slot]||b.slot}</span>
+          <span style="color:#fff;font-weight:800;font-size:15px;text-shadow:0 1px 4px rgba(0,0,0,.3)">${esc(b.title)}</span>
+        </div>
+        <div class="card-pad" style="padding:13px 15px">
+          <div class="flex items-center gap-2 cell-sub" style="margin-bottom:8px"><i class="fa-regular fa-calendar"></i> ${b.start} → ${b.end}</div>
+          <div class="flex items-center justify-between">
+            <span class="cell-sub"><i class="fa-solid fa-arrow-pointer"></i> ${b.clicks.toLocaleString()} clicks</span>
+            <div class="flex gap-2">
+              <button class="btn btn-ghost btn-sm" onclick="openBanner('${b.id}')"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-danger btn-sm" onclick="delBanner('${b.id}')"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>`).join('') || '<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-images"></i><div>No banners in this slot yet.</div></div>';
+  }
+
+  let editId = null;
+  function openBanner(id){
+    editId = id || null;
+    document.getElementById('bnDrawerTitle').textContent = id ? 'Edit banner' : 'New banner';
+    const b = id ? data.banners.find(x=>x.id===id) : null;
+    document.getElementById('bnTitle').value = b? b.title : '';
+    document.getElementById('bnSlot').value = b? b.slot : 'home_hero';
+    document.getElementById('bnTarget').value = b? b.target : 'home.html';
+    document.getElementById('bnStart').value = b? b.start : '2026-06-12';
+    document.getElementById('bnEnd').value = b? b.end : '2026-07-12';
+    document.getElementById('bnActive').checked = b? b.status!=='off' : true;
+    document.getElementById('dzPreview').style.display='none';
+    AdminShell.open('bnDrawer');
+  }
+  function fakeUpload(){
+    const c=['#258046','#2563EB','#B45309','#7C3AED','#DC2626'][Math.floor(Math.random()*5)];
+    const p=document.getElementById('dzPreview'); p.style.display='';
+    p.innerHTML=`<div style="height:90px;border-radius:10px;background:linear-gradient(135deg,${c},${c}cc);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700"><i class="fa-solid fa-image" style="margin-right:8px"></i> banner-${Date.now().toString().slice(-5)}.webp</div>`;
+    p.dataset.color=c;
+  }
+  function saveBanner(){
+    const t=document.getElementById('bnTitle').value.trim()||'Untitled banner';
+    const slot=document.getElementById('bnSlot').value;
+    const active=document.getElementById('bnActive').checked;
+    const color=document.getElementById('dzPreview').dataset.color || '#258046';
+    const rec={ title:t, slot, status: active?'active':'off', start:document.getElementById('bnStart').value, end:document.getElementById('bnEnd').value, target:document.getElementById('bnTarget').value, clicks: editId?(data.banners.find(x=>x.id===editId).clicks):0, img: editId?(data.banners.find(x=>x.id===editId).img):color };
+    if(editId){ Object.assign(data.banners.find(x=>x.id===editId), rec); }
+    else { rec.id='bn'+Date.now(); data.banners.unshift(rec); }
+    KKD.save(data); AdminShell.close('bnDrawer'); renderTabs(); renderGrid(); AdminShell.saved(editId?'Banner updated':'Banner added to draft');
+  }
+  function delBanner(id){ data.banners=data.banners.filter(b=>b.id!==id); KKD.save(data); renderTabs(); renderGrid(); AdminShell.saved('Banner removed'); }
+
+  renderTabs(); renderGrid();
+</script>
+</body></html>

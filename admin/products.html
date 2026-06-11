@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Products</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+  /* page-specific: badge toggle-chips in the drawer */
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid var(--slate-300);border-radius:9999px;font-size:12.5px;font-weight:700;color:var(--slate-600);background:#fff;cursor:pointer;user-select:none;transition:.15s}
+  .chip:hover{border-color:var(--green)}
+  .chip.on{background:var(--green-50);border-color:var(--green);color:var(--green)}
+  .chip input{display:none}
+</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Products</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Manage your catalogue — pricing, stock, crop tags and badges.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openProduct()"><i class="fa-solid fa-plus"></i> New product</button>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="card card-pad" style="margin-bottom:18px">
+        <div class="row3" style="grid-template-columns:1.4fr 1fr 1fr 1fr;gap:12px;align-items:end">
+          <div class="field" style="margin:0">
+            <label>Search</label>
+            <input class="input" id="fSearch" placeholder="Search by name or SKU…" oninput="render()"/>
+          </div>
+          <div class="field" style="margin:0">
+            <label>Category</label>
+            <select class="select" id="fCat" onchange="render()"></select>
+          </div>
+          <div class="field" style="margin:0">
+            <label>Crop</label>
+            <select class="select" id="fCrop" onchange="render()"></select>
+          </div>
+          <div class="field" style="margin:0">
+            <label>Status</label>
+            <select class="select" id="fStatus" onchange="render()">
+              <option value="all">All</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="card">
+        <div class="card-head">
+          <h3>Catalogue</h3>
+          <span class="sub" id="count"></span>
+          <div style="margin-left:auto"></div>
+          <button class="btn btn-ghost btn-sm" onclick="resetFilters()"><i class="fa-solid fa-rotate-left"></i> Reset filters</button>
+        </div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr>
+              <th>Product</th><th>Category</th><th>Crop</th><th>Price</th>
+              <th>Stock</th><th>Badges</th><th>Status</th><th style="text-align:right">Actions</th>
+            </tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: new / edit product -->
+<div class="scrim" id="pDrawerScrim" onclick="AdminShell.close('pDrawer')"></div>
+<aside class="drawer" id="pDrawer">
+  <div class="drawer-head">
+    <h3 id="pDrawerTitle">New product</h3>
+    <button class="x-btn" onclick="AdminShell.close('pDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Name</label><input class="input" id="pName" placeholder="e.g. Chakravarti Insecticide"/></div>
+    <div class="field"><label>SKU</label><input class="input" id="pSku" placeholder="e.g. KKD-INS-001"/></div>
+    <div class="row2">
+      <div class="field"><label>Category</label><select class="select" id="pCat"></select></div>
+      <div class="field"><label>Crop</label><select class="select" id="pCrop"></select></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Price (₹)</label><input class="input" type="number" id="pPrice" min="0" placeholder="0"/></div>
+      <div class="field"><label>MRP (₹)</label><input class="input" type="number" id="pMrp" min="0" placeholder="0"/></div>
+    </div>
+    <div class="field"><label>Stock</label><input class="input" type="number" id="pStock" min="0" placeholder="0"/></div>
+    <div class="field">
+      <label>Badges</label>
+      <div class="chips" id="pBadges"></div>
+    </div>
+    <div class="field"><label>Description</label><textarea class="input" id="pDesc" placeholder="Short description shown on the product page…"></textarea></div>
+    <div class="field">
+      <label>Product image</label>
+      <div class="dropzone" id="pDz" onclick="fakeUpload()">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <div class="t">Click or drop an image</div>
+        <div class="s">Square · JPG / PNG / WebP · max 2 MB</div>
+      </div>
+      <div id="pDzPreview" style="display:none;margin-top:10px"></div>
+    </div>
+    <div class="field flex items-center justify-between" style="padding:12px 14px;background:var(--slate-50);border-radius:10px;border:1px solid var(--slate-200)">
+      <div><label style="margin:0">Active</label><div class="hint" style="margin-top:2px">Visible and purchasable in the app</div></div>
+      <label class="switch"><input type="checkbox" id="pActive" checked><span class="track"></span></label>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('pDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveProduct()"><i class="fa-solid fa-check"></i> Save to draft</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'products', title: 'Products', crumb: 'Content' });
+  let data = KKD.load();
+
+  const BADGE_LABELS = { bestseller:'Bestseller', new:'New', most_selling:'Most selling', top_rated:'Top rated' };
+  const catName = k => { const c = data.categories.find(x=>x.key===k); return c? c.name : k; };
+  const cropName = k => { const c = data.crops.find(x=>x.key===k); return c? c.name : k; };
+
+  // ---- populate filters + drawer selects ----
+  function fillSelects(){
+    const catOpts = data.categories.map(c=>`<option value="${c.key}">${esc(c.name)}</option>`).join('');
+    const cropOpts = data.crops.map(c=>`<option value="${c.key}">${esc(c.name)}</option>`).join('');
+    document.getElementById('fCat').innerHTML = `<option value="all">All categories</option>` + catOpts;
+    document.getElementById('fCrop').innerHTML = `<option value="all">All crops</option>` + cropOpts;
+    document.getElementById('pCat').innerHTML = catOpts;
+    document.getElementById('pCrop').innerHTML = cropOpts;
+    document.getElementById('pBadges').innerHTML = Object.entries(BADGE_LABELS).map(([k,v])=>
+      `<label class="chip" data-badge="${k}" onclick="toggleChip(this)"><input type="checkbox" value="${k}"><i class="fa-solid fa-tag" style="font-size:10px"></i> ${v}</label>`).join('');
+  }
+  function toggleChip(el){ const cb = el.querySelector('input'); cb.checked = !cb.checked; el.classList.toggle('on', cb.checked); }
+
+  function stockBadge(n){
+    if(n<=0) return `<span class="badge b-red"><span class="dot"></span> Out of stock</span>`;
+    if(n<=10) return `<span class="badge b-draft"><span class="dot"></span> ${n} left</span>`;
+    return `<span class="badge b-active"><span class="dot"></span> ${n} in stock</span>`;
+  }
+
+  function render(){
+    const q = document.getElementById('fSearch').value.trim().toLowerCase();
+    const fc = document.getElementById('fCat').value;
+    const fr = document.getElementById('fCrop').value;
+    const fs = document.getElementById('fStatus').value;
+    const list = data.products.filter(p=>{
+      if(q && !(p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q))) return false;
+      if(fc!=='all' && p.cat!==fc) return false;
+      if(fr!=='all' && p.crop!==fr) return false;
+      if(fs==='active' && !p.active) return false;
+      if(fs==='inactive' && p.active) return false;
+      return true;
+    });
+    document.getElementById('count').textContent = `${list.length} of ${data.products.length} products`;
+    document.getElementById('rows').innerHTML = list.map(p=>`
+      <tr>
+        <td>
+          <div class="flex items-center gap-2">
+            <div class="thumb"><i class="fa-solid fa-flask"></i></div>
+            <div>
+              <div class="cell-main">${esc(p.name)}</div>
+              <div class="cell-sub">${esc(p.sku)}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="tag">${esc(catName(p.cat))}</span></td>
+        <td><span class="tag">${esc(cropName(p.crop))}</span></td>
+        <td>
+          <div class="cell-main">₹${p.price}</div>
+          ${p.mrp>p.price?`<div class="cell-sub"><s>₹${p.mrp}</s></div>`:''}
+        </td>
+        <td>${stockBadge(p.stock)}</td>
+        <td>${(p.badges||[]).map(b=>`<span class="tag tag-green" style="margin:1px 2px 1px 0">${BADGE_LABELS[b]||b}</span>`).join('') || '<span class="cell-sub">—</span>'}</td>
+        <td><label class="switch"><input type="checkbox" ${p.active?'checked':''} onchange="toggleActive('${p.id}',this.checked)"><span class="track"></span></label></td>
+        <td style="text-align:right">
+          <div class="flex gap-2" style="justify-content:flex-end">
+            <button class="btn btn-ghost btn-sm" onclick="openProduct('${p.id}')"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="delProduct('${p.id}')"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>`).join('') || `<tr><td colspan="8"><div class="empty"><i class="fa-solid fa-box-open"></i><div>No products match your filters.</div></div></td></tr>`;
+  }
+
+  function resetFilters(){
+    document.getElementById('fSearch').value='';
+    document.getElementById('fCat').value='all';
+    document.getElementById('fCrop').value='all';
+    document.getElementById('fStatus').value='all';
+    render();
+  }
+
+  function toggleActive(id, on){
+    const p = data.products.find(x=>x.id===id); if(!p) return;
+    p.active = on; KKD.save(data); AdminShell.saved(on?'Product activated':'Product deactivated');
+  }
+
+  // ---- drawer ----
+  let editId = null;
+  function openProduct(id){
+    editId = id || null;
+    document.getElementById('pDrawerTitle').textContent = id ? 'Edit product' : 'New product';
+    const p = id ? data.products.find(x=>x.id===id) : null;
+    document.getElementById('pName').value  = p? p.name  : '';
+    document.getElementById('pSku').value   = p? p.sku   : '';
+    document.getElementById('pCat').value   = p? p.cat   : data.categories[0].key;
+    document.getElementById('pCrop').value  = p? p.crop  : data.crops[0].key;
+    document.getElementById('pPrice').value = p? p.price : '';
+    document.getElementById('pMrp').value   = p? p.mrp   : '';
+    document.getElementById('pStock').value = p? p.stock : '';
+    document.getElementById('pDesc').value  = p? (p.desc||'') : '';
+    document.getElementById('pActive').checked = p? !!p.active : true;
+    const sel = p? (p.badges||[]) : [];
+    document.querySelectorAll('#pBadges .chip').forEach(c=>{
+      const on = sel.includes(c.dataset.badge);
+      c.classList.toggle('on', on); c.querySelector('input').checked = on;
+    });
+    document.getElementById('pDzPreview').style.display='none';
+    document.getElementById('pDzPreview').dataset.color='';
+    AdminShell.open('pDrawer');
+  }
+
+  function fakeUpload(){
+    const c=['#258046','#2563EB','#B45309','#7C3AED','#DC2626'][Math.floor(Math.random()*5)];
+    const p=document.getElementById('pDzPreview'); p.style.display='';
+    p.innerHTML=`<div style="height:90px;border-radius:10px;background:linear-gradient(135deg,${c},${c}cc);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700"><i class="fa-solid fa-image" style="margin-right:8px"></i> product-${Date.now().toString().slice(-5)}.webp</div>`;
+    p.dataset.color=c;
+  }
+
+  function saveProduct(){
+    const badges = Array.from(document.querySelectorAll('#pBadges .chip input:checked')).map(i=>i.value);
+    const rec = {
+      name: document.getElementById('pName').value.trim() || 'Untitled product',
+      sku: document.getElementById('pSku').value.trim() || 'KKD-NEW-000',
+      cat: document.getElementById('pCat').value,
+      crop: document.getElementById('pCrop').value,
+      price: parseInt(document.getElementById('pPrice').value,10) || 0,
+      mrp: parseInt(document.getElementById('pMrp').value,10) || 0,
+      stock: parseInt(document.getElementById('pStock').value,10) || 0,
+      badges,
+      desc: document.getElementById('pDesc').value.trim(),
+      active: document.getElementById('pActive').checked,
+    };
+    if(editId){ Object.assign(data.products.find(x=>x.id===editId), rec); }
+    else { rec.id='p'+Date.now(); data.products.unshift(rec); }
+    KKD.save(data); AdminShell.close('pDrawer'); render(); AdminShell.saved(editId?'Product updated':'Product added to draft');
+  }
+
+  function delProduct(id){
+    data.products = data.products.filter(p=>p.id!==id);
+    KKD.save(data); render(); AdminShell.saved('Product removed');
+  }
+
+  fillSelects(); render();
+</script>
+</body></html>

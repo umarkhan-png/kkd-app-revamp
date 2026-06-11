@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Categories</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+  .ic-tile{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+  .icon-pick{display:flex;flex-wrap:wrap;gap:8px}
+  .icon-opt{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;border:1px solid var(--slate-200);background:#fff;color:var(--slate-600);cursor:pointer}
+  .icon-opt.sel{border-color:var(--green);color:var(--green);background:var(--green-50);box-shadow:0 0 0 3px var(--green-50)}
+</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Categories</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Organise the Shop-by-category grid.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openCat()"><i class="fa-solid fa-plus"></i> New category</button>
+      </div>
+
+      <div class="card">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr>
+              <th style="width:48px">Order</th>
+              <th>Category</th>
+              <th>Key</th>
+              <th>Products</th>
+              <th>Status</th>
+              <th style="text-align:right">Actions</th>
+            </tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: new / edit category -->
+<div class="scrim" id="catDrawerScrim" onclick="AdminShell.close('catDrawer')"></div>
+<aside class="drawer" id="catDrawer">
+  <div class="drawer-head">
+    <h3 id="catDrawerTitle">New category</h3>
+    <button class="x-btn" onclick="AdminShell.close('catDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Name</label><input class="input" id="catName" placeholder="e.g. Fungicide"/></div>
+    <div class="field"><label>Key</label><input class="input" id="catKey" placeholder="fungicide"/><div class="hint">Lowercase slug used in deep links (shop.html?cat=key).</div></div>
+    <div class="field">
+      <label>Icon</label>
+      <div class="icon-pick" id="iconPick"></div>
+    </div>
+    <div class="field flex items-center justify-between" style="padding:12px 14px;background:var(--slate-50);border-radius:10px;border:1px solid var(--slate-200)">
+      <div><label style="margin:0">Active</label><div class="hint" style="margin-top:2px">Show this category in the app grid</div></div>
+      <label class="switch"><input type="checkbox" id="catActive" checked><span class="track"></span></label>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('catDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveCat()"><i class="fa-solid fa-check"></i> Save to draft</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'categories', title: 'Categories', crumb: 'Content' });
+  let data = KKD.load();
+
+  const ICONS = ['leaf','flask','droplet','spray-can','shapes','seedling'];
+  function iconFor(c){ return c.icon || 'shapes'; }
+
+  function renderRows(){
+    const list = data.categories.slice().sort((a,b)=>a.order-b.order);
+    document.getElementById('rows').innerHTML = list.map(c=>`
+      <tr draggable="true" data-id="${c.id}"
+          ondragstart="dragStart(event,'${c.id}')" ondragend="dragEnd(event)"
+          ondragover="dragOver(event,'${c.id}')" ondragleave="dragLeave(event)" ondrop="drop(event,'${c.id}')">
+        <td><i class="fa-solid fa-grip-vertical grip"></i></td>
+        <td>
+          <div class="flex items-center gap-2">
+            <div class="ic-tile ic-green"><i class="fa-solid fa-${iconFor(c)}"></i></div>
+            <span class="cell-main">${esc(c.name)}</span>
+          </div>
+        </td>
+        <td><span class="tag" style="font-family:ui-monospace,Menlo,Consolas,monospace">${esc(c.key)}</span></td>
+        <td class="cell-sub">${c.products}</td>
+        <td><label class="switch"><input type="checkbox" ${c.active?'checked':''} onchange="toggleCat('${c.id}',this.checked)"><span class="track"></span></label></td>
+        <td style="text-align:right">
+          <div class="flex gap-2" style="justify-content:flex-end">
+            <button class="btn btn-ghost btn-sm" onclick="openCat('${c.id}')"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="delCat('${c.id}')"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>`).join('') || '<tr><td colspan="6"><div class="empty"><i class="fa-solid fa-shapes"></i><div>No categories yet.</div></div></td></tr>';
+  }
+
+  // ---- HTML5 drag-and-drop reorder ----
+  let dragId = null;
+  function dragStart(e,id){ dragId=id; e.currentTarget.classList.add('dragging'); }
+  function dragEnd(e){ e.currentTarget.classList.remove('dragging'); document.querySelectorAll('#rows tr.over').forEach(r=>r.classList.remove('over')); }
+  function dragOver(e,id){ e.preventDefault(); if(id!==dragId) e.currentTarget.classList.add('over'); }
+  function dragLeave(e){ e.currentTarget.classList.remove('over'); }
+  function drop(e,id){
+    e.preventDefault();
+    if(!dragId || dragId===id) return;
+    const list = data.categories.slice().sort((a,b)=>a.order-b.order);
+    const from = list.findIndex(c=>c.id===dragId);
+    const to = list.findIndex(c=>c.id===id);
+    const [moved] = list.splice(from,1);
+    list.splice(to,0,moved);
+    list.forEach((c,i)=> c.order = i+1);
+    KKD.save(data); renderRows(); AdminShell.saved('Order updated');
+  }
+
+  function toggleCat(id,on){ const c=data.categories.find(x=>x.id===id); if(c){ c.active=on; KKD.save(data); AdminShell.saved(on?'Category activated':'Category hidden'); } }
+
+  let editId=null;
+  function renderIconPick(sel){
+    document.getElementById('iconPick').innerHTML = ICONS.map(ic=>
+      `<div class="icon-opt ${ic===sel?'sel':''}" data-icon="${ic}" onclick="pickIcon('${ic}')"><i class="fa-solid fa-${ic}"></i></div>`).join('');
+  }
+  function pickIcon(ic){ renderIconPick(ic); }
+  function currentIcon(){ const el=document.querySelector('.icon-opt.sel'); return el?el.dataset.icon:'shapes'; }
+
+  function openCat(id){
+    editId = id || null;
+    document.getElementById('catDrawerTitle').textContent = id ? 'Edit category' : 'New category';
+    const c = id ? data.categories.find(x=>x.id===id) : null;
+    document.getElementById('catName').value = c? c.name : '';
+    document.getElementById('catKey').value = c? c.key : '';
+    document.getElementById('catActive').checked = c? c.active : true;
+    renderIconPick(c? iconFor(c) : 'shapes');
+    AdminShell.open('catDrawer');
+  }
+  function saveCat(){
+    const name=document.getElementById('catName').value.trim()||'Untitled';
+    const key=(document.getElementById('catKey').value.trim()||name.toLowerCase().replace(/[^a-z0-9]+/g,'-')).toLowerCase();
+    const active=document.getElementById('catActive').checked;
+    const icon=currentIcon();
+    if(editId){ Object.assign(data.categories.find(x=>x.id===editId), { name, key, active, icon }); }
+    else {
+      const last = data.categories.reduce((m,c)=>Math.max(m,c.order),0);
+      data.categories.push({ id:'c'+Date.now(), key, name, order:last+1, products:0, active, icon });
+    }
+    KKD.save(data); AdminShell.close('catDrawer'); renderRows(); AdminShell.saved(editId?'Category updated':'Category added');
+  }
+  function delCat(id){ data.categories=data.categories.filter(c=>c.id!==id); KKD.save(data); renderRows(); AdminShell.saved('Category removed'); }
+
+  renderRows();
+</script>
+</body></html>

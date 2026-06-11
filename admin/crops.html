@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Crops</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+  .crop-band{height:90px;background:linear-gradient(135deg,#258046,#2E8B57);position:relative;display:flex;align-items:center;justify-content:center;color:#fff;font-size:34px}
+  .crop-band .tag{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.22);color:#fff}
+</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Crops</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Manage crops used for filtering and 'Shop by crop'.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openCrop()"><i class="fa-solid fa-plus"></i> New crop</button>
+      </div>
+
+      <div class="grid-cards" style="grid-template-columns:repeat(3,1fr)" id="grid"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: new / edit crop -->
+<div class="scrim" id="cropDrawerScrim" onclick="AdminShell.close('cropDrawer')"></div>
+<aside class="drawer" id="cropDrawer">
+  <div class="drawer-head">
+    <h3 id="cropDrawerTitle">New crop</h3>
+    <button class="x-btn" onclick="AdminShell.close('cropDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Name</label><input class="input" id="cropName" placeholder="e.g. Wheat"/></div>
+    <div class="field"><label>Key</label><input class="input" id="cropKey" placeholder="wheat"/><div class="hint">Lowercase slug used for crop filtering.</div></div>
+    <div class="field"><label>Season</label>
+      <select class="select" id="cropSeason">
+        <option value="Rabi">Rabi</option>
+        <option value="Kharif">Kharif</option>
+        <option value="All season">All season</option>
+        <option value="Annual">Annual</option>
+      </select>
+    </div>
+    <div class="field flex items-center justify-between" style="padding:12px 14px;background:var(--slate-50);border-radius:10px;border:1px solid var(--slate-200)">
+      <div><label style="margin:0">Active</label><div class="hint" style="margin-top:2px">Show this crop in the app filter</div></div>
+      <label class="switch"><input type="checkbox" id="cropActive" checked><span class="track"></span></label>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('cropDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveCrop()"><i class="fa-solid fa-check"></i> Save to draft</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'crops', title: 'Crops', crumb: 'Content' });
+  let data = KKD.load();
+
+  function renderGrid(){
+    document.getElementById('grid').innerHTML = data.crops.map(c=>`
+      <div class="card" style="overflow:hidden">
+        <div class="crop-band">
+          <i class="fa-solid fa-seedling"></i>
+          <span class="tag">${esc(c.season)}</span>
+        </div>
+        <div class="card-pad" style="padding:14px 16px">
+          <div style="font-size:15px;font-weight:800;margin-bottom:3px">${esc(c.name)}</div>
+          <div class="cell-sub" style="margin-bottom:12px">${c.products} products</div>
+          <div class="flex items-center justify-between">
+            <label class="switch"><input type="checkbox" ${c.active?'checked':''} onchange="toggleCrop('${c.id}',this.checked)"><span class="track"></span></label>
+            <div class="flex gap-2">
+              <button class="btn btn-ghost btn-sm" onclick="openCrop('${c.id}')"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-danger btn-sm" onclick="delCrop('${c.id}')"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>`).join('') || '<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-seedling"></i><div>No crops yet.</div></div>';
+  }
+
+  function toggleCrop(id,on){ const c=data.crops.find(x=>x.id===id); if(c){ c.active=on; KKD.save(data); AdminShell.saved(on?'Crop activated':'Crop hidden'); } }
+
+  let editId=null;
+  function openCrop(id){
+    editId = id || null;
+    document.getElementById('cropDrawerTitle').textContent = id ? 'Edit crop' : 'New crop';
+    const c = id ? data.crops.find(x=>x.id===id) : null;
+    document.getElementById('cropName').value = c? c.name : '';
+    document.getElementById('cropKey').value = c? c.key : '';
+    document.getElementById('cropSeason').value = c? c.season : 'Rabi';
+    document.getElementById('cropActive').checked = c? c.active : true;
+    AdminShell.open('cropDrawer');
+  }
+  function saveCrop(){
+    const name=document.getElementById('cropName').value.trim()||'Untitled';
+    const key=(document.getElementById('cropKey').value.trim()||name.toLowerCase().replace(/[^a-z0-9]+/g,'-')).toLowerCase();
+    const season=document.getElementById('cropSeason').value;
+    const active=document.getElementById('cropActive').checked;
+    if(editId){ Object.assign(data.crops.find(x=>x.id===editId), { name, key, season, active }); }
+    else { data.crops.push({ id:'cr'+Date.now(), key, name, season, products:0, active }); }
+    KKD.save(data); AdminShell.close('cropDrawer'); renderGrid(); AdminShell.saved(editId?'Crop updated':'Crop added');
+  }
+  function delCrop(id){ data.crops=data.crops.filter(c=>c.id!==id); KKD.save(data); renderGrid(); AdminShell.saved('Crop removed'); }
+
+  renderGrid();
+</script>
+</body></html>

@@ -95,7 +95,7 @@
       try { fn = (localStorage.getItem('kkd.firstName') || '').trim(); } catch (e) {}
       el.textContent = (fn ? fn : 'Farmer') + '!';
     })();
-    // Auto-route to notifications-allow next (skippable) · welcome stays on screen ~4.5s
-    setTimeout(() => { if (!document.hidden) window.location.href = 'notifications-allow.html'; }, 4500);
+    // Auto-route to the allow-notifications bottom sheet next (skippable) · welcome stays on screen ~4.5s
+    setTimeout(() => { if (!document.hidden) window.location.href = 'notifications-allow-sheet.html'; }, 4500);
   </script>
 </body></html>

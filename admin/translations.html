@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Translations</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+/* ≤10 lines: translations-specific helpers */
+.tr-page{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 13px;border-radius:11px;border:1px solid transparent;cursor:pointer;margin-bottom:6px;transition:.15s}
+.tr-page:hover{background:var(--slate-50)}
+.tr-page.active{background:var(--green-50);border-color:var(--green-100)}
+.tr-page.active .tr-page-name{color:var(--green)}
+.cov-chip{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--slate-600);background:var(--slate-100);padding:4px 10px;border-radius:9999px}
+.cov-bar{width:34px;height:5px;border-radius:9999px;background:var(--slate-200);overflow:hidden}
+.cov-bar>span{display:block;height:100%;background:var(--green);border-radius:9999px}
+.tr-input{height:34px!important;font-size:12.5px!important;padding:0 10px!important}
+</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Translations</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Edit every in-app string, page by page, across languages.</p>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn btn-ghost" onclick="AdminShell.toast('Import started — map your CSV columns to locales.','file-csv')"><i class="fa-solid fa-file-csv"></i> Import CSV</button>
+          <button class="btn btn-soft" onclick="openAddLang()"><i class="fa-solid fa-plus"></i> Add language</button>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:20px;align-items:flex-start">
+
+        <!-- LEFT: pages list -->
+        <div class="card card-pad" style="width:240px;flex-shrink:0">
+          <p class="section-title">Pages</p>
+          <div id="pageList"></div>
+        </div>
+
+        <!-- RIGHT: editor -->
+        <div class="card" style="flex:1;min-width:0">
+          <div class="card-head">
+            <div>
+              <h3 id="paneTitle">Home</h3>
+              <div class="sub" id="paneSub">—</div>
+            </div>
+            <div class="search" style="margin-left:auto;max-width:240px">
+              <i class="fa-solid fa-magnifying-glass" style="font-size:12px"></i>
+              <input id="trSearch" placeholder="Filter keys…" oninput="renderTable()"/>
+            </div>
+          </div>
+          <div class="card-pad">
+            <div id="covChips" class="flex items-center gap-2" style="flex-wrap:wrap;margin-bottom:16px"></div>
+            <div class="tbl-wrap">
+              <table class="tbl"><thead id="trHead"></thead><tbody id="trBody"></tbody></table>
+            </div>
+            <div id="trEmpty"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: add language -->
+<div class="scrim" id="langScrim" onclick="AdminShell.close('lang')"></div>
+<div class="modal" id="lang" style="width:440px">
+  <div class="drawer-head">
+    <h3>Add language</h3>
+    <button class="x-btn" onclick="AdminShell.close('lang')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <p class="muted" style="margin:0 0 16px;font-size:13px">A new column is added to every page. All strings start empty and show as missing until you fill them in.</p>
+    <div class="field"><label>Language name</label><input class="input" id="langName" placeholder="e.g. ગુજરાતી (Gujarati)"/></div>
+    <div class="field"><label>Locale code</label><input class="input" id="langCode" placeholder="e.g. gu" maxlength="5" style="text-transform:lowercase"/><div class="hint">2-letter ISO code used in the app.</div></div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('lang')">Cancel</button>
+    <button class="btn btn-primary" onclick="addLanguage()"><i class="fa-solid fa-check"></i> Add language</button>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'translations', title: 'Translations', crumb: 'Localization' });
+  let data = KKD.load();
+  let activePage = Object.keys(data.translations)[0];
+
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const enabledLocales = () => data.locales.filter(l => l.enabled);
+
+  // coverage for a page: filled cells / (keys × enabled locales)
+  function pageCoverage(page){
+    const locs = enabledLocales(); const rows = data.translations[page] || [];
+    const total = rows.length * locs.length; if(!total) return 100;
+    let filled = 0;
+    rows.forEach(r => locs.forEach(l => { if((r[l.code]||'').trim()) filled++; }));
+    return Math.round(filled / total * 100);
+  }
+  // per-locale coverage for one page
+  function localeCoverage(page, code){
+    const rows = data.translations[page] || []; if(!rows.length) return 100;
+    let filled = rows.reduce((n,r)=> n + ((r[code]||'').trim()?1:0), 0);
+    return Math.round(filled / rows.length * 100);
+  }
+
+  function renderPages(){
+    document.getElementById('pageList').innerHTML = Object.keys(data.translations).map(page=>{
+      const cov = pageCoverage(page); const n = data.translations[page].length;
+      return `<div class="tr-page ${page===activePage?'active':''}" onclick="selectPage('${page}')">
+        <div style="min-width:0">
+          <div class="tr-page-name" style="font-weight:700;font-size:13.5px">${cap(page)}</div>
+          <div class="cell-sub">${n} string${n!==1?'s':''}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-size:12px;font-weight:800;color:${cov>=90?'var(--green)':cov>=50?'var(--amber)':'var(--red)'}">${cov}%</div>
+          <div class="cov-bar" style="margin-top:4px"><span style="width:${cov}%;background:${cov>=90?'var(--green)':cov>=50?'var(--amber)':'var(--red)'}"></span></div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function selectPage(page){ activePage = page; document.getElementById('trSearch').value=''; renderPages(); renderPane(); }
+
+  function renderPane(){
+    document.getElementById('paneTitle').textContent = cap(activePage);
+    const n = data.translations[activePage].length;
+    document.getElementById('paneSub').textContent = `${n} string${n!==1?'s':''} · ${enabledLocales().length} languages`;
+    renderChips(); renderTable();
+  }
+
+  function renderChips(){
+    document.getElementById('covChips').innerHTML = enabledLocales().map(l=>{
+      const c = localeCoverage(activePage, l.code);
+      const col = c>=90?'var(--green)':c>=50?'var(--amber)':'var(--red)';
+      return `<span class="cov-chip"><span style="width:8px;height:8px;border-radius:9999px;background:${col}"></span>${esc(l.label.replace(/\s*\(.*\)/,''))} <b style="color:${col}">${c}%</b></span>`;
+    }).join('');
+  }
+
+  function renderTable(){
+    const locs = enabledLocales();
+    document.getElementById('trHead').innerHTML = `<tr><th style="min-width:200px">Key</th>${locs.map(l=>`<th>${esc(l.label.replace(/\s*\(.*\)/,''))}</th>`).join('')}</tr>`;
+    const q = document.getElementById('trSearch').value.trim().toLowerCase();
+    const rows = data.translations[activePage].filter(r=> !q || r.key.toLowerCase().includes(q));
+    const tb = document.getElementById('trBody');
+    tb.innerHTML = rows.map(r=>{
+      const idx = data.translations[activePage].indexOf(r);
+      const cells = locs.map(l=>{
+        const v = r[l.code] || '';
+        const miss = !v.trim();
+        const style = miss ? 'border-color:#FCA5A5;background:#FEF2F2' : '';
+        return `<td><input class="input tr-input" style="${style}" placeholder="Add translation"
+          value="${esc(v).replace(/"/g,'&quot;')}"
+          oninput="onEdit(${idx},'${l.code}',this.value,this)"
+          onchange="onCommit(${idx},'${l.code}',this.value)"></td>`;
+      }).join('');
+      return `<tr><td><span class="cell-main" style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px">${esc(r.key)}</span></td>${cells}</tr>`;
+    }).join('');
+    document.getElementById('trEmpty').innerHTML = rows.length ? '' :
+      '<div class="empty"><i class="fa-solid fa-magnifying-glass"></i><div>No keys match your filter.</div></div>';
+  }
+
+  // live update in memory + missing styling
+  function onEdit(idx, code, val, el){
+    data.translations[activePage][idx][code] = val;
+    if(val.trim()){ el.style.borderColor=''; el.style.background=''; }
+    else { el.style.borderColor='#FCA5A5'; el.style.background='#FEF2F2'; }
+  }
+  // persist + refresh coverage
+  function onCommit(idx, code, val){
+    data.translations[activePage][idx][code] = val;
+    KKD.save(data);
+    AdminShell.saved('Translation saved');
+    renderPages(); renderChips();
+  }
+
+  // ---- add language modal ----
+  function openAddLang(){
+    document.getElementById('langName').value=''; document.getElementById('langCode').value='';
+    AdminShell.open('lang');
+  }
+  function addLanguage(){
+    const label = document.getElementById('langName').value.trim();
+    const code = document.getElementById('langCode').value.trim().toLowerCase();
+    if(!label || !code){ AdminShell.toast('Enter a language name and code.','triangle-exclamation'); return; }
+    if(data.locales.some(l=>l.code===code)){ AdminShell.toast('That locale code already exists.','triangle-exclamation'); return; }
+    data.locales.push({ code, label, enabled:true, fallback:false });
+    Object.keys(data.translations).forEach(page=>{
+      data.translations[page].forEach(r=>{ r[code] = ''; });
+    });
+    KKD.save(data);
+    AdminShell.close('lang');
+    renderPages(); renderPane();
+    AdminShell.toast('Language added','language');
+    AdminShell.saved('Language added');
+  }
+
+  renderPages(); renderPane();
+</script>
+</body></html>

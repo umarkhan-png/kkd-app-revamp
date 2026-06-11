@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Deep Links</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>.mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Deep Links</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Named routes that banners and homepage sections can point to.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openLink()"><i class="fa-solid fa-plus"></i> New link</button>
+      </div>
+
+      <div class="card">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Name</th><th>Route</th><th>Params</th><th style="text-align:right">Actions</th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: new / edit deep link -->
+<div class="scrim" id="dlDrawerScrim" onclick="AdminShell.close('dlDrawer')"></div>
+<aside class="drawer" id="dlDrawer">
+  <div class="drawer-head">
+    <h3 id="dlDrawerTitle">New deep link</h3>
+    <button class="x-btn" onclick="AdminShell.close('dlDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Name</label><input class="input" id="dlName" placeholder="e.g. Offers listing"/></div>
+    <div class="field"><label>Route</label>
+      <select class="select" id="dlRoute">
+        <option value="home.html">home.html</option>
+        <option value="shop.html">shop.html</option>
+        <option value="pdp.html">pdp.html</option>
+        <option value="wallet.html">wallet.html</option>
+        <option value="cart.html">cart.html</option>
+        <option value="orders.html">orders.html</option>
+      </select>
+    </div>
+    <div class="field"><label>Params</label><input class="input mono" id="dlParams" placeholder="e.g. ?cat={key}"/>
+      <div class="hint">Leave empty for a plain route. Use {key}, {sku} as placeholders.</div>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('dlDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveLink()"><i class="fa-solid fa-check"></i> Save to draft</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'deeplinks', title: 'Deep Links', crumb: 'Media & Config' });
+  let data = KKD.load();
+  if (!data.deeplinks) data.deeplinks = [];
+
+  function fullRoute(d){ return d.route + (d.params && d.params !== '—' ? d.params : ''); }
+
+  function render(){
+    document.getElementById('rows').innerHTML = data.deeplinks.map((d,i)=>`
+      <tr>
+        <td><div class="cell-main">${esc(d.name)}</div></td>
+        <td><span class="tag mono">${esc(d.route)}</span></td>
+        <td><span class="cell-sub mono">${d.params && d.params !== '—' ? esc(d.params) : '—'}</span></td>
+        <td>
+          <div class="flex gap-2" style="justify-content:flex-end">
+            <button class="btn btn-ghost btn-sm" onclick="copyLink(${i})"><i class="fa-regular fa-copy"></i> Copy</button>
+            <button class="btn btn-ghost btn-sm" onclick="openLink(${i})"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="delLink(${i})"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>`).join('') || '<tr><td colspan="4"><div class="empty"><i class="fa-solid fa-link"></i><div>No deep links yet.</div></div></td></tr>';
+  }
+
+  function copyLink(i){
+    const r = fullRoute(data.deeplinks[i]);
+    try { navigator.clipboard && navigator.clipboard.writeText(r); } catch(e){}
+    AdminShell.toast('Link copied', 'copy');
+  }
+
+  let editIdx = null;
+  function openLink(i){
+    editIdx = (typeof i === 'number') ? i : null;
+    const d = editIdx!==null ? data.deeplinks[editIdx] : null;
+    document.getElementById('dlDrawerTitle').textContent = d ? 'Edit deep link' : 'New deep link';
+    document.getElementById('dlName').value = d ? d.name : '';
+    document.getElementById('dlRoute').value = d ? d.route : 'home.html';
+    document.getElementById('dlParams').value = (d && d.params && d.params !== '—') ? d.params : '';
+    AdminShell.open('dlDrawer');
+  }
+  function saveLink(){
+    const name = document.getElementById('dlName').value.trim() || 'Untitled link';
+    const route = document.getElementById('dlRoute').value;
+    const params = document.getElementById('dlParams').value.trim() || '—';
+    const rec = { name, route, params };
+    if (editIdx!==null) data.deeplinks[editIdx] = rec; else data.deeplinks.push(rec);
+    KKD.save(data); AdminShell.close('dlDrawer'); render(); AdminShell.saved(editIdx!==null ? 'Deep link updated' : 'Deep link added to draft');
+  }
+  function delLink(i){ data.deeplinks.splice(i,1); KKD.save(data); render(); AdminShell.saved('Deep link removed'); }
+
+  render();
+</script>
+</body></html>

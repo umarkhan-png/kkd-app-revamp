@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Settings</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>.avatar-lg{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#10B981,var(--green));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;flex-shrink:0}</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div style="margin-bottom:20px">
+        <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Settings</h2>
+        <p class="muted" style="margin:0;font-size:13.5px">Portal and app-wide preferences.</p>
+      </div>
+
+      <!-- Admin profile -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h3>Admin profile</h3></div>
+        <div class="card-pad">
+          <div class="flex items-center gap-2" style="gap:16px;margin-bottom:18px">
+            <div class="avatar-lg">AD</div>
+            <div><div class="cell-main" style="font-size:15px">Admin</div><div class="cell-sub">admin@kkd.app</div></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Name</label><input class="input" id="pfName" value="Admin"/></div>
+            <div class="field"><label>Email</label><input class="input" id="pfEmail" value="admin@kkd.app"/></div>
+          </div>
+          <div class="field" style="max-width:50%">
+            <label>Role</label>
+            <div class="input flex items-center" style="display:flex;gap:8px;background:var(--slate-50);color:var(--slate-500)">
+              <i class="fa-solid fa-lock" style="font-size:12px"></i> Super Admin
+            </div>
+            <div class="hint">Roles are managed by the platform owner.</div>
+          </div>
+          <button class="btn btn-primary" onclick="saveProfile()"><i class="fa-solid fa-check"></i> Save profile</button>
+        </div>
+      </div>
+
+      <!-- Languages -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h3>Languages</h3><span class="sub">Toggle which locales the app offers and pick the fallback.</span></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Language</th><th>Enabled</th><th style="text-align:right">Default</th></tr></thead>
+            <tbody id="locRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Danger zone -->
+      <div class="card" style="border-left:3px solid var(--red)">
+        <div class="card-head"><h3 style="color:var(--red)">Danger zone</h3></div>
+        <div class="card-pad flex items-center justify-between" style="gap:16px;flex-wrap:wrap">
+          <div style="max-width:560px">
+            <div class="cell-main" style="margin-bottom:3px">Reset demo data</div>
+            <p class="muted" style="margin:0;font-size:13px">Clears every draft edit in this browser and restores the original seed content. This cannot be undone.</p>
+          </div>
+          <button class="btn btn-danger" onclick="resetDemo()"><i class="fa-solid fa-triangle-exclamation"></i> Reset demo data</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'settings', title: 'Settings', crumb: 'System' });
+  let data = KKD.load();
+  if (!data.locales) data.locales = [];
+
+  function renderLocales(){
+    document.getElementById('locRows').innerHTML = data.locales.map((l,i)=>`
+      <tr>
+        <td><div class="flex items-center gap-2"><span style="font-size:18px">${l.flag||'🏳️'}</span><span class="cell-main">${esc(l.label)}</span></div></td>
+        <td><label class="switch"><input type="checkbox" ${l.enabled?'checked':''} onchange="toggleLoc(${i},this.checked)"><span class="track"></span></label></td>
+        <td style="text-align:right">
+          ${l.fallback
+            ? '<span class="badge b-active"><span class="dot"></span> Default</span>'
+            : `<button class="btn btn-ghost btn-sm" onclick="makeDefault(${i})">Make default</button>`}
+        </td>
+      </tr>`).join('');
+  }
+
+  function saveProfile(){ KKD.save(data); AdminShell.saved('Profile saved'); }
+  function toggleLoc(i,on){ data.locales[i].enabled = on; KKD.save(data); AdminShell.saved((on?'Enabled ':'Disabled ') + data.locales[i].label.split(' ')[0]); }
+  function makeDefault(i){
+    data.locales.forEach(l=> l.fallback = false);
+    data.locales[i].fallback = true;
+    if (!data.locales[i].enabled) data.locales[i].enabled = true;
+    KKD.save(data); renderLocales(); AdminShell.saved('Default language updated');
+  }
+  function resetDemo(){
+    if (!confirm('Reset all demo data to the original seed? This clears every draft edit and cannot be undone.')) return;
+    KKD.reset(); location.reload();
+  }
+
+  renderLocales();
+</script>
+</body></html>

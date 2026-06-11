@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Publish & Versions</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>.mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div style="margin-bottom:20px">
+        <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Publish &amp; Versions</h2>
+        <p class="muted" style="margin:0;font-size:13.5px">Review draft changes and ship a new content version — no app store deploy.</p>
+      </div>
+
+      <!-- Ready to publish -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-pad flex items-center justify-between" style="gap:24px;flex-wrap:wrap">
+          <div class="flex items-center" style="gap:24px;flex-wrap:wrap">
+            <div>
+              <div style="font-size:42px;font-weight:800;line-height:1;color:var(--green)" id="pendBig">0</div>
+              <div class="muted" style="font-size:13px;margin-top:4px">unpublished changes</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="flex items-center gap-2"><span class="tag tag-green">Banner</span><span class="cell-sub">Delivery banner copy edited</span></div>
+              <div class="flex items-center gap-2"><span class="tag">Product</span><span class="cell-sub">Humic Acid Plus price updated</span></div>
+              <div class="flex items-center gap-2"><span class="tag">i18n</span><span class="cell-sub">Hindi string for PDP added</span></div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="btn btn-danger" onclick="discardDraft()"><i class="fa-solid fa-trash-can"></i> Discard draft</button>
+            <button class="btn btn-primary" id="pubBtn" onclick="doPublish()"><i class="fa-solid fa-rocket"></i> Publish <span id="pubLbl"></span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Version history -->
+      <div class="card">
+        <div class="card-head"><h3>Version history</h3></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Version</th><th>Published</th><th>By</th><th>Notes</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active: 'publish', title: 'Publish & Versions', crumb: 'Release' });
+  let data = KKD.load();
+  if (!data.versions) data.versions = [];
+
+  function nextVersion(){
+    const max = data.versions.reduce((m,v)=>Math.max(m, parseInt(String(v.v).replace(/\D/g,''),10)||0), 0);
+    return 'v' + (max + 1);
+  }
+
+  function refreshPend(){
+    const n = KKD.pending();
+    document.getElementById('pendBig').textContent = n;
+    const btn = document.getElementById('pubBtn');
+    btn.disabled = n === 0;
+    btn.style.opacity = n === 0 ? '.5' : '';
+    btn.style.pointerEvents = n === 0 ? 'none' : '';
+    document.getElementById('pubLbl').textContent = nextVersion();
+  }
+
+  function render(){
+    document.getElementById('rows').innerHTML = data.versions.map((v,i)=>`
+      <tr>
+        <td><div class="cell-main mono">${esc(v.v)}</div></td>
+        <td><span class="cell-sub">${esc(v.when)}</span></td>
+        <td>${esc(v.by)}</td>
+        <td><span class="cell-sub">${esc(v.note)}</span></td>
+        <td>${v.live ? '<span class="badge b-active"><span class="dot"></span> Live</span>' : '<span class="badge b-off"><span class="dot"></span> Archived</span>'}</td>
+        <td>
+          <div class="flex gap-2" style="justify-content:flex-end">
+            ${v.live
+              ? '<span class="tag tag-green"><i class="fa-solid fa-check"></i></span>'
+              : `<button class="btn btn-ghost btn-sm" onclick="rollback(${i})"><i class="fa-solid fa-rotate-left"></i> Rollback</button>`}
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+
+  function doPublish(){
+    AdminShell.publish();
+    data.versions.forEach(v=> v.live = false);
+    data.versions.unshift({ v: nextVersion(), when: '2026-06-11 12:00', by: 'Admin', note: 'Manual publish from portal', live: true });
+    KKD.save(data); KKD.clearPending();
+    render(); refreshPend();
+  }
+  function discardDraft(){ KKD.clearPending(); render(); refreshPend(); AdminShell.toast('Draft discarded','trash-can'); }
+  function rollback(i){
+    const v = data.versions[i];
+    data.versions.forEach(x=> x.live = false);
+    v.live = true; KKD.save(data); render();
+    AdminShell.toast('Rolled back to ' + v.v, 'rotate-left');
+  }
+
+  render(); refreshPend();
+</script>
+</body></html>

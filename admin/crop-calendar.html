@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Crop Calendar</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Crop Calendar</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Define growth stages and tasks for each crop.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openStage()"><i class="fa-solid fa-plus"></i> New stage</button>
+      </div>
+
+      <!-- Crop selector tabs -->
+      <div class="tabs" id="cropTabs"></div>
+
+      <!-- Stage list -->
+      <div id="stageList"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: new / edit stage -->
+<div class="scrim" id="stDrawerScrim" onclick="AdminShell.close('stDrawer')"></div>
+<aside class="drawer" id="stDrawer">
+  <div class="drawer-head">
+    <h3 id="stDrawerTitle">New stage</h3>
+    <button class="x-btn" onclick="AdminShell.close('stDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Stage name</label><input class="input" id="stName" placeholder="e.g. Flowering"/></div>
+    <div class="field"><label>Hindi name</label><input class="input" id="stHindi" placeholder="e.g. फूल"/></div>
+    <div class="row2">
+      <div class="field"><label>Day from</label><input class="input" type="number" id="stFrom" value="0"/></div>
+      <div class="field"><label>Day to</label><input class="input" type="number" id="stTo" value="0"/></div>
+    </div>
+    <div class="field"><label>Tasks</label>
+      <textarea class="input" id="stTasks" rows="6" placeholder="One task per line"></textarea>
+      <div class="hint">Each line becomes a task pill on the crop calendar.</div>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('stDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveStage()"><i class="fa-solid fa-check"></i> Save to draft</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active:'calendar', title:'Crop Calendar', crumb:'Crop Help', controls:'Crop calendar stages + dated tasks in the app', preview:'crop-calendar.html' });
+  let data = KKD.load();
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  let activeCrop = data.cropStages.length ? data.cropStages[0].crop : null;
+
+  function cropEntry(){ return data.cropStages.find(c=>c.crop===activeCrop); }
+
+  function renderTabs(){
+    document.getElementById('cropTabs').innerHTML = data.cropStages.map(c=>
+      `<div class="tab ${activeCrop===c.crop?'active':''}" onclick="activeCrop='${c.crop}';renderTabs();renderList()">${cap(c.crop)} <span style="opacity:.6">${c.stages.length}</span></div>`
+    ).join('') || '';
+  }
+
+  function renderList(){
+    const entry = cropEntry();
+    const stages = entry ? entry.stages : [];
+    document.getElementById('stageList').innerHTML = stages.map((s,i)=>`
+      <div class="drag-item" style="align-items:flex-start">
+        <i class="fa-solid fa-grip-vertical grip" style="margin-top:3px"></i>
+        <div style="flex:1;min-width:0">
+          <div class="flex items-center gap-2" style="margin-bottom:6px">
+            <span class="l-main" style="font-size:14.5px">${esc(s.name)}</span>
+            <span class="muted" style="font-size:12.5px">${esc(s.hindi||'')}</span>
+            <span class="tag tag-green" style="margin-left:6px"><i class="fa-regular fa-calendar" style="margin-right:4px"></i> Day ${s.dayFrom}–${s.dayTo}</span>
+          </div>
+          <div class="flex" style="flex-wrap:wrap;gap:6px">
+            ${(s.tasks||[]).map(t=>`<span class="tag"><i class="fa-solid fa-check" style="margin-right:5px;color:var(--green)"></i>${esc(t)}</span>`).join('') || '<span class="muted" style="font-size:12px">No tasks yet</span>'}
+          </div>
+        </div>
+        <div class="flex gap-2" style="margin-left:auto">
+          <button class="btn btn-ghost btn-sm" onclick="openStage(${i})"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="delStage(${i})"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>`).join('') || '<div class="empty"><i class="fa-solid fa-calendar-days"></i><div>No stages defined for this crop yet.</div></div>';
+  }
+
+  let editIdx = null;
+  function openStage(idx){
+    if(!activeCrop){ AdminShell.toast('No crop selected','triangle-exclamation'); return; }
+    editIdx = (idx===undefined||idx===null) ? null : idx;
+    document.getElementById('stDrawerTitle').textContent = editIdx!==null ? 'Edit stage' : 'New stage';
+    const s = editIdx!==null ? cropEntry().stages[editIdx] : null;
+    document.getElementById('stName').value = s? s.name : '';
+    document.getElementById('stHindi').value = s? s.hindi : '';
+    document.getElementById('stFrom').value = s? s.dayFrom : 0;
+    document.getElementById('stTo').value = s? s.dayTo : 0;
+    document.getElementById('stTasks').value = s? (s.tasks||[]).join('\n') : '';
+    AdminShell.open('stDrawer');
+  }
+  function saveStage(){
+    const entry = cropEntry();
+    const rec = {
+      name: document.getElementById('stName').value.trim() || 'Untitled stage',
+      hindi: document.getElementById('stHindi').value.trim(),
+      dayFrom: parseInt(document.getElementById('stFrom').value,10)||0,
+      dayTo: parseInt(document.getElementById('stTo').value,10)||0,
+      tasks: document.getElementById('stTasks').value.split('\n').map(t=>t.trim()).filter(Boolean),
+    };
+    if(editIdx!==null){ Object.assign(entry.stages[editIdx], rec); }
+    else { entry.stages.push(rec); }
+    KKD.save(data); AdminShell.close('stDrawer'); renderTabs(); renderList(); AdminShell.saved(editIdx!==null?'Stage updated':'Stage added to draft');
+  }
+  function delStage(idx){ cropEntry().stages.splice(idx,1); KKD.save(data); renderTabs(); renderList(); AdminShell.saved('Stage removed'); }
+
+  renderTabs(); renderList();
+</script>
+</body></html>

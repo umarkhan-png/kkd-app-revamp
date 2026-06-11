@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Disease Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Disease Library</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Diseases, symptoms and the products that treat them.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openDisease()"><i class="fa-solid fa-plus"></i> New disease</button>
+      </div>
+
+      <!-- Filters -->
+      <div class="card card-pad flex items-center gap-2" style="margin-bottom:18px;flex-wrap:wrap">
+        <div class="search" style="flex:1;min-width:220px"><i class="fa-solid fa-magnifying-glass" style="font-size:12px"></i><input id="fSearch" placeholder="Search name or Hindi…" oninput="render()"/></div>
+        <select class="select" id="fCrop" style="width:auto;min-width:160px" onchange="render()"></select>
+        <select class="select" id="fSev" style="width:auto;min-width:150px" onchange="render()">
+          <option value="all">All severities</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+      </div>
+
+      <!-- Table -->
+      <div class="card">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr>
+              <th>Disease</th><th>Crop</th><th>Severity</th><th>Description</th><th>Treats with</th><th style="text-align:right">Actions</th>
+            </tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: new / edit disease -->
+<div class="scrim" id="dsDrawerScrim" onclick="AdminShell.close('dsDrawer')"></div>
+<aside class="drawer" id="dsDrawer">
+  <div class="drawer-head">
+    <h3 id="dsDrawerTitle">New disease</h3>
+    <button class="x-btn" onclick="AdminShell.close('dsDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Name</label><input class="input" id="dsName" placeholder="e.g. Powdery Mildew"/></div>
+    <div class="field"><label>Hindi name</label><input class="input" id="dsHindi" placeholder="e.g. चूर्णिल आसिता"/></div>
+    <div class="row2">
+      <div class="field"><label>Crop</label><select class="select" id="dsCrop"></select></div>
+      <div class="field"><label>Severity</label>
+        <select class="select" id="dsSev"><option>High</option><option>Medium</option><option>Low</option></select>
+      </div>
+    </div>
+    <div class="field"><label>Description</label><textarea class="input" id="dsDesc" rows="3" placeholder="Symptoms, spread, conditions…"></textarea></div>
+    <div class="field"><label>Recommended products</label>
+      <div id="dsProducts" style="display:flex;flex-direction:column;gap:8px;margin-top:4px"></div>
+      <div class="hint">Shown as “Treats with” on photo-diagnosis results.</div>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('dsDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveDisease()"><i class="fa-solid fa-check"></i> Save to draft</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active:'diseases', title:'Disease Library', crumb:'Crop Help', controls:'Disease info + photo-diagnosis results', preview:'photo-diagnosis.html' });
+  let data = KKD.load();
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const prodName = id => { const p = data.products.find(x=>x.id===id); return p ? p.name : id; };
+  function sevBadge(s){ const m={High:['b-red','High'],Medium:['b-draft','Medium'],Low:['b-off','Low']}; const [c,t]=m[s]||m.Low; return `<span class="badge ${c}"><span class="dot"></span> ${t}</span>`; }
+  function trunc(t,n){ t=t||''; return t.length>n? esc(t.slice(0,n))+'…' : esc(t); }
+
+  // populate crop filter + drawer crop select
+  document.getElementById('fCrop').innerHTML = '<option value="all">All crops</option>' + data.crops.map(c=>`<option value="${c.key}">${esc(c.name)}</option>`).join('');
+  document.getElementById('dsCrop').innerHTML = data.crops.map(c=>`<option value="${c.key}">${esc(c.name)}</option>`).join('');
+
+  function render(){
+    const q = document.getElementById('fSearch').value.trim().toLowerCase();
+    const fc = document.getElementById('fCrop').value;
+    const fs = document.getElementById('fSev').value;
+    const list = data.diseases.filter(d=>{
+      const mq = !q || d.name.toLowerCase().includes(q) || (d.hindi||'').toLowerCase().includes(q);
+      const mc = fc==='all' || d.crop===fc;
+      const ms = fs==='all' || d.severity===fs;
+      return mq && mc && ms;
+    });
+    document.getElementById('rows').innerHTML = list.map(d=>`
+      <tr>
+        <td><div class="cell-main">${esc(d.name)}</div><div class="cell-sub">${esc(d.hindi||'')}</div></td>
+        <td><span class="tag tag-green">${esc(cap(d.crop))}</span></td>
+        <td>${sevBadge(d.severity)}</td>
+        <td style="max-width:280px;color:var(--slate-600)">${trunc(d.desc,90)}</td>
+        <td><div class="flex" style="flex-wrap:wrap;gap:5px">${(d.products||[]).map(id=>`<span class="tag">${esc(prodName(id))}</span>`).join('') || '<span class="muted" style="font-size:12px">—</span>'}</div></td>
+        <td><div class="flex gap-2" style="justify-content:flex-end">
+          <button class="btn btn-ghost btn-sm" onclick="openDisease('${d.id}')"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="delDisease('${d.id}')"><i class="fa-solid fa-trash"></i></button>
+        </div></td>
+      </tr>`).join('') || '<tr><td colspan="6"><div class="empty"><i class="fa-solid fa-bug"></i><div>No diseases match these filters.</div></div></td></tr>';
+  }
+
+  let editId = null;
+  function openDisease(id){
+    editId = id || null;
+    document.getElementById('dsDrawerTitle').textContent = id ? 'Edit disease' : 'New disease';
+    const d = id ? data.diseases.find(x=>x.id===id) : null;
+    document.getElementById('dsName').value = d? d.name : '';
+    document.getElementById('dsHindi').value = d? d.hindi : '';
+    document.getElementById('dsCrop').value = d? d.crop : data.crops[0].key;
+    document.getElementById('dsSev').value = d? d.severity : 'High';
+    document.getElementById('dsDesc').value = d? d.desc : '';
+    const sel = d ? (d.products||[]) : [];
+    document.getElementById('dsProducts').innerHTML = data.products.map(p=>`
+      <label class="flex items-center gap-2" style="font-size:13px;font-weight:500;cursor:pointer">
+        <input type="checkbox" value="${p.id}" ${sel.includes(p.id)?'checked':''}> ${esc(p.name)}
+      </label>`).join('');
+    AdminShell.open('dsDrawer');
+  }
+  function saveDisease(){
+    const checked = Array.from(document.querySelectorAll('#dsProducts input:checked')).map(c=>c.value);
+    const rec = {
+      name: document.getElementById('dsName').value.trim() || 'Untitled disease',
+      hindi: document.getElementById('dsHindi').value.trim(),
+      crop: document.getElementById('dsCrop').value,
+      severity: document.getElementById('dsSev').value,
+      desc: document.getElementById('dsDesc').value.trim(),
+      products: checked,
+    };
+    if(editId){ Object.assign(data.diseases.find(x=>x.id===editId), rec); }
+    else { rec.id='ds'+Date.now(); data.diseases.unshift(rec); }
+    KKD.save(data); AdminShell.close('dsDrawer'); render(); AdminShell.saved(editId?'Disease updated':'Disease added to draft');
+  }
+  function delDisease(id){ data.diseases=data.diseases.filter(d=>d.id!==id); KKD.save(data); render(); AdminShell.saved('Disease removed'); }
+
+  render();
+</script>
+</body></html>

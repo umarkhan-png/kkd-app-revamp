@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Advisory</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Advisory</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Publish farming advisory articles and expert answers.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openArticle()"><i class="fa-solid fa-plus"></i> New article</button>
+      </div>
+
+      <!-- Status tabs -->
+      <div class="tabs" id="statusTabs"></div>
+
+      <!-- Table -->
+      <div class="card">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr>
+              <th>Title</th><th>Crop</th><th>Topic</th><th>Expert answers</th><th>Status</th><th style="text-align:right">Actions</th>
+            </tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: new / edit article -->
+<div class="scrim" id="adDrawerScrim" onclick="AdminShell.close('adDrawer')"></div>
+<aside class="drawer" id="adDrawer">
+  <div class="drawer-head">
+    <h3 id="adDrawerTitle">New article</h3>
+    <button class="x-btn" onclick="AdminShell.close('adDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Title</label><input class="input" id="adTitle" placeholder="e.g. Monsoon fungicide rotation guide"/></div>
+    <div class="row2">
+      <div class="field"><label>Crop</label><select class="select" id="adCrop"></select></div>
+      <div class="field"><label>Topic</label>
+        <select class="select" id="adTopic"><option>Pest</option><option>Nutrition</option><option>Disease</option></select>
+      </div>
+    </div>
+    <div class="field"><label>Body</label><textarea class="input" id="adBody" rows="6" placeholder="Article content…"></textarea></div>
+    <div class="field"><label>Status</label>
+      <select class="select" id="adStatus"><option value="draft">Draft</option><option value="published">Published</option></select>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('adDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveArticle()"><i class="fa-solid fa-check"></i> Save to draft</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active:'advisory', title:'Advisory', crumb:'Crop Help', controls:'Advisory articles / expert answers', preview:'advisory.html' });
+  let data = KKD.load();
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const cropLabel = key => key==='all' ? 'All crops' : cap(key);
+  let filter = 'all';
+  const STATUSES = { all:'All', published:'Published', draft:'Draft' };
+
+  // drawer crop select (All + crops)
+  document.getElementById('adCrop').innerHTML = '<option value="all">All crops</option>' + data.crops.map(c=>`<option value="${c.key}">${esc(c.name)}</option>`).join('');
+
+  function statusBadge(s){ return s==='published' ? '<span class="badge b-active"><span class="dot"></span> Published</span>' : '<span class="badge b-draft"><span class="dot"></span> Draft</span>'; }
+
+  function renderTabs(){
+    document.getElementById('statusTabs').innerHTML = Object.entries(STATUSES).map(([k,v])=>{
+      const n = k==='all' ? data.advisory.length : data.advisory.filter(a=>a.status===k).length;
+      return `<div class="tab ${filter===k?'active':''}" onclick="filter='${k}';renderTabs();renderRows()">${v} <span style="opacity:.6">${n}</span></div>`;
+    }).join('');
+  }
+
+  function renderRows(){
+    const list = data.advisory.filter(a=> filter==='all' || a.status===filter);
+    document.getElementById('rows').innerHTML = list.map(a=>`
+      <tr>
+        <td><div class="cell-main">${esc(a.title)}</div></td>
+        <td><span class="tag tag-green">${esc(cropLabel(a.crop))}</span></td>
+        <td><span class="tag">${esc(a.topic)}</span></td>
+        <td><span class="cell-sub"><i class="fa-solid fa-comment-dots" style="margin-right:5px"></i>${a.answers}</span></td>
+        <td>${statusBadge(a.status)}</td>
+        <td><div class="flex gap-2" style="justify-content:flex-end">
+          <button class="btn btn-ghost btn-sm" onclick="toggleStatus('${a.id}')">${a.status==='published'?'<i class="fa-solid fa-eye-slash"></i> Unpublish':'<i class="fa-solid fa-rocket"></i> Publish'}</button>
+          <button class="btn btn-ghost btn-sm" onclick="openArticle('${a.id}')"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="delArticle('${a.id}')"><i class="fa-solid fa-trash"></i></button>
+        </div></td>
+      </tr>`).join('') || '<tr><td colspan="6"><div class="empty"><i class="fa-solid fa-book-open"></i><div>No articles in this view yet.</div></div></td></tr>';
+  }
+
+  let editId = null;
+  function openArticle(id){
+    editId = id || null;
+    document.getElementById('adDrawerTitle').textContent = id ? 'Edit article' : 'New article';
+    const a = id ? data.advisory.find(x=>x.id===id) : null;
+    document.getElementById('adTitle').value = a? a.title : '';
+    document.getElementById('adCrop').value = a? a.crop : 'all';
+    document.getElementById('adTopic').value = a? a.topic : 'Pest';
+    document.getElementById('adBody').value = a? (a.content||'') : '';
+    document.getElementById('adStatus').value = a? a.status : 'draft';
+    AdminShell.open('adDrawer');
+  }
+  function saveArticle(){
+    const rec = {
+      title: document.getElementById('adTitle').value.trim() || 'Untitled article',
+      crop: document.getElementById('adCrop').value,
+      topic: document.getElementById('adTopic').value,
+      content: document.getElementById('adBody').value.trim(),
+      status: document.getElementById('adStatus').value,
+    };
+    if(editId){ Object.assign(data.advisory.find(x=>x.id===editId), rec); }
+    else { rec.id='ad'+Date.now(); rec.answers=0; data.advisory.unshift(rec); }
+    KKD.save(data); AdminShell.close('adDrawer'); renderTabs(); renderRows(); AdminShell.saved(editId?'Article updated':'Article added to draft');
+  }
+  function toggleStatus(id){
+    const a = data.advisory.find(x=>x.id===id); if(!a) return;
+    a.status = a.status==='published' ? 'draft' : 'published';
+    KKD.save(data); renderTabs(); renderRows(); AdminShell.saved(a.status==='published'?'Article published':'Article unpublished');
+  }
+  function delArticle(id){ data.advisory=data.advisory.filter(a=>a.id!==id); KKD.save(data); renderTabs(); renderRows(); AdminShell.saved('Article removed'); }
+
+  renderTabs(); renderRows();
+</script>
+</body></html>

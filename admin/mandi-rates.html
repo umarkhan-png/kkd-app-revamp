@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Mandi Rates</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Mandi Rates</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Daily market prices farmers see on My Crop.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openRate()"><i class="fa-solid fa-plus"></i> Add rate</button>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi" id="kpi"></div>
+
+      <!-- Rates table -->
+      <div class="card">
+        <div class="card-head"><h3>Market rates</h3><span class="sub" id="rateCount"></span></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Crop</th><th>Location</th><th>Price</th><th>Change</th><th style="text-align:right">Actions</th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: add / edit rate -->
+<div class="scrim" id="rtDrawerScrim" onclick="AdminShell.close('rtDrawer')"></div>
+<aside class="drawer" id="rtDrawer">
+  <div class="drawer-head">
+    <h3 id="rtDrawerTitle">Add rate</h3>
+    <button class="x-btn" onclick="AdminShell.close('rtDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Crop</label>
+      <select class="select" id="rtCrop"></select>
+      <div class="hint">Pick from your catalog crops, or add a custom name below.</div>
+    </div>
+    <div class="field"><label>Custom crop (optional)</label><input class="input" id="rtCropCustom" placeholder="e.g. Onion"/></div>
+    <div class="field"><label>Location</label><input class="input" id="rtLoc" placeholder="e.g. Indore"/></div>
+    <div class="row2">
+      <div class="field"><label>Price (₹)</label><input class="input" type="number" id="rtPrice" placeholder="0"/></div>
+      <div class="field"><label>Unit</label>
+        <select class="select" id="rtUnit">
+          <option value="kg">per kg</option>
+          <option value="quintal">per quintal</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Change (₹)</label><input class="input" type="number" id="rtChange" placeholder="e.g. 2 or -4"/>
+      <div class="hint">Positive = price up (gainer), negative = price down (loser), 0 = no change.</div>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('rtDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveRate()"><i class="fa-solid fa-check"></i> Save to draft</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active:'mandi', title:'Mandi Rates', crumb:'Crop Help', controls:'Mandi (market) rates shown on My Crop', preview:'my-crop.html' });
+  let data = KKD.load();
+
+  function changeBadge(n){
+    if(n>0) return `<span class="badge b-active">▲ ₹${n}</span>`;
+    if(n<0) return `<span class="badge b-red">▼ ₹${Math.abs(n)}</span>`;
+    return `<span class="badge b-off">—</span>`;
+  }
+
+  function renderKpi(){
+    const total = data.mandi.length;
+    const gainers = data.mandi.filter(m=>m.change>0).length;
+    const losers = data.mandi.filter(m=>m.change<0).length;
+    document.getElementById('kpi').innerHTML = `
+      <div class="stat"><div class="ic ic-green"><i class="fa-solid fa-indian-rupee-sign"></i></div><div class="num">${total}</div><div class="lbl">Total rates</div></div>
+      <div class="stat"><div class="ic ic-green"><i class="fa-solid fa-arrow-trend-up"></i></div><div class="num">${gainers}</div><div class="lbl">Gainers (▲)</div></div>
+      <div class="stat"><div class="ic ic-red"><i class="fa-solid fa-arrow-trend-down"></i></div><div class="num">${losers}</div><div class="lbl">Losers (▼)</div></div>`;
+  }
+
+  function renderRows(){
+    document.getElementById('rateCount').textContent = data.mandi.length + ' crops tracked';
+    document.getElementById('rows').innerHTML = data.mandi.map((m,i)=>`
+      <tr>
+        <td class="cell-main">${esc(m.crop)}</td>
+        <td><span class="cell-sub"><i class="fa-solid fa-location-dot"></i> ${esc(m.location)}</span></td>
+        <td><b>₹${m.price}</b><span class="cell-sub">/${esc(m.unit)}</span></td>
+        <td>${changeBadge(m.change)}</td>
+        <td style="text-align:right"><div class="flex gap-2" style="justify-content:flex-end">
+          <button class="btn btn-ghost btn-sm" onclick="openRate(${i})"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="delRate(${i})"><i class="fa-solid fa-trash"></i></button>
+        </div></td>
+      </tr>`).join('') || '<tr><td colspan="5"><div class="empty"><i class="fa-solid fa-indian-rupee-sign"></i><div>No mandi rates yet.</div></div></td></tr>';
+  }
+
+  function fillCrops(sel){
+    document.getElementById('rtCrop').innerHTML =
+      '<option value="">— choose —</option>' +
+      data.crops.map(c=>`<option value="${esc(c.name)}" ${sel===c.name?'selected':''}>${esc(c.name)}</option>`).join('');
+  }
+
+  let editIdx = null;
+  function openRate(i){
+    editIdx = (i===undefined) ? null : i;
+    const m = editIdx!==null ? data.mandi[editIdx] : null;
+    document.getElementById('rtDrawerTitle').textContent = m ? 'Edit rate' : 'Add rate';
+    const known = m && data.crops.some(c=>c.name===m.crop);
+    fillCrops(known ? m.crop : '');
+    document.getElementById('rtCropCustom').value = (m && !known) ? m.crop : '';
+    document.getElementById('rtLoc').value = m ? m.location : '';
+    document.getElementById('rtPrice').value = m ? m.price : '';
+    document.getElementById('rtUnit').value = m ? m.unit : 'kg';
+    document.getElementById('rtChange').value = m ? m.change : 0;
+    AdminShell.open('rtDrawer');
+  }
+
+  function saveRate(){
+    const custom = document.getElementById('rtCropCustom').value.trim();
+    const crop = custom || document.getElementById('rtCrop').value || 'Untitled';
+    const rec = {
+      crop,
+      location: document.getElementById('rtLoc').value.trim() || '—',
+      price: Number(document.getElementById('rtPrice').value) || 0,
+      unit: document.getElementById('rtUnit').value,
+      change: Number(document.getElementById('rtChange').value) || 0,
+    };
+    if(editIdx!==null) Object.assign(data.mandi[editIdx], rec);
+    else data.mandi.push(rec);
+    KKD.save(data); AdminShell.close('rtDrawer'); renderKpi(); renderRows();
+    AdminShell.saved(editIdx!==null ? 'Rate updated' : 'Rate added to draft');
+  }
+
+  function delRate(i){ data.mandi.splice(i,1); KKD.save(data); renderKpi(); renderRows(); AdminShell.saved('Rate removed'); }
+
+  renderKpi(); renderRows();
+</script>
+</body></html>

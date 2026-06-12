@@ -15,18 +15,24 @@
       <div class="flex items-center justify-between" style="margin-bottom:20px">
         <div>
           <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Reviews &amp; Ratings</h2>
-          <p class="muted" style="margin:0;font-size:13.5px">Moderate customer reviews and photos.</p>
+          <p class="muted" style="margin:0;font-size:13.5px">Moderate reviews, reply, and feature the best on product pages.</p>
         </div>
       </div>
 
-      <!-- KPI row -->
-      <div class="kpi" id="kpi"></div>
+      <!-- Summary row: rating summary (left) + kpi (right) -->
+      <div class="grid-cards" style="grid-template-columns:1.05fr 1.35fr;align-items:stretch;margin-bottom:20px">
+        <div class="card">
+          <div class="card-head"><h3>Rating summary</h3></div>
+          <div class="card-pad" id="ratingSummary"></div>
+        </div>
+        <div class="kpi" id="kpi" style="margin-bottom:0"></div>
+      </div>
 
       <!-- Status tabs + rating filter -->
       <div class="flex items-center justify-between gap-3" style="margin-bottom:20px;flex-wrap:wrap">
         <div class="tabs" id="tabs" style="margin-bottom:0;border-bottom:0"></div>
         <div class="field" style="margin:0;min-width:170px">
-          <select class="select" id="ratingFilter" onchange="ratingFilter=this.value;render()">
+          <select class="select" id="ratingFilter" onchange="ratingFilter=this.value;renderRows()">
             <option value="all">All ratings</option>
             <option value="5">5★ only</option>
             <option value="4">4★ only</option>
@@ -37,12 +43,24 @@
         </div>
       </div>
 
+      <!-- Bulk bar (appears when any selected) -->
+      <div id="bulkBar" class="card" style="display:none;margin-bottom:16px;border-color:var(--green-200);background:var(--green-50)">
+        <div class="flex items-center gap-3" style="padding:12px 16px;flex-wrap:wrap">
+          <span class="cell-main" id="bulkCount" style="color:var(--green)"></span>
+          <div class="flex gap-2" style="margin-left:auto">
+            <button class="btn btn-soft btn-sm" onclick="bulkStatus('approved')"><i class="fa-solid fa-check"></i> Approve selected</button>
+            <button class="btn btn-danger btn-sm" onclick="bulkStatus('rejected')"><i class="fa-solid fa-xmark"></i> Reject selected</button>
+          </div>
+        </div>
+      </div>
+
       <!-- Reviews table -->
       <div class="card">
         <div class="tbl-wrap">
           <table class="tbl">
             <thead><tr>
-              <th>Product</th><th>Rating</th><th>Review</th><th>Date</th><th>Status</th><th style="text-align:right">Actions</th>
+              <th style="width:38px"><input type="checkbox" id="checkAll" onchange="toggleAll(this.checked)"></th>
+              <th>Product</th><th>Reviewer</th><th>Rating</th><th>Review</th><th>Date</th><th>Status</th><th style="text-align:center">Featured</th><th style="text-align:right">Actions</th>
             </tr></thead>
             <tbody id="rows"></tbody>
           </table>
@@ -53,25 +71,82 @@
   </div>
 </div>
 
+<!-- Drawer: reply to review -->
+<div class="scrim" id="replyDrawerScrim" onclick="AdminShell.close('replyDrawer')"></div>
+<aside class="drawer" id="replyDrawer">
+  <div class="drawer-head">
+    <h3>Reply to review</h3>
+    <button class="x-btn" onclick="AdminShell.close('replyDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="card" style="background:var(--slate-50);margin-bottom:18px">
+      <div class="card-pad">
+        <div class="flex items-center justify-between" style="margin-bottom:8px">
+          <div class="cell-main" id="replyProduct"></div>
+          <span id="replyStars"></span>
+        </div>
+        <div class="cell-sub" id="replyUser" style="margin-bottom:8px"></div>
+        <div style="font-size:13.5px;line-height:1.55" id="replyText"></div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Your reply (shown publicly under the review)</label>
+      <textarea class="input" id="replyBox" placeholder="Thank you for your feedback…"></textarea>
+      <div class="hint">Replies appear on the product page below the customer's review.</div>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('replyDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveReply()"><i class="fa-solid fa-check"></i> Save reply</button>
+  </div>
+</aside>
+
 <script src="assets/data.js"></script>
 <script src="assets/shell.js"></script>
 <script>
-  AdminShell.mount({ active:'reviews', title:'Reviews & Ratings', crumb:'Catalog', controls:'Customer reviews shown on product pages', preview:'pdp.html' });
+  AdminShell.mount({ active:'reviews', title:'Reviews & Ratings', crumb:'Product Page', controls:'Customer reviews & ratings shown on product pages', preview:'pdp.html' });
   let data = KKD.load();
   let filter = 'all';
   let ratingFilter = 'all';
+  let selected = {};
 
   const STATUS = { pending:['b-draft','Pending'], approved:['b-active','Approved'], rejected:['b-red','Rejected'] };
+  const isSpam = r => /https?:\/\//i.test(r.text || '');
 
   function statusBadge(s){ const [c,t]=STATUS[s]||STATUS.pending; return `<span class="badge ${c}"><span class="dot"></span> ${t}</span>`; }
-  function stars(n){ let s=''; for(let i=1;i<=5;i++){ s+=`<i class="fa-${i<=n?'solid':'regular'} fa-star" style="color:${i<=n?'#F59E0B':'var(--slate-300)'};font-size:12px"></i>`; } return `<span style="white-space:nowrap">${s}</span>`; }
+  function stars(n,size){ size=size||12; let s=''; for(let i=1;i<=5;i++){ s+=`<i class="fa-${i<=n?'solid':'regular'} fa-star" style="color:${i<=n?'#F59E0B':'var(--slate-300)'};font-size:${size}px"></i>`; } return `<span style="white-space:nowrap">${s}</span>`; }
+
+  function renderSummary(){
+    const all = data.reviews;
+    const total = all.length;
+    const avg = total ? (all.reduce((s,r)=>s+(r.rating||0),0)/total) : 0;
+    const dist = [5,4,3,2,1].map(star=>{
+      const n = all.filter(r=>r.rating===star).length;
+      const pct = total ? Math.round(n/total*100) : 0;
+      return `<div class="flex items-center gap-2" style="margin-bottom:8px">
+        <span style="width:30px;font-size:12px;font-weight:700;white-space:nowrap">${star}<i class="fa-solid fa-star" style="color:#F59E0B;font-size:10px;margin-left:2px"></i></span>
+        <div style="flex:1;height:8px;border-radius:9999px;background:var(--slate-100);overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--green);border-radius:9999px"></div></div>
+        <span class="cell-sub" style="width:34px;text-align:right">${n}</span>
+      </div>`;
+    }).join('');
+    document.getElementById('ratingSummary').innerHTML = `
+      <div class="flex items-center gap-4" style="margin-bottom:16px">
+        <div style="font-size:40px;font-weight:800;letter-spacing:-.02em;line-height:1">${avg.toFixed(1)}</div>
+        <div>
+          ${stars(Math.round(avg),15)}
+          <div class="cell-sub" style="margin-top:4px">${total} review${total===1?'':'s'}</div>
+        </div>
+      </div>
+      ${dist}`;
+  }
 
   function renderKpi(){
     const c = s => data.reviews.filter(r=>r.status===s).length;
     const cards = [
       { n:c('pending'), l:'Pending', ic:'ic-amber', i:'clock' },
       { n:c('approved'), l:'Approved', ic:'ic-green', i:'circle-check' },
-      { n:c('rejected'), l:'Rejected', ic:'ic-red', i:'circle-xmark' },
+      { n:data.reviews.filter(isSpam).length, l:'Flagged', ic:'ic-red', i:'triangle-exclamation' },
+      { n:data.reviews.filter(r=>r.featured).length, l:'Featured', ic:'ic-amber', i:'star' },
     ];
     document.getElementById('kpi').innerHTML = cards.map(k=>`
       <div class="stat">
@@ -82,50 +157,111 @@
   }
 
   function renderTabs(){
-    const TABS = { all:'All', pending:'Pending', approved:'Approved', rejected:'Rejected' };
+    const TABS = { all:'All', pending:'Pending', approved:'Approved', rejected:'Rejected', flagged:'Flagged' };
     document.getElementById('tabs').innerHTML = Object.entries(TABS).map(([k,v])=>{
-      const n = k==='all'? data.reviews.length : data.reviews.filter(r=>r.status===k).length;
+      const n = k==='all'? data.reviews.length : (k==='flagged'? data.reviews.filter(isSpam).length : data.reviews.filter(r=>r.status===k).length);
       return `<div class="tab ${filter===k?'active':''}" onclick="filter='${k}';renderTabs();renderRows()">${v} <span style="opacity:.6">${n}</span></div>`;
     }).join('');
   }
 
-  function renderRows(){
-    const list = data.reviews.filter(r=>
-      (filter==='all' || r.status===filter) &&
+  function visibleList(){
+    return data.reviews.filter(r=>
+      (filter==='all' || (filter==='flagged'? isSpam(r) : r.status===filter)) &&
       (ratingFilter==='all' || r.rating===parseInt(ratingFilter,10))
     );
-    document.getElementById('rows').innerHTML = list.map(r=>`
+  }
+
+  function renderRows(){
+    const list = visibleList();
+    // drop selections no longer visible
+    const visibleIds = new Set(list.map(r=>r.id));
+    Object.keys(selected).forEach(id=>{ if(!visibleIds.has(id)) delete selected[id]; });
+    document.getElementById('rows').innerHTML = list.map(r=>{
+      const spam = isSpam(r);
+      const mediaTag = r.photos>0 ? `<span class="tag" style="margin-top:5px">📷 ${r.photos}</span>` : '';
+      const spamTag = spam ? `<span class="tag" style="margin-top:5px;background:var(--red-bg);color:var(--red)">⚠ Spam</span>` : '';
+      return `
       <tr>
-        <td>
-          <div class="cell-main">${esc(r.product)}</div>
-          <div class="cell-sub">${esc(r.user)}</div>
-        </td>
+        <td><input type="checkbox" ${selected[r.id]?'checked':''} onchange="toggleOne('${r.id}',this.checked)"></td>
+        <td><div class="cell-main">${esc(r.product)}</div></td>
+        <td><div class="cell-sub">${esc(r.user)}</div></td>
         <td>${stars(r.rating)}</td>
-        <td style="max-width:320px">
-          <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:320px">${esc(r.text)}</div>
-          ${r.photos>0?`<span class="tag" style="margin-top:5px">📷 ${r.photos}</span>`:''}
+        <td style="max-width:300px">
+          <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:300px">${esc(r.text)}</div>
+          <div class="flex gap-2" style="flex-wrap:wrap">${mediaTag}${spamTag}</div>
+          ${r.reply?`<div class="cell-sub" style="margin-top:5px"><i class="fa-solid fa-reply" style="color:var(--green)"></i> ${esc(r.reply)}</div>`:''}
         </td>
         <td class="cell-sub">${r.date}</td>
         <td>${statusBadge(r.status)}</td>
+        <td style="text-align:center">
+          <button class="btn btn-ghost btn-sm" style="width:32px;padding:0" title="Feature on product page" onclick="toggleFeature('${r.id}')">
+            <i class="fa-${r.featured?'solid':'regular'} fa-star" style="color:${r.featured?'#F59E0B':'var(--slate-300)'};font-size:14px"></i>
+          </button>
+        </td>
         <td style="text-align:right;white-space:nowrap">
           ${r.status==='pending'?`
             <button class="btn btn-soft btn-sm" onclick="setStatus('${r.id}','approved')"><i class="fa-solid fa-check"></i> Approve</button>
             <button class="btn btn-danger btn-sm" onclick="setStatus('${r.id}','rejected')"><i class="fa-solid fa-xmark"></i> Reject</button>`:''}
+          <button class="btn btn-ghost btn-sm" onclick="openReply('${r.id}')"><i class="fa-solid fa-reply"></i> Reply</button>
           <button class="btn btn-danger btn-sm" onclick="delReview('${r.id}')"><i class="fa-solid fa-trash"></i></button>
         </td>
-      </tr>`).join('') || `<tr><td colspan="6"><div class="empty"><i class="fa-solid fa-star"></i><div>No reviews match this filter.</div></div></td></tr>`;
+      </tr>`;
+    }).join('') || `<tr><td colspan="9"><div class="empty"><i class="fa-solid fa-star"></i><div>No reviews match this filter.</div></div></td></tr>`;
+    // sync check-all + bulk bar
+    const ca = document.getElementById('checkAll');
+    ca.checked = list.length>0 && list.every(r=>selected[r.id]);
+    renderBulk();
   }
 
-  function render(){ renderKpi(); renderTabs(); renderRows(); }
+  function renderBulk(){
+    const n = Object.keys(selected).length;
+    const bar = document.getElementById('bulkBar');
+    bar.style.display = n>0 ? '' : 'none';
+    document.getElementById('bulkCount').textContent = `${n} selected`;
+  }
+
+  function toggleOne(id, on){ if(on) selected[id]=true; else delete selected[id]; renderRows(); }
+  function toggleAll(on){ visibleList().forEach(r=>{ if(on) selected[r.id]=true; else delete selected[r.id]; }); renderRows(); }
+
+  function render(){ renderSummary(); renderKpi(); renderTabs(); renderRows(); }
 
   function setStatus(id, status){
     const r = data.reviews.find(x=>x.id===id); if(!r) return;
     r.status = status; KKD.save(data); render();
     AdminShell.saved(status==='approved'?'Review approved':'Review rejected');
   }
+  function bulkStatus(status){
+    const ids = Object.keys(selected); if(!ids.length) return;
+    ids.forEach(id=>{ const r=data.reviews.find(x=>x.id===id); if(r) r.status=status; });
+    selected = {}; KKD.save(data); render();
+    AdminShell.saved(`${ids.length} review${ids.length===1?'':'s'} ${status}`);
+  }
+  function toggleFeature(id){
+    const r = data.reviews.find(x=>x.id===id); if(!r) return;
+    r.featured = !r.featured; KKD.save(data); render();
+    AdminShell.saved(r.featured?'Featured on product page':'Removed from featured');
+  }
   function delReview(id){
-    data.reviews = data.reviews.filter(r=>r.id!==id); KKD.save(data); render();
+    data.reviews = data.reviews.filter(r=>r.id!==id); delete selected[id]; KKD.save(data); render();
     AdminShell.saved('Review deleted');
+  }
+
+  let replyId = null;
+  function openReply(id){
+    const r = data.reviews.find(x=>x.id===id); if(!r) return;
+    replyId = id;
+    document.getElementById('replyProduct').textContent = r.product;
+    document.getElementById('replyStars').innerHTML = stars(r.rating);
+    document.getElementById('replyUser').textContent = `${r.user} · ${r.date}`;
+    document.getElementById('replyText').textContent = r.text;
+    document.getElementById('replyBox').value = r.reply || '';
+    AdminShell.open('replyDrawer');
+  }
+  function saveReply(){
+    const r = data.reviews.find(x=>x.id===replyId); if(!r) return;
+    r.reply = document.getElementById('replyBox').value.trim();
+    KKD.save(data); AdminShell.close('replyDrawer'); render();
+    AdminShell.saved('Reply saved');
   }
 
   render();

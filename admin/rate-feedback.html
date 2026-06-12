@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Rate-app & Feedback</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Rate-app &amp; Feedback</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Decide when to ask for a rating, and capture unhappy feedback.</p>
+        </div>
+      </div>
+
+      <!-- Rating fork -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h3>Rating fork</h3><span class="sub">How the in-app prompt routes happy vs. unhappy users</span></div>
+        <div>
+          <div class="lrow">
+            <div class="iconbox ic-amber"><i class="fa-solid fa-star"></i></div>
+            <div style="min-width:0">
+              <div class="l-main">Happy threshold</div>
+              <div class="l-sub">stars ≥ N → Play Store, below → feedback form</div>
+            </div>
+            <div class="l-right">
+              <input class="input" type="number" min="1" max="5" id="happyThreshold" style="width:84px" onchange="saveFork()">
+            </div>
+          </div>
+          <div class="lrow">
+            <div class="iconbox ic-green"><i class="fa-brands fa-google-play"></i></div>
+            <div style="min-width:0;flex:1">
+              <div class="l-main">Play Store URL</div>
+              <div class="l-sub">Where happy users are sent to leave a public rating</div>
+            </div>
+            <div class="l-right" style="flex:1;max-width:420px">
+              <input class="input" type="text" id="storeUrl" style="width:100%" onchange="saveFork()" placeholder="https://play.google.com/…">
+            </div>
+          </div>
+          <div class="lrow">
+            <div class="iconbox ic-blue"><i class="fa-solid fa-clock"></i></div>
+            <div style="min-width:0">
+              <div class="l-main">Ask after</div>
+              <div class="l-sub">When to first show the rating prompt</div>
+            </div>
+            <div class="l-right">
+              <select class="select" id="askAfter" style="min-width:210px" onchange="saveFork()">
+                <option>First delivered order</option>
+                <option>3rd order</option>
+                <option>After 7 days</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback tags -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-head"><h3>Feedback tags</h3><span class="sub">Shown to unhappy users to categorise their complaint</span></div>
+        <div class="card-pad">
+          <div class="flex gap-2" id="tagList" style="flex-wrap:wrap;margin-bottom:14px"></div>
+          <div class="flex gap-2" style="max-width:420px">
+            <input class="input" id="newTag" placeholder="Add a feedback tag…" onkeydown="if(event.key==='Enter')addTag()">
+            <button class="btn btn-soft" onclick="addTag()"><i class="fa-solid fa-plus"></i> Add tag</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submitted feedback -->
+      <div class="card">
+        <div class="card-head">
+          <h3>Submitted feedback</h3>
+          <span class="sub muted" style="margin-left:auto">Live submissions — read only · <b id="subCount">0</b> total</span>
+        </div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr>
+              <th>User</th><th>Tag</th><th>Feedback</th><th>Date</th>
+            </tr></thead>
+            <tbody id="subRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active:'ratefeedback', title:'Rate-app & Feedback', crumb:'Account & Help', controls:'The in-app rating prompt + feedback form (rate-app screen)', preview:'rate-app.html' });
+  let data = KKD.load();
+  const ra = data.rateApp;
+
+  function renderFork(){
+    document.getElementById('happyThreshold').value = ra.happyThreshold;
+    document.getElementById('storeUrl').value = ra.storeUrl;
+    document.getElementById('askAfter').value = ra.askAfter;
+  }
+  function saveFork(){
+    ra.happyThreshold = parseInt(document.getElementById('happyThreshold').value,10) || ra.happyThreshold;
+    ra.storeUrl = document.getElementById('storeUrl').value.trim();
+    ra.askAfter = document.getElementById('askAfter').value;
+    KKD.save(data); AdminShell.saved('Rating fork updated');
+  }
+
+  function renderTags(){
+    document.getElementById('tagList').innerHTML = ra.feedbackTags.map((t,i)=>`
+      <span class="tag" style="font-size:12px;padding:6px 6px 6px 11px;gap:6px">${esc(t)}
+        <button class="x-btn" style="width:18px;height:18px;border-radius:6px;font-size:9px;margin:0" onclick="delTag(${i})"><i class="fa-solid fa-xmark"></i></button>
+      </span>`).join('') || '<span class="cell-sub">No tags yet — add one below.</span>';
+  }
+  function addTag(){
+    const inp = document.getElementById('newTag');
+    const v = inp.value.trim(); if(!v) return;
+    ra.feedbackTags.push(v); inp.value='';
+    KKD.save(data); renderTags(); AdminShell.saved('Tag added');
+  }
+  function delTag(i){
+    ra.feedbackTags.splice(i,1);
+    KKD.save(data); renderTags(); AdminShell.saved('Tag removed');
+  }
+
+  function renderSubmitted(){
+    const list = ra.submitted || [];
+    document.getElementById('subCount').textContent = list.length;
+    document.getElementById('subRows').innerHTML = list.map(s=>`
+      <tr>
+        <td><div class="cell-main">${esc(s.user)}</div></td>
+        <td><span class="tag">${esc(s.tag)}</span></td>
+        <td style="max-width:380px">${esc(s.text)}</td>
+        <td class="cell-sub">${s.date}</td>
+      </tr>`).join('') || `<tr><td colspan="4"><div class="empty"><i class="fa-solid fa-comment-dots"></i><div>No feedback submitted yet.</div></div></td></tr>`;
+  }
+
+  renderFork(); renderTags(); renderSubmitted();
+</script>
+</body></html>

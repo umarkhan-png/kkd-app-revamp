@@ -58,6 +58,8 @@
         {ic:'ic-red', icon:'bolt', title:'Flash deals', href:'flash-deals.html', sum:d=>`${G(d,'flashDeals').filter(f=>f.status==='active').length} live deal(s)`},
         {ic:'ic-green', icon:'coins', title:'Krishi Coins widget', href:'coins.html', sum:d=>`${G(d,'earnSteps').length}-step earn widget`},
         {ic:'ic-slate', icon:'language', title:'Greeting & labels', href:'translations.html', sum:d=>`${(d.translations.home||[]).length} home strings`},
+        {ic:'ic-amber', icon:'quote-left', title:'Farmer testimonials', href:'testimonials.html', sum:d=>`${G(d,'testimonials').filter(t=>t.status==='approved'&&(t.placement||[]).includes('home')).length} on home`},
+        {ic:'ic-blue', icon:'chart-simple', title:'Social proof stats', href:'social-proof.html', sum:d=>`${(d.socialProof||{}).farmers} farmers`},
       ]},
     search: { label:'Search screen', file:'search.html', icon:'magnifying-glass',
       controls:'The Search screen — placeholder, trending, suggestions, polls',
@@ -82,7 +84,9 @@
       blocks:[
         {ic:'ic-green', icon:'flask', title:'Product info & variants', href:'products.html', sum:d=>`${G(d,'products').length} products`},
         {ic:'ic-amber', icon:'star', title:'Reviews & ratings', href:'reviews.html', sum:d=>`${G(d,'reviews').filter(r=>r.status==='pending').length} pending to moderate`},
+        {ic:'ic-green', icon:'quote-left', title:'Testimonials', href:'testimonials.html', sum:d=>`${G(d,'testimonials').filter(t=>t.status==='approved'&&(t.placement||[]).includes('pdp')).length} on product pages`},
         {ic:'ic-blue', icon:'shield-halved', title:'Trust badges', href:'trust-badges.html', sum:d=>`${G(d,'trustBadges').filter(b=>b.active).length} active badges`},
+        {ic:'ic-slate', icon:'chart-simple', title:'Social proof ("N bought")', href:'social-proof.html', sum:d=>`${(d.socialProof||{}).pdpBought} bought`},
         {ic:'ic-slate', icon:'layer-group', title:'Related & cross-sell', href:'cross-sell.html', sum:d=>`${G(d,'crossSell').length} rules`},
         {ic:'ic-green', icon:'user-doctor', title:'Ask-Expert banner', href:'experts.html', sum:d=>`${G(d,'experts').filter(e=>e.available).length} experts online`},
       ]},
@@ -131,12 +135,14 @@
         {ic:'ic-green', icon:'flag-checkered', title:'Onboarding copy & lists', href:'onboarding.html', sum:d=>`${(d.onboarding.languages||[]).length} languages, ${(d.onboarding.cropPicker||[]).length} crops`},
         {ic:'ic-blue', icon:'language', title:'Translations', href:'translations.html', sum:d=>`${(d.translations.notifications||[]).length} notif strings`},
         {ic:'ic-amber', icon:'bell', title:'Allow-notifications', href:'notifications.html', sum:d=>`Push opt-in`},
+        {ic:'ic-slate', icon:'quote-left', title:'Welcome testimonials', href:'testimonials.html', sum:d=>`${G(d,'testimonials').filter(t=>t.status==='approved'&&(t.placement||[]).includes('welcome')).length} on welcome`},
       ]},
     account: { label:'Account & Help', file:'account.html', icon:'user',
       controls:'Account menu, experts/Ask-AI, help & FAQ',
       sub:'Profile, support and help.',
       blocks:[
         {ic:'ic-green', icon:'user-doctor', title:'Experts & Ask-AI', href:'experts.html', sum:d=>`${G(d,'experts').length} experts`},
+        {ic:'ic-amber', icon:'star-half-stroke', title:'Rate-app & feedback', href:'rate-feedback.html', sum:d=>`${(d.rateApp.submitted||[]).length} feedback received`},
         {ic:'ic-blue', icon:'file-lines', title:'Help & FAQ', href:'app-text.html', sum:d=>`${G(d,'staticPages').length} pages`},
         {ic:'ic-slate', icon:'gear', title:'App settings', href:'settings.html', sum:d=>`Profile & languages`},
       ]},
@@ -145,6 +151,7 @@
       sub:'Your static and legal content.',
       blocks:[
         {ic:'ic-green', icon:'file-lines', title:'All pages & screen copy', href:'app-text.html', sum:d=>`${G(d,'staticPages').length} pages`},
+        {ic:'ic-blue', icon:'chart-simple', title:'Social proof stats (About)', href:'social-proof.html', sum:d=>`${(d.socialProof||{}).states} states`},
       ]},
   };
 

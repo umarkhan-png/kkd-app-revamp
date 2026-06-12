@@ -59,6 +59,8 @@
       { id: 'h4', type: 'deals', title: 'Flash deals', detail: 'Timer · 6 products', visible: true },
       { id: 'h5', type: 'coins', title: 'Earn Krishi Coins', detail: '5-step widget', visible: true },
       { id: 'h6', type: 'product_rail', title: 'Buy again', detail: 'Personalised', visible: true },
+      { id: 'h8', type: 'social_proof', title: 'Trusted by farmers', detail: 'Headline stats', visible: true },
+      { id: 'h9', type: 'testimonials', title: 'Farmer stories', detail: 'Approved testimonials', visible: true },
       { id: 'h7', type: 'crop_picker', title: 'Shop by crop', detail: '6 crops', visible: false },
     ],
 
@@ -167,6 +169,34 @@
       { id: 'tb3', title: 'Katyayani Assured', desc: '100% genuine, direct from factory', icon: 'shield-halved', active: true },
       { id: 'tb4', title: 'Verified by lab', desc: 'Quality lab-tested batches', icon: 'flask-vial', active: false },
     ],
+
+    // ---------------- User-generated content & social proof ----------------
+    // Farmer testimonials shown on Home / PDP / Welcome — go through approval before publishing
+    testimonials: [
+      { id: 'ts1', name: 'Ramesh Patel', location: 'Indore, MP', crop: 'Cotton', rating: 5, media: 'video', verified: true, featured: true, status: 'approved', placement: ['home','pdp'], quote: 'Chakravarti se cotton me bollworm control ho gaya. Yield 20% badhi.' },
+      { id: 'ts2', name: 'Sunita Devi', location: 'Ujjain, MP', crop: 'Tomato', rating: 5, media: 'photo', verified: true, featured: false, status: 'approved', placement: ['home'], quote: 'Humic dalne ke 7 din me growth dikhne lagi.' },
+      { id: 'ts3', name: 'Mahesh Kumar', location: 'Dewas, MP', crop: 'Soybean', rating: 4, media: 'none', verified: false, featured: false, status: 'pending', placement: ['pdp'], quote: 'Accha product, delivery thodi slow thi.' },
+      { id: 'ts4', name: 'Anil S.', location: 'Bhopal, MP', crop: 'Chilli', rating: 5, media: 'video', verified: true, featured: false, status: 'pending', placement: ['home','welcome'], quote: 'Krishi doctor call se sahi dawa mili. Bahut help hui.' },
+      { id: 'ts5', name: 'Spam User', location: '—', crop: '—', rating: 1, media: 'none', verified: false, featured: false, status: 'rejected', placement: [], quote: 'Buy followers http://spam.co cheap now!!!' },
+    ],
+    // Headline numbers shown across Home / About / Welcome — single source of truth
+    socialProof: {
+      farmers: '10 lakh+', states: '28', products: '500+', years: '8',
+      pdpBought: '8,427+', headlineRating: '4.8',
+      trustLine: '10 lakh+ farmers across India trust KKD',
+    },
+    // Rate-app fork + feedback capture (rate-app.html)
+    rateApp: {
+      happyThreshold: 4, // >= this many stars -> Play Store; below -> in-app feedback
+      storeUrl: 'https://play.google.com/store/apps/details?id=com.kkd',
+      feedbackTags: ['App is slow', 'Crashes / Bugs', 'Hard to use', 'Missing product', 'Delivery issue', 'Payment issue'],
+      askAfter: 'First delivered order',
+      submitted: [
+        { user: 'Vikram S.', tag: 'App is slow', text: 'Home screen takes time to load on 3G.', date: '2026-06-10' },
+        { user: 'Geeta R.', tag: 'Missing product', text: 'Mujhe Saaf fungicide nahi mila.', date: '2026-06-09' },
+        { user: 'Anonymous', tag: 'Delivery issue', text: 'Order 2 din late aaya.', date: '2026-06-08' },
+      ],
+    },
     crossSell: [
       { id: 'xs1', trigger: 'In cart', label: 'Special deal', products: ['p3'], save: 98, active: true },
       { id: 'xs2', trigger: 'Buy together', label: 'Best buy together', products: ['p2','p5'], save: 120, active: true },

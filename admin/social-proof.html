@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Social Proof</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Social Proof</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">One place for every “trusted by N farmers” number.</p>
+        </div>
+      </div>
+
+      <!-- Live preview strip -->
+      <div class="card card-pad" style="margin-bottom:20px;background:linear-gradient(135deg,var(--green-50),#fff)">
+        <div class="section-title" style="margin-bottom:14px"><i class="fa-solid fa-mobile-screen-button"></i> As shown in the app</div>
+        <div class="row3" id="tiles" style="grid-template-columns:repeat(4,1fr)"></div>
+        <div class="flex items-center justify-between gap-3" style="margin-top:16px;flex-wrap:wrap">
+          <div id="trustLinePv" style="font-size:14px;font-weight:700;color:var(--green)"></div>
+          <div class="flex items-center gap-2" style="font-weight:800;font-size:15px">
+            <i class="fa-solid fa-star" style="color:#F59E0B"></i> <span id="ratingPv"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit stats -->
+      <div class="card">
+        <div class="card-head"><h3>Edit stats</h3><span class="sub">Every change saves to draft and updates the preview above</span></div>
+        <div class="card-pad">
+          <div class="row2">
+            <div class="field"><label>Farmers</label><input class="input" id="spFarmers" oninput="onEdit()"/></div>
+            <div class="field"><label>States</label><input class="input" id="spStates" oninput="onEdit()"/></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Products</label><input class="input" id="spProducts" oninput="onEdit()"/></div>
+            <div class="field"><label>Years</label><input class="input" id="spYears" oninput="onEdit()"/></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>“Bought this” badge text</label><input class="input" id="spBought" oninput="onEdit()"/><div class="hint">Shown on the product page (e.g. “8,427+ bought this”).</div></div>
+            <div class="field"><label>Headline rating</label><input class="input" id="spRating" oninput="onEdit()"/></div>
+          </div>
+          <div class="field"><label>Trust line</label><input class="input" id="spTrust" oninput="onEdit()"/><div class="hint">The one-liner shown on Home, About &amp; Welcome.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active:'socialproof', title:'Social Proof', crumb:'Home / About', controls:'Headline stats shown on Home, About & Welcome screens', preview:'home.html' });
+  let data = KKD.load();
+  const sp = data.socialProof;
+
+  // bootstrap fields from data
+  document.getElementById('spFarmers').value = sp.farmers || '';
+  document.getElementById('spStates').value = sp.states || '';
+  document.getElementById('spProducts').value = sp.products || '';
+  document.getElementById('spYears').value = sp.years || '';
+  document.getElementById('spBought').value = sp.pdpBought || '';
+  document.getElementById('spRating').value = sp.headlineRating || '';
+  document.getElementById('spTrust').value = sp.trustLine || '';
+
+  function renderPreview(){
+    const tiles = [
+      { n: sp.farmers, l:'Farmers', i:'wheat-awn' },
+      { n: sp.states, l:'States', i:'location-dot' },
+      { n: sp.products, l:'Products', i:'flask' },
+      { n: sp.years, l:'Years', i:'calendar-check' },
+    ];
+    document.getElementById('tiles').innerHTML = tiles.map(t=>`
+      <div style="text-align:center;background:#fff;border:1px solid var(--green-100);border-radius:12px;padding:14px 10px">
+        <div class="ic ic-green" style="width:34px;height:34px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;margin-bottom:8px"><i class="fa-solid fa-${t.i}"></i></div>
+        <div style="font-size:20px;font-weight:800;letter-spacing:-.02em">${esc(t.n||'—')}</div>
+        <div style="font-size:11.5px;color:var(--slate-500);font-weight:600;margin-top:2px">${t.l}</div>
+      </div>`).join('');
+    document.getElementById('trustLinePv').textContent = sp.trustLine || '';
+    document.getElementById('ratingPv').textContent = sp.headlineRating || '—';
+  }
+
+  function syncFromFields(){
+    sp.farmers = document.getElementById('spFarmers').value;
+    sp.states = document.getElementById('spStates').value;
+    sp.products = document.getElementById('spProducts').value;
+    sp.years = document.getElementById('spYears').value;
+    sp.pdpBought = document.getElementById('spBought').value;
+    sp.headlineRating = document.getElementById('spRating').value;
+    sp.trustLine = document.getElementById('spTrust').value;
+  }
+  function onEdit(){ syncFromFields(); renderPreview(); }                                  // live preview while typing
+  function commit(){ syncFromFields(); KKD.save(data); AdminShell.saved('Stats updated'); } // persist once, on blur
+  ['spFarmers','spStates','spProducts','spYears','spBought','spRating','spTrust']
+    .forEach(id => document.getElementById(id).addEventListener('change', commit));
+
+  renderPreview();
+</script>
+</body></html>

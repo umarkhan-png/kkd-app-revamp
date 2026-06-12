@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Testimonials</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="flex items-center justify-between" style="margin-bottom:20px">
+        <div>
+          <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Testimonials</h2>
+          <p class="muted" style="margin:0;font-size:13.5px">Approve and place farmer stories across the app.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openTs()"><i class="fa-solid fa-plus"></i> New testimonial</button>
+      </div>
+
+      <!-- KPI row -->
+      <div class="kpi" id="kpi"></div>
+
+      <!-- Status tabs + placement filter -->
+      <div class="flex items-center justify-between gap-3" style="margin-bottom:20px;flex-wrap:wrap">
+        <div class="tabs" id="tabs" style="margin-bottom:0;border-bottom:0"></div>
+        <div class="field" style="margin:0;min-width:180px">
+          <select class="select" id="placeFilter" onchange="placeFilter=this.value;render()">
+            <option value="all">All placements</option>
+            <option value="home">Home</option>
+            <option value="pdp">Product</option>
+            <option value="welcome">Welcome</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Testimonial cards -->
+      <div class="grid-cards" style="grid-template-columns:repeat(2,1fr)" id="grid"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: new / edit testimonial -->
+<div class="scrim" id="tsDrawerScrim" onclick="AdminShell.close('tsDrawer')"></div>
+<aside class="drawer" id="tsDrawer">
+  <div class="drawer-head">
+    <h3 id="tsDrawerTitle">New testimonial</h3>
+    <button class="x-btn" onclick="AdminShell.close('tsDrawer')"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="field"><label>Name</label><input class="input" id="tsName" placeholder="e.g. Ramesh Patel"/></div>
+    <div class="field"><label>Location</label><input class="input" id="tsLoc" placeholder="e.g. Indore, MP"/></div>
+    <div class="row2">
+      <div class="field"><label>Crop</label><select class="select" id="tsCrop"></select></div>
+      <div class="field"><label>Rating</label><input class="input" type="number" id="tsRating" min="1" max="5" value="5"/></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Media</label>
+        <select class="select" id="tsMedia">
+          <option value="none">None</option>
+          <option value="photo">Photo</option>
+          <option value="video">Video</option>
+        </select>
+      </div>
+      <div class="field flex items-center justify-between" style="padding:12px 14px;background:var(--slate-50);border-radius:10px;border:1px solid var(--slate-200);align-self:end">
+        <div><label style="margin:0">Verified</label><div class="hint" style="margin-top:2px">Confirmed buyer</div></div>
+        <label class="switch"><input type="checkbox" id="tsVerified"><span class="track"></span></label>
+      </div>
+    </div>
+    <div class="field"><label>Placement</label>
+      <div class="flex items-center gap-3" style="flex-wrap:wrap;padding:4px 0">
+        <label class="flex items-center gap-2" style="font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="tsPlHome" value="home"> Home</label>
+        <label class="flex items-center gap-2" style="font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="tsPlPdp" value="pdp"> Product page</label>
+        <label class="flex items-center gap-2" style="font-size:13px;font-weight:600;cursor:pointer"><input type="checkbox" id="tsPlWelcome" value="welcome"> Welcome</label>
+      </div>
+      <div class="hint">Where this story appears in the app.</div>
+    </div>
+    <div class="field"><label>Quote</label><textarea class="input" id="tsQuote" placeholder="What the farmer said…"></textarea></div>
+    <div class="field"><label>Status</label>
+      <select class="select" id="tsStatus">
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="AdminShell.close('tsDrawer')">Cancel</button>
+    <button class="btn btn-primary" onclick="saveTs()"><i class="fa-solid fa-check"></i> Save testimonial</button>
+  </div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  AdminShell.mount({ active:'testimonials', title:'Testimonials', crumb:'Home / Product', controls:'Farmer testimonials on Home, Product pages & Welcome', preview:'home.html' });
+  let data = KKD.load();
+  let filter = 'all';
+  let placeFilter = 'all';
+
+  const STATUS = { pending:['b-draft','Pending'], approved:['b-active','Approved'], rejected:['b-red','Rejected'] };
+  const PLACE = { home:'Home', pdp:'Product', welcome:'Welcome' };
+
+  function statusBadge(s){ const [c,t]=STATUS[s]||STATUS.pending; return `<span class="badge ${c}"><span class="dot"></span> ${t}</span>`; }
+  function stars(n){ let s=''; for(let i=1;i<=5;i++){ s+=`<i class="fa-${i<=n?'solid':'regular'} fa-star" style="color:${i<=n?'#F59E0B':'var(--slate-300)'};font-size:12px"></i>`; } return `<span style="white-space:nowrap">${s}</span>`; }
+  function initials(name){ return String(name||'?').trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase() || '?'; }
+  function mediaBadge(m){ if(m==='video') return `<span class="tag">🎥 Video</span>`; if(m==='photo') return `<span class="tag">📷 Photo</span>`; return ''; }
+
+  function renderKpi(){
+    const cards = [
+      { n:data.testimonials.filter(t=>t.status==='approved').length, l:'Approved', ic:'ic-green', i:'circle-check' },
+      { n:data.testimonials.filter(t=>t.status==='pending').length, l:'Pending', ic:'ic-amber', i:'clock' },
+      { n:data.testimonials.filter(t=>t.featured).length, l:'Featured', ic:'ic-blue', i:'star' },
+    ];
+    document.getElementById('kpi').innerHTML = cards.map(k=>`
+      <div class="stat">
+        <div class="ic ${k.ic}"><i class="fa-solid fa-${k.i}"></i></div>
+        <div class="num">${k.n}</div>
+        <div class="lbl">${k.l}</div>
+      </div>`).join('');
+  }
+
+  function renderTabs(){
+    const TABS = { all:'All', pending:'Pending', approved:'Approved', rejected:'Rejected' };
+    document.getElementById('tabs').innerHTML = Object.entries(TABS).map(([k,v])=>{
+      const n = k==='all'? data.testimonials.length : data.testimonials.filter(t=>t.status===k).length;
+      return `<div class="tab ${filter===k?'active':''}" onclick="filter='${k}';render()">${v} <span style="opacity:.6">${n}</span></div>`;
+    }).join('');
+  }
+
+  function renderGrid(){
+    const list = data.testimonials.filter(t=>
+      (filter==='all' || t.status===filter) &&
+      (placeFilter==='all' || (t.placement||[]).includes(placeFilter))
+    );
+    document.getElementById('grid').innerHTML = list.map(t=>`
+      <div class="card card-pad">
+        <div class="flex items-center gap-3" style="margin-bottom:12px">
+          <div class="iconbox ic-green" style="border-radius:9999px;font-size:13px;font-weight:800">${initials(t.name)}</div>
+          <div style="min-width:0">
+            <div class="l-main" style="font-weight:700;font-size:14px">${esc(t.name)}</div>
+            <div class="l-sub" style="font-size:11.5px;color:var(--slate-500)">${esc(t.location)}</div>
+          </div>
+          <div style="margin-left:auto">${t.crop && t.crop!=='—' ? `<span class="tag tag-green">${esc(t.crop)}</span>` : ''}</div>
+        </div>
+        <div class="flex items-center gap-2" style="margin-bottom:10px;flex-wrap:wrap">
+          ${stars(t.rating)}
+          ${mediaBadge(t.media)}
+          ${t.verified ? `<span class="tag tag-green">✓ Verified</span>` : ''}
+        </div>
+        <div style="font-style:italic;font-size:13px;color:var(--slate-600);line-height:1.55;margin-bottom:12px">“${esc(t.quote)}”</div>
+        <div class="flex items-center gap-2" style="margin-bottom:12px;flex-wrap:wrap">
+          ${(t.placement||[]).length ? (t.placement||[]).map(p=>`<span class="tag">${PLACE[p]||p}</span>`).join('') : `<span class="tag">No placement</span>`}
+          <span style="margin-left:auto">${statusBadge(t.status)}</span>
+        </div>
+        <div class="flex items-center gap-2" style="border-top:1px solid var(--slate-100);padding-top:12px">
+          <button class="btn btn-ghost btn-sm" title="${t.featured?'Featured':'Make featured'}" onclick="toggleFeatured('${t.id}')">
+            <i class="fa-${t.featured?'solid':'regular'} fa-star" style="color:${t.featured?'#F59E0B':'var(--slate-400)'}"></i> Featured
+          </button>
+          ${t.status==='pending'?`
+            <button class="btn btn-soft btn-sm" onclick="setStatus('${t.id}','approved')"><i class="fa-solid fa-check"></i> Approve</button>
+            <button class="btn btn-danger btn-sm" onclick="setStatus('${t.id}','rejected')"><i class="fa-solid fa-xmark"></i> Reject</button>`:''}
+          <div class="flex gap-2" style="margin-left:auto">
+            <button class="btn btn-ghost btn-sm" onclick="openTs('${t.id}')"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="delTs('${t.id}')"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+      </div>`).join('') || `<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-comment-dots"></i><div>No testimonials match this filter.</div></div>`;
+  }
+
+  function render(){ renderKpi(); renderTabs(); renderGrid(); }
+
+  let editId = null;
+  function openTs(id){
+    editId = id || null;
+    document.getElementById('tsDrawerTitle').textContent = id ? 'Edit testimonial' : 'New testimonial';
+    const t = id ? data.testimonials.find(x=>x.id===id) : null;
+    // crop select from crops names
+    document.getElementById('tsCrop').innerHTML = data.crops.map(c=>`<option value="${esc(c.name)}">${esc(c.name)}</option>`).join('');
+    document.getElementById('tsName').value = t? t.name : '';
+    document.getElementById('tsLoc').value = t? t.location : '';
+    document.getElementById('tsCrop').value = t && t.crop ? t.crop : (data.crops[0]? data.crops[0].name : '');
+    document.getElementById('tsRating').value = t? t.rating : 5;
+    document.getElementById('tsMedia').value = t? t.media : 'none';
+    document.getElementById('tsVerified').checked = t? !!t.verified : false;
+    const pl = t? (t.placement||[]) : [];
+    document.getElementById('tsPlHome').checked = pl.includes('home');
+    document.getElementById('tsPlPdp').checked = pl.includes('pdp');
+    document.getElementById('tsPlWelcome').checked = pl.includes('welcome');
+    document.getElementById('tsQuote').value = t? t.quote : '';
+    document.getElementById('tsStatus').value = t? t.status : 'pending';
+    AdminShell.open('tsDrawer');
+  }
+
+  function saveTs(){
+    const placement = [];
+    if(document.getElementById('tsPlHome').checked) placement.push('home');
+    if(document.getElementById('tsPlPdp').checked) placement.push('pdp');
+    if(document.getElementById('tsPlWelcome').checked) placement.push('welcome');
+    let rating = parseInt(document.getElementById('tsRating').value,10) || 5;
+    rating = Math.max(1, Math.min(5, rating));
+    const rec = {
+      name: document.getElementById('tsName').value.trim() || 'Unnamed farmer',
+      location: document.getElementById('tsLoc').value.trim() || '—',
+      crop: document.getElementById('tsCrop').value || '—',
+      rating,
+      media: document.getElementById('tsMedia').value,
+      verified: document.getElementById('tsVerified').checked,
+      featured: editId ? !!data.testimonials.find(x=>x.id===editId).featured : false,
+      status: document.getElementById('tsStatus').value,
+      placement,
+      quote: document.getElementById('tsQuote').value.trim(),
+    };
+    if(editId){ Object.assign(data.testimonials.find(x=>x.id===editId), rec); }
+    else { rec.id='ts'+Date.now(); data.testimonials.unshift(rec); }
+    KKD.save(data); AdminShell.close('tsDrawer'); render(); AdminShell.saved(editId?'Testimonial updated':'Testimonial added');
+  }
+
+  function toggleFeatured(id){
+    const t = data.testimonials.find(x=>x.id===id); if(!t) return;
+    t.featured = !t.featured; KKD.save(data); render();
+    AdminShell.saved(t.featured?'Marked as featured':'Removed from featured');
+  }
+  function setStatus(id, status){
+    const t = data.testimonials.find(x=>x.id===id); if(!t) return;
+    t.status = status; KKD.save(data); render();
+    AdminShell.saved(status==='approved'?'Testimonial approved':'Testimonial rejected');
+  }
+  function delTs(id){
+    data.testimonials = data.testimonials.filter(t=>t.id!==id); KKD.save(data); render();
+    AdminShell.saved('Testimonial deleted');
+  }
+
+  render();
+</script>
+</body></html>

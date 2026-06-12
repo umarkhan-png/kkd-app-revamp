@@ -58,15 +58,16 @@
   /* Product card · matches home most-selling typography exactly · taller image, name 14px, technical sub 11px, size chip 10.5px, price 17px, MRP-strike 11.5px, h-9 Add */
   .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   /* Cross-sell promo injected after every 2 product cards · styled as a real promotional banner image (gradient creative + product shot + CTA), not a UI component · pushes to another category/subcategory */
-  .cat-promo{grid-column:1/-1;position:relative;display:block;height:104px;border-radius:16px;overflow:hidden;text-decoration:none;box-shadow:0 10px 22px -14px rgba(15,23,42,.5)}
+  /* full product-section width, 1080x480 (2.25:1) aspect ratio — same proportion as the app's standard home banner, scaled to the grid width */
+  .cat-promo{grid-column:1/-1;position:relative;display:block;width:100%;aspect-ratio:1080/480;border-radius:18px;overflow:hidden;text-decoration:none;box-shadow:0 14px 28px -16px rgba(15,23,42,.55)}
   .cat-promo:active{transform:scale(.992)}
-  .cat-promo-blob{position:absolute;right:-26px;top:-34px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.12)}
-  .cat-promo-blob.b2{right:42px;top:34px;width:78px;height:78px;background:rgba(255,255,255,.08)}
-  .cat-promo-copy{position:absolute;left:16px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;gap:5px;z-index:2;max-width:62%}
-  .cat-promo-eyebrow{font-size:9.5px;font-weight:800;letter-spacing:.1em;color:rgba(255,255,255,.9);text-transform:uppercase}
-  .cat-promo-head{font-size:18px;font-weight:900;color:#fff;line-height:1.08;text-shadow:0 1px 6px rgba(0,0,0,.2)}
-  .cat-promo-cta{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;background:#fff;color:#0F172A;font-size:11px;font-weight:800;padding:5px 13px;border-radius:9999px;margin-top:3px;box-shadow:0 4px 10px -3px rgba(0,0,0,.25)}
-  .cat-promo-img{position:absolute;right:16px;top:50%;transform:translateY(-50%);height:72px;width:auto;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,.3));z-index:1}
+  .cat-promo-blob{position:absolute;right:-30px;top:-52px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.12)}
+  .cat-promo-blob.b2{right:64px;top:46px;width:108px;height:108px;background:rgba(255,255,255,.08)}
+  .cat-promo-copy{position:absolute;left:20px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;gap:8px;z-index:2;max-width:58%}
+  .cat-promo-eyebrow{font-size:11px;font-weight:800;letter-spacing:.11em;color:rgba(255,255,255,.9);text-transform:uppercase}
+  .cat-promo-head{font-size:23px;font-weight:900;color:#fff;line-height:1.05;text-shadow:0 1px 8px rgba(0,0,0,.22)}
+  .cat-promo-cta{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;background:#fff;color:#0F172A;font-size:12px;font-weight:800;padding:7px 16px;border-radius:9999px;margin-top:4px;box-shadow:0 5px 12px -3px rgba(0,0,0,.28)}
+  .cat-promo-img{position:absolute;right:18px;top:50%;transform:translateY(-50%);height:auto;max-height:80%;width:auto;object-fit:contain;filter:drop-shadow(0 8px 14px rgba(0,0,0,.3));z-index:1}
   .pcard{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06);transition:transform .15s ease;text-decoration:none;color:#0F172A}
   .pcard:active{transform:scale(.98)}
   .pcard-img{width:100%;height:130px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;position:relative;padding:12px;flex-shrink:0}
@@ -712,12 +713,12 @@
           + '</div>'
           + '</a>';
       });
-      // After every 2 cards, drop in a slim promo to another category/subcategory (no trailing banner after the last row)
+      // After every 4 cards, drop in a promo banner to another category/subcategory (no trailing banner after the last row)
       const promos = buildPromos();
       let html = '', pk = 0;
       cards.forEach((c, i) => {
         html += c;
-        if ((i + 1) % 2 === 0 && i < cards.length - 1) { html += promoBanner(promos[pk % promos.length]); pk++; }
+        if ((i + 1) % 4 === 0 && i < cards.length - 1) { html += promoBanner(promos[pk % promos.length]); pk++; }
       });
       list.innerHTML = html;
       list.querySelectorAll('.cat-promo').forEach(el => el.addEventListener('click', e => { e.preventDefault(); pushToCat(el.dataset.pcat, el.dataset.psub); }));

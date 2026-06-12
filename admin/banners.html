@@ -15,15 +15,12 @@
       <div class="flex items-center justify-between" style="margin-bottom:20px">
         <div>
           <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Banners</h2>
-          <p class="muted" style="margin:0;font-size:13.5px">Upload, schedule and slot promotional banners across the app.</p>
+          <p class="muted" style="margin:0;font-size:13.5px">Upload, schedule and slot promotional banners — with a different image per language.</p>
         </div>
         <button class="btn btn-primary" onclick="openBanner()"><i class="fa-solid fa-plus"></i> New banner</button>
       </div>
 
-      <!-- Slot filter tabs -->
       <div class="tabs" id="tabs"></div>
-
-      <!-- Banner cards grid -->
       <div class="grid-cards" style="grid-template-columns:repeat(3,1fr)" id="grid"></div>
 
     </div>
@@ -39,13 +36,9 @@
   </div>
   <div class="drawer-body">
     <div class="field">
-      <label>Banner image</label>
-      <div class="dropzone" id="dz" onclick="fakeUpload()">
-        <i class="fa-solid fa-cloud-arrow-up"></i>
-        <div class="t">Click or drop an image</div>
-        <div class="s">Recommended 1080×480 · JPG / PNG / WebP · max 2 MB</div>
-      </div>
-      <div id="dzPreview" style="display:none;margin-top:10px"></div>
+      <label>Banner image — one per language</label>
+      <div class="hint" style="margin-top:0;margin-bottom:10px">Upload a separate image for each language. Languages without their own image fall back to the default (English).</div>
+      <div id="bnImgs"></div>
     </div>
     <div class="field"><label>Title</label><input class="input" id="bnTitle" placeholder="e.g. Monsoon Mega Sale"/></div>
     <div class="field"><label>Slot</label>
@@ -56,7 +49,7 @@
         <option value="cart">Cart · Banner</option>
       </select>
     </div>
-    <div class="field"><label>Tap target (deep link)</label>
+    <div class="field"><label>Tap target (app link)</label>
       <select class="select" id="bnTarget">
         <option value="home.html">Home</option>
         <option value="shop.html?cat=offers">Offers listing</option>
@@ -84,11 +77,14 @@
 <script src="assets/data.js"></script>
 <script src="assets/shell.js"></script>
 <script>
-  AdminShell.mount({ active: 'banners', title: 'Banners', crumb: 'Merchandising', controls: 'Promotional banners across the app', preview: 'home.html' });
+  AdminShell.mount({ active: 'banners', title: 'Banners', crumb: 'Merchandising', controls: 'Promotional banners across the app (image per language)', preview: 'home.html' });
   let data = KKD.load();
   const SLOTS = { all:'All slots', home_hero:'Home hero', category_top:'Category top', pdp:'Product page', cart:'Cart' };
+  const SHORT = { en:'EN', hi:'हिं', mr:'मरा', pa:'ਪੰ', gu:'ગુ', ta:'த', te:'తె' };
   let filter = 'all';
 
+  function enabledLocales(){ return (data.locales||[]).filter(l=>l.enabled); }
+  function shortLoc(code){ return SHORT[code] || code.toUpperCase().slice(0,2); }
   function statusBadge(s){ const m={active:['b-active','Active'],scheduled:['b-scheduled','Scheduled'],off:['b-off','Inactive']}; const [c,t]=m[s]||m.off; return `<span class="badge ${c}"><span class="dot"></span> ${t}</span>`; }
 
   function renderTabs(){
@@ -99,15 +95,22 @@
   }
   function renderGrid(){
     const list = data.banners.filter(b=> filter==='all' || b.slot===filter);
-    document.getElementById('grid').innerHTML = list.map(b=>`
+    document.getElementById('grid').innerHTML = list.map(b=>{
+      const nLoc = b.imgByLocale ? Object.keys(b.imgByLocale).filter(k=>b.imgByLocale[k]).length : 0;
+      // little swatch per language so the multi-language nature is visible at a glance
+      const swatches = [['en',b.img]].concat(Object.entries(b.imgByLocale||{})).filter(([k,v])=>v).map(([k,v])=>
+        `<span title="${k}" style="display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;color:#fff;background:rgba(0,0,0,.28);padding:2px 6px;border-radius:6px"><span style="width:8px;height:8px;border-radius:2px;background:${v}"></span>${shortLoc(k)}</span>`).join('');
+      return `
       <div class="card" style="overflow:hidden">
         <div style="height:120px;background:linear-gradient(135deg,${b.img},${b.img}cc);position:relative;display:flex;align-items:flex-end;padding:12px">
           <span style="position:absolute;top:10px;left:10px">${statusBadge(b.status)}</span>
           <span style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,.35);color:#fff;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:7px">${SLOTS[b.slot]||b.slot}</span>
           <span style="color:#fff;font-weight:800;font-size:15px;text-shadow:0 1px 4px rgba(0,0,0,.3)">${esc(b.title)}</span>
+          <div style="position:absolute;bottom:10px;right:10px;display:flex;gap:4px">${swatches}</div>
         </div>
         <div class="card-pad" style="padding:13px 15px">
-          <div class="flex items-center gap-2 cell-sub" style="margin-bottom:8px"><i class="fa-regular fa-calendar"></i> ${b.start} → ${b.end}</div>
+          <div class="flex items-center gap-2 cell-sub" style="margin-bottom:8px"><i class="fa-regular fa-calendar"></i> ${b.start} → ${b.end}
+            ${nLoc?`<span class="tag tag-green" style="margin-left:auto"><i class="fa-solid fa-language"></i> ${nLoc+1} languages</span>`:`<span class="tag" style="margin-left:auto">1 language</span>`}</div>
           <div class="flex items-center justify-between">
             <span class="cell-sub"><i class="fa-solid fa-arrow-pointer"></i> ${b.clicks.toLocaleString()} clicks</span>
             <div class="flex gap-2">
@@ -116,10 +119,28 @@
             </div>
           </div>
         </div>
-      </div>`).join('') || '<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-images"></i><div>No banners in this slot yet.</div></div>';
+      </div>`;}).join('') || '<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-images"></i><div>No banners in this slot yet.</div></div>';
   }
 
-  let editId = null;
+  // per-locale image state while editing: { code: '#color' }
+  let editId = null, imgState = {};
+  function renderImgRows(){
+    document.getElementById('bnImgs').innerHTML = enabledLocales().map(l=>{
+      const c = imgState[l.code]; const isDefault = l.code==='en'; const name = l.label.split(' ')[0];
+      return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span class="tag ${isDefault?'tag-green':''}" style="min-width:48px;justify-content:center">${shortLoc(l.code)}</span>
+        <div class="dropzone" style="flex:1;padding:9px;text-align:left" onclick="uploadLoc('${l.code}')">
+          ${c
+            ? `<div style="height:36px;border-radius:8px;background:linear-gradient(135deg,${c},${c}cc);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700"><i class="fa-solid fa-image" style="margin-right:6px"></i> ${name}-banner.webp</div>`
+            : `<div style="font-size:11.5px;color:var(--slate-500)"><i class="fa-solid fa-cloud-arrow-up" style="margin-right:6px;color:var(--green)"></i> ${isDefault?'Upload default image':'Upload '+name+' image (optional)'}</div>`}
+        </div>
+        ${c && !isDefault ? `<button class="btn btn-ghost btn-icon btn-sm" onclick="event.stopPropagation();clearLoc('${l.code}')"><i class="fa-solid fa-xmark"></i></button>` : '<span style="width:32px"></span>'}
+      </div>`;
+    }).join('');
+  }
+  function uploadLoc(code){ const pal=['#258046','#2563EB','#B45309','#7C3AED','#DC2626','#0891B2','#DB2777']; imgState[code]=pal[Math.floor(Math.random()*pal.length)]; renderImgRows(); }
+  function clearLoc(code){ delete imgState[code]; renderImgRows(); }
+
   function openBanner(id){
     editId = id || null;
     document.getElementById('bnDrawerTitle').textContent = id ? 'Edit banner' : 'New banner';
@@ -130,24 +151,24 @@
     document.getElementById('bnStart').value = b? b.start : '2026-06-12';
     document.getElementById('bnEnd').value = b? b.end : '2026-07-12';
     document.getElementById('bnActive').checked = b? b.status!=='off' : true;
-    document.getElementById('dzPreview').style.display='none';
+    imgState = {};
+    if (b) { imgState.en = b.img; Object.assign(imgState, b.imgByLocale || {}); }
+    renderImgRows();
     AdminShell.open('bnDrawer');
-  }
-  function fakeUpload(){
-    const c=['#258046','#2563EB','#B45309','#7C3AED','#DC2626'][Math.floor(Math.random()*5)];
-    const p=document.getElementById('dzPreview'); p.style.display='';
-    p.innerHTML=`<div style="height:90px;border-radius:10px;background:linear-gradient(135deg,${c},${c}cc);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700"><i class="fa-solid fa-image" style="margin-right:8px"></i> banner-${Date.now().toString().slice(-5)}.webp</div>`;
-    p.dataset.color=c;
   }
   function saveBanner(){
     const t=document.getElementById('bnTitle').value.trim()||'Untitled banner';
-    const slot=document.getElementById('bnSlot').value;
     const active=document.getElementById('bnActive').checked;
-    const color=document.getElementById('dzPreview').dataset.color || '#258046';
-    const rec={ title:t, slot, status: active?'active':'off', start:document.getElementById('bnStart').value, end:document.getElementById('bnEnd').value, target:document.getElementById('bnTarget').value, clicks: editId?(data.banners.find(x=>x.id===editId).clicks):0, img: editId?(data.banners.find(x=>x.id===editId).img):color };
+    const en = imgState.en || (editId ? data.banners.find(x=>x.id===editId).img : '#258046');
+    const byLoc = {}; Object.keys(imgState).forEach(k=>{ if(k!=='en' && imgState[k]) byLoc[k]=imgState[k]; });
+    const rec={ title:t, slot:document.getElementById('bnSlot').value, status: active?'active':'off',
+      start:document.getElementById('bnStart').value, end:document.getElementById('bnEnd').value,
+      target:document.getElementById('bnTarget').value,
+      clicks: editId?(data.banners.find(x=>x.id===editId).clicks):0, img: en, imgByLocale: byLoc };
     if(editId){ Object.assign(data.banners.find(x=>x.id===editId), rec); }
     else { rec.id='bn'+Date.now(); data.banners.unshift(rec); }
-    KKD.save(data); AdminShell.close('bnDrawer'); renderTabs(); renderGrid(); AdminShell.saved(editId?'Banner updated':'Banner added to draft');
+    KKD.save(data); AdminShell.close('bnDrawer'); renderTabs(); renderGrid();
+    AdminShell.saved(editId?'Banner updated':'Banner added to draft');
   }
   function delBanner(id){ data.banners=data.banners.filter(b=>b.id!==id); KKD.save(data); renderTabs(); renderGrid(); AdminShell.saved('Banner removed'); }
 

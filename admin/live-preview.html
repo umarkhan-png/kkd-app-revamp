@@ -62,12 +62,13 @@
   function strings(d, loc){ const m={}; (d.translations.home||[]).forEach(s=> m[s.key]=(s[loc]&&s[loc].trim())?s[loc]:s.en); return m; }
   function money(n){ return '₹'+Number(n).toLocaleString('en-IN'); }
 
-  function sectionBlock(s, d, t){
+  function bannerImg(b, loc){ return (b.imgByLocale && b.imgByLocale[loc]) || b.img; }
+  function sectionBlock(s, d, t, loc){
     if(!s.visible) return '';
     if(s.type==='banner'){
       const list=d.banners.filter(b=>b.slot==='home_hero'&&b.status==='active');
       if(!list.length) return '';
-      return `<div class="sec">${list.map(b=>`<div class="banner" style="background:linear-gradient(135deg,${b.img},${b.img}cc)"><span class="slot">${b.target}</span>${b.title}</div>`).join('')}</div>`;
+      return `<div class="sec">${list.map(b=>{ const im=bannerImg(b,loc); return `<div class="banner" style="background:linear-gradient(135deg,${im},${im}cc)"><span class="slot">${b.target}</span>${b.title}</div>`; }).join('')}</div>`;
     }
     if(s.type==='category_grid'){
       const cats=d.categories.filter(c=>c.active);
@@ -120,12 +121,13 @@
         <div><div class="greet">${greet.split('!')[0]||'Hey'}</div><div class="loc">Indore 452001 <i class="fa-solid fa-angle-down" style="font-size:10px"></i></div></div>
         <div class="pills"><span class="pill"><i class="fa-solid fa-wallet"></i> ₹540</span><span class="pill">🪙 220</span><span class="pill"><i class="fa-solid fa-bell"></i></span></div></div>
         <div class="search"><i class="fa-solid fa-magnifying-glass"></i> ${ph}</div></div>`;
-    const body = (d.homepage||[]).map(s=>sectionBlock(s,d,t)).join('');
+    const body = (d.homepage||[]).map(s=>sectionBlock(s,d,t,loc)).join('');
     const nav = `<div class="nav"><div class="on"><i class="fa-solid fa-house"></i>Home</div><div><i class="fa-solid fa-seedling"></i>Crop</div><div><i class="fa-solid fa-box"></i>Orders</div><div><i class="fa-solid fa-user"></i>Profile</div></div>`;
     document.getElementById('app').innerHTML = head + body + nav;
   }
 
   function ping(){ const f=document.getElementById('flash'); f.classList.add('on'); setTimeout(()=>f.classList.remove('on'),900); }
+  const qloc = new URLSearchParams(location.search).get('loc'); if(qloc) document.getElementById('loc').value = qloc;
   render();
   // Re-render the instant the portal saves: storage event (other docs) + postMessage from the portal + a light poll fallback.
   window.addEventListener('storage', e=>{ if(e.key==='kkdAdmin.data'){ render(); ping(); } });

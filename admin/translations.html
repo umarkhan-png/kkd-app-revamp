@@ -37,9 +37,10 @@
       <div style="display:flex;gap:20px;align-items:flex-start">
 
         <!-- LEFT: pages list -->
-        <div class="card card-pad" style="width:240px;flex-shrink:0">
-          <p class="section-title">Pages</p>
-          <div id="pageList"></div>
+        <div class="card card-pad" style="width:252px;flex-shrink:0">
+          <p class="section-title">Pages &amp; content</p>
+          <div class="search" style="margin-bottom:10px;width:auto"><i class="fa-solid fa-magnifying-glass" style="font-size:11px"></i><input id="pageSearch" placeholder="Find a page…" oninput="renderPages()"/></div>
+          <div id="pageList" style="max-height:64vh;overflow-y:auto;margin:0 -6px;padding:0 6px"></div>
         </div>
 
         <!-- RIGHT: editor -->
@@ -86,14 +87,18 @@
   </div>
 </div>
 
+<script src="assets/i18n-data.js"></script>
 <script src="assets/data.js"></script>
 <script src="assets/shell.js"></script>
 <script>
-  AdminShell.mount({ active: 'translations', title: 'Translations', crumb: 'Content & Languages', controls: 'Every in-app string, in each language', preview: 'home.html' });
+  AdminShell.mount({ active: 'translations', title: 'Translations', crumb: 'Content & Languages', controls: 'Every in-app string & content, in each language', preview: 'home.html' });
   let data = KKD.load();
-  let activePage = Object.keys(data.translations)[0];
-
+  const LABELS = window.KKD_I18N_LABELS || {};
+  const GROUPS = window.KKD_I18N_GROUPS || null;
   const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const labelOf = p => LABELS[p] || cap(String(p).replace(/_/g,' '));
+  let activePage = data.translations.home ? 'home' : Object.keys(data.translations)[0];
+
   const enabledLocales = () => data.locales.filter(l => l.enabled);
 
   // coverage for a page: filled cells / (keys × enabled locales)
@@ -111,26 +116,45 @@
     return Math.round(filled / rows.length * 100);
   }
 
+  function pageRowHtml(page){
+    const cov = pageCoverage(page); const n = (data.translations[page]||[]).length;
+    const col = cov>=90?'var(--green)':cov>=50?'var(--amber)':'var(--red)';
+    return `<div class="tr-page ${page===activePage?'active':''}" onclick="selectPage('${page}')">
+      <div style="min-width:0">
+        <div class="tr-page-name" style="font-weight:700;font-size:13px">${esc(labelOf(page))}</div>
+        <div class="cell-sub">${n} string${n!==1?'s':''}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:11.5px;font-weight:800;color:${col}">${cov}%</div>
+        <div class="cov-bar" style="margin-top:4px"><span style="width:${cov}%;background:${col}"></span></div>
+      </div>
+    </div>`;
+  }
   function renderPages(){
-    document.getElementById('pageList').innerHTML = Object.keys(data.translations).map(page=>{
-      const cov = pageCoverage(page); const n = data.translations[page].length;
-      return `<div class="tr-page ${page===activePage?'active':''}" onclick="selectPage('${page}')">
-        <div style="min-width:0">
-          <div class="tr-page-name" style="font-weight:700;font-size:13.5px">${cap(page)}</div>
-          <div class="cell-sub">${n} string${n!==1?'s':''}</div>
-        </div>
-        <div style="text-align:right;flex-shrink:0">
-          <div style="font-size:12px;font-weight:800;color:${cov>=90?'var(--green)':cov>=50?'var(--amber)':'var(--red)'}">${cov}%</div>
-          <div class="cov-bar" style="margin-top:4px"><span style="width:${cov}%;background:${cov>=90?'var(--green)':cov>=50?'var(--amber)':'var(--red)'}"></span></div>
-        </div>
-      </div>`;
-    }).join('');
+    const se = document.getElementById('pageSearch');
+    const q = se ? se.value.trim().toLowerCase() : '';
+    const all = Object.keys(data.translations);
+    const match = p => !q || labelOf(p).toLowerCase().includes(q) || p.toLowerCase().includes(q);
+    let html = '';
+    if (GROUPS) {
+      Object.entries(GROUPS).forEach(([g, pages]) => {
+        const list = pages.filter(p => data.translations[p] && match(p));
+        if (!list.length) return;
+        html += `<div class="nav-group-label" style="color:var(--slate-400);padding:9px 6px 4px">${esc(g)}</div>` + list.map(pageRowHtml).join('');
+      });
+      const grouped = new Set(Object.values(GROUPS).flat());
+      const rest = all.filter(p => !grouped.has(p) && match(p));
+      if (rest.length) html += `<div class="nav-group-label" style="color:var(--slate-400);padding:9px 6px 4px">Other</div>` + rest.map(pageRowHtml).join('');
+    } else {
+      html = all.filter(match).map(pageRowHtml).join('');
+    }
+    document.getElementById('pageList').innerHTML = html || '<div class="cell-sub" style="padding:10px">No pages match.</div>';
   }
 
   function selectPage(page){ activePage = page; document.getElementById('trSearch').value=''; renderPages(); renderPane(); }
 
   function renderPane(){
-    document.getElementById('paneTitle').textContent = cap(activePage);
+    document.getElementById('paneTitle').textContent = labelOf(activePage);
     const n = data.translations[activePage].length;
     document.getElementById('paneSub').textContent = `${n} string${n!==1?'s':''} · ${enabledLocales().length} languages`;
     renderChips(); renderTable();

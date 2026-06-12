@@ -16,7 +16,7 @@
     locales: LOCALES,
 
     banners: [
-      { id: 'bn1', title: 'Monsoon Mega Sale', slot: 'home_hero', status: 'active', start: '2026-06-01', end: '2026-06-30', target: 'shop.html?cat=offers', clicks: 12840, img: '#258046' },
+      { id: 'bn1', title: 'Monsoon Mega Sale', slot: 'home_hero', status: 'active', start: '2026-06-01', end: '2026-06-30', target: 'shop.html?cat=offers', clicks: 12840, img: '#258046', imgByLocale: { hi: '#1D4ED8', mr: '#9333EA' } },
       { id: 'bn2', title: 'Free delivery over ₹499', slot: 'home_hero', status: 'active', start: '2026-06-05', end: '2026-07-05', target: 'home.html', clicks: 8210, img: '#2563EB' },
       { id: 'bn3', title: 'New Fungicide range', slot: 'category_top', status: 'scheduled', start: '2026-06-15', end: '2026-07-15', target: 'shop.html?cat=fungicide', clicks: 0, img: '#B45309' },
       { id: 'bn4', title: 'Krishi Coins 2x weekend', slot: 'pdp', status: 'active', start: '2026-06-08', end: '2026-06-12', target: 'wallet.html', clicks: 3460, img: '#7C3AED' },
@@ -340,11 +340,16 @@
   const KEY = 'kkdAdmin.data';
   function load() {
     const seed = JSON.parse(JSON.stringify(SEED));
+    // Full per-screen translation set lives in i18n-data.js (window.KKD_I18N) when that page loads it.
+    if (global.KKD_I18N) seed.translations = Object.assign({}, seed.translations, JSON.parse(JSON.stringify(global.KKD_I18N)));
+    let data;
     try {
       const s = localStorage.getItem(KEY);
-      if (s) { const stored = JSON.parse(s); return Object.assign({}, seed, stored); } // new SEED collections fill in over older saved state
-    } catch (e) {}
-    return seed;
+      data = s ? Object.assign({}, seed, JSON.parse(s)) : seed; // new SEED collections fill in over older saved state
+    } catch (e) { data = seed; }
+    // ensure saved (older) state still gets the full translation namespaces merged in
+    if (global.KKD_I18N) data.translations = Object.assign({}, JSON.parse(JSON.stringify(global.KKD_I18N)), data.translations);
+    return data;
   }
   function save(d) { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} bumpPending(); }
   function reset() { try { localStorage.removeItem(KEY); localStorage.removeItem('kkdAdmin.pending'); } catch (e) {} }

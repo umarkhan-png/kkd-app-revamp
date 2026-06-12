@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Screen</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+  .screen-grid{display:grid;grid-template-columns:1fr 340px;gap:26px;align-items:start}
+  .block{display:flex;align-items:center;gap:14px;padding:15px 16px;background:#fff;border:1px solid var(--slate-200);border-radius:12px;margin-bottom:12px;box-shadow:var(--shadow-sm);cursor:pointer;transition:.15s;text-decoration:none;color:inherit}
+  .block:hover{border-color:var(--green-200);box-shadow:0 6px 18px -10px rgba(37,128,70,.4);transform:translateY(-1px)}
+  .block .arrow{margin-left:auto;color:var(--slate-400)}
+  .block:hover .arrow{color:var(--green)}
+  @media(max-width:1180px){.screen-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+      <div class="flex items-center justify-between" style="margin-bottom:18px">
+        <div>
+          <h2 id="scTitle" style="font-size:21px;font-weight:800;margin:0 0 3px"></h2>
+          <p id="scSub" class="muted" style="margin:0;font-size:13.5px"></p>
+        </div>
+        <button class="btn btn-soft" id="scOpen"><i class="fa-solid fa-mobile-screen-button"></i> Open live preview</button>
+      </div>
+
+      <div class="screen-grid">
+        <div>
+          <p class="section-title">What's on this screen <span style="color:var(--slate-400);font-weight:600;text-transform:none;letter-spacing:0">· tap a block to edit it</span></p>
+          <div id="blocks"></div>
+        </div>
+        <div>
+          <p class="section-title">Live preview</p>
+          <div class="phone"><div class="phone-screen"><iframe id="scFrame"></iframe></div></div>
+          <div class="muted" style="font-size:11.5px;margin-top:10px"><i class="fa-solid fa-bolt" style="color:var(--green)"></i> Edits you save appear here.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+  const G = (d,k)=>d[k]||[];
+  // Each app screen → the content blocks on it. summary() pulls a live count from draft data; href is the editor.
+  const SCREENS = {
+    home: { label:'Home screen', file:'home.html', icon:'house',
+      controls:'The app Home screen — banners, categories, sections, deals, coins',
+      sub:'Everything a farmer sees first. Reorder, restyle and restock it here.',
+      blocks:[
+        {ic:'ic-green', icon:'images', title:'Banners', href:'banners.html', sum:d=>`${G(d,'banners').filter(b=>b.slot==='home_hero'&&b.status==='active').length} active hero banners`},
+        {ic:'ic-blue', icon:'table-cells-large', title:'Section order & visibility', href:'homepage.html', sum:d=>`${G(d,'homepage').filter(s=>s.visible).length} of ${G(d,'homepage').length} sections visible`},
+        {ic:'ic-amber', icon:'shapes', title:'Category row', href:'categories.html', sum:d=>`${G(d,'categories').filter(c=>c.active).length} categories shown`},
+        {ic:'ic-red', icon:'bolt', title:'Flash deals', href:'flash-deals.html', sum:d=>`${G(d,'flashDeals').filter(f=>f.status==='active').length} live deal(s)`},
+        {ic:'ic-green', icon:'coins', title:'Krishi Coins widget', href:'coins.html', sum:d=>`${G(d,'earnSteps').length}-step earn widget`},
+        {ic:'ic-slate', icon:'language', title:'Greeting & labels', href:'translations.html', sum:d=>`${(d.translations.home||[]).length} home strings`},
+      ]},
+    search: { label:'Search screen', file:'search.html', icon:'magnifying-glass',
+      controls:'The Search screen — placeholder, trending, suggestions, polls',
+      sub:'Tune what farmers see while searching.',
+      blocks:[
+        {ic:'ic-green', icon:'magnifying-glass', title:'Search basics & trending', href:'search-config.html', sum:d=>`${(d.searchConfig.trending||[]).length} trending terms`},
+        {ic:'ic-blue', icon:'microphone', title:'Voice search hints', href:'search-config.html', sum:d=>`${(d.searchConfig.voiceHints||[]).length} hint phrases`},
+        {ic:'ic-amber', icon:'square-poll-vertical', title:'Engagement poll', href:'polls.html', sum:d=>`${G(d,'polls').filter(p=>p.active).length} active poll(s)`},
+        {ic:'ic-slate', icon:'file-lines', title:'Empty-state copy', href:'app-text.html', sum:d=>`No-result message`},
+      ]},
+    shop: { label:'Shop & Category', file:'shop.html', icon:'store',
+      controls:'Product listing — catalogue, categories, filters, top banner',
+      sub:'The browse & filter experience.',
+      blocks:[
+        {ic:'ic-green', icon:'flask', title:'Products', href:'products.html', sum:d=>`${G(d,'products').filter(p=>p.active).length} live products`},
+        {ic:'ic-amber', icon:'shapes', title:'Categories & filters', href:'categories.html', sum:d=>`${G(d,'categories').length} categories`},
+        {ic:'ic-blue', icon:'images', title:'Category top banner', href:'banners.html', sum:d=>`${G(d,'banners').filter(b=>b.slot==='category_top').length} category banner(s)`},
+      ]},
+    pdp: { label:'Product page', file:'pdp.html', icon:'box-open',
+      controls:'Product detail — info, reviews, trust badges, related, Ask-Expert',
+      sub:'Everything on a single product page.',
+      blocks:[
+        {ic:'ic-green', icon:'flask', title:'Product info & variants', href:'products.html', sum:d=>`${G(d,'products').length} products`},
+        {ic:'ic-amber', icon:'star', title:'Reviews & ratings', href:'reviews.html', sum:d=>`${G(d,'reviews').filter(r=>r.status==='pending').length} pending to moderate`},
+        {ic:'ic-blue', icon:'shield-halved', title:'Trust badges', href:'trust-badges.html', sum:d=>`${G(d,'trustBadges').filter(b=>b.active).length} active badges`},
+        {ic:'ic-slate', icon:'layer-group', title:'Related & cross-sell', href:'cross-sell.html', sum:d=>`${G(d,'crossSell').length} rules`},
+        {ic:'ic-green', icon:'user-doctor', title:'Ask-Expert banner', href:'experts.html', sum:d=>`${G(d,'experts').filter(e=>e.available).length} experts online`},
+      ]},
+    cart: { label:'Cart & Checkout', file:'cart.html', icon:'cart-shopping',
+      controls:'Cart & checkout — coupons, cross-sell, coins, payments, delivery',
+      sub:'The path to placing an order.',
+      blocks:[
+        {ic:'ic-green', icon:'ticket', title:'Coupons', href:'coupons.html', sum:d=>`${G(d,'coupons').filter(c=>c.status==='active').length} active codes`},
+        {ic:'ic-amber', icon:'layer-group', title:'Cross-sell cards', href:'cross-sell.html', sum:d=>`${G(d,'crossSell').filter(x=>x.active).length} active`},
+        {ic:'ic-blue', icon:'coins', title:'Coins redemption', href:'coins.html', sum:d=>`Redeem up to ${(d.coinSettings||{}).redeemCapPct}%`},
+        {ic:'ic-slate', icon:'credit-card', title:'Payment methods', href:'payments.html', sum:d=>`${(d.payments.methods||[]).filter(m=>m.enabled).length} methods on`},
+        {ic:'ic-red', icon:'location-dot', title:'Serviceability & delivery', href:'serviceability.html', sum:d=>`Free over ₹${(d.serviceability||{}).freeThreshold}`},
+      ]},
+    orders: { label:'Orders & Tracking', file:'order-details.html', icon:'truck',
+      controls:'Orders, tracking, returns, order notifications & scratch cards',
+      sub:'After the order is placed.',
+      blocks:[
+        {ic:'ic-green', icon:'truck', title:'Order statuses & returns', href:'orders-returns.html', sum:d=>`${(d.ordersConfig.statuses||[]).length} statuses`},
+        {ic:'ic-blue', icon:'bell', title:'Order notifications', href:'notifications.html', sum:d=>`${G(d,'pushTemplates').filter(p=>p.type==='order').length} order template(s)`},
+        {ic:'ic-amber', icon:'gift', title:'Scratch cards', href:'scratch-cards.html', sum:d=>`${G(d,'scratchCampaigns').filter(s=>s.active).length} active campaign(s)`},
+        {ic:'ic-slate', icon:'file-lines', title:'Refund / status copy', href:'app-text.html', sum:d=>`Screen copy`},
+      ]},
+    mycrop: { label:'My Crop', file:'my-crop.html', icon:'seedling',
+      controls:'Crop calendar, disease library, advisory & mandi rates',
+      sub:'The crop-knowledge hub.',
+      blocks:[
+        {ic:'ic-green', icon:'calendar-days', title:'Crop calendar', href:'crop-calendar.html', sum:d=>`${G(d,'cropStages').length} crops with stages`},
+        {ic:'ic-red', icon:'bug', title:'Disease library', href:'disease-library.html', sum:d=>`${G(d,'diseases').length} diseases`},
+        {ic:'ic-blue', icon:'book-open', title:'Advisory articles', href:'advisory.html', sum:d=>`${G(d,'advisory').filter(a=>a.status==='published').length} published`},
+        {ic:'ic-amber', icon:'indian-rupee-sign', title:'Mandi rates', href:'mandi-rates.html', sum:d=>`${G(d,'mandi').length} rates`},
+        {ic:'ic-slate', icon:'wheat-awn', title:'Crops', href:'crops.html', sum:d=>`${G(d,'crops').filter(c=>c.active).length} active crops`},
+      ]},
+    rewards: { label:'Rewards & Wallet', file:'wallet.html', icon:'gift',
+      controls:'Krishi Coins, scratch cards, referral & coupons',
+      sub:'All the growth & loyalty loops.',
+      blocks:[
+        {ic:'ic-green', icon:'coins', title:'Krishi Coins rules', href:'coins.html', sum:d=>`${G(d,'coinRules').filter(r=>r.active).length} earn rules`},
+        {ic:'ic-amber', icon:'gift', title:'Scratch cards', href:'scratch-cards.html', sum:d=>`${G(d,'scratchCampaigns').length} campaign(s)`},
+        {ic:'ic-blue', icon:'user-group', title:'Refer & earn', href:'refer.html', sum:d=>`+${(d.referral||{}).referrerCoins} coins / friend`},
+        {ic:'ic-slate', icon:'ticket', title:'Coupons', href:'coupons.html', sum:d=>`${G(d,'coupons').filter(c=>c.status==='active').length} active`},
+      ]},
+    onboarding: { label:'Onboarding', file:'welcome-aboard.html', icon:'flag-checkered',
+      controls:'First-run flow — languages, crop picker, welcome & permission copy',
+      sub:'The first five minutes for a new farmer.',
+      blocks:[
+        {ic:'ic-green', icon:'flag-checkered', title:'Onboarding copy & lists', href:'onboarding.html', sum:d=>`${(d.onboarding.languages||[]).length} languages, ${(d.onboarding.cropPicker||[]).length} crops`},
+        {ic:'ic-blue', icon:'language', title:'Translations', href:'translations.html', sum:d=>`${(d.translations.notifications||[]).length} notif strings`},
+        {ic:'ic-amber', icon:'bell', title:'Allow-notifications', href:'notifications.html', sum:d=>`Push opt-in`},
+      ]},
+    account: { label:'Account & Help', file:'account.html', icon:'user',
+      controls:'Account menu, experts/Ask-AI, help & FAQ',
+      sub:'Profile, support and help.',
+      blocks:[
+        {ic:'ic-green', icon:'user-doctor', title:'Experts & Ask-AI', href:'experts.html', sum:d=>`${G(d,'experts').length} experts`},
+        {ic:'ic-blue', icon:'file-lines', title:'Help & FAQ', href:'app-text.html', sum:d=>`${G(d,'staticPages').length} pages`},
+        {ic:'ic-slate', icon:'gear', title:'App settings', href:'settings.html', sum:d=>`Profile & languages`},
+      ]},
+    pages: { label:'Static & Legal Pages', file:'about.html', icon:'file-lines',
+      controls:'About, Privacy, Terms, Returns, Help — the long-form pages',
+      sub:'Your static and legal content.',
+      blocks:[
+        {ic:'ic-green', icon:'file-lines', title:'All pages & screen copy', href:'app-text.html', sum:d=>`${G(d,'staticPages').length} pages`},
+      ]},
+  };
+
+  const s = new URLSearchParams(location.search).get('s') || 'home';
+  const cfg = SCREENS[s] || SCREENS.home;
+  AdminShell.mount({ active: 'sc-' + s, title: cfg.label, crumb: 'App Screens' });
+  document.getElementById('scTitle').textContent = cfg.label;
+  document.getElementById('scSub').textContent = cfg.sub;
+
+  const d = KKD.load();
+  document.getElementById('blocks').innerHTML = cfg.blocks.map(b=>`
+    <a class="block" href="${b.href}">
+      <span class="iconbox ${b.ic}"><i class="fa-solid fa-${b.icon}"></i></span>
+      <div><div style="font-weight:700;font-size:14px">${b.title}</div><div class="cell-sub">${b.sum(d)}</div></div>
+      <i class="fa-solid fa-angle-right arrow"></i>
+    </a>`).join('');
+
+  // preview: Home uses the content-driven live preview; other screens load the real app screen
+  document.getElementById('scFrame').src = s === 'home' ? 'live-preview.html' : ('../screens/' + cfg.file);
+  document.getElementById('scOpen').onclick = ()=> AdminShell.previewApp(s === 'home' ? 'home.html' : cfg.file);
+</script>
+</body></html>

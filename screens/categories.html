@@ -57,14 +57,16 @@
 
   /* Product card · matches home most-selling typography exactly · taller image, name 14px, technical sub 11px, size chip 10.5px, price 17px, MRP-strike 11.5px, h-9 Add */
   .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  /* Slim cross-sell promo injected after every 2 product cards · pushes to another category/subcategory · deliberately short so it doesn't crowd the grid */
-  .cat-promo{grid-column:1/-1;display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:14px;background:linear-gradient(135deg,#ECFDF5,#F0FDF4);border:1px solid #BBF7D0;text-decoration:none;color:#0F172A;box-shadow:0 1px 2px rgba(4,120,87,.05)}
-  .cat-promo:active{transform:scale(.99)}
-  .cat-promo-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-  .cat-promo-tx{flex:1;min-width:0}
-  .cat-promo-t{display:block;font-size:12.5px;font-weight:800;line-height:1.2}
-  .cat-promo-s{display:block;font-size:10.5px;color:#15803D;font-weight:600;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .cat-promo-go{width:26px;height:26px;border-radius:50%;background:#258046;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+  /* Cross-sell promo injected after every 2 product cards · styled as a real promotional banner image (gradient creative + product shot + CTA), not a UI component · pushes to another category/subcategory */
+  .cat-promo{grid-column:1/-1;position:relative;display:block;height:104px;border-radius:16px;overflow:hidden;text-decoration:none;box-shadow:0 10px 22px -14px rgba(15,23,42,.5)}
+  .cat-promo:active{transform:scale(.992)}
+  .cat-promo-blob{position:absolute;right:-26px;top:-34px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.12)}
+  .cat-promo-blob.b2{right:42px;top:34px;width:78px;height:78px;background:rgba(255,255,255,.08)}
+  .cat-promo-copy{position:absolute;left:16px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;gap:5px;z-index:2;max-width:62%}
+  .cat-promo-eyebrow{font-size:9.5px;font-weight:800;letter-spacing:.1em;color:rgba(255,255,255,.9);text-transform:uppercase}
+  .cat-promo-head{font-size:18px;font-weight:900;color:#fff;line-height:1.08;text-shadow:0 1px 6px rgba(0,0,0,.2)}
+  .cat-promo-cta{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;background:#fff;color:#0F172A;font-size:11px;font-weight:800;padding:5px 13px;border-radius:9999px;margin-top:3px;box-shadow:0 4px 10px -3px rgba(0,0,0,.25)}
+  .cat-promo-img{position:absolute;right:6px;bottom:-8px;height:112px;width:auto;object-fit:contain;filter:drop-shadow(0 10px 14px rgba(0,0,0,.3));z-index:1}
   .pcard{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06);transition:transform .15s ease;text-decoration:none;color:#0F172A}
   .pcard:active{transform:scale(.98)}
   .pcard-img{width:100%;height:130px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;position:relative;padding:12px;flex-shrink:0}
@@ -636,23 +638,36 @@
     // ----- Inline cross-sell promo (shown after every 2 product cards) -----
     // Builds a rotating list of OTHER categories + a notable subcategory of each, so the
     // banner always nudges the user somewhere new without leaving the page.
+    // brand-safe gradient creatives (greens/teals/blues — no amber/gold per brand)
+    const PROMO_GRADS = [
+      'linear-gradient(135deg,#258046 0%,#16643A 100%)',
+      'linear-gradient(135deg,#0E7490 0%,#0B4A5E 100%)',
+      'linear-gradient(135deg,#2563EB 0%,#1E40AF 100%)',
+      'linear-gradient(135deg,#059669 0%,#03543F 100%)',
+      'linear-gradient(135deg,#0D9488 0%,#0B5E57 100%)'
+    ];
+    function catImage(k){ const p = PRODUCTS.find(x => x.cat === k); return p ? p.img : '../assets/Humic_nobg.png'; }
+    function catMaxOff(k){ let m = 0; PRODUCTS.filter(x => x.cat === k).forEach(p => { const o = offPct(p); if (o > m) m = o; }); return m; }
     function buildPromos(){
-      const out = [];
+      const out = []; let gi = 0;
       Object.keys(CATS).forEach(k => {
         if (k === activeCat) return;
-        const c = CATS[k];
-        const a = c.subs.find(s => s.key === 'all') || c.subs[0];
-        out.push({ cat:k, sub:'all', icon:a.icon, bg:a.bg, title:'Explore ' + c.label, sub2:'See all ' + c.label.toLowerCase() });
+        const c = CATS[k], img = catImage(k), off = catMaxOff(k);
+        out.push({ cat:k, sub:'all', head:'Explore ' + c.label, eyebrow: off > 0 ? ('Up to ' + off + '% off') : 'Shop by category', img, grad:PROMO_GRADS[gi++ % PROMO_GRADS.length] });
         const n = c.subs.find(s => s.key !== 'all');
-        if (n) out.push({ cat:k, sub:n.key, icon:n.icon, bg:n.bg, title:n.label, sub2:'in ' + c.label });
+        if (n) out.push({ cat:k, sub:n.key, head:n.label, eyebrow:'In ' + c.label, img, grad:PROMO_GRADS[gi++ % PROMO_GRADS.length] });
       });
-      return out.length ? out : [{ cat:activeCat, sub:'all', icon:'🛒', bg:'#ECFDF5', title:'Browse all products', sub2:'' }];
+      return out.length ? out : [{ cat:activeCat, sub:'all', head:'Browse all products', eyebrow:'', img:catImage(activeCat), grad:PROMO_GRADS[0] }];
     }
     function promoBanner(p){
-      return '<a class="cat-promo" data-pcat="'+p.cat+'" data-psub="'+(p.sub||'all')+'">'
-        + '<span class="cat-promo-ic" style="background:'+(p.bg||'#ECFDF5')+'">'+p.icon+'</span>'
-        + '<span class="cat-promo-tx"><span class="cat-promo-t">'+p.title+'</span><span class="cat-promo-s">'+(p.sub2||'')+'</span></span>'
-        + '<span class="cat-promo-go"><i class="fa-solid fa-arrow-right"></i></span>'
+      return '<a class="cat-promo" style="background:'+p.grad+'" data-pcat="'+p.cat+'" data-psub="'+(p.sub||'all')+'">'
+        + '<span class="cat-promo-blob"></span><span class="cat-promo-blob b2"></span>'
+        + '<span class="cat-promo-copy">'
+          + (p.eyebrow ? '<span class="cat-promo-eyebrow">'+p.eyebrow+'</span>' : '')
+          + '<span class="cat-promo-head">'+p.head+'</span>'
+          + '<span class="cat-promo-cta">Shop now <i class="fa-solid fa-arrow-right text-[9px]"></i></span>'
+        + '</span>'
+        + '<img class="cat-promo-img" src="'+p.img+'" alt=""/>'
         + '</a>';
     }
     function pushToCat(cat, sub){

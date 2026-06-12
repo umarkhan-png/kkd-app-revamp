@@ -18,7 +18,7 @@
       { key: 'dashboard', label: 'Dashboard', icon: 'gauge-high', href: 'index.html' },
     ]},
     { group: 'App Screens', items: [
-      { key: 'sc-home', label: 'Home', icon: 'house', href: 'screen.html?s=home' },
+      { key: 'sc-home', label: 'Home', icon: 'house', href: 'home-manager.html' },
       { key: 'sc-search', label: 'Search', icon: 'magnifying-glass', href: 'screen.html?s=search' },
       { key: 'sc-shop', label: 'Shop & Category', icon: 'store', href: 'screen.html?s=shop' },
       { key: 'sc-pdp', label: 'Product Page', icon: 'box-open', href: 'screen.html?s=pdp' },

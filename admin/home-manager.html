@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Home Page Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+/* ── Home Page Manager · scoped under .hm so nothing here touches the shell chrome ── */
+.hm{
+  --green:#258046;--green-lt:#ECFDF5;--green-md:#1F7A40;
+  --g50:#F9FAFB;--g100:#F3F4F6;--g200:#E5E7EB;--g300:#D1D5DB;
+  --g400:#9CA3AF;--g500:#6B7280;--g600:#4B5563;--g700:#374151;--g800:#1F2937;
+  --red:#DC2626;--amber:#D97706;--blue:#2563EB;--r:10px;
+  color:var(--g800);
+}
+
+/* TWO-PANEL LAYOUT */
+.hm .hm-layout{display:flex;gap:16px;align-items:flex-start;}
+.hm .lp{width:282px;flex-shrink:0;background:#fff;border:1px solid var(--g200);border-radius:var(--r);box-shadow:var(--shadow-sm);overflow:hidden;position:sticky;top:16px;}
+.hm .lp-head{padding:13px 15px;border-bottom:1px solid var(--g100);}
+.hm .lp-head h3{font-size:13px;font-weight:700;color:var(--g700);margin:0;}
+.hm .lp-head p{font-size:11px;color:var(--g400);margin:2px 0 0;}
+.hm .lp-body{padding:6px 0;max-height:calc(100vh - 180px);overflow-y:auto;}
+
+.hm .sec-item{display:flex;align-items:center;gap:7px;padding:9px 11px;cursor:pointer;border-left:3px solid transparent;transition:background .1s;}
+.hm .sec-item:hover{background:var(--g50);}
+.hm .sec-item.active{background:var(--green-lt);border-left-color:var(--green);}
+.hm .sec-item.drag-over{border-top:2px solid var(--green);}
+.hm .sec-item.dragging{opacity:.35;}
+.hm .drag-h{cursor:grab;color:var(--g300);font-size:16px;flex-shrink:0;}
+.hm .sec-icon{font-size:16px;flex-shrink:0;}
+.hm .sec-info{flex:1;min-width:0;}
+.hm .sec-name{font-size:12.5px;font-weight:600;}
+.hm .sec-sub{font-size:10.5px;color:var(--g400);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hm .sec-item.off .sec-name,.hm .sec-item.off .sec-icon{opacity:.45;}
+.hm .vis-btn{cursor:pointer;font-size:14px;opacity:.7;flex-shrink:0;border:none;background:none;padding:2px;}
+.hm .vis-btn:hover{opacity:1;}
+
+/* RIGHT PANEL */
+.hm .rp{flex:1;min-width:0;}
+.hm .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;color:var(--g400);text-align:center;background:#fff;border:1px solid var(--g200);border-radius:var(--r);}
+.hm .empty-state .ei{font-size:44px;margin-bottom:10px;}
+
+/* CARD (scoped — does not collide with shell .card) */
+.hm .card{background:#fff;border:1px solid var(--g200);border-radius:var(--r);margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow-sm);}
+.hm .card-head{padding:13px 18px;border-bottom:1px solid var(--g100);display:flex;align-items:center;justify-content:space-between;}
+.hm .card-head h3{font-size:13.5px;font-weight:700;margin:0;}
+.hm .card-body{padding:18px;}
+
+/* LANG TABS */
+.hm .lang-tabs{display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap;}
+.hm .lt{padding:4px 11px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--g200);color:var(--g600);transition:all .15s;font-weight:500;}
+.hm .lt.on{background:var(--green);border-color:var(--green);color:#fff;}
+
+/* STATE PILLS */
+.hm .sp-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+.hm .sp{padding:3px 9px;border-radius:20px;font-size:11px;cursor:pointer;border:1.5px solid var(--g200);color:var(--g600);transition:all .15s;}
+.hm .sp.on{background:var(--green-lt);border-color:var(--green);color:var(--green);font-weight:600;}
+.hm .sp.all{background:var(--green);border-color:var(--green);color:#fff;font-weight:600;}
+
+/* FORM */
+.hm .row{display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.hm .fg{display:flex;flex-direction:column;flex:1;min-width:130px;}
+.hm .fg.fix{flex:0 0 auto;}
+.hm label{font-size:11px;font-weight:700;color:var(--g600);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;display:block;}
+.hm input[type=text],.hm input[type=number],.hm input[type=datetime-local],.hm input[type=url],.hm textarea,.hm select.s{
+  border:1px solid var(--g200);border-radius:8px;padding:8px 10px;font-size:13px;
+  color:var(--g800);outline:none;background:#fff;width:100%;font-family:inherit;transition:border .15s;height:auto;
+}
+.hm input:focus,.hm textarea:focus,.hm select.s:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
+.hm textarea{resize:vertical;min-height:65px;}
+.hm input[type=color]{width:44px;height:34px;border:1px solid var(--g200);border-radius:6px;padding:2px;cursor:pointer;}
+.hm select.s{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;}
+
+/* BUTTONS (scoped) */
+.hm .btn{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:5px;height:auto;white-space:nowrap;}
+.hm .btn-p{background:var(--green);color:#fff;}
+.hm .btn-p:hover{background:var(--green-md);}
+.hm .btn-s{background:#fff;color:var(--g700);border:1px solid var(--g200);}
+.hm .btn-s:hover{background:var(--g100);}
+.hm .btn-d{background:#FEE2E2;color:var(--red);border:1px solid #FECACA;}
+.hm .btn-d:hover{background:#FECACA;}
+.hm .btn-sm{padding:4px 9px;font-size:12px;}
+.hm .btn-ic{padding:4px 7px;font-size:13px;}
+
+/* TOGGLE */
+.hm .tr{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--g100);}
+.hm .tr:last-child{border-bottom:none;}
+.hm .tr-l .tt{font-size:13px;font-weight:600;}
+.hm .tr-l .td{font-size:11px;color:var(--g400);margin-top:1px;}
+.hm .tg{position:relative;width:37px;height:20px;background:var(--g200);border-radius:20px;cursor:pointer;transition:background .2s;flex-shrink:0;}
+.hm .tg.on{background:var(--green);}
+.hm .tg::after{content:'';position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.hm .tg.on::after{left:20px;}
+
+/* LIST ITEM */
+.hm .li{display:flex;align-items:flex-start;gap:8px;padding:11px;border:1px solid var(--g200);border-radius:8px;margin-bottom:7px;background:#fff;}
+.hm .li-body{flex:1;min-width:0;}
+.hm .li-act{display:flex;gap:4px;flex-shrink:0;}
+
+/* MISC */
+.hm .sdiv{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--g400);padding:10px 0 7px;}
+.hm .color-r{display:flex;align-items:center;gap:8px;}
+.hm .color-r span{font-size:11.5px;color:var(--g500);}
+.hm .ep{width:38px;height:38px;border:1px solid var(--g200);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;background:var(--g50);cursor:pointer;flex-shrink:0;}
+.hm .pchip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;background:var(--green-lt);border-radius:20px;font-size:11.5px;color:var(--green);margin:2px;font-weight:600;}
+.hm .pchip .x{cursor:pointer;font-size:13px;}
+.hm .padd{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border:1.5px dashed var(--g300);border-radius:20px;font-size:11.5px;color:var(--g500);margin:2px;cursor:pointer;transition:all .15s;}
+.hm .padd:hover{border-color:var(--green);color:var(--green);}
+.hm .cchip{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--g200);margin:3px;transition:all .15s;}
+.hm .cchip.on{background:var(--green-lt);border-color:var(--green);color:var(--green);font-weight:600;}
+.hm .info-box{background:var(--green-lt);border-radius:8px;padding:11px 13px;font-size:12px;color:var(--green);margin-top:8px;}
+.hm .sch-box{background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:13px;margin-bottom:12px;}
+.hm .sch-box .sl{font-size:11px;font-weight:700;color:var(--g500);margin-bottom:9px;text-transform:uppercase;letter-spacing:.4px;}
+.hm .hint-p{font-size:12px;color:var(--g500);margin-bottom:12px;}
+
+/* WIDGET */
+.hm .wi{border:1px solid var(--g200);border-radius:8px;padding:13px;margin-bottom:9px;background:#fff;}
+.hm .wi-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;gap:8px;}
+.hm .wi-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;}
+
+/* TESTIMONIAL */
+.hm .tc{display:flex;gap:11px;border:1px solid var(--g200);border-radius:8px;padding:11px;margin-bottom:8px;background:#fff;}
+.hm .tc-thumb{width:60px;height:60px;border-radius:6px;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;flex-shrink:0;}
+.hm .tc-body{flex:1;min-width:0;}
+.hm .tc-act{display:flex;flex-direction:column;gap:5px;flex-shrink:0;}
+
+/* BANNER */
+.hm .bimg{width:100%;height:55px;border-radius:6px;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--g400);cursor:pointer;}
+
+@media (max-width:1080px){
+  .hm .hm-layout{flex-direction:column;}
+  .hm .lp{width:100%;position:static;}
+}
+</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+
+      <div class="hm">
+        <div class="flex items-center justify-between" style="margin-bottom:18px">
+          <div>
+            <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Home Page Manager</h2>
+            <p class="muted" style="margin:0;font-size:13.5px">Every section of the app Home screen — reorder, show/hide, and edit content per language &amp; state.</p>
+          </div>
+          <span class="tag tag-green" id="hmCount" style="font-size:12px;padding:5px 11px"></span>
+        </div>
+
+        <div class="hm-layout">
+          <!-- LEFT -->
+          <div class="lp">
+            <div class="lp-head">
+              <h3>Page Sections</h3>
+              <p>⠿ drag to reorder · click to edit</p>
+            </div>
+            <div class="lp-body" id="secList"></div>
+          </div>
+          <!-- RIGHT -->
+          <div class="rp" id="rp">
+            <div class="empty-state"><div class="ei">🏠</div><p>Select a section from the left to edit</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+AdminShell.mount({ active:'sc-home', title:'Home Page Manager', crumb:'App Screens', controls:'Every section of the app Home screen', preview:'home.html' });
+
+const LANGS=[{c:'hi',l:'HI'},{c:'en',l:'EN'},{c:'mr',l:'MR'},{c:'gu',l:'GU'},{c:'pa',l:'PA'}];
+const STATES=['All States','MP','UP','Maharashtra','Gujarat','Rajasthan','Karnataka','AP','Telangana','Punjab','Haryana','Bihar','WB'];
+const PRODS=[{n:'Humic + Fulvic 98'},{n:'Chakrawarti ZC'},{n:'Antivirus'},{n:'NPK 19-19-19'},{n:'Bhumiraja'},{n:'WeedOff'},{n:'Mega Combo'},{n:'Chakraveer'}];
+const CROPS=['🍅 Tomato','🌶️ Chilli','🌾 Wheat','🌽 Maize','🧅 Onion','🥔 Potato','🫘 Soybean','🪴 Cotton','🥜 Groundnut','🌾 Paddy','🫑 Capsicum'];
+
+// Reference SECS — used to seed data.homeSections on first load
+const DEFAULT_SECS=[
+  {id:'offer',    ic:'🎁', nm:'Offer Strip',         sub:'Header announcement ticker',     on:true},
+  {id:'cats',     ic:'🗂️', nm:'Categories',           sub:'Pesticide, Fertilizer…',         on:true},
+  {id:'ordstatus',ic:'📦', nm:'Order Status',          sub:'Sticky active order bar',         on:true},
+  {id:'coins',    ic:'🪙', nm:'Earn Coins',             sub:'Task screen + drawer',            on:true},
+  {id:'flash',    ic:'⚡', nm:'Flash Sale',             sub:'Timed deals + countdown',         on:true},
+  {id:'banners',  ic:'🖼️', nm:'Promo Banners',          sub:'Image carousel, state/lang/time', on:true},
+  {id:'crops',    ic:'🌾', nm:'Shop by Crop',           sub:'Auto seasonal + manual per state',on:true},
+  {id:'best',     ic:'⭐', nm:'Bestsellers',             sub:'Auto weekly top 4 + manual pin',  on:true},
+  {id:'recent',   ic:'👁️', nm:'Recently Viewed',        sub:'Per-user browsing history',       on:true},
+  {id:'buyagain', ic:'🔄', nm:'Buy Again',              sub:'Quick reorder past purchases',    on:true},
+  {id:'featured', ic:'🎯', nm:'Featured Products',      sub:'Curated collections by state/lang',on:true},
+  {id:'widgets',  ic:'🧩', nm:'Widgets',                sub:'Crop Q, Refer, Rate…',            on:true},
+  {id:'testi',    ic:'🎥', nm:'Testimonials',            sub:'Farmer video section',            on:true},
+  {id:'mostsell', ic:'🔥', nm:'Most Selling',            sub:'Auto state-wise trending',        on:true},
+  {id:'expert',   ic:'💬', nm:'Ask Expert',              sub:'Floating agronomist button',       on:true},
+];
+
+/* ── PERSISTENCE: order + visibility live in data.homeSections ── */
+let data = KKD.load();
+let SECS;
+function seedSecs(){
+  // seed from the reference on first load; otherwise reconcile saved order/visibility against defaults
+  if(!Array.isArray(data.homeSections) || !data.homeSections.length){
+    data.homeSections = DEFAULT_SECS.map(s=>({id:s.id,on:s.on}));
+    KKD.save(data);
+  }
+  const meta = Object.fromEntries(DEFAULT_SECS.map(s=>[s.id,s]));
+  // ordered list from stored order; drop unknowns, append any new defaults missing from store
+  const stored = data.homeSections.filter(s=>meta[s.id]);
+  const seen = new Set(stored.map(s=>s.id));
+  DEFAULT_SECS.forEach(s=>{ if(!seen.has(s.id)) stored.push({id:s.id,on:s.on}); });
+  data.homeSections = stored;
+  SECS = stored.map(s=>({...meta[s.id], on:s.on}));
+}
+function persist(){ data.homeSections = SECS.map(s=>({id:s.id,on:s.on})); KKD.save(data); }
+seedSecs();
+
+let sel=null,dragId=null;
+
+/* ── RENDER LIST ── */
+function renderList(){
+  document.getElementById('hmCount').textContent = SECS.length + ' sections';
+  document.getElementById('secList').innerHTML=SECS.map(s=>`
+    <div class="sec-item${sel===s.id?' active':''}${s.on?'':' off'}" id="si-${s.id}"
+      draggable="true"
+      ondragstart="ds(event,'${s.id}')" ondragover="dov(event)" ondrop="dd(event,'${s.id}')" ondragleave="dl(event)" ondragend="de(event)"
+      onclick="pick('${s.id}')">
+      <span class="drag-h" onclick="event.stopPropagation()">⠿</span>
+      <span class="sec-icon">${s.ic}</span>
+      <div class="sec-info"><div class="sec-name">${s.nm}</div><div class="sec-sub">${s.sub}</div></div>
+      <button class="vis-btn" title="${s.on?'Hide on app':'Show on app'}" onclick="event.stopPropagation();toggleVis('${s.id}')">${s.on?'👁️':'🚫'}</button>
+    </div>`).join('');
+}
+
+/* ── DRAG (HTML5 reorder, persisted) ── */
+function ds(e,id){dragId=id;setTimeout(()=>{const el=document.getElementById('si-'+id);if(el)el.classList.add('dragging');},0);}
+function dov(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+function dl(e){e.currentTarget.classList.remove('drag-over');}
+function de(e){document.querySelectorAll('.hm .sec-item').forEach(x=>x.classList.remove('dragging','drag-over'));}
+function dd(e,tid){
+  e.preventDefault();e.currentTarget.classList.remove('drag-over');
+  if(!dragId||dragId===tid)return;
+  const si=SECS.findIndex(s=>s.id===dragId),ti=SECS.findIndex(s=>s.id===tid);
+  const[it]=SECS.splice(si,1);SECS.splice(ti,0,it);dragId=null;
+  persist();renderList();AdminShell.saved('Section order updated');
+}
+function toggleVis(id){const s=SECS.find(s=>s.id===id);s.on=!s.on;persist();renderList();AdminShell.saved(s.nm+(s.on?' shown on app':' hidden on app'));}
+
+/* ── SELECT ── */
+function pick(id){sel=id;renderList();document.getElementById('rp').innerHTML=EDITORS[id]?EDITORS[id]():`<div class="empty-state"><div class="ei">🚧</div><p>Editor coming soon</p></div>`;}
+
+/* ── HELPERS ── */
+function LT(ac='hi'){return`<div class="lang-tabs">${LANGS.map(l=>`<div class="lt${l.c===ac?' on':''}" onclick="swL(this)">${l.l}</div>`).join('')}</div>`;}
+function swL(el){el.closest('.lang-tabs').querySelectorAll('.lt').forEach(t=>t.classList.remove('on'));el.classList.add('on');}
+function SP(selSt=['All States']){return`<div class="sp-wrap">${STATES.map(st=>`<div class="sp${st==='All States'&&selSt.includes(st)?' all':selSt.includes(st)?' on':''}" onclick="swS(this,'${st}')">${st}</div>`).join('')}</div>`;}
+function swS(el,st){if(st==='All States'){el.closest('.sp-wrap').querySelectorAll('.sp').forEach(p=>p.classList.remove('on','all'));el.classList.add('all');}else{el.closest('.sp-wrap').querySelector('.sp:first-child').classList.remove('all');el.classList.toggle('on');}}
+function TG(id,on,tt,td=''){return`<div class="tr"><div class="tr-l"><div class="tt">${tt}</div>${td?`<div class="td">${td}</div>`:''}</div><div class="tg${on?' on':''}" id="${id}" onclick="this.classList.toggle('on')"></div></div>`;}
+function promptE(el){const e=prompt('Enter emoji:',el.textContent.trim());if(e)el.textContent=e;}
+function save(msg){AdminShell.saved(msg);}
+
+/* ── ADD HELPERS ── */
+function newPChip(n){return`<span class="pchip">🌱 ${n} <span class="x" onclick="this.closest('.pchip').remove()">×</span></span>`;}
+function newPAdd(fn){return`<span class="padd" onclick="${fn}(this)">+ Add Product</span>`;}
+
+/* ══════════════════════════════════════════════
+   EDITORS — ported verbatim (depth + fields) from the reference
+═══════════════════════════════════════════════ */
+const EDITORS={
+
+/* 1 ── OFFER STRIP */
+offer:()=>`
+<div class="card">
+  <div class="card-head"><h3>🎁 Offer Strip — Header Ticker</h3><button class="btn btn-p btn-sm" onclick="save('Offer strip saved')">Save</button></div>
+  <div class="card-body">
+    ${LT()}
+    <div class="sdiv">Active Offers (scroll as ticker)</div>
+    <div id="ofList">
+      ${[
+        {ic:'🎁',bold:'Christmas offer',body:'20% off + free gift on ₹999+',lc:'#C0392B',bg:'#FFF3E0',link:''},
+        {ic:'🔥',bold:'Kisan Special',body:'₹500 off above ₹2000+',lc:'#1B6B3A',bg:'#F0FDF4',link:''},
+      ].map(o=>`
+      <div class="li">
+        <span class="drag-h">⠿</span>
+        <div class="li-body">
+          <div class="row" style="margin-bottom:10px;">
+            <div class="fg fix"><label>Icon</label><div style="display:flex;align-items:center;gap:6px;"><div class="ep" onclick="promptE(this)">${o.ic}</div><input type="text" style="width:55px;" value="${o.ic}"/></div></div>
+            <div class="fg"><label>Bold Label (colored)</label><input type="text" value="${o.bold}"/></div>
+            <div class="fg"><label>Body Text</label><input type="text" value="${o.body}"/></div>
+          </div>
+          <div class="row" style="margin-bottom:0;">
+            <div class="fg fix"><label>Label Color</label><div class="color-r"><input type="color" value="${o.lc}"/><span>${o.lc}</span></div></div>
+            <div class="fg fix"><label>BG Color</label><div class="color-r"><input type="color" value="${o.bg}"/></div></div>
+            <div class="fg"><label>Deeplink / URL</label><input type="text" value="${o.link}" placeholder="kkd://sale/christmas"/></div>
+          </div>
+        </div>
+        <div class="li-act"><button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button></div>
+      </div>`).join('')}
+    </div>
+    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addOffer()">+ Add Offer</button>
+  </div>
+</div>`,
+
+/* 2 ── CATEGORIES */
+cats:()=>`
+<div class="card">
+  <div class="card-head"><h3>🗂️ Categories</h3><button class="btn btn-p btn-sm" onclick="save('Categories saved')">Save</button></div>
+  <div class="card-body">
+    ${LT()}
+    <p class="hint-p">Drag to reorder · Toggle show/hide · Click emoji to change icon</p>
+    <div id="catList">
+      ${[{e:'🐛',n:'Pesticide'},{e:'🍄',n:'Fungicide'},{e:'🌱',n:'Fertilizer'},{e:'🌿',n:'Herbicide'},{e:'📦',n:'Combo'}].map(c=>`
+      <div class="li">
+        <span class="drag-h">⠿</span>
+        <div class="ep" onclick="promptE(this)">${c.e}</div>
+        <div class="li-body">
+          <div class="row" style="margin-bottom:0;">
+            <div class="fg"><label>Name (HI)</label><input type="text" value="${c.n}"/></div>
+            <div class="fg"><label>Name (EN)</label><input type="text" value="${c.n}"/></div>
+            <div class="fg"><label>Link</label><input type="text" value="/categories?cat=${c.n.toLowerCase()}"/></div>
+          </div>
+        </div>
+        <div class="li-act" style="padding-top:16px;">
+          <div class="tg on" onclick="this.classList.toggle('on')"></div>
+          <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
+        </div>
+      </div>`).join('')}
+    </div>
+    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addCat()">+ Add Category</button>
+  </div>
+</div>`,
+
+/* 3 ── ORDER STATUS */
+ordstatus:()=>`
+<div class="card">
+  <div class="card-head"><h3>📦 Order Status Sticky Bar</h3><button class="btn btn-p btn-sm" onclick="save('Order status saved')">Save</button></div>
+  <div class="card-body">
+    ${TG('os1',true,'Show Order Status Bar','Sticky bar with live order status above categories')}
+    ${TG('os2',true,'Show Full Expanded Card','Full tracking card visible when user scrolls to top')}
+    <div style="margin-top:14px;" class="sdiv">Position</div>
+    <div class="row"><div class="fg" style="max-width:260px;"><label>Show After</label>
+      <select class="s"><option>Categories</option><option>Offer Strip</option><option>Search Bar</option></select>
+    </div></div>
+    <div class="sdiv">Status Labels</div>
+    ${LT()}
+    <div class="row">
+      <div class="fg"><label>Out for Delivery</label><input type="text" value="OUT FOR DELIVERY"/></div>
+      <div class="fg"><label>Track Button</label><input type="text" value="Track →"/></div>
+      <div class="fg"><label>Packed</label><input type="text" value="Packed"/></div>
+      <div class="fg"><label>Delivered</label><input type="text" value="Delivered"/></div>
+    </div>
+  </div>
+</div>`,
+
+/* 4 ── EARN COINS */
+coins:()=>`
+<div class="card">
+  <div class="card-head"><h3>🪙 Earn Coins — Task Screen</h3><button class="btn btn-p btn-sm" onclick="save('Tasks saved')">Save</button></div>
+  <div class="card-body">
+    ${LT()}
+    <div class="sdiv">Section Header</div>
+    <div class="row">
+      <div class="fg"><label>Title</label><input type="text" value="EARN KRISHI COINS"/></div>
+      <div class="fg"><label>Sub-heading</label><input type="text" value="Complete 5 quick steps"/></div>
+      <div class="fg"><label>Coins label</label><input type="text" value="Earn up to 25 coins"/></div>
+    </div>
+    <div class="sdiv">Drawer Heading</div>
+    <div class="row"><div class="fg"><label>Drawer Title</label><input type="text" value="Complete steps to earn krishi coin"/></div></div>
+    <div class="sdiv">Tasks (shown in drawer)</div>
+    <div id="taskList">
+      ${[
+        {e:'🔔',t:'Allow notifications',c:10,a:'enable_notifications'},
+        {e:'📍',t:'Allow location',c:10,a:'enable_location'},
+        {e:'🛒',t:'Add to cart',c:15,a:'add_to_cart'},
+        {e:'🔍',t:'Search product',c:10,a:'search'},
+        {e:'🌾',t:'Add crop',c:50,a:'add_crop'},
+      ].map(t=>`
+      <div class="li">
+        <span class="drag-h">⠿</span>
+        <div class="ep" onclick="promptE(this)" style="font-size:18px;">${t.e}</div>
+        <div class="li-body">
+          <div class="row" style="margin-bottom:8px;">
+            <div class="fg"><label>Title (HI)</label><input type="text" value="${t.t}"/></div>
+            <div class="fg"><label>Title (EN)</label><input type="text" value="${t.t}"/></div>
+            <div class="fg fix"><label>Coins</label><input type="number" style="width:80px;" value="${t.c}"/></div>
+          </div>
+          <div class="row" style="margin-bottom:0;">
+            <div class="fg"><label>Action Type</label>
+              <select class="s">
+                <option value="enable_notifications"${t.a==='enable_notifications'?' selected':''}>Enable Notifications</option>
+                <option value="enable_location"${t.a==='enable_location'?' selected':''}>Enable Location</option>
+                <option value="add_to_cart"${t.a==='add_to_cart'?' selected':''}>Add to Cart</option>
+                <option value="search"${t.a==='search'?' selected':''}>Search Product</option>
+                <option value="add_crop"${t.a==='add_crop'?' selected':''}>Add Crop</option>
+                <option value="make_purchase">Make Purchase</option>
+                <option value="rate_product">Rate Product</option>
+                <option value="refer_friend">Refer Friend</option>
+                <option value="deeplink">Custom Deeplink</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="li-act" style="padding-top:16px;">
+          <div class="tg on" onclick="this.classList.toggle('on')"></div>
+          <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
+        </div>
+      </div>`).join('')}
+    </div>
+    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addTask()">+ Add Task</button>
+  </div>
+</div>`,
+
+/* 5 ── FLASH SALE */
+flash:()=>`
+<div class="card">
+  <div class="card-head"><h3>⚡ Flash Sale</h3><button class="btn btn-p btn-sm" onclick="save('Flash sale saved')">Save</button></div>
+  <div class="card-body">
+    ${TG('fs0',true,'Flash Sale Active','Section auto-hides when schedule ends')}
+    <div style="margin-top:14px;"></div>
+    <div class="sch-box">
+      <div class="sl">⏱ Schedule</div>
+      <div class="row">
+        <div class="fg"><label>Start Date &amp; Time</label><input type="datetime-local" value="2026-06-03T10:00"/></div>
+        <div class="fg"><label>End Date &amp; Time</label><input type="datetime-local" value="2026-06-03T14:00"/></div>
+      </div>
+      ${TG('fs1',true,'Auto-hide when timer ends','Removes section from home once time is up')}
+    </div>
+    <div class="sdiv">Appearance</div>
+    ${LT()}
+    <div class="row"><div class="fg"><label>Section Label</label><input type="text" value="FLASH DEALS"/></div></div>
+    <div class="row">
+      <div class="fg fix"><label>BG Color 1</label><div class="color-r"><input type="color" value="#EA580C"/><span>#EA580C</span></div></div>
+      <div class="fg fix"><label>BG Color 2</label><div class="color-r"><input type="color" value="#F59E0B"/></div></div>
+      <div class="fg fix"><label>Label BG</label><div class="color-r"><input type="color" value="#1B6B3A"/></div></div>
+      <div class="fg fix"><label>Timer BG</label><div class="color-r"><input type="color" value="#111111"/></div></div>
+    </div>
+    ${TG('fs2',true,'Show Countdown Timer','HH:MM:SS timer display')}
+    ${TG('fs3',true,'Show Diagonal Pattern','Decorative background lines')}
+    <div class="sdiv" style="margin-top:12px;">Products in Flash Sale</div>
+    <div id="fpList" style="margin-bottom:8px;">
+      ${newPChip('Chakrawarti ZC')}${newPChip('Humic + Fulvic 98')}${newPAdd('addFP')}
+    </div>
+  </div>
+</div>`,
+
+/* 6 ── BANNERS */
+banners:()=>`
+<div class="card">
+  <div class="card-head"><h3>🖼️ Promotional Banners</h3><button class="btn btn-p btn-sm" onclick="save('Banners saved')">Save</button></div>
+  <div class="card-body">
+    <p class="hint-p">Each banner targets specific state · language · time window</p>
+    <div id="bnList">
+      ${[
+        {nm:'Mega Krishi Bachat Mela',link:'/shop?sale=mela',states:['All States'],lang:'All'},
+        {nm:'Hot Combo BOGO',link:'/shop?filter=combo',states:['MP','UP'],lang:'HI'},
+      ].map(b=>`
+      <div class="li" style="flex-direction:column;gap:11px;align-items:stretch;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="drag-h">⠿</span>
+          <div class="bimg" style="flex:1;" onclick="this.querySelector('input').click()">🖼️ ${b.nm}<input type="file" accept="image/*" style="display:none;"/></div>
+          <div class="li-act">
+            <div class="tg on" onclick="this.classList.toggle('on')"></div>
+            <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
+          </div>
+        </div>
+        <div class="row" style="margin-bottom:8px;">
+          <div class="fg"><label>Banner Name</label><input type="text" value="${b.nm}"/></div>
+          <div class="fg"><label>Deeplink / URL</label><input type="text" value="${b.link}"/></div>
+        </div>
+        <div class="row" style="margin-bottom:8px;">
+          <div class="fg fix"><label>Language</label><select class="s"><option>All</option>${LANGS.map(l=>`<option${b.lang===l.l?' selected':''}>${l.l}</option>`).join('')}</select></div>
+          <div class="fg"><label>Start</label><input type="datetime-local" value="2026-06-01T00:00"/></div>
+          <div class="fg"><label>End</label><input type="datetime-local" value="2026-06-30T23:59"/></div>
+        </div>
+        <div><label>Target States</label>${SP(b.states)}</div>
+      </div>`).join('')}
+    </div>
+    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addBanner()">+ Add Banner</button>
+  </div>
+</div>`,
+
+/* 7 ── SHOP BY CROP */
+crops:()=>`
+<div class="card">
+  <div class="card-head"><h3>🌾 Shop by Crop</h3><button class="btn btn-p btn-sm" onclick="save('Shop by Crop saved')">Save</button></div>
+  <div class="card-body">
+    ${LT()}
+    <div class="row"><div class="fg"><label>Section Title</label><input type="text" value="Shop by Crop"/></div></div>
+    ${TG('sbc1',true,'Auto Seasonal Mode','Shows crops in-season for user\'s state based on current month')}
+    <div style="margin-top:14px;" class="sdiv">Manual Config — per State</div>
+    <div class="row"><div class="fg" style="max-width:240px;"><label>Configure State</label>
+      <select class="s" onchange="save('Loaded '+this.value+' config')">
+        ${STATES.filter(s=>s!=='All States').map(s=>`<option>${s}</option>`).join('')}
+      </select>
+    </div></div>
+    <p class="hint-p">Select crops to show · drag to reorder</p>
+    <div>${CROPS.map((c,i)=>`<span class="cchip${i<4?' on':''}" onclick="this.classList.toggle('on')">${c}</span>`).join('')}</div>
+    <button class="btn btn-s btn-sm" style="margin-top:10px;">+ Add Custom Crop</button>
+  </div>
+</div>`,
+
+/* 8 ── BESTSELLERS */
+best:()=>`
+<div class="card">
+  <div class="card-head"><h3>⭐ Bestsellers</h3><button class="btn btn-p btn-sm" onclick="save('Bestsellers saved')">Save</button></div>
+  <div class="card-body">
+    ${LT()}
+    <div class="row">
+      <div class="fg"><label>Section Title</label><input type="text" value="Bestsellers"/></div>
+      <div class="fg"><label>"See all" Link</label><input type="text" value="/shop?sort=bestsellers"/></div>
+    </div>
+    ${TG('bs1',true,'Auto Weekly Update','Top 4 selling products auto-populate every Monday')}
+    <div class="sdiv" style="margin-top:12px;">Manual Pinned Products (override auto)</div>
+    <p class="hint-p">Pinned always appear · auto fills remaining slots from weekly data</p>
+    <div id="bsList">
+      ${newPChip('Humic + Fulvic 98')}${newPChip('Chakrawarti ZC')}${newPAdd('addBS')}
+    </div>
+  </div>
+</div>`,
+
+/* 9 ── RECENTLY VIEWED */
+recent:()=>`
+<div class="card">
+  <div class="card-head"><h3>👁️ Recently Viewed</h3><button class="btn btn-p btn-sm" onclick="save('Recently Viewed saved')">Save</button></div>
+  <div class="card-body">
+    ${TG('rv1',true,'Show Section','Per-user recently viewed products')}
+    <div style="margin-top:14px;"></div>
+    ${LT()}
+    <div class="row">
+      <div class="fg"><label>Section Title</label><input type="text" value="Recently viewed"/></div>
+      <div class="fg"><label>"See all" Label</label><input type="text" value="See all"/></div>
+    </div>
+    <div class="row">
+      <div class="fg fix"><label>BG Color</label><div class="color-r"><input type="color" value="#F0F0FA"/></div></div>
+      <div class="fg fix"><label>Min items to show</label><input type="number" style="width:90px;" value="2"/></div>
+    </div>
+  </div>
+</div>`,
+
+/* 10 ── BUY AGAIN */
+buyagain:()=>`
+<div class="card">
+  <div class="card-head"><h3>🔄 Buy Again</h3><button class="btn btn-p btn-sm" onclick="save('Buy Again saved')">Save</button></div>
+  <div class="card-body">
+    ${TG('ba1',true,'Show Section','Past purchases for quick reorder')}
+    <div style="margin-top:14px;"></div>
+    ${LT()}
+    <div class="row">
+      <div class="fg"><label>Section Title</label><input type="text" value="Buy again"/></div>
+      <div class="fg"><label>"See all" Label</label><input type="text" value="SEE ALL"/></div>
+      <div class="fg"><label>Button Label</label><input type="text" value="Buy again"/></div>
+    </div>
+    <div class="row">
+      <div class="fg"><label>"Ordered on" Prefix</label><input type="text" value="ORDERED ON"/></div>
+      <div class="fg fix"><label>Min Orders to Show</label><input type="number" style="width:90px;" value="1"/></div>
+    </div>
+  </div>
+</div>`,
+
+/* 11 ── FEATURED PRODUCTS */
+featured:()=>`
+<div class="card">
+  <div class="card-head"><h3>🎯 Featured Products</h3><button class="btn btn-p btn-sm" onclick="save('Featured Products saved')">Save</button></div>
+  <div class="card-body">
+    <p class="hint-p">Each collection can target a specific state and language. Drag to reorder.</p>
+    <div id="fcList">
+      ${[
+        {nm:'Insecticide Showcase',color:'#1B6B3A',prods:['Chakrawarti ZC','Chakraveer'],states:['All States']},
+        {nm:'Fertilizer Fest',color:'#7C3AED',prods:['Humic + Fulvic 98','NPK 19-19-19'],states:['MP','UP']},
+      ].map(col=>`
+      <div class="li" style="flex-direction:column;gap:11px;align-items:stretch;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="drag-h">⠿</span>
+          <strong style="flex:1;font-size:13px;">${col.nm}</strong>
+          <div class="tg on" onclick="this.classList.toggle('on')"></div>
+          <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
+        </div>
+        <div class="row" style="margin-bottom:8px;">
+          <div class="fg"><label>Collection Name</label><input type="text" value="${col.nm}"/></div>
+          <div class="fg fix"><label>Card BG Color</label><div class="color-r"><input type="color" value="${col.color}"/></div></div>
+          <div class="fg"><label>Language</label><select class="s"><option>All</option>${LANGS.map(l=>`<option>${l.l}</option>`).join('')}</select></div>
+        </div>
+        <div><label>Products</label><div style="margin-top:5px;">${col.prods.map(p=>newPChip(p)).join('')}${newPAdd('addFC')}</div></div>
+        <div><label>Target States</label>${SP(col.states)}</div>
+      </div>`).join('')}
+    </div>
+    <button class="btn btn-s btn-sm" onclick="addFColl()">+ Add Collection</button>
+  </div>
+</div>`,
+
+/* 12 ── WIDGETS */
+widgets:()=>`
+<div class="card">
+  <div class="card-head"><h3>🧩 Widgets</h3><button class="btn btn-p btn-sm" onclick="save('Widgets saved')">Save</button></div>
+  <div class="card-body">
+    <p class="hint-p">Drag to reorder · Toggle show/hide · Edit content per language · Add new widgets</p>
+    <div id="wList">
+      ${[
+        {e:'🌾',t:'Which crop do you grow most?',c:'+15 coins',type:'multi_choice',opts:'Wheat,Cotton,Tomato,Other',act:'set_crop'},
+        {e:'🐛',t:'Facing any crop problem now?',c:'+15 coins',type:'multi_choice',opts:'Pest,Disease,Weeds,Nutrition',act:'crop_problem'},
+        {e:'💬',t:'Share your success story with KKD',c:'+30 coins',type:'cta',cta:'Share testimonial',act:'deeplink:/testimonials/submit'},
+        {e:'🎁',t:'Refer a friend, earn ₹50 each',c:'₹50',type:'cta',cta:'Invite a friend',act:'deeplink:/refer'},
+        {e:'🚚',t:'Did your last order arrive OK?',c:'+10 coins',type:'yes_no',opts:'Yes,No',act:'delivery_feedback'},
+        {e:'⭐',t:'Rate your recent purchase',c:'+25 coins',type:'cta',cta:'Rate & review',act:'deeplink:/rate'},
+      ].map(w=>`
+      <div class="wi">
+        <div class="wi-head">
+          <div style="display:flex;align-items:center;gap:7px;min-width:0;">
+            <span style="cursor:grab;color:var(--g300);font-size:17px;">⠿</span>
+            <div class="ep" onclick="promptE(this)" style="font-size:18px;">${w.e}</div>
+            <span class="wi-title">${w.t}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;">
+            <div class="tg on" onclick="this.classList.toggle('on')"></div>
+            <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.wi').remove()">🗑️</button>
+          </div>
+        </div>
+        ${LT()}
+        <div class="row" style="margin-bottom:10px;">
+          <div class="fg"><label>Widget Title</label><input type="text" value="${w.t}"/></div>
+          <div class="fg fix"><label>Reward</label><input type="text" style="width:95px;" value="${w.c}"/></div>
+        </div>
+        <div class="row" style="margin-bottom:10px;">
+          <div class="fg"><label>Type</label>
+            <select class="s">
+              <option value="multi_choice"${w.type==='multi_choice'?' selected':''}>Multi Choice</option>
+              <option value="yes_no"${w.type==='yes_no'?' selected':''}>Yes / No</option>
+              <option value="cta"${w.type==='cta'?' selected':''}>CTA Button</option>
+              <option value="rating">Star Rating</option>
+              <option value="input">Text Input</option>
+            </select>
+          </div>
+          ${w.opts?`<div class="fg"><label>Options (comma separated)</label><input type="text" value="${w.opts}"/></div>`:''}
+          ${w.cta?`<div class="fg"><label>CTA Button Text</label><input type="text" value="${w.cta}"/></div>`:''}
+        </div>
+        <div class="fg"><label>Action / Deeplink</label><input type="text" value="${w.act}"/></div>
+      </div>`).join('')}
+    </div>
+    <button class="btn btn-s btn-sm" onclick="addWidget()">+ Add New Widget</button>
+  </div>
+</div>`,
+
+/* 13 ── TESTIMONIALS */
+testi:()=>`
+<div class="card">
+  <div class="card-head"><h3>🎥 Farmer Testimonials</h3><button class="btn btn-p btn-sm" onclick="save('Testimonials saved')">Save</button></div>
+  <div class="card-body">
+    ${TG('tm1',true,'Show Section','Farmer video testimonials on home page')}
+    <div style="margin-top:14px;"></div>
+    ${LT()}
+    <div class="row"><div class="fg"><label>Section Title</label><input type="text" value="Farmer testimonials"/></div></div>
+    <div class="sdiv">Testimonials</div>
+    <div id="tmList">
+      ${[
+        {f:'Ramesh Patel',cr:'Tomato',loc:'Indore',cap:'"Tomato result in 15 days"'},
+        {f:'Mohan Verma',cr:'Cotton',loc:'Khandwa',cap:'"Yield up by 20%"'},
+      ].map(t=>`
+      <div class="tc">
+        <div class="tc-thumb" onclick="this.querySelector('input').click()">▶️<input type="file" accept="video/*" style="display:none;"/></div>
+        <div class="tc-body">
+          <div class="row" style="margin-bottom:8px;">
+            <div class="fg"><label>Farmer Name</label><input type="text" value="${t.f}"/></div>
+            <div class="fg"><label>Crop</label><input type="text" value="${t.cr}"/></div>
+            <div class="fg"><label>Location</label><input type="text" value="${t.loc}"/></div>
+          </div>
+          <div class="row" style="margin-bottom:0;">
+            <div class="fg"><label>Caption / Quote</label><input type="text" value='${t.cap}'/></div>
+            <div class="fg"><label>Video URL (YouTube/Drive)</label><input type="text" placeholder="https://…"/></div>
+          </div>
+        </div>
+        <div class="tc-act">
+          <div class="tg on" onclick="this.classList.toggle('on')"></div>
+          <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.tc').remove()">🗑️</button>
+        </div>
+      </div>`).join('')}
+    </div>
+    <button class="btn btn-s btn-sm" onclick="addTesti()">+ Add Testimonial</button>
+  </div>
+</div>`,
+
+/* 14 ── MOST SELLING */
+mostsell:()=>`
+<div class="card">
+  <div class="card-head"><h3>🔥 Most Selling in [State]</h3><button class="btn btn-p btn-sm" onclick="save('Most Selling saved')">Save</button></div>
+  <div class="card-body">
+    ${TG('ms1',true,'Show Section','Auto-personalizes based on user\'s state')}
+    <div style="margin-top:14px;"></div>
+    ${LT()}
+    <div class="row">
+      <div class="fg"><label>Section Title Template</label><input type="text" value="Most selling in {state}"/></div>
+      <div class="fg"><label>"See all" Label</label><input type="text" value="See all"/></div>
+    </div>
+    <div class="row">
+      <div class="fg"><label>Badge Label</label><input type="text" value="{count} bought last week"/></div>
+      <div class="fg fix"><label>Products to Show</label><input type="number" style="width:90px;" value="4"/></div>
+    </div>
+    <div class="info-box">ℹ️ Products auto-populate from weekly order data per state. No manual selection needed.</div>
+  </div>
+</div>`,
+
+/* 15 ── ASK EXPERT */
+expert:()=>`
+<div class="card">
+  <div class="card-head"><h3>💬 Ask Expert — Floating Button</h3><button class="btn btn-p btn-sm" onclick="save('Ask Expert saved')">Save</button></div>
+  <div class="card-body">
+    ${TG('ae1',true,'Show Floating Button','Agronomist bubble on home page')}
+    <div style="margin-top:14px;"></div>
+    ${LT()}
+    <div class="row">
+      <div class="fg"><label>Button Label</label><input type="text" value="Ask Expert"/></div>
+      <div class="fg"><label>Sub-label</label><input type="text" value="Free agronomist call"/></div>
+    </div>
+    <div class="row">
+      <div class="fg"><label>Deeplink / Action</label><input type="text" value="kkd://expert/call"/></div>
+      <div class="fg"><label>Expert Photo</label><button class="btn btn-s btn-sm" style="margin-top:4px;">Upload Photo</button></div>
+    </div>
+    ${TG('ae2',true,'Show Video Call Icon','Red camera icon on button')}
+  </div>
+</div>`,
+
+};/* end EDITORS */
+
+/* ── ADD FUNCTIONS ── */
+function addOffer(){
+  document.getElementById('ofList').insertAdjacentHTML('beforeend',`
+  <div class="li">
+    <span class="drag-h">⠿</span>
+    <div class="li-body">
+      <div class="row" style="margin-bottom:10px;">
+        <div class="fg fix"><label>Icon</label><div style="display:flex;align-items:center;gap:6px;"><div class="ep" onclick="promptE(this)">🎉</div><input type="text" style="width:55px;" value="🎉"/></div></div>
+        <div class="fg"><label>Bold Label</label><input type="text" placeholder="e.g. Summer Sale"/></div>
+        <div class="fg"><label>Body Text</label><input type="text" placeholder="30% off everything"/></div>
+      </div>
+      <div class="row" style="margin-bottom:0;">
+        <div class="fg fix"><label>Label Color</label><div class="color-r"><input type="color" value="#DC2626"/></div></div>
+        <div class="fg fix"><label>BG Color</label><div class="color-r"><input type="color" value="#FFF7ED"/></div></div>
+        <div class="fg"><label>Deeplink</label><input type="text" placeholder="kkd://…"/></div>
+      </div>
+    </div>
+    <div class="li-act"><button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button></div>
+  </div>`);}
+
+function addCat(){
+  document.getElementById('catList').insertAdjacentHTML('beforeend',`
+  <div class="li">
+    <span class="drag-h">⠿</span>
+    <div class="ep" onclick="promptE(this)">🌿</div>
+    <div class="li-body"><div class="row" style="margin-bottom:0;">
+      <div class="fg"><label>Name (HI)</label><input type="text" placeholder="नई श्रेणी"/></div>
+      <div class="fg"><label>Name (EN)</label><input type="text" placeholder="New Category"/></div>
+      <div class="fg"><label>Link</label><input type="text" placeholder="/categories?cat=new"/></div>
+    </div></div>
+    <div class="li-act" style="padding-top:16px;">
+      <div class="tg on" onclick="this.classList.toggle('on')"></div>
+      <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
+    </div>
+  </div>`);}
+
+function addTask(){
+  document.getElementById('taskList').insertAdjacentHTML('beforeend',`
+  <div class="li">
+    <span class="drag-h">⠿</span>
+    <div class="ep" onclick="promptE(this)" style="font-size:18px;">✅</div>
+    <div class="li-body">
+      <div class="row" style="margin-bottom:8px;">
+        <div class="fg"><label>Title (HI)</label><input type="text" placeholder="नई टास्क"/></div>
+        <div class="fg"><label>Title (EN)</label><input type="text" placeholder="New Task"/></div>
+        <div class="fg fix"><label>Coins</label><input type="number" style="width:80px;" value="10"/></div>
+      </div>
+      <div class="row" style="margin-bottom:0;">
+        <div class="fg"><label>Action Type</label>
+          <select class="s"><option>Enable Notifications</option><option>Enable Location</option><option>Add to Cart</option><option>Search Product</option><option>Add Crop</option><option>Make Purchase</option><option>Rate Product</option><option>Refer Friend</option><option>Custom Deeplink</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="li-act" style="padding-top:16px;">
+      <div class="tg on" onclick="this.classList.toggle('on')"></div>
+      <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
+    </div>
+  </div>`);}
+
+function addFP(btn){const p=PRODS.find(p=>!document.getElementById('fpList').innerHTML.includes(p.n));if(!p)return;const c=document.createElement('span');c.className='pchip';c.innerHTML=`🌱 ${p.n} <span class="x" onclick="this.closest('.pchip').remove()">×</span>`;btn.before(c);}
+function addBS(btn){const p=PRODS.find(p=>!document.getElementById('bsList').innerHTML.includes(p.n));if(!p)return;const c=document.createElement('span');c.className='pchip';c.innerHTML=`⭐ ${p.n} <span class="x" onclick="this.closest('.pchip').remove()">×</span>`;btn.before(c);}
+function addFC(btn){const p=PRODS[Math.floor(Math.random()*PRODS.length)];const c=document.createElement('span');c.className='pchip';c.innerHTML=`🌱 ${p.n} <span class="x" onclick="this.closest('.pchip').remove()">×</span>`;btn.before(c);}
+
+function addBanner(){
+  document.getElementById('bnList').insertAdjacentHTML('beforeend',`
+  <div class="li" style="flex-direction:column;gap:11px;align-items:stretch;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="drag-h">⠿</span>
+      <div class="bimg" style="flex:1;" onclick="this.querySelector('input').click()">🖼️ Click to upload banner<input type="file" accept="image/*" style="display:none;"/></div>
+      <div class="li-act"><div class="tg on" onclick="this.classList.toggle('on')"></div><button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button></div>
+    </div>
+    <div class="row" style="margin-bottom:8px;">
+      <div class="fg"><label>Banner Name</label><input type="text" placeholder="e.g. Monsoon Sale"/></div>
+      <div class="fg"><label>Deeplink</label><input type="text" placeholder="kkd://…"/></div>
+    </div>
+    <div class="row" style="margin-bottom:8px;">
+      <div class="fg fix"><label>Language</label><select class="s"><option>All</option>${LANGS.map(l=>`<option>${l.l}</option>`).join('')}</select></div>
+      <div class="fg"><label>Start</label><input type="datetime-local"/></div>
+      <div class="fg"><label>End</label><input type="datetime-local"/></div>
+    </div>
+    <div><label>Target States</label>${SP(['All States'])}</div>
+  </div>`);}
+
+function addFColl(){
+  document.getElementById('fcList').insertAdjacentHTML('beforeend',`
+  <div class="li" style="flex-direction:column;gap:11px;align-items:stretch;margin-bottom:10px;">
+    <div style="display:flex;align-items:center;gap:8px;"><span class="drag-h">⠿</span><strong style="flex:1;font-size:13px;">New Collection</strong>
+      <div class="tg on" onclick="this.classList.toggle('on')"></div>
+      <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
+    </div>
+    <div class="row" style="margin-bottom:8px;">
+      <div class="fg"><label>Collection Name</label><input type="text" placeholder="e.g. Monsoon Essentials"/></div>
+      <div class="fg fix"><label>Card BG Color</label><div class="color-r"><input type="color" value="#1B6B3A"/></div></div>
+      <div class="fg"><label>Language</label><select class="s"><option>All</option>${LANGS.map(l=>`<option>${l.l}</option>`).join('')}</select></div>
+    </div>
+    <div><label>Products</label><div style="margin-top:5px;">${newPAdd('addFC')}</div></div>
+    <div><label>Target States</label>${SP(['All States'])}</div>
+  </div>`);}
+
+function addWidget(){
+  document.getElementById('wList').insertAdjacentHTML('beforeend',`
+  <div class="wi">
+    <div class="wi-head">
+      <div style="display:flex;align-items:center;gap:7px;min-width:0;">
+        <span style="cursor:grab;color:var(--g300);font-size:17px;">⠿</span>
+        <div class="ep" onclick="promptE(this)" style="font-size:18px;">🆕</div>
+        <span class="wi-title">New Widget</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px;">
+        <div class="tg on" onclick="this.classList.toggle('on')"></div>
+        <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.wi').remove()">🗑️</button>
+      </div>
+    </div>
+    ${LT()}
+    <div class="row" style="margin-bottom:10px;">
+      <div class="fg"><label>Widget Title</label><input type="text" placeholder="e.g. Rate the App"/></div>
+      <div class="fg fix"><label>Reward</label><input type="text" style="width:95px;" placeholder="+10 coins"/></div>
+    </div>
+    <div class="row" style="margin-bottom:10px;">
+      <div class="fg"><label>Type</label>
+        <select class="s"><option>Multi Choice</option><option>Yes / No</option><option>CTA Button</option><option>Star Rating</option><option>Text Input</option></select>
+      </div>
+      <div class="fg"><label>CTA / Options</label><input type="text" placeholder="Button text or comma-separated options"/></div>
+    </div>
+    <div class="fg"><label>Action / Deeplink</label><input type="text" placeholder="deeplink:/path or action_name"/></div>
+  </div>`);}
+
+function addTesti(){
+  document.getElementById('tmList').insertAdjacentHTML('beforeend',`
+  <div class="tc">
+    <div class="tc-thumb" onclick="this.querySelector('input').click()">▶️<input type="file" accept="video/*" style="display:none;"/></div>
+    <div class="tc-body">
+      <div class="row" style="margin-bottom:8px;">
+        <div class="fg"><label>Farmer Name</label><input type="text" placeholder="Suresh Kumar"/></div>
+        <div class="fg"><label>Crop</label><input type="text" placeholder="Wheat"/></div>
+        <div class="fg"><label>Location</label><input type="text" placeholder="Bhopal"/></div>
+      </div>
+      <div class="row" style="margin-bottom:0;">
+        <div class="fg"><label>Caption</label><input type="text" placeholder='"My yield doubled!"'/></div>
+        <div class="fg"><label>Video URL</label><input type="text" placeholder="https://youtube.com/…"/></div>
+      </div>
+    </div>
+    <div class="tc-act">
+      <div class="tg on" onclick="this.classList.toggle('on')"></div>
+      <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.tc').remove()">🗑️</button>
+    </div>
+  </div>`);}
+
+// INIT
+renderList();
+</script>
+</body></html>

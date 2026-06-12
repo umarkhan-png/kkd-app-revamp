@@ -57,6 +57,14 @@
 
   /* Product card · matches home most-selling typography exactly · taller image, name 14px, technical sub 11px, size chip 10.5px, price 17px, MRP-strike 11.5px, h-9 Add */
   .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  /* Slim cross-sell promo injected after every 2 product cards · pushes to another category/subcategory · deliberately short so it doesn't crowd the grid */
+  .cat-promo{grid-column:1/-1;display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:14px;background:linear-gradient(135deg,#ECFDF5,#F0FDF4);border:1px solid #BBF7D0;text-decoration:none;color:#0F172A;box-shadow:0 1px 2px rgba(4,120,87,.05)}
+  .cat-promo:active{transform:scale(.99)}
+  .cat-promo-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .cat-promo-tx{flex:1;min-width:0}
+  .cat-promo-t{display:block;font-size:12.5px;font-weight:800;line-height:1.2}
+  .cat-promo-s{display:block;font-size:10.5px;color:#15803D;font-weight:600;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cat-promo-go{width:26px;height:26px;border-radius:50%;background:#258046;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
   .pcard{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06);transition:transform .15s ease;text-decoration:none;color:#0F172A}
   .pcard:active{transform:scale(.98)}
   .pcard-img{width:100%;height:130px;background:#F8FAFC;display:flex;align-items:center;justify-content:center;position:relative;padding:12px;flex-shrink:0}
@@ -625,6 +633,36 @@
       return out;
     }
 
+    // ----- Inline cross-sell promo (shown after every 2 product cards) -----
+    // Builds a rotating list of OTHER categories + a notable subcategory of each, so the
+    // banner always nudges the user somewhere new without leaving the page.
+    function buildPromos(){
+      const out = [];
+      Object.keys(CATS).forEach(k => {
+        if (k === activeCat) return;
+        const c = CATS[k];
+        const a = c.subs.find(s => s.key === 'all') || c.subs[0];
+        out.push({ cat:k, sub:'all', icon:a.icon, bg:a.bg, title:'Explore ' + c.label, sub2:'See all ' + c.label.toLowerCase() });
+        const n = c.subs.find(s => s.key !== 'all');
+        if (n) out.push({ cat:k, sub:n.key, icon:n.icon, bg:n.bg, title:n.label, sub2:'in ' + c.label });
+      });
+      return out.length ? out : [{ cat:activeCat, sub:'all', icon:'🛒', bg:'#ECFDF5', title:'Browse all products', sub2:'' }];
+    }
+    function promoBanner(p){
+      return '<a class="cat-promo" data-pcat="'+p.cat+'" data-psub="'+(p.sub||'all')+'">'
+        + '<span class="cat-promo-ic" style="background:'+(p.bg||'#ECFDF5')+'">'+p.icon+'</span>'
+        + '<span class="cat-promo-tx"><span class="cat-promo-t">'+p.title+'</span><span class="cat-promo-s">'+(p.sub2||'')+'</span></span>'
+        + '<span class="cat-promo-go"><i class="fa-solid fa-arrow-right"></i></span>'
+        + '</a>';
+    }
+    function pushToCat(cat, sub){
+      activeCat = cat; activeSub = sub || 'all'; recentView = false;
+      document.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === cat ? 'true' : 'false'));
+      if (typeof renderAppliedChips === 'function') renderAppliedChips();
+      const pm = document.getElementById('productMain'); if (pm) pm.scrollTop = 0;
+      renderSubs(); renderProducts();
+    }
+
     function renderProducts(){
       const list = document.getElementById('productList');
       let filtered = recentView ? PRODUCTS.slice(0, 6) : PRODUCTS.filter(p => p.cat === activeCat && (activeSub === 'all' || p.subs.includes(activeSub)));
@@ -634,7 +672,7 @@
         return;
       }
       const rating = (p) => (4.5 + ((p.name.length * 7) % 5) / 10).toFixed(1);
-      list.innerHTML = filtered.map((p, i) => {
+      const cards = filtered.map((p, i) => {
         const id = p.cat + '-' + activeSub + '-' + i;
         const qty = cart.get(id) ? cart.get(id).qty : 0;
         const hasVariants = Array.isArray(p.variants) && p.variants.length > 1;
@@ -658,7 +696,16 @@
             + renderAdd(id, p, qty)
           + '</div>'
           + '</a>';
-      }).join('');
+      });
+      // After every 2 cards, drop in a slim promo to another category/subcategory (no trailing banner after the last row)
+      const promos = buildPromos();
+      let html = '', pk = 0;
+      cards.forEach((c, i) => {
+        html += c;
+        if ((i + 1) % 2 === 0 && i < cards.length - 1) { html += promoBanner(promos[pk % promos.length]); pk++; }
+      });
+      list.innerHTML = html;
+      list.querySelectorAll('.cat-promo').forEach(el => el.addEventListener('click', e => { e.preventDefault(); pushToCat(el.dataset.pcat, el.dataset.psub); }));
       list.querySelectorAll('.padd-action').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault(); e.stopPropagation();

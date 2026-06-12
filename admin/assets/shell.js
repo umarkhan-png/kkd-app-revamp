@@ -149,11 +149,16 @@
     },
     publish() {
       if (global.KKD) global.KKD.clearPending();
-      this.refreshPending();
+      this.refreshPending(); this.refreshPreview();
       this.toast('Published! The app picks this up on next launch — no redeploy.', 'rocket');
     },
     preview() { this.previewApp('home.html'); },
-    saved(msg) { this.toast(msg || 'Saved to draft', 'check'); this.refreshPending(); },
+    saved(msg) { this.toast(msg || 'Saved to draft', 'check'); this.refreshPending(); this.refreshPreview(); },
+
+    // tell any open live-preview iframe to re-render after an edit
+    refreshPreview() {
+      document.querySelectorAll('iframe').forEach(f => { try { f.contentWindow.postMessage('kkd-refresh', '*'); } catch (e) {} });
+    },
 
     // in-portal phone preview of an actual app screen
     previewApp(screen) {
@@ -168,8 +173,11 @@
           <div class="phone"><div class="phone-screen"><iframe id="appPreviewFrame"></iframe></div></div>`;
         document.body.appendChild(scrim); document.body.appendChild(m);
       }
-      document.getElementById('appPreviewFrame').src = '../screens/' + screen;
-      document.getElementById('appPreviewTitle').textContent = 'Live preview · ' + screen;
+      // Home (and home-driven surfaces) use the content-driven live preview that reflects draft edits;
+      // other screens load the real static app screen.
+      const isHome = screen === 'home.html';
+      document.getElementById('appPreviewFrame').src = isHome ? 'live-preview.html' : ('../screens/' + screen);
+      document.getElementById('appPreviewTitle').textContent = isHome ? 'Live preview · Home · reflects your edits' : 'Live preview · ' + screen;
       this.open('appPreview');
     },
 

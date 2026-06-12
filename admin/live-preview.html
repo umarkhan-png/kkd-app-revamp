@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD · Live preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  /* Content-driven render of the app HOME screen, drawn entirely from the
+     portal's draft data (localStorage kkdAdmin.data). Re-renders the moment
+     the portal saves — that's the WYSIWYG link the portal was missing. */
+  *{box-sizing:border-box;font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0;background:#F4FBF6;color:#0F172A}
+  body{font-size:13px;padding-bottom:64px}
+  .pv-bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:6px;padding:6px 10px;background:#0E1A13;color:#fff;font-size:10px}
+  .pv-bar select{margin-left:auto;background:#1E3A2A;color:#fff;border:0;border-radius:6px;font-size:10px;padding:3px 6px;font-family:inherit}
+  .hd{background:linear-gradient(135deg,#258046,#1F7A40);color:#fff;padding:12px 14px 16px}
+  .hd-top{display:flex;align-items:center;gap:8px}
+  .logo{width:30px;height:30px;border-radius:9px;background:#fff;color:#258046;font-weight:900;display:flex;align-items:center;justify-content:center}
+  .greet{font-size:11px;opacity:.9;line-height:1.1}
+  .loc{font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px}
+  .pills{margin-left:auto;display:flex;gap:6px}
+  .pill{background:rgba(255,255,255,.18);border-radius:999px;padding:4px 9px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:4px}
+  .search{margin-top:12px;background:#fff;border-radius:11px;padding:9px 12px;color:#94A3B8;font-size:12px;display:flex;align-items:center;gap:8px}
+  .sec{padding:14px}
+  .sec-h{font-size:13.5px;font-weight:800;margin:0 0 10px;display:flex;align-items:center;gap:6px}
+  .cats{display:flex;gap:12px;overflow-x:auto;padding-bottom:2px}
+  .cat{flex:0 0 auto;text-align:center;width:58px}
+  .cat .ic{width:54px;height:54px;border-radius:50%;background:#ECFDF5;border:1px solid #BBF7D0;color:#258046;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;margin:0 auto 5px}
+  .cat .nm{font-size:10.5px;font-weight:600;line-height:1.1}
+  .banner{height:118px;border-radius:14px;display:flex;align-items:flex-end;padding:12px;color:#fff;font-weight:800;font-size:15px;margin-bottom:10px;box-shadow:0 8px 20px -10px rgba(0,0,0,.4);position:relative;overflow:hidden}
+  .banner .slot{position:absolute;top:9px;right:9px;background:rgba(0,0,0,.3);font-size:9px;font-weight:700;padding:2px 7px;border-radius:6px}
+  .prods{display:flex;gap:10px;overflow-x:auto}
+  .pcard{flex:0 0 130px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden}
+  .pcard .img{height:80px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;color:#94A3B8;font-size:20px}
+  .pcard .b{padding:8px}
+  .pcard .nm{font-size:11px;font-weight:700;line-height:1.2;height:27px;overflow:hidden}
+  .pcard .pr{font-size:12.5px;font-weight:800;color:#258046;margin-top:3px}
+  .deal{background:linear-gradient(135deg,#FFF7ED,#FFFBEB);border:1px solid #FED7AA;border-radius:14px;padding:12px}
+  .deal .timer{background:#0F172A;color:#fff;font-size:11px;font-weight:800;padding:2px 8px;border-radius:6px}
+  .coins{background:#fff;border:1px solid #E5E7EB;border-radius:14px;padding:12px}
+  .step{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid #F1F5F9;font-size:12px}
+  .step:last-child{border-bottom:0}
+  .step .ck{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{background:#ECFDF5;border:1px solid #BBF7D0;color:#258046;border-radius:999px;padding:5px 12px;font-size:11.5px;font-weight:700}
+  .nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #E5E7EB;display:flex;justify-content:space-around;padding:7px 0 9px}
+  .nav div{font-size:9.5px;font-weight:600;color:#94A3B8;text-align:center}
+  .nav div.on{color:#258046}
+  .nav div i{display:block;font-size:15px;margin-bottom:2px}
+  .flash{position:fixed;top:6px;left:6px;background:#258046;color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:6px;z-index:9;opacity:0;transition:opacity .2s}
+  .flash.on{opacity:1}
+</style></head>
+<body>
+  <div class="flash" id="flash"><i class="fa-solid fa-bolt"></i> Updated</div>
+  <div class="pv-bar"><i class="fa-solid fa-mobile-screen-button"></i> Live preview · Home
+    <select id="loc" onchange="render()"><option value="en">EN</option><option value="hi">हिं</option><option value="mr">मरा</option></select>
+  </div>
+  <div id="app"></div>
+
+<script src="assets/data.js"></script>
+<script>
+  const ICONS = { pesticide:'🐛', fungicide:'🍂', fertilizer:'🌱', herbicide:'🌾', combo:'📦', seeds:'🌰' };
+  function strings(d, loc){ const m={}; (d.translations.home||[]).forEach(s=> m[s.key]=(s[loc]&&s[loc].trim())?s[loc]:s.en); return m; }
+  function money(n){ return '₹'+Number(n).toLocaleString('en-IN'); }
+
+  function sectionBlock(s, d, t){
+    if(!s.visible) return '';
+    if(s.type==='banner'){
+      const list=d.banners.filter(b=>b.slot==='home_hero'&&b.status==='active');
+      if(!list.length) return '';
+      return `<div class="sec">${list.map(b=>`<div class="banner" style="background:linear-gradient(135deg,${b.img},${b.img}cc)"><span class="slot">${b.target}</span>${b.title}</div>`).join('')}</div>`;
+    }
+    if(s.type==='category_grid'){
+      const cats=d.categories.filter(c=>c.active);
+      return `<div class="sec"><h3 class="sec-h">${t['home.shop_category']||'Shop by category'}</h3><div class="cats">${cats.map(c=>`<div class="cat"><div class="ic">${ICONS[c.key]||c.name[0]}</div><div class="nm">${c.name}</div></div>`).join('')}</div></div>`;
+    }
+    if(s.type==='product_rail'){
+      const ps=d.products.filter(p=>p.active).slice(0,5);
+      return `<div class="sec"><h3 class="sec-h">${s.title==='Most selling'?(t['home.most_selling']||'Most selling'):s.title}</h3><div class="prods">${ps.map(p=>`<div class="pcard"><div class="img"><i class="fa-solid fa-flask"></i></div><div class="b"><div class="nm">${p.name}</div><div class="pr">${money(p.price)}</div></div></div>`).join('')}</div></div>`;
+    }
+    if(s.type==='deals'){
+      const fd=d.flashDeals.find(f=>f.status==='active');
+      const names=fd? fd.products.map(id=>(d.products.find(p=>p.id===id)||{}).name).filter(Boolean):[];
+      return `<div class="sec"><div class="deal"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span class="sec-h" style="margin:0">⚡ ${s.title}</span><span class="timer" style="margin-left:auto">ends in 8h</span></div>${fd?`<div style="font-size:11.5px;color:#9A3412;font-weight:600">${fd.discount}% off · ${names.join(', ')}</div>`:'<div style="font-size:11.5px;color:#9A3412">No active deal</div>'}</div></div>`;
+    }
+    if(s.type==='coins'){
+      const steps=d.earnSteps||[]; const done=steps.filter(s=>s.done).length;
+      return `<div class="sec"><div class="coins"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="sec-h" style="margin:0">🪙 ${s.title}</span><span style="margin-left:auto;font-size:11px;font-weight:700;color:#64748B">${done} of ${steps.length} done</span></div>${steps.map(st=>`<div class="step"><span class="ck" style="background:${st.done?'#258046':'#F1F5F9'};color:${st.done?'#fff':'#94A3B8'}"><i class="fa-solid fa-${st.done?'check':'plus'}"></i></span><span style="flex:1">${st.label}</span><span style="font-weight:800;color:#258046">+${st.coins}</span></div>`).join('')}</div></div>`;
+    }
+    if(s.type==='crop_picker'){
+      const crops=d.crops.filter(c=>c.active).slice(0,6);
+      return `<div class="sec"><h3 class="sec-h">🌱 ${s.title}</h3><div class="chips">${crops.map(c=>`<span class="chip">${c.name}</span>`).join('')}</div></div>`;
+    }
+    return '';
+  }
+
+  function render(){
+    const d = KKD.load();
+    const loc = document.getElementById('loc').value;
+    const t = strings(d, loc);
+    const greet = (t['home.greeting']||'Hey! {name}').replace('{name}','Sagar');
+    const ph = (d.searchConfig&&d.searchConfig.placeholder) || t['home.search_ph'] || 'Search…';
+    const coins = (d.config.find(c=>c.key==='coins_per_100')||{}).value;
+    const head = `<div class="hd"><div class="hd-top"><div class="logo">K</div>
+        <div><div class="greet">${greet.split('!')[0]||'Hey'}</div><div class="loc">Indore 452001 <i class="fa-solid fa-angle-down" style="font-size:10px"></i></div></div>
+        <div class="pills"><span class="pill"><i class="fa-solid fa-wallet"></i> ₹540</span><span class="pill">🪙 220</span><span class="pill"><i class="fa-solid fa-bell"></i></span></div></div>
+        <div class="search"><i class="fa-solid fa-magnifying-glass"></i> ${ph}</div></div>`;
+    const body = (d.homepage||[]).map(s=>sectionBlock(s,d,t)).join('');
+    const nav = `<div class="nav"><div class="on"><i class="fa-solid fa-house"></i>Home</div><div><i class="fa-solid fa-seedling"></i>Crop</div><div><i class="fa-solid fa-box"></i>Orders</div><div><i class="fa-solid fa-user"></i>Profile</div></div>`;
+    document.getElementById('app').innerHTML = head + body + nav;
+  }
+
+  function ping(){ const f=document.getElementById('flash'); f.classList.add('on'); setTimeout(()=>f.classList.remove('on'),900); }
+  render();
+  // Re-render the instant the portal saves: storage event (other docs) + postMessage from the portal + a light poll fallback.
+  window.addEventListener('storage', e=>{ if(e.key==='kkdAdmin.data'){ render(); ping(); } });
+  window.addEventListener('message', e=>{ if(e.data==='kkd-refresh'){ render(); ping(); } });
+  let last = localStorage.getItem('kkdAdmin.data');
+  setInterval(()=>{ const cur=localStorage.getItem('kkdAdmin.data'); if(cur!==last){ last=cur; render(); ping(); } }, 700);
+</script>
+</body></html>

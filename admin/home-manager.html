@@ -182,6 +182,10 @@ const CROPS=['🍅 Tomato','🌶️ Chilli','🌾 Wheat','🌽 Maize','🧅 Onio
 
 // Reference SECS — used to seed data.homeSections on first load
 const DEFAULT_SECS=[
+  {id:'header',   ic:'🏠', nm:'Header / Top Bar',     sub:'Logo, greeting, location, wallet, coins, bell', on:true},
+  {id:'theme',    ic:'🎨', nm:'Theme & Seasons',      sub:'Green / Rain / Festival + animations', on:true},
+  {id:'statusbanner',ic:'📢', nm:'Top Status Banner', sub:'Rotating rain/offer ticker',     on:true},
+  {id:'search',   ic:'🔍', nm:'Search Bar',           sub:'Placeholder, voice, colors',     on:true},
   {id:'offer',    ic:'🎁', nm:'Offer Strip',         sub:'Header announcement ticker',     on:true},
   {id:'cats',     ic:'🗂️', nm:'Categories',           sub:'Pesticide, Fertilizer…',         on:true},
   {id:'ordstatus',ic:'📦', nm:'Order Status',          sub:'Sticky active order bar',         on:true},
@@ -197,6 +201,8 @@ const DEFAULT_SECS=[
   {id:'testi',    ic:'🎥', nm:'Testimonials',            sub:'Farmer video section',            on:true},
   {id:'mostsell', ic:'🔥', nm:'Most Selling',            sub:'Auto state-wise trending',        on:true},
   {id:'expert',   ic:'💬', nm:'Ask Expert',              sub:'Floating agronomist button',       on:true},
+  {id:'cartfab',  ic:'🛒', nm:'Cart Bar (floating)',     sub:'Sticky view-cart bar',             on:true},
+  {id:'behavior', ic:'⚙️', nm:'Behavior & Animations',   sub:'Timings & scroll effects',         on:true},
 ];
 
 /* ── PERSISTENCE: order + visibility live in data.homeSections ── */
@@ -271,6 +277,177 @@ function newPAdd(fn){return`<span class="padd" onclick="${fn}(this)">+ Add Produ
 ═══════════════════════════════════════════════ */
 const EDITORS={
 
+/* 0a ── HEADER / TOP BAR */
+header:()=>`
+<div class="card">
+  <div class="card-head"><h3>🏠 Header / Top Bar</h3><button class="btn btn-p btn-sm" onclick="save('Header saved')">Save</button></div>
+  <div class="card-body">
+    <div class="sdiv">Logo</div>
+    <div class="row" style="align-items:flex-end;">
+      <div class="fg fix"><label>App Logo</label>
+        <div class="tc-thumb" onclick="this.querySelector('input').click()" style="width:60px;height:60px;font-size:11px;color:var(--g400);text-align:center;">🏠<input type="file" accept="image/*" style="display:none;"/></div>
+      </div>
+      <div class="fg"><label>Current File</label><input type="text" value="../assets/kkd-logo.png"/></div>
+      <div class="fg"><label>Logo Tap Link</label><input type="text" value="home.html"/></div>
+    </div>
+
+    <div class="sdiv">Greeting</div>
+    ${LT()}
+    <div class="row">
+      <div class="fg"><label>Greeting Text</label><input type="text" value="Hey! {name}"/></div>
+    </div>
+    ${TG('hd1',true,'Rotate greeting with Deliver-to','Greeting and address alternate in the same slot')}
+    <div class="row">
+      <div class="fg fix"><label>Rotation interval (sec)</label><input type="number" style="width:120px;" value="5"/></div>
+    </div>
+    <div class="row">
+      <div class="fg"><label>Morning variant</label><input type="text" placeholder="Good morning, {name}"/></div>
+      <div class="fg"><label>Afternoon variant</label><input type="text" placeholder="Good afternoon, {name}"/></div>
+      <div class="fg"><label>Evening variant</label><input type="text" placeholder="Good evening, {name}"/></div>
+    </div>
+
+    <div class="sdiv">Deliver-to Pill</div>
+    <div class="row">
+      <div class="fg"><label>Location Text</label><input type="text" value="Indore 452001"/></div>
+    </div>
+    ${TG('hd2',true,'Tap to switch theme','Tapping the address cycles green → rain → festival')}
+    ${TG('hd3',true,'Show chevron','Down-chevron next to location')}
+
+    <div class="sdiv">Wallet Pill</div>
+    ${TG('hd4',true,'Show wallet pill','Money wallet shortcut in the header')}
+    ${TG('hd5',true,'Show only when balance > 0','Hide the pill when wallet is empty')}
+    <div class="row">
+      <div class="fg fix"><label>Default amount ₹</label><input type="number" style="width:120px;" value="540"/></div>
+      <div class="fg fix"><label>Icon Color</label><div class="color-r"><input type="color" value="#258046"/><span>#258046</span></div></div>
+      <div class="fg"><label>Link</label><input type="text" value="wallet.html"/></div>
+    </div>
+
+    <div class="sdiv">Coins Pill</div>
+    <div class="row">
+      <div class="fg fix"><label>Coins balance</label><input type="number" style="width:120px;" value="220"/></div>
+      <div class="fg fix"><label>Icon Color</label><div class="color-r"><input type="color" value="#D9A441"/><span>#D9A441</span></div></div>
+      <div class="fg"><label>Link</label><input type="text" value="coins-statement.html"/></div>
+    </div>
+
+    <div class="sdiv">Notification Bell</div>
+    ${TG('hd6',true,'Show unread badge','Red count badge on the bell')}
+    <div class="row">
+      <div class="fg fix"><label>Unread count</label><input type="number" style="width:120px;" value="3"/></div>
+      <div class="fg fix"><label>Badge Color</label><div class="color-r"><input type="color" value="#DC2626"/><span>#DC2626</span></div></div>
+      <div class="fg"><label>Link</label><input type="text" value="notifications.html"/></div>
+    </div>
+  </div>
+</div>`,
+
+/* 0b ── THEME & SEASONS */
+theme:()=>`
+<div class="card">
+  <div class="card-head"><h3>🎨 Theme &amp; Seasons</h3><button class="btn btn-p btn-sm" onclick="save('Theme saved')">Save</button></div>
+  <div class="card-body">
+    <div class="row"><div class="fg" style="max-width:260px;"><label>Default Theme</label>
+      <select class="s"><option>Green</option><option>Rain</option><option>Festival</option></select>
+    </div></div>
+
+    <div class="sdiv">Green Theme</div>
+    ${TG('th1',true,'Green theme enabled','Default emerald home gradient')}
+    <div class="row">
+      <div class="fg fix"><label>Emerald Color</label><div class="color-r"><input type="color" value="#258046"/><span>#258046</span></div></div>
+    </div>
+
+    <div class="sdiv">Rain Theme</div>
+    ${TG('th2',true,'Rain theme enabled','Blue monsoon gradient')}
+    <div class="row">
+      <div class="fg fix"><label>Blue Color</label><div class="color-r"><input type="color" value="#2563EB"/><span>#2563EB</span></div></div>
+    </div>
+    ${TG('th3',true,'Rain animation','Falling raindrops over the header')}
+    <div class="row">
+      <div class="fg fix"><label>Raindrop count</label><input type="number" style="width:120px;" value="6"/></div>
+      <div class="fg fix"><label>Speed (sec)</label><input type="number" step="0.1" style="width:120px;" value="1.4"/></div>
+    </div>
+
+    <div class="sdiv">Festival Theme</div>
+    ${TG('th4',true,'Festival theme enabled','Christmas/festive gradient')}
+    <div class="row">
+      <div class="fg fix"><label>Red Color</label><div class="color-r"><input type="color" value="#DC2626"/><span>#DC2626</span></div></div>
+      <div class="fg fix"><label>Green Color</label><div class="color-r"><input type="color" value="#258046"/><span>#258046</span></div></div>
+      <div class="fg fix"><label>Gold Color</label><div class="color-r"><input type="color" value="#D9A441"/><span>#D9A441</span></div></div>
+    </div>
+    ${TG('th5',true,'Snowfall (festival)','Falling snowflakes on the festival theme')}
+    <div class="row">
+      <div class="fg fix"><label>Snowflake count</label><input type="number" style="width:120px;" value="12"/></div>
+      <div class="fg fix"><label>Speed (sec)</label><input type="number" step="0.1" style="width:120px;" value="3.4"/></div>
+    </div>
+
+    <div class="sdiv">General</div>
+    ${TG('th6',true,'Bloom animation on switch','Soft bloom transition when theme changes')}
+    <div class="sch-box" style="margin-top:12px;">
+      <div class="sl">🎉 Festival auto-schedule</div>
+      <div class="row">
+        <div class="fg"><label>Start Date &amp; Time</label><input type="datetime-local" value="2026-12-20T00:00"/></div>
+        <div class="fg"><label>End Date &amp; Time</label><input type="datetime-local" value="2026-12-26T23:59"/></div>
+      </div>
+    </div>
+    ${TG('th7',true,'Tap Deliver-to to switch theme','Address tap cycles through enabled themes')}
+  </div>
+</div>`,
+
+/* 0c ── TOP STATUS BANNER */
+statusbanner:()=>`
+<div class="card">
+  <div class="card-head"><h3>📢 Top Status Banner</h3><button class="btn btn-p btn-sm" onclick="save('Status banner saved')">Save</button></div>
+  <div class="card-body">
+    ${TG('sb1',true,'Show status banner','Rotating ticker above the search bar')}
+    <div class="row" style="margin-top:12px;">
+      <div class="fg fix"><label>Rotation interval (sec)</label><input type="number" style="width:140px;" value="4"/></div>
+    </div>
+    <div class="sdiv">Variants (rotate in order)</div>
+    ${LT()}
+    <div id="sbList">
+      ${[
+        {ic:'⛅',bold:'Rain expected',body:'8 mm in 24 hrs · Hold spray for today',tc:'#1E40AF',iconc:'#2563EB',link:'shop.html?weather=rain'},
+        {ic:'🎁',bold:'Christmas offer',body:'20% off + free gift on ₹999+',tc:'#7F1D1D',iconc:'#DC2626',link:'shop.html'},
+      ].map(v=>`
+      <div class="li">
+        <span class="drag-h">⠿</span>
+        <div class="li-body">
+          <div class="row" style="margin-bottom:10px;">
+            <div class="fg fix"><label>Icon</label><div style="display:flex;align-items:center;gap:6px;"><div class="ep" onclick="promptE(this)">${v.ic}</div><input type="text" style="width:55px;" value="${v.ic}"/></div></div>
+            <div class="fg"><label>Bold Label</label><input type="text" value="${v.bold}"/></div>
+            <div class="fg"><label>Body Text</label><input type="text" value="${v.body}"/></div>
+          </div>
+          <div class="row" style="margin-bottom:0;">
+            <div class="fg fix"><label>Text Color</label><div class="color-r"><input type="color" value="${v.tc}"/><span>${v.tc}</span></div></div>
+            <div class="fg fix"><label>Icon Color</label><div class="color-r"><input type="color" value="${v.iconc}"/><span>${v.iconc}</span></div></div>
+            <div class="fg"><label>Deeplink / URL</label><input type="text" value="${v.link}"/></div>
+          </div>
+        </div>
+        <div class="li-act" style="padding-top:16px;">
+          <div class="tg on" onclick="this.classList.toggle('on')"></div>
+          <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
+        </div>
+      </div>`).join('')}
+    </div>
+    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addStatusVariant()">+ Add Variant</button>
+  </div>
+</div>`,
+
+/* 0d ── SEARCH BAR */
+search:()=>`
+<div class="card">
+  <div class="card-head"><h3>🔍 Search Bar</h3><button class="btn btn-p btn-sm" onclick="save('Search bar saved')">Save</button></div>
+  <div class="card-body">
+    ${LT()}
+    <div class="row">
+      <div class="fg"><label>Placeholder</label><input type="text" value="Search products, pests, crops"/></div>
+      <div class="fg"><label>Tap Target</label><input type="text" value="search.html"/></div>
+    </div>
+    ${TG('se1',true,'Show voice search','Microphone shortcut inside the search bar')}
+    <div class="row" style="margin-top:12px;">
+      <div class="fg fix"><label>BG Color</label><div class="color-r"><input type="color" value="#F1F5F9"/><span>#F1F5F9</span></div></div>
+    </div>
+  </div>
+</div>`,
+
 /* 1 ── OFFER STRIP */
 offer:()=>`
 <div class="card">
@@ -344,14 +521,29 @@ ordstatus:()=>`
     <div class="row"><div class="fg" style="max-width:260px;"><label>Show After</label>
       <select class="s"><option>Categories</option><option>Offer Strip</option><option>Search Bar</option></select>
     </div></div>
+    <div class="sdiv">Order Details</div>
+    <div class="row">
+      <div class="fg"><label>Order ID Template</label><input type="text" value="#KKD-{id}"/></div>
+      <div class="fg fix"><label>Status Color</label><div class="color-r"><input type="color" value="#258046"/><span>#258046</span></div></div>
+    </div>
     <div class="sdiv">Status Labels</div>
     ${LT()}
     <div class="row">
-      <div class="fg"><label>Out for Delivery</label><input type="text" value="OUT FOR DELIVERY"/></div>
+      <div class="fg"><label>Status Label</label><input type="text" value="Out for Delivery"/></div>
       <div class="fg"><label>Track Button</label><input type="text" value="Track →"/></div>
-      <div class="fg"><label>Packed</label><input type="text" value="Packed"/></div>
-      <div class="fg"><label>Delivered</label><input type="text" value="Delivered"/></div>
+      <div class="fg"><label>ETA Template</label><input type="text" value="Arriving today by 5:00 PM" placeholder="Arriving {time}"/></div>
     </div>
+    <div class="sdiv">Progress Stages</div>
+    <div class="row">
+      <div class="fg"><label>Stage 1</label><input type="text" value="Placed"/></div>
+      <div class="fg"><label>Stage 2</label><input type="text" value="Packed"/></div>
+      <div class="fg"><label>Stage 3</label><input type="text" value="Out"/></div>
+      <div class="fg"><label>Stage 4</label><input type="text" value="Delivered"/></div>
+      <div class="fg fix"><label>Active Stage Color</label><div class="color-r"><input type="color" value="#258046"/><span>#258046</span></div></div>
+    </div>
+    ${TG('os3',true,'Show pagination dots','Carousel position dots below the card')}
+    ${TG('os4',false,'Multi-order carousel','Swipe between multiple active orders')}
+    ${TG('os5',true,'Show product thumbnails','Item images inside the order card')}
   </div>
 </div>`,
 
@@ -708,22 +900,89 @@ expert:()=>`
   <div class="card-body">
     ${TG('ae1',true,'Show Floating Button','Agronomist bubble on home page')}
     <div style="margin-top:14px;"></div>
+    <div class="row" style="align-items:flex-end;">
+      <div class="fg fix"><label>Expert Photo</label>
+        <div class="tc-thumb" onclick="this.querySelector('input').click()" style="width:60px;height:60px;font-size:11px;color:var(--g400);text-align:center;">👤<input type="file" accept="image/*" style="display:none;"/></div>
+      </div>
+      <div class="fg"><label>Current File</label><input type="text" value="../assets/expert.png"/></div>
+    </div>
     ${LT()}
     <div class="row">
       <div class="fg"><label>Button Label</label><input type="text" value="Ask Expert"/></div>
       <div class="fg"><label>Sub-label</label><input type="text" value="Free agronomist call"/></div>
     </div>
     <div class="row">
-      <div class="fg"><label>Deeplink / Action</label><input type="text" value="kkd://expert/call"/></div>
-      <div class="fg"><label>Expert Photo</label><button class="btn btn-s btn-sm" style="margin-top:4px;">Upload Photo</button></div>
+      <div class="fg"><label>Deeplink / Action</label><input type="text" value="help.html"/></div>
     </div>
-    ${TG('ae2',true,'Show Video Call Icon','Red camera icon on button')}
+    ${TG('ae2',true,'Show video badge','Red camera icon on the button')}
+    ${TG('ae3',true,'Compact on scroll','Shrinks to a tight pill while scrolling')}
+    ${TG('ae4',true,'Pulse animation','Soft attention pulse on the button')}
+  </div>
+</div>`,
+
+/* 16 ── CART BAR (FLOATING) */
+cartfab:()=>`
+<div class="card">
+  <div class="card-head"><h3>🛒 Cart Bar — Floating</h3><button class="btn btn-p btn-sm" onclick="save('Cart bar saved')">Save</button></div>
+  <div class="card-body">
+    ${LT()}
+    <div class="row">
+      <div class="fg"><label>View Cart Label</label><input type="text" value="View cart"/></div>
+      <div class="fg"><label>Item Label</label><input type="text" value="item"/></div>
+      <div class="fg"><label>Savings Prefix</label><input type="text" value="Save ₹"/></div>
+    </div>
+    <div class="row">
+      <div class="fg fix"><label>BG Color</label><div class="color-r"><input type="color" value="#0F172A"/><span>#0F172A</span></div></div>
+      <div class="fg fix"><label>Savings / Accent Color</label><div class="color-r"><input type="color" value="#34D399"/><span>#34D399</span></div></div>
+      <div class="fg"><label>Link</label><input type="text" value="cart.html"/></div>
+    </div>
+    ${TG('cf1',true,'Compact on scroll','Shrinks to a centered pill while scrolling')}
+  </div>
+</div>`,
+
+/* 17 ── BEHAVIOR & ANIMATIONS */
+behavior:()=>`
+<div class="card">
+  <div class="card-head"><h3>⚙️ Behavior &amp; Animations</h3><button class="btn btn-p btn-sm" onclick="save('Behavior saved')">Save</button></div>
+  <div class="card-body">
+    <div class="sdiv">Timings</div>
+    <div class="row">
+      <div class="fg fix"><label>Greeting rotation (sec)</label><input type="number" step="0.1" style="width:150px;" value="5"/></div>
+      <div class="fg fix"><label>Status banner rotation (sec)</label><input type="number" step="0.1" style="width:170px;" value="4"/></div>
+      <div class="fg fix"><label>FAB pulse (sec)</label><input type="number" step="0.1" style="width:130px;" value="2.8"/></div>
+    </div>
+    <div class="sdiv">Scroll Effects</div>
+    ${TG('bh1',true,'Categories shrink on scroll','Category row compacts as the page scrolls')}
+    ${TG('bh2',true,'Ask-Expert lifts above cart bar','FAB moves up so it clears the cart bar')}
+    ${TG('bh3',true,'Ask-Expert expands at end of page','FAB returns to full pill near the page bottom')}
   </div>
 </div>`,
 
 };/* end EDITORS */
 
 /* ── ADD FUNCTIONS ── */
+function addStatusVariant(){
+  document.getElementById('sbList').insertAdjacentHTML('beforeend',`
+  <div class="li">
+    <span class="drag-h">⠿</span>
+    <div class="li-body">
+      <div class="row" style="margin-bottom:10px;">
+        <div class="fg fix"><label>Icon</label><div style="display:flex;align-items:center;gap:6px;"><div class="ep" onclick="promptE(this)">📢</div><input type="text" style="width:55px;" value="📢"/></div></div>
+        <div class="fg"><label>Bold Label</label><input type="text" placeholder="e.g. Heatwave alert"/></div>
+        <div class="fg"><label>Body Text</label><input type="text" placeholder="Irrigate early morning"/></div>
+      </div>
+      <div class="row" style="margin-bottom:0;">
+        <div class="fg fix"><label>Text Color</label><div class="color-r"><input type="color" value="#1E40AF"/></div></div>
+        <div class="fg fix"><label>Icon Color</label><div class="color-r"><input type="color" value="#2563EB"/></div></div>
+        <div class="fg"><label>Deeplink / URL</label><input type="text" placeholder="shop.html"/></div>
+      </div>
+    </div>
+    <div class="li-act" style="padding-top:16px;">
+      <div class="tg on" onclick="this.classList.toggle('on')"></div>
+      <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
+    </div>
+  </div>`);}
+
 function addOffer(){
   document.getElementById('ofList').insertAdjacentHTML('beforeend',`
   <div class="li">

@@ -304,11 +304,11 @@
       <!-- Wallet balance pill · shown only when the money wallet has a balance -->
       <a href="wallet.html" id="walletPill" class="flex items-center gap-1.5 h-10 px-2.5 rounded-full" style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgba(15,23,42,0.04);text-decoration:none">
         <i class="fa-solid fa-wallet text-[13px]" style="color:#258046"></i>
-        <span class="text-[14px] font-extrabold tnum" style="color:#0F172A">&#8377;<span id="walletAmt">540</span></span>
+        <span class="text-[14px] font-semibold tnum" style="color:#0F172A">&#8377;<span id="walletAmt">540</span></span>
       </a>
       <a href="coins-statement.html" id="coinPill" class="flex items-center gap-1.5 h-10 px-2.5 rounded-full relative" style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgba(15,23,42,0.04);text-decoration:none;transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .35s ease,border-color .35s ease">
         <i id="coinIcon" class="fa-solid fa-coins text-[14px]" style="color:#D9A441;transition:transform .35s cubic-bezier(.34,1.56,.64,1)"></i>
-        <span id="coinBalance" class="text-[14px] font-extrabold tnum" style="color:#0F172A">220</span>
+        <span id="coinBalance" class="text-[14px] font-semibold tnum" style="color:#0F172A">220</span>
       </a>
       <!-- Notification shortcut · 40px circular button next to the coin pill · unread badge floats top-right when there are unseen notifs -->
       <a href="notifications.html" id="notifBtn" class="relative w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgba(15,23,42,0.04);text-decoration:none" aria-label="Notifications">
@@ -593,7 +593,7 @@
               <i class="fa-solid fa-coins text-[19px]" style="color:#FFFFFF"></i>
             </div>
             <div class="flex-1 leading-tight min-w-0">
-              <div class="text-[15.5px] font-extrabold" style="color:#0F172A">Complete 5 quick steps</div>
+              <div class="text-[15.5px] font-semibold" style="color:#0F172A">Complete 5 quick steps</div>
               <div class="text-[11.5px] font-semibold mt-0.5" style="color:#64748B">Earn up to <span style="color:#258046;font-weight:800"><span id="questMaxCoins">95</span> coins</span></div>
             </div>
             <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-extrabold flex-shrink-0" style="background:#258046;color:#FFFFFF;box-shadow:0 4px 10px -3px rgba(5,150,105,0.45)">View all <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i></span>
@@ -616,7 +616,7 @@
               <i class="fa-solid fa-wallet text-[18px]" style="color:#FFFFFF"></i>
             </div>
             <div class="flex-1 leading-tight min-w-0">
-              <div class="text-[15.5px] font-extrabold truncate" style="color:#0F172A">Use your <span id="obWalletAmt">270</span> coins</div>
+              <div class="text-[15.5px] font-semibold truncate" style="color:#0F172A">Use your <span id="obWalletAmt">270</span> coins</div>
               <div class="text-[11px] font-semibold mt-0.5 truncate" style="color:#64748B">Apply at checkout for instant savings</div>
             </div>
             <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-extrabold flex-shrink-0" style="background:#258046;color:#FFFFFF;box-shadow:0 3px 8px -2px rgba(5,150,105,0.4)">
@@ -635,7 +635,7 @@
           <div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div>
           <div class="flex items-center justify-between">
             <div class="leading-tight">
-              <div class="text-[17px] font-extrabold text-[#0F172A]">Complete steps to earn krishi coin</div>
+              <div class="text-[17px] font-bold text-[#0F172A]">Complete steps to earn krishi coin</div>
             </div>
             <button id="questClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[14px]" style="color:#475569"></i></button>
           </div>
@@ -668,11 +668,11 @@
           <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-[12px] font-extrabold tracking-[0.12em] text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%);box-shadow:0 4px 10px -2px rgba(5,150,105,0.5)">⚡ FLASH DEALS</span>
           <!-- Countdown clock: 3 separate dark tiles for H : M : S with amber digits + glow -->
           <div class="flex items-center gap-1">
-            <span class="px-2 py-1.5 rounded-md tnum text-[14px] font-extrabold leading-none" id="flashTimerH" style="background:#0F172A;color:#FBBF24;min-width:34px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">02</span>
-            <span class="text-[14px] font-extrabold" style="color:#0F172A">:</span>
-            <span class="px-2 py-1.5 rounded-md tnum text-[14px] font-extrabold leading-none" id="flashTimerM" style="background:#0F172A;color:#FBBF24;min-width:34px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">14</span>
-            <span class="text-[14px] font-extrabold" style="color:#0F172A">:</span>
-            <span class="px-2 py-1.5 rounded-md tnum text-[14px] font-extrabold leading-none" id="flashTimerS" style="background:#0F172A;color:#FBBF24;min-width:34px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">38</span>
+            <span class="px-2 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerH" style="background:#0F172A;color:#FBBF24;min-width:34px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">02</span>
+            <span class="text-[14px] font-semibold" style="color:#0F172A">:</span>
+            <span class="px-2 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerM" style="background:#0F172A;color:#FBBF24;min-width:34px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">14</span>
+            <span class="text-[14px] font-semibold" style="color:#0F172A">:</span>
+            <span class="px-2 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerS" style="background:#0F172A;color:#FBBF24;min-width:34px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">38</span>
           </div>
         </div>
 
@@ -689,12 +689,12 @@
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
                   <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full object-contain"/>
-                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-bold bg-white" style="border:1.5px solid #258046;color:#258046;line-height:1" aria-label="Add to cart">+</button>
+                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-extrabold bg-white" style="border:1.5px solid #258046;color:#258046;line-height:1" aria-label="Add to cart">+</button>
                 </div>
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
                 <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mb-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
-                <div class="text-[14.5px] font-bold leading-tight text-[#0F172A]">Chakrawarti ZC</div>
+                <div class="text-[14.5px] font-semibold leading-tight text-[#0F172A]">Chakrawarti ZC</div>
                 <div class="text-[11.5px] mt-1 truncate" style="color:#94A3B8">Chloran. + Lambda-Cy.</div>
                 <div class="flex items-baseline gap-2 mt-2">
                   <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[13.5px] font-extrabold" style="background:#FBBF24;color:#0F172A">
@@ -714,12 +714,12 @@
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
                   <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/>
-                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-bold bg-white" style="border:1.5px solid #258046;color:#258046;line-height:1" aria-label="Add to cart">+</button>
+                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-extrabold bg-white" style="border:1.5px solid #258046;color:#258046;line-height:1" aria-label="Add to cart">+</button>
                 </div>
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
                 <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mb-1.5" style="background:#F1F5F9;color:#475569">1 L</div>
-                <div class="text-[14.5px] font-bold leading-tight text-[#0F172A]">Humic + Fulvic 98</div>
+                <div class="text-[14.5px] font-semibold leading-tight text-[#0F172A]">Humic + Fulvic 98</div>
                 <div class="text-[11.5px] mt-1 truncate" style="color:#94A3B8">Humic 12% + Fulvic 8%</div>
                 <div class="flex items-baseline gap-2 mt-2">
                   <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[13.5px] font-extrabold" style="background:#FBBF24;color:#0F172A">
@@ -739,12 +739,12 @@
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
                   <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend max-h-full object-contain"/>
-                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-bold bg-white" style="border:1.5px solid #258046;color:#258046;line-height:1" aria-label="Add to cart">+</button>
+                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-extrabold bg-white" style="border:1.5px solid #258046;color:#258046;line-height:1" aria-label="Add to cart">+</button>
                 </div>
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
                 <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mb-1.5" style="background:#F1F5F9;color:#475569">1 kg</div>
-                <div class="text-[14.5px] font-bold leading-tight text-[#0F172A]">NPK 19-19-19</div>
+                <div class="text-[14.5px] font-semibold leading-tight text-[#0F172A]">NPK 19-19-19</div>
                 <div class="text-[11.5px] mt-1 truncate" style="color:#94A3B8">N 19 · P 19 · K 19</div>
                 <div class="flex items-baseline gap-2 mt-2">
                   <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[13.5px] font-extrabold" style="background:#FBBF24;color:#0F172A">
@@ -764,12 +764,12 @@
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
                   <img src="https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp" class="img-blend max-h-full object-contain"/>
-                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-bold bg-white" style="border:1.5px solid #258046;color:#258046;line-height:1" aria-label="Add to cart">+</button>
+                  <button class="flash-add absolute bottom-1.5 right-1.5 w-8 h-8 rounded-md flex items-center justify-center text-[20px] font-extrabold bg-white" style="border:1.5px solid #258046;color:#258046;line-height:1" aria-label="Add to cart">+</button>
                 </div>
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
                 <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mb-1.5" style="background:#F1F5F9;color:#475569">Combo</div>
-                <div class="text-[14.5px] font-bold leading-tight text-[#0F172A]">Triple Attack</div>
+                <div class="text-[14.5px] font-semibold leading-tight text-[#0F172A]">Triple Attack</div>
                 <div class="text-[11.5px] mt-1 truncate" style="color:#94A3B8">Imida + Mancozeb + NPK</div>
                 <div class="flex items-baseline gap-2 mt-2">
                   <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[13.5px] font-extrabold" style="background:#FBBF24;color:#0F172A">
@@ -884,7 +884,7 @@
         <div class="px-4 py-3 flex items-center justify-between" style="background:#FFFFFF">
           <div class="flex items-center gap-1.5">
             <span class="text-[18px] leading-none">🌾</span>
-            <span class="text-[16px] text-[#0F172A] font-extrabold tracking-tight">Select your crop</span>
+            <span class="text-[16px] text-[#0F172A] font-bold tracking-tight">Select your crop</span>
           </div>
           <button id="addCropBtn_legacy" class="flex items-center gap-1 text-[12.5px] font-bold px-2.5 py-1 rounded-full" style="color:#258046;background:#ECFDF5;border:1px solid #BBF7D0">
             <i class="fa-solid fa-plus text-[10px]"></i>
@@ -982,7 +982,7 @@
               </div>
               <div class="text-[10.5px] text-[#64748B] mt-1">100ml · Insecticide</div>
               <div class="flex items-baseline gap-1 mt-1.5 flex-wrap">
-                <span class="text-[16px] font-extrabold tnum text-[#0F172A]">₹358</span>
+                <span class="text-[16px] font-bold tnum text-[#0F172A]">₹358</span>
                 <span class="text-[11px] text-[#94A3B8] line-through tnum">₹495</span>
                 <span class="text-[10px] font-extrabold" style="color:#258046">28% off</span>
               </div>
@@ -1001,7 +1001,7 @@
               </div>
               <div class="text-[10.5px] text-[#64748B] mt-1">100ml · Viricide</div>
               <div class="flex items-baseline gap-1 mt-1.5">
-                <span class="text-[16px] font-extrabold tnum text-[#0F172A]">₹327</span>
+                <span class="text-[16px] font-bold tnum text-[#0F172A]">₹327</span>
               </div>
               <button class="w-full mt-2 h-8 rounded-lg bg-emerald-600 text-white text-[12px] font-semibold">Add</button>
             </a>
@@ -1018,7 +1018,7 @@
               </div>
               <div class="text-[10.5px] text-[#64748B] mt-1">1kg · Fertilizer</div>
               <div class="flex items-baseline gap-1 mt-1.5 flex-wrap">
-                <span class="text-[16px] font-extrabold tnum text-[#0F172A]">₹289</span>
+                <span class="text-[16px] font-bold tnum text-[#0F172A]">₹289</span>
                 <span class="text-[11px] text-[#94A3B8] line-through tnum">₹340</span>
                 <span class="text-[10px] font-extrabold" style="color:#258046">15% off</span>
               </div>
@@ -1037,7 +1037,7 @@
               </div>
               <div class="text-[10.5px] text-[#64748B] mt-1">Combo · 3-in-1</div>
               <div class="flex items-baseline gap-1 mt-1.5 flex-wrap">
-                <span class="text-[16px] font-extrabold tnum text-[#0F172A]">₹712</span>
+                <span class="text-[16px] font-bold tnum text-[#0F172A]">₹712</span>
                 <span class="text-[11px] text-[#94A3B8] line-through tnum">₹910</span>
                 <span class="text-[10px] font-extrabold" style="color:#258046">22% off</span>
               </div>
@@ -1063,7 +1063,7 @@
         <div class="absolute -bottom-4 -left-2 text-[70px] leading-none pointer-events-none select-none" style="color:rgba(5,150,105,0.06);transform:rotate(-15deg)">🌾</div>
         <!-- Header — wordmark only (subtitle dropped per spec) -->
         <div class="relative px-4 pt-4 pb-2">
-          <div class="text-[16px] text-[#0F172A] font-extrabold tracking-tight">Shop by Crop</div>
+          <div class="text-[16px] text-[#0F172A] font-bold tracking-tight">Shop by Crop</div>
         </div>
 
         <!-- Inline scrollable chip picker — populated by JS from CROP_META · "More" chip pinned at end for the full 20+ crop catalog -->
@@ -1100,7 +1100,7 @@
 
         <!-- "View Products" CTA — disabled-looking when 0 crops selected, vivid emerald + pulse when one or more is selected -->
         <div class="relative px-4 pb-4">
-          <a id="cropViewMore" href="shop.html" class="nu flex items-center justify-center gap-1.5 rounded-xl py-3 text-[14px] font-extrabold transition-all" style="background:#FFFFFF;color:#94A3B8;border:1.5px dashed #CBD5E1">
+          <a id="cropViewMore" href="shop.html" class="nu flex items-center justify-center gap-1.5 rounded-xl py-3 text-[14px] font-semibold transition-all" style="background:#FFFFFF;color:#94A3B8;border:1.5px dashed #CBD5E1">
             <span id="cropCtaLabel">Select crop above to view products</span>
             <i class="fa-solid fa-arrow-right text-[11px]"></i>
           </a>
@@ -1125,7 +1125,7 @@
     <!-- Bestsellers (moved up — first section under categories) -->
     <section class="px-4 pt-5">
       <div class="flex items-baseline justify-between mb-4">
-        <h2 class="text-[21px] font-bold tracking-tight">Bestsellers</h2>
+        <h2 class="text-[21px] font-extrabold tracking-tight">Bestsellers</h2>
         <a href="shop.html?sort=bestsellers" class="nu text-[13px] font-semibold" style="color:#258046">See all</a>
       </div>
       <div class="grid grid-cols-2 gap-3">
@@ -1149,7 +1149,7 @@
           </div>
           <div class="p-2.5">
             <div class="leading-tight">
-              <div class="text-[14.5px] font-bold text-[#0F172A] truncate">Humic + Fulvic 98</div>
+              <div class="text-[14.5px] font-semibold text-[#0F172A] truncate">Humic + Fulvic 98</div>
               <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Humic 12% + Fulvic 8%</div>
             </div>
             <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
@@ -1157,7 +1157,7 @@
               <span class="text-[11px] font-medium" style="color:#DC2626">6 left</span>
             </div>
             <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
-              <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹210</span>
+              <span class="text-[18px] font-bold tnum text-[#0F172A]">₹210</span>
               <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹290</span>
               <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
             </div>
@@ -1185,7 +1185,7 @@
           </div>
           <div class="p-2.5">
             <div class="leading-tight">
-              <div class="text-[14.5px] font-bold text-[#0F172A] truncate">Chakrawarti ZC</div>
+              <div class="text-[14.5px] font-semibold text-[#0F172A] truncate">Chakrawarti ZC</div>
               <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Chloran. + Lambda-Cy. ZC</div>
             </div>
             <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
@@ -1193,7 +1193,7 @@
               <span class="text-[11px] font-medium" style="color:#DC2626">4 left</span>
             </div>
             <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
-              <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹358</span>
+              <span class="text-[18px] font-bold tnum text-[#0F172A]">₹358</span>
               <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹495</span>
               <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
             </div>
@@ -1215,12 +1215,12 @@
           </div>
           <div class="p-2.5">
             <div class="leading-tight">
-              <div class="text-[14.5px] font-bold text-[#0F172A] truncate">Chakraveer 18.5%</div>
+              <div class="text-[14.5px] font-semibold text-[#0F172A] truncate">Chakraveer 18.5%</div>
               <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Chlorantraniliprole 18.5% SC</div>
             </div>
             <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
             <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
-              <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹440</span>
+              <span class="text-[18px] font-bold tnum text-[#0F172A]">₹440</span>
               <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹610</span>
               <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
             </div>
@@ -1228,7 +1228,7 @@
               <button class="qty-add w-full h-8 rounded-lg text-white text-[12.5px] font-semibold" style="background:#258046">Add</button>
               <div class="qty-steps w-full h-8 rounded-lg text-white items-center justify-between px-1" style="background:#258046;display:none">
                 <button class="qty-dec w-8 h-8 flex items-center justify-center text-[18px] font-bold">−</button>
-                <span class="qty-val text-[14px] font-bold tnum">1</span>
+                <span class="qty-val text-[14px] font-semibold tnum">1</span>
                 <button class="qty-inc w-8 h-8 flex items-center justify-center text-[18px] font-bold">+</button>
               </div>
             </div>
@@ -1247,18 +1247,18 @@
           </div>
           <div class="p-2.5">
             <div class="leading-tight">
-              <div class="text-[14.5px] font-bold text-[#0F172A] truncate">Antivirus</div>
+              <div class="text-[14.5px] font-semibold text-[#0F172A] truncate">Antivirus</div>
               <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Anti-viral biostimulant</div>
             </div>
             <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
             <div class="flex items-baseline gap-1.5 mt-1.5">
-              <span class="text-[18px] font-extrabold tnum text-[#0F172A]">₹327</span>
+              <span class="text-[18px] font-bold tnum text-[#0F172A]">₹327</span>
             </div>
             <div class="mt-2 qty-wrap">
               <button class="qty-add w-full h-8 rounded-lg text-white text-[12.5px] font-semibold" style="background:#258046">Add</button>
               <div class="qty-steps w-full h-8 rounded-lg text-white items-center justify-between px-1" style="background:#258046;display:none">
                 <button class="qty-dec w-8 h-8 flex items-center justify-center text-[18px] font-bold">−</button>
-                <span class="qty-val text-[14px] font-bold tnum">1</span>
+                <span class="qty-val text-[14px] font-semibold tnum">1</span>
                 <button class="qty-inc w-8 h-8 flex items-center justify-center text-[18px] font-bold">+</button>
               </div>
             </div>
@@ -1271,7 +1271,7 @@
     <!-- Recently viewed · light-purple full-bleed section · cards match the Bestseller product-card style -->
     <section class="mt-8 py-4" style="background:#F3F1FF">
       <div class="px-4 mb-3 flex items-baseline justify-between">
-        <h2 class="text-[21px] font-bold tracking-tight">Recently viewed</h2>
+        <h2 class="text-[21px] font-extrabold tracking-tight">Recently viewed</h2>
         <a href="shop.html?view=recent" class="nu text-[13px] font-semibold" style="color:#258046">See all</a>
       </div>
       <style>
@@ -1305,7 +1305,7 @@
     <!-- Buy again · individual PRODUCT tiles (one product per card) · horizontally scrollable · clean white product-card chrome per the design system, with a single Reorder/Buy-again action -->
     <section class="mt-8">
       <div class="px-4 mb-3 flex items-baseline justify-between">
-        <h2 class="text-[21px] font-bold tracking-tight">Buy again</h2>
+        <h2 class="text-[21px] font-extrabold tracking-tight">Buy again</h2>
         <a href="orders.html" class="nu text-[12px] font-extrabold" style="color:#258046;text-decoration:none">SEE ALL</a>
       </div>
       <style>
@@ -1528,7 +1528,7 @@
           <div class="flex items-center gap-2 text-white">
             <span class="text-[22px]" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25))">🎉</span>
             <i class="fa-solid fa-circle-check text-[22px]" style="color:#FFFFFF"></i>
-            <span class="text-[15px] font-extrabold">+20 coins earned!</span>
+            <span class="text-[15px] font-semibold">+20 coins earned!</span>
             <span class="text-[22px]" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25))">🪙</span>
           </div>
         </div>
@@ -1693,7 +1693,7 @@
     <div id="engTestiModal" class="eng-modal">
       <div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 0"></div>
       <div class="mt-4 leading-tight">
-        <div class="text-[18px] font-extrabold text-[#0F172A]">Share your success story</div>
+        <div class="text-[18px] font-bold text-[#0F172A]">Share your success story</div>
         <div class="text-[11.5px] mt-0.5" style="color:#64748B">Tell other farmers how KKD helped · earn <b style="color:#B45309">+30 coins</b></div>
       </div>
       <div class="mt-3 text-[11px] font-extrabold uppercase tracking-wider" style="color:#64748B">Which product / crop?</div>
@@ -1702,7 +1702,7 @@
       <textarea id="engTestiText" placeholder="What result did you see? How many days? Any tips for other farmers…" class="w-full mt-1.5 rounded-[10px] text-[12.5px] outline-none" style="border:1px solid #E5E7EB;background:#FAFAFA;padding:10px 12px;min-height:74px;resize:none;font-family:inherit;color:#0F172A"></textarea>
       <div><label class="eng-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input type="file" accept="image/*,video/*" capture="environment" multiple id="engTestiMedia" style="display:none"/></label></div>
       <div class="eng-attach-info" id="engTestiAttachInfo"></div>
-      <button id="engTestiSubmit" class="w-full h-[50px] mt-3 rounded-[12px] text-white text-[14.5px] font-extrabold" style="background:#258046;border:0;opacity:.55" disabled><i class="fa-solid fa-paper-plane text-[12px]"></i> Submit story &amp; earn +30</button>
+      <button id="engTestiSubmit" class="w-full h-[50px] mt-3 rounded-[12px] text-white text-[14.5px] font-semibold" style="background:#258046;border:0;opacity:.55" disabled><i class="fa-solid fa-paper-plane text-[12px]"></i> Submit story &amp; earn +30</button>
     </div>
 
     <!-- Rate & review bottom modal -->
@@ -1712,7 +1712,7 @@
       <div class="flex items-center gap-3 mt-4">
         <div class="w-12 h-12 rounded-[12px] flex items-center justify-center flex-shrink-0" style="background:#F8FAFC;border:1px solid #E5E7EB;padding:6px"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="max-h-full object-contain"/></div>
         <div class="leading-tight">
-          <div class="text-[15px] font-extrabold text-[#0F172A]">Humic + Fulvic</div>
+          <div class="text-[15px] font-semibold text-[#0F172A]">Humic + Fulvic</div>
           <div class="text-[11.5px]" style="color:#64748B">From your order on 10 Apr</div>
         </div>
       </div>
@@ -1726,7 +1726,7 @@
       <textarea id="engRateText" placeholder="Write a quick review (optional)…" class="w-full rounded-[10px] text-[12.5px] outline-none" style="border:1px solid #E5E7EB;background:#FAFAFA;padding:10px 12px;min-height:60px;resize:none;font-family:inherit;color:#0F172A"></textarea>
       <div><label class="eng-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input type="file" accept="image/*,video/*" capture="environment" multiple id="engRateMedia" style="display:none"/></label></div>
       <div class="eng-attach-info" id="engRateAttachInfo"></div>
-      <button id="engRateSubmit" class="w-full h-[50px] mt-3 rounded-[12px] text-white text-[14.5px] font-extrabold" style="background:#258046;border:0;opacity:.55" disabled>Submit &amp; earn +25 coins</button>
+      <button id="engRateSubmit" class="w-full h-[50px] mt-3 rounded-[12px] text-white text-[14.5px] font-semibold" style="background:#258046;border:0;opacity:.55" disabled>Submit &amp; earn +25 coins</button>
     </div>
 
     <!-- "Sorry to hear" sheet · shown when the user says their last order did NOT arrive OK -->
@@ -1739,8 +1739,8 @@
         </div>
         <div class="text-[19px] font-extrabold text-center leading-tight text-[#0F172A]">Sorry to hear that</div>
         <p class="text-[13px] text-center mt-2 leading-relaxed" style="color:#64748B">We're really sorry your order didn't arrive as expected. Our support team will make it right — please reach out and we'll help you straight away.</p>
-        <a href="help.html" class="w-full mt-5 h-[52px] rounded-[12px] text-[15px] font-extrabold inline-flex items-center justify-center gap-2" style="background:#258046;color:#FFFFFF;text-decoration:none;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)"><i class="fa-solid fa-headset text-[14px]"></i> Reach out to us</a>
-        <button id="sorryClose" class="w-full mt-2.5 h-[48px] rounded-[12px] text-[14px] font-bold" style="background:#FFFFFF;border:1.5px solid #E5E7EB;color:#0F172A">Not now</button>
+        <a href="help.html" class="w-full mt-5 h-[52px] rounded-[12px] text-[15px] font-semibold inline-flex items-center justify-center gap-2" style="background:#258046;color:#FFFFFF;text-decoration:none;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)"><i class="fa-solid fa-headset text-[14px]"></i> Reach out to us</a>
+        <button id="sorryClose" class="w-full mt-2.5 h-[48px] rounded-[12px] text-[14px] font-semibold" style="background:#FFFFFF;border:1.5px solid #E5E7EB;color:#0F172A">Not now</button>
       </div>
     </div>
 
@@ -1887,7 +1887,7 @@
     <!-- Farmer testimonials · same portrait video-tile pattern as the PDP "Farmer testimonials" section -->
     <section class="mt-8">
       <div class="px-4 mb-3">
-        <h2 class="text-[21px] font-bold tracking-tight">Farmer testimonials</h2>
+        <h2 class="text-[21px] font-extrabold tracking-tight">Farmer testimonials</h2>
       </div>
       <div class="overflow-x-auto scroll-x px-4" id="testiScroll">
         <div class="flex gap-3 min-w-max pb-1" id="testiRow">
@@ -1978,7 +1978,7 @@
     <!-- Most Selling in Indore — Bestseller-style tiles (grey image area edge-to-edge) + Flash-Sale-style emerald top strip carrying the "X bought last week" social-proof badge -->
     <section class="mt-8">
       <div class="px-4 mb-3 flex items-baseline justify-between">
-        <h2 class="text-[21px] font-bold tracking-tight">Most selling in Indore</h2>
+        <h2 class="text-[21px] font-extrabold tracking-tight">Most selling in Indore</h2>
         <a href="shop.html?sort=bestsellers" class="nu text-[13px] font-semibold" style="color:#258046">See all</a>
       </div>
       <div class="overflow-x-auto scroll-x">
@@ -1997,12 +1997,12 @@
             </div>
             <div class="p-2.5">
               <div class="leading-tight">
-                <div class="text-[14px] font-bold text-[#0F172A] truncate">Chakrawarti ZC</div>
+                <div class="text-[14px] font-semibold text-[#0F172A] truncate">Chakrawarti ZC</div>
                 <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Chloran. + Lambda-Cy.</div>
               </div>
               <div class="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
               <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
-                <span class="text-[17px] font-extrabold tnum text-[#0F172A]">&#8377;358</span>
+                <span class="text-[17px] font-bold tnum text-[#0F172A]">&#8377;358</span>
                 <span class="text-[11.5px] text-[#94A3B8] line-through tnum">&#8377;495</span>
                 <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
               </div>
@@ -2025,12 +2025,12 @@
             </div>
             <div class="p-2.5">
               <div class="leading-tight">
-                <div class="text-[14px] font-bold text-[#0F172A] truncate">Humic + Fulvic</div>
+                <div class="text-[14px] font-semibold text-[#0F172A] truncate">Humic + Fulvic</div>
                 <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Humic 12% + Fulvic 8%</div>
               </div>
               <div class="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">1 L</div>
               <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
-                <span class="text-[17px] font-extrabold tnum text-[#0F172A]">&#8377;376</span>
+                <span class="text-[17px] font-bold tnum text-[#0F172A]">&#8377;376</span>
                 <span class="text-[11.5px] text-[#94A3B8] line-through tnum">&#8377;520</span>
                 <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
               </div>
@@ -2053,12 +2053,12 @@
             </div>
             <div class="p-2.5">
               <div class="leading-tight">
-                <div class="text-[14px] font-bold text-[#0F172A] truncate">NPK 19-19-19</div>
+                <div class="text-[14px] font-semibold text-[#0F172A] truncate">NPK 19-19-19</div>
                 <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">N 19 &middot; P 19 &middot; K 19</div>
               </div>
               <div class="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">1 kg</div>
               <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
-                <span class="text-[17px] font-extrabold tnum text-[#0F172A]">&#8377;289</span>
+                <span class="text-[17px] font-bold tnum text-[#0F172A]">&#8377;289</span>
                 <span class="text-[11.5px] text-[#94A3B8] line-through tnum">&#8377;340</span>
                 <span class="text-[10.5px] font-extrabold" style="color:#258046">15% off</span>
               </div>
@@ -2081,12 +2081,12 @@
             </div>
             <div class="p-2.5">
               <div class="leading-tight">
-                <div class="text-[14px] font-bold text-[#0F172A] truncate">Chakraveer 18.5%</div>
+                <div class="text-[14px] font-semibold text-[#0F172A] truncate">Chakraveer 18.5%</div>
                 <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Chlorantraniliprole</div>
               </div>
               <div class="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
               <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
-                <span class="text-[17px] font-extrabold tnum text-[#0F172A]">&#8377;440</span>
+                <span class="text-[17px] font-bold tnum text-[#0F172A]">&#8377;440</span>
                 <span class="text-[11.5px] text-[#94A3B8] line-through tnum">&#8377;610</span>
                 <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
               </div>
@@ -2163,7 +2163,7 @@
         <div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div>
         <div class="flex items-center justify-between">
           <div>
-            <div class="text-[17px] font-extrabold text-[#0F172A]">Track order</div>
+            <div class="text-[17px] font-bold text-[#0F172A]">Track order</div>
             <div class="text-[11.5px] mt-0.5" style="color:#64748B">#KKD-26194 · ₹2,140 · 3 items</div>
           </div>
           <button id="trackSheetClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9">
@@ -2262,7 +2262,7 @@
         <div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div>
         <div class="flex items-center justify-between">
           <div>
-            <div class="text-[17px] font-extrabold text-[#0F172A]">All Crops</div>
+            <div class="text-[17px] font-bold text-[#0F172A]">All Crops</div>
             <div class="text-[11.5px] mt-0.5" style="color:#64748B">Tap all crops you grow</div>
           </div>
           <button id="cropSheetClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9">
@@ -2272,7 +2272,7 @@
       </div>
       <div id="cropSheetGrid" class="grid grid-cols-3 gap-2.5 px-5 py-3 overflow-y-auto" style="flex:1"></div>
       <div class="flex-shrink-0 px-5 py-3" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)">
-        <button id="cropSheetDone" class="w-full h-12 rounded-xl text-white text-[14px] font-extrabold" style="background:#258046">Done</button>
+        <button id="cropSheetDone" class="w-full h-12 rounded-xl text-white text-[14px] font-semibold" style="background:#258046">Done</button>
       </div>
     </div>
   </div>
@@ -2283,7 +2283,7 @@
     <div id="variantSheetPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:78vh;transform:translateY(100%);transition:transform .3s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
       <div class="flex-shrink-0 px-5 pt-5 pb-4 flex items-start gap-3.5" style="border-bottom:1px solid #F1F5F9">
         <div class="flex-1 min-w-0">
-          <div id="vsName" class="text-[16.5px] font-extrabold text-[#0F172A] leading-tight">Product</div>
+          <div id="vsName" class="text-[16.5px] font-bold text-[#0F172A] leading-tight">Product</div>
           <div id="vsTech" class="text-[12px] mt-1 leading-snug" style="color:#94A3B8"></div>
         </div>
         <button id="vsClose" class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:#F1F5F9">
@@ -2335,7 +2335,7 @@
         <div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div>
         <div class="flex items-center justify-between">
           <div>
-            <div class="text-[18px] font-extrabold text-[#0F172A]">Select your crops</div>
+            <div class="text-[18px] font-bold text-[#0F172A]">Select your crops</div>
             <p class="text-[12px] text-[#64748B] mt-0.5">Tap all crops you grow</p>
           </div>
           <button id="closeCropModal" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9">
@@ -2384,7 +2384,7 @@
       </div>
       <!-- Apply -->
       <div class="px-5 py-3 flex-shrink-0" style="border-top:1px solid #F1F5F9">
-        <button id="applyCropsBtn" class="w-full h-12 rounded-xl text-white text-[14px] font-extrabold" style="background:#258046">Add 0 crops</button>
+        <button id="applyCropsBtn" class="w-full h-12 rounded-xl text-white text-[14px] font-semibold" style="background:#258046">Add 0 crops</button>
       </div>
     </div>
   </div>
@@ -3138,7 +3138,7 @@
           return '<div class="flex items-center gap-3 py-3.5" style="border-bottom:1px solid #F1F5F9;'+(isDone ? 'opacity:.65' : '')+'">'
             + '<span class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:'+q.bg+';color:'+q.color+';font-size:17px"><i class="fa-solid '+q.icon+'"></i></span>'
             + '<div class="flex-1 min-w-0 leading-tight">'
-              + '<div class="flex items-center gap-2 flex-wrap"><span class="text-[14px] font-extrabold text-[#0F172A]">'+q.title+'</span><span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-extrabold" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-coins text-[8px]"></i> +'+q.coins+'</span></div>'
+              + '<div class="flex items-center gap-2 flex-wrap"><span class="text-[14px] font-semibold text-[#0F172A]">'+q.title+'</span><span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-extrabold" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-coins text-[8px]"></i> +'+q.coins+'</span></div>'
             + '</div>' + right
           + '</div>';
         }).join('');
@@ -3409,7 +3409,7 @@
         const stepper = qty > 0
           ? '<div class="h-9 rounded-lg flex items-center justify-between px-1" style="background:#258046;min-width:104px">'
               + '<button data-vs-act="dec" data-vs-key="'+k+'" class="w-8 h-9 flex items-center justify-center text-white text-[18px] font-bold">−</button>'
-              + '<span class="text-white text-[14px] font-bold tnum">'+qty+'</span>'
+              + '<span class="text-white text-[14px] font-semibold tnum">'+qty+'</span>'
               + '<button data-vs-act="inc" data-vs-key="'+k+'" class="w-8 h-9 flex items-center justify-center text-white text-[18px] font-bold">+</button>'
             + '</div>'
           : '<button data-vs-act="inc" data-vs-key="'+k+'" class="h-9 px-5 rounded-lg text-white text-[12.5px] font-extrabold flex-shrink-0" style="background:#258046">Add</button>';
@@ -3425,7 +3425,7 @@
               + (v.low ? '<span class="text-[11px] font-medium" style="color:#DC2626">'+v.low+' left</span>' : '')
             + '</div>'
             + '<div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">'
-              + '<span class="text-[16px] font-extrabold tnum text-[#0F172A]">₹'+v.price+'</span>'
+              + '<span class="text-[16px] font-bold tnum text-[#0F172A]">₹'+v.price+'</span>'
               + (v.mrp ? '<span class="text-[11.5px] tnum line-through" style="color:#94A3B8">₹'+v.mrp+'</span>' : '')
               + (v.off ? '<span class="text-[10.5px] font-extrabold" style="color:#258046">'+v.off+'% off</span>' : '')
             + '</div>'
@@ -3654,7 +3654,7 @@
         <div class="flex items-center gap-3">
           <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:#F8FAFC;border:1px solid #E5E7EB;padding:5px"><img id="baRateImg" src="" class="max-h-full object-contain"/></div>
           <div class="flex-1 leading-tight min-w-0">
-            <div class="text-[15px] font-extrabold text-[#0F172A]">Rate <span id="baRateName">product</span></div>
+            <div class="text-[15px] font-semibold text-[#0F172A]">Rate <span id="baRateName">product</span></div>
             <div class="text-[11.5px]" style="color:#64748B">Share your experience with other farmers</div>
           </div>
           <button id="baRateClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
@@ -3683,7 +3683,7 @@
         </div>
       </div>
       <div class="flex-shrink-0 px-5 pt-2" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px)">
-        <button id="baRateSubmit" class="w-full h-[50px] rounded-[12px] text-white text-[14.5px] font-extrabold" style="background:#258046;border:0;opacity:.55;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)" disabled>Submit review</button>
+        <button id="baRateSubmit" class="w-full h-[50px] rounded-[12px] text-white text-[14.5px] font-semibold" style="background:#258046;border:0;opacity:.55;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)" disabled>Submit review</button>
       </div>
     </div>
   </div>
@@ -3793,7 +3793,7 @@
         ov.innerHTML = '<div style="width:84px;height:84px;border-radius:50%;background:rgba(220,38,38,0.15);color:#F87171;display:flex;align-items:center;justify-content:center;font-size:38px"><i class="fa-solid fa-user-lock"></i></div>'
           + '<div style="font-size:21px;font-weight:900;margin-top:20px">Account suspended</div>'
           + '<div style="font-size:13.5px;color:rgba(255,255,255,0.75);margin-top:10px;max-width:300px;line-height:1.5">Your account has been temporarily blocked due to a policy issue. Please contact support to restore access.</div>'
-          + '<a href="help.html" style="margin-top:24px;height:50px;padding:0 28px;border-radius:12px;background:#258046;color:#fff;font-size:14.5px;font-weight:800;display:inline-flex;align-items:center;gap:9px;text-decoration:none"><i class="fa-solid fa-headset"></i> Contact support</a>'
+          + '<a href="help.html" style="margin-top:24px;height:50px;padding:0 28px;border-radius:12px;background:#258046;color:#fff;font-size:14.5px;font-weight:600;display:inline-flex;align-items:center;gap:9px;text-decoration:none"><i class="fa-solid fa-headset"></i> Contact support</a>'
           + '<div style="font-size:11.5px;color:rgba(255,255,255,0.5);margin-top:16px">Ref: KKD-USR-4471</div>';
         document.body.appendChild(ov);
       } else if (st.nonservice) {

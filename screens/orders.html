@@ -142,7 +142,7 @@
 <body>
 
   <!-- System status -->
-  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold">
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-medium">
     <span>9:41</span>
     <div class="flex items-center gap-1.5">
       <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
@@ -276,19 +276,19 @@
   <nav class="fixed bottom-0 left-0 right-0 bg-white flex justify-around items-center px-2 py-2 z-50" style="height:68px;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04)">
     <a href="home.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none">
       <i class="fa-solid fa-house text-[20px]"></i>
-      <span class="text-[12.5px] font-semibold">Home</span>
+      <span class="text-[12.5px] font-medium">Home</span>
     </a>
     <a href="crop-detail.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none">
       <i class="fa-solid fa-seedling text-[20px]"></i>
-      <span class="text-[12.5px] font-semibold">Crop</span>
+      <span class="text-[12.5px] font-medium">Crop</span>
     </a>
     <a href="orders.html" class="flex flex-col items-center gap-1" style="text-decoration:none">
       <i class="fa-solid fa-box text-[20px]" style="color:#258046"></i>
-      <span class="text-[12.5px] font-bold" style="color:#0F172A">Orders</span>
+      <span class="text-[12.5px] font-medium" style="color:#0F172A">Orders</span>
     </a>
     <a href="account.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none">
       <i class="fa-solid fa-user text-[20px]"></i>
-      <span class="text-[12.5px] font-semibold">Profile</span>
+      <span class="text-[12.5px] font-medium">Profile</span>
     </a>
   </nav>
 
@@ -299,12 +299,12 @@
     <div class="px-5 pt-3 pb-2 flex items-center justify-between">
       <div class="leading-tight">
         <div class="text-[17px] font-bold text-[#0F172A]">Pay COD amount</div>
-        <div class="text-[11.5px] font-semibold" style="color:#64748B">Order <span id="codOrderId" class="font-bold text-[#0F172A]">#</span></div>
+        <div class="text-[11.5px] font-medium" style="color:#64748B">Order <span id="codOrderId" class="font-bold text-[#0F172A]">#</span></div>
       </div>
       <button id="codClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
     <div class="px-5 pt-3">
-      <div class="text-[11.5px] font-bold mb-1.5" style="color:#475569">Amount to pay</div>
+      <div class="text-[11.5px] font-medium mb-1.5" style="color:#475569">Amount to pay</div>
       <div class="cod-input-wrap">
         <span class="rs">&#8377;</span>
         <input id="codAmtInput" type="number" inputmode="numeric" value="0"/>
@@ -313,7 +313,7 @@
         <span style="color:#64748B">Total COD: <b class="text-[#0F172A]" id="codTotalLbl">&#8377;0</b></span>
         <span class="font-extrabold" style="color:#258046">Earn <span id="codCoinsLbl">+0</span> <i class="fa-solid fa-coins text-[10px]" style="color:#F59E0B"></i></span>
       </div>
-      <div id="codErr" class="text-[11px] font-bold" style="color:#DC2626;display:none;margin-top:4px">Amount cannot exceed total COD due</div>
+      <div id="codErr" class="text-[11px] font-medium" style="color:#DC2626;display:none;margin-top:4px">Amount cannot exceed total COD due</div>
       <div class="cod-coin-strip mt-3">
         <i class="fa-solid fa-coins text-[14px]" style="color:#F59E0B"></i>
         <div class="text-[11.5px] leading-tight" style="color:#0F172A"><b>1 coin = &#8377;1</b></div>
@@ -333,7 +333,7 @@
     <div class="px-5 pt-3 pb-2 flex items-center justify-between">
       <div class="leading-tight">
         <div class="text-[17px] font-bold text-[#0F172A]">Rate your products</div>
-        <div class="text-[11.5px] font-semibold" style="color:#64748B">Order <span id="rateOrderId" class="font-bold text-[#0F172A]">#</span> · earn 25 coins per rating</div>
+        <div class="text-[11.5px] font-medium" style="color:#64748B">Order <span id="rateOrderId" class="font-bold text-[#0F172A]">#</span> · earn 25 coins per rating</div>
       </div>
       <button id="rateClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>

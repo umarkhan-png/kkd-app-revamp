@@ -278,7 +278,7 @@
   <span class="snow-flake" style="left:94%;animation-delay:.4s;font-size:11px">❄</span>
 
   <!-- System status bar — sticky at viewport top with theme color fill · only this strip pins on scroll, the address row below scrolls away with normal flow -->
-  <div class="sticky-status flex items-center justify-between px-4 pt-3 pb-2.5 text-[12px] font-semibold text-[#0F172A]">
+  <div class="sticky-status flex items-center justify-between px-4 pt-3 pb-2.5 text-[12px] font-medium text-[#0F172A]">
     <span>9:41</span>
     <div class="flex items-center gap-1.5">
       <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
@@ -293,7 +293,7 @@
       <img src="../assets/kkd-logo.png" alt="KKD" id="kkdLogo" class="flex-shrink-0" style="width:36px;height:36px;border-radius:9px;object-fit:cover;cursor:pointer"/>
       <div class="leading-tight min-w-0">
         <!-- Greeting · scrolls upward continuously (current text exits up, new text enters from below) · normal Title-Case ("Hey! Sagar"), no all-caps -->
-        <div style="overflow:hidden;height:14px;line-height:14px"><div id="greetLabel" class="text-[11px] font-semibold text-[#94A3B8] tracking-wide" style="transition:transform .45s cubic-bezier(.5,0,.3,1),opacity .35s ease;display:block">Hey! Sagar</div></div>
+        <div style="overflow:hidden;height:14px;line-height:14px"><div id="greetLabel" class="text-[11px] font-medium text-[#94A3B8] tracking-wide" style="transition:transform .45s cubic-bezier(.5,0,.3,1),opacity .35s ease;display:block">Hey! Sagar</div></div>
         <div id="homeAddr" class="flex items-center gap-1 text-[16px] font-bold text-[#0F172A] mt-0.5">
           Indore 452001
           <i class="fa-solid fa-chevron-down text-[10px] text-[#64748B] ml-0.5"></i>
@@ -313,7 +313,7 @@
       <!-- Notification shortcut · 40px circular button next to the coin pill · unread badge floats top-right when there are unseen notifs -->
       <a href="notifications.html" id="notifBtn" class="relative w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgba(15,23,42,0.04);text-decoration:none" aria-label="Notifications">
         <i class="fa-solid fa-bell text-[15px]" style="color:#0F172A"></i>
-        <span id="notifBadge" class="absolute" style="top:-2px;right:-2px;min-width:18px;height:18px;padding:0 4px;border-radius:9999px;background:#DC2626;color:#FFFFFF;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;border:2px solid #FFFFFF;line-height:1">3</span>
+        <span id="notifBadge" class="absolute" style="top:-2px;right:-2px;min-width:18px;height:18px;padding:0 4px;border-radius:9999px;background:#DC2626;color:#FFFFFF;font-size:10px;font-weight:500;display:inline-flex;align-items:center;justify-content:center;border:2px solid #FFFFFF;line-height:1">3</span>
       </a>
     </div>
   </div>
@@ -332,7 +332,7 @@
   <!-- Top status banner — auto-rotates rain → christmas → order every 4s (in-place text swap) -->
   <a href="#" id="topStatusBanner" class="theme-banner rain-banner nu" style="flex-wrap:nowrap;transition:opacity .3s ease">
     <i id="tsbIcon" class="fa-solid fa-cloud-rain text-[14px] flex-shrink-0" style="color:#2563EB"></i>
-    <span id="tsbText" class="flex-1 min-w-0 text-[12.5px] font-semibold leading-snug" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#1E40AF"><strong>Rain expected</strong> · 8 mm in 24 hrs · Hold spray for today</span>
+    <span id="tsbText" class="flex-1 min-w-0 text-[12.5px] font-medium leading-snug" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#1E40AF"><strong>Rain expected</strong> · 8 mm in 24 hrs · Hold spray for today</span>
     <i id="tsbChev" class="fa-solid fa-chevron-right text-[11px] flex-shrink-0" style="color:#1D4ED8"></i>
   </a>
 
@@ -357,7 +357,7 @@
     <div class="flex gap-3 px-4">
       <a href="categories.html?cat=pesticide" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle"><span class="cat-emoji">🐛</span></div>
-        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Pesticide</span>
+        <span class="cat-label text-[13px] font-medium text-[#0F172A] text-center leading-tight">Pesticide</span>
       </a>
       <a href="categories.html?cat=fungicide" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle">
@@ -371,7 +371,7 @@
             <circle cx="19" cy="18" r="1.4" fill="#92400E"/>
           </svg>
         </div>
-        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Fungicide</span>
+        <span class="cat-label text-[13px] font-medium text-[#0F172A] text-center leading-tight">Fungicide</span>
       </a>
       <a href="categories.html?cat=fertilizer" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle">
@@ -400,7 +400,7 @@
             <circle cx="30" cy="29" r="1.4" fill="#FBBF24"/>
           </svg>
         </div>
-        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Fertilizer</span>
+        <span class="cat-label text-[13px] font-medium text-[#0F172A] text-center leading-tight">Fertilizer</span>
       </a>
       <a href="categories.html?cat=herbicide" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle">
@@ -433,7 +433,7 @@
             </g>
           </svg>
         </div>
-        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Herbicide</span>
+        <span class="cat-label text-[13px] font-medium text-[#0F172A] text-center leading-tight">Herbicide</span>
       </a>
       <a href="categories.html?cat=combo" class="cat-tile nu flex-shrink-0 flex flex-col items-center gap-2" style="width:80px">
         <div class="cat-circle">
@@ -452,7 +452,7 @@
             <line x1="10" y1="9" x2="26" y2="9" stroke="#258046" stroke-width="1"/>
           </svg>
         </div>
-        <span class="cat-label text-[13px] font-semibold text-[#0F172A] text-center leading-tight">Combo</span>
+        <span class="cat-label text-[13px] font-medium text-[#0F172A] text-center leading-tight">Combo</span>
       </a>
     </div>
   </div>
@@ -469,10 +469,10 @@
               <span class="block w-2 h-2 rounded-full" style="background:#258046"></span>
               <span class="absolute inset-0 w-2 h-2 rounded-full" style="background:#258046;animation:dtPulse 1.6s ease-out infinite"></span>
             </span>
-            <span class="text-[11px] font-extrabold uppercase tracking-wider truncate" style="color:#258046">Out for Delivery</span>
-            <span class="dt-compact-id text-[11px] font-extrabold flex-shrink-0" style="color:#0F172A;display:none">· #KKD-26194</span>
+            <span class="text-[11px] font-medium uppercase tracking-wider truncate" style="color:#258046">Out for Delivery</span>
+            <span class="dt-compact-id text-[11px] font-medium flex-shrink-0" style="color:#0F172A;display:none">· #KKD-26194</span>
           </div>
-          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-extrabold flex-shrink-0" style="background:linear-gradient(135deg,#1F7A40 0%,#258046 55%,#34A853 100%);color:#FFFFFF;box-shadow:0 4px 10px -3px rgba(4,120,87,0.55)">
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium flex-shrink-0" style="background:linear-gradient(135deg,#1F7A40 0%,#258046 55%,#34A853 100%);color:#FFFFFF;box-shadow:0 4px 10px -3px rgba(4,120,87,0.55)">
             Track <i class="fa-solid fa-arrow-right text-[9px]" style="color:#FFFFFF"></i>
           </span>
         </div>
@@ -480,11 +480,11 @@
           <div class="flex flex-shrink-0" style="margin-right:-4px">
             <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);margin-right:-6px;z-index:3"><img src="../assets/Chakrawarti_nobg.png" class="w-6 h-6 object-contain"/></div>
             <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);margin-right:-6px;z-index:2"><img src="../assets/Humic_nobg.png" class="w-6 h-6 object-contain"/></div>
-            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-extrabold" style="background:#FFFFFF;color:#258046;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);z-index:1">+1</div>
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-medium" style="background:#FFFFFF;color:#258046;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);z-index:1">+1</div>
           </div>
           <div class="flex-1 min-w-0 leading-tight">
-            <div class="text-[12.5px] font-extrabold truncate" style="color:#0F172A">#KKD-26194 &middot; &#8377;2,140</div>
-            <div class="text-[10.5px] font-semibold truncate" style="color:#64748B">3 items &middot; Arriving today by 5:00 PM</div>
+            <div class="text-[12.5px] font-medium truncate" style="color:#0F172A">#KKD-26194 &middot; &#8377;2,140</div>
+            <div class="text-[10.5px] font-medium truncate" style="color:#64748B">3 items &middot; Arriving today by 5:00 PM</div>
           </div>
         </div>
         <div class="dt-detail">
@@ -501,7 +501,7 @@
             <div class="flex-1 h-1.5 rounded-full" style="background:#6EE7B7"></div>
             <div class="w-2 h-2 rounded-full" style="background:#6EE7B7"></div>
           </div>
-          <div class="flex justify-between mt-1.5 text-[9.5px] font-semibold">
+          <div class="flex justify-between mt-1.5 text-[9.5px] font-medium">
             <span style="color:#258046">Placed</span>
             <span style="color:#258046">Packed</span>
             <span class="dt-stage-current" style="color:#064E3B;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;font-size:10.5px">Out</span>
@@ -518,10 +518,10 @@
               <span class="block w-2 h-2 rounded-full" style="background:#0891B2"></span>
               <span class="absolute inset-0 w-2 h-2 rounded-full" style="background:#0891B2;animation:dtPulse 1.6s ease-out infinite"></span>
             </span>
-            <span class="text-[11px] font-extrabold uppercase tracking-wider truncate" style="color:#0E7490">Packed &middot; Dispatching</span>
-            <span class="dt-compact-id text-[11px] font-extrabold flex-shrink-0" style="color:#0F172A;display:none">&middot; #KKD-26195</span>
+            <span class="text-[11px] font-medium uppercase tracking-wider truncate" style="color:#0E7490">Packed &middot; Dispatching</span>
+            <span class="dt-compact-id text-[11px] font-medium flex-shrink-0" style="color:#0F172A;display:none">&middot; #KKD-26195</span>
           </div>
-          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-extrabold flex-shrink-0" style="background:linear-gradient(135deg,#1F7A40 0%,#258046 55%,#34A853 100%);color:#FFFFFF;box-shadow:0 4px 10px -3px rgba(4,120,87,0.55)">
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium flex-shrink-0" style="background:linear-gradient(135deg,#1F7A40 0%,#258046 55%,#34A853 100%);color:#FFFFFF;box-shadow:0 4px 10px -3px rgba(4,120,87,0.55)">
             Track <i class="fa-solid fa-arrow-right text-[9px]" style="color:#FFFFFF"></i>
           </span>
         </div>
@@ -531,8 +531,8 @@
             <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#FFFFFF;border:1.5px solid #FFFFFF;box-shadow:0 1px 2px rgba(15,23,42,0.08);z-index:2"><img src="../assets/Humic_nobg.png" class="w-6 h-6 object-contain"/></div>
           </div>
           <div class="flex-1 min-w-0 leading-tight">
-            <div class="text-[12.5px] font-extrabold truncate" style="color:#0F172A">#KKD-26195 &middot; &#8377;1,290</div>
-            <div class="text-[10.5px] font-semibold truncate" style="color:#64748B">2 items &middot; Arriving 29 May by 6:00 PM</div>
+            <div class="text-[12.5px] font-medium truncate" style="color:#0F172A">#KKD-26195 &middot; &#8377;1,290</div>
+            <div class="text-[10.5px] font-medium truncate" style="color:#64748B">2 items &middot; Arriving 29 May by 6:00 PM</div>
           </div>
         </div>
         <div class="dt-detail">
@@ -550,7 +550,7 @@
             <div class="flex-1 h-1.5 rounded-full" style="background:#6EE7B7"></div>
             <div class="w-2 h-2 rounded-full" style="background:#6EE7B7"></div>
           </div>
-          <div class="flex justify-between mt-1.5 text-[9.5px] font-semibold">
+          <div class="flex justify-between mt-1.5 text-[9.5px] font-medium">
             <span style="color:#258046">Placed</span>
             <span class="dt-stage-current" style="color:#0E7490;font-weight:900;text-transform:uppercase;letter-spacing:0.04em;font-size:10.5px">Packed</span>
             <span style="color:#64748B">Out</span>
@@ -563,7 +563,7 @@
     <!-- Pagination dots row · only shown when there are 2+ tiles · dots + inline "1 of N" counter centred together as one unit · index syncs with scroll position (JS) · pt-2 gives an even gap below the card; NO bottom padding so the green margin under the counter matches the green margin above the card → the [card + counter] block sits vertically centred in the strip -->
     <div class="ds-dots-row dt-detail flex items-center justify-center gap-3 pt-2 px-5">
       <div id="deliveryDots" class="ds-dots flex items-center gap-1.5"></div>
-      <span class="text-[10.5px] font-extrabold tracking-[0.1em] uppercase" style="color:#258046"><span id="dsIndex">1</span> of <span id="dsTotal">2</span></span>
+      <span class="text-[10.5px] font-medium tracking-[0.1em] uppercase" style="color:#258046"><span id="dsIndex">1</span> of <span id="dsTotal">2</span></span>
     </div>
   </div>
 
@@ -585,8 +585,8 @@
           <span class="absolute pointer-events-none" style="top:-34px;right:-34px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,0.14) 0%,transparent 70%)"></span>
           <div class="flex items-center gap-1.5 px-3.5 py-2 relative" style="background:linear-gradient(90deg,#ECFDF5 0%,#F0FDF4 100%);border-bottom:1px solid #BBF7D0">
             <i class="fa-solid fa-trophy text-[11px]" style="color:#258046"></i>
-            <span class="text-[10px] font-extrabold tracking-[0.14em] uppercase" style="color:#258046">Earn Krishi Coins</span>
-            <span class="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold" style="background:#FFFFFF;color:#258046;border:1px solid #BBF7D0"><span id="questDoneCount">0</span> of 5 done</span>
+            <span class="text-[10px] font-medium tracking-[0.14em] uppercase" style="color:#258046">Earn Krishi Coins</span>
+            <span class="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium" style="background:#FFFFFF;color:#258046;border:1px solid #BBF7D0"><span id="questDoneCount">0</span> of 5 done</span>
           </div>
           <div class="px-3.5 pt-3.5 flex items-center gap-3 relative">
             <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%);box-shadow:0 6px 16px -4px rgba(5,150,105,0.5),0 0 0 4px rgba(5,150,105,0.1)">
@@ -594,9 +594,9 @@
             </div>
             <div class="flex-1 leading-tight min-w-0">
               <div class="text-[15.5px] font-semibold" style="color:#0F172A">Complete 5 quick steps</div>
-              <div class="text-[11.5px] font-semibold mt-0.5" style="color:#64748B">Earn up to <span style="color:#258046;font-weight:800"><span id="questMaxCoins">95</span> coins</span></div>
+              <div class="text-[11.5px] font-medium mt-0.5" style="color:#64748B">Earn up to <span style="color:#258046;font-weight:800"><span id="questMaxCoins">95</span> coins</span></div>
             </div>
-            <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-extrabold flex-shrink-0" style="background:#258046;color:#FFFFFF;box-shadow:0 4px 10px -3px rgba(5,150,105,0.45)">View all <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i></span>
+            <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-medium flex-shrink-0" style="background:#258046;color:#FFFFFF;box-shadow:0 4px 10px -3px rgba(5,150,105,0.45)">View all <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i></span>
           </div>
           <div class="px-4 pt-4 pb-3.5 relative">
             <div class="flex items-center" id="questSteps"></div>
@@ -606,8 +606,8 @@
         <div class="ob-state-shop" style="display:none">
           <div class="flex items-center gap-1.5 px-3.5 py-2" style="background:#ECFDF5;border-bottom:1px solid #BBF7D0">
             <i class="fa-solid fa-circle-check text-[11px]" style="color:#258046"></i>
-            <span class="text-[10px] font-extrabold tracking-[0.14em] uppercase" style="color:#258046">Your rewards</span>
-            <span class="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold" style="background:#FFFFFF;color:#258046;border:1px solid #BBF7D0">
+            <span class="text-[10px] font-medium tracking-[0.14em] uppercase" style="color:#258046">Your rewards</span>
+            <span class="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium" style="background:#FFFFFF;color:#258046;border:1px solid #BBF7D0">
               <i class="fa-solid fa-coins text-[9px]" style="color:#F59E0B"></i> <span id="obWalletChip">270</span> coins
             </span>
           </div>
@@ -617,9 +617,9 @@
             </div>
             <div class="flex-1 leading-tight min-w-0">
               <div class="text-[15.5px] font-semibold truncate" style="color:#0F172A">Use your <span id="obWalletAmt">270</span> coins</div>
-              <div class="text-[11px] font-semibold mt-0.5 truncate" style="color:#64748B">Apply at checkout for instant savings</div>
+              <div class="text-[11px] font-medium mt-0.5 truncate" style="color:#64748B">Apply at checkout for instant savings</div>
             </div>
-            <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-extrabold flex-shrink-0" style="background:#258046;color:#FFFFFF;box-shadow:0 3px 8px -2px rgba(5,150,105,0.4)">
+            <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-medium flex-shrink-0" style="background:#258046;color:#FFFFFF;box-shadow:0 3px 8px -2px rgba(5,150,105,0.4)">
               Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i>
             </span>
           </div>
@@ -665,7 +665,7 @@
 
         <!-- Header: emerald deal pill + appealing 3-box countdown clock — wrapped in its own px-4 so the wrapper itself can be full-bleed (no horizontal padding) and the scroll container below can reach the right viewport edge naturally -->
         <div class="relative flex items-center justify-between mb-3 px-4">
-          <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-[12px] font-extrabold tracking-[0.12em] text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%);box-shadow:0 4px 10px -2px rgba(5,150,105,0.5)">⚡ FLASH DEALS</span>
+          <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-[12px] font-medium tracking-[0.12em] text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%);box-shadow:0 4px 10px -2px rgba(5,150,105,0.5)">⚡ FLASH DEALS</span>
           <!-- Countdown clock: 3 separate dark tiles for H : M : S with amber digits + glow -->
           <div class="flex items-center gap-1">
             <span class="px-2 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerH" style="background:#0F172A;color:#FBBF24;min-width:34px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">02</span>
@@ -683,8 +683,8 @@
             <!-- Card 1 · Chakrawarti -->
             <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:160px;border:1px solid #E5E7EB;box-shadow:0 2px 10px rgba(15,23,42,0.06)">
               <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
-                <span class="text-[13px] font-extrabold">Save ₹247</span>
-                <span class="text-[11.5px] font-extrabold px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">50% OFF</span>
+                <span class="text-[13px] font-medium">Save ₹247</span>
+                <span class="text-[11.5px] font-medium px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">50% OFF</span>
               </div>
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
@@ -693,11 +693,11 @@
                 </div>
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
-                <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mb-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
+                <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium mb-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
                 <div class="text-[14.5px] font-semibold leading-tight text-[#0F172A]">Chakrawarti ZC</div>
                 <div class="text-[11.5px] mt-1 truncate" style="color:#94A3B8">Chloran. + Lambda-Cy.</div>
                 <div class="flex items-baseline gap-2 mt-2">
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[13.5px] font-extrabold" style="background:#FBBF24;color:#0F172A">
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[13.5px] font-medium" style="background:#FBBF24;color:#0F172A">
                     <i class="fa-solid fa-lock text-[9px]"></i>₹248
                   </span>
                   <span class="text-[12px] tnum line-through" style="color:#94A3B8">MRP ₹495</span>
@@ -708,8 +708,8 @@
             <!-- Card 2 · Humic + Fulvic -->
             <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:160px;border:1px solid #E5E7EB;box-shadow:0 2px 10px rgba(15,23,42,0.06)">
               <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
-                <span class="text-[13px] font-extrabold">Save ₹208</span>
-                <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">40% OFF</span>
+                <span class="text-[13px] font-medium">Save ₹208</span>
+                <span class="text-[10px] font-medium px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">40% OFF</span>
               </div>
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
@@ -718,11 +718,11 @@
                 </div>
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
-                <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mb-1.5" style="background:#F1F5F9;color:#475569">1 L</div>
+                <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium mb-1.5" style="background:#F1F5F9;color:#475569">1 L</div>
                 <div class="text-[14.5px] font-semibold leading-tight text-[#0F172A]">Humic + Fulvic 98</div>
                 <div class="text-[11.5px] mt-1 truncate" style="color:#94A3B8">Humic 12% + Fulvic 8%</div>
                 <div class="flex items-baseline gap-2 mt-2">
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[13.5px] font-extrabold" style="background:#FBBF24;color:#0F172A">
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[13.5px] font-medium" style="background:#FBBF24;color:#0F172A">
                     <i class="fa-solid fa-lock text-[9px]"></i>₹312
                   </span>
                   <span class="text-[12px] tnum line-through" style="color:#94A3B8">MRP ₹520</span>
@@ -733,8 +733,8 @@
             <!-- Card 3 · NPK -->
             <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:160px;border:1px solid #E5E7EB;box-shadow:0 2px 10px rgba(15,23,42,0.06)">
               <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
-                <span class="text-[13px] font-extrabold">Save ₹119</span>
-                <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">35% OFF</span>
+                <span class="text-[13px] font-medium">Save ₹119</span>
+                <span class="text-[10px] font-medium px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">35% OFF</span>
               </div>
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
@@ -743,11 +743,11 @@
                 </div>
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
-                <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mb-1.5" style="background:#F1F5F9;color:#475569">1 kg</div>
+                <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium mb-1.5" style="background:#F1F5F9;color:#475569">1 kg</div>
                 <div class="text-[14.5px] font-semibold leading-tight text-[#0F172A]">NPK 19-19-19</div>
                 <div class="text-[11.5px] mt-1 truncate" style="color:#94A3B8">N 19 · P 19 · K 19</div>
                 <div class="flex items-baseline gap-2 mt-2">
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[13.5px] font-extrabold" style="background:#FBBF24;color:#0F172A">
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[13.5px] font-medium" style="background:#FBBF24;color:#0F172A">
                     <i class="fa-solid fa-lock text-[9px]"></i>₹221
                   </span>
                   <span class="text-[12px] tnum line-through" style="color:#94A3B8">MRP ₹340</span>
@@ -758,8 +758,8 @@
             <!-- Card 4 · Triple Attack -->
             <div class="flex-shrink-0 rounded-xl overflow-hidden bg-white relative" style="width:160px;border:1px solid #E5E7EB;box-shadow:0 2px 10px rgba(15,23,42,0.06)">
               <div class="px-3 py-2 flex items-center justify-between text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
-                <span class="text-[13px] font-extrabold">Save ₹410</span>
-                <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">45% OFF</span>
+                <span class="text-[13px] font-medium">Save ₹410</span>
+                <span class="text-[10px] font-medium px-1.5 py-0.5 rounded" style="background:#FBBF24;color:#0F172A">45% OFF</span>
               </div>
               <a href="pdp.html" class="nu block px-2 pt-2">
                 <div class="aspect-square rounded-lg flex items-center justify-center p-2 relative" style="background:#F8FAFC">
@@ -768,11 +768,11 @@
                 </div>
               </a>
               <div class="px-2.5 pb-2.5 pt-2">
-                <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mb-1.5" style="background:#F1F5F9;color:#475569">Combo</div>
+                <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium mb-1.5" style="background:#F1F5F9;color:#475569">Combo</div>
                 <div class="text-[14.5px] font-semibold leading-tight text-[#0F172A]">Triple Attack</div>
                 <div class="text-[11.5px] mt-1 truncate" style="color:#94A3B8">Imida + Mancozeb + NPK</div>
                 <div class="flex items-baseline gap-2 mt-2">
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[13.5px] font-extrabold" style="background:#FBBF24;color:#0F172A">
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[13.5px] font-medium" style="background:#FBBF24;color:#0F172A">
                     <i class="fa-solid fa-lock text-[9px]"></i>₹500
                   </span>
                   <span class="text-[12px] tnum line-through" style="color:#94A3B8">MRP ₹910</span>
@@ -800,7 +800,7 @@
             <div class="absolute -top-12 -left-12 w-36 h-36 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(251,191,36,0.3) 0%,transparent 65%)"></div>
             <div class="absolute -bottom-12 -right-12 w-44 h-44 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(16,185,129,0.4) 0%,transparent 65%)"></div>
             <div class="relative p-4 text-white flex-1 flex flex-col justify-between">
-              <div class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9.5px] font-extrabold tracking-[0.16em] self-start" style="background:rgba(251,191,36,0.18);color:#FBBF24;border:1px solid rgba(251,191,36,0.4)">
+              <div class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9.5px] font-medium tracking-[0.16em] self-start" style="background:rgba(251,191,36,0.18);color:#FBBF24;border:1px solid rgba(251,191,36,0.4)">
                 <i class="fa-solid fa-crown text-[8px]"></i> KISAN EXCLUSIVE
               </div>
               <div class="mt-1.5 leading-none">
@@ -809,13 +809,13 @@
               </div>
               <div class="flex items-end justify-between mt-3">
                 <div>
-                  <div class="text-[9px] font-bold tracking-[0.14em]" style="color:rgba(255,255,255,0.8)">EXTRA DISCOUNT</div>
+                  <div class="text-[9px] font-medium tracking-[0.14em]" style="color:rgba(255,255,255,0.8)">EXTRA DISCOUNT</div>
                   <div class="flex items-baseline gap-1 mt-0.5">
                     <span class="text-[22px] font-extrabold tnum" style="color:#FBBF24;text-shadow:0 0 12px rgba(251,191,36,0.45)">₹500</span>
-                    <span class="text-[11px] font-bold tracking-wider" style="color:rgba(255,255,255,0.75)">OFF</span>
+                    <span class="text-[11px] font-medium tracking-wider" style="color:rgba(255,255,255,0.75)">OFF</span>
                   </div>
                 </div>
-                <button class="inline-flex items-center gap-1 px-3.5 py-2 rounded-full text-[11.5px] font-extrabold" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#0F172A;box-shadow:0 6px 18px rgba(251,191,36,0.55),inset 0 1px 0 rgba(255,255,255,0.4)">SHOP NOW <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
+                <button class="inline-flex items-center gap-1 px-3.5 py-2 rounded-full text-[11.5px] font-medium" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#0F172A;box-shadow:0 6px 18px rgba(251,191,36,0.55),inset 0 1px 0 rgba(255,255,255,0.4)">SHOP NOW <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
               </div>
             </div>
           </a>
@@ -828,7 +828,7 @@
             <div class="absolute -top-12 -left-12 w-36 h-36 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(251,191,36,0.28) 0%,transparent 65%)"></div>
             <div class="absolute -bottom-12 -right-12 w-44 h-44 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(99,102,241,0.5) 0%,transparent 65%)"></div>
             <div class="relative p-4 text-white flex-1 flex flex-col justify-between">
-              <div class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9.5px] font-extrabold tracking-[0.16em] self-start" style="background:rgba(251,191,36,0.18);color:#FBBF24;border:1px solid rgba(251,191,36,0.4)">
+              <div class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9.5px] font-medium tracking-[0.16em] self-start" style="background:rgba(251,191,36,0.18);color:#FBBF24;border:1px solid rgba(251,191,36,0.4)">
                 <i class="fa-solid fa-bolt text-[8px]"></i> HOT COMBO
               </div>
               <div class="mt-1.5 leading-none">
@@ -837,10 +837,10 @@
               </div>
               <div class="flex items-end justify-between mt-3">
                 <div>
-                  <div class="text-[9px] font-bold tracking-[0.14em]" style="color:rgba(255,255,255,0.8)">ON ANTIVIRUS COMBO</div>
-                  <div class="text-[12px] font-bold mt-0.5" style="color:rgba(255,255,255,0.95)">Chilli · Tomato · Brinjal</div>
+                  <div class="text-[9px] font-medium tracking-[0.14em]" style="color:rgba(255,255,255,0.8)">ON ANTIVIRUS COMBO</div>
+                  <div class="text-[12px] font-medium mt-0.5" style="color:rgba(255,255,255,0.95)">Chilli · Tomato · Brinjal</div>
                 </div>
-                <button class="inline-flex items-center gap-1 px-3.5 py-2 rounded-full text-[11.5px] font-extrabold" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#0F172A;box-shadow:0 6px 18px rgba(251,191,36,0.55),inset 0 1px 0 rgba(255,255,255,0.4)">GRAB <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
+                <button class="inline-flex items-center gap-1 px-3.5 py-2 rounded-full text-[11.5px] font-medium" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#0F172A;box-shadow:0 6px 18px rgba(251,191,36,0.55),inset 0 1px 0 rgba(255,255,255,0.4)">GRAB <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
               </div>
             </div>
           </a>
@@ -853,7 +853,7 @@
             <div class="absolute -top-12 -left-12 w-36 h-36 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(234,88,12,0.22) 0%,transparent 65%)"></div>
             <div class="absolute -bottom-12 -right-12 w-44 h-44 rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(252,211,77,0.5) 0%,transparent 65%)"></div>
             <div class="relative p-4 flex-1 flex flex-col justify-between" style="color:#0F172A">
-              <div class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9.5px] font-extrabold tracking-[0.16em] self-start" style="background:rgba(15,23,42,0.85);color:#FBBF24;border:1px solid rgba(15,23,42,0.4)">
+              <div class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9.5px] font-medium tracking-[0.16em] self-start" style="background:rgba(15,23,42,0.85);color:#FBBF24;border:1px solid rgba(15,23,42,0.4)">
                 <i class="fa-solid fa-seedling text-[8px]"></i> FERTILIZER FEST
               </div>
               <div class="mt-1.5 leading-none">
@@ -862,13 +862,13 @@
               </div>
               <div class="flex items-end justify-between mt-3">
                 <div>
-                  <div class="text-[9px] font-bold tracking-[0.14em]" style="color:rgba(15,23,42,0.7)">UP TO</div>
+                  <div class="text-[9px] font-medium tracking-[0.14em]" style="color:rgba(15,23,42,0.7)">UP TO</div>
                   <div class="flex items-baseline gap-1 mt-0.5">
                     <span class="text-[22px] font-extrabold tnum" style="color:#7C2D12;text-shadow:0 0 12px rgba(234,88,12,0.3)">40%</span>
-                    <span class="text-[11px] font-bold tracking-wider" style="color:rgba(15,23,42,0.7)">OFF</span>
+                    <span class="text-[11px] font-medium tracking-wider" style="color:rgba(15,23,42,0.7)">OFF</span>
                   </div>
                 </div>
-                <button class="inline-flex items-center gap-1 px-3.5 py-2 rounded-full text-[11.5px] font-extrabold" style="background:#0F172A;color:#FBBF24;box-shadow:0 6px 18px rgba(15,23,42,0.4),inset 0 1px 0 rgba(255,255,255,0.1)">EXPLORE <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
+                <button class="inline-flex items-center gap-1 px-3.5 py-2 rounded-full text-[11.5px] font-medium" style="background:#0F172A;color:#FBBF24;box-shadow:0 6px 18px rgba(15,23,42,0.4),inset 0 1px 0 rgba(255,255,255,0.1)">EXPLORE <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
               </div>
             </div>
           </a>
@@ -886,7 +886,7 @@
             <span class="text-[18px] leading-none">🌾</span>
             <span class="text-[16px] text-[#0F172A] font-bold tracking-tight">Select your crop</span>
           </div>
-          <button id="addCropBtn_legacy" class="flex items-center gap-1 text-[12.5px] font-bold px-2.5 py-1 rounded-full" style="color:#258046;background:#ECFDF5;border:1px solid #BBF7D0">
+          <button id="addCropBtn_legacy" class="flex items-center gap-1 text-[12.5px] font-medium px-2.5 py-1 rounded-full" style="color:#258046;background:#ECFDF5;border:1px solid #BBF7D0">
             <i class="fa-solid fa-plus text-[10px]"></i>
             Add
           </button>
@@ -898,25 +898,25 @@
             <div class="flex gap-2 px-1">
               <button data-quick="tomato" class="quick-crop-chip flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full flex-shrink-0" style="background:#FFFFFF;border:1px solid #E5E7EB">
                 <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=64&q=80&fit=crop" class="w-7 h-7 rounded-full object-cover" onerror="cropFallback(this,'🍅',16)"/>
-                <span class="text-[12.5px] font-bold text-[#0F172A]">Tomato</span>
+                <span class="text-[12.5px] font-medium text-[#0F172A]">Tomato</span>
               </button>
               <button data-quick="chilli" class="quick-crop-chip flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full flex-shrink-0" style="background:#FFFFFF;border:1px solid #E5E7EB">
                 <img src="https://images.unsplash.com/photo-1583852048850-31c0d0e7cdde?w=64&q=80&fit=crop" class="w-7 h-7 rounded-full object-cover" onerror="cropFallback(this,'🌶️',16)"/>
-                <span class="text-[12.5px] font-bold text-[#0F172A]">Chilli</span>
+                <span class="text-[12.5px] font-medium text-[#0F172A]">Chilli</span>
               </button>
               <button data-quick="wheat" class="quick-crop-chip flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full flex-shrink-0" style="background:#FFFFFF;border:1px solid #E5E7EB">
                 <img src="https://images.unsplash.com/photo-1574226516831-e1dff420e562?w=64&q=80&fit=crop" class="w-7 h-7 rounded-full object-cover" onerror="cropFallback(this,'🌾',16)"/>
-                <span class="text-[12.5px] font-bold text-[#0F172A]">Wheat</span>
+                <span class="text-[12.5px] font-medium text-[#0F172A]">Wheat</span>
               </button>
               <button data-quick="maize" class="quick-crop-chip flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full flex-shrink-0" style="background:#FFFFFF;border:1px solid #E5E7EB">
                 <img src="https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=64&q=80&fit=crop" class="w-7 h-7 rounded-full object-cover" onerror="cropFallback(this,'🌽',16)"/>
-                <span class="text-[12.5px] font-bold text-[#0F172A]">Maize</span>
+                <span class="text-[12.5px] font-medium text-[#0F172A]">Maize</span>
               </button>
               <button data-quick="cotton" class="quick-crop-chip flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full flex-shrink-0" style="background:#FFFFFF;border:1px solid #E5E7EB">
                 <img src="https://images.unsplash.com/photo-1591885503007-9b80d9c89a52?w=64&q=80&fit=crop" class="w-7 h-7 rounded-full object-cover" onerror="cropFallback(this,'☁️',16)"/>
-                <span class="text-[12.5px] font-bold text-[#0F172A]">Cotton</span>
+                <span class="text-[12.5px] font-medium text-[#0F172A]">Cotton</span>
               </button>
-              <button id="addCropBtnInline" class="flex items-center gap-1 px-2.5 py-1 rounded-full text-[12.5px] font-bold flex-shrink-0" style="color:#258046;background:#ECFDF5;border:1px dashed #10B981">
+              <button id="addCropBtnInline" class="flex items-center gap-1 px-2.5 py-1 rounded-full text-[12.5px] font-medium flex-shrink-0" style="color:#258046;background:#ECFDF5;border:1px dashed #10B981">
                 <i class="fa-solid fa-plus text-[9px]"></i> More
               </button>
             </div>
@@ -932,37 +932,37 @@
                 <div class="w-7 h-7 rounded-full overflow-hidden crop-circle" style="background:#FEE2E2">
                   <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🍅',16)"/>
                 </div>
-                <span class="text-[12.5px] font-bold text-[#0F172A] crop-label">Tomato</span>
+                <span class="text-[12.5px] font-medium text-[#0F172A] crop-label">Tomato</span>
               </button>
               <button data-crop="chilli" class="crop-tab flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-white cursor-pointer flex-shrink-0" style="border:1px solid #E5E7EB">
                 <div class="w-7 h-7 rounded-full overflow-hidden crop-circle" style="background:#FFEDD5">
                   <img src="https://images.unsplash.com/photo-1583852048850-31c0d0e7cdde?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌶️',16)"/>
                 </div>
-                <span class="text-[12.5px] font-bold text-[#0F172A] crop-label">Chilli</span>
+                <span class="text-[12.5px] font-medium text-[#0F172A] crop-label">Chilli</span>
               </button>
               <button data-crop="wheat" class="crop-tab flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-white cursor-pointer flex-shrink-0" style="border:1px solid #E5E7EB">
                 <div class="w-7 h-7 rounded-full overflow-hidden crop-circle" style="background:#FEF3C7">
                   <img src="https://images.unsplash.com/photo-1574226516831-e1dff420e562?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌾',16)"/>
                 </div>
-                <span class="text-[12.5px] font-bold text-[#0F172A] crop-label">Wheat</span>
+                <span class="text-[12.5px] font-medium text-[#0F172A] crop-label">Wheat</span>
               </button>
               <button data-crop="maize" class="crop-tab flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-white cursor-pointer flex-shrink-0" style="border:1px solid #E5E7EB">
                 <div class="w-7 h-7 rounded-full overflow-hidden crop-circle" style="background:#FEF9C3">
                   <img src="https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌽',16)"/>
                 </div>
-                <span class="text-[12.5px] font-bold text-[#0F172A] crop-label">Maize</span>
+                <span class="text-[12.5px] font-medium text-[#0F172A] crop-label">Maize</span>
               </button>
               <button data-crop="cotton" class="crop-tab flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-white cursor-pointer flex-shrink-0" style="border:1px solid #E5E7EB">
                 <div class="w-7 h-7 rounded-full overflow-hidden crop-circle" style="background:#F1F5F9">
                   <img src="https://images.unsplash.com/photo-1591885503007-9b80d9c89a52?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'☁️',16)"/>
                 </div>
-                <span class="text-[12.5px] font-bold text-[#0F172A] crop-label">Cotton</span>
+                <span class="text-[12.5px] font-medium text-[#0F172A] crop-label">Cotton</span>
               </button>
               <button data-crop="sugarcane" class="crop-tab flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-white cursor-pointer flex-shrink-0" style="border:1px solid #E5E7EB">
                 <div class="w-7 h-7 rounded-full overflow-hidden crop-circle" style="background:#DCFCE7">
                   <img src="https://images.unsplash.com/photo-1597106776019-b4ecc878c202?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🎋',16)"/>
                 </div>
-                <span class="text-[12.5px] font-bold text-[#0F172A] crop-label">Sugarcane</span>
+                <span class="text-[12.5px] font-medium text-[#0F172A] crop-label">Sugarcane</span>
               </button>
             </div>
           </div>
@@ -972,82 +972,82 @@
             <a href="pdp.html" class="nu rounded-xl p-2.5" style="background:#FFFFFF;border:1px solid #E5E7EB">
               <div class="aspect-square rounded-lg flex items-center justify-center p-2 mb-2 relative" style="background:#F8FAFC">
                 <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full object-contain"/>
-                <span class="absolute top-1 right-1 inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9.5px] font-semibold shadow-sm" style="background:rgba(255,255,255,0.95);color:#475569">
+                <span class="absolute top-1 right-1 inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9.5px] font-medium shadow-sm" style="background:rgba(255,255,255,0.95);color:#475569">
                   <i class="fa-solid fa-star text-[7.5px]" style="color:#F59E0B"></i>4.8
                 </span>
               </div>
               <div class="leading-tight">
-                <div class="text-[13px] font-bold text-[#0F172A] truncate">Chakrawarti ZC</div>
+                <div class="text-[13px] font-medium text-[#0F172A] truncate">Chakrawarti ZC</div>
                 <div class="text-[10.5px] mt-0.5 truncate" style="color:#94A3B8">Chloran. + Lambda-Cy. ZC</div>
               </div>
               <div class="text-[10.5px] text-[#64748B] mt-1">100ml · Insecticide</div>
               <div class="flex items-baseline gap-1 mt-1.5 flex-wrap">
                 <span class="text-[16px] font-bold tnum text-[#0F172A]">₹358</span>
                 <span class="text-[11px] text-[#94A3B8] line-through tnum">₹495</span>
-                <span class="text-[10px] font-extrabold" style="color:#258046">28% off</span>
+                <span class="text-[10px] font-medium" style="color:#258046">28% off</span>
               </div>
-              <button class="w-full mt-2 h-8 rounded-lg bg-emerald-600 text-white text-[12px] font-semibold">Add</button>
+              <button class="w-full mt-2 h-8 rounded-lg bg-emerald-600 text-white text-[12px] font-medium">Add</button>
             </a>
             <a href="pdp.html" class="nu rounded-xl p-2.5" style="background:#FFFFFF;border:1px solid #E5E7EB">
               <div class="aspect-square rounded-lg flex items-center justify-center p-2 mb-2 relative" style="background:#F8FAFC">
                 <img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" class="img-blend max-h-full object-contain"/>
-                <span class="absolute top-1 right-1 inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9.5px] font-semibold shadow-sm" style="background:rgba(255,255,255,0.95);color:#475569">
+                <span class="absolute top-1 right-1 inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9.5px] font-medium shadow-sm" style="background:rgba(255,255,255,0.95);color:#475569">
                   <i class="fa-solid fa-star text-[7.5px]" style="color:#F59E0B"></i>4.9
                 </span>
               </div>
               <div class="leading-tight">
-                <div class="text-[13px] font-bold text-[#0F172A] truncate">Antivirus</div>
+                <div class="text-[13px] font-medium text-[#0F172A] truncate">Antivirus</div>
                 <div class="text-[10.5px] mt-0.5 truncate" style="color:#94A3B8">Anti-viral biostimulant</div>
               </div>
               <div class="text-[10.5px] text-[#64748B] mt-1">100ml · Viricide</div>
               <div class="flex items-baseline gap-1 mt-1.5">
                 <span class="text-[16px] font-bold tnum text-[#0F172A]">₹327</span>
               </div>
-              <button class="w-full mt-2 h-8 rounded-lg bg-emerald-600 text-white text-[12px] font-semibold">Add</button>
+              <button class="w-full mt-2 h-8 rounded-lg bg-emerald-600 text-white text-[12px] font-medium">Add</button>
             </a>
             <a href="pdp.html" class="nu rounded-xl p-2.5" style="background:#FFFFFF;border:1px solid #E5E7EB">
               <div class="aspect-square rounded-lg flex items-center justify-center p-2 mb-2 relative" style="background:#F8FAFC">
                 <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend max-h-full object-contain"/>
-                <span class="absolute top-1 right-1 inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9.5px] font-semibold shadow-sm" style="background:rgba(255,255,255,0.95);color:#475569">
+                <span class="absolute top-1 right-1 inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9.5px] font-medium shadow-sm" style="background:rgba(255,255,255,0.95);color:#475569">
                   <i class="fa-solid fa-star text-[7.5px]" style="color:#F59E0B"></i>4.6
                 </span>
               </div>
               <div class="leading-tight">
-                <div class="text-[13px] font-bold text-[#0F172A] truncate">NPK 19-19-19</div>
+                <div class="text-[13px] font-medium text-[#0F172A] truncate">NPK 19-19-19</div>
                 <div class="text-[10.5px] mt-0.5 truncate" style="color:#94A3B8">N 19 · P 19 · K 19</div>
               </div>
               <div class="text-[10.5px] text-[#64748B] mt-1">1kg · Fertilizer</div>
               <div class="flex items-baseline gap-1 mt-1.5 flex-wrap">
                 <span class="text-[16px] font-bold tnum text-[#0F172A]">₹289</span>
                 <span class="text-[11px] text-[#94A3B8] line-through tnum">₹340</span>
-                <span class="text-[10px] font-extrabold" style="color:#258046">15% off</span>
+                <span class="text-[10px] font-medium" style="color:#258046">15% off</span>
               </div>
-              <button class="w-full mt-2 h-8 rounded-lg bg-emerald-600 text-white text-[12px] font-semibold">Add</button>
+              <button class="w-full mt-2 h-8 rounded-lg bg-emerald-600 text-white text-[12px] font-medium">Add</button>
             </a>
             <a href="pdp.html" class="nu rounded-xl p-2.5" style="background:#FFFFFF;border:1px solid #E5E7EB">
               <div class="aspect-square rounded-lg flex items-center justify-center p-2 mb-2 relative" style="background:#F8FAFC">
                 <img src="https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp" class="img-blend max-h-full object-contain"/>
-                <span class="absolute top-1 right-1 inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9.5px] font-semibold shadow-sm" style="background:rgba(255,255,255,0.95);color:#475569">
+                <span class="absolute top-1 right-1 inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9.5px] font-medium shadow-sm" style="background:rgba(255,255,255,0.95);color:#475569">
                   <i class="fa-solid fa-star text-[7.5px]" style="color:#F59E0B"></i>4.7
                 </span>
               </div>
               <div class="leading-tight">
-                <div class="text-[13px] font-bold text-[#0F172A] truncate">Triple Attack</div>
+                <div class="text-[13px] font-medium text-[#0F172A] truncate">Triple Attack</div>
                 <div class="text-[10.5px] mt-0.5 truncate" style="color:#94A3B8">Imida + Mancozeb + NPK</div>
               </div>
               <div class="text-[10.5px] text-[#64748B] mt-1">Combo · 3-in-1</div>
               <div class="flex items-baseline gap-1 mt-1.5 flex-wrap">
                 <span class="text-[16px] font-bold tnum text-[#0F172A]">₹712</span>
                 <span class="text-[11px] text-[#94A3B8] line-through tnum">₹910</span>
-                <span class="text-[10px] font-extrabold" style="color:#258046">22% off</span>
+                <span class="text-[10px] font-medium" style="color:#258046">22% off</span>
               </div>
-              <button class="w-full mt-2 h-8 rounded-lg bg-emerald-600 text-white text-[12px] font-semibold">Add</button>
+              <button class="w-full mt-2 h-8 rounded-lg bg-emerald-600 text-white text-[12px] font-medium">Add</button>
             </a>
           </div>
 
           <!-- View All CTA -->
           <div class="px-4 mt-3 pb-4">
-            <a href="shop.html?crop=tomato" id="cropViewAll" class="nu flex items-center justify-center gap-1.5 bg-white rounded-xl py-2.5 text-[13.5px] font-bold text-emerald-700" style="border:1.5px solid rgba(14,122,78,0.4)">
+            <a href="shop.html?crop=tomato" id="cropViewAll" class="nu flex items-center justify-center gap-1.5 bg-white rounded-xl py-2.5 text-[13.5px] font-medium text-emerald-700" style="border:1.5px solid rgba(14,122,78,0.4)">
               View All <span id="cropPickName">Tomato</span> Products <i class="fa-solid fa-arrow-right text-[11px]"></i>
             </a>
           </div>
@@ -1118,7 +1118,7 @@
           <span style="display:block;font-size:15px;font-weight:900;color:#0F172A">&#8377;540 sitting in your wallet</span>
           <span style="display:block;font-size:12px;color:#475569;font-weight:500;margin-top:1px">Use it on your next order — auto-applied at checkout</span>
         </span>
-        <span style="flex-shrink:0;position:relative;background:#258046;color:#fff;font-size:12.5px;font-weight:800;padding:8px 16px;border-radius:10px">Use now</span>
+        <span style="flex-shrink:0;position:relative;background:#258046;color:#fff;font-size:12.5px;font-weight:500;padding:8px 16px;border-radius:10px">Use now</span>
       </a>
     </section>
 
@@ -1126,7 +1126,7 @@
     <section class="px-4 pt-5">
       <div class="flex items-baseline justify-between mb-4">
         <h2 class="text-[21px] font-extrabold tracking-tight">Bestsellers</h2>
-        <a href="shop.html?sort=bestsellers" class="nu text-[13px] font-semibold" style="color:#258046">See all</a>
+        <a href="shop.html?sort=bestsellers" class="nu text-[13px] font-medium" style="color:#258046">See all</a>
       </div>
       <div class="grid grid-cols-2 gap-3">
 
@@ -1140,10 +1140,10 @@
           <!-- Compact image area with badges sitting on the grey shade (top corners, out of product center) -->
           <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:140px">
             <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/>
-            <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FEF3C7;color:#92400E">
+            <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-medium tracking-wider" style="background:#FEF3C7;color:#92400E">
               <i class="fa-solid fa-crown text-[7.5px]"></i>BESTSELLER
             </span>
-            <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-bold shadow-sm" style="background:#FFFFFF;color:#475569">
+            <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-medium shadow-sm" style="background:#FFFFFF;color:#475569">
               <i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>4.7
             </span>
           </div>
@@ -1153,16 +1153,16 @@
               <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Humic 12% + Fulvic 8%</div>
             </div>
             <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold" style="background:#F1F5F9;color:#475569">500 ml</span>
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium" style="background:#F1F5F9;color:#475569">500 ml</span>
               <span class="text-[11px] font-medium" style="color:#DC2626">6 left</span>
             </div>
             <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
               <span class="text-[18px] font-bold tnum text-[#0F172A]">₹210</span>
               <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹290</span>
-              <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
+              <span class="text-[10.5px] font-medium" style="color:#258046">28% off</span>
             </div>
             <div class="mt-2">
-              <button class="variant-btn w-full h-8 rounded-lg text-[12.5px] font-semibold text-white" style="background:#258046">2 Options</button>
+              <button class="variant-btn w-full h-8 rounded-lg text-[12.5px] font-medium text-white" style="background:#258046">2 Options</button>
             </div>
           </div>
         </a>
@@ -1176,10 +1176,10 @@
            style="background:#FFFFFF;border:1px solid #E5E7EB">
           <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:140px">
             <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full object-contain"/>
-            <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FEF3C7;color:#92400E">
+            <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-medium tracking-wider" style="background:#FEF3C7;color:#92400E">
               <i class="fa-solid fa-crown text-[7.5px]"></i>BESTSELLER
             </span>
-            <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-bold shadow-sm" style="background:#FFFFFF;color:#475569">
+            <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-medium shadow-sm" style="background:#FFFFFF;color:#475569">
               <i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>4.8
             </span>
           </div>
@@ -1189,16 +1189,16 @@
               <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Chloran. + Lambda-Cy. ZC</div>
             </div>
             <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold" style="background:#F1F5F9;color:#475569">100 ml</span>
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium" style="background:#F1F5F9;color:#475569">100 ml</span>
               <span class="text-[11px] font-medium" style="color:#DC2626">4 left</span>
             </div>
             <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
               <span class="text-[18px] font-bold tnum text-[#0F172A]">₹358</span>
               <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹495</span>
-              <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
+              <span class="text-[10.5px] font-medium" style="color:#258046">28% off</span>
             </div>
             <div class="mt-2">
-              <button class="variant-btn w-full h-8 rounded-lg text-[12.5px] font-semibold text-white" style="background:#258046">2 Options</button>
+              <button class="variant-btn w-full h-8 rounded-lg text-[12.5px] font-medium text-white" style="background:#258046">2 Options</button>
             </div>
           </div>
         </a>
@@ -1206,10 +1206,10 @@
         <a href="pdp.html" class="nu rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB">
           <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:140px">
             <img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" class="img-blend max-h-full object-contain"/>
-            <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#DBEAFE;color:#1E40AF">
+            <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-medium tracking-wider" style="background:#DBEAFE;color:#1E40AF">
               <i class="fa-solid fa-bolt text-[7.5px]"></i>TOP PICK
             </span>
-            <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-bold shadow-sm" style="background:#FFFFFF;color:#475569">
+            <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-medium shadow-sm" style="background:#FFFFFF;color:#475569">
               <i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>4.5
             </span>
           </div>
@@ -1218,14 +1218,14 @@
               <div class="text-[14.5px] font-semibold text-[#0F172A] truncate">Chakraveer 18.5%</div>
               <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Chlorantraniliprole 18.5% SC</div>
             </div>
-            <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
+            <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium mt-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
             <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
               <span class="text-[18px] font-bold tnum text-[#0F172A]">₹440</span>
               <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹610</span>
-              <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
+              <span class="text-[10.5px] font-medium" style="color:#258046">28% off</span>
             </div>
             <div class="mt-2 qty-wrap">
-              <button class="qty-add w-full h-8 rounded-lg text-white text-[12.5px] font-semibold" style="background:#258046">Add</button>
+              <button class="qty-add w-full h-8 rounded-lg text-white text-[12.5px] font-medium" style="background:#258046">Add</button>
               <div class="qty-steps w-full h-8 rounded-lg text-white items-center justify-between px-1" style="background:#258046;display:none">
                 <button class="qty-dec w-8 h-8 flex items-center justify-center text-[18px] font-bold">−</button>
                 <span class="qty-val text-[14px] font-semibold tnum">1</span>
@@ -1238,10 +1238,10 @@
         <a href="pdp.html" class="nu rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB">
           <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:140px">
             <img src="https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp" class="img-blend max-h-full object-contain"/>
-            <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-extrabold tracking-wider" style="background:#FCE7F3;color:#9D174D">
+            <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-medium tracking-wider" style="background:#FCE7F3;color:#9D174D">
               <i class="fa-solid fa-sparkles text-[7.5px]"></i>NEW
             </span>
-            <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-bold shadow-sm" style="background:#FFFFFF;color:#475569">
+            <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-medium shadow-sm" style="background:#FFFFFF;color:#475569">
               <i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>4.9
             </span>
           </div>
@@ -1250,12 +1250,12 @@
               <div class="text-[14.5px] font-semibold text-[#0F172A] truncate">Antivirus</div>
               <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Anti-viral biostimulant</div>
             </div>
-            <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
+            <div class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium mt-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
             <div class="flex items-baseline gap-1.5 mt-1.5">
               <span class="text-[18px] font-bold tnum text-[#0F172A]">₹327</span>
             </div>
             <div class="mt-2 qty-wrap">
-              <button class="qty-add w-full h-8 rounded-lg text-white text-[12.5px] font-semibold" style="background:#258046">Add</button>
+              <button class="qty-add w-full h-8 rounded-lg text-white text-[12.5px] font-medium" style="background:#258046">Add</button>
               <div class="qty-steps w-full h-8 rounded-lg text-white items-center justify-between px-1" style="background:#258046;display:none">
                 <button class="qty-dec w-8 h-8 flex items-center justify-center text-[18px] font-bold">−</button>
                 <span class="qty-val text-[14px] font-semibold tnum">1</span>
@@ -1272,7 +1272,7 @@
     <section class="mt-8 py-4" style="background:#F3F1FF">
       <div class="px-4 mb-3 flex items-baseline justify-between">
         <h2 class="text-[21px] font-extrabold tracking-tight">Recently viewed</h2>
-        <a href="shop.html?view=recent" class="nu text-[13px] font-semibold" style="color:#258046">See all</a>
+        <a href="shop.html?view=recent" class="nu text-[13px] font-medium" style="color:#258046">See all</a>
       </div>
       <style>
         .rv-card{flex-shrink:0;width:172px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06);text-decoration:none;color:#0F172A;display:flex;flex-direction:column}
@@ -1306,7 +1306,7 @@
     <section class="mt-8">
       <div class="px-4 mb-3 flex items-baseline justify-between">
         <h2 class="text-[21px] font-extrabold tracking-tight">Buy again</h2>
-        <a href="orders.html" class="nu text-[12px] font-extrabold" style="color:#258046;text-decoration:none">SEE ALL</a>
+        <a href="orders.html" class="nu text-[12px] font-medium" style="color:#258046;text-decoration:none">SEE ALL</a>
       </div>
       <style>
         /* Buy again · horizontal REORDER tiles · green "Ordered <date>" strip layer on top, technical name under the product name, filled-emerald Buy-again button (same as the Add button) */
@@ -1418,7 +1418,7 @@
                 <div class="font-extrabold leading-tight text-white" style="font-size:19px">Chakrawarti ZC</div>
                 <div class="text-[11.5px] mt-1 leading-snug" style="color:rgba(255,255,255,0.72)">Chloran. + Lambda-Cy.</div>
               </div>
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold flex-shrink-0" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium flex-shrink-0" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
                 <i class="fa-solid fa-star text-[9px]" style="color:#FBBF24"></i> 4.8
               </span>
             </div>
@@ -1429,14 +1429,14 @@
             <!-- BOTTOM: disease + crop uses on left, Shop now button on right -->
             <div class="relative px-4 pb-4 pt-2 flex items-end gap-2.5" style="z-index:2">
               <div class="flex-1 min-w-0">
-                <div class="text-[12.5px] font-extrabold leading-snug whitespace-nowrap" style="color:#FBBF24">
+                <div class="text-[12.5px] font-medium leading-snug whitespace-nowrap" style="color:#FBBF24">
                   <i class="fa-solid fa-shield-virus text-[11px]"></i> Kills sucking pests
                 </div>
-                <div class="text-[11.5px] font-semibold leading-snug mt-1.5 whitespace-nowrap" style="color:rgba(255,255,255,0.82)">
+                <div class="text-[11.5px] font-medium leading-snug mt-1.5 whitespace-nowrap" style="color:rgba(255,255,255,0.82)">
                   <i class="fa-solid fa-seedling text-[10.5px]"></i> Tomato, Chilli, Brinjal
                 </div>
               </div>
-              <button class="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 rounded-full text-[12.5px] font-extrabold whitespace-nowrap flex-shrink-0" style="background:#FFFFFF;color:#064E3B">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#064E3B"></i></button>
+              <button class="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 rounded-full text-[12.5px] font-medium whitespace-nowrap flex-shrink-0" style="background:#FFFFFF;color:#064E3B">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#064E3B"></i></button>
             </div>
           </a>
 
@@ -1449,7 +1449,7 @@
                 <div class="font-extrabold leading-tight text-white" style="font-size:19px">Antivirus</div>
                 <div class="text-[11.5px] mt-1 leading-snug" style="color:rgba(255,255,255,0.72)">Anti-viral biostimulant</div>
               </div>
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold flex-shrink-0" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium flex-shrink-0" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
                 <i class="fa-solid fa-star text-[9px]" style="color:#FBBF24"></i> 4.9
               </span>
             </div>
@@ -1458,14 +1458,14 @@
             </div>
             <div class="relative px-4 pb-4 pt-2 flex items-end gap-2.5" style="z-index:2">
               <div class="flex-1 min-w-0">
-                <div class="text-[12.5px] font-extrabold leading-snug whitespace-nowrap" style="color:#FBBF24">
+                <div class="text-[12.5px] font-medium leading-snug whitespace-nowrap" style="color:#FBBF24">
                   <i class="fa-solid fa-shield-virus text-[11px]"></i> Stops leaf-virus
                 </div>
-                <div class="text-[11.5px] font-semibold leading-snug mt-1.5 whitespace-nowrap" style="color:rgba(255,255,255,0.82)">
+                <div class="text-[11.5px] font-medium leading-snug mt-1.5 whitespace-nowrap" style="color:rgba(255,255,255,0.82)">
                   <i class="fa-solid fa-seedling text-[10.5px]"></i> Tomato, Chilli, Papaya
                 </div>
               </div>
-              <button class="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 rounded-full text-[12.5px] font-extrabold whitespace-nowrap flex-shrink-0" style="background:#FFFFFF;color:#4338CA">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#4338CA"></i></button>
+              <button class="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 rounded-full text-[12.5px] font-medium whitespace-nowrap flex-shrink-0" style="background:#FFFFFF;color:#4338CA">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#4338CA"></i></button>
             </div>
           </a>
 
@@ -1478,7 +1478,7 @@
                 <div class="font-extrabold leading-tight text-white" style="font-size:19px">Humic + Fulvic</div>
                 <div class="text-[11.5px] mt-1 leading-snug" style="color:rgba(255,255,255,0.72)">Humic 12% + Fulvic 8%</div>
               </div>
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold flex-shrink-0" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium flex-shrink-0" style="background:rgba(255,255,255,0.18);color:#FFFFFF;backdrop-filter:blur(4px)">
                 <i class="fa-solid fa-star text-[9px]" style="color:#FBBF24"></i> 4.7
               </span>
             </div>
@@ -1487,14 +1487,14 @@
             </div>
             <div class="relative px-4 pb-4 pt-2 flex items-end gap-2.5" style="z-index:2">
               <div class="flex-1 min-w-0">
-                <div class="text-[12.5px] font-extrabold leading-snug whitespace-nowrap" style="color:#FBBF24">
+                <div class="text-[12.5px] font-medium leading-snug whitespace-nowrap" style="color:#FBBF24">
                   <i class="fa-solid fa-shield-virus text-[11px]"></i> Boosts roots &amp; soil
                 </div>
-                <div class="text-[11.5px] font-semibold leading-snug mt-1.5 whitespace-nowrap" style="color:rgba(255,255,255,0.82)">
+                <div class="text-[11.5px] font-medium leading-snug mt-1.5 whitespace-nowrap" style="color:rgba(255,255,255,0.82)">
                   <i class="fa-solid fa-seedling text-[10.5px]"></i> Works on all crops
                 </div>
               </div>
-              <button class="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 rounded-full text-[12.5px] font-extrabold whitespace-nowrap flex-shrink-0" style="background:#FFFFFF;color:#134E4A">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#134E4A"></i></button>
+              <button class="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 rounded-full text-[12.5px] font-medium whitespace-nowrap flex-shrink-0" style="background:#FFFFFF;color:#134E4A">Shop now <i class="fa-solid fa-arrow-right text-[10px]" style="color:#134E4A"></i></button>
             </div>
           </a>
 
@@ -1507,8 +1507,8 @@
       <div id="acresCard" class="rounded-xl p-3.5 relative overflow-hidden" style="background:#FFFFFF;border:1px solid #BBF7D0;box-shadow:0 2px 8px -4px rgba(5,150,105,0.15);transition:transform .35s cubic-bezier(.34,1.56,.64,1)">
         <div class="flex items-center gap-2">
           <i class="fa-solid fa-circle-question text-[14px] flex-shrink-0" style="color:#258046"></i>
-          <div class="flex-1 min-w-0 text-[13.5px] font-extrabold text-[#0F172A] leading-tight">How many acres of land do you farm?</div>
-          <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[10.5px] font-extrabold flex-shrink-0" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#78350F">
+          <div class="flex-1 min-w-0 text-[13.5px] font-medium text-[#0F172A] leading-tight">How many acres of land do you farm?</div>
+          <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[10.5px] font-medium flex-shrink-0" style="background:linear-gradient(135deg,#FBBF24 0%,#F59E0B 100%);color:#78350F">
             <i class="fa-solid fa-coins text-[9px]"></i> +20
           </span>
           <button id="acresClose" class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style="background:#F1F5F9;border:0" aria-label="Dismiss">
@@ -1516,10 +1516,10 @@
           </button>
         </div>
         <div id="acreRow" class="flex gap-1.5 mt-2.5" data-q="acres">
-          <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-semibold text-center" data-val="lt1" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">&lt;&nbsp;1</button>
-          <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-semibold text-center" data-val="1-5" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">1&ndash;5</button>
-          <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-semibold text-center" data-val="5-10" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">5&ndash;10</button>
-          <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-semibold text-center" data-val="gt10" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">10+</button>
+          <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-medium text-center" data-val="lt1" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">&lt;&nbsp;1</button>
+          <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-medium text-center" data-val="1-5" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">1&ndash;5</button>
+          <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-medium text-center" data-val="5-10" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">5&ndash;10</button>
+          <button class="acre-opt nu flex-1 py-1.5 rounded-lg text-[11.5px] font-medium text-center" data-val="gt10" style="background:#F8FAFC;color:#0F172A;border:1px solid #E5E7EB">10+</button>
         </div>
         <!-- Flying coin burst container (multiple spawned at runtime) -->
         <div id="acresBurst" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
@@ -1696,9 +1696,9 @@
         <div class="text-[18px] font-bold text-[#0F172A]">Share your success story</div>
         <div class="text-[11.5px] mt-0.5" style="color:#64748B">Tell other farmers how KKD helped · earn <b style="color:#B45309">+30 coins</b></div>
       </div>
-      <div class="mt-3 text-[11px] font-extrabold uppercase tracking-wider" style="color:#64748B">Which product / crop?</div>
+      <div class="mt-3 text-[11px] font-medium uppercase tracking-wider" style="color:#64748B">Which product / crop?</div>
       <input id="engTestiProd" type="text" placeholder="e.g. Humic on tomato" class="w-full mt-1.5 rounded-[10px] text-[13px] outline-none" style="border:1px solid #E5E7EB;background:#FAFAFA;padding:11px 12px;font-family:inherit;color:#0F172A"/>
-      <div class="mt-3 text-[11px] font-extrabold uppercase tracking-wider" style="color:#64748B">Your story</div>
+      <div class="mt-3 text-[11px] font-medium uppercase tracking-wider" style="color:#64748B">Your story</div>
       <textarea id="engTestiText" placeholder="What result did you see? How many days? Any tips for other farmers…" class="w-full mt-1.5 rounded-[10px] text-[12.5px] outline-none" style="border:1px solid #E5E7EB;background:#FAFAFA;padding:10px 12px;min-height:74px;resize:none;font-family:inherit;color:#0F172A"></textarea>
       <div><label class="eng-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input type="file" accept="image/*,video/*" capture="environment" multiple id="engTestiMedia" style="display:none"/></label></div>
       <div class="eng-attach-info" id="engTestiAttachInfo"></div>
@@ -1895,37 +1895,37 @@
             <img src="https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=400&q=80" class="w-full h-full object-cover" style="opacity:.55"/>
             <div class="absolute inset-0 flex flex-col items-center justify-center">
               <div class="w-11 h-11 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg></div>
-              <div class="text-white text-[10px] font-extrabold text-center px-2">Ramesh Patel</div>
+              <div class="text-white text-[10px] font-medium text-center px-2">Ramesh Patel</div>
               <div class="text-[9px] text-center" style="color:rgba(255,255,255,0.7)">Tomato · Indore</div>
             </div>
-            <div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-semibold leading-tight">"Tomato result in 15 days"</div></div>
+            <div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-medium leading-tight">"Tomato result in 15 days"</div></div>
           </div>
           <div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">
             <img src="https://images.unsplash.com/photo-1572177812156-58036aae439c?w=400&q=80" class="w-full h-full object-cover" style="opacity:.55"/>
             <div class="absolute inset-0 flex flex-col items-center justify-center">
               <div class="w-11 h-11 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg></div>
-              <div class="text-white text-[10px] font-extrabold text-center px-2">Mohan Verma</div>
+              <div class="text-white text-[10px] font-medium text-center px-2">Mohan Verma</div>
               <div class="text-[9px] text-center" style="color:rgba(255,255,255,0.7)">Cotton · Khandwa</div>
             </div>
-            <div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-semibold leading-tight">"Yield up by 20%"</div></div>
+            <div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-medium leading-tight">"Yield up by 20%"</div></div>
           </div>
           <div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">
             <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=400&q=80" class="w-full h-full object-cover" style="opacity:.55"/>
             <div class="absolute inset-0 flex flex-col items-center justify-center">
               <div class="w-11 h-11 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg></div>
-              <div class="text-white text-[10px] font-extrabold text-center px-2">Balram Kushwaha</div>
+              <div class="text-white text-[10px] font-medium text-center px-2">Balram Kushwaha</div>
               <div class="text-[9px] text-center" style="color:rgba(255,255,255,0.7)">Wheat · Sehore</div>
             </div>
-            <div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-semibold leading-tight">"Used for 2 seasons"</div></div>
+            <div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-medium leading-tight">"Used for 2 seasons"</div></div>
           </div>
           <div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">
             <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&q=80" class="w-full h-full object-cover" style="opacity:.55"/>
             <div class="absolute inset-0 flex flex-col items-center justify-center">
               <div class="w-11 h-11 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg></div>
-              <div class="text-white text-[10px] font-extrabold text-center px-2">Anita Devi</div>
+              <div class="text-white text-[10px] font-medium text-center px-2">Anita Devi</div>
               <div class="text-[9px] text-center" style="color:rgba(255,255,255,0.7)">Chilli · Ujjain</div>
             </div>
-            <div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-semibold leading-tight">"Healthier crop, less spray"</div></div>
+            <div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-medium leading-tight">"Healthier crop, less spray"</div></div>
           </div>
         </div>
       </div>
@@ -1950,8 +1950,8 @@
           return '<div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">'
             + '<img src="' + t.img + '" class="w-full h-full object-cover" style="opacity:.55"/>'
             + '<div class="absolute inset-0 flex flex-col items-center justify-center"><div class="w-11 h-11 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg></div>'
-            + '<div class="text-white text-[10px] font-extrabold text-center px-2">' + t.n + '</div><div class="text-[9px] text-center" style="color:rgba(255,255,255,0.7)">' + t.loc + '</div></div>'
-            + '<div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-semibold leading-tight">' + t.q + '</div></div></div>';
+            + '<div class="text-white text-[10px] font-medium text-center px-2">' + t.n + '</div><div class="text-[9px] text-center" style="color:rgba(255,255,255,0.7)">' + t.loc + '</div></div>'
+            + '<div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-medium leading-tight">' + t.q + '</div></div></div>';
         }
         function loadMore(){
           if (loading || done) return;
@@ -1960,7 +1960,7 @@
           loader.id = 'testiLoader';
           loader.className = 'flex-shrink-0 flex flex-col items-center justify-center gap-2';
           loader.style.cssText = 'width:108px;height:200px;border-radius:12px;border:1px solid #E5E7EB;background:#fff';
-          loader.innerHTML = '<div style="width:24px;height:24px;border-radius:50%;border:3px solid #D1FAE5;border-top-color:#258046;animation:tspin .8s linear infinite"></div><div class="text-[10px] font-bold" style="color:#94A3B8">Loading…</div>';
+          loader.innerHTML = '<div style="width:24px;height:24px;border-radius:50%;border:3px solid #D1FAE5;border-top-color:#258046;animation:tspin .8s linear infinite"></div><div class="text-[10px] font-medium" style="color:#94A3B8">Loading…</div>';
           row.appendChild(loader);
           setTimeout(() => {
             loader.remove();
@@ -1979,7 +1979,7 @@
     <section class="mt-8">
       <div class="px-4 mb-3 flex items-baseline justify-between">
         <h2 class="text-[21px] font-extrabold tracking-tight">Most selling in Indore</h2>
-        <a href="shop.html?sort=bestsellers" class="nu text-[13px] font-semibold" style="color:#258046">See all</a>
+        <a href="shop.html?sort=bestsellers" class="nu text-[13px] font-medium" style="color:#258046">See all</a>
       </div>
       <div class="overflow-x-auto scroll-x">
         <div class="flex gap-3 px-4 pb-1">
@@ -1987,11 +1987,11 @@
           <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06)">
             <div class="px-3 py-2 flex items-center justify-center gap-1.5 text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
               <i class="fa-solid fa-fire text-[11px]" style="color:#FBBF24"></i>
-              <span class="text-[11.5px] font-extrabold tracking-wide">134 bought last week</span>
+              <span class="text-[11.5px] font-medium tracking-wide">134 bought last week</span>
             </div>
             <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:130px">
               <img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend max-h-full object-contain"/>
-              <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-bold shadow-sm" style="background:#FFFFFF;color:#475569">
+              <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-medium shadow-sm" style="background:#FFFFFF;color:#475569">
                 <i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>4.8
               </span>
             </div>
@@ -2000,14 +2000,14 @@
                 <div class="text-[14px] font-semibold text-[#0F172A] truncate">Chakrawarti ZC</div>
                 <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Chloran. + Lambda-Cy.</div>
               </div>
-              <div class="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
+              <div class="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-medium mt-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
               <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
                 <span class="text-[17px] font-bold tnum text-[#0F172A]">&#8377;358</span>
                 <span class="text-[11.5px] text-[#94A3B8] line-through tnum">&#8377;495</span>
-                <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
+                <span class="text-[10.5px] font-medium" style="color:#258046">28% off</span>
               </div>
               <div class="mt-2 qty-wrap">
-                <button class="qty-add w-full h-9 rounded-lg bg-emerald-600 text-white text-[12.5px] font-semibold">Add</button>
+                <button class="qty-add w-full h-9 rounded-lg bg-emerald-600 text-white text-[12.5px] font-medium">Add</button>
               </div>
             </div>
           </a>
@@ -2015,11 +2015,11 @@
           <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06)">
             <div class="px-3 py-2 flex items-center justify-center gap-1.5 text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
               <i class="fa-solid fa-fire text-[11px]" style="color:#FBBF24"></i>
-              <span class="text-[11.5px] font-extrabold tracking-wide">98 bought last week</span>
+              <span class="text-[11.5px] font-medium tracking-wide">98 bought last week</span>
             </div>
             <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:130px">
               <img src="https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg" class="img-blend max-h-full object-contain"/>
-              <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-bold shadow-sm" style="background:#FFFFFF;color:#475569">
+              <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-medium shadow-sm" style="background:#FFFFFF;color:#475569">
                 <i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>4.7
               </span>
             </div>
@@ -2028,14 +2028,14 @@
                 <div class="text-[14px] font-semibold text-[#0F172A] truncate">Humic + Fulvic</div>
                 <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Humic 12% + Fulvic 8%</div>
               </div>
-              <div class="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">1 L</div>
+              <div class="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-medium mt-1.5" style="background:#F1F5F9;color:#475569">1 L</div>
               <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
                 <span class="text-[17px] font-bold tnum text-[#0F172A]">&#8377;376</span>
                 <span class="text-[11.5px] text-[#94A3B8] line-through tnum">&#8377;520</span>
-                <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
+                <span class="text-[10.5px] font-medium" style="color:#258046">28% off</span>
               </div>
               <div class="mt-2 qty-wrap">
-                <button class="qty-add w-full h-9 rounded-lg bg-emerald-600 text-white text-[12.5px] font-semibold">Add</button>
+                <button class="qty-add w-full h-9 rounded-lg bg-emerald-600 text-white text-[12.5px] font-medium">Add</button>
               </div>
             </div>
           </a>
@@ -2043,11 +2043,11 @@
           <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06)">
             <div class="px-3 py-2 flex items-center justify-center gap-1.5 text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
               <i class="fa-solid fa-fire text-[11px]" style="color:#FBBF24"></i>
-              <span class="text-[11.5px] font-extrabold tracking-wide">76 bought last week</span>
+              <span class="text-[11.5px] font-medium tracking-wide">76 bought last week</span>
             </div>
             <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:130px">
               <img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend max-h-full object-contain"/>
-              <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-bold shadow-sm" style="background:#FFFFFF;color:#475569">
+              <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-medium shadow-sm" style="background:#FFFFFF;color:#475569">
                 <i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>4.6
               </span>
             </div>
@@ -2056,14 +2056,14 @@
                 <div class="text-[14px] font-semibold text-[#0F172A] truncate">NPK 19-19-19</div>
                 <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">N 19 &middot; P 19 &middot; K 19</div>
               </div>
-              <div class="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">1 kg</div>
+              <div class="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-medium mt-1.5" style="background:#F1F5F9;color:#475569">1 kg</div>
               <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
                 <span class="text-[17px] font-bold tnum text-[#0F172A]">&#8377;289</span>
                 <span class="text-[11.5px] text-[#94A3B8] line-through tnum">&#8377;340</span>
-                <span class="text-[10.5px] font-extrabold" style="color:#258046">15% off</span>
+                <span class="text-[10.5px] font-medium" style="color:#258046">15% off</span>
               </div>
               <div class="mt-2 qty-wrap">
-                <button class="qty-add w-full h-9 rounded-lg bg-emerald-600 text-white text-[12.5px] font-semibold">Add</button>
+                <button class="qty-add w-full h-9 rounded-lg bg-emerald-600 text-white text-[12.5px] font-medium">Add</button>
               </div>
             </div>
           </a>
@@ -2071,11 +2071,11 @@
           <a href="pdp.html" class="nu flex-shrink-0 w-[170px] rounded-2xl overflow-hidden" style="background:#FFFFFF;border:1px solid #E5E7EB;box-shadow:0 2px 8px -2px rgba(15,23,42,0.06)">
             <div class="px-3 py-2 flex items-center justify-center gap-1.5 text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%)">
               <i class="fa-solid fa-fire text-[11px]" style="color:#FBBF24"></i>
-              <span class="text-[11.5px] font-extrabold tracking-wide">54 bought last week</span>
+              <span class="text-[11.5px] font-medium tracking-wide">54 bought last week</span>
             </div>
             <div class="relative flex items-center justify-center p-3" style="background:#F8FAFC;height:130px">
               <img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" class="img-blend max-h-full object-contain"/>
-              <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-bold shadow-sm" style="background:#FFFFFF;color:#475569">
+              <span class="absolute top-2 right-2 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10.5px] font-medium shadow-sm" style="background:#FFFFFF;color:#475569">
                 <i class="fa-solid fa-star text-[8.5px]" style="color:#F59E0B"></i>4.5
               </span>
             </div>
@@ -2084,14 +2084,14 @@
                 <div class="text-[14px] font-semibold text-[#0F172A] truncate">Chakraveer 18.5%</div>
                 <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">Chlorantraniliprole</div>
               </div>
-              <div class="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
+              <div class="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-medium mt-1.5" style="background:#F1F5F9;color:#475569">100 ml</div>
               <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
                 <span class="text-[17px] font-bold tnum text-[#0F172A]">&#8377;440</span>
                 <span class="text-[11.5px] text-[#94A3B8] line-through tnum">&#8377;610</span>
-                <span class="text-[10.5px] font-extrabold" style="color:#258046">28% off</span>
+                <span class="text-[10.5px] font-medium" style="color:#258046">28% off</span>
               </div>
               <div class="mt-2 qty-wrap">
-                <button class="qty-add w-full h-9 rounded-lg bg-emerald-600 text-white text-[12.5px] font-semibold">Add</button>
+                <button class="qty-add w-full h-9 rounded-lg bg-emerald-600 text-white text-[12.5px] font-medium">Add</button>
               </div>
             </div>
           </a>
@@ -2116,7 +2116,7 @@
     <!-- Brand illustration footer with "Jump to top" pill overlayed on the illustration's top edge so it visually sits on top of the artwork (not floating in white space above) -->
     <section id="endHint" class="relative" style="background:#FFFFFF;line-height:0;margin-top:64px">
       <div class="absolute left-0 right-0 flex items-center justify-center" style="top:0;transform:translateY(-50%);z-index:5;line-height:1">
-        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="nu inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12.5px] font-extrabold" style="background:#ECFDF5;color:#258046;border:1px solid #BBF7D0;box-shadow:0 6px 18px -4px rgba(5,150,105,0.35)">
+        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="nu inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12.5px] font-medium" style="background:#ECFDF5;color:#258046;border:1px solid #BBF7D0;box-shadow:0 6px 18px -4px rgba(5,150,105,0.35)">
           <i class="fa-solid fa-arrow-up text-[11px]" style="color:#258046"></i> Jump to top
         </button>
       </div>
@@ -2134,10 +2134,10 @@
       <div class="flex items-baseline gap-1.5 min-w-0">
         <span class="text-[20px] font-extrabold tnum">₹<span id="cartTotal">358</span></span>
         <span class="text-[15px] text-white/70 font-semibold whitespace-nowrap"><span id="cartCount">1</span> item</span>
-        <span class="cart-save text-[13.5px] font-bold whitespace-nowrap" style="color:#34D399">· Save ₹<span id="cartSave">137</span></span>
+        <span class="cart-save text-[13.5px] font-medium whitespace-nowrap" style="color:#34D399">· Save ₹<span id="cartSave">137</span></span>
       </div>
     </div>
-    <div class="cart-view flex items-center gap-1.5 text-[12.5px] font-bold flex-shrink-0">
+    <div class="cart-view flex items-center gap-1.5 text-[12.5px] font-medium flex-shrink-0">
       <span class="view-label">View cart</span>
       <i class="fa-solid fa-arrow-right text-[10px]"></i>
     </div>
@@ -2150,8 +2150,8 @@
       <span class="expert-video-badge" aria-hidden="true"><i class="fa-solid fa-video"></i></span>
     </span>
     <span class="expert-text">
-      <span class="text-[11.5px] font-extrabold">Ask Expert</span>
-      <span class="expert-sub text-[9px] font-semibold" style="color:rgba(255,255,255,0.85)">Free agronomist call</span>
+      <span class="text-[11.5px] font-medium">Ask Expert</span>
+      <span class="expert-sub text-[9px] font-medium" style="color:rgba(255,255,255,0.85)">Free agronomist call</span>
     </span>
   </a>
 
@@ -2178,78 +2178,78 @@
             <i class="fa-solid fa-truck-fast text-[16px]" style="color:#FFFFFF"></i>
           </div>
           <div class="flex-1 leading-tight">
-            <div class="text-[13.5px] font-extrabold" style="color:#258046">Out for delivery</div>
-            <div class="text-[11.5px] font-semibold" style="color:#065F46">Arriving today by 5:00 PM</div>
+            <div class="text-[13.5px] font-medium" style="color:#258046">Out for delivery</div>
+            <div class="text-[11.5px] font-medium" style="color:#065F46">Arriving today by 5:00 PM</div>
           </div>
-          <span class="text-[10.5px] font-extrabold uppercase tracking-wider px-2 py-1 rounded-md" style="background:#FFFFFF;color:#258046;border:1px solid #BBF7D0">Live</span>
+          <span class="text-[10.5px] font-medium uppercase tracking-wider px-2 py-1 rounded-md" style="background:#FFFFFF;color:#258046;border:1px solid #BBF7D0">Live</span>
         </div>
         <!-- Timeline -->
-        <div class="text-[12px] font-extrabold uppercase tracking-wider mb-3" style="color:#64748B">Order timeline</div>
+        <div class="text-[12px] font-medium uppercase tracking-wider mb-3" style="color:#64748B">Order timeline</div>
         <div class="relative pl-7 pb-2" style="border-left:2px dashed #BBF7D0;margin-left:8px">
           <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full flex items-center justify-center" style="background:#258046;border:2px solid #FFFFFF;box-shadow:0 0 0 2px #BBF7D0"><i class="fa-solid fa-check text-white text-[8px]"></i></div>
-          <div class="text-[13px] font-extrabold text-[#0F172A]">Order placed</div>
+          <div class="text-[13px] font-medium text-[#0F172A]">Order placed</div>
           <div class="text-[11px]" style="color:#64748B">22 May, 11:42 AM</div>
           <div class="text-[11px] mt-1" style="color:#475569">Payment received · UPI ₹2,140</div>
         </div>
         <div class="relative pl-7 pb-2" style="border-left:2px dashed #BBF7D0;margin-left:8px">
           <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full flex items-center justify-center" style="background:#258046;border:2px solid #FFFFFF;box-shadow:0 0 0 2px #BBF7D0"><i class="fa-solid fa-check text-white text-[8px]"></i></div>
-          <div class="text-[13px] font-extrabold text-[#0F172A]">Packed at warehouse</div>
+          <div class="text-[13px] font-medium text-[#0F172A]">Packed at warehouse</div>
           <div class="text-[11px]" style="color:#64748B">23 May, 09:15 AM</div>
           <div class="text-[11px] mt-1" style="color:#475569">Quality checked &middot; Sealed by Katyayani Indore</div>
         </div>
         <div class="relative pl-7 pb-2" style="border-left:2px dashed #258046;margin-left:8px">
           <div class="absolute -left-[10px] top-0 w-5 h-5 rounded-full flex items-center justify-center" style="background:#258046;border:2px solid #FFFFFF;box-shadow:0 0 0 3px rgba(5,150,105,0.25);animation:dtPulse 1.6s ease-out infinite"><i class="fa-solid fa-truck-fast text-white text-[9px]"></i></div>
-          <div class="text-[13px] font-extrabold" style="color:#258046">Out for delivery <span class="text-[10px] font-bold uppercase ml-1 px-1.5 py-0.5 rounded" style="background:#258046;color:#FFFFFF">Now</span></div>
+          <div class="text-[13px] font-medium" style="color:#258046">Out for delivery <span class="text-[10px] font-medium uppercase ml-1 px-1.5 py-0.5 rounded" style="background:#258046;color:#FFFFFF">Now</span></div>
           <div class="text-[11px]" style="color:#64748B">Today, 02:45 PM</div>
           <div class="text-[11px] mt-1" style="color:#475569">Suresh Yadav (rider) · arriving by 5:00 PM</div>
-          <a href="tel:+919999999999" class="inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-1 rounded-md text-[11px] font-extrabold" style="background:#FFFFFF;color:#258046;border:1px solid #BBF7D0"><i class="fa-solid fa-phone text-[9px]" style="color:#258046"></i> Call rider</a>
+          <a href="tel:+919999999999" class="inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium" style="background:#FFFFFF;color:#258046;border:1px solid #BBF7D0"><i class="fa-solid fa-phone text-[9px]" style="color:#258046"></i> Call rider</a>
         </div>
         <div class="relative pl-7" style="margin-left:8px">
           <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full" style="background:#FFFFFF;border:2px solid #CBD5E1"></div>
-          <div class="text-[13px] font-bold" style="color:#94A3B8">Delivered</div>
+          <div class="text-[13px] font-medium" style="color:#94A3B8">Delivered</div>
           <div class="text-[11px]" style="color:#94A3B8">Expected today by 5:00 PM</div>
         </div>
         <!-- Delivery address -->
-        <div class="text-[12px] font-extrabold uppercase tracking-wider mb-3 mt-5" style="color:#64748B">Delivery address</div>
+        <div class="text-[12px] font-medium uppercase tracking-wider mb-3 mt-5" style="color:#64748B">Delivery address</div>
         <div class="rounded-xl p-3 flex items-start gap-2.5" style="background:#F8FAFC;border:1px solid #E5E7EB">
           <i class="fa-solid fa-location-dot text-[14px] mt-1 flex-shrink-0" style="color:#258046"></i>
           <div class="flex-1 leading-tight">
-            <div class="text-[12.5px] font-extrabold text-[#0F172A]">Home · Indore 452001</div>
+            <div class="text-[12.5px] font-medium text-[#0F172A]">Home · Indore 452001</div>
             <div class="text-[11px] mt-0.5" style="color:#64748B">Plot 14, Khasra Road, Vijay Nagar, Indore, MP</div>
           </div>
         </div>
         <!-- Items -->
-        <div class="text-[12px] font-extrabold uppercase tracking-wider mb-3 mt-5" style="color:#64748B">Items (3)</div>
+        <div class="text-[12px] font-medium uppercase tracking-wider mb-3 mt-5" style="color:#64748B">Items (3)</div>
         <div class="space-y-2 mb-5">
           <div class="rounded-xl p-2.5 flex items-center gap-2.5" style="background:#FFFFFF;border:1px solid #E5E7EB">
             <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#F8FAFC"><img src="../assets/Chakrawarti_nobg.png" class="w-10 h-10 object-contain"/></div>
             <div class="flex-1 min-w-0 leading-tight">
-              <div class="text-[12.5px] font-extrabold truncate text-[#0F172A]">Chakrawarti ZC</div>
+              <div class="text-[12.5px] font-medium truncate text-[#0F172A]">Chakrawarti ZC</div>
               <div class="text-[11px] truncate" style="color:#64748B">100 ml · Qty 2</div>
             </div>
-            <div class="text-[13px] font-extrabold tnum text-[#0F172A]">&#8377;716</div>
+            <div class="text-[13px] font-medium tnum text-[#0F172A]">&#8377;716</div>
           </div>
           <div class="rounded-xl p-2.5 flex items-center gap-2.5" style="background:#FFFFFF;border:1px solid #E5E7EB">
             <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#F8FAFC"><img src="../assets/Humic_nobg.png" class="w-10 h-10 object-contain"/></div>
             <div class="flex-1 min-w-0 leading-tight">
-              <div class="text-[12.5px] font-extrabold truncate text-[#0F172A]">Humic + Fulvic 98</div>
+              <div class="text-[12.5px] font-medium truncate text-[#0F172A]">Humic + Fulvic 98</div>
               <div class="text-[11px] truncate" style="color:#64748B">1 L · Qty 1</div>
             </div>
-            <div class="text-[13px] font-extrabold tnum text-[#0F172A]">&#8377;376</div>
+            <div class="text-[13px] font-medium tnum text-[#0F172A]">&#8377;376</div>
           </div>
           <div class="rounded-xl p-2.5 flex items-center gap-2.5" style="background:#FFFFFF;border:1px solid #E5E7EB">
             <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#F8FAFC"><img src="../assets/AntiVirus_nobg.png" class="w-10 h-10 object-contain"/></div>
             <div class="flex-1 min-w-0 leading-tight">
-              <div class="text-[12.5px] font-extrabold truncate text-[#0F172A]">Antivirus</div>
+              <div class="text-[12.5px] font-medium truncate text-[#0F172A]">Antivirus</div>
               <div class="text-[11px] truncate" style="color:#64748B">100 ml · Qty 3</div>
             </div>
-            <div class="text-[13px] font-extrabold tnum text-[#0F172A]">&#8377;981</div>
+            <div class="text-[13px] font-medium tnum text-[#0F172A]">&#8377;981</div>
           </div>
         </div>
       </div>
       <div class="flex-shrink-0 px-5 py-3 flex gap-2" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)">
-        <a href="help.html" class="nu flex-1 h-12 rounded-xl flex items-center justify-center text-[13px] font-extrabold" style="background:#F1F5F9;color:#0F172A">Need help?</a>
-        <a href="order-details.html" class="nu flex-1 h-12 rounded-xl flex items-center justify-center gap-1.5 text-[13px] font-extrabold" style="background:#258046;color:#FFFFFF">View full <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i></a>
+        <a href="help.html" class="nu flex-1 h-12 rounded-xl flex items-center justify-center text-[13px] font-medium" style="background:#F1F5F9;color:#0F172A">Need help?</a>
+        <a href="order-details.html" class="nu flex-1 h-12 rounded-xl flex items-center justify-center gap-1.5 text-[13px] font-medium" style="background:#258046;color:#FFFFFF">View full <i class="fa-solid fa-arrow-right text-[10px]" style="color:#FFFFFF"></i></a>
       </div>
     </div>
   </div>
@@ -2298,10 +2298,10 @@
           <div class="flex items-baseline gap-1.5 min-w-0">
             <span class="text-[20px] font-extrabold tnum">₹<span id="vsBarAmt">0</span></span>
             <span class="text-[15px] text-white/70 font-semibold whitespace-nowrap"><span id="vsBarCount">1</span> items</span>
-            <span id="vsBarSaveWrap" class="text-[13.5px] font-bold whitespace-nowrap" style="color:#34D399">· Save ₹<span id="vsBarSave">0</span></span>
+            <span id="vsBarSaveWrap" class="text-[13.5px] font-medium whitespace-nowrap" style="color:#34D399">· Save ₹<span id="vsBarSave">0</span></span>
           </div>
         </div>
-        <div class="flex items-center gap-1.5 text-[12.5px] font-bold flex-shrink-0"><span>View cart</span><i class="fa-solid fa-arrow-right text-[10px]"></i></div>
+        <div class="flex items-center gap-1.5 text-[12.5px] font-medium flex-shrink-0"><span>View cart</span><i class="fa-solid fa-arrow-right text-[10px]"></i></div>
       </a>
     </div>
   </div>
@@ -2310,19 +2310,19 @@
   <nav class="fixed bottom-0 left-0 right-0 bg-white flex justify-around items-center px-2 py-2 z-50" style="height:68px;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04)">
     <a href="home.html" class="nu flex flex-col items-center gap-1">
       <i class="fa-solid fa-house text-[20px]" style="color:#258046"></i>
-      <span class="text-[12.5px] font-bold" style="color:#0F172A">Home</span>
+      <span class="text-[12.5px] font-medium" style="color:#0F172A">Home</span>
     </a>
     <a href="crop-detail.html" class="nu flex flex-col items-center gap-1" style="color:#94A3B8">
       <i class="fa-solid fa-seedling text-[20px]"></i>
-      <span class="text-[12.5px] font-semibold">Crop</span>
+      <span class="text-[12.5px] font-medium">Crop</span>
     </a>
     <a href="orders.html" class="nu flex flex-col items-center gap-1" style="color:#94A3B8">
       <i class="fa-solid fa-box text-[20px]"></i>
-      <span class="text-[12.5px] font-semibold">Orders</span>
+      <span class="text-[12.5px] font-medium">Orders</span>
     </a>
     <a href="account.html" class="nu flex flex-col items-center gap-1" style="color:#94A3B8">
       <i class="fa-solid fa-user text-[20px]"></i>
-      <span class="text-[12.5px] font-semibold">Profile</span>
+      <span class="text-[12.5px] font-medium">Profile</span>
     </a>
   </nav>
 
@@ -2347,39 +2347,39 @@
       <div class="grid grid-cols-3 gap-2.5 px-5 py-3 overflow-y-auto" id="cropModalGrid" style="flex:1">
         <button data-crop="tomato" class="crop-choice flex flex-col items-center p-3 rounded-xl bg-white relative" style="border:2px solid #E2E8F0">
           <div class="w-14 h-14 rounded-full overflow-hidden mb-2" style="background:#FEE2E2"><img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🍅',30)"/></div>
-          <span class="text-[12px] font-bold text-[#0F172A]">Tomato</span>
+          <span class="text-[12px] font-medium text-[#0F172A]">Tomato</span>
         </button>
         <button data-crop="chilli" class="crop-choice flex flex-col items-center p-3 rounded-xl bg-white relative" style="border:2px solid #E2E8F0">
           <div class="w-14 h-14 rounded-full overflow-hidden mb-2" style="background:#FFEDD5"><img src="https://images.unsplash.com/photo-1583852048850-31c0d0e7cdde?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌶️',30)"/></div>
-          <span class="text-[12px] font-bold text-[#0F172A]">Chilli</span>
+          <span class="text-[12px] font-medium text-[#0F172A]">Chilli</span>
         </button>
         <button data-crop="wheat" class="crop-choice flex flex-col items-center p-3 rounded-xl bg-white relative" style="border:2px solid #E2E8F0">
           <div class="w-14 h-14 rounded-full overflow-hidden mb-2" style="background:#FEF3C7"><img src="https://images.unsplash.com/photo-1574226516831-e1dff420e562?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌾',30)"/></div>
-          <span class="text-[12px] font-bold text-[#0F172A]">Wheat</span>
+          <span class="text-[12px] font-medium text-[#0F172A]">Wheat</span>
         </button>
         <button data-crop="maize" class="crop-choice flex flex-col items-center p-3 rounded-xl bg-white relative" style="border:2px solid #E2E8F0">
           <div class="w-14 h-14 rounded-full overflow-hidden mb-2" style="background:#FEF9C3"><img src="https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌽',30)"/></div>
-          <span class="text-[12px] font-bold text-[#0F172A]">Maize</span>
+          <span class="text-[12px] font-medium text-[#0F172A]">Maize</span>
         </button>
         <button data-crop="cotton" class="crop-choice flex flex-col items-center p-3 rounded-xl bg-white relative" style="border:2px solid #E2E8F0">
           <div class="w-14 h-14 rounded-full overflow-hidden mb-2" style="background:#F1F5F9"><img src="https://images.unsplash.com/photo-1591885503007-9b80d9c89a52?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'☁️',26)"/></div>
-          <span class="text-[12px] font-bold text-[#0F172A]">Cotton</span>
+          <span class="text-[12px] font-medium text-[#0F172A]">Cotton</span>
         </button>
         <button data-crop="sugarcane" class="crop-choice flex flex-col items-center p-3 rounded-xl bg-white relative" style="border:2px solid #E2E8F0">
           <div class="w-14 h-14 rounded-full overflow-hidden mb-2" style="background:#DCFCE7"><img src="https://images.unsplash.com/photo-1597106776019-b4ecc878c202?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🎋',26)"/></div>
-          <span class="text-[12px] font-bold text-[#0F172A]">Sugarcane</span>
+          <span class="text-[12px] font-medium text-[#0F172A]">Sugarcane</span>
         </button>
         <button data-crop="paddy" class="crop-choice flex flex-col items-center p-3 rounded-xl bg-white relative" style="border:2px solid #E2E8F0">
           <div class="w-14 h-14 rounded-full overflow-hidden mb-2" style="background:#ECFDF5"><img src="https://images.unsplash.com/photo-1568347877321-f8935c7dc5a8?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🌱',26)"/></div>
-          <span class="text-[12px] font-bold text-[#0F172A]">Paddy</span>
+          <span class="text-[12px] font-medium text-[#0F172A]">Paddy</span>
         </button>
         <button data-crop="onion" class="crop-choice flex flex-col items-center p-3 rounded-xl bg-white relative" style="border:2px solid #E2E8F0">
           <div class="w-14 h-14 rounded-full overflow-hidden mb-2" style="background:#FCE7F3"><img src="https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🧅',30)"/></div>
-          <span class="text-[12px] font-bold text-[#0F172A]">Onion</span>
+          <span class="text-[12px] font-medium text-[#0F172A]">Onion</span>
         </button>
         <button data-crop="potato" class="crop-choice flex flex-col items-center p-3 rounded-xl bg-white relative" style="border:2px solid #E2E8F0">
           <div class="w-14 h-14 rounded-full overflow-hidden mb-2" style="background:#FEF3C7"><img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=128&q=80&fit=crop" class="w-full h-full object-cover" onerror="cropFallback(this,'🥔',30)"/></div>
-          <span class="text-[12px] font-bold text-[#0F172A]">Potato</span>
+          <span class="text-[12px] font-medium text-[#0F172A]">Potato</span>
         </button>
       </div>
       <!-- Apply -->
@@ -2964,7 +2964,7 @@
             + tick
             + '</div>'
             + '<div class="flex-1 flex items-center justify-center px-1" style="background:'+tileBg+'">'
-            + '<span class="text-[11.5px] font-bold leading-none whitespace-nowrap" style="color:'+labelColor+'">'+m.label+'</span>'
+            + '<span class="text-[11.5px] font-medium leading-none whitespace-nowrap" style="color:'+labelColor+'">'+m.label+'</span>'
             + '</div>'
             + '</button>';
         }).join('');
@@ -2976,7 +2976,7 @@
           + '<i class="fa-solid fa-plus text-[16px]" style="color:#FFFFFF"></i></div>'
           + '</div>'
           + '<div class="flex-1 flex items-center justify-center px-1" style="background:#FFFFFF">'
-          + '<span class="text-[11.5px] font-bold leading-none whitespace-nowrap" style="color:#0F172A">All crops</span>'
+          + '<span class="text-[11.5px] font-medium leading-none whitespace-nowrap" style="color:#0F172A">All crops</span>'
           + '</div>'
           + '</button>';
         picker.innerHTML = chips + moreChip;
@@ -3128,17 +3128,17 @@
           const isDone = done.has(q.id);
           let right;
           if (isDone) {
-            right = '<span class="flex-shrink-0 inline-flex items-center gap-1.5 px-3 h-9 rounded-lg text-[12px] font-extrabold" style="background:#ECFDF5;color:#258046;border:1px solid #A7F3D0"><i class="fa-solid fa-check"></i> Earned</span>';
+            right = '<span class="flex-shrink-0 inline-flex items-center gap-1.5 px-3 h-9 rounded-lg text-[12px] font-medium" style="background:#ECFDF5;color:#258046;border:1px solid #A7F3D0"><i class="fa-solid fa-check"></i> Earned</span>';
           } else if (q.kind === 'status') {
             // passive step · no action, just a status
-            right = '<span class="flex-shrink-0 inline-flex items-center gap-1.5 px-3 h-9 rounded-lg text-[12px] font-bold" style="background:#F1F5F9;color:#64748B"><i class="fa-regular fa-clock text-[11px]"></i> Pending</span>';
+            right = '<span class="flex-shrink-0 inline-flex items-center gap-1.5 px-3 h-9 rounded-lg text-[12px] font-medium" style="background:#F1F5F9;color:#64748B"><i class="fa-regular fa-clock text-[11px]"></i> Pending</span>';
           } else {
-            right = '<button data-quest="'+q.id+'" class="flex-shrink-0 inline-flex items-center justify-center px-4 h-9 rounded-lg text-[12.5px] font-extrabold" style="background:#258046;color:#FFFFFF;border:0;box-shadow:0 4px 10px -3px rgba(5,150,105,0.45)">'+q.action+'</button>';
+            right = '<button data-quest="'+q.id+'" class="flex-shrink-0 inline-flex items-center justify-center px-4 h-9 rounded-lg text-[12.5px] font-medium" style="background:#258046;color:#FFFFFF;border:0;box-shadow:0 4px 10px -3px rgba(5,150,105,0.45)">'+q.action+'</button>';
           }
           return '<div class="flex items-center gap-3 py-3.5" style="border-bottom:1px solid #F1F5F9;'+(isDone ? 'opacity:.65' : '')+'">'
             + '<span class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:'+q.bg+';color:'+q.color+';font-size:17px"><i class="fa-solid '+q.icon+'"></i></span>'
             + '<div class="flex-1 min-w-0 leading-tight">'
-              + '<div class="flex items-center gap-2 flex-wrap"><span class="text-[14px] font-semibold text-[#0F172A]">'+q.title+'</span><span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-extrabold" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-coins text-[8px]"></i> +'+q.coins+'</span></div>'
+              + '<div class="flex items-center gap-2 flex-wrap"><span class="text-[14px] font-semibold text-[#0F172A]">'+q.title+'</span><span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-medium" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-coins text-[8px]"></i> +'+q.coins+'</span></div>'
             + '</div>' + right
           + '</div>';
         }).join('');
@@ -3227,7 +3227,7 @@
             + tick
             + '</div>'
             + '<div class="flex-1 flex items-center justify-center px-1">'
-            + '<span class="text-[12.5px] font-bold leading-none" style="color:'+labelColor+'">'+m.label+'</span>'
+            + '<span class="text-[12.5px] font-medium leading-none" style="color:'+labelColor+'">'+m.label+'</span>'
             + '</div>'
             + '</button>';
         }).join('');
@@ -3412,7 +3412,7 @@
               + '<span class="text-white text-[14px] font-semibold tnum">'+qty+'</span>'
               + '<button data-vs-act="inc" data-vs-key="'+k+'" class="w-8 h-9 flex items-center justify-center text-white text-[18px] font-bold">+</button>'
             + '</div>'
-          : '<button data-vs-act="inc" data-vs-key="'+k+'" class="h-9 px-5 rounded-lg text-white text-[12.5px] font-extrabold flex-shrink-0" style="background:#258046">Add</button>';
+          : '<button data-vs-act="inc" data-vs-key="'+k+'" class="h-9 px-5 rounded-lg text-white text-[12.5px] font-medium flex-shrink-0" style="background:#258046">Add</button>';
         // Per-row product thumbnail · same grey card treatment as the home product-card image area · uses the card-level product image (single asset, per-variant images can plug in later via v.img)
         const imgSrc = v.img || card.dataset.productImg || '';
         const thumb = '<div class="w-14 h-14 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#F8FAFC;border:1px solid #E5E7EB"><img src="'+imgSrc+'" class="w-12 h-12 object-contain"/></div>';
@@ -3421,13 +3421,13 @@
           + thumb
           + '<div class="flex-1 min-w-0">'
             + '<div class="flex items-center gap-1.5 flex-wrap">'
-              + '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold" style="background:#F1F5F9;color:#475569">'+v.size+'</span>'
+              + '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium" style="background:#F1F5F9;color:#475569">'+v.size+'</span>'
               + (v.low ? '<span class="text-[11px] font-medium" style="color:#DC2626">'+v.low+' left</span>' : '')
             + '</div>'
             + '<div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">'
               + '<span class="text-[16px] font-bold tnum text-[#0F172A]">₹'+v.price+'</span>'
               + (v.mrp ? '<span class="text-[11.5px] tnum line-through" style="color:#94A3B8">₹'+v.mrp+'</span>' : '')
-              + (v.off ? '<span class="text-[10.5px] font-extrabold" style="color:#258046">'+v.off+'% off</span>' : '')
+              + (v.off ? '<span class="text-[10.5px] font-medium" style="color:#258046">'+v.off+'% off</span>' : '')
             + '</div>'
           + '</div>'
           + stepper

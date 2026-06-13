@@ -128,7 +128,7 @@
 </style></head>
 <body>
 
-  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-bold">
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-medium">
     <span>9:41</span>
     <div class="flex items-center gap-1.5">
       <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
@@ -183,10 +183,10 @@
 
   <!-- Bottom nav · Crop active -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white flex justify-around items-center px-2 py-2 z-50" style="height:68px;border-top:1px solid #F1F5F9;box-shadow:0 -4px 16px rgba(0,0,0,0.04)">
-    <a href="home.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none"><i class="fa-solid fa-house text-[20px]"></i><span class="text-[12.5px] font-semibold">Home</span></a>
-    <a href="crop-detail.html" class="flex flex-col items-center gap-1" style="text-decoration:none"><i class="fa-solid fa-seedling text-[20px]" style="color:#258046"></i><span class="text-[12.5px] font-bold" style="color:#0F172A">Crop</span></a>
-    <a href="orders.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none"><i class="fa-solid fa-box text-[20px]"></i><span class="text-[12.5px] font-semibold">Orders</span></a>
-    <a href="account.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none"><i class="fa-solid fa-user text-[20px]"></i><span class="text-[12.5px] font-semibold">Profile</span></a>
+    <a href="home.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none"><i class="fa-solid fa-house text-[20px]"></i><span class="text-[12.5px] font-medium">Home</span></a>
+    <a href="crop-detail.html" class="flex flex-col items-center gap-1" style="text-decoration:none"><i class="fa-solid fa-seedling text-[20px]" style="color:#258046"></i><span class="text-[12.5px] font-medium" style="color:#0F172A">Crop</span></a>
+    <a href="orders.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none"><i class="fa-solid fa-box text-[20px]"></i><span class="text-[12.5px] font-medium">Orders</span></a>
+    <a href="account.html" class="flex flex-col items-center gap-1" style="color:#94A3B8;text-decoration:none"><i class="fa-solid fa-user text-[20px]"></i><span class="text-[12.5px] font-medium">Profile</span></a>
   </nav>
 
   <script>
@@ -407,7 +407,7 @@
           + '<img src="' + m.img + '" class="w-full h-full object-cover" style="display:block" onerror="cropFallback(this,\'' + m.emoji + '\',38)"/>'
           + tick + '</div>'
           + '<div class="flex-1 flex items-center justify-center px-1">'
-          + '<span class="text-[12.5px] font-bold leading-none" style="color:' + labelColor + '">' + m.label + '</span>'
+          + '<span class="text-[12.5px] font-medium leading-none" style="color:' + labelColor + '">' + m.label + '</span>'
           + '</div></button>';
       }).join('');
       grid.querySelectorAll('[data-k]').forEach(b => b.addEventListener('click', () => {

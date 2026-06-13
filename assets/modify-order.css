@@ -1,0 +1,68 @@
+/* Shared "Modify order before confirmation" UI — used by order-success & order-details.
+   All weights follow the size->weight ladder (<16=600, 16-18=700, >=19=800). */
+.md-card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04);overflow:hidden}
+.md-window{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#ECFDF5;border-bottom:1px solid #BBF7D0;font-size:11.5px;font-weight:600;color:#258046}
+.md-row{display:flex;align-items:center;gap:11px;padding:11px 14px;border-bottom:1px solid #F1F5F9}
+.md-add-wrap{border-top:1px dashed #CBD5E1}
+.md-thumb{width:44px;height:44px;border-radius:9px;background:#F8FAFC;border:1px solid #E5E7EB;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:4px;overflow:hidden}
+.md-thumb img{max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:multiply}
+.md-info{flex:1;min-width:0;line-height:1.25}
+.md-name{font-size:13px;font-weight:600;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.md-sub{font-size:11px;color:#64748B;margin-top:1px}
+.md-price{font-size:13px;font-weight:600;color:#0F172A;white-space:nowrap}
+.md-rm{flex-shrink:0;width:30px;height:30px;border-radius:8px;background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+.md-badge{display:inline-flex;align-items:center;gap:3px;margin-left:6px;padding:1px 6px;border-radius:5px;background:#ECFDF5;color:#258046;font-size:9.5px;font-weight:600}
+.md-add{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:12px;background:#FFFFFF;border:0;color:#258046;font-size:13px;font-weight:600;cursor:pointer}
+
+/* bottom sheet + backdrop (self-contained) */
+.md-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:140}
+.md-bd.open{opacity:1;pointer-events:auto}
+.md-sheet{position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:150;max-height:90vh;display:flex;flex-direction:column}
+.md-sheet.open{transform:translateY(0)}
+
+/* add-products sheet */
+.md-sh-head{padding:16px 16px 10px;display:flex;align-items:center;justify-content:between;gap:10px}
+.md-sh-x{width:34px;height:34px;border-radius:50%;background:#F1F5F9;border:0;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#475569;font-size:13px;cursor:pointer}
+.md-search{margin:0 16px 6px;display:flex;align-items:center;gap:8px;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:11px;padding:9px 12px}
+.md-search input{flex:1;border:0;outline:0;background:transparent;font-size:13px;color:#0F172A}
+.md-search i{color:#94A3B8;font-size:13px}
+.aps-list{overflow-y:auto;flex:1}
+.aps-row{display:flex;align-items:center;gap:11px;padding:11px 16px;border-bottom:1px solid #F1F5F9}
+.aps-empty{padding:26px 16px;text-align:center;color:#94A3B8;font-size:12.5px}
+.aps-add{flex-shrink:0;padding:7px 14px;border-radius:9px;background:#ECFDF5;border:1px solid #BBF7D0;color:#258046;font-size:12px;font-weight:600;cursor:pointer}
+.aps-add.done{background:#258046;color:#FFFFFF;border-color:#258046}
+
+/* sheet footer: Done OR in-sheet payment */
+.md-foot{padding:14px 16px;border-top:1px solid #F1F5F9;box-shadow:0 -4px 14px -8px rgba(15,23,42,0.12)}
+.md-foot-done{width:100%;height:50px;border-radius:12px;background:#258046;color:#FFFFFF;border:0;font-size:15px;font-weight:600;cursor:pointer}
+.md-pay-sum{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.md-pay-sum .l{font-size:12.5px;font-weight:600;color:#0F172A}
+.md-pay-sum .v{font-size:15px;font-weight:600;color:#0F172A}
+.md-pays{display:flex;gap:9px}
+.apay{flex:1;border-radius:11px;padding:11px 8px;cursor:pointer;text-align:center;border:1.5px solid #E5E7EB;background:#FFFFFF;position:relative}
+.apay.online{border-color:#258046;background:#258046;color:#FFFFFF}
+.apay .t{font-size:12.5px;font-weight:600;display:block}
+.apay .s{font-size:10px;font-weight:600;display:block;margin-top:2px}
+.apay.online .s{color:#D1FAE5}
+.apay.cod .s{color:#64748B}
+.apay-tag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#FBBF24;color:#78350F;font-size:9px;font-weight:600;padding:2px 7px;border-radius:9999px;white-space:nowrap}
+
+/* lighter remove confirmation */
+.rmm{padding:18px 18px 20px}
+.rmm-ic{width:44px;height:44px;border-radius:50%;background:#FEF2F2;color:#DC2626;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:12px}
+.rmm h3{margin:0 0 10px;font-size:16px;font-weight:700;color:#0F172A}
+.rmm-credit{font-size:13.5px;color:#0F172A;line-height:1.5}
+.rmm-credit b{font-weight:700;color:#258046}
+.rmm-coupon{margin-top:6px;font-size:11.5px;color:#9A3412;line-height:1.45}
+.rmm-coupon b{font-weight:700}
+.rmm-btns{display:flex;gap:10px;margin-top:18px}
+.rmm-keep{flex:1;height:46px;border-radius:11px;background:#F1F5F9;color:#0F172A;border:0;font-size:13.5px;font-weight:600;cursor:pointer}
+.rmm-go{flex:1.3;height:46px;border-radius:11px;background:#DC2626;color:#FFFFFF;border:0;font-size:13.5px;font-weight:600;cursor:pointer}
+
+/* wallet credit toast */
+.wtoast{position:fixed;left:16px;right:16px;bottom:84px;z-index:160;background:#0F172A;color:#FFFFFF;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:11px;box-shadow:0 12px 28px -8px rgba(0,0,0,0.5);transform:translateY(calc(100% + 110px));transition:transform .35s cubic-bezier(.32,.72,0,1)}
+.wtoast.show{transform:translateY(0)}
+.wtoast .wic{width:32px;height:32px;border-radius:9px;background:#258046;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.wtoast .wt{flex:1;line-height:1.3}
+.wtoast .wt .a{font-size:12.5px;font-weight:600}
+.wtoast .wt .b{font-size:10.5px;color:#94A3B8}

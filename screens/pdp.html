@@ -582,7 +582,7 @@
   </script>
 </div>
 
-<!-- Ratings & reviews · top "VIEW ALL" link removed · review fonts bumped up · "Verified / Helpful / Report" stripped from review card · bottom CTA is now "View more" which appends 5 more reviews on tap -->
+<!-- Ratings & reviews · top "VIEW ALL" link removed · review fonts bumped up · "Verified / Helpful / Report" stripped from review card · bottom CTA is now "View more" which appends 3 more reviews per tap until the pool runs out -->
 <div class="mt-6 py-5 px-4" style="background:#F8FAFC;border-top:1px solid #F1F5F9;border-bottom:1px solid #F1F5F9">
   <div class="mb-3">
     <div class="text-[16px] font-bold text-[#0F172A]">Ratings &amp; reviews</div>
@@ -806,7 +806,7 @@
     </div>
   </div>
 
-  <!-- Review list · larger fonts · Helpful/Report/Verified stripped per spec · "View more" reveals 5 additional reviews -->
+  <!-- Review list · larger fonts · Helpful/Report/Verified stripped per spec · "View more" reveals 3 more reviews per tap -->
   <div id="reviewList" class="mt-3 space-y-2.5">
     <div class="bg-white border border-[#E5E7EB] rounded-[12px] p-3.5">
       <div class="flex items-center gap-2.5">
@@ -1045,7 +1045,7 @@
     }));
   })();
 
-  // View more reviews · appends 5 additional review cards on tap, then hides the button when no more left
+  // View more reviews · appends 3 more review cards per tap, button stays until the pool is exhausted
   (function(){
     const list = document.getElementById('reviewList');
     const btn = document.getElementById('viewMoreBtn');
@@ -1055,11 +1055,22 @@
       { n:'Balram Kushwaha', loc:'Sehore · 2 months ago', initials:'B', star:4, body:'Used for 2 seasons on wheat. Yield is consistently up.', imgs:[] },
       { n:'Suresh Yadav', loc:'Bhopal · 3 weeks ago', initials:'S', star:5, body:'Mix easily with urea. No clumping. Highly recommend.', imgs:['https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=200&q=80'] },
       { n:'Anita Devi', loc:'Ujjain · 5 days ago', initials:'A', star:5, body:'Tomato patch had stunted growth. After 3 sprays, plants are thriving.', imgs:[] },
-      { n:'Pradeep Singh', loc:'Dewas · 2 weeks ago', initials:'P', star:4, body:'Good quality. Pack arrived sealed. Will order again next season.', imgs:[] }
+      { n:'Pradeep Singh', loc:'Dewas · 2 weeks ago', initials:'P', star:4, body:'Good quality. Pack arrived sealed. Will order again next season.', imgs:[] },
+      { n:'Dinesh Patidar', loc:'Ratlam · 1 week ago', initials:'D', star:5, body:'Mirchi ki fasal me result accha mila. Patte healthy ho gaye.', imgs:[] },
+      { n:'Kailash Meena', loc:'Mandsaur · 4 days ago', initials:'K', star:4, body:'Delivery time pe aayi. Product original laga. Soyabean me try kiya.', imgs:['https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=200&q=80'] },
+      { n:'Ramnivas Gurjar', loc:'Shajapur · 2 months ago', initials:'R', star:5, body:'Teesri baar order kiya. Bharosa ban gaya hai is brand par.', imgs:[] },
+      { n:'Lakhan Lal', loc:'Vidisha · 6 days ago', initials:'L', star:5, body:'Gehu me daala, growth tezi se hui. Paisa vasool.', imgs:[] },
+      { n:'Gopal Sahu', loc:'Hoshangabad · 3 weeks ago', initials:'G', star:4, body:'Quality theek hai. Packaging thodi aur strong honi chahiye.', imgs:[] },
+      { n:'Shivnarayan', loc:'Betul · 1 month ago', initials:'S', star:5, body:'Makka ki fasal ke liye best. Jad mazboot ho gayi.', imgs:['https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=200&q=80'] },
+      { n:'Phoolchand Jat', loc:'Neemuch · 10 days ago', initials:'P', star:5, body:'Costly laga pehle, par result dekh ke worth it.', imgs:[] },
+      { n:'Hariom Tiwari', loc:'Sagar · 2 weeks ago', initials:'H', star:4, body:'Spray karne me aasan. Pump me jam nahi hota.', imgs:[] },
+      { n:'Devkaran', loc:'Rajgarh · 5 weeks ago', initials:'D', star:5, body:'Pyaaz ki kheti me change saaf dikha. Recommend karta hoon.', imgs:[] },
+      { n:'Bhagwan Das', loc:'Guna · 8 days ago', initials:'B', star:5, body:'Customer support ne sahi guidance di. Product accha hai.', imgs:[] },
+      { n:'Mangilal Patidar', loc:'Dhar · 3 days ago', initials:'M', star:4, body:'Chana fasal me use kiya. Phool zyada aaye is baar.', imgs:['https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=200&q=80'] }
     ];
     let shown = 0;
     btn.addEventListener('click', () => {
-      const batch = pool.slice(shown, shown + 5);
+      const batch = pool.slice(shown, shown + 3);
       batch.forEach(r => {
         const card = document.createElement('div');
         card.className = 'bg-white border border-[#E5E7EB] rounded-[12px] p-3.5';

@@ -127,6 +127,59 @@
   .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:10px 12px 14px;display:flex;gap:10px;z-index:50}
   .cta-out{flex:1;height:52px;border-radius:12px;background:#FFFFFF;color:#0F172A;border:1.5px solid #E5E7EB;font-size:13.5px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
   .cta-pri{flex:1.4;height:52px;border-radius:12px;background:#258046;color:#FFFFFF;border:0;font-size:14.5px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+  /* --- Modify order (post-placement window) --- */
+  .mod-card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04);overflow:hidden}
+  .mod-window{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#FFF7ED;border-bottom:1px solid #FED7AA;font-size:11.5px;font-weight:600;color:#9A3412}
+  .mod-window b{color:#7C2D12;font-weight:700}
+  .mod-row{display:flex;align-items:center;gap:11px;padding:11px 14px;border-bottom:1px solid #F1F5F9}
+  .mod-row.gone{display:none}
+  .mod-add-wrap{border-bottom:1px solid #F1F5F9}
+  .mod-thumb{width:44px;height:44px;border-radius:9px;background:#F8FAFC;border:1px solid #E5E7EB;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:4px;overflow:hidden}
+  .mod-thumb img{max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:multiply}
+  .mod-info{flex:1;min-width:0;line-height:1.25}
+  .mod-name{font-size:13px;font-weight:600;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mod-sub{font-size:11px;color:#64748B;margin-top:1px}
+  .mod-price{font-size:13px;font-weight:600;color:#0F172A;white-space:nowrap}
+  .mod-rm{flex-shrink:0;width:30px;height:30px;border-radius:8px;background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+  .mod-badge{display:inline-flex;align-items:center;gap:3px;margin-left:6px;padding:1px 6px;border-radius:5px;background:#ECFDF5;color:#258046;font-size:9.5px;font-weight:600}
+  .mod-add{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:12px;background:#FFFFFF;border:0;color:#258046;font-size:13px;font-weight:600;cursor:pointer}
+  /* pay-for-added strip */
+  .added-strip{margin:10px 16px 0;border:1px solid #BBF7D0;border-radius:14px;overflow:hidden;background:#FFFFFF;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .added-strip-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:#ECFDF5;border-bottom:1px solid #BBF7D0}
+  .added-strip-head .l{font-size:12.5px;font-weight:600;color:#0F172A}
+  .added-strip-head .v{font-size:14px;font-weight:600;color:#0F172A}
+  .added-note{padding:8px 14px 0;font-size:11px;color:#64748B}
+  .added-pays{display:flex;gap:9px;padding:12px 14px}
+  .apay{flex:1;border-radius:10px;padding:10px 8px;cursor:pointer;text-align:center;border:1.5px solid #E5E7EB;background:#FFFFFF;position:relative}
+  .apay.online{border-color:#258046;background:#258046;color:#FFFFFF}
+  .apay .t{font-size:12.5px;font-weight:600;display:block}
+  .apay .s{font-size:10px;font-weight:600;display:block;margin-top:2px}
+  .apay.online .s{color:#D1FAE5}
+  .apay.cod .s{color:#64748B}
+  .apay-tag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#FBBF24;color:#78350F;font-size:9px;font-weight:600;padding:2px 7px;border-radius:9999px;white-space:nowrap}
+  /* remove confirmation modal */
+  .rmm{padding:18px}
+  .rmm-ic{width:46px;height:46px;border-radius:50%;background:#FEF2F2;color:#DC2626;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px}
+  .rmm h3{margin:0;font-size:16px;font-weight:700;color:#0F172A}
+  .rmm-p{font-size:12.5px;color:#64748B;margin:4px 0 0;line-height:1.5}
+  .rmm-credit{margin-top:14px;background:#ECFDF5;border:1px solid #BBF7D0;border-radius:12px;padding:12px 14px}
+  .rmm-cl{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#475569;padding:2px 0}
+  .rmm-cl.tot{border-top:1px dashed #6EE7B7;margin-top:6px;padding-top:7px;font-size:13.5px;font-weight:700;color:#0F172A}
+  .rmm-coupon{margin-top:10px;background:#FFF7ED;border:1px solid #FED7AA;border-radius:12px;padding:10px 12px;font-size:11.5px;font-weight:600;color:#9A3412;display:flex;gap:8px;line-height:1.45}
+  .rmm-btns{display:flex;gap:10px;margin-top:16px}
+  .rmm-keep{flex:1;height:46px;border-radius:11px;background:#F1F5F9;color:#0F172A;border:0;font-size:13.5px;font-weight:600;cursor:pointer}
+  .rmm-go{flex:1.4;height:46px;border-radius:11px;background:#DC2626;color:#FFFFFF;border:0;font-size:13.5px;font-weight:600;cursor:pointer}
+  /* wallet credit toast */
+  .wtoast{position:fixed;left:16px;right:16px;bottom:84px;z-index:130;background:#0F172A;color:#FFFFFF;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:11px;box-shadow:0 12px 28px -8px rgba(0,0,0,0.5);transform:translateY(calc(100% + 110px));transition:transform .35s cubic-bezier(.32,.72,0,1)}
+  .wtoast.show{transform:translateY(0)}
+  .wtoast .wic{width:32px;height:32px;border-radius:9px;background:#258046;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+  .wtoast .wt{flex:1;line-height:1.3}
+  .wtoast .wt .a{font-size:12.5px;font-weight:600}
+  .wtoast .wt .b{font-size:10.5px;color:#94A3B8}
+  /* add-products sheet rows */
+  .aps-row{display:flex;align-items:center;gap:11px;padding:11px 16px;border-bottom:1px solid #F1F5F9}
+  .aps-add{flex-shrink:0;padding:7px 14px;border-radius:9px;background:#ECFDF5;border:1px solid #BBF7D0;color:#258046;font-size:12px;font-weight:600;cursor:pointer}
+  .aps-add.done{background:#258046;color:#FFFFFF;border-color:#258046}
 </style></head>
 <body>
 
@@ -176,6 +229,35 @@
         <span class="pay-mode-chip" id="payStatus"><i class="fa-solid fa-circle-check text-[9px]"></i> Payment received</span>
       </div>
       <div class="val tnum" id="payMethodAmt">₹1,805</div>
+    </div>
+  </div>
+
+  <!-- Modify order · only available BEFORE the seller confirms · add or remove items within the window -->
+  <div id="modifyBlock">
+    <div class="sec-title">Modify your order</div>
+    <div class="mod-card">
+      <div class="mod-window"><i class="fa-regular fa-clock"></i> <span>Add or remove items till we confirm — <b id="modCountdown">29:45</b> left</span></div>
+      <div id="modItems"><!-- rows injected by JS --></div>
+      <div class="mod-add-wrap">
+        <button type="button" class="mod-add" id="addMoreBtn"><i class="fa-solid fa-plus"></i> Add more products</button>
+      </div>
+    </div>
+
+    <!-- Pay-for-added strip · appears once items are added · pay the added amount online (5% off) or on delivery -->
+    <div class="added-strip" id="addedStrip" style="display:none">
+      <div class="added-strip-head"><span class="l">Added items to pay</span><span class="v tnum" id="addedAmt">₹0</span></div>
+      <div class="added-note">Original order is already paid — only the newly added items need payment.</div>
+      <div class="added-pays">
+        <div class="apay online" id="payAddedOnline">
+          <span class="apay-tag">Save 5%</span>
+          <span class="t">Pay online</span>
+          <span class="s tnum" id="payOnlineAmt">₹0</span>
+        </div>
+        <div class="apay cod" id="payAddedCod">
+          <span class="t">Pay on delivery</span>
+          <span class="s tnum" id="payCodAmt">₹0</span>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -257,6 +339,48 @@
   </div>
 
   <!-- COD pay sheet · same pattern as orders.html · editable amount + Full shortcut + live coin preview · success state celebrates the prepayment + credited coins -->
+  <!-- Add more products sheet -->
+  <div id="addBd" class="modal-bd"></div>
+  <div id="addSheet" class="modal-sheet">
+    <div class="px-4 pt-4 pb-2 flex items-center justify-between">
+      <div class="leading-tight">
+        <div class="text-[16px] font-bold" style="color:#0F172A">Add more products</div>
+        <div class="text-[11.5px] mt-0.5" style="color:#64748B">Frequently bought with your order</div>
+      </div>
+      <button id="addClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div id="apsList" class="overflow-y-auto" style="max-height:50vh"><!-- suggestions injected by JS --></div>
+    <div class="p-4">
+      <button id="addDone" class="w-full h-[50px] rounded-[12px] text-white text-[15px] font-semibold" style="background:#258046;border:0;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">Done</button>
+    </div>
+  </div>
+
+  <!-- Remove item · confirmation with wallet credit + coupon-removal breakdown -->
+  <div id="rmBd" class="modal-bd"></div>
+  <div id="rmSheet" class="modal-sheet">
+    <div class="rmm">
+      <div class="rmm-ic"><i class="fa-solid fa-trash-can"></i></div>
+      <h3 id="rmTitle">Remove this item?</h3>
+      <p class="rmm-p" id="rmDesc">It will be taken off your order and the amount credited to your KKD Wallet.</p>
+      <div class="rmm-credit">
+        <div class="rmm-cl"><span id="rmItemLbl">Item amount</span><span id="rmItemVal" class="tnum">₹0</span></div>
+        <div class="rmm-cl" id="rmCouponRow" style="display:none"><span>Coupon reversed</span><span id="rmCouponVal" class="tnum" style="color:#B45309">− ₹100</span></div>
+        <div class="rmm-cl tot"><span>Credited to wallet</span><span id="rmCreditVal" class="tnum" style="color:#258046">₹0</span></div>
+      </div>
+      <div class="rmm-coupon" id="rmCouponWarn" style="display:none"><i class="fa-solid fa-circle-info" style="margin-top:1px"></i> <span id="rmCouponWarnTx"></span></div>
+      <div class="rmm-btns">
+        <button class="rmm-keep" id="rmKeep">Keep item</button>
+        <button class="rmm-go" id="rmGo">Remove &amp; credit wallet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wallet credit toast -->
+  <div class="wtoast" id="walletToast">
+    <span class="wic"><i class="fa-solid fa-wallet"></i></span>
+    <div class="wt"><div class="a" id="wtMain">₹0 credited to your wallet</div><div class="b">Use it on your next order</div></div>
+  </div>
+
   <div id="codBd" class="modal-bd"></div>
   <div id="codSheet" class="modal-sheet">
     <div class="modal-handle"></div>
@@ -494,5 +618,155 @@
     </div>
   </div>
 
+  <script>
+  // ===== Modify order (post-placement window): add / remove items, wallet credit, coupon reversal =====
+  (function(){
+    var COUPON = { code:'HARVEST100', off:100, min:1200, active:true };
+    var items = [
+      { key:'humic',  name:'Humic + Fulvic',  sub:'1 L · Qty 2',   price:752, img:'../assets/Humic_nobg.png',       added:false },
+      { key:'chakra', name:'Chakrawarti ZC',  sub:'100 ml · Qty 1', price:700, img:'../assets/Chakrawarti_nobg.png', added:false },
+      { key:'npk',    name:'NPK 19:19:19',    sub:'1 kg · Qty 1',   price:453, img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp', added:false }
+    ];
+    var catalog = [
+      { key:'antivirus', name:'Antivirus',    sub:'250 ml', price:327, img:'../assets/AntiVirus_nobg.png' },
+      { key:'bhumiraja', name:'Bhumiraja',    sub:'1 kg',   price:410, img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' },
+      { key:'triple',    name:'Triple Attack', sub:'500 ml', price:585, img:'https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp' },
+      { key:'chakraveer',name:'Chakraveer',   sub:'1 L',    price:640, img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp' }
+    ];
+
+    var rupee = function(n){ return '₹' + Number(n).toLocaleString('en-IN'); };
+    var origItems = function(){ return items.filter(function(i){ return !i.added; }); };
+    var addedItems = function(){ return items.filter(function(i){ return i.added; }); };
+    var origSubtotal = function(){ return origItems().reduce(function(s,i){ return s + i.price; }, 0); };
+    var couponApplies = function(){ return origSubtotal() >= COUPON.min; };
+    var $ = function(id){ return document.getElementById(id); };
+
+    function imgTag(src){ return '<img src="'+src+'" onerror="this.style.display=\'none\'"/>'; }
+
+    function render(){
+      $('modItems').innerHTML = items.map(function(i){
+        return '<div class="mod-row" data-key="'+i.key+'">'
+          + '<div class="mod-thumb">'+imgTag(i.img)+'</div>'
+          + '<div class="mod-info"><div class="mod-name">'+i.name+(i.added?'<span class="mod-badge"><i class="fa-solid fa-plus" style="font-size:7px"></i> Added</span>':'')+'</div><div class="mod-sub">'+i.sub+'</div></div>'
+          + '<div class="mod-price tnum">'+rupee(i.price)+'</div>'
+          + '<button class="mod-rm" data-rm="'+i.key+'" aria-label="Remove"><i class="fa-solid fa-trash-can"></i></button>'
+          + '</div>';
+      }).join('');
+      var added = addedItems();
+      var strip = $('addedStrip');
+      if(added.length){
+        var amt = added.reduce(function(s,i){ return s + i.price; }, 0);
+        strip.style.display = 'block';
+        $('addedAmt').textContent = rupee(amt);
+        $('payOnlineAmt').textContent = rupee(Math.round(amt*0.95));
+        $('payCodAmt').textContent = rupee(amt);
+      } else { strip.style.display = 'none'; }
+    }
+
+    // ---- remove flow ----
+    var pending = null;
+    function openRemove(key){
+      var it = items.filter(function(i){ return i.key===key; })[0];
+      if(!it) return;
+      pending = it;
+      $('rmTitle').textContent = 'Remove ' + it.name + '?';
+      $('rmItemLbl').textContent = it.name;
+      $('rmItemVal').textContent = rupee(it.price);
+      var credEl = document.querySelector('.rmm-credit');
+      if(it.added){
+        $('rmDesc').textContent = 'This item was just added and isn’t paid yet, so it will simply be removed.';
+        credEl.style.display = 'none';
+        $('rmCouponRow').style.display = 'none';
+        $('rmCouponWarn').style.display = 'none';
+        it._credit = 0; it._couponLost = false;
+      } else {
+        credEl.style.display = 'block';
+        $('rmDesc').textContent = 'It will be taken off your order and the amount credited to your KKD Wallet.';
+        var couponLost = couponApplies() && (origSubtotal() - it.price) < COUPON.min && COUPON.active;
+        var credit = it.price - (couponLost ? COUPON.off : 0);
+        if(couponLost){
+          $('rmCouponRow').style.display = 'flex';
+          $('rmCouponVal').textContent = '− ' + rupee(COUPON.off);
+          $('rmCouponWarn').style.display = 'flex';
+          $('rmCouponWarnTx').innerHTML = 'Removing this drops your order below ' + rupee(COUPON.min) + ', so coupon <b>' + COUPON.code + '</b> (' + rupee(COUPON.off) + ' off) is reversed — deducted from your credit below.';
+        } else {
+          $('rmCouponRow').style.display = 'none';
+          $('rmCouponWarn').style.display = 'none';
+        }
+        $('rmCreditVal').textContent = rupee(credit);
+        it._credit = credit; it._couponLost = couponLost;
+      }
+      open('rm');
+    }
+    function doRemove(){
+      if(!pending) return;
+      var it = pending, credit = it._credit;
+      if(it._couponLost) COUPON.active = false;
+      items = items.filter(function(x){ return x.key !== it.key; });
+      close('rm');
+      if(credit > 0) showToast(rupee(credit) + ' credited to your wallet', 'Use it on your next order');
+      pending = null;
+      render();
+    }
+
+    // ---- add flow ----
+    function renderCatalog(){
+      $('apsList').innerHTML = catalog.map(function(c){
+        var inOrder = items.some(function(i){ return i.key===c.key; });
+        return '<div class="aps-row">'
+          + '<div class="mod-thumb">'+imgTag(c.img)+'</div>'
+          + '<div class="mod-info"><div class="mod-name">'+c.name+'</div><div class="mod-sub">'+c.sub+'</div></div>'
+          + '<div class="mod-price tnum" style="margin-right:6px">'+rupee(c.price)+'</div>'
+          + '<button class="aps-add'+(inOrder?' done':'')+'" data-add="'+c.key+'"'+(inOrder?' disabled':'')+'>'+(inOrder?'Added':'+ Add')+'</button>'
+          + '</div>';
+      }).join('');
+    }
+    function addProduct(key){
+      if(items.some(function(i){ return i.key===key; })) return;
+      var c = catalog.filter(function(x){ return x.key===key; })[0];
+      if(!c) return;
+      items.push({ key:c.key, name:c.name, sub:c.sub, price:c.price, img:c.img, added:true });
+      renderCatalog(); render();
+    }
+
+    // ---- sheet helpers ----
+    function open(w){ $(w==='add'?'addBd':'rmBd').classList.add('open'); $(w==='add'?'addSheet':'rmSheet').classList.add('open'); }
+    function close(w){ $(w==='add'?'addBd':'rmBd').classList.remove('open'); $(w==='add'?'addSheet':'rmSheet').classList.remove('open'); }
+
+    // ---- toast ----
+    var tTimer = null;
+    function showToast(main, sub){
+      $('wtMain').textContent = main;
+      $('walletToast').querySelector('.b').textContent = sub;
+      var t = $('walletToast'); t.classList.add('show');
+      clearTimeout(tTimer); tTimer = setTimeout(function(){ t.classList.remove('show'); }, 3200);
+    }
+
+    // ---- countdown to confirmation ----
+    (function(){
+      var secs = 29*60 + 45, el = $('modCountdown');
+      setInterval(function(){
+        if(secs <= 0){ $('modifyBlock').style.display = 'none'; return; }
+        secs--; var m = Math.floor(secs/60), s = secs%60;
+        el.textContent = m + ':' + (s<10?'0':'') + s;
+      }, 1000);
+    })();
+
+    // ---- events ----
+    $('modItems').addEventListener('click', function(e){ var b = e.target.closest('[data-rm]'); if(b) openRemove(b.getAttribute('data-rm')); });
+    $('addMoreBtn').addEventListener('click', function(){ renderCatalog(); open('add'); });
+    $('addClose').addEventListener('click', function(){ close('add'); });
+    $('addDone').addEventListener('click', function(){ close('add'); });
+    $('addBd').addEventListener('click', function(){ close('add'); });
+    $('apsList').addEventListener('click', function(e){ var b = e.target.closest('[data-add]'); if(b) addProduct(b.getAttribute('data-add')); });
+    $('rmKeep').addEventListener('click', function(){ close('rm'); pending = null; });
+    $('rmBd').addEventListener('click', function(){ close('rm'); pending = null; });
+    $('rmGo').addEventListener('click', doRemove);
+    $('payAddedOnline').addEventListener('click', function(){ addedItems().forEach(function(i){ i.added = false; }); render(); showToast('Added items paid online · 5% saved', 'Now part of your order'); });
+    $('payAddedCod').addEventListener('click', function(){ addedItems().forEach(function(i){ i.added = false; }); render(); showToast('Added items set to Pay on delivery', 'Pay cash to the courier'); });
+
+    render();
+  })();
+  </script>
   <script src="../assets/weight-ladder.js"></script>
 </body></html>

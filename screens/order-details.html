@@ -237,7 +237,7 @@
 <body class="state-delivered">
 
   <!-- System status -->
-  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-medium">
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-semibold">
     <span>9:41</span>
     <div class="flex items-center gap-1.5">
       <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
@@ -553,7 +553,7 @@
       </div>
       <!-- Reveal textarea when Other is picked -->
       <div id="reasonOtherWrap" class="reason-other-wrap">
-        <label class="text-[11.5px] font-medium mb-1.5 block" style="color:#475569">Tell us what went wrong</label>
+        <label class="text-[11.5px] font-semibold mb-1.5 block" style="color:#475569">Tell us what went wrong</label>
         <textarea id="reasonOtherText" rows="4" placeholder="Type your reason here…"></textarea>
       </div>
     </div>
@@ -708,13 +708,13 @@
       <button id="rtnTncClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
     <div class="px-5 pb-3 overflow-y-auto" style="flex:1">
-      <div class="text-[11px] font-medium uppercase tracking-wider mb-2" style="color:#64748B">Terms &amp; conditions</div>
+      <div class="text-[11px] font-semibold uppercase tracking-wider mb-2" style="color:#64748B">Terms &amp; conditions</div>
       <div class="tnc-li"><i class="fa-solid fa-circle"></i> Raise a return or replacement within <b>7 days</b> of delivery.</div>
       <div class="tnc-li"><i class="fa-solid fa-circle"></i> Damaged, wrong, or unopened sealed items are eligible; opened agro-chemicals only if damaged or incorrect.</div>
       <div class="tnc-li"><i class="fa-solid fa-circle"></i> An <b>unboxing video</b> speeds up approval.</div>
       <div class="tnc-li"><i class="fa-solid fa-circle"></i> Free reverse pickup in 24–48 hrs.</div>
       <div class="tnc-li"><i class="fa-solid fa-circle"></i> Refund to your <b>Wallet</b> or original payment method in 3–5 days after quality check; replacement ships after pickup.</div>
-      <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-1 text-[12px] font-medium" style="color:#258046;text-decoration:none"><i class="fa-solid fa-up-right-from-square text-[10px]"></i> Read full policy</a>
+      <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-1 text-[12px] font-semibold" style="color:#258046;text-decoration:none"><i class="fa-solid fa-up-right-from-square text-[10px]"></i> Read full policy</a>
       <label class="tnc-check"><input type="checkbox" id="rtnTncAgree"/> I have read and agree to the Return &amp; Refund Terms &amp; Conditions.</label>
     </div>
     <div class="px-5 pt-3 pb-5" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">
@@ -734,13 +734,13 @@
     </div>
     <div class="px-5 pb-3 overflow-y-auto" style="flex:1">
       <span class="rtn-oid"><i class="fa-solid fa-receipt text-[9px]"></i> Order #KAT-2026-04-1198</span>
-      <div class="text-[11px] font-medium uppercase tracking-wider mt-4 mb-2" style="color:#64748B">What would you like?</div>
+      <div class="text-[11px] font-semibold uppercase tracking-wider mt-4 mb-2" style="color:#64748B">What would you like?</div>
       <div class="rtn-seg" id="rtnSeg">
         <button type="button" class="rtn-seg-btn active" data-choice="return"><i class="fa-solid fa-rotate-left"></i> Return &amp; refund</button>
         <button type="button" class="rtn-seg-btn" data-choice="replace"><i class="fa-solid fa-right-left"></i> Replacement</button>
       </div>
 
-      <div class="text-[11px] font-medium uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Select product(s)</div>
+      <div class="text-[11px] font-semibold uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Select product(s)</div>
       <div class="space-y-2" id="rtnProducts">
         <div class="rtn-prod">
           <label class="rtn-prod-main"><input type="checkbox" class="rtn-prod-cb" data-key="humic" data-max="2"/><div class="pimg"><img src="../assets/Humic_nobg.png" class="img-blend"/></div><div class="flex-1 leading-tight"><div class="pn">Humic + Fulvic</div><div class="ps">1 L · ₹376 · ordered 2</div></div></label>
@@ -752,7 +752,7 @@
         </div>
       </div>
 
-      <div class="text-[11px] font-medium uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Reason</div>
+      <div class="text-[11px] font-semibold uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Reason</div>
       <select class="rtn-select" id="rtnReason">
         <option value="">Select a reason…</option>
         <option>Damaged / leaking on arrival</option>
@@ -762,17 +762,17 @@
         <option>Quality issue</option>
         <option>Other</option>
       </select>
-      <div class="text-[11px] font-medium uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Describe the issue</div>
+      <div class="text-[11px] font-semibold uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Describe the issue</div>
       <textarea class="rtn-desc" id="rtnDesc" placeholder="Type the issue in your words…"></textarea>
       <!-- Voice note · substitute for typing the description (NOT a photo/video proof) -->
       <button type="button" class="rtn-voice-pill" id="rtnVoice"><i class="fa-solid fa-microphone"></i> Record a voice note instead</button>
-      <div id="rtnVoiceStatus" class="text-[11.5px] font-medium mt-2" style="color:#258046;display:none"><i class="fa-solid fa-circle-check text-[10px]"></i> Voice note recorded</div>
+      <div id="rtnVoiceStatus" class="text-[11.5px] font-semibold mt-2" style="color:#258046;display:none"><i class="fa-solid fa-circle-check text-[10px]"></i> Voice note recorded</div>
 
-      <div class="text-[11px] font-medium uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Add proof (photo / video)</div>
+      <div class="text-[11px] font-semibold uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Add proof (photo / video)</div>
       <button type="button" id="rtnProofBtn" class="rtn-attach" style="width:100%"><i class="fa-solid fa-camera"></i> Add photo / video</button>
       <div id="rtnPreview" class="rtn-preview"></div>
 
-      <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-4 text-[12px] font-medium" style="color:#258046;text-decoration:none"><i class="fa-solid fa-circle-info text-[11px]"></i> Read returns &amp; refund policy</a>
+      <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-4 text-[12px] font-semibold" style="color:#258046;text-decoration:none"><i class="fa-solid fa-circle-info text-[11px]"></i> Read returns &amp; refund policy</a>
     </div>
     <div class="px-5 pt-3 pb-5" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)">
       <button id="rtnSubmit" class="w-full h-[52px] rounded-[12px] text-[15px] font-semibold" style="background:#258046;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
@@ -813,14 +813,14 @@
     <div class="px-5 pt-3 pb-2 flex items-center justify-between" style="flex-shrink:0">
       <div class="leading-tight">
         <div class="text-[18px] font-bold text-[#0F172A]" id="rtnDetTitle">Return details</div>
-        <div class="text-[11.5px] font-medium" style="color:#64748B" id="rtnDetProd">Humic + Fulvic · ₹376</div>
+        <div class="text-[11.5px] font-semibold" style="color:#64748B" id="rtnDetProd">Humic + Fulvic · ₹376</div>
       </div>
       <button id="rtnDetClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
     <div class="px-5 pb-5 overflow-y-auto" style="flex:1">
       <div class="rounded-[12px] p-3 mb-4 flex items-center gap-3" style="background:#FFFBEB;border:1px solid #FCD34D">
         <i class="fa-solid fa-truck-fast text-[15px]" style="color:#B45309"></i>
-        <div class="text-[12px] font-medium" style="color:#78350F">Pickup scheduled for <b>Tomorrow, 10am–6pm</b></div>
+        <div class="text-[12px] font-semibold" style="color:#78350F">Pickup scheduled for <b>Tomorrow, 10am–6pm</b></div>
       </div>
       <div class="px-1">
         <div class="rtl done"><div class="dot"><i class="fa-solid fa-check"></i></div><div><div class="a">Return requested</div><div class="b">Today · just now</div></div></div>
@@ -828,7 +828,7 @@
         <div class="rtl"><div class="dot"></div><div><div class="a">Item picked up</div><div class="b">Quality check on arrival</div></div></div>
         <div class="rtl"><div class="dot"></div><div><div class="a" id="rtnDetLast">Refund to wallet</div><div class="b">3–5 days after quality check</div></div></div>
       </div>
-      <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-4 text-[12px] font-medium" style="color:#258046;text-decoration:none"><i class="fa-solid fa-circle-info text-[11px]"></i> Returns &amp; refund policy</a>
+      <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-4 text-[12px] font-semibold" style="color:#258046;text-decoration:none"><i class="fa-solid fa-circle-info text-[11px]"></i> Returns &amp; refund policy</a>
     </div>
   </div>
 
@@ -839,12 +839,12 @@
     <div class="px-5 pt-3 pb-2 flex items-center justify-between">
       <div class="leading-tight">
         <div class="text-[17px] font-bold text-[#0F172A]">Pay COD amount</div>
-        <div class="text-[11.5px] font-medium" style="color:#64748B">Order <span id="codOrderId" class="font-bold text-[#0F172A]">#KAT-2026-04-1198</span></div>
+        <div class="text-[11.5px] font-semibold" style="color:#64748B">Order <span id="codOrderId" class="font-bold text-[#0F172A]">#KAT-2026-04-1198</span></div>
       </div>
       <button id="codClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
     <div class="px-5 pt-3">
-      <div class="text-[11.5px] font-medium mb-1.5" style="color:#475569">Amount to pay</div>
+      <div class="text-[11.5px] font-semibold mb-1.5" style="color:#475569">Amount to pay</div>
       <div class="cod-input-wrap">
         <span class="rs">&#8377;</span>
         <input id="codAmtInput" type="number" inputmode="numeric" value="628"/>
@@ -853,7 +853,7 @@
         <span style="color:#64748B">Total COD: <b class="text-[#0F172A]" id="codTotalLbl">&#8377;628</b></span>
         <span class="font-extrabold" style="color:#258046">Earn <span id="codCoinsLbl">+50</span> <i class="fa-solid fa-coins text-[10px]" style="color:#F59E0B"></i></span>
       </div>
-      <div id="codErr" class="text-[11px] font-medium" style="color:#DC2626;display:none;margin-top:4px">Amount cannot exceed total COD due</div>
+      <div id="codErr" class="text-[11px] font-semibold" style="color:#DC2626;display:none;margin-top:4px">Amount cannot exceed total COD due</div>
       <div class="cod-coin-strip mt-3">
         <i class="fa-solid fa-coins text-[14px]" style="color:#F59E0B"></i>
         <div class="text-[11.5px] leading-tight" style="color:#0F172A"><b>1 coin = &#8377;1</b></div>

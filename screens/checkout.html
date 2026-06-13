@@ -96,7 +96,7 @@
 </style></head>
 <body>
 
-  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-medium">
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-semibold">
     <span>9:41</span>
     <div class="flex items-center gap-1.5">
       <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
@@ -115,8 +115,8 @@
   <!-- State banner · shown for non-serviceable address / banned product (demo via ?st=) -->
   <div id="stateBanner" style="display:none;margin:8px 16px 0;border-radius:12px;padding:12px 13px;display:none;align-items:flex-start;gap:10px">
     <span id="sbIc" style="width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px"></span>
-    <div style="flex:1;min-width:0;line-height:1.4"><div id="sbTitle" style="font-size:13px;font-weight:500"></div><div id="sbSub" style="font-size:11.5px;font-weight:500;margin-top:1px"></div></div>
-    <a id="sbAction" href="addresses.html" style="flex-shrink:0;font-size:11.5px;font-weight:500;text-decoration:underline;align-self:center"></a>
+    <div style="flex:1;min-width:0;line-height:1.4"><div id="sbTitle" style="font-size:13px;font-weight:600"></div><div id="sbSub" style="font-size:11.5px;font-weight:600;margin-top:1px"></div></div>
+    <a id="sbAction" href="addresses.html" style="flex-shrink:0;font-size:11.5px;font-weight:600;text-decoration:underline;align-self:center"></a>
   </div>
 
   <!-- Alternate number · always-visible input (no save button) above the delivery section -->
@@ -134,7 +134,7 @@
     <div class="alt-head">
       <span class="alt-ic"><i class="fa-solid fa-phone-volume"></i></span>
       <div class="flex-1 leading-tight" style="min-width:0">
-        <div class="text-[13.5px] font-medium text-[#0F172A]">Add an alternate number</div>
+        <div class="text-[13.5px] font-semibold text-[#0F172A]">Add an alternate number</div>
         <div class="text-[11.5px] mt-0.5" style="color:#64748B">Shared numbers get orders ~1 day earlier</div>
       </div>
     </div>
@@ -169,7 +169,7 @@
       <div class="flex-1 leading-tight">
         <div class="flex items-center gap-1.5">
           <span class="text-[14.5px] font-semibold text-[#0F172A]" id="delivDate">Tomorrow, 28 May</span>
-          <span class="text-[9px] font-medium text-[#258046] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider" id="delivFree">Free</span>
+          <span class="text-[9px] font-semibold text-[#258046] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider" id="delivFree">Free</span>
         </div>
         <div class="text-[11.5px] text-[#64748B] mt-0.5" id="delivSub">Order before <span class="font-bold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
       </div>
@@ -201,8 +201,8 @@
           </span>
           <div class="pay-sub">UPI &middot; Cards &middot; Net banking &middot; Wallets</div>
           <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:5px">
-            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;color:#258046;background:#ECFDF5;border:1px solid #BBF7D0;padding:3px 9px;border-radius:9999px"><i class="fa-solid fa-tag text-[9px]"></i> 5% instant off · save ₹95</span>
-            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;color:#258046;background:#ECFDF5;border:1px solid #BBF7D0;padding:3px 9px;border-radius:9999px"><i class="fa-solid fa-bolt text-[9px]"></i> Faster order processing</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#258046;background:#ECFDF5;border:1px solid #BBF7D0;padding:3px 9px;border-radius:9999px"><i class="fa-solid fa-tag text-[9px]"></i> 5% instant off · save ₹95</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#258046;background:#ECFDF5;border:1px solid #BBF7D0;padding:3px 9px;border-radius:9999px"><i class="fa-solid fa-bolt text-[9px]"></i> Faster order processing</span>
           </div>
         </span>
       </span>
@@ -247,7 +247,7 @@
           </span>
           <div class="pay-sub">Pay in cash when the order arrives</div>
           <div class="pay-sub" style="color:#B45309;margin-top:3px"><i class="fa-solid fa-phone-volume text-[10px]"></i> We'll call to confirm — please pick up calls starting from 92019</div>
-          <div id="codExtra" style="display:none;margin-top:9px;padding:10px 12px;border-radius:10px;background:#FFF7ED;border:1px solid #FED7AA;color:#9A3412;font-size:11.5px;font-weight:500;line-height:1.55">
+          <div id="codExtra" style="display:none;margin-top:9px;padding:10px 12px;border-radius:10px;background:#FFF7ED;border:1px solid #FED7AA;color:#9A3412;font-size:11.5px;font-weight:600;line-height:1.55">
             <i class="fa-solid fa-circle-info" style="color:#EA580C"></i> COD costs <b id="codExtraAmt" class="tnum">₹95</b> more — prepaid orders get 5% off. <span id="codSwitchPay" role="button" tabindex="0" style="color:#258046;font-weight:800;cursor:pointer;text-decoration:underline;white-space:nowrap">Pay now &amp; save</span>
           </div>
         </span>

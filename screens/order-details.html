@@ -6,6 +6,7 @@
 <script src="../assets/celebrate.js"></script>
 <script src="../assets/verify.js"></script>
 <script src="../assets/rate.js"></script>
+<link rel="stylesheet" href="../assets/modify-order.css">
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   html,body{font-family:'Poppins',system-ui,sans-serif}
@@ -229,6 +230,15 @@
   /* State-conditional visibility */
   body.state-transit  .only-delivered{display:none}
   body.state-delivered .only-transit{display:none}
+  /* pending-confirmation state · still editable */
+  .only-pending{display:none}
+  body.state-pending .only-pending{display:block}
+  body.state-pending .sticky-cta .only-pending{display:inline-flex}
+  body.state-pending .hide-pending{display:none!important}
+  body.state-pending .only-delivered,body.state-pending .only-transit{display:none}
+  body.state-pending .hero{background:linear-gradient(180deg,#EFF6FF,#DBEAFE);border-color:#BFDBFE}
+  body.state-pending .hero-ic{border-color:rgba(37,99,235,0.35);box-shadow:0 6px 16px -4px rgba(37,99,235,0.3)}
+  body.state-pending .hero-ic i{color:#2563EB}
   /* No Return/Refund CTA while the order is still out for delivery */
   body.state-transit #returnCta{display:none}
   body:not(.state-partial) .only-partial{display:none}
@@ -268,11 +278,14 @@
     <div class="hero-ic">
       <i class="fa-solid fa-circle-check only-delivered"></i>
       <i class="fa-solid fa-truck only-transit"></i>
+      <i class="fa-regular fa-clock only-pending"></i>
     </div>
     <h2 class="only-delivered">Delivered</h2>
     <h2 class="only-transit">Out for delivery</h2>
+    <h2 class="only-pending">Pending confirmation</h2>
     <div class="hero-sub only-delivered">Arrived on <b id="deliveredOn">10 Apr, 11:04 AM</b></div>
     <div class="hero-sub only-transit">Arriving tomorrow by <b>5:00 PM</b></div>
+    <div class="hero-sub only-pending">Add or remove items before the seller confirms</div>
   </div>
 
   <!-- Dedicated order-id row · ID surfaced below the hero so it has a real home, not buried in the header -->
@@ -281,9 +294,12 @@
     <span class="val" id="orderIdLabel">#KAT-2026-04-1198</span>
   </div>
 
+  <!-- Modify order · only for pending-confirmation orders · injected by shared module -->
+  <div id="modifyMount" class="only-pending" style="margin-top:8px"></div>
+
   <!-- Order Timeline -->
-  <div class="sec-title">Order Timeline</div>
-  <div class="card">
+  <div class="sec-title hide-pending">Order Timeline</div>
+  <div class="card hide-pending">
     <div class="tl">
       <div class="tl-item done">
         <div class="tl-badge done"><i class="fa-solid fa-receipt"></i></div>
@@ -312,8 +328,8 @@
   </div>
 
   <!-- UNIFIED Products + Bill card · inline calc per product -->
-  <div class="sec-title">2 products in this order</div>
-  <div class="card">
+  <div class="sec-title hide-pending">2 products in this order</div>
+  <div class="card hide-pending">
 
     <div class="prod-row" data-key="humic">
       <a href="pdp.html" class="prod-img"><img src="../assets/Humic_nobg.png" class="img-blend" alt=""/></a>
@@ -473,8 +489,8 @@
   </div>
 
   <!-- Unboxing video · standalone card (moved out of the help sheet) · records proof via device camera -->
-  <div class="sec-title">Order proof</div>
-  <label class="card" style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer">
+  <div class="sec-title hide-pending">Order proof</div>
+  <label class="card hide-pending" style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer">
     <div class="w-10 h-10 rounded-[11px] flex items-center justify-center flex-shrink-0" style="background:#EFF6FF;color:#2563EB"><i class="fa-solid fa-video text-[16px]"></i></div>
     <div class="flex-1 leading-tight">
       <div class="text-[14px] font-semibold text-[#0F172A]">Shoot unboxing video</div>
@@ -485,7 +501,7 @@
   </label>
 
   <!-- Verify authenticity · scan the QR on the Katyayani pack to confirm a genuine product -->
-  <button type="button" id="verifyCard" onclick="window.kkdVerify&&window.kkdVerify()" class="card" style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;width:calc(100% - 32px);text-align:left;background:#FFFFFF">
+  <button type="button" id="verifyCard" onclick="window.kkdVerify&&window.kkdVerify()" class="card hide-pending" style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;width:calc(100% - 32px);text-align:left;background:#FFFFFF">
     <div class="w-10 h-10 rounded-[11px] flex items-center justify-center flex-shrink-0" style="background:#ECFDF5;color:#258046"><i class="fa-solid fa-qrcode text-[16px]"></i></div>
     <div class="flex-1 leading-tight">
       <div class="text-[14px] font-semibold text-[#0F172A]">Verify genuine product</div>
@@ -508,11 +524,14 @@
 
   <!-- Sticky bottom · 2 CTAs · Return (outline) + Reorder (primary emerald, fa-repeat) · Download invoice moved back into the kebab menu -->
   <div class="sticky-cta">
-    <a class="cta-out" id="returnCta" href="#return">
+    <a class="cta-out hide-pending" id="returnCta" href="#return">
       <i class="fa-solid fa-right-left"></i> Return
     </a>
-    <a class="cta-pri" href="cart.html?reorder=1">
+    <a class="cta-pri hide-pending" href="cart.html?reorder=1">
       <i class="fa-solid fa-repeat"></i> Reorder
+    </a>
+    <a class="cta-pri only-pending" href="orders.html" style="flex:1">
+      <i class="fa-solid fa-check"></i> Done
     </a>
   </div>
 
@@ -881,8 +900,8 @@
       const state = (qp.get('state') || 'delivered').toLowerCase();
       const payment = (qp.get('payment') || '').toLowerCase();
       const id    = qp.get('id') || 'KAT-2026-04-1198';
-      document.body.classList.remove('state-delivered','state-transit');
-      document.body.classList.add('state-' + (state === 'transit' ? 'transit' : 'delivered'));
+      document.body.classList.remove('state-delivered','state-transit','state-pending');
+      document.body.classList.add('state-' + (state === 'transit' ? 'transit' : (state === 'pending' ? 'pending' : 'delivered')));
       const isPartial = payment === 'partial' || state === 'transit';
       document.body.classList.toggle('state-partial', isPartial);
 
@@ -1231,5 +1250,29 @@
       });
     })();
   </script>
+  <script>
+  // Modify flow only for pending-confirmation orders (?state=pending)
+  (function(){
+    var st = (new URLSearchParams(location.search).get('state') || '').toLowerCase();
+    if (st !== 'pending') return;
+    window.KKD_MODIFY = {
+      mount: 'modifyMount',
+      note: 'Add or remove items before your order is confirmed',
+      coupon: { code: 'HARVEST100', off: 100, min: 1200, active: true },
+      items: [
+        { key: 'humic',  name: 'Humic + Fulvic', sub: '1 L · Qty 2',   price: 752, img: '../assets/Humic_nobg.png' },
+        { key: 'chakra', name: 'Chakrawarti ZC', sub: '100 ml · Qty 1', price: 700, img: '../assets/Chakrawarti_nobg.png' },
+        { key: 'npk',    name: 'NPK 19:19:19',   sub: '1 kg · Qty 1',   price: 453, img: 'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp' }
+      ],
+      catalog: [
+        { key: 'antivirus',  name: 'Antivirus',     sub: '250 ml', price: 327, img: '../assets/AntiVirus_nobg.png' },
+        { key: 'bhumiraja',  name: 'Bhumiraja',     sub: '1 kg',   price: 410, img: 'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' },
+        { key: 'triple',     name: 'Triple Attack', sub: '500 ml', price: 585, img: 'https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp' },
+        { key: 'chakraveer', name: 'Chakraveer',    sub: '1 L',    price: 640, img: 'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp' }
+      ]
+    };
+  })();
+  </script>
+  <script src="../assets/modify-order.js"></script>
   <script src="../assets/weight-ladder.js"></script>
 </body></html>

@@ -5,11 +5,21 @@
    these reads/writes for Supabase calls — the UI contract stays the same.
    ========================================================================== */
 (function (global) {
+  // The app ships 12 languages (see screens/language.html). Every translation
+  // surface in the portal is driven off this list, so all 12 columns/tabs show up.
   const LOCALES = [
-    { code: 'en', label: 'English', flag: '🇬🇧', enabled: true, fallback: true },
-    { code: 'hi', label: 'हिन्दी (Hindi)', flag: '🇮🇳', enabled: true, fallback: false },
-    { code: 'mr', label: 'मराठी (Marathi)', flag: '🇮🇳', enabled: true, fallback: false },
-    { code: 'pa', label: 'ਪੰਜਾਬੀ (Punjabi)', flag: '🇮🇳', enabled: false, fallback: false },
+    { code: 'hi',   label: 'हिंदी (Hindi)',      flag: '🇮🇳', enabled: true, fallback: false },
+    { code: 'en',   label: 'English',            flag: '🇬🇧', enabled: true, fallback: true },
+    { code: 'hien', label: 'Hinglish',           flag: '🇮🇳', enabled: true, fallback: false },
+    { code: 'mr',   label: 'मराठी (Marathi)',    flag: '🇮🇳', enabled: true, fallback: false },
+    { code: 'gu',   label: 'ગુજરાતી (Gujarati)', flag: '🇮🇳', enabled: true, fallback: false },
+    { code: 'pa',   label: 'ਪੰਜਾਬੀ (Punjabi)',   flag: '🇮🇳', enabled: true, fallback: false },
+    { code: 'te',   label: 'తెలుగు (Telugu)',    flag: '🇮🇳', enabled: true, fallback: false },
+    { code: 'ta',   label: 'தமிழ் (Tamil)',      flag: '🇮🇳', enabled: true, fallback: false },
+    { code: 'kn',   label: 'ಕನ್ನಡ (Kannada)',    flag: '🇮🇳', enabled: true, fallback: false },
+    { code: 'ml',   label: 'മലയാളം (Malayalam)', flag: '🇮🇳', enabled: true, fallback: false },
+    { code: 'od',   label: 'ଓଡ଼ିଆ (Odia)',        flag: '🇮🇳', enabled: true, fallback: false },
+    { code: 'bn',   label: 'বাংলা (Bengali)',    flag: '🇮🇳', enabled: true, fallback: false },
   ];
 
   const SEED = {
@@ -263,21 +273,97 @@
       { id: 'pl1', question: 'Which crop do you grow most?', options: ['Wheat','Cotton','Tomato','Other'], reward: 15, placement: 'Home + Search', active: true },
       { id: 'pl2', question: 'How do you usually buy inputs?', options: ['Local dealer','Online','Co-op'], reward: 10, placement: 'Home', active: false },
     ],
+    // Onboarding screens, modelled deeply for the Onboarding manager. Translatable
+    // strings are { en, hi, ... } objects keyed by locale code (seed English; other
+    // languages fall back to en until translated). Images are editable paths.
     onboarding: {
-      languages: ['Hindi','English','Hinglish','Marathi','Gujarati','Punjabi','Telugu','Tamil','Kannada','Malayalam','Odia','Bengali'],
-      cropPicker: ['Wheat','Rice','Tomato','Chilli','Maize','Soybean','Cotton','Sugarcane','More'],
-      welcomeAboard: { eyebrow: 'Welcome aboard', headline: 'Namaste,', sub: "You've joined the Katyayani family. Let's grow together." },
-      welcomeBack: { eyebrow: 'Welcome back', headline: 'Hey,', sub: 'Good to see you again. Your farm has been waiting for you.' },
-      permissionBullets: [
-        { icon: 'truck-fast', text: 'Faster, accurate delivery to your farm' },
-        { icon: 'wheat-awn', text: 'Product recommendations for your area' },
-        { icon: 'cloud-sun-rain', text: 'Local weather & spray alerts' },
+      // The 12 picker languages shown on screens/language.html — manage label / order / visibility
+      languages: [
+        { code: 'hi',   native: 'हिंदी',      name: 'Hindi',            on: true },
+        { code: 'en',   native: 'English',    name: 'English',          on: true },
+        { code: 'hien', native: 'Hinglish',   name: 'Hindi + English',  on: true },
+        { code: 'mr',   native: 'मराठी',      name: 'Marathi',          on: true },
+        { code: 'gu',   native: 'ગુજરાતી',    name: 'Gujarati',         on: true },
+        { code: 'pa',   native: 'ਪੰਜਾਬੀ',     name: 'Punjabi',          on: true },
+        { code: 'te',   native: 'తెలుగు',     name: 'Telugu',           on: true },
+        { code: 'ta',   native: 'தமிழ்',      name: 'Tamil',            on: true },
+        { code: 'kn',   native: 'ಕನ್ನಡ',      name: 'Kannada',          on: true },
+        { code: 'ml',   native: 'മലയാളം',     name: 'Malayalam',        on: true },
+        { code: 'od',   native: 'ଓଡ଼ିଆ',       name: 'Odia',             on: true },
+        { code: 'bn',   native: 'বাংলা',      name: 'Bengali',          on: true },
       ],
-      otpFacts: [
-        'Free doctor calls with every order',
-        'Direct-from-factory pricing',
-        'New launch: Bhumiraja bio-stimulant',
-        'Licensed & lab-tested products',
+      cropPicker: ['Wheat','Rice','Tomato','Chilli','Maize','Soybean','Cotton','Sugarcane','More'],
+
+      // 1) Splash — logo-only over the emerald background (NO text on this screen)
+      splash: {
+        logo: '../assets/kd-logo-white.png',
+        logoWidth: 172,
+        bg: '#083D28',
+        durationMs: 2500,
+      },
+
+      // 2) Language select
+      langSelect: {
+        title: { en: 'Choose your language' },
+        sheetTitle: { en: 'Choose language' },
+      },
+
+      // 3) Mobile number (phone.html)
+      phone: {
+        logo: '../assets/kkd-logo.png',
+        heroImages: ['../assets/Humic_nobg.png','../assets/Chakrawarti_nobg.png','../assets/AntiVirus_nobg.png'],
+        offerEnabled: true,
+        offer:          { en: 'FIRST ORDER · ₹100 OFF' },
+        tagline:        { en: 'Save up to 40% on every spray' },
+        statFarmersNum: { en: '10 L+' },
+        statFarmersLbl: { en: 'Farmers' },
+        statProductsNum:{ en: '500+' },
+        statProductsLbl:{ en: 'Products' },
+        heading:        { en: 'Enter your mobile number' },
+        inputPh:        { en: 'Mobile number' },
+        referralToggle: { en: 'Have a referral code?' },
+        referralPh:     { en: 'Enter referral code' },
+        apply:          { en: 'Apply' },
+        consentTerms:   { en: 'By continuing you agree that you have read and accept our terms & conditions and privacy policy.' },
+        consentSms:     { en: 'I hereby authorize KKD to send notifications on SMS / Promotional / Information messages.' },
+        sendOtp:        { en: 'Send OTP' },
+      },
+
+      // 4) OTP (otp.html) — incl. the auto-rotating fact strip
+      otp: {
+        heading:    { en: 'Enter OTP' },
+        codeSentTo: { en: 'Code sent to' },
+        change:     { en: 'Change' },
+        noCode:     { en: "Didn't receive the code?" },
+        resendIn:   { en: 'Resend in' },
+        resendSecs: 30,
+        whatsapp:   { en: 'WhatsApp' },
+        sms:        { en: 'SMS' },
+        verify:     { en: 'Verify' },
+        factRotateMs: 4000,
+        facts: [
+          { icon: 'truck-fast',     text: { en: 'Free shipping on every order above ₹500' } },
+          { icon: 'headset',        text: { en: 'Krishi Doctor expert calls · free, 7am – 10pm' } },
+          { icon: 'sparkles',       text: { en: 'New launch: Humic + Fulvic 98 · stronger roots' } },
+          { icon: 'shield-halved',  text: { en: 'CIB-CR licensed · sealed straight from the factory' } },
+        ],
+      },
+
+      // 5) Name
+      name: {
+        heading:    { en: "What's your name?" },
+        firstPh:    { en: 'First name' },
+        lastPh:     { en: 'Last name' },
+        continue:   { en: 'Continue' },
+      },
+
+      // 6) Welcome + permission
+      welcomeAboard: { eyebrow: { en: 'Welcome aboard' }, headline: { en: 'Namaste,' }, sub: { en: "You've joined the Katyayani family. Let's grow together." } },
+      welcomeBack:   { eyebrow: { en: 'Welcome back' },   headline: { en: 'Hey,' },     sub: { en: 'Good to see you again. Your farm has been waiting for you.' } },
+      permissionBullets: [
+        { icon: 'truck-fast',      text: { en: 'Faster, accurate delivery to your farm' } },
+        { icon: 'wheat-awn',       text: { en: 'Product recommendations for your area' } },
+        { icon: 'cloud-sun-rain',  text: { en: 'Local weather & spray alerts' } },
       ],
     },
 
@@ -337,7 +423,7 @@
     ],
   };
 
-  const KEY = 'kkdAdmin.data';
+  const KEY = 'kkdAdmin.data.v2'; // bumped: 12 locales + deep onboarding schema
   function load() {
     const seed = JSON.parse(JSON.stringify(SEED));
     // Full per-screen translation set lives in i18n-data.js (window.KKD_I18N) when that page loads it.

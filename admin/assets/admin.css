@@ -174,10 +174,15 @@ textarea.input{height:auto;padding:10px 12px;resize:vertical;min-height:84px;lin
 .grip{color:var(--slate-400);cursor:grab;font-size:14px}
 .grip:active{cursor:grabbing}
 
-/* ---------- Phone preview ---------- */
+/* ---------- Phone preview ----------
+   The app screens are built for a 390px-wide phone (see viewer.html). The frame's
+   inner area is only 282px, so we render the iframe at its true 390px width and
+   scale it down to fit — otherwise fixed-px content (OTP cells, hero images,
+   paddings) overflows and the app looks broken. inner = 300-2*9 = 282; 282/390 = .7231;
+   iframe height 832 * .7231 ≈ 602 = inner height (620-2*9). */
 .phone{width:300px;height:620px;border-radius:34px;background:#0F172A;padding:9px;box-shadow:var(--shadow-lg);flex-shrink:0}
 .phone-screen{width:100%;height:100%;border-radius:26px;overflow:hidden;background:#fff;position:relative}
-.phone-screen iframe{width:100%;height:100%;border:0}
+.phone-screen iframe{width:390px;height:832px;border:0;transform:scale(.7231);transform-origin:top left}
 
 /* utilities */
 .flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}

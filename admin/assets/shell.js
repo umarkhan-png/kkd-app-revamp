@@ -26,7 +26,7 @@
       { key: 'sc-orders', label: 'Orders & Tracking', icon: 'truck', href: 'screen.html?s=orders' },
       { key: 'sc-mycrop', label: 'My Crop', icon: 'seedling', href: 'screen.html?s=mycrop' },
       { key: 'sc-rewards', label: 'Rewards & Wallet', icon: 'gift', href: 'screen.html?s=rewards' },
-      { key: 'sc-onboarding', label: 'Onboarding', icon: 'flag-checkered', href: 'screen.html?s=onboarding' },
+      { key: 'sc-onboarding', label: 'Onboarding', icon: 'flag-checkered', href: 'onboarding-manager.html' },
       { key: 'sc-account', label: 'Account & Help', icon: 'user', href: 'screen.html?s=account' },
       { key: 'sc-pages', label: 'Static Pages', icon: 'file-lines', href: 'screen.html?s=pages' },
     ]},

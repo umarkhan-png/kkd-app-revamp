@@ -9,11 +9,9 @@
 
   const KKD_I18N = {
 
-    /* ---------------- Onboarding ---------------- */
-    splash: [
-      { key: 'splash.trust_line', en: '10 lakh+ farmers across India trust KKD', hi: '', mr: '' },
-      { key: 'splash.tagline', en: 'Direct from Factory', hi: '', mr: '' },
-    ],
+    /* ---------------- Onboarding ----------------
+       Note: the Splash screen is logo-only (no text), so it has no translation
+       page — its logo/background are managed under Onboarding → Splash. */
     language: [
       { key: 'language.title', en: 'Choose your language', hi: '', mr: '' },
       { key: 'language.sheet_title', en: 'Choose language', hi: '', mr: '' },
@@ -760,7 +758,6 @@
   };
 
   const KKD_I18N_LABELS = {
-    splash: 'Splash',
     language: 'Language select',
     phone: 'Phone / mobile',
     otp: 'OTP verify',
@@ -820,7 +817,7 @@
     static_pages: 'Static pages',
   };
   const KKD_I18N_GROUPS = {
-    'Onboarding': ['splash', 'language', 'phone', 'otp', 'name', 'tell-us', 'permissions', 'locating', 'welcome-aboard', 'welcome-back', 'notifications-allow', 'notifications', 'know-your-app'],
+    'Onboarding': ['language', 'phone', 'otp', 'name', 'tell-us', 'permissions', 'locating', 'welcome-aboard', 'welcome-back', 'notifications-allow', 'notifications', 'know-your-app'],
     'Home & Search': ['home', 'search', 'voice-search', 'photo-diagnosis', 'loading', 'error-network'],
     'Shop & Product': ['shop', 'pdp', 'categories'],
     'Cart & Checkout': ['cart', 'empty-cart', 'checkout', 'error-payment', 'order-success'],

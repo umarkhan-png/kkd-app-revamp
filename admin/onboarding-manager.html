@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Onboarding Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+/* ── Onboarding Manager · scoped under .hm (same design system as Home Page Manager) ── */
+.hm{
+  --green:#258046;--green-lt:#ECFDF5;--green-md:#1F7A40;
+  --g50:#F9FAFB;--g100:#F3F4F6;--g200:#E5E7EB;--g300:#D1D5DB;
+  --g400:#9CA3AF;--g500:#6B7280;--g600:#4B5563;--g700:#374151;--g800:#1F2937;
+  --red:#DC2626;--amber:#D97706;--blue:#2563EB;--r:10px;
+  color:var(--g800);
+}
+.hm .hm-layout{display:flex;gap:16px;align-items:flex-start;}
+.hm .lp{width:240px;flex-shrink:0;background:#fff;border:1px solid var(--g200);border-radius:var(--r);box-shadow:var(--shadow-sm);overflow:hidden;position:sticky;top:16px;}
+.hm .lp-head{padding:13px 15px;border-bottom:1px solid var(--g100);}
+.hm .lp-head h3{font-size:13px;font-weight:700;color:var(--g700);margin:0;}
+.hm .lp-head p{font-size:11px;color:var(--g400);margin:2px 0 0;}
+.hm .lp-body{padding:6px 0;}
+.hm .sec-item{display:flex;align-items:center;gap:9px;padding:10px 13px;cursor:pointer;border-left:3px solid transparent;transition:background .1s;}
+.hm .sec-item:hover{background:var(--g50);}
+.hm .sec-item.active{background:var(--green-lt);border-left-color:var(--green);}
+.hm .sec-icon{font-size:18px;flex-shrink:0;}
+.hm .sec-info{flex:1;min-width:0;}
+.hm .sec-name{font-size:13px;font-weight:600;}
+.hm .sec-sub{font-size:10.5px;color:var(--g400);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hm .rp{flex:1;min-width:0;}
+.hm .card{background:#fff;border:1px solid var(--g200);border-radius:var(--r);margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow-sm);}
+.hm .card-head{padding:13px 18px;border-bottom:1px solid var(--g100);display:flex;align-items:center;justify-content:space-between;}
+.hm .card-head h3{font-size:13.5px;font-weight:700;margin:0;}
+.hm .card-body{padding:18px;}
+.hm .lang-tabs{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap;}
+.hm .lt{padding:4px 11px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--g200);color:var(--g600);transition:all .15s;font-weight:500;}
+.hm .lt.on{background:var(--green);border-color:var(--green);color:#fff;}
+.hm .row{display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.hm .fg{display:flex;flex-direction:column;flex:1;min-width:150px;}
+.hm .fg.fix{flex:0 0 auto;}
+.hm label{font-size:11px;font-weight:700;color:var(--g600);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;display:block;}
+.hm input[type=text],.hm input[type=number],.hm input[type=url],.hm textarea,.hm select.s{
+  border:1px solid var(--g200);border-radius:8px;padding:8px 10px;font-size:13px;
+  color:var(--g800);outline:none;background:#fff;width:100%;font-family:inherit;transition:border .15s;
+}
+.hm input:focus,.hm textarea:focus,.hm select.s:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
+.hm textarea{resize:vertical;min-height:60px;}
+.hm input[type=color]{width:44px;height:34px;border:1px solid var(--g200);border-radius:6px;padding:2px;cursor:pointer;}
+.hm .btn{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
+.hm .btn-p{background:var(--green);color:#fff;}
+.hm .btn-p:hover{background:var(--green-md);}
+.hm .btn-s{background:#fff;color:var(--g700);border:1px solid var(--g200);}
+.hm .btn-s:hover{background:var(--g100);}
+.hm .btn-d{background:#FEE2E2;color:var(--red);border:1px solid #FECACA;}
+.hm .btn-d:hover{background:#FECACA;}
+.hm .btn-sm{padding:5px 10px;font-size:12px;}
+.hm .btn-ic{padding:5px 8px;font-size:13px;}
+.hm .tr{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--g100);}
+.hm .tr:last-child{border-bottom:none;}
+.hm .tr-l .tt{font-size:13px;font-weight:600;}
+.hm .tr-l .td{font-size:11px;color:var(--g400);margin-top:1px;}
+.hm .tg{position:relative;width:37px;height:20px;background:var(--g200);border-radius:20px;cursor:pointer;transition:background .2s;flex-shrink:0;}
+.hm .tg.on{background:var(--green);}
+.hm .tg::after{content:'';position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.hm .tg.on::after{left:20px;}
+.hm .li{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--g200);border-radius:8px;margin-bottom:8px;background:#fff;}
+.hm .li-body{flex:1;min-width:0;}
+.hm .li-act{display:flex;gap:4px;flex-shrink:0;}
+.hm .hint{font-size:11px;color:var(--g400);line-height:1.4;}
+.hm .info-box{background:var(--green-lt);border-radius:8px;padding:11px 13px;font-size:12px;color:var(--green);margin-top:4px;display:flex;gap:8px;align-items:flex-start;}
+.hm .lang-pill{font-size:10px;font-weight:700;color:var(--green);background:var(--green-lt);border-radius:6px;padding:1px 6px;margin-left:5px;vertical-align:middle;}
+/* image field */
+.hm .imgbox{width:62px;height:62px;border-radius:8px;border:1px solid var(--g200);background:var(--g50);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--g400);flex-shrink:0;overflow:hidden;}
+.hm .imgbox img{max-width:100%;max-height:100%;object-fit:contain;}
+.hm .factic{width:38px;height:38px;border-radius:8px;background:var(--green-lt);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+@media (max-width:1080px){ .hm .hm-layout{flex-direction:column;} .hm .lp{width:100%;position:static;} }
+</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+      <div class="hm">
+        <div class="flex items-center justify-between" style="margin-bottom:18px">
+          <div>
+            <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Onboarding Manager</h2>
+            <p class="muted" style="margin:0;font-size:13.5px">Every first-run screen — splash, language, mobile number, OTP, name &amp; welcome. Edit copy in all 12 languages, swap images, and manage the auto-rotating messages.</p>
+          </div>
+          <span class="tag tag-green" style="font-size:12px;padding:5px 11px">6 screens</span>
+        </div>
+        <div class="hm-layout">
+          <div class="lp">
+            <div class="lp-head"><h3>Onboarding screens</h3><p>click a screen to edit it</p></div>
+            <div class="lp-body" id="secList"></div>
+          </div>
+          <div class="rp" id="rp"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+AdminShell.mount({ active:'sc-onboarding', title:'Onboarding Manager', crumb:'App Screens', controls:'The first-run flow — splash, language, mobile, OTP, name & welcome', preview:'phone.html' });
+
+const D = KKD.load();
+const O = D.onboarding;
+let activeKey = 'splash';
+let activeLang = 'hi';
+
+// 12 app languages (screens/language.html)
+const LANGS=[{c:'hi',l:'HI'},{c:'en',l:'EN'},{c:'hien',l:'HIN'},{c:'mr',l:'MR'},{c:'gu',l:'GU'},{c:'pa',l:'PA'},{c:'te',l:'TE'},{c:'ta',l:'TA'},{c:'kn',l:'KN'},{c:'ml',l:'ML'},{c:'od',l:'OD'},{c:'bn',l:'BN'}];
+
+const SECTIONS = [
+  { key:'splash',   icon:'📲', name:'Splash',          sub:'Logo + background',     screen:'splash.html' },
+  { key:'language', icon:'🌐', name:'Language select',  sub:'12 languages',          screen:'language.html' },
+  { key:'phone',    icon:'📱', name:'Mobile number',    sub:'Logo, hero, consent',   screen:'phone.html' },
+  { key:'otp',      icon:'🔢', name:'OTP verify',       sub:'Rotating facts, resend',screen:'otp.html' },
+  { key:'name',     icon:'🙋', name:'Name entry',       sub:'Name fields',           screen:'name.html' },
+  { key:'welcome',  icon:'🎉', name:'Welcome',          sub:'Welcome + permission',  screen:'welcome-aboard.html' },
+];
+
+/* ---------- path helpers (read/write nested O by "a.b.0.c") ---------- */
+function getPath(p){ return p.split('.').reduce((o,k)=> (o==null?o:o[k]), O); }
+function setPath(p,val){ const ks=p.split('.'); let o=O; for(let i=0;i<ks.length-1;i++){ if(o[ks[i]]==null) o[ks[i]]={}; o=o[ks[i]]; } o[ks[ks.length-1]]=val; }
+function commit(msg){ KKD.save(D); AdminShell.saved(msg||'Saved to draft'); }
+
+/* ---------- field components ---------- */
+// translatable text field — binds to <path>.<activeLang>, shows English as placeholder fallback
+function tField(path,label,opts){
+  opts=opts||{};
+  const cur = getPath(path+'.'+activeLang) || '';
+  const en  = getPath(path+'.en') || '';
+  const ph  = (activeLang!=='en' && en) ? en : (opts.ph||'Enter text');
+  const badge = activeLang!=='en' ? `<span class="lang-pill">${activeLang.toUpperCase()}</span>` : '';
+  const ctrl = opts.area
+    ? `<textarea oninput="setPath('${path}.${activeLang}',this.value)" onchange="commit()" placeholder="${esc(ph)}">${esc(cur)}</textarea>`
+    : `<input type="text" value="${esc(cur)}" oninput="setPath('${path}.${activeLang}',this.value)" onchange="commit()" placeholder="${esc(ph)}"/>`;
+  return `<div class="fg" ${opts.style?`style="${opts.style}"`:''}><label>${label}${badge}</label>${ctrl}${opts.hint?`<div class="hint" style="margin-top:4px">${opts.hint}</div>`:''}</div>`;
+}
+// plain text/number field
+function field(path,label,opts){
+  opts=opts||{};
+  const cur = getPath(path); const v = (cur==null?'':cur);
+  return `<div class="fg ${opts.fix?'fix':''}" ${opts.style?`style="${opts.style}"`:''}><label>${label}</label>
+    <input type="${opts.type||'text'}" value="${esc(String(v))}" oninput="setPath('${path}',${opts.type==='number'?'(this.value===\'\'?0:+this.value)':'this.value'})" onchange="commit()" placeholder="${esc(opts.ph||'')}" ${opts.type==='number'?`style="max-width:140px"`:''}/>
+    ${opts.hint?`<div class="hint" style="margin-top:4px">${opts.hint}</div>`:''}</div>`;
+}
+// image field — preview + path input + Upload (mock: local object URL)
+function imgField(path,label,hint){
+  const v = getPath(path)||'';
+  const isImg = /\.(png|jpe?g|webp|svg|gif)(\?|$)/i.test(v) || v.startsWith('blob:') || v.startsWith('data:') || v.startsWith('http');
+  return `<div class="fg"><label>${label}</label>
+    <div style="display:flex;gap:11px;align-items:flex-start">
+      <div class="imgbox">${isImg?`<img src="${esc(v)}" onerror="this.style.display='none'"/>`:'<i class="fa-solid fa-image"></i>'}</div>
+      <div style="flex:1;min-width:0">
+        <input type="text" value="${esc(v)}" oninput="setPath('${path}',this.value)" onchange="commit();rerender()" placeholder="../assets/your-image.png or https://…"/>
+        <div style="display:flex;gap:7px;margin-top:7px;align-items:center">
+          <button class="btn btn-s btn-sm" onclick="pickImg('${path}')"><i class="fa-solid fa-upload"></i> Upload image</button>
+          ${hint?`<span class="hint">${hint}</span>`:''}
+        </div>
+      </div>
+    </div></div>`;
+}
+function pickImg(path){
+  const inp=document.createElement('input'); inp.type='file'; inp.accept='image/*';
+  inp.onchange=()=>{ const f=inp.files&&inp.files[0]; if(!f)return; const url=URL.createObjectURL(f); setPath(path,url); commit('Image updated'); rerender(); };
+  inp.click();
+}
+// on/off toggle bound to a boolean path
+function toggle(path,title,desc){
+  const on = !!getPath(path);
+  return `<div class="tr"><div class="tr-l"><div class="tt">${title}</div>${desc?`<div class="td">${desc}</div>`:''}</div>
+    <div class="tg ${on?'on':''}" onclick="setPath('${path}',${!on});commit();rerender()"></div></div>`;
+}
+// color field bound to a path
+function colorField(path,label){
+  const v=getPath(path)||'#000000';
+  return `<div class="fg fix"><label>${label}</label><div style="display:flex;gap:8px;align-items:center">
+    <input type="color" value="${esc(v)}" oninput="setPath('${path}',this.value);document.getElementById('cx_${path.replace(/[^a-z0-9]/gi,'')}').value=this.value" onchange="commit()"/>
+    <input id="cx_${path.replace(/[^a-z0-9]/gi,'')}" type="text" value="${esc(v)}" style="max-width:110px" oninput="setPath('${path}',this.value)" onchange="commit()"/>
+  </div></div>`;
+}
+
+/* ---------- shared chrome ---------- */
+function langBar(){ return `<div class="lang-tabs">${LANGS.map(l=>`<div class="lt${l.c===activeLang?' on':''}" onclick="setLang('${l.c}')">${l.l}</div>`).join('')}</div>`; }
+function setLang(c){ activeLang=c; rerender(); }
+function head(meta){
+  return `<div class="flex items-center justify-between" style="margin-bottom:14px">
+    <div><h2 style="font-size:18px;font-weight:800;margin:0">${meta.icon} ${meta.name}</h2><p class="muted" style="margin:2px 0 0;font-size:12.5px">${meta.sub}</p></div>
+    <button class="btn btn-s btn-sm" onclick="AdminShell.previewApp('${meta.screen}')"><i class="fa-solid fa-mobile-screen-button"></i> Preview in app</button>
+  </div>`;
+}
+function card(title,inner){ return `<div class="card"><div class="card-head"><h3>${title}</h3></div><div class="card-body">${inner}</div></div>`; }
+
+/* ---------- per-screen editors ---------- */
+const EDITORS = {
+  splash(){
+    return head(meta('splash')) +
+      card('Logo &amp; background',
+        imgField('splash.logo','Logo image','PNG with transparency · shows white KKD mark on the emerald background') +
+        `<div class="row" style="margin-top:14px">`+
+          field('splash.logoWidth','Logo width (px)',{type:'number'}) +
+          colorField('splash.bg','Background colour') +
+          field('splash.durationMs','Auto-advance after (ms)',{type:'number',hint:'Time before moving to Language select'}) +
+        `</div>`
+      ) +
+      `<div class="info-box"><i class="fa-solid fa-circle-info" style="margin-top:1px"></i><span>This screen shows the logo only — it has <b>no text</b>, so it isn't part of Translations.</span></div>`;
+  },
+  language(){
+    const tiles = O.languages.map((L,i)=>`
+      <div class="li">
+        <div class="li-body">
+          <div class="row" style="margin-bottom:0">
+            <div class="fg"><label>Native name</label><input type="text" value="${esc(L.native)}" oninput="setPath('languages.${i}.native',this.value)" onchange="commit()"/></div>
+            <div class="fg"><label>English label</label><input type="text" value="${esc(L.name)}" oninput="setPath('languages.${i}.name',this.value)" onchange="commit()"/></div>
+            <div class="fg fix"><label>Code</label><input type="text" value="${esc(L.code)}" style="max-width:80px" oninput="setPath('languages.${i}.code',this.value)" onchange="commit()"/></div>
+          </div>
+        </div>
+        <div class="li-act" style="flex-direction:column;align-items:center;gap:6px">
+          <div class="tg ${L.on?'on':''}" title="Show in app" onclick="setPath('languages.${i}.on',${!L.on});commit();rerender()"></div>
+          <button class="btn btn-d btn-ic" onclick="delLang(${i})"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>`).join('');
+    return head(meta('language')) + langBar() +
+      card('Screen text',
+        `<div class="row" style="margin-bottom:0">`+
+          tField('langSelect.title','Title (full page)') +
+          tField('langSelect.sheetTitle','Title (picker sheet)') +
+        `</div>`
+      ) +
+      card(`Languages shown in the picker · ${O.languages.length}`,
+        tiles + `<button class="btn btn-s btn-sm" onclick="addLang()"><i class="fa-solid fa-plus"></i> Add language</button>
+        <div class="hint" style="margin-top:8px">Toggle hides a language from the picker without deleting it. The tile order here is the order shown in the app.</div>`
+      );
+  },
+  phone(){
+    return head(meta('phone')) + langBar() +
+      card('Top bar &amp; hero',
+        imgField('phone.logo','Top-bar logo','Small KKD logo at the top-left (~40px)') +
+        `<div class="sdiv" style="font-size:10.5px;font-weight:800;color:var(--g400);margin:14px 0 8px">HERO PRODUCT IMAGES (3)</div>`+
+        imgField('phone.heroImages.0','Product 1 (left)') +
+        imgField('phone.heroImages.1','Product 2 (centre)') +
+        imgField('phone.heroImages.2','Product 3 (right)') +
+        `<div style="margin-top:10px">`+ toggle('phone.offerEnabled','Show first-order offer banner','The glass strip on top of the hero') +`</div>`+
+        `<div class="row" style="margin-top:14px">`+
+          tField('phone.offer','Offer banner text') +
+          tField('phone.tagline','Hero tagline') +
+        `</div>`+
+        `<div class="row" style="margin-bottom:0">`+
+          tField('phone.statFarmersNum','Stat 1 — number',{style:'min-width:110px'}) +
+          tField('phone.statFarmersLbl','Stat 1 — label',{style:'min-width:110px'}) +
+          tField('phone.statProductsNum','Stat 2 — number',{style:'min-width:110px'}) +
+          tField('phone.statProductsLbl','Stat 2 — label',{style:'min-width:110px'}) +
+        `</div>`
+      ) +
+      card('Form copy',
+        `<div class="row">`+ tField('phone.heading','Heading') + tField('phone.inputPh','Input placeholder') +`</div>`+
+        `<div class="row">`+ tField('phone.referralToggle','Referral toggle link') + tField('phone.referralPh','Referral input placeholder') + tField('phone.apply','Apply button',{style:'min-width:110px'}) +`</div>`+
+        tField('phone.consentTerms','Consent — terms &amp; privacy',{area:true}) +
+        `<div style="height:12px"></div>`+
+        tField('phone.consentSms','Consent — SMS authorization',{area:true}) +
+        `<div style="height:12px"></div>`+
+        tField('phone.sendOtp','Primary button (Send OTP)',{style:'max-width:240px'})
+      );
+  },
+  otp(){
+    const facts = O.otp.facts.map((f,i)=>`
+      <div class="li">
+        <div class="factic"><i class="fa-solid fa-${esc(f.icon||'circle-info')}"></i></div>
+        <div class="li-body">
+          <div class="row" style="margin-bottom:0">
+            <div class="fg fix" style="max-width:170px"><label>Icon (Font Awesome)</label><input type="text" value="${esc(f.icon||'')}" oninput="setPath('otp.facts.${i}.icon',this.value)" onchange="commit();rerender()" placeholder="truck-fast"/></div>
+            ${tField('otp.facts.'+i+'.text','Message')}
+          </div>
+        </div>
+        <div class="li-act"><button class="btn btn-d btn-ic" onclick="delFact(${i})"><i class="fa-solid fa-trash"></i></button></div>
+      </div>`).join('');
+    return head(meta('otp')) + langBar() +
+      card('Heading &amp; resend',
+        `<div class="row">`+ tField('otp.heading','Heading') + tField('otp.codeSentTo','"Code sent to" label') + tField('otp.change','Change link',{style:'min-width:110px'}) +`</div>`+
+        `<div class="row">`+ tField('otp.noCode','No-code prompt') + tField('otp.resendIn','"Resend in" label') + field('otp.resendSecs','Resend timer (secs)',{type:'number'}) +`</div>`+
+        `<div class="row" style="margin-bottom:0">`+ tField('otp.whatsapp','WhatsApp button') + tField('otp.sms','SMS button') + tField('otp.verify','Verify button') +`</div>`
+      ) +
+      card('Auto-rotating message strip',
+        `<p class="hint" style="margin:0 0 12px">These messages rotate one after another below the OTP boxes. Add, edit or remove them, set the icon, and translate each one.</p>`+
+        `<div class="row" style="margin-bottom:14px">`+ field('otp.factRotateMs','Rotation speed (ms)',{type:'number',hint:'Time each message stays on screen'}) +`</div>`+
+        facts +
+        `<button class="btn btn-s btn-sm" onclick="addFact()"><i class="fa-solid fa-plus"></i> Add rotating message</button>`
+      );
+  },
+  name(){
+    return head(meta('name')) + langBar() +
+      card('Screen text',
+        `<div class="row">`+ tField('name.heading','Heading') +`</div>`+
+        `<div class="row">`+ tField('name.firstPh','First-name placeholder') + tField('name.lastPh','Last-name placeholder') +`</div>`+
+        `<div class="row" style="margin-bottom:0">`+ tField('name.continue','Continue button',{style:'max-width:240px'}) +`</div>`
+      );
+  },
+  welcome(){
+    const bullets = O.permissionBullets.map((b,i)=>`
+      <div class="li">
+        <div class="factic"><i class="fa-solid fa-${esc(b.icon||'circle-info')}"></i></div>
+        <div class="li-body"><div class="row" style="margin-bottom:0">
+          <div class="fg fix" style="max-width:170px"><label>Icon</label><input type="text" value="${esc(b.icon||'')}" oninput="setPath('permissionBullets.${i}.icon',this.value)" onchange="commit();rerender()"/></div>
+          ${tField('permissionBullets.'+i+'.text','Benefit line')}
+        </div></div>
+        <div class="li-act"><button class="btn btn-d btn-ic" onclick="delBullet(${i})"><i class="fa-solid fa-trash"></i></button></div>
+      </div>`).join('');
+    return head(meta('welcome')) + langBar() +
+      card('Welcome — new user (Welcome aboard)',
+        `<div class="row">`+ tField('welcomeAboard.eyebrow','Eyebrow') + tField('welcomeAboard.headline','Headline') +`</div>`+
+        tField('welcomeAboard.sub','Sub-text',{area:true})
+      ) +
+      card('Welcome — returning user (Welcome back)',
+        `<div class="row">`+ tField('welcomeBack.eyebrow','Eyebrow') + tField('welcomeBack.headline','Headline') +`</div>`+
+        tField('welcomeBack.sub','Sub-text',{area:true})
+      ) +
+      card('Location permission — benefit lines',
+        bullets + `<button class="btn btn-s btn-sm" onclick="addBullet()"><i class="fa-solid fa-plus"></i> Add benefit line</button>`
+      );
+  },
+};
+function meta(k){ return SECTIONS.find(s=>s.key===k); }
+
+/* ---------- list mutations ---------- */
+function addFact(){ O.otp.facts.push({ icon:'circle-info', text:{ en:'New message' } }); commit('Message added'); rerender(); }
+function delFact(i){ O.otp.facts.splice(i,1); commit('Message removed'); rerender(); }
+function addBullet(){ O.permissionBullets.push({ icon:'circle-check', text:{ en:'New benefit' } }); commit('Line added'); rerender(); }
+function delBullet(i){ O.permissionBullets.splice(i,1); commit('Line removed'); rerender(); }
+function addLang(){ O.languages.push({ code:'', native:'', name:'', on:true }); commit('Language added'); rerender(); }
+function delLang(i){ O.languages.splice(i,1); commit('Language removed'); rerender(); }
+
+/* ---------- render ---------- */
+function renderList(){
+  document.getElementById('secList').innerHTML = SECTIONS.map(s=>`
+    <div class="sec-item ${s.key===activeKey?'active':''}" onclick="selectSection('${s.key}')">
+      <span class="sec-icon">${s.icon}</span>
+      <div class="sec-info"><div class="sec-name">${s.name}</div><div class="sec-sub">${s.sub}</div></div>
+    </div>`).join('');
+}
+function selectSection(k){ activeKey=k; try{ location.hash=k; }catch(e){} renderList(); rerender(); }
+function rerender(){ document.getElementById('rp').innerHTML = EDITORS[activeKey](); }
+
+// deep-link: #otp, #phone, … opens that screen directly
+(function(){ const h=(location.hash||'').replace('#',''); if(h && SECTIONS.some(s=>s.key===h)) activeKey=h; })();
+renderList(); rerender();
+</script>
+</body></html>

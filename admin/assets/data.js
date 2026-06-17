@@ -367,6 +367,27 @@
       ],
     },
 
+    // Home top-of-screen theme RULES. One theme shows at a time: themes are tried
+    // top-to-bottom (array order = priority) and the first whose rule matches the
+    // user's state + current weather + date wins. `default` is the catch-all.
+    homeThemes: {
+      default: 'green',
+      themes: [
+        { id:'festival', name:'Holi Festival', enabled:true,
+          trigger:{ type:'festival', start:'2026-03-13', end:'2026-03-15', states:['All'] },
+          bg:{ image:'', fit:'cover', overlay:'medium' },
+          colors:{ a:'#DC2626', b:'#9333EA', c:'#D9A441' }, anim:'snow', animCount:14, animSpeed:3.4 },
+        { id:'rain', name:'Monsoon / Rain', enabled:true,
+          trigger:{ type:'weather', weather:'rain', states:['All'] },
+          bg:{ image:'', fit:'cover', overlay:'light' },
+          colors:{ a:'#2563EB', b:'#DBEAFE', c:'#1E40AF' }, anim:'rain', animCount:6, animSpeed:1.4 },
+        { id:'green', name:'Green (default)', enabled:true,
+          trigger:{ type:'always', states:['All'] },
+          bg:{ image:'', fit:'cover', overlay:'none' },
+          colors:{ a:'#258046', b:'#10B981', c:'#D9A441' }, anim:'none', animCount:0, animSpeed:0 },
+      ],
+    },
+
     // ---------------- Content & static pages ----------------
     staticPages: [
       { key: 'about', title: 'About Katyayani', updated: '2026-05-14', words: 180, status: 'published' },

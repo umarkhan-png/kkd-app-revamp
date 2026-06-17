@@ -128,6 +128,34 @@
 /* BANNER */
 .hm .bimg{width:100%;height:55px;border-radius:6px;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--g400);cursor:pointer;}
 
+/* TOP-BG UPLOADER */
+.hm .bg-up{display:flex;gap:14px;align-items:flex-start;}
+.hm .bg-prev{width:176px;height:99px;border-radius:8px;border:1px solid var(--g200);background:linear-gradient(180deg,#258046 0%,#258046 55%,#10B981 100%);display:flex;align-items:center;justify-content:center;font-size:11px;color:rgba(255,255,255,.85);flex-shrink:0;overflow:hidden;position:relative;}
+.hm .bg-prev img{width:100%;height:100%;object-fit:cover;}
+.hm .bg-prev.contain img{object-fit:contain;background:var(--g100);}
+.hm .bg-guide{font-size:11.5px;color:var(--g500);background:var(--g50);border:1px dashed var(--g300);border-radius:8px;padding:8px 11px;margin-top:9px;line-height:1.5;}
+.hm .bg-guide i{color:var(--green);margin-right:5px;}
+.hm .bg-msg{font-size:12px;font-weight:600;border-radius:8px;padding:8px 11px;margin-top:8px;line-height:1.4;}
+.hm .bg-msg.err{background:#FEF2F2;color:var(--red);border:1px solid #FECACA;}
+.hm .bg-msg.warn{background:#FFFBEB;color:var(--amber);border:1px solid #FDE68A;}
+.hm .bg-msg.ok{background:var(--green-lt);color:var(--green);border:1px solid #A7F3D0;}
+
+/* THEME TILES + EDITOR */
+.hm .theme-tiles{display:flex;flex-direction:column;gap:10px;margin-bottom:6px;}
+.hm .theme-tile{display:flex;align-items:center;gap:13px;padding:11px;border:1px solid var(--g200);border-radius:10px;background:#fff;transition:border .15s,box-shadow .15s;}
+.hm .theme-tile.editing{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
+.hm .theme-tile.off{opacity:.6;}
+.hm .tt-prev{width:108px;height:60px;border-radius:8px;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:9.5px;color:rgba(255,255,255,.85);text-align:center;line-height:1.2;}
+.hm .tt-prev img{width:100%;height:100%;object-fit:cover;}
+.hm .tt-body{flex:1;min-width:0;}
+.hm .tt-name{font-size:13.5px;font-weight:700;}
+.hm .tt-def{font-size:10px;font-weight:700;color:var(--blue);background:#DBEAFE;border-radius:6px;padding:1px 6px;margin-left:5px;vertical-align:middle;}
+.hm .tt-badge{font-size:11.5px;color:var(--g600);margin-top:3px;}
+.hm .tt-prio{font-size:10.5px;color:var(--g400);margin-top:2px;}
+.hm .tt-act{display:flex;align-items:center;gap:5px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:160px;}
+.hm .theme-ed{border:1px solid var(--green);border-radius:10px;padding:16px;background:var(--green-lt);}
+.hm .theme-ed .bg-prev{width:176px;height:99px;}
+
 @media (max-width:1080px){
   .hm .hm-layout{flex-direction:column;}
   .hm .lp{width:100%;position:static;}
@@ -269,6 +297,189 @@ function TG(id,on,tt,td=''){return`<div class="tr"><div class="tr-l"><div class=
 function promptE(el){const e=prompt('Enter emoji:',el.textContent.trim());if(e)el.textContent=e;}
 function save(msg){AdminShell.saved(msg);}
 
+/* ══════════════ THEME RULE MANAGER ══════════════
+   Themes are rule-driven (state / weather / festival date). Only ONE shows at a
+   time: themes are tried top-to-bottom (priority) and the first whose rule matches
+   the user's state + current weather + date wins. So when Holi (festival) AND rain
+   both match, whichever sits higher in the list is what the user sees. */
+const WEATHERS=['clear','rain','cloudy','hot','cold','storm'];
+let teEdit=null;                                   // id of theme being edited (inline)
+let teSim={state:'All States',weather:'rain',date:'2026-03-14'};  // resolver simulator
+let teMsg=null;                                    // last upload message {kind,text}
+function themeData(){
+  if(!data.homeThemes) data.homeThemes={ default:'green', themes:[] };
+  if(!Array.isArray(data.homeThemes.themes)) data.homeThemes.themes=[];
+  return data.homeThemes;
+}
+function editTheme(){ return themeData().themes.find(t=>t.id===teEdit); }
+function themeUI(){ if(sel==='theme') document.getElementById('rp').innerHTML=EDITORS.theme(); }
+function ruleMatches(t,state,weather,date){
+  if(!t.enabled) return false;
+  const tr=t.trigger||{}; const st=(tr.states&&tr.states.indexOf('All')>=0)? true : (tr.states||[]).indexOf(state)>=0;
+  if(!st) return false;
+  if(tr.type==='always') return true;
+  if(tr.type==='state')   return true;             // state scope already checked
+  if(tr.type==='weather') return tr.weather===weather;
+  if(tr.type==='festival')return tr.start&&tr.end&&date>=tr.start&&date<=tr.end;
+  return false;                                    // 'manual' never auto-applies
+}
+function resolveTheme(state,weather,date){
+  const T=themeData();
+  for(const t of T.themes){ if(ruleMatches(t,state,weather,date)) return t; }
+  return T.themes.find(t=>t.id===T.default) || T.themes[0] || null;
+}
+function triggerBadge(t){
+  const tr=t.trigger||{}; const scope=(tr.states&&tr.states.indexOf('All')<0)?` · 📍 ${tr.states.join(', ')}`:'';
+  if(tr.type==='always')  return `⭐ Always (default)${scope}`;
+  if(tr.type==='state')   return `📍 State: ${(tr.states||[]).join(', ')||'—'}`;
+  if(tr.type==='weather') return `🌦 Weather: ${tr.weather||'—'}${scope}`;
+  if(tr.type==='festival')return `🎉 Festival: ${tr.start||'?'} → ${tr.end||'?'}${scope}`;
+  if(tr.type==='manual')  return `✋ Manual only${scope}`;
+  return '—';
+}
+function themeGrad(t){ const c=t.colors||{}; return `linear-gradient(180deg, ${c.a||'#258046'} 0%, ${c.b||'#10B981'} 100%)`; }
+
+/* ---- per-theme background uploader (validated) ---- */
+function tePick(input){
+  const t=editTheme(); if(!t) return;
+  const f=input.files&&input.files[0]; if(!f) return;
+  const ok=['image/png','image/jpeg','image/webp','image/gif'];
+  if(ok.indexOf(f.type)<0){ teMsg={kind:'err',text:'Unsupported file type. Please use a PNG, JPG, WebP or GIF.'}; themeUI(); return; }
+  const MB=f.size/1048576, cap=f.type==='image/gif'?4:2;
+  if(MB>cap){ teMsg={kind:'err',text:`This file is ${MB.toFixed(1)} MB — keep ${f.type==='image/gif'?'GIFs under 4 MB':'images under 2 MB'} so Home loads fast. Compress it and try again.`}; themeUI(); return; }
+  const url=URL.createObjectURL(f), img=new Image();
+  img.onload=()=>{
+    const w=img.naturalWidth,h=img.naturalHeight; t.bg=t.bg||{};
+    t.bg.image=url; t.bg.name=f.name; t.bg.w=w; t.bg.h=h; t.bg.type=f.type; KKD.save(data);
+    if(w<1080||h<600) teMsg={kind:'warn',text:`Uploaded ${w}×${h}px — below the recommended 1080×600 px, so it may look soft on large phones. It will still work.`};
+    else if(Math.abs((w/h)-(16/9))>0.5) teMsg={kind:'warn',text:`Uploaded ${w}×${h}px. The top band is landscape (~16:9); this ratio may crop — use "Image fit" to adjust.`};
+    else teMsg={kind:'ok',text:`Looks great — ${w}×${h}px, ${MB.toFixed(1)} MB. Saved to draft.`};
+    AdminShell.refreshPending(); themeUI();
+  };
+  img.onerror=()=>{ teMsg={kind:'err',text:'That image could not be read — it may be corrupt. Try a different file.'}; themeUI(); };
+  img.src=url;
+}
+function teBgRemove(){ const t=editTheme(); if(!t||!t.bg) return; t.bg.image=''; delete t.bg.name; delete t.bg.w; delete t.bg.h; KKD.save(data); teMsg={kind:'ok',text:'Image removed — this theme falls back to its gradient colours.'}; AdminShell.refreshPending(); themeUI(); }
+function teBgSet(k,v){ const t=editTheme(); if(!t) return; t.bg=t.bg||{}; t.bg[k]=v; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
+
+/* ---- mutations ---- */
+function themeAdd(){
+  const T=themeData(); const id='t'+(T.themes.length+1)+'_'+T.themes.reduce((n)=>n+1,0);
+  T.themes.unshift({ id, name:'New theme', enabled:true, trigger:{type:'manual',states:['All']}, bg:{image:'',fit:'cover',overlay:'light'}, colors:{a:'#258046',b:'#10B981',c:'#D9A441'}, anim:'none', animCount:8, animSpeed:2 });
+  teEdit=id; teMsg=null; KKD.save(data); AdminShell.refreshPending(); themeUI();
+}
+function themeDel(id){ const T=themeData(); T.themes=T.themes.filter(t=>t.id!==id); if(T.default===id) T.default=(T.themes[T.themes.length-1]||{}).id||''; if(teEdit===id) teEdit=null; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
+function themeEdit(id){ teEdit=(teEdit===id?null:id); teMsg=null; themeUI(); }
+function themeMove(i,d){ const T=themeData(); const j=i+d; if(j<0||j>=T.themes.length) return; const a=T.themes; [a[i],a[j]]=[a[j],a[i]]; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
+function themeToggle(id){ const t=themeData().themes.find(x=>x.id===id); if(!t)return; t.enabled=!t.enabled; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
+function themeSetDefault(v){ themeData().default=v; KKD.save(data); AdminShell.refreshPending(); }
+function themeField(id,path,v){ const t=themeData().themes.find(x=>x.id===id); if(!t)return; const ks=path.split('.'); let o=t; for(let i=0;i<ks.length-1;i++){ if(o[ks[i]]==null)o[ks[i]]={}; o=o[ks[i]]; } o[ks[ks.length-1]]=v; KKD.save(data); AdminShell.refreshPending(); }
+function themeSetTriggerType(id,v){ themeField(id,'trigger.type',v); themeUI(); }
+function themeToggleScopeAll(id){ const t=themeData().themes.find(x=>x.id===id); if(!t)return; t.trigger.states=['All']; KKD.save(data); themeUI(); }
+function themeToggleScope(id,st){ const t=themeData().themes.find(x=>x.id===id); if(!t)return; let s=(t.trigger.states||[]).filter(x=>x!=='All'); s.indexOf(st)>=0?(s=s.filter(x=>x!==st)):s.push(st); if(!s.length)s=['All']; t.trigger.states=s; KKD.save(data); themeUI(); }
+function themeSim(k,v){ teSim[k]=v; themeUI(); }
+
+/* ---- views ---- */
+function themeResolverBox(){
+  const win=resolveTheme(teSim.state,teSim.weather,teSim.date);
+  const stOpts=['All States'].concat(STATES.filter(s=>s!=='All States')).map(s=>`<option${s===teSim.state?' selected':''}>${s}</option>`).join('');
+  const wOpts=WEATHERS.map(w=>`<option${w===teSim.weather?' selected':''}>${w}</option>`).join('');
+  return `<div class="sch-box">
+    <div class="sl">🔎 What will users see? — test your rules</div>
+    <div class="row" style="margin-bottom:10px">
+      <div class="fg fix"><label>User's state</label><select class="s" onchange="themeSim('state',this.value)">${stOpts}</select></div>
+      <div class="fg fix"><label>Weather now</label><select class="s" onchange="themeSim('weather',this.value)">${wOpts}</select></div>
+      <div class="fg fix"><label>Date</label><input type="date" value="${teSim.date}" onchange="themeSim('date',this.value)"/></div>
+    </div>
+    <div class="info-box"><i class="fa-solid fa-eye" style="margin-top:1px"></i><span>A user in <b>${esc(teSim.state)}</b> · <b>${esc(teSim.weather)}</b> weather · <b>${esc(teSim.date)}</b> sees → <b>${win?esc(win.name):'no theme'}</b>${win?` <span class="hint">(${triggerBadge(win)})</span>`:''}</span></div>
+  </div>`;
+}
+function themeTile(t,i){
+  const T=themeData(); const isDef=t.id===T.default;
+  const prev=(t.bg&&t.bg.image)?`<img src="${t.bg.image}" alt=""/>`:'';
+  return `<div class="theme-tile${t.id===teEdit?' editing':''}${t.enabled?'':' off'}">
+    <div class="tt-prev" style="background:${themeGrad(t)}">${prev}</div>
+    <div class="tt-body">
+      <div class="tt-name">${esc(t.name)}${isDef?' <span class="tt-def">fallback</span>':''}</div>
+      <div class="tt-badge">${triggerBadge(t)}</div>
+      <div class="tt-prio">Priority ${i+1}${i===0?' · highest':''}</div>
+    </div>
+    <div class="tt-act">
+      <button class="btn btn-s btn-ic" title="Move up" onclick="themeMove(${i},-1)" ${i===0?'disabled style=opacity:.4':''}><i class="fa-solid fa-arrow-up"></i></button>
+      <button class="btn btn-s btn-ic" title="Move down" onclick="themeMove(${i},1)" ${i===T.themes.length-1?'disabled style=opacity:.4':''}><i class="fa-solid fa-arrow-down"></i></button>
+      <div class="tg ${t.enabled?'on':''}" title="Enable / disable" onclick="themeToggle('${t.id}')"></div>
+      <button class="btn ${t.id===teEdit?'btn-p':'btn-s'} btn-ic" title="Edit" onclick="themeEdit('${t.id}')"><i class="fa-solid fa-pen"></i></button>
+      <button class="btn btn-d btn-ic" title="Delete" onclick="themeDel('${t.id}')"><i class="fa-solid fa-trash"></i></button>
+    </div>
+  </div>`;
+}
+function themeEditor(t){
+  if(!t) return '';
+  const tr=t.trigger||{}; const bg=t.bg||{}; const c=t.colors||{};
+  const selO=(v,c2)=>v===c2?' selected':'';
+  const scopeAll=(tr.states||['All']).indexOf('All')>=0;
+  const stateChips=STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!scopeAll&&(tr.states||[]).indexOf(s)>=0)?'on':''}" onclick="themeToggleScope('${t.id}','${s}')">${s}</span>`).join('');
+  const condRow = tr.type==='weather'
+      ? `<div class="fg fix"><label>Weather condition</label><select class="s" onchange="themeField('${t.id}','trigger.weather',this.value);">${WEATHERS.map(w=>`<option${selO(w,tr.weather)}>${w}</option>`).join('')}</select></div>`
+    : tr.type==='festival'
+      ? `<div class="fg fix"><label>Start date</label><input type="date" value="${tr.start||''}" onchange="themeField('${t.id}','trigger.start',this.value)"/></div>
+         <div class="fg fix"><label>End date</label><input type="date" value="${tr.end||''}" onchange="themeField('${t.id}','trigger.end',this.value)"/></div>`
+      : '';
+  return `<div class="theme-ed">
+    <div class="card-head" style="padding:0 0 12px;border:0"><h3>✏️ Editing: ${esc(t.name)}</h3><button class="btn btn-s btn-sm" onclick="themeEdit('${t.id}')">Done</button></div>
+
+    <div class="row"><div class="fg" style="max-width:320px"><label>Theme name</label><input type="text" value="${esc(t.name)}" onchange="themeField('${t.id}','name',this.value);themeUI()"/></div></div>
+
+    <div class="sdiv">When does this theme show?</div>
+    <div class="row">
+      <div class="fg fix"><label>Rule type</label><select class="s" onchange="themeSetTriggerType('${t.id}',this.value)">
+        <option value="always"${selO('always',tr.type)}>Always (catch-all / default)</option>
+        <option value="weather"${selO('weather',tr.type)}>Weather-based</option>
+        <option value="festival"${selO('festival',tr.type)}>Festival / date range</option>
+        <option value="state"${selO('state',tr.type)}>State only</option>
+        <option value="manual"${selO('manual',tr.type)}>Manual only (user taps to switch)</option>
+      </select></div>
+      ${condRow}
+    </div>
+    <div class="sdiv" style="padding-top:4px">Applies to states</div>
+    <div style="margin-bottom:6px"><span class="cchip ${scopeAll?'on':''}" onclick="themeToggleScopeAll('${t.id}')">All states</span> ${stateChips}</div>
+
+    <div class="sdiv">Background image / GIF</div>
+    <p class="hint-p">Shows in this theme's tile and behind the top of Home. Optional — without an image the gradient colours below are used.</p>
+    <div class="bg-up">
+      <div class="bg-prev ${bg.fit==='contain'?'contain':''}" style="background:${themeGrad(t)}">${bg.image?`<img src="${bg.image}" alt=""/>`:'Gradient<br>(no image)'}</div>
+      <div style="flex:1;min-width:0">
+        <input type="file" id="teFile" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none" onchange="tePick(this)"/>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-s btn-sm" onclick="document.getElementById('teFile').click()"><i class="fa-solid fa-upload"></i> Upload image / GIF</button>
+          ${bg.image?`<button class="btn btn-d btn-sm" onclick="teBgRemove()"><i class="fa-solid fa-trash"></i> Remove</button>`:''}
+        </div>
+        <div class="bg-guide"><i class="fa-solid fa-circle-info"></i>Recommended <b>1080 × 600 px</b> (landscape, ~16:9). Max <b>2 MB</b> for images, <b>4 MB</b> for GIFs. Formats: <b>PNG, JPG, WebP, GIF</b>.</div>
+        ${bg.image&&bg.w?`<div class="hint" style="margin-top:7px">Current: ${bg.name?esc(bg.name)+' · ':''}${bg.w}×${bg.h}px</div>`:''}
+        ${teMsg?`<div class="bg-msg ${teMsg.kind}">${esc(teMsg.text)}</div>`:''}
+        <div class="row" style="margin-top:12px;margin-bottom:0">
+          <div class="fg fix"><label>Image fit</label><select class="s" onchange="teBgSet('fit',this.value)"><option value="cover"${selO('cover',bg.fit||'cover')}>Cover (fill)</option><option value="contain"${selO('contain',bg.fit||'cover')}>Contain (fit)</option></select></div>
+          <div class="fg fix"><label>Text-protection overlay</label><select class="s" onchange="teBgSet('overlay',this.value)"><option value="none"${selO('none',bg.overlay||'light')}>None</option><option value="light"${selO('light',bg.overlay||'light')}>Light dim</option><option value="medium"${selO('medium',bg.overlay||'light')}>Medium dim</option><option value="strong"${selO('strong',bg.overlay||'light')}>Strong dim</option></select></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sdiv">Gradient colours (used when there's no image)</div>
+    <div class="row">
+      <div class="fg fix"><label>Primary</label><div class="color-r"><input type="color" value="${c.a||'#258046'}" onchange="themeField('${t.id}','colors.a',this.value);themeUI()"/><span>${c.a||'#258046'}</span></div></div>
+      <div class="fg fix"><label>Secondary</label><div class="color-r"><input type="color" value="${c.b||'#10B981'}" onchange="themeField('${t.id}','colors.b',this.value);themeUI()"/><span>${c.b||'#10B981'}</span></div></div>
+      <div class="fg fix"><label>Accent</label><div class="color-r"><input type="color" value="${c.c||'#D9A441'}" onchange="themeField('${t.id}','colors.c',this.value)"/><span>${c.c||'#D9A441'}</span></div></div>
+    </div>
+
+    <div class="sdiv">Animation</div>
+    <div class="row" style="margin-bottom:0">
+      <div class="fg fix"><label>Effect</label><select class="s" onchange="themeField('${t.id}','anim',this.value)"><option value="none"${selO('none',t.anim)}>None</option><option value="rain"${selO('rain',t.anim)}>Rain</option><option value="snow"${selO('snow',t.anim)}>Snow / petals</option></select></div>
+      <div class="fg fix"><label>Particle count</label><input type="number" style="width:110px" value="${t.animCount||8}" onchange="themeField('${t.id}','animCount',+this.value)"/></div>
+      <div class="fg fix"><label>Speed (sec)</label><input type="number" step="0.1" style="width:110px" value="${t.animSpeed||2}" onchange="themeField('${t.id}','animSpeed',+this.value)"/></div>
+    </div>
+  </div>`;
+}
+
 /* ── ADD HELPERS ── */
 function newPChip(n){return`<span class="pchip">🌱 ${n} <span class="x" onclick="this.closest('.pchip').remove()">×</span></span>`;}
 function newPAdd(fn){return`<span class="padd" onclick="${fn}(this)">+ Add Product</span>`;}
@@ -340,57 +551,28 @@ header:()=>`
   </div>
 </div>`,
 
-/* 0b ── THEME & SEASONS */
-theme:()=>`
+/* 0b ── THEME RULES (state / weather / festival · one theme at a time, by priority) */
+theme:()=>{ const T=themeData(); return `
 <div class="card">
-  <div class="card-head"><h3>🎨 Theme &amp; Seasons</h3><button class="btn btn-p btn-sm" onclick="save('Theme saved')">Save</button></div>
+  <div class="card-head"><h3>🎨 Theme Rules</h3><button class="btn btn-p btn-sm" onclick="save('Themes saved')">Save</button></div>
   <div class="card-body">
-    <div class="row"><div class="fg" style="max-width:260px;"><label>Default Theme</label>
-      <select class="s"><option>Green</option><option>Rain</option><option>Festival</option></select>
-    </div></div>
+    <p class="hint-p">Themes change the top of Home automatically — by <b>state</b>, by <b>weather</b>, or on <b>festival dates</b> (Holi, Diwali, Christmas…). A user only ever sees <b>one theme at a time</b>: themes are checked top-to-bottom and the first whose rule matches wins. So if Holi <i>and</i> rain both apply, whichever sits higher here is what shows — drag priority with the ↑ ↓ buttons.</p>
 
-    <div class="sdiv">Green Theme</div>
-    ${TG('th1',true,'Green theme enabled','Default emerald home gradient')}
-    <div class="row">
-      <div class="fg fix"><label>Emerald Color</label><div class="color-r"><input type="color" value="#258046"/><span>#258046</span></div></div>
-    </div>
+    ${themeResolverBox()}
 
-    <div class="sdiv">Rain Theme</div>
-    ${TG('th2',true,'Rain theme enabled','Blue monsoon gradient')}
-    <div class="row">
-      <div class="fg fix"><label>Blue Color</label><div class="color-r"><input type="color" value="#2563EB"/><span>#2563EB</span></div></div>
-    </div>
-    ${TG('th3',true,'Rain animation','Falling raindrops over the header')}
-    <div class="row">
-      <div class="fg fix"><label>Raindrop count</label><input type="number" style="width:120px;" value="6"/></div>
-      <div class="fg fix"><label>Speed (sec)</label><input type="number" step="0.1" style="width:120px;" value="1.4"/></div>
-    </div>
+    <div class="sdiv">Themes · top = highest priority</div>
+    <div class="theme-tiles">${T.themes.map((t,i)=>themeTile(t,i)).join('')}</div>
+    <button class="btn btn-s btn-sm" onclick="themeAdd()" style="margin-top:6px"><i class="fa-solid fa-plus"></i> Add theme</button>
 
-    <div class="sdiv">Festival Theme</div>
-    ${TG('th4',true,'Festival theme enabled','Christmas/festive gradient')}
-    <div class="row">
-      <div class="fg fix"><label>Red Color</label><div class="color-r"><input type="color" value="#DC2626"/><span>#DC2626</span></div></div>
-      <div class="fg fix"><label>Green Color</label><div class="color-r"><input type="color" value="#258046"/><span>#258046</span></div></div>
-      <div class="fg fix"><label>Gold Color</label><div class="color-r"><input type="color" value="#D9A441"/><span>#D9A441</span></div></div>
-    </div>
-    ${TG('th5',true,'Snowfall (festival)','Falling snowflakes on the festival theme')}
-    <div class="row">
-      <div class="fg fix"><label>Snowflake count</label><input type="number" style="width:120px;" value="12"/></div>
-      <div class="fg fix"><label>Speed (sec)</label><input type="number" step="0.1" style="width:120px;" value="3.4"/></div>
-    </div>
-
-    <div class="sdiv">General</div>
-    ${TG('th6',true,'Bloom animation on switch','Soft bloom transition when theme changes')}
-    <div class="sch-box" style="margin-top:12px;">
-      <div class="sl">🎉 Festival auto-schedule</div>
-      <div class="row">
-        <div class="fg"><label>Start Date &amp; Time</label><input type="datetime-local" value="2026-12-20T00:00"/></div>
-        <div class="fg"><label>End Date &amp; Time</label><input type="datetime-local" value="2026-12-26T23:59"/></div>
+    <div class="row" style="margin-top:18px;margin-bottom:0">
+      <div class="fg" style="max-width:320px"><label>Fallback theme (shown when no rule matches)</label>
+        <select class="s" onchange="themeSetDefault(this.value)">${T.themes.map(t=>`<option value="${t.id}"${t.id===T.default?' selected':''}>${esc(t.name)}</option>`).join('')}</select>
       </div>
     </div>
-    ${TG('th7',true,'Tap Deliver-to to switch theme','Address tap cycles through enabled themes')}
+
+    ${teEdit?`<div style="margin-top:16px">${themeEditor(T.themes.find(x=>x.id===teEdit))}</div>`:''}
   </div>
-</div>`,
+</div>`; },
 
 /* 0c ── TOP STATUS BANNER */
 statusbanner:()=>`
@@ -1131,7 +1313,8 @@ function addTesti(){
     </div>
   </div>`);}
 
-// INIT
+// INIT — open the section from #hash (e.g. #theme) or the first one
 renderList();
+(function(){ const raw=(location.hash||'').replace('#',''); const parts=raw.split('/'); const sec=parts[0]; const id=SECS.some(s=>s.id===sec)?sec:SECS[0].id; pick(id); if(id==='theme'&&parts[1]){ teEdit=parts[1]; themeUI(); } })();
 </script>
 </body></html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Segoe UI',system-ui,sans-serif;background:#fff;width:390px}
+  .row{display:flex;gap:6px;padding:14px 16px}
+  .tile{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:7px;text-decoration:none}
+  .chip{width:62px;height:62px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+  .lab{font-size:11px;font-weight:700;color:#2A1F14;text-align:center;line-height:1.1}
+  .head{font:700 13px system-ui;color:#0F172A;padding:18px 16px 2px;letter-spacing:.3px;border-top:1px solid #EEE}
+  .sub{font:500 11px system-ui;color:#94A3B8;padding:0 16px 4px}
+  svg{display:block;width:46px;height:46px}
+
+  /* ---------- STYLE 1: BLOCK PRINT / LINO ---------- */
+  .s1 .chip{border-radius:16px;background:#ECE1C8;border:1.5px solid #DCCBA6}
+  .s1 .chip::after{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:.12;pointer-events:none}
+  .s1 .lab{font-variant:small-caps;letter-spacing:.5px;font-weight:800}
+
+  /* ---------- STYLE 2: RISOGRAPH DUOTONE ---------- */
+  .s2 .chip{border-radius:50%;background:#FBF7EE;border:1.5px solid #ECE5D5}
+  .s2 .chip::after{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='1'/%3E%3C/filter%3E%3Crect width='60' height='60' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:.16;pointer-events:none}
+  .s2 .lab{font-weight:800;letter-spacing:-.2px}
+  .riso{position:relative}
+  .riso svg{position:absolute;inset:0}
+  .riso .a{mix-blend-mode:multiply;transform:translate(-1.4px,-1.4px)}
+  .riso .b{mix-blend-mode:multiply;transform:translate(1.4px,1.4px)}
+  .riso .spacer{position:static;visibility:hidden}
+
+  /* ---------- STYLE 3: PAPER CUT-OUT ---------- */
+  .s3 .chip{border-radius:20px}
+  .s3 svg{filter:drop-shadow(0 2px 1.5px rgba(40,25,10,.22))}
+  .s3 .lab{font-weight:700}
+</style></head>
+<body>
+<script>
+const CATS=[
+ {key:'pesticide', label:'Pesticide', ink:'#C0492B', riso:'#2E7D32', wash:'linear-gradient(160deg,#FFF1EC,#FFE1D4)', paper:'#E8A07E', paper2:'#F3C9B3'},
+ {key:'fungicide', label:'Fungicide', ink:'#7A4A86', riso:'#C0492B', wash:'linear-gradient(160deg,#F4EEFC,#E7DBF8)', paper:'#A07CB0', paper2:'#CDB6D8'},
+ {key:'fertilizer',label:'Fertilizer',ink:'#2E7D32', riso:'#B07A12', wash:'linear-gradient(160deg,#ECF7E9,#D8EFD1)', paper:'#6CA84E', paper2:'#A8CE8C'},
+ {key:'herbicide', label:'Herbicide', ink:'#B07A12', riso:'#2E7D32', wash:'linear-gradient(160deg,#FCF4E1,#F5E6BF)', paper:'#CDA23E', paper2:'#E6CE8C'},
+ {key:'combo',     label:'Combo',     ink:'#3D52A0', riso:'#C0492B', wash:'linear-gradient(160deg,#ECEFFC,#DBE2F8)', paper:'#5B83D6', paper2:'#9FB6E8'},
+];
+
+// --- base glyphs: returns markup with fill="INK"/stroke="INK" for body, fill="CARVE" for cut-out details
+function glyph(key, ink, carve){
+ const S=`stroke="${ink}" stroke-linecap="round" stroke-linejoin="round" fill="none"`;
+ switch(key){
+  case 'pesticide': return `
+    <ellipse cx="24" cy="27" rx="11" ry="13" fill="${ink}"/>
+    <ellipse cx="24" cy="13" rx="5.6" ry="4.6" fill="${ink}"/>
+    <g ${S} stroke-width="2.6">
+      <path d="M13.5 21 L6 17 M13 27 L5 27.5 M14.5 34 L8 39"/>
+      <path d="M34.5 21 L42 17 M35 27 L43 27.5 M33.5 34 L40 39"/>
+      <path d="M21 9.5 L17.5 4.5 M27 9.5 L30.5 4.5"/>
+    </g>
+    <path d="M24 17 L24 38" stroke="${carve}" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="19" cy="24" r="1.7" fill="${carve}"/>
+    <circle cx="29" cy="24" r="1.7" fill="${carve}"/>`;
+  case 'fungicide': return `
+    <path d="M24 6 C12 10 8 24 12 38 C14 42 34 42 36 38 C40 24 36 10 24 6 Z" fill="${ink}"/>
+    <path d="M24 9 L24 39" stroke="${carve}" stroke-width="2" stroke-linecap="round"/>
+    <g stroke="${carve}" stroke-width="1.4" stroke-linecap="round"><path d="M24 18 L15 14 M24 26 L14 23 M24 18 L33 14 M24 26 L34 23"/></g>
+    <circle cx="17" cy="19" r="3.1" fill="${carve}"/>
+    <circle cx="30" cy="16" r="2.3" fill="${carve}"/>
+    <circle cx="20" cy="31" r="2.7" fill="${carve}"/>`;
+  case 'fertilizer': return `
+    <path d="M11 36 Q24 31 37 36 L37 40 Q24 43 11 40 Z" fill="${ink}"/>
+    <path d="M24 37 L24 17" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>
+    <path d="M24 26 C16 25 11 20 10 13 C17 14 22 18 24 23 Z" fill="${ink}"/>
+    <path d="M24 22 C32 21 37 16 38 9 C31 10 26 14 24 19 Z" fill="${ink}"/>
+    <path d="M14 15 C18 17 21 20 23 24" stroke="${carve}" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+    <path d="M34 11 C30 13 27 16 25 20" stroke="${carve}" stroke-width="1.3" fill="none" stroke-linecap="round"/>`;
+  case 'herbicide': return `
+    <path d="M9 37 Q24 33 39 37 L39 41 L9 41 Z" fill="${ink}"/>
+    <g stroke="${ink}" stroke-width="2.4" stroke-linecap="round" fill="none">
+      <path d="M24 39 C20 29 14 20 9 13"/>
+      <path d="M24 39 C24 27 23 17 22 7"/>
+      <path d="M24 39 C28 29 34 20 39 13"/>
+      <path d="M24 39 C25 27 28 17 31 8"/>
+      <path d="M24 39 C21 30 18 22 16 15"/>
+      <path d="M24 39 C27 30 30 22 32 16"/>
+    </g>`;
+  case 'combo': return `
+    <rect x="8" y="22" width="15" height="16" rx="2" fill="${ink}"/>
+    <rect x="22" y="15" width="9.5" height="23" rx="2" fill="${ink}"/>
+    <rect x="30.5" y="20" width="7.5" height="18" rx="2" fill="${ink}"/>
+    <rect x="24" y="10.5" width="5.5" height="5" rx="1" fill="${ink}"/>
+    <rect x="32.5" y="16" width="4" height="4.5" rx="1" fill="${ink}"/>
+    <path d="M8 28 L23 28" stroke="${carve}" stroke-width="1.6"/>
+    <path d="M15.5 22 L15.5 38" stroke="${carve}" stroke-width="1.6"/>
+    <rect x="24" y="24" width="6" height="6" rx="1" fill="${carve}"/>`;
+ }
+}
+
+function tile(c, inner){
+ return `<a class="tile"><div class="chip" style="${c._chipStyle||''}">${inner}</div><div class="lab">${c.label}</div></a>`;
+}
+
+let html='';
+
+// STYLE 1 — block print
+html+=`<div class="head s1">1 · BLOCK PRINT (lino-cut on kraft)</div><div class="sub">single bold ink per category · hand-carved rough edges · Indian block-print heritage</div><div class="row s1">`;
+CATS.forEach(c=>{ const g=`<svg viewBox="0 0 48 48">${glyph(c.key,c.ink,'#ECE1C8')}</svg>`; html+=tile(c,g); });
+html+=`</div>`;
+
+// STYLE 2 — riso duotone
+html+=`<div class="head s2">2 · RISOGRAPH DUOTONE</div><div class="sub">two overprinted flat colours · grain · bold &amp; graphic</div><div class="row s2">`;
+CATS.forEach(c=>{
+  const ga=`<svg class="a" viewBox="0 0 48 48">${glyph(c.key,c.ink,'#FBF7EE')}</svg>`;
+  const gb=`<svg class="b" viewBox="0 0 48 48">${glyph(c.key,c.riso,'#FBF7EE')}</svg>`;
+  const spacer=`<svg class="spacer" viewBox="0 0 48 48"></svg>`;
+  const inner=`<div class="riso">${spacer}${gb}${ga}</div>`;
+  html+=tile(c,inner);
+});
+html+=`</div>`;
+
+// STYLE 3 — paper cut-out
+html+=`<div class="head s3">3 · PAPER CUT-OUT</div><div class="sub">layered construction-paper shapes · soft shadow · tactile</div><div class="row s3">`;
+CATS.forEach(c=>{
+  c._chipStyle=`background:${c.wash};border-radius:20px;border:1.5px solid rgba(0,0,0,.05)`;
+  const g=`<svg viewBox="0 0 48 48">${glyph(c.key,c.paper,c.paper2)}</svg>`;
+  html+=tile(c,g);
+});
+html+=`</div>`;
+
+document.body.innerHTML=html;
+</script>
+</body></html>

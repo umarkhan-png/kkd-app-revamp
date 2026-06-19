@@ -13,12 +13,14 @@
 <style>
   * { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; letter-spacing: -0.01em; }
   html, body { margin: 0; padding: 0; }
-  body { background: #FFFFFF; color: #0F172A; padding-bottom: 68px; overflow-x: clip; }
+  body { background: #F3F1EC; color: #0F172A; padding-bottom: 68px; overflow-x: clip; }
   .tnum { font-variant-numeric: tabular-nums; }
   a.nu { text-decoration: none; color: inherit; }
   .scroll-x { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .scroll-x::-webkit-scrollbar { display: none; }
   .img-blend { mix-blend-mode: multiply; }
+  /* Bestseller cards — raised off the dull page bg */
+  .bs-grid > a { box-shadow: 0 6px 18px -8px rgba(15,23,42,0.20), 0 2px 5px -2px rgba(15,23,42,0.07); }
   .stars { color: #F59E0B; font-size: 12.5px; letter-spacing: 1.5px; }
 
   /* 3 themes · switched by tapping Deliver-to */
@@ -1103,7 +1105,7 @@
         <h2 class="text-[21px] font-extrabold tracking-tight">Bestsellers</h2>
         <a href="shop.html?sort=bestsellers" class="nu text-[13px] font-semibold" style="color:#258046">See all</a>
       </div>
-      <div class="grid grid-cols-2 gap-3">
+      <div class="grid grid-cols-2 gap-3 bs-grid">
 
         <a href="pdp.html" class="nu rounded-2xl overflow-hidden"
            data-variant-card

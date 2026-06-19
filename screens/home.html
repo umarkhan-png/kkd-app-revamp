@@ -246,6 +246,9 @@
   .cat-combo { background:#3D52A0; box-shadow:0 7px 16px -6px rgba(61,82,160,0.50); }
   .cat-emoji { font-size: 34px; line-height: 1; transition: font-size .25s; }
   .cat-svg { width: 28px; height: 28px; transition: width .25s, height .25s; display: block; }
+  /* Illustration-in-circle category tile — light ground so the colour image reads */
+  .cat-photo-tile { background:#FFFFFF; overflow:hidden; border:1px solid #EAEEF2; box-shadow:0 5px 14px -6px rgba(15,23,42,0.24); }
+  .cat-photo { width:100%; height:100%; object-fit:cover; display:block; transition: width .25s, height .25s; }
   .cat-label { transition: font-size .25s; }
   body.scrolled .cat-emoji { font-size: 22px; }
   body.scrolled .cat-svg { width: 24px; height: 24px; }
@@ -365,14 +368,8 @@
     <div class="flex gap-1.5 px-4">
       <!-- PESTICIDE · insect (caterpillar) -->
       <a href="categories.html?cat=pesticide" class="cat-tile nu flex-1 min-w-0 flex flex-col items-center gap-2">
-        <div class="cat-circle cat-pest">
-          <svg class="cat-svg" viewBox="0 0 48 48" fill="none" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-label="Pesticide">
-            <path d="M34 8h4v4h-4z"/>
-            <path d="M34 12l-6 4h-4v4h4l6 4"/>
-            <rect x="14" y="16" width="14" height="24" rx="2"/>
-            <path d="M17 12h8v4"/>
-            <path d="M18 24h6"/>
-          </svg>
+        <div class="cat-circle cat-photo-tile">
+          <img class="cat-photo" src="../assets/cat/pesticide.png" alt="Pesticide"/>
         </div>
         <span class="cat-label text-[12.5px] font-semibold text-[#0F172A] text-center leading-tight">Pesticide</span>
       </a>

@@ -266,13 +266,14 @@
   body.scrolled .sticky-cats > div { display: flex; justify-content: space-around; gap: 0 !important; padding: 0 8px !important; }
 
   /* ===== Reference-style category tiles · colour card + product image + Hindi(primary)/English ===== */
-  .cat2-tile{ flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:5px; text-decoration:none; }
-  .cat2-card{ width:100%; height:90px; border-radius:15px; background:var(--c); display:flex; flex-direction:column; align-items:center; padding:7px 4px 0; box-shadow:0 4px 12px -7px rgba(15,23,42,.22); transition:transform .15s ease; }
+  .cat2-tile{ flex:1; min-width:0; text-decoration:none; display:block; }
+  .cat2-card{ width:100%; height:100px; border-radius:16px; background:var(--c); display:flex; flex-direction:column; align-items:center; padding:9px 4px 0; box-shadow:0 5px 13px -7px rgba(15,23,42,.28); transition:transform .15s ease; }
   .cat2-tile:active .cat2-card{ transform:scale(.97); }
-  .cat2-pw{ height:56px; display:flex; align-items:center; justify-content:center; }
-  .cat2-pw img{ max-height:56px; max-width:84%; object-fit:contain; filter:drop-shadow(0 3px 4px rgba(0,0,0,.16)); }
-  .cat2-hi{ flex:1; display:flex; align-items:center; justify-content:center; font-family:'Noto Sans Devanagari',sans-serif; font-weight:700; font-size:9.5px; line-height:1.02; text-align:center; color:var(--t); padding-bottom:4px; }
-  .cat2-en{ font-size:9.5px; font-weight:600; color:#64748B; text-align:center; line-height:1; }
+  .cat2-pw{ height:56px; display:flex; align-items:flex-end; justify-content:center; }
+  .cat2-pw img{ object-fit:contain; filter:drop-shadow(0 3px 4px rgba(0,0,0,.18)); }
+  .cat2-pw img.b{ height:44px; margin-right:-13px; z-index:1; }
+  .cat2-pw img.f{ height:56px; position:relative; z-index:2; }
+  .cat2-lb{ flex:1; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; color:#27313F; letter-spacing:-.02em; padding-bottom:7px; text-align:center; line-height:1; }
   /* tiles are too tall to stay in the sticky header → hide the category row once scrolled / at end */
   body.scrolled .sticky-cats, body.at-end .sticky-cats{ display:none !important; }
 </style>
@@ -383,39 +384,34 @@
   <div class="sticky-cats cat-row py-3">
     <div class="flex gap-2 px-4">
       <a href="categories.html?cat=pesticide" class="cat2-tile nu">
-        <div class="cat2-card" style="--c:#DCF3E1;--t:#1B6B3A">
-          <div class="cat2-pw"><img src="../assets/cat/p_pesticide.png" alt="Pesticide"/></div>
-          <div class="cat2-hi">कीटनाशक</div>
+        <div class="cat2-card" style="--c:#BFE8CB">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/chakraveer.png" alt=""/><img class="f" src="../assets/cat/pool/chakrawarti.png" alt=""/></div>
+          <div class="cat2-lb">Pesticide</div>
         </div>
-        <div class="cat2-en">Pesticide</div>
       </a>
       <a href="categories.html?cat=fungicide" class="cat2-tile nu">
-        <div class="cat2-card" style="--c:#FCE3EE;--t:#B03A6E">
-          <div class="cat2-pw"><img src="../assets/cat/p_fungicide.png" alt="Fungicide"/></div>
-          <div class="cat2-hi">फफूंदनाशक</div>
+        <div class="cat2-card" style="--c:#F9CFE0">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/bhannat.png" alt=""/><img class="f" src="../assets/cat/pool/antivirus.png" alt=""/></div>
+          <div class="cat2-lb">Fungicide</div>
         </div>
-        <div class="cat2-en">Fungicide</div>
       </a>
       <a href="categories.html?cat=fertilizer" class="cat2-tile nu">
-        <div class="cat2-card" style="--c:#FBF1D6;--t:#94761A">
-          <div class="cat2-pw"><img src="../assets/cat/p_fertilizer.png" alt="Fertilizer"/></div>
-          <div class="cat2-hi">खाद</div>
+        <div class="cat2-card" style="--c:#FCE7AE">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/humic.png" alt=""/><img class="f" src="../assets/cat/pool/npk.png" alt=""/></div>
+          <div class="cat2-lb">Fertilizer</div>
         </div>
-        <div class="cat2-en">Fertilizer</div>
       </a>
       <a href="categories.html?cat=herbicide" class="cat2-tile nu">
-        <div class="cat2-card" style="--c:#FCE3D8;--t:#C2603A">
-          <div class="cat2-pw"><img src="../assets/cat/p_herbicide.png" alt="Herbicide"/></div>
-          <div class="cat2-hi">खरपतवारनाशक</div>
+        <div class="cat2-card" style="--c:#FAD0BC">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/bhumiraja.png" alt=""/><img class="f" src="../assets/cat/pool/triple.png" alt=""/></div>
+          <div class="cat2-lb">Herbicide</div>
         </div>
-        <div class="cat2-en">Herbicide</div>
       </a>
       <a href="categories.html?cat=combo" class="cat2-tile nu">
-        <div class="cat2-card" style="--c:#E4E9FB;--t:#4858A8">
-          <div class="cat2-pw"><img src="../assets/cat/p_combo.png" alt="Combo"/></div>
-          <div class="cat2-hi">कॉम्बो</div>
+        <div class="cat2-card" style="--c:#D2DAF7">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/npk.png" alt=""/><img class="f" src="../assets/cat/pool/chakrawarti.png" alt=""/></div>
+          <div class="cat2-lb">Combo</div>
         </div>
-        <div class="cat2-en">Combo</div>
       </a>
     </div>
   </div>

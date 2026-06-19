@@ -178,7 +178,7 @@
   .sticky-actions { position: sticky; top: 32px; z-index: 60; background: #FFFFFF; }
   /* Delivery tile compact state — when body.scrolled, sub-line hides, icon + paddings shrink so it doesn't eat too much height while staying frozen below the categories */
   /* Expanded state · each in-progress order is a floating premium white card on the soft emerald band */
-  .delivery-tile { width: calc(100% - 28px); margin: 0 14px; border-radius: 18px; background: linear-gradient(180deg,#FFFFFF 0%,#F2FCF6 100%); border: 1px solid #BBF7D0; box-shadow: 0 12px 26px -14px rgba(4,120,87,0.42), 0 2px 6px -3px rgba(4,120,87,0.14); transition: padding .25s ease, box-shadow .2s ease, margin .25s ease, border-radius .25s ease, background .25s ease; }
+  .delivery-tile { width: calc(100% - 60px); margin: 0 0 0 14px; border-radius: 18px; background: linear-gradient(180deg,#FFFFFF 0%,#F2FCF6 100%); border: 1px solid #BBF7D0; box-shadow: 0 12px 26px -14px rgba(4,120,87,0.42), 0 2px 6px -3px rgba(4,120,87,0.14); transition: padding .25s ease, box-shadow .2s ease, margin .25s ease, border-radius .25s ease, background .25s ease; }
   .delivery-tile:active { box-shadow: 0 6px 16px -10px rgba(4,120,87,0.45); }
   .delivery-tile .dt-statusrow { margin-bottom: 8px; }
   /* Compact (pinned-below-categories) state · collapse back to an efficient flush bar */
@@ -189,14 +189,19 @@
   /* On scroll-compact, surface the order ID inline next to the status pill so the user still knows which order is moving */
   body.scrolled .delivery-tile .dt-compact-id { display: inline !important; }
   /* Delivery stack · horizontal scroll-snap carousel for 2+ in-progress orders · header + dots auto-hide in single-order mode and in compact (scrolled) state since the carousel header would steal too much height */
-  .delivery-scroller{ -webkit-overflow-scrolling:touch; scroll-padding-inline:14px; }
+  .delivery-scroller{ -webkit-overflow-scrolling:touch; scroll-padding-left:14px; }
   .delivery-scroller::-webkit-scrollbar{ display:none; }
   .delivery-card{ scroll-snap-stop:always; }
   /* Single-order mode (set by JS): hide the dots row · scrolled compact mode also hides it · the row carries both the dots and the inline "1 of N" counter so a single rule controls both */
   .delivery-stack.single .ds-dots-row,
   body.scrolled .delivery-stack .ds-dots-row{ display:none !important; }
   /* Centre every delivery "banner" card in the green strip. scroll-snap was aligning to the card's BORDER edge, which ate the 14px left gutter (scrollLeft snapped to 14) and shoved the card off-centre against one side. Snapping to the card CENTRE with the snap-port inset by the gutter (scroll-padding-inline above) keeps the card centred — scrollLeft 0, equal 14px gutters — for both the single-order card and the multi-order carousel. */
-  .delivery-card{ scroll-snap-align:center !important; }
+  .delivery-card{ scroll-snap-align:start !important; }
+  /* last card needs a right gutter so it isn't flush to the edge when snapped */
+  .delivery-card:last-child{ margin-right:14px; }
+  /* single order → full-width centred card (no peek, nothing to peek at) */
+  .delivery-stack.single .delivery-tile{ width: calc(100% - 28px); margin: 0 14px; }
+  .delivery-stack.single .delivery-card{ scroll-snap-align:center !important; }
   .ds-dots .dot{ width:6px; height:6px; border-radius:9999px; background:#A7F3D0; transition: all .2s ease; }
   .ds-dots .dot.on{ background:#258046; width:18px; }
   /* Pulsing dot for live status */
@@ -505,12 +510,6 @@
           </div>
         </div>
       </button>
-    </div>
-
-    <!-- Pagination dots row · only shown when there are 2+ tiles · dots + inline "1 of N" counter centred together as one unit · index syncs with scroll position (JS) · pt-2 gives an even gap below the card; NO bottom padding so the green margin under the counter matches the green margin above the card → the [card + counter] block sits vertically centred in the strip -->
-    <div class="ds-dots-row dt-detail flex items-center justify-center gap-3 pt-2 px-5">
-      <div id="deliveryDots" class="ds-dots flex items-center gap-1.5"></div>
-      <span class="text-[10.5px] font-semibold tracking-[0.1em] uppercase" style="color:#258046"><span id="dsIndex">1</span> of <span id="dsTotal">2</span></span>
     </div>
   </div>
 

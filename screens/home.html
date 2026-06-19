@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <title>KKD · Home</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="../assets/celebrate.js"></script>
@@ -264,6 +264,17 @@
   body.scrolled .cat-label { font-size: 10.5px; }
   body.scrolled .sticky-cats { padding-top: 6px; padding-bottom: 6px; overflow: visible; }
   body.scrolled .sticky-cats > div { display: flex; justify-content: space-around; gap: 0 !important; padding: 0 8px !important; }
+
+  /* ===== Reference-style category tiles · colour card + product image + Hindi(primary)/English ===== */
+  .cat2-tile{ flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:5px; text-decoration:none; }
+  .cat2-card{ width:100%; height:90px; border-radius:15px; background:var(--c); display:flex; flex-direction:column; align-items:center; padding:7px 4px 0; box-shadow:0 4px 12px -7px rgba(15,23,42,.22); transition:transform .15s ease; }
+  .cat2-tile:active .cat2-card{ transform:scale(.97); }
+  .cat2-pw{ height:56px; display:flex; align-items:center; justify-content:center; }
+  .cat2-pw img{ max-height:56px; max-width:84%; object-fit:contain; filter:drop-shadow(0 3px 4px rgba(0,0,0,.16)); }
+  .cat2-hi{ flex:1; display:flex; align-items:center; justify-content:center; font-family:'Noto Sans Devanagari',sans-serif; font-weight:700; font-size:9.5px; line-height:1.02; text-align:center; color:var(--t); padding-bottom:4px; }
+  .cat2-en{ font-size:9.5px; font-weight:600; color:#64748B; text-align:center; line-height:1; }
+  /* tiles are too tall to stay in the sticky header → hide the category row once scrolled / at end */
+  body.scrolled .sticky-cats, body.at-end .sticky-cats{ display:none !important; }
 </style>
 </head>
 <body>
@@ -368,43 +379,43 @@
     </div>
   </div>
 
-  <!-- STICKY CATEGORIES — soft colour-washed rounded tiles + 3D glossy icon of what each category treats · all 5 fit across the width (no scroll) -->
+  <!-- CATEGORIES — colour-washed product tiles with Hindi (primary) + English label, like the existing KKD app -->
   <div class="sticky-cats cat-row py-3">
-    <div class="flex gap-1.5 px-4">
-      <!-- PESTICIDE · insect (caterpillar) -->
-      <a href="categories.html?cat=pesticide" class="cat-tile nu flex-1 min-w-0 flex flex-col items-center gap-2">
-        <div class="cat-circle cat-photo-tile">
-          <img class="cat-photo" src="../assets/cat/pesticide.png" alt="Pesticide" style="object-fit:contain"/>
+    <div class="flex gap-2 px-4">
+      <a href="categories.html?cat=pesticide" class="cat2-tile nu">
+        <div class="cat2-card" style="--c:#DCF3E1;--t:#1B6B3A">
+          <div class="cat2-pw"><img src="../assets/cat/p_pesticide.png" alt="Pesticide"/></div>
+          <div class="cat2-hi">कीटनाशक</div>
         </div>
-        <span class="cat-label text-[12.5px] font-semibold text-[#0F172A] text-center leading-tight">Pesticide</span>
+        <div class="cat2-en">Pesticide</div>
       </a>
-      <!-- FUNGICIDE · fungus (mushroom) -->
-      <a href="categories.html?cat=fungicide" class="cat-tile nu flex-1 min-w-0 flex flex-col items-center gap-2">
-        <div class="cat-circle cat-photo-tile">
-          <img class="cat-photo" src="../assets/cat/fungicide.png" alt="Fungicide"/>
+      <a href="categories.html?cat=fungicide" class="cat2-tile nu">
+        <div class="cat2-card" style="--c:#FCE3EE;--t:#B03A6E">
+          <div class="cat2-pw"><img src="../assets/cat/p_fungicide.png" alt="Fungicide"/></div>
+          <div class="cat2-hi">फफूंदनाशक</div>
         </div>
-        <span class="cat-label text-[12.5px] font-semibold text-[#0F172A] text-center leading-tight">Fungicide</span>
+        <div class="cat2-en">Fungicide</div>
       </a>
-      <!-- FERTILIZER · healthy sprout -->
-      <a href="categories.html?cat=fertilizer" class="cat-tile nu flex-1 min-w-0 flex flex-col items-center gap-2">
-        <div class="cat-circle cat-photo-tile">
-          <img class="cat-photo" src="../assets/cat/fertilizer.png" alt="Fertilizer"/>
+      <a href="categories.html?cat=fertilizer" class="cat2-tile nu">
+        <div class="cat2-card" style="--c:#FBF1D6;--t:#94761A">
+          <div class="cat2-pw"><img src="../assets/cat/p_fertilizer.png" alt="Fertilizer"/></div>
+          <div class="cat2-hi">खाद</div>
         </div>
-        <span class="cat-label text-[12.5px] font-semibold text-[#0F172A] text-center leading-tight">Fertilizer</span>
+        <div class="cat2-en">Fertilizer</div>
       </a>
-      <!-- HERBICIDE · weeds (leaves) -->
-      <a href="categories.html?cat=herbicide" class="cat-tile nu flex-1 min-w-0 flex flex-col items-center gap-2">
-        <div class="cat-circle cat-photo-tile">
-          <img class="cat-photo" src="../assets/cat/herbicide.png" alt="Herbicide"/>
+      <a href="categories.html?cat=herbicide" class="cat2-tile nu">
+        <div class="cat2-card" style="--c:#FCE3D8;--t:#C2603A">
+          <div class="cat2-pw"><img src="../assets/cat/p_herbicide.png" alt="Herbicide"/></div>
+          <div class="cat2-hi">खरपतवारनाशक</div>
         </div>
-        <span class="cat-label text-[12.5px] font-semibold text-[#0F172A] text-center leading-tight">Herbicide</span>
+        <div class="cat2-en">Herbicide</div>
       </a>
-      <!-- COMBO · product bundle (box) -->
-      <a href="categories.html?cat=combo" class="cat-tile nu flex-1 min-w-0 flex flex-col items-center gap-2">
-        <div class="cat-circle cat-photo-tile">
-          <img class="cat-photo" src="../assets/cat/combo.png" alt="Combo"/>
+      <a href="categories.html?cat=combo" class="cat2-tile nu">
+        <div class="cat2-card" style="--c:#E4E9FB;--t:#4858A8">
+          <div class="cat2-pw"><img src="../assets/cat/p_combo.png" alt="Combo"/></div>
+          <div class="cat2-hi">कॉम्बो</div>
         </div>
-        <span class="cat-label text-[12.5px] font-semibold text-[#0F172A] text-center leading-tight">Combo</span>
+        <div class="cat2-en">Combo</div>
       </a>
     </div>
   </div>

@@ -244,7 +244,7 @@
   .cat-herb  { background: linear-gradient(160deg,#FCF4E1,#F5E6BF); border-color: #E9D29A; }
   .cat-combo { background: linear-gradient(160deg,#ECEFFC,#DBE2F8); border-color: #C2CCF0; }
   .cat-emoji { font-size: 34px; line-height: 1; transition: font-size .25s; }
-  .cat-svg { width: 46px; height: 46px; transition: width .25s, height .25s; display: block; object-fit: contain; }
+  .cat-svg { width: 34px; height: 34px; transition: width .25s, height .25s; display: block; }
   .cat-label { transition: font-size .25s; }
   body.scrolled .cat-emoji { font-size: 22px; }
   body.scrolled .cat-svg { width: 24px; height: 24px; }
@@ -365,35 +365,68 @@
       <!-- PESTICIDE · insect (caterpillar) -->
       <a href="categories.html?cat=pesticide" class="cat-tile nu flex-1 min-w-0 flex flex-col items-center gap-2">
         <div class="cat-circle cat-pest">
-          <img class="cat-svg" src="../assets/cat/pesticide.png" alt="" aria-label="Pesticide — insect"/>
+          <svg class="cat-svg" viewBox="0 0 48 48" fill="none" stroke="#C0492B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Pesticide">
+            <path d="M34 8h4v4h-4z"/>
+            <path d="M34 12l-6 4h-4v4h4l6 4"/>
+            <rect x="14" y="16" width="14" height="24" rx="2"/>
+            <path d="M17 12h8v4"/>
+            <path d="M18 24h6"/>
+          </svg>
         </div>
         <span class="cat-label text-[12.5px] font-semibold text-[#0F172A] text-center leading-tight">Pesticide</span>
       </a>
       <!-- FUNGICIDE · fungus (mushroom) -->
       <a href="categories.html?cat=fungicide" class="cat-tile nu flex-1 min-w-0 flex flex-col items-center gap-2">
         <div class="cat-circle cat-fung">
-          <img class="cat-svg" src="../assets/cat/fungicide.png" alt="" aria-label="Fungicide — fungus"/>
+          <svg class="cat-svg" viewBox="0 0 48 48" fill="none" stroke="#7A4A86" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Fungicide">
+            <path d="M8 40c0-18 12-32 32-32-2 18-14 32-32 32z"/>
+            <path d="M8 40C16 28 26 18 40 8"/>
+            <circle cx="22" cy="28" r="1.6"/>
+            <circle cx="28" cy="22" r="1.4"/>
+            <circle cx="30" cy="30" r="1.2"/>
+          </svg>
         </div>
         <span class="cat-label text-[12.5px] font-semibold text-[#0F172A] text-center leading-tight">Fungicide</span>
       </a>
       <!-- FERTILIZER · healthy sprout -->
       <a href="categories.html?cat=fertilizer" class="cat-tile nu flex-1 min-w-0 flex flex-col items-center gap-2">
         <div class="cat-circle cat-fert">
-          <img class="cat-svg" src="../assets/cat/fertilizer.png" alt="" aria-label="Fertilizer — sprout"/>
+          <svg class="cat-svg" viewBox="0 0 48 48" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Fertilizer">
+            <path d="M22 4c0 3 2 4 2 7s-2 4-2 7"/>
+            <path d="M18 10c-3 0-5-2-5-4 3 0 5 2 5 4z"/>
+            <path d="M30 10c3 0 5-2 5-4-3 0-5 2-5 4z"/>
+            <path d="M14 20c2-3 6-3 10 0 4-3 8-3 10 0l-2 20a3 3 0 01-3 3H19a3 3 0 01-3-3l-2-20z"/>
+            <path d="M19 28h10"/>
+          </svg>
         </div>
         <span class="cat-label text-[12.5px] font-semibold text-[#0F172A] text-center leading-tight">Fertilizer</span>
       </a>
       <!-- HERBICIDE · weeds (leaves) -->
       <a href="categories.html?cat=herbicide" class="cat-tile nu flex-1 min-w-0 flex flex-col items-center gap-2">
         <div class="cat-circle cat-herb">
-          <img class="cat-svg" src="../assets/cat/herbicide.png" alt="" aria-label="Herbicide — weeds"/>
+          <svg class="cat-svg" viewBox="0 0 48 48" fill="none" stroke="#9A6B12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Herbicide">
+            <path d="M12 42V22"/>
+            <path d="M22 42V16"/>
+            <path d="M32 42V20"/>
+            <path d="M12 22c-2-2-3-4-3-6M12 22c2-2 3-4 3-6"/>
+            <path d="M22 16c-2-2-3-4-3-6M22 16c2-2 3-4 3-6"/>
+            <path d="M32 20c-2-2-3-4-3-6M32 20c2-2 3-4 3-6"/>
+            <line x1="8" y1="10" x2="40" y2="40"/>
+          </svg>
         </div>
         <span class="cat-label text-[12.5px] font-semibold text-[#0F172A] text-center leading-tight">Herbicide</span>
       </a>
       <!-- COMBO · product bundle (box) -->
       <a href="categories.html?cat=combo" class="cat-tile nu flex-1 min-w-0 flex flex-col items-center gap-2">
         <div class="cat-circle cat-combo">
-          <img class="cat-svg" src="../assets/cat/combo.png" alt="" aria-label="Combo — product bundle"/>
+          <svg class="cat-svg" viewBox="0 0 48 48" fill="none" stroke="#3D52A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Combo">
+            <rect x="6" y="16" width="10" height="26" rx="1.5"/>
+            <path d="M9 12h4v4H9z"/>
+            <rect x="19" y="12" width="10" height="30" rx="1.5"/>
+            <path d="M22 8h4v4h-4z"/>
+            <rect x="32" y="16" width="10" height="26" rx="1.5"/>
+            <path d="M35 12h4v4h-4z"/>
+          </svg>
         </div>
         <span class="cat-label text-[12.5px] font-semibold text-[#0F172A] text-center leading-tight">Combo</span>
       </a>

@@ -265,20 +265,15 @@
   body.scrolled .sticky-cats { padding-top: 6px; padding-bottom: 6px; overflow: visible; }
   body.scrolled .sticky-cats > div { display: flex; justify-content: space-around; gap: 0 !important; padding: 0 8px !important; }
 
-  /* ===== Reference-style category tiles · colour card + white product well + English label ===== */
+  /* ===== Reference-style category tiles · colour card + product image + Hindi(primary)/English ===== */
   .cat2-tile{ flex:1; min-width:0; text-decoration:none; display:block; }
-  .cat2-card{ width:100%; height:108px; border-radius:16px; background:var(--c); display:flex; flex-direction:column; padding:7px; box-shadow:0 5px 13px -7px rgba(15,23,42,.28); transition:transform .15s ease; }
+  .cat2-card{ width:100%; height:100px; border-radius:16px; background:var(--c); display:flex; flex-direction:column; align-items:center; padding:9px 4px 0; box-shadow:0 5px 13px -7px rgba(15,23,42,.28); transition:transform .15s ease; }
   .cat2-tile:active .cat2-card{ transform:scale(.97); }
-  /* White product well — gives every product an identical frame + baseline, and the products' own baked
-     contact-shadows (designed for white) disappear here, so no grey "separation" reads on the colour tile. */
-  .cat2-well{ flex:1; background:#FFFFFF; border-radius:11px; display:flex; align-items:flex-end; justify-content:center; overflow:hidden; box-shadow:inset 0 0 0 1px rgba(15,23,42,.04); }
-  /* Both images bounded by height AND width so wide pouches and skinny bottles share a comparable footprint
-     and can never spill outside the well. */
-  .cat2-pw{ width:100%; height:50px; display:flex; align-items:flex-end; justify-content:center; }
-  .cat2-pw img{ object-fit:contain; object-position:bottom; display:block; }
-  .cat2-pw img.b{ height:42px; max-width:42%; margin-right:-9px; z-index:1; }
-  .cat2-pw img.f{ height:50px; max-width:54%; position:relative; z-index:2; }
-  .cat2-lb{ height:22px; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; color:#27313F; letter-spacing:-.02em; text-align:center; line-height:1; }
+  .cat2-pw{ height:56px; display:flex; align-items:flex-end; justify-content:center; }
+  .cat2-pw img{ object-fit:contain; filter:drop-shadow(0 3px 4px rgba(0,0,0,.18)); }
+  .cat2-pw img.b{ height:44px; margin-right:-13px; z-index:1; }
+  .cat2-pw img.f{ height:56px; position:relative; z-index:2; }
+  .cat2-lb{ flex:1; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; color:#27313F; letter-spacing:-.02em; padding-bottom:7px; text-align:center; line-height:1; }
   /* tiles are too tall to stay in the sticky header → hide the category row once scrolled / at end */
   body.scrolled .sticky-cats, body.at-end .sticky-cats{ display:none !important; }
 </style>
@@ -390,31 +385,31 @@
     <div class="flex gap-2 px-4">
       <a href="categories.html?cat=pesticide" class="cat2-tile nu">
         <div class="cat2-card" style="--c:#BFE8CB">
-          <div class="cat2-well"><div class="cat2-pw"><img class="b" src="../assets/cat/pool/chakraveer.png" alt=""/><img class="f" src="../assets/cat/pool/chakrawarti.png" alt=""/></div></div>
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/chakraveer.png" alt=""/><img class="f" src="../assets/cat/pool/chakrawarti.png" alt=""/></div>
           <div class="cat2-lb">Pesticide</div>
         </div>
       </a>
       <a href="categories.html?cat=fungicide" class="cat2-tile nu">
         <div class="cat2-card" style="--c:#F9CFE0">
-          <div class="cat2-well"><div class="cat2-pw"><img class="b" src="../assets/cat/pool/bhannat.png" alt=""/><img class="f" src="../assets/cat/pool/antivirus.png" alt=""/></div></div>
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/bhannat.png" alt=""/><img class="f" src="../assets/cat/pool/antivirus.png" alt=""/></div>
           <div class="cat2-lb">Fungicide</div>
         </div>
       </a>
       <a href="categories.html?cat=fertilizer" class="cat2-tile nu">
         <div class="cat2-card" style="--c:#FCE7AE">
-          <div class="cat2-well"><div class="cat2-pw"><img class="b" src="../assets/cat/pool/humic.png" alt=""/><img class="f" src="../assets/cat/pool/npk.png" alt=""/></div></div>
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/humic.png" alt=""/><img class="f" src="../assets/cat/pool/npk.png" alt=""/></div>
           <div class="cat2-lb">Fertilizer</div>
         </div>
       </a>
       <a href="categories.html?cat=herbicide" class="cat2-tile nu">
         <div class="cat2-card" style="--c:#FAD0BC">
-          <div class="cat2-well"><div class="cat2-pw"><img class="b" src="../assets/cat/pool/bhumiraja.png" alt=""/><img class="f" src="../assets/cat/pool/triple.png" alt=""/></div></div>
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/bhumiraja.png" alt=""/><img class="f" src="../assets/cat/pool/triple.png" alt=""/></div>
           <div class="cat2-lb">Herbicide</div>
         </div>
       </a>
       <a href="categories.html?cat=combo" class="cat2-tile nu">
         <div class="cat2-card" style="--c:#D2DAF7">
-          <div class="cat2-well"><div class="cat2-pw"><img class="b" src="../assets/cat/pool/npk.png" alt=""/><img class="f" src="../assets/cat/pool/chakrawarti.png" alt=""/></div></div>
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/npk.png" alt=""/><img class="f" src="../assets/cat/pool/chakrawarti.png" alt=""/></div>
           <div class="cat2-lb">Combo</div>
         </div>
       </a>

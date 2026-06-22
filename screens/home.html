@@ -210,7 +210,7 @@
   @keyframes dtTruckBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
   /* Onboarding progress current-segment fill animation */
   @keyframes progFill { 0%, 100% { width: 40%; } 50% { width: 65%; } }
-  .sticky-search { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: background .35s ease, border-color .35s ease, padding .25s; }
+  .sticky-search { background: #FFFFFF; transition: background .35s ease, border-color .35s ease, padding .25s; }
   .sticky-cats { background: #FFFFFF; border-bottom: 1px solid #F1F5F9; transition: background .35s ease, border-color .35s ease, padding .25s; }
   .sticky-search input { transition: background .35s ease, border-color .35s ease; }
   /* At end of page · sticky search stays plain white (no green fill) · sticky-cats mirrors the top section with the EXACT same emerald gradient so top and bottom visually anchor together · white labels + translucent white circles inside for legibility on the dark fill */
@@ -277,8 +277,14 @@
   .cat2-pw img.b{ height:44px; max-width:42%; margin-right:-10px; z-index:1; }
   .cat2-pw img.f{ height:56px; max-width:66%; position:relative; z-index:2; }
   .cat2-lb{ flex:1; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; color:#27313F; letter-spacing:-.02em; padding-bottom:7px; text-align:center; line-height:1; }
-  /* tiles are too tall to stay in the sticky header → hide the category row once scrolled / at end */
-  body.scrolled .sticky-cats, body.at-end .sticky-cats{ display:none !important; }
+  /* tiles are too tall to stay in the sticky header at end-of-page → hide there; on normal scroll they collapse into colourful text pills (see below) */
+  body.at-end .sticky-cats{ display:none !important; }
+  /* Scrolled state · categories wrap into compact colour-pill text strip · product cut-outs hide, .cat2-card collapses to a rounded pill carrying just its label on its category colour (--c) */
+  body.scrolled .sticky-cats{ padding-top:6px; padding-bottom:6px; }
+  body.scrolled .sticky-cats > div{ gap:6px; padding:0 12px; }
+  body.scrolled .cat2-card{ height:auto; padding:7px 4px; border-radius:999px; box-shadow:0 2px 6px -3px rgba(15,23,42,.22); }
+  body.scrolled .cat2-pw{ display:none; }
+  body.scrolled .cat2-lb{ font-size:11.5px; padding:0; line-height:1.1; flex:none; }
 </style>
 </head>
 <body>
@@ -373,7 +379,7 @@
   <div class="sticky-actions">
 
   <!-- Search · voice icon less prominent -->
-  <div class="sticky-search px-4 py-3">
+  <div class="sticky-search px-4 pt-3 pb-1">
     <div class="relative">
       <input id="search-input" type="text" readonly onclick="location.href='search.html'" placeholder="Search products, pests, crops" class="w-full pl-12 pr-12 py-3 rounded-xl text-[15.5px] font-medium focus:outline-none focus:ring-2 focus:ring-emerald-600/30 cursor-pointer" style="background:#F1F5F9;border:1px solid #E2E8F0"/>
       <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-[15px]" style="color:#94A3B8"></i>
@@ -384,7 +390,7 @@
   </div>
 
   <!-- CATEGORIES — colour-washed product tiles with Hindi (primary) + English label, like the existing KKD app -->
-  <div class="sticky-cats cat-row py-3">
+  <div class="sticky-cats cat-row pt-1 pb-3">
     <div class="flex gap-2 px-4">
       <a href="categories.html?cat=pesticide" class="cat2-tile nu">
         <div class="cat2-card" style="--c:#BFE8CB">

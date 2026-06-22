@@ -8,14 +8,26 @@
   html,body{margin:0;padding:0}
   /* Page is locked to viewport height · only the product column (and the sub-rail) scrolls · everything above stays fixed in view */
   html,body{height:100%}
-  body{background:#F8F8F8;color:#0F172A;display:flex;flex-direction:column;overflow:hidden}
+  body{background:#FFFFFF;color:#0F172A;display:flex;flex-direction:column;overflow:hidden}
   .img-blend{mix-blend-mode:multiply}
   .tnum{font-variant-numeric:tabular-nums}
   .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .scroll-x::-webkit-scrollbar{display:none}
   .scroll-x{scrollbar-width:none}
 
-  /* Top main-cat circles · home-page parity · uniform 72px circle, 36px SVG, emoji 34px · selected = solid emerald fill with white-tinted icon + emerald label */
+  /* Top main-cat tiles · home-page parity · COLOUR-WASHED CARDS with product cut-outs + label (cat2 family), matching home.html · selected state ringed in emerald */
+  .cat2-tile{flex:1;min-width:0;background:transparent;border:0;padding:0;text-decoration:none;display:block;cursor:pointer}
+  .cat2-card{width:100%;height:100px;border-radius:12px;background:var(--c);display:flex;flex-direction:column;align-items:center;padding:9px 4px 0;box-shadow:0 5px 13px -7px rgba(15,23,42,.28);transition:transform .15s ease, box-shadow .2s ease}
+  .cat2-tile:active .cat2-card{transform:scale(.97)}
+  .cat2-tile[aria-pressed="true"] .cat2-card{box-shadow:0 0 0 2.5px #258046, 0 8px 18px -6px rgba(5,150,105,.4)}
+  .cat2-pw{width:100%;height:56px;display:flex;align-items:flex-end;justify-content:center}
+  .cat2-pw img{object-fit:contain;object-position:bottom;filter:drop-shadow(0 3px 3px rgba(0,0,0,.16))}
+  .cat2-pw img.b{height:44px;max-width:42%;margin-right:-10px;z-index:1}
+  .cat2-pw img.f{height:56px;max-width:66%;position:relative;z-index:2}
+  .cat2-lb{flex:1;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800;color:#27313F;letter-spacing:-.02em;padding-bottom:7px;text-align:center;line-height:1}
+  .cat2-tile[aria-pressed="true"] .cat2-lb{color:#0F172A}
+
+  /* Legacy circle-tile styles · retained for any leftover refs but no longer rendered */
   .cat-tile{transition:transform .15s ease}
   .cat-tile:active{transform:scale(.96)}
   .cat-circle{width:72px;height:72px;border-radius:9999px;background:#FFFFFF;border:1.5px solid #E2E8F0;display:flex;align-items:center;justify-content:center;transition:all .35s ease}
@@ -98,23 +110,23 @@
   @keyframes cartIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 
   /* Top stack · static white · the body is locked and only the product column scrolls so neither needs sticky positioning */
-  /* Category + filter sections · neutral app-grey (#F8F8F8), not the blueish slate */
-  .stk-main{background:#F8F8F8;border-bottom:1px solid #ECECEC;flex-shrink:0}
-  .stk-filter{background:#F8F8F8;border-bottom:1px solid #ECECEC;flex-shrink:0}
-  /* Compact category row on product scroll · mirrors the home page's shrink-on-scroll behaviour */
+  /* Category + filter sections · WHITE header band so the top section reads as a single white sticky like search.html / other pages, with the grey product column sitting underneath */
+  .stk-main{background:#FFFFFF;border-bottom:1px solid #ECECEC;flex-shrink:0}
+  .stk-filter{background:#FFFFFF;border-bottom:1px solid #ECECEC;flex-shrink:0}
+  /* Compact category row on product scroll · cat2 tiles collapse to colour-pill text strip (same behaviour as home.html body.scrolled) */
   .stk-main .cat-row-inner{transition:padding .3s ease, gap .3s ease}
-  /* Compact · spread all 5 tiles across the full width (no left white-space / no scroll) · mirrors the home page */
-  .stk-main.compact .cat-row-inner{padding:8px 8px;gap:0;justify-content:space-around;overflow-x:hidden}
-  .stk-main.compact .cat-tile{width:auto !important}
-  .stk-main.compact .cat-circle{width:42px;height:42px;border-width:1px}
-  .stk-main.compact .cat-emoji{font-size:21px}
-  .stk-main.compact .cat-svg{width:23px;height:23px}
-  .stk-main.compact .cat-label{font-size:10.5px}
+  .stk-main.compact .cat-row-inner{padding:6px 12px;gap:6px;justify-content:space-around;overflow-x:hidden}
+  .stk-main.compact .cat2-tile{flex:1}
+  .stk-main.compact .cat2-card{height:auto;padding:7px 4px;border-radius:999px;box-shadow:0 2px 6px -3px rgba(15,23,42,.22)}
+  .stk-main.compact .cat2-tile[aria-pressed="true"] .cat2-card{box-shadow:0 0 0 2px #258046, 0 2px 6px -3px rgba(5,150,105,.35)}
+  .stk-main.compact .cat2-pw{display:none}
+  .stk-main.compact .cat2-lb{font-size:11.5px;padding:0;line-height:1.1;flex:none}
 
   /* Two-column body · flex:1 of the viewport-height column · each pane scrolls independently */
   .cat-body{flex:1;display:flex;min-height:0}
   .cat-body aside{overflow-y:auto;-webkit-overflow-scrolling:touch}
-  .cat-body main{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:160px;background:#FFFFFF}
+  /* Product column rides the page bg (#F8F8F8) so white pcards float on grey — matches the home + other listing pages */
+  .cat-body main{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:160px;background:#F8F8F8}
   .cat-body aside::-webkit-scrollbar,
   .cat-body main::-webkit-scrollbar{width:0;display:none}
 
@@ -208,83 +220,38 @@
     </a>
   </div>
 
-  <!-- TOP: Main 5 categories · SAME SVG illustrations as homepage -->
-    <div class="stk-main">
-    <div class="flex gap-3 px-4 py-3 scroll-x cat-row-inner">
-      <button data-cat="pesticide" aria-pressed="true" class="cat-tile flex-shrink-0 flex flex-col items-center gap-2" style="width:80px;background:transparent;border:0;cursor:pointer">
-        <div class="cat-circle"><span class="cat-emoji">🐛</span></div>
-        <span class="cat-label text-[13px] font-semibold text-center leading-tight" style="color:#0F172A">Pesticide</span>
-      </button>
-      <button data-cat="fungicide" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-2" style="width:80px;background:transparent;border:0;cursor:pointer">
-        <div class="cat-circle">
-          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="fungus on leaf">
-            <path d="M18 3 C8 6 4 16 6 26 C7 30 11 33 18 33 C25 33 29 30 30 26 C32 16 28 6 18 3 Z" fill="#22C55E"/>
-            <line x1="18" y1="5" x2="18" y2="32" stroke="#15803D" stroke-width="1.2" stroke-linecap="round"/>
-            <circle cx="12" cy="14" r="2"   fill="#7C2D12"/>
-            <circle cx="24" cy="12" r="1.6" fill="#78350F"/>
-            <circle cx="13" cy="24" r="2.2" fill="#7C2D12"/>
-            <circle cx="24" cy="23" r="1.8" fill="#78350F"/>
-            <circle cx="19" cy="18" r="1.4" fill="#92400E"/>
-          </svg>
+  <!-- TOP: Main 5 categories · home-page parity · colour-washed cat2 cards -->
+  <div class="stk-main">
+    <div class="flex gap-2 px-4 py-3 cat-row-inner">
+      <button data-cat="pesticide" aria-pressed="true" class="cat2-tile">
+        <div class="cat2-card" style="--c:#BFE8CB">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/chakraveer.png" alt=""/><img class="f" src="../assets/cat/pool/chakrawarti.png" alt=""/></div>
+          <div class="cat2-lb">Pesticide</div>
         </div>
-        <span class="cat-label text-[13px] font-semibold text-center leading-tight" style="color:#0F172A">Fungicide</span>
       </button>
-      <button data-cat="fertilizer" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-2" style="width:80px;background:transparent;border:0;cursor:pointer">
-        <div class="cat-circle">
-          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="growing plant with fertilizer granules">
-            <path d="M3 30 Q18 26 33 30 L33 33 L3 33 Z" fill="#92400E"/>
-            <path d="M18 30 L18 6" stroke="#15803D" stroke-width="2.4" stroke-linecap="round"/>
-            <path d="M18 24 C12 23 8 20 6 16 C10 16 14 18 18 22" fill="#22C55E"/>
-            <path d="M18 24 C24 23 28 20 30 16 C26 16 22 18 18 22" fill="#22C55E"/>
-            <path d="M18 16 C13 14 10 11 9 7 C13 8 16 11 18 14" fill="#22C55E"/>
-            <path d="M18 16 C23 14 26 11 27 7 C23 8 20 11 18 14" fill="#22C55E"/>
-            <circle cx="18" cy="5" r="2.2" fill="#22C55E"/>
-            <g stroke="#FBBF24" stroke-width="1.3" stroke-linecap="round"><path d="M27 4 L27 1.5"/><path d="M25.5 2.7 L28.5 2.7"/></g>
-            <circle cx="6"  cy="29" r="1.4" fill="#D9A441"/>
-            <circle cx="11" cy="28" r="1.2" fill="#FBBF24"/>
-            <circle cx="25" cy="28" r="1.2" fill="#D9A441"/>
-            <circle cx="30" cy="29" r="1.4" fill="#FBBF24"/>
-          </svg>
+      <button data-cat="fungicide" aria-pressed="false" class="cat2-tile">
+        <div class="cat2-card" style="--c:#F9CFE0">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/bhannat.png" alt=""/><img class="f" src="../assets/cat/pool/antivirus.png" alt=""/></div>
+          <div class="cat2-lb">Fungicide</div>
         </div>
-        <span class="cat-label text-[13px] font-semibold text-center leading-tight" style="color:#0F172A">Fertilizer</span>
       </button>
-      <button data-cat="herbicide" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-2" style="width:80px;background:transparent;border:0;cursor:pointer">
-        <div class="cat-circle">
-          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="grass tuft">
-            <g fill="#15803D">
-              <path d="M16 33 C13 24 9 16 5 9 C10 16 14 24 17 33 Z"/>
-              <path d="M16.5 33 C16 22 16 12 15 2 C17 12 17.5 22 17.5 33 Z"/>
-              <path d="M20 33 C23 24 27 16 31 9 C26 16 22 24 19 33 Z"/>
-              <path d="M19.5 33 C19 22 20 12 21 2 C20 12 20.5 22 20.5 33 Z"/>
-            </g>
-            <g fill="#22C55E">
-              <path d="M17.25 33 C16.5 21 17.5 10 18 0 C18.5 10 19.5 21 18.75 33 Z"/>
-              <path d="M17 33 C16 24 14 16 11 8 C14 16 15.5 24 18 33 Z"/>
-              <path d="M19 33 C20 24 22 16 25 8 C22 16 20.5 24 18 33 Z"/>
-            </g>
-            <g fill="#258046">
-              <path d="M14 33 C13.5 24 13 16 12 7 C14 16 14.5 24 15 33 Z"/>
-              <path d="M22 33 C22.5 24 23 16 24 7 C22 16 21.5 24 21 33 Z"/>
-            </g>
-          </svg>
+      <button data-cat="fertilizer" aria-pressed="false" class="cat2-tile">
+        <div class="cat2-card" style="--c:#FCE7AE">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/npk.png" alt=""/><img class="f" src="../assets/cat/pool/humic.png" alt=""/></div>
+          <div class="cat2-lb">Fertilizer</div>
         </div>
-        <span class="cat-label text-[13px] font-semibold text-center leading-tight" style="color:#0F172A">Herbicide</span>
       </button>
-      <button data-cat="combo" aria-pressed="false" class="cat-tile flex-shrink-0 flex flex-col items-center gap-2" style="width:80px;background:transparent;border:0;cursor:pointer">
-        <div class="cat-circle">
-          <svg class="cat-svg" viewBox="0 0 36 36" fill="none" aria-label="combo stacked packages">
-            <rect x="3" y="22" width="30" height="11" rx="1.5" fill="#2563EB"/>
-            <line x1="18" y1="22" x2="18" y2="33" stroke="#1E40AF" stroke-width="1"/>
-            <line x1="3" y1="27" x2="33" y2="27" stroke="#1E40AF" stroke-width="1"/>
-            <rect x="6" y="13" width="24" height="10" rx="1.5" fill="#F59E0B"/>
-            <line x1="18" y1="13" x2="18" y2="23" stroke="#B45309" stroke-width="1"/>
-            <line x1="6" y1="18" x2="30" y2="18" stroke="#B45309" stroke-width="1"/>
-            <rect x="10" y="4" width="16" height="10" rx="1.5" fill="#10B981"/>
-            <line x1="18" y1="4" x2="18" y2="14" stroke="#258046" stroke-width="1"/>
-            <line x1="10" y1="9" x2="26" y2="9" stroke="#258046" stroke-width="1"/>
-          </svg>
+      <button data-cat="herbicide" aria-pressed="false" class="cat2-tile">
+        <div class="cat2-card" style="--c:#FAD0BC">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/bhumiraja.png" alt=""/><img class="f" src="../assets/cat/pool/triple.png" alt=""/></div>
+          <div class="cat2-lb">Herbicide</div>
         </div>
-        <span class="cat-label text-[13px] font-semibold text-center leading-tight" style="color:#0F172A">Combo</span>
+      </button>
+      <button data-cat="combo" aria-pressed="false" class="cat2-tile">
+        <div class="cat2-card" style="--c:#D2DAF7">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/npk.png" alt=""/><img class="f" src="../assets/cat/pool/chakrawarti.png" alt=""/></div>
+          <div class="cat2-lb">Combo</div>
+        </div>
       </button>
     </div>
   </div><!-- /.stk-main -->

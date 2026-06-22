@@ -10,7 +10,6 @@
   var COUPON = cfg.coupon || { active: false, min: 0, off: 0, code: '' };
   var items = (cfg.items || []).map(function (i) { var o = {}; for (var k in i) o[k] = i[k]; return o; });
   var catalog = cfg.catalog || [];
-  var note = cfg.note || 'Items can be changed before your order is confirmed';
 
   var $ = function (id) { return document.getElementById(id); };
   var rupee = function (n) { return '₹' + Number(n).toLocaleString('en-IN'); };
@@ -22,9 +21,8 @@
 
   // ---------- inject card ----------
   mount.innerHTML =
-    '<div class="sec-title">Modify your order</div>' +
+    '<div class="sec-title">Order items</div>' +
     '<div class="md-card">' +
-      '<div class="md-window"><i class="fa-regular fa-pen-to-square"></i> <span>' + note + '</span></div>' +
       '<div id="mdItems"></div>' +
       '<div class="md-add-wrap"><button type="button" class="md-add" id="mdAddBtn"></button></div>' +
     '</div>';

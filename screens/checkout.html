@@ -619,7 +619,23 @@
         });
         applyChip();
 
-        confirmBtn.onclick = function(){ close(); proceed(true); };
+        confirmBtn.onclick = function(){
+          // Stash the merge breakdown so order-success.html can show qty-bumped + newly-added rows in the Order items section
+          try {
+            const pay = selected === 'paynow' ? onlineTotal : extra;
+            localStorage.setItem('kkd.mergeInfo', JSON.stringify({
+              ts: Date.now(),
+              orderId: oid,
+              updated: updatedIds.slice(),
+              added: newIds.slice(),
+              unchanged: unchangedIds.slice(),
+              method: selected,
+              amountPaid: pay
+            }));
+          } catch(e){}
+          close();
+          proceed(true);
+        };
         ov.classList.add('open');
       }
 

@@ -530,14 +530,60 @@
     } catch(e){}
   })();
 
+  // Shared catalog (keys match checkout's data-item ids)
+  const KKD_CATALOG = {
+    humic:       { name:'Humic + Fulvic',  sub:'1 L',     price:752, img:'../assets/Humic_nobg.png' },
+    chakrawarti: { name:'Chakrawarti ZC',   sub:'100 ml',  price:700, img:'../assets/Chakrawarti_nobg.png' },
+    chakra:      { name:'Chakrawarti ZC',   sub:'100 ml',  price:700, img:'../assets/Chakrawarti_nobg.png' },
+    npk:         { name:'NPK 19:19:19',     sub:'1 kg',    price:453, img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp' },
+    antivirus:   { name:'Antivirus',        sub:'250 ml',  price:327, img:'../assets/AntiVirus_nobg.png' },
+    bhumiraja:   { name:'Bhumiraja',        sub:'1 kg',    price:410, img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' },
+    triple:      { name:'Triple Attack',    sub:'500 ml',  price:585, img:'https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp' },
+    chakraveer:  { name:'Chakraveer',       sub:'1 L',     price:640, img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp' }
+  };
+  function _meta(k){ return KKD_CATALOG[k] || { name:k, sub:'', price:0, img:'' }; }
+
+  // Default items (no merge in play) · the prototype order's static contents
+  const DEFAULT_ITEMS = [
+    { key:'humic',       qty:2 },
+    { key:'chakrawarti', qty:1 },
+    { key:'npk',         qty:1 }
+  ];
+
+  // If we arrived from a merge confirm in checkout, rebuild the items list from kkd.mergeInfo so the Order items section reflects what actually happened:
+  //   · UPDATED keys  → existing row with qty bumped to 2
+  //   · ADDED keys    → fresh row tagged with added:true (modify-order.js paints the green "Added" badge)
+  //   · UNCHANGED keys → existing row stays at qty 1
+  function _buildItems(){
+    let info = null;
+    try { info = JSON.parse(localStorage.getItem('kkd.mergeInfo') || 'null'); } catch(e){}
+    const merged = new URLSearchParams(location.search).get('merged') === '1';
+    if (!merged || !info || !Array.isArray(info.updated)) {
+      return DEFAULT_ITEMS.map(function(d){
+        const m = _meta(d.key);
+        return { key:d.key, name:m.name, sub:m.sub + ' · Qty ' + d.qty, price:m.price * d.qty, img:m.img };
+      });
+    }
+    const rows = [];
+    (info.unchanged || []).forEach(function(k){
+      const m = _meta(k);
+      rows.push({ key:k, name:m.name, sub:m.sub + ' · Qty 1', price:m.price, img:m.img });
+    });
+    (info.updated || []).forEach(function(k){
+      const m = _meta(k);
+      rows.push({ key:k, name:m.name, sub:m.sub + ' · Qty 2', price:m.price * 2, img:m.img });
+    });
+    (info.added || []).forEach(function(k){
+      const m = _meta(k);
+      rows.push({ key:k, name:m.name, sub:m.sub + ' · Qty 1', price:m.price, img:m.img, added:true });
+    });
+    return rows;
+  }
+
   window.KKD_MODIFY = {
     mount: 'modifyMount',
     coupon: { code: 'HARVEST100', off: 100, min: 1200, active: true },
-    items: [
-      { key: 'humic',  name: 'Humic + Fulvic', sub: '1 L · Qty 2',   price: 752, img: '../assets/Humic_nobg.png' },
-      { key: 'chakra', name: 'Chakrawarti ZC', sub: '100 ml · Qty 1', price: 700, img: '../assets/Chakrawarti_nobg.png' },
-      { key: 'npk',    name: 'NPK 19:19:19',   sub: '1 kg · Qty 1',   price: 453, img: 'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp' }
-    ],
+    items: _buildItems(),
     catalog: [
       { key: 'antivirus',  name: 'Antivirus',     sub: '250 ml', price: 327, img: '../assets/AntiVirus_nobg.png' },
       { key: 'bhumiraja',  name: 'Bhumiraja',     sub: '1 kg',   price: 410, img: 'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' },

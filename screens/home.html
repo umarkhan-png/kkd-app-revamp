@@ -279,10 +279,14 @@
   .cat2-lb{ flex:1; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; color:#27313F; letter-spacing:-.02em; padding-bottom:7px; text-align:center; line-height:1; }
   /* tiles are too tall to stay in the sticky header at end-of-page → hide there; on normal scroll they collapse into colourful text pills (see below) */
   body.at-end .sticky-cats{ display:none !important; }
-  /* Scrolled state · categories wrap into compact colour-pill text strip · product cut-outs hide, .cat2-card collapses to a rounded pill carrying just its label on its category colour (--c) */
-  body.scrolled .sticky-cats{ padding-top:6px; padding-bottom:6px; }
-  body.scrolled .sticky-cats > div{ gap:6px; padding:0 12px; }
-  body.scrolled .cat2-card{ height:auto; padding:7px 4px; border-radius:999px; box-shadow:0 2px 6px -3px rgba(15,23,42,.22); }
+  /* Scrolled state · categories wrap into compact colour-pill text strip · product cut-outs hide, .cat2-card collapses to a rounded pill carrying just its label on its category colour (--c)
+     · row scrolls horizontally if pills overflow (scrollbar hidden)
+     · first pill aligns with the search input's left edge (px-4 → 16px) */
+  body.scrolled .sticky-cats{ padding-top:10px; padding-bottom:10px; }
+  body.scrolled .sticky-cats > div{ gap:10px; padding:0 16px; justify-content:flex-start; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  body.scrolled .sticky-cats > div::-webkit-scrollbar{ display:none; }
+  body.scrolled .cat2-tile{ flex:0 0 auto; }
+  body.scrolled .cat2-card{ width:auto; height:auto; padding:7px 14px; border-radius:999px; box-shadow:0 2px 6px -3px rgba(15,23,42,.22); }
   body.scrolled .cat2-pw{ display:none; }
   body.scrolled .cat2-lb{ font-size:11.5px; padding:0; line-height:1.1; flex:none; }
 </style>
@@ -390,7 +394,7 @@
   </div>
 
   <!-- CATEGORIES — colour-washed product tiles with Hindi (primary) + English label, like the existing KKD app -->
-  <div class="sticky-cats cat-row pt-1 pb-3">
+  <div class="sticky-cats cat-row pt-2 pb-3">
     <div class="flex gap-2 px-4">
       <a href="categories.html?cat=pesticide" class="cat2-tile nu">
         <div class="cat2-card" style="--c:#BFE8CB">

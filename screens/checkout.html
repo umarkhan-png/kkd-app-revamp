@@ -104,12 +104,16 @@
   .om-handle{width:40px;height:4px;border-radius:999px;background:#E2E8F0;margin:10px auto 6px}
   .om-body{padding:6px 22px 4px;text-align:center}
   .om-ic{width:54px;height:54px;border-radius:50%;margin:6px auto 12px;display:flex;align-items:center;justify-content:center;background:#ECFDF5;color:#258046;font-size:22px}
-  .om-ic.warn{background:#FEF3C7;color:#B45309}
   .om-title{font-size:18px;font-weight:800;color:#0F172A;line-height:1.2}
   .om-sub{font-size:13px;color:#64748B;font-weight:500;margin-top:8px;line-height:1.45}
-  .om-sub b{color:#0F172A;font-weight:700}
-  .om-recap{margin-top:14px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:11px 14px;text-align:left;font-size:12.5px;color:#475569;font-weight:600;line-height:1.4}
-  .om-recap b{color:#0F172A;font-weight:800}
+  .om-recap{margin-top:14px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:11px 14px;text-align:left}
+  .om-recap-top{display:flex;align-items:center;gap:10px}
+  .om-recap-id{flex:1;min-width:0;font-size:13px;color:#0F172A;line-height:1.3}
+  .om-recap-id b{font-weight:800}
+  .om-recap-id span{display:block;margin-top:2px;font-size:11.5px;color:#64748B;font-weight:600}
+  .om-recap-view{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:9999px;background:#FFFFFF;border:1.5px solid #258046;color:#258046;font-size:12px;font-weight:800;text-decoration:none}
+  .om-recap-view:active{transform:scale(.97)}
+  .om-recap-items{margin-top:8px;padding-top:8px;border-top:1px dashed #E2E8F0;font-size:11.5px;color:#64748B;font-weight:600;line-height:1.4}
   .om-actions{padding:14px 18px 22px;display:flex;flex-direction:column;gap:10px}
   .om-btn{width:100%;height:48px;border-radius:12px;border:0;font-size:14.5px;font-weight:800;cursor:pointer;transition:transform .15s ease;font-family:inherit}
   .om-btn:active{transform:scale(.985)}
@@ -419,26 +423,11 @@
           return lo;
         } catch(e) { return null; }
       }
-      function getCart(){
-        try { return (JSON.parse(localStorage.getItem('kkd.cart') || '[]') || []).slice().sort(); }
-        catch(e) { return []; }
-      }
-      function sameItems(a,b){
-        if (!a || !b || a.length !== b.length) return false;
-        const s = a.slice().sort(), t = b.slice().sort();
-        for (let i = 0; i < s.length; i++) if (s[i] !== t[i]) return false;
-        return true;
-      }
-
       // DOM refs are looked up lazily inside showSheet — the modal markup sits AFTER this script in the body, so it isn't in the DOM yet at IIFE-execution time
-      function showSheet(isSame, recent){
+      function showSheet(recent){
         const ov = document.getElementById('omOverlay');
-        if (!ov) return; // markup missing → fall through silently
-        const titleEl = document.getElementById('omTitle');
-        const subEl = document.getElementById('omSub');
+        if (!ov) return;
         const recapEl = document.getElementById('omRecap');
-        const icWrap = ov.querySelector('.om-ic');
-        const icEl = ov.querySelector('.om-ic i');
         const primary = document.getElementById('omPrimary');
         const secondary = document.getElementById('omSecondary');
         const cancel = document.getElementById('omCancel');
@@ -450,27 +439,15 @@
         if (bd) bd.onclick = close;
 
         const recapTxt = (recent.items || []).slice(0, 4).join(', ') + (recent.items.length > 4 ? ' …' : '');
-        if (isSame) {
-          icWrap.classList.add('warn');
-          if (icEl) icEl.className = 'fa-solid fa-triangle-exclamation';
-          titleEl.textContent = 'Same order already placed';
-          subEl.innerHTML = 'You placed an order with the <b>same items</b> a few minutes ago. Merge into that order, or open it to review?';
-          recapEl.innerHTML = '<b>#' + (recent.id || 'KKD-26194') + '</b> · ' + recent.items.length + ' item' + (recent.items.length > 1 ? 's' : '') + ' · ' + recapTxt;
-          primary.textContent = 'Merge with existing order';
-          secondary.textContent = 'Discard & view order';
-          primary.onclick = function(){ close(); proceed(true); };
-          secondary.onclick = function(){ close(); location.href = 'order-details.html'; };
-        } else {
-          icWrap.classList.remove('warn');
-          if (icEl) icEl.className = 'fa-solid fa-arrows-rotate';
-          titleEl.textContent = 'Merge with previous order?';
-          subEl.innerHTML = 'You placed an order just a few minutes ago. Add these new items to that order so they ship together?';
-          recapEl.innerHTML = '<b>#' + (recent.id || 'KKD-26194') + '</b> · ' + recent.items.length + ' item' + (recent.items.length > 1 ? 's' : '') + ' · ' + recapTxt;
-          primary.textContent = 'Merge with previous order';
-          secondary.textContent = 'Place as new order';
-          primary.onclick = function(){ close(); proceed(true); };
-          secondary.onclick = function(){ close(); proceed(false); };
-        }
+        const oid = recent.id || 'KKD-26194';
+        recapEl.innerHTML =
+          '<div class="om-recap-top">' +
+            '<div class="om-recap-id"><b>#' + oid + '</b><span>' + recent.items.length + ' item' + (recent.items.length > 1 ? 's' : '') + '</span></div>' +
+            '<a href="order-details.html" class="om-recap-view">View <i class="fa-solid fa-arrow-right text-[10px]"></i></a>' +
+          '</div>' +
+          '<div class="om-recap-items">' + recapTxt + '</div>';
+        primary.onclick = function(){ close(); proceed(true); };
+        secondary.onclick = function(){ close(); proceed(false); };
         open();
       }
 
@@ -480,7 +457,7 @@
         if (recent) {
           e.preventDefault();
           e.stopImmediatePropagation();
-          showSheet(sameItems(recent.items, getCart()), recent);
+          showSheet(recent);
           return;
         }
         proceed(false);
@@ -517,19 +494,19 @@
       }
     })();
   </script>
-  <!-- Order-merge bottom sheet · driven by JS in the Place Order handler above -->
+  <!-- Order-merge bottom sheet · driven by JS in the Place Order handler above · single generic flavour, recap tile carries a View link to the recent order -->
   <div id="omOverlay" class="om-overlay" role="dialog" aria-modal="true">
     <div class="om-bd"></div>
     <div class="om-sheet">
       <div class="om-handle"></div>
       <div class="om-body">
         <div class="om-ic"><i class="fa-solid fa-arrows-rotate"></i></div>
-        <div class="om-title" id="omTitle">Merge with previous order?</div>
-        <div class="om-sub" id="omSub"></div>
+        <div class="om-title">Merge with recent order?</div>
+        <div class="om-sub">You placed an order a few minutes ago. Add these items to that order so they ship together?</div>
         <div class="om-recap" id="omRecap"></div>
       </div>
       <div class="om-actions">
-        <button type="button" class="om-btn primary" id="omPrimary">Merge with previous order</button>
+        <button type="button" class="om-btn primary" id="omPrimary">Merge with recent order</button>
         <button type="button" class="om-btn secondary" id="omSecondary">Place as new order</button>
         <button type="button" class="om-btn ghost" id="omCancel">Cancel</button>
       </div>

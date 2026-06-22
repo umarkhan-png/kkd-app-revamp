@@ -94,43 +94,60 @@
   .sticky-sum .amt{font-size:20px;font-weight:700;color:#0F172A;letter-spacing:-0.01em;font-variant-numeric:tabular-nums}
   .place-btn{flex:2;height:52px;border-radius:12px;background:#258046;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 18px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
 
-  /* Order-merge bottom sheet · appears on Place Order when a recent order (kkd.lastOrder, <60 min old) exists · two flavours: SAME items (warn) or DIFFERENT items (sync) */
+  /* Order-merge bottom sheet · appears on Place Order when a recent order (kkd.lastOrder, <60 min old) exists
+     · Case A (same items)     → warn icon · qty-bump rows in "Adding"
+     · Case B (different items) → sync icon · brand-new items in "Adding"
+     · Always shows the previous order list + an inline pay summary using the checkout's currentMethod */
   .om-overlay{position:fixed;inset:0;z-index:90;display:none}
   .om-overlay.open{display:block}
   .om-bd{position:absolute;inset:0;background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease}
   .om-overlay.open .om-bd{opacity:1}
-  .om-sheet{position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);max-height:88vh;display:flex;flex-direction:column;box-shadow:0 -10px 32px rgba(0,0,0,0.18)}
+  .om-sheet{position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -10px 32px rgba(0,0,0,0.18)}
   .om-overlay.open .om-sheet{transform:translateY(0)}
-  .om-handle{width:40px;height:4px;border-radius:999px;background:#E2E8F0;margin:10px auto 6px}
-  .om-body{padding:6px 22px 4px;text-align:center}
-  .om-ic{width:54px;height:54px;border-radius:50%;margin:6px auto 12px;display:flex;align-items:center;justify-content:center;background:#ECFDF5;color:#258046;font-size:22px}
+  .om-handle{width:40px;height:4px;border-radius:999px;background:#E2E8F0;margin:10px auto 4px;flex-shrink:0}
+  .om-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 18px 8px;flex:1;min-height:0}
+  .om-scroll::-webkit-scrollbar{width:0;display:none}
+  .om-head{text-align:center;padding:4px 4px 0}
+  .om-ic{width:50px;height:50px;border-radius:50%;margin:4px auto 10px;display:flex;align-items:center;justify-content:center;background:#ECFDF5;color:#258046;font-size:20px}
   .om-ic.warn{background:#FEF3C7;color:#B45309}
-  .om-title{font-size:18px;font-weight:800;color:#0F172A;line-height:1.2}
-  .om-sub{font-size:13px;color:#64748B;font-weight:500;margin-top:8px;line-height:1.45}
+  .om-title{font-size:17px;font-weight:800;color:#0F172A;line-height:1.2}
+  .om-sub{font-size:12.5px;color:#64748B;font-weight:500;margin-top:6px;line-height:1.45}
   .om-sub b{color:#0F172A;font-weight:700}
-  .om-recap{margin-top:14px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:11px 14px;text-align:left}
-  .om-recap-top{display:flex;align-items:center;gap:10px}
-  .om-recap-id{flex:1;min-width:0;font-size:13px;color:#0F172A;line-height:1.3}
-  .om-recap-id b{font-weight:800}
-  .om-recap-id span{display:block;margin-top:2px;font-size:11.5px;color:#64748B;font-weight:600}
-  .om-recap-view{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:9999px;background:#FFFFFF;border:1.5px solid #258046;color:#258046;font-size:12px;font-weight:800;text-decoration:none}
+  .om-sec{margin-top:14px}
+  .om-sec-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+  .om-sec-head span{font-size:11px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:.06em}
+  .om-recap-view{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:9999px;background:#FFFFFF;border:1.5px solid #258046;color:#258046;font-size:11.5px;font-weight:800;text-decoration:none}
   .om-recap-view:active{transform:scale(.97)}
-  /* Stage 2 · diff list · each row = product image + name/sub + delta badge */
-  .om-diff{margin-top:14px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;overflow:hidden}
-  .om-diff-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid #EEF2F6}
-  .om-diff-row:first-child{border-top:0}
-  .om-diff-img{width:36px;height:36px;border-radius:8px;background:#FFFFFF;border:1px solid #E2E8F0;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .om-diff-img img{max-width:80%;max-height:80%;object-fit:contain}
-  .om-diff-name{flex:1;min-width:0;line-height:1.25}
-  .om-diff-name .n{font-size:13px;font-weight:700;color:#0F172A;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}
-  .om-diff-name .s{font-size:11px;color:#64748B;font-weight:600;margin-top:1px}
-  .om-diff-badge{flex-shrink:0;font-size:11px;font-weight:800;padding:4px 9px;border-radius:9999px;background:#ECFDF5;color:#258046;border:1px solid #BBF7D0;letter-spacing:.01em;text-transform:uppercase}
-  .om-diff-badge.bump{background:#FEF3C7;color:#B45309;border-color:#FDE68A}
-  .om-actions{padding:14px 18px 22px;display:flex;flex-direction:column;gap:10px}
+  /* Previous-order list · compact · order id top row, then item · qty rows */
+  .om-prev-list{margin:0;padding:10px 12px;list-style:none;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;font-size:12.5px;color:#475569;font-weight:600;line-height:1.5}
+  .om-prev-id{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#0F172A;font-weight:800;padding-bottom:6px;border-bottom:1px dashed #E2E8F0;margin-bottom:6px}
+  .om-prev-id .c{color:#64748B;font-weight:600;font-size:11px}
+  .om-prev-list li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:3px 0}
+  .om-prev-list li .nm{flex:1;min-width:0;color:#0F172A;font-weight:700;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}
+  .om-prev-list li .nm .s{color:#94A3B8;font-weight:500;margin-left:6px;font-size:11.5px}
+  .om-prev-list li .q{flex-shrink:0;color:#475569;font-weight:700;font-variant-numeric:tabular-nums}
+  /* Adding-to-order list · richer rows · image + name/sub + qty · price */
+  .om-new-list{background:#FFFFFF;border:1px solid #BBF7D0;border-radius:12px;overflow:hidden}
+  .om-new-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid #ECFDF5}
+  .om-new-row:first-child{border-top:0}
+  .om-new-img{width:40px;height:40px;border-radius:8px;background:#F8FAFC;border:1px solid #E2E8F0;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:3px}
+  .om-new-img img{max-width:100%;max-height:100%;object-fit:contain}
+  .om-new-body{flex:1;min-width:0;line-height:1.25}
+  .om-new-body .n{font-size:13px;font-weight:800;color:#0F172A;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}
+  .om-new-body .s{font-size:11px;color:#64748B;font-weight:600;margin-top:1px}
+  .om-new-body .q{display:inline-block;margin-top:3px;font-size:10.5px;font-weight:800;color:#258046;background:#ECFDF5;border:1px solid #BBF7D0;border-radius:6px;padding:1px 7px;letter-spacing:.02em}
+  .om-new-price{flex-shrink:0;font-size:13.5px;font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
+  /* Pay box · extra amount + chosen payment method · sits just above the CTA */
+  .om-pay{margin-top:14px;background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border:1px solid #BBF7D0;border-radius:12px;padding:12px 14px}
+  .om-pay-row{display:flex;align-items:baseline;justify-content:space-between;font-size:13px;color:#0F172A;font-weight:700}
+  .om-pay-row b{font-size:18px;font-weight:900;color:#0F172A}
+  .om-pay-method{margin-top:6px;font-size:11.5px;color:#258046;font-weight:600;display:flex;align-items:center;gap:6px}
+  .om-pay-method b{color:#0F172A;font-weight:800}
+  /* CTAs */
+  .om-actions{padding:12px 18px 20px;display:flex;flex-direction:column;gap:10px;flex-shrink:0;border-top:1px solid #F1F5F9}
   .om-btn{width:100%;height:48px;border-radius:12px;border:0;font-size:14.5px;font-weight:800;cursor:pointer;transition:transform .15s ease;font-family:inherit}
   .om-btn:active{transform:scale(.985)}
   .om-btn.primary{background:#258046;color:#FFFFFF;box-shadow:0 8px 18px -6px rgba(5,150,105,0.45)}
-  .om-btn.secondary{background:#FFFFFF;color:#258046;border:1.5px solid #258046}
 </style></head>
 <body>
 
@@ -416,25 +433,28 @@
     updateBill(currentMethod, currentPct);
 
     // Place order · carries the chosen payment method to the success screen so the COD-pay option shows for COD/Partial
-    // · if a recent order (kkd.lastOrder · placed within the last 60 minutes) exists, intercept the tap and show the two-stage merge sheet
-    //   - SAME items     → stage 1 "Same order already placed" (warn) → stage 2 lists quantity bumps that will be applied
-    //   - DIFFERENT items → stage 1 "Merge with recent order?"        → stage 2 lists the new items being added to the previous order
+    // · if a recent order (kkd.lastOrder · placed within the last 60 minutes) exists, intercept the tap and show the merge sheet
+    //   - SAME items     → warn icon · "Adding" rows are the cart items each with "Qty +1" (extra qty payment due)
+    //   - DIFFERENT items → sync icon · "Adding" rows are only the new items in the cart (delta payment due)
+    // Single-stage sheet · shows prev list + adding list + inline pay summary using the checkout's currentMethod · one Pay & Merge CTA
     (function(){
       const btn = document.getElementById('placeOrderBtn');
       if (!btn) return;
 
-      // Small catalog · keys match the data-item ids used on cart.html / PDPs · used to render the diff rows on stage 2
+      // Small catalog · keys match the data-item ids used on cart.html / PDPs
       const CATALOG = {
-        humic:       { name:'Humic + Fulvic',  sub:'1 L',     img:'../assets/Humic_nobg.png' },
-        chakrawarti: { name:'Chakrawarti ZC',   sub:'100 ml',  img:'../assets/Chakrawarti_nobg.png' },
-        chakra:      { name:'Chakrawarti ZC',   sub:'100 ml',  img:'../assets/Chakrawarti_nobg.png' },
-        npk:         { name:'NPK 19:19:19',     sub:'1 kg',    img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp' },
-        antivirus:   { name:'Antivirus',        sub:'250 ml',  img:'../assets/AntiVirus_nobg.png' },
-        bhumiraja:   { name:'Bhumiraja',        sub:'1 kg',    img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' },
-        triple:      { name:'Triple Attack',    sub:'500 ml',  img:'https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp' },
-        chakraveer:  { name:'Chakraveer',       sub:'1 L',     img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp' }
+        humic:       { name:'Humic + Fulvic',  sub:'1 L',     price:752, img:'../assets/Humic_nobg.png' },
+        chakrawarti: { name:'Chakrawarti ZC',   sub:'100 ml',  price:700, img:'../assets/Chakrawarti_nobg.png' },
+        chakra:      { name:'Chakrawarti ZC',   sub:'100 ml',  price:700, img:'../assets/Chakrawarti_nobg.png' },
+        npk:         { name:'NPK 19:19:19',     sub:'1 kg',    price:453, img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp' },
+        antivirus:   { name:'Antivirus',        sub:'250 ml',  price:327, img:'../assets/AntiVirus_nobg.png' },
+        bhumiraja:   { name:'Bhumiraja',        sub:'1 kg',    price:410, img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' },
+        triple:      { name:'Triple Attack',    sub:'500 ml',  price:585, img:'https://katyayanikrishidirect.com/cdn/shop/files/Triple_attack_1_2.webp' },
+        chakraveer:  { name:'Chakraveer',       sub:'1 L',     price:640, img:'https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp' }
       };
-      function itemMeta(k){ return CATALOG[k] || { name: k, sub: '', img: '' }; }
+      const PAY_LABEL = { paynow:'Pay Now', partial:'Partial payment', cod:'Cash on Delivery' };
+      function itemMeta(k){ return CATALOG[k] || { name: k, sub: '', price: 0, img: '' }; }
+      function rupee(n){ return '₹' + Number(n).toLocaleString('en-IN'); }
 
       function proceed(merged){
         location.href = 'order-success.html?' + (merged ? 'merged=1&' : '') + 'mode=' + currentMethod;
@@ -458,22 +478,21 @@
         return true;
       }
 
-      // DOM refs are looked up lazily inside showSheet — modal markup sits AFTER this script in the body, so it isn't in DOM yet at IIFE-execution time
+      // DOM refs are looked up lazily — modal markup sits AFTER this script
       function showSheet(recent){
         const ov = document.getElementById('omOverlay');
         if (!ov) return;
-        const stage1 = document.getElementById('omStage1');
-        const stage2 = document.getElementById('omStage2');
-        const icWrap = document.getElementById('omIcWrap');
-        const icEl   = document.getElementById('omIc');
-        const titleEl = document.getElementById('omTitle');
-        const subEl  = document.getElementById('omSub');
-        const recapEl = document.getElementById('omRecap');
-        const mergeBtn = document.getElementById('omMerge');
+        const icWrap   = document.getElementById('omIcWrap');
+        const icEl     = document.getElementById('omIc');
+        const titleEl  = document.getElementById('omTitle');
+        const subEl    = document.getElementById('omSub');
+        const prevHead = document.getElementById('omPrevHead');
+        const prevList = document.getElementById('omPrevList');
+        const newHead  = document.getElementById('omNewHead');
+        const newList  = document.getElementById('omNewList');
+        const payTotal = document.getElementById('omPayTotal');
+        const payMethod= document.getElementById('omPayMethod');
         const confirmBtn = document.getElementById('omConfirm');
-        const backBtn = document.getElementById('omBack');
-        const diffSub = document.getElementById('omDiffSub');
-        const diffEl = document.getElementById('omDiff');
         const bd = ov.querySelector('.om-bd');
 
         const cart = getCart();
@@ -481,65 +500,63 @@
         const oid = recent.id || 'KKD-26194';
 
         function close(){ ov.classList.remove('open'); }
-        function showStage(n){
-          stage1.style.display = n === 1 ? '' : 'none';
-          stage2.style.display = n === 2 ? '' : 'none';
-        }
         if (bd) bd.onclick = close;
 
-        // ----- Stage 1 wording -----
+        // Header
         if (isSame) {
           icWrap.classList.add('warn');
           icEl.className = 'fa-solid fa-triangle-exclamation';
           titleEl.textContent = 'Same order already placed';
-          subEl.innerHTML = 'You placed an order with the <b>same items</b> a few minutes ago. Merge so the quantities are added together?';
+          subEl.innerHTML = 'You placed an order with the <b>same items</b> a few minutes ago. Merge so the new quantities are added together.';
         } else {
           icWrap.classList.remove('warn');
           icEl.className = 'fa-solid fa-arrows-rotate';
           titleEl.textContent = 'Merge with recent order?';
-          subEl.innerHTML = 'You placed an order a few minutes ago. Add these items to that order so they ship together?';
+          subEl.innerHTML = 'You placed an order a few minutes ago. Add these items to that order so they ship together.';
         }
-        recapEl.innerHTML =
-          '<div class="om-recap-top">' +
-            '<div class="om-recap-id"><b>#' + oid + '</b><span>' + recent.items.length + ' item' + (recent.items.length > 1 ? 's' : '') + '</span></div>' +
-            '<a href="order-details.html" class="om-recap-view">View <i class="fa-solid fa-arrow-right text-[10px]"></i></a>' +
+
+        // Previous-order list (header + each item with assumed Qty 1 since cart only stores ids)
+        prevHead.textContent = 'Previous order';
+        let prevRows = '<li class="om-prev-id"><span>#' + oid + '</span><span class="c">' + recent.items.length + ' item' + (recent.items.length > 1 ? 's' : '') + '</span></li>';
+        recent.items.forEach(k => {
+          const m = itemMeta(k);
+          prevRows += '<li><div class="nm">' + m.name + (m.sub ? '<span class="s">' + m.sub + '</span>' : '') + '</div><div class="q">Qty 1</div></li>';
+        });
+        prevList.innerHTML = prevRows;
+
+        // Adding list + total
+        let adding;
+        if (isSame) {
+          adding = cart.slice();
+          newHead.textContent = 'Adding to this order · Qty +1 each';
+        } else {
+          const recentSet = new Set(recent.items);
+          adding = cart.filter(k => !recentSet.has(k));
+          if (!adding.length) adding = cart.slice();
+          newHead.textContent = adding.length + ' new item' + (adding.length > 1 ? 's' : '') + ' being added';
+        }
+        let total = 0, newRows = '';
+        adding.forEach(k => {
+          const m = itemMeta(k);
+          total += (m.price || 0);
+          newRows += '<div class="om-new-row">' +
+            '<div class="om-new-img">' + (m.img ? '<img src="' + m.img + '" alt="" onerror="this.style.display=\'none\'"/>' : '') + '</div>' +
+            '<div class="om-new-body">' +
+              '<div class="n">' + m.name + '</div>' +
+              (m.sub ? '<div class="s">' + m.sub + '</div>' : '') +
+              '<span class="q">Qty 1</span>' +
+            '</div>' +
+            '<div class="om-new-price">' + rupee(m.price || 0) + '</div>' +
           '</div>';
+        });
+        newList.innerHTML = newRows;
 
-        // ----- Stage 2 diff content (built lazily on Merge tap so it reads the latest state) -----
-        function renderDiff(){
-          let rows = '';
-          if (isSame) {
-            diffSub.innerHTML = 'These quantities will be added to <b>#' + oid + '</b>.';
-            cart.forEach(k => {
-              const m = itemMeta(k);
-              rows += '<div class="om-diff-row">' +
-                '<div class="om-diff-img">' + (m.img ? '<img src="' + m.img + '" alt=""/>' : '') + '</div>' +
-                '<div class="om-diff-name"><div class="n">' + m.name + '</div>' + (m.sub ? '<div class="s">' + m.sub + '</div>' : '') + '</div>' +
-                '<span class="om-diff-badge bump">Qty +1</span>' +
-                '</div>';
-            });
-          } else {
-            const recentSet = new Set(recent.items);
-            const additions = cart.filter(k => !recentSet.has(k));
-            const list = additions.length ? additions : cart;
-            diffSub.innerHTML = list.length + ' new item' + (list.length > 1 ? 's' : '') + ' will be added to <b>#' + oid + '</b>.';
-            list.forEach(k => {
-              const m = itemMeta(k);
-              rows += '<div class="om-diff-row">' +
-                '<div class="om-diff-img">' + (m.img ? '<img src="' + m.img + '" alt=""/>' : '') + '</div>' +
-                '<div class="om-diff-name"><div class="n">' + m.name + '</div>' + (m.sub ? '<div class="s">' + m.sub + '</div>' : '') + '</div>' +
-                '<span class="om-diff-badge">Added</span>' +
-                '</div>';
-            });
-          }
-          diffEl.innerHTML = rows;
-        }
+        // Pay summary
+        payTotal.textContent = rupee(total);
+        payMethod.textContent = PAY_LABEL[currentMethod] || 'Pay Now';
+        confirmBtn.textContent = 'Pay ' + rupee(total) + ' & Merge order';
 
-        mergeBtn.onclick = function(){ renderDiff(); showStage(2); };
-        backBtn.onclick = function(){ showStage(1); };
         confirmBtn.onclick = function(){ close(); proceed(true); };
-
-        showStage(1);
         ov.classList.add('open');
       }
 
@@ -552,7 +569,6 @@
           showSheet(recent);
           return;
         }
-        // No recent order → place as new (default path)
         location.href = 'order-success.html?mode=' + currentMethod;
       });
     })();
@@ -587,39 +603,44 @@
       }
     })();
   </script>
-  <!-- Order-merge bottom sheet · two stages
-       · stage 1 · case-aware intro (same items = warn, different items = sync) + Merge CTA
-       · stage 2 · diff preview (qty bumps for same-items / list of additions for different) + Confirm CTA -->
+  <!-- Order-merge bottom sheet · single stage
+       Shows the previous order's items+qtys, the items being added (Case A = same items with qty bump · Case B = brand new items),
+       the extra amount to pay using the payment method already chosen on checkout, and a single "Pay & Merge" CTA -->
   <div id="omOverlay" class="om-overlay" role="dialog" aria-modal="true">
     <div class="om-bd"></div>
     <div class="om-sheet">
       <div class="om-handle"></div>
-
-      <div class="om-stage" id="omStage1">
-        <div class="om-body">
+      <div class="om-scroll">
+        <div class="om-head">
           <div class="om-ic" id="omIcWrap"><i id="omIc" class="fa-solid fa-arrows-rotate"></i></div>
           <div class="om-title" id="omTitle">Merge with recent order?</div>
           <div class="om-sub" id="omSub"></div>
-          <div class="om-recap" id="omRecap"></div>
         </div>
-        <div class="om-actions">
-          <button type="button" class="om-btn primary" id="omMerge">Merge with recent order</button>
+
+        <div class="om-sec">
+          <div class="om-sec-head">
+            <span id="omPrevHead">Previous order</span>
+            <a href="order-details.html" class="om-recap-view">View <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
+          </div>
+          <ul class="om-prev-list" id="omPrevList"></ul>
+        </div>
+
+        <div class="om-sec">
+          <div class="om-sec-head"><span id="omNewHead">Adding to this order</span></div>
+          <div class="om-new-list" id="omNewList"></div>
+        </div>
+
+        <div class="om-pay" id="omPayBox">
+          <div class="om-pay-row">
+            <span>Extra to pay</span>
+            <b id="omPayTotal" class="tnum">₹0</b>
+          </div>
+          <div class="om-pay-method"><i class="fa-solid fa-circle-check"></i> Charging via <b id="omPayMethod">Pay Now</b></div>
         </div>
       </div>
-
-      <div class="om-stage" id="omStage2" style="display:none">
-        <div class="om-body">
-          <div class="om-ic"><i class="fa-solid fa-list-check"></i></div>
-          <div class="om-title">Review the changes</div>
-          <div class="om-sub" id="omDiffSub"></div>
-          <div class="om-diff" id="omDiff"></div>
-        </div>
-        <div class="om-actions">
-          <button type="button" class="om-btn primary" id="omConfirm">Confirm &amp; place order</button>
-          <button type="button" class="om-btn secondary" id="omBack">Back</button>
-        </div>
+      <div class="om-actions">
+        <button type="button" class="om-btn primary" id="omConfirm">Pay ₹0 &amp; Merge order</button>
       </div>
-
     </div>
   </div>
 

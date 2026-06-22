@@ -430,23 +430,25 @@
         return true;
       }
 
-      const ov = document.getElementById('omOverlay');
-      const titleEl = document.getElementById('omTitle');
-      const subEl = document.getElementById('omSub');
-      const recapEl = document.getElementById('omRecap');
-      const icWrap = ov && ov.querySelector('.om-ic');
-      const icEl = ov && ov.querySelector('.om-ic i');
-      const primary = document.getElementById('omPrimary');
-      const secondary = document.getElementById('omSecondary');
-      const cancel = document.getElementById('omCancel');
-      const bd = ov && ov.querySelector('.om-bd');
-
-      function close(){ if (ov) ov.classList.remove('open'); }
-      function open(){ if (ov) ov.classList.add('open'); }
-      if (cancel) cancel.addEventListener('click', close);
-      if (bd) bd.addEventListener('click', close);
-
+      // DOM refs are looked up lazily inside showSheet — the modal markup sits AFTER this script in the body, so it isn't in the DOM yet at IIFE-execution time
       function showSheet(isSame, recent){
+        const ov = document.getElementById('omOverlay');
+        if (!ov) return; // markup missing → fall through silently
+        const titleEl = document.getElementById('omTitle');
+        const subEl = document.getElementById('omSub');
+        const recapEl = document.getElementById('omRecap');
+        const icWrap = ov.querySelector('.om-ic');
+        const icEl = ov.querySelector('.om-ic i');
+        const primary = document.getElementById('omPrimary');
+        const secondary = document.getElementById('omSecondary');
+        const cancel = document.getElementById('omCancel');
+        const bd = ov.querySelector('.om-bd');
+
+        function close(){ ov.classList.remove('open'); }
+        function open(){ ov.classList.add('open'); }
+        if (cancel) cancel.onclick = close;
+        if (bd) bd.onclick = close;
+
         const recapTxt = (recent.items || []).slice(0, 4).join(', ') + (recent.items.length > 4 ? ' …' : '');
         if (isSame) {
           icWrap.classList.add('warn');

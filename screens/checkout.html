@@ -121,8 +121,7 @@
   .om-recap-view{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:9999px;background:#FFFFFF;border:1.5px solid #258046;color:#258046;font-size:11.5px;font-weight:800;text-decoration:none}
   .om-recap-view:active{transform:scale(.97)}
   /* Section head above the unified list */
-  .om-sec-head{display:flex;align-items:center;justify-content:space-between;margin:16px 2px 6px;font-size:11px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:.06em}
-  .om-sec-head .hint{color:#94A3B8;text-transform:none;letter-spacing:0;font-weight:600;font-size:11px}
+  .om-sec-head{margin:16px 2px 8px;font-size:11px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:.06em}
   /* Unified item list · one row per item · status tag + qty delta · UNCHANGED rows muted */
   .om-list{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden}
   .om-row{display:flex;align-items:center;gap:11px;padding:11px 12px;border-top:1px solid #F1F5F9;position:relative}
@@ -141,18 +140,23 @@
   .om-row-body .qty .arrow{font-size:10px;color:#B45309;font-weight:900}
   .om-row-body .qty .next{color:#0F172A;font-weight:900}
   .om-row-right{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:4px;text-align:right}
-  .om-tag{font-size:9.5px;font-weight:900;letter-spacing:.06em;padding:2px 7px;border-radius:9999px;text-transform:uppercase;line-height:1.5;white-space:nowrap}
+  .om-tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:800;letter-spacing:.01em;padding:3px 9px;border-radius:9999px;line-height:1.4;white-space:nowrap}
+  .om-tag i{font-size:9px}
   .om-tag.updated{background:#FEF3C7;color:#B45309;border:1px solid #FDE68A}
   .om-tag.new{background:#ECFDF5;color:#258046;border:1px solid #BBF7D0}
-  .om-tag.unchanged{background:#F1F5F9;color:#94A3B8;border:1px solid #E2E8F0}
+  .om-tag.unchanged{background:#F1F5F9;color:#64748B;border:1px solid #E2E8F0}
   .om-row-price{font-size:13px;font-weight:800;color:#258046;font-variant-numeric:tabular-nums}
   .om-row-price.none{color:#94A3B8;font-weight:600;font-size:11px}
-  /* Pay box · total + Pay Online/COD chips */
+  /* Pay box · billing breakdown + Pay Online/COD chips */
   .om-pay{margin-top:16px;background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border:1px solid #BBF7D0;border-radius:14px;padding:12px 14px 14px}
-  .om-pay-row{display:flex;align-items:baseline;justify-content:space-between;font-size:13px;color:#0F172A;font-weight:700}
-  .om-pay-row b{font-size:20px;font-weight:900;color:#0F172A}
-  .om-pay-row.breakdown{margin-top:4px;font-size:11px;color:#64748B;font-weight:600}
-  .om-pay-row.breakdown b{font-size:11px;font-weight:700;color:#64748B}
+  .om-pay-row{display:flex;align-items:baseline;justify-content:space-between;font-size:13px;color:#0F172A;font-weight:700;padding:3px 0}
+  .om-pay-row.sub{font-size:12px;color:#475569;font-weight:600}
+  .om-pay-row.sub span:last-child{font-weight:700;color:#0F172A;font-variant-numeric:tabular-nums}
+  .om-pay-row.total{font-size:13px;color:#0F172A;font-weight:700}
+  .om-pay-row.total b{font-size:15px;font-weight:900;color:#0F172A;font-variant-numeric:tabular-nums}
+  .om-pay-row.hi{font-size:14px;color:#258046;font-weight:800}
+  .om-pay-row.hi b{font-size:22px;font-weight:900;color:#258046;font-variant-numeric:tabular-nums}
+  .om-pay-divider{margin:6px 0 4px;border-top:1px dashed #A7F3D0}
   .om-pay-method-label{margin-top:12px;font-size:10.5px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:.06em}
   .om-pay-chips{margin-top:6px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .om-chip{display:flex;align-items:center;gap:9px;padding:10px 11px;border-radius:11px;background:#FFFFFF;border:1.5px solid #E2E8F0;cursor:pointer;text-align:left;font-family:inherit;transition:all .15s ease}
@@ -505,12 +509,16 @@
         if (!ov) return;
         const icEl     = document.getElementById('omIc');
         const titleEl  = document.getElementById('omTitle');
-        const subEl    = document.getElementById('omSub');
         const orderIdEl= document.getElementById('omOrderId');
         const orderCt  = document.getElementById('omOrderCount');
         const listEl   = document.getElementById('omList');
         const payTotal = document.getElementById('omPayTotal');
-        const payBreak = document.getElementById('omPayBreakdown');
+        const payPrev  = document.getElementById('omPayPrev');
+        const payAdd   = document.getElementById('omPayAdd');
+        const payAddLbl= document.getElementById('omPayAddLabel');
+        const payDiscRow = document.getElementById('omPayDiscRow');
+        const payDisc  = document.getElementById('omPayDisc');
+        const payMerged= document.getElementById('omPayMerged');
         const onlineSave = document.getElementById('omOnlineSave');
         const chips    = ov.querySelectorAll('.om-chip');
         const confirmBtn = document.getElementById('omConfirm');
@@ -531,9 +539,6 @@
         // Header · single flavour · the diff list below carries the case-specific detail (UPDATED qty bumps vs NEW additions vs IN ORDER untouched rows)
         icEl.className = 'fa-solid fa-arrows-rotate';
         titleEl.textContent = 'Merge items in your recent order';
-        subEl.innerHTML = isCaseA
-          ? 'These items are already in your recent order — merging will <b>bump their quantities</b>.'
-          : 'Add these items to your recent order so everything ships together.';
         orderIdEl.textContent = '#' + oid;
         const mergedCount = updatedIds.length + newIds.length + unchangedIds.length;
         orderCt.textContent = mergedCount + ' item' + (mergedCount > 1 ? 's' : '') + ' after merge';
@@ -573,18 +578,25 @@
         unchangedIds.forEach(k => { html += row('unchanged', k); });
         listEl.innerHTML = html;
 
-        // Pay totals · extra = qty-bump prices + new-item prices · IN-ORDER items contribute nothing
+        // Pay totals
+        //   extra        = qty-bump prices + new-item prices (the line items being added now)
+        //   prevTotal    = the recent order's total (sum of all its items' prices)
+        //   mergedTotal  = prevTotal + extra (what the order is worth after merge, gross)
+        //   onlineTotal  = extra − 5% (what the user pays online · COD pays the full extra)
         let extra = 0;
         updatedIds.forEach(k => { extra += (itemMeta(k).price || 0); });
         newIds.forEach(k => { extra += (itemMeta(k).price || 0); });
+        let prevTotal = 0;
+        recent.items.forEach(k => { prevTotal += (itemMeta(k).price || 0); });
         const onlineDiscount = Math.round(extra * 0.05);
         const onlineTotal = Math.max(0, extra - onlineDiscount);
 
-        payTotal.textContent = rupee(extra);
-        let breakdownBits = [];
-        if (updatedIds.length) breakdownBits.push(updatedIds.length + '× Qty +1');
-        if (newIds.length)     breakdownBits.push(newIds.length + '× new');
-        payBreak.innerHTML = breakdownBits.length ? '<span>' + breakdownBits.join(' · ') + '</span><b>' + rupee(extra) + '</b>' : '';
+        let addLabelBits = [];
+        if (updatedIds.length) addLabelBits.push(updatedIds.length + '× Qty +1');
+        if (newIds.length)     addLabelBits.push(newIds.length + '× new');
+        payAddLbl.innerHTML = 'Adding now' + (addLabelBits.length ? ' <span style="color:#94A3B8;font-weight:600">· ' + addLabelBits.join(' · ') + '</span>' : '');
+        payPrev.textContent = rupee(prevTotal);
+        payAdd.textContent  = rupee(extra);
         if (onlineSave) onlineSave.textContent = onlineDiscount.toLocaleString('en-IN');
 
         // Default chip · seed from checkout's currentMethod (paynow/partial → online · cod → cod)
@@ -592,7 +604,16 @@
         function applyChip(){
           chips.forEach(c => c.setAttribute('aria-checked', c.dataset.pay === selected ? 'true' : 'false'));
           const pay = selected === 'paynow' ? onlineTotal : extra;
-          confirmBtn.textContent = (selected === 'paynow' ? 'Pay ' + rupee(pay) : 'Place order · ' + rupee(extra) + ' COD') + ' & Merge';
+          const merged = prevTotal + pay;
+          if (selected === 'paynow') {
+            payDiscRow.style.display = onlineDiscount > 0 ? 'flex' : 'none';
+            payDisc.textContent = '−' + rupee(onlineDiscount);
+          } else {
+            payDiscRow.style.display = 'none';
+          }
+          payMerged.textContent = rupee(merged);
+          payTotal.textContent = rupee(pay);
+          confirmBtn.textContent = (selected === 'paynow' ? 'Pay ' + rupee(pay) : 'Place order · ' + rupee(pay) + ' COD') + ' & Merge';
         }
         chips.forEach(c => {
           c.onclick = function(){ selected = c.dataset.pay; applyChip(); };
@@ -659,8 +680,7 @@
       <div class="om-scroll">
         <div class="om-head">
           <div class="om-ic"><i id="omIc" class="fa-solid fa-arrows-rotate"></i></div>
-          <div class="om-title" id="omTitle">Merge with recent order</div>
-          <div class="om-sub" id="omSub"></div>
+          <div class="om-title" id="omTitle">Merge items in your recent order</div>
         </div>
 
         <div class="om-recap-tile">
@@ -671,15 +691,16 @@
           <a href="order-details.html" class="om-recap-view">View <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
         </div>
 
-        <div class="om-sec-head"><span>Updated order</span><span class="hint">After merge</span></div>
+        <div class="om-sec-head"><span>After merge</span></div>
         <div class="om-list" id="omList"></div>
 
         <div class="om-pay">
-          <div class="om-pay-row">
-            <span>Extra to pay</span>
-            <b id="omPayTotal" class="tnum">₹0</b>
-          </div>
-          <div class="om-pay-row breakdown" id="omPayBreakdown"></div>
+          <div class="om-pay-row sub"><span>Previous order paid</span><span id="omPayPrev" class="tnum">₹0</span></div>
+          <div class="om-pay-row sub"><span id="omPayAddLabel">Adding now</span><span id="omPayAdd" class="tnum">₹0</span></div>
+          <div class="om-pay-row sub" id="omPayDiscRow" style="display:none"><span>Pay Online discount (5%)</span><span id="omPayDisc" class="tnum">−₹0</span></div>
+          <div class="om-pay-divider"></div>
+          <div class="om-pay-row total"><span>Total order value</span><b id="omPayMerged" class="tnum">₹0</b></div>
+          <div class="om-pay-row hi"><span>You pay now</span><b id="omPayTotal" class="tnum">₹0</b></div>
           <div class="om-pay-method-label">Choose how to pay</div>
           <div class="om-pay-chips" role="radiogroup">
             <button type="button" class="om-chip" data-pay="paynow" role="radio" aria-checked="true">

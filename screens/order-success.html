@@ -499,15 +499,18 @@
   </div>
 
   <script>
-  // Persist a snapshot of THIS order so checkout.html can offer "merge with previous order" if the user comes back and tries to place another one within 60 minutes
+  // Persist a snapshot of THIS order so checkout.html can offer "merge with previous order" if the user comes back and tries to place another one within 60 minutes.
+  // Also clear kkd.cart so the next visit to checkout starts fresh — without this, the natural flow ("placed A,B,C · now I want to add D") lands at cart=[A,B,C,D] and the merge sheet would falsely flag A,B,C as qty-bumps.
   (function(){
     try {
       const params = new URLSearchParams(location.search);
-      // When checkout merged into a previous order, keep the existing snapshot (already saved); just refresh its timestamp
       const merged = params.get('merged') === '1';
       if (merged) {
+        // Refresh the snapshot's timestamp so the merge window stays open, but keep the items list as-is
         const cur = JSON.parse(localStorage.getItem('kkd.lastOrder') || 'null');
-        if (cur) { cur.ts = Date.now(); localStorage.setItem('kkd.lastOrder', JSON.stringify(cur)); return; }
+        if (cur) { cur.ts = Date.now(); localStorage.setItem('kkd.lastOrder', JSON.stringify(cur)); }
+        localStorage.removeItem('kkd.cart');
+        return;
       }
       const cart = JSON.parse(localStorage.getItem('kkd.cart') || '[]') || [];
       if (!Array.isArray(cart) || !cart.length) return;
@@ -523,6 +526,7 @@
         ts: Date.now(),
         mode: params.get('mode') || 'paynow'
       }));
+      localStorage.removeItem('kkd.cart');
     } catch(e){}
   })();
 

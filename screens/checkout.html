@@ -142,7 +142,6 @@
   .om-row-right{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:4px;text-align:right}
   .om-tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:800;letter-spacing:.01em;padding:3px 9px;border-radius:9999px;line-height:1.4;white-space:nowrap}
   .om-tag i{font-size:9px}
-  .om-tag.updated{background:#FEF3C7;color:#B45309;border:1px solid #FDE68A}
   .om-tag.new{background:#ECFDF5;color:#258046;border:1px solid #BBF7D0}
   .om-tag.unchanged{background:#F1F5F9;color:#64748B;border:1px solid #E2E8F0}
   .om-row-price{font-size:13px;font-weight:800;color:#258046;font-variant-numeric:tabular-nums}
@@ -537,7 +536,7 @@
         if (bd) bd.onclick = close;
 
         // Header · single flavour · the diff list below carries the case-specific detail (UPDATED qty bumps vs NEW additions vs IN ORDER untouched rows)
-        icEl.className = 'fa-solid fa-arrows-rotate';
+        icEl.className = 'fa-solid fa-code-merge';
         titleEl.textContent = 'Merge items in your recent order';
         orderIdEl.textContent = '#' + oid;
         const mergedCount = updatedIds.length + newIds.length + unchangedIds.length;
@@ -550,12 +549,12 @@
           let tagHtml = '', priceHtml = '';
           if (state === 'updated') {
             qtyHtml = '<span class="qty">Qty <span class="prev">1</span><i class="fa-solid fa-arrow-right arrow"></i><span class="next">2</span></span>';
-            tagHtml = '<span class="om-tag updated">Qty +1</span>';
-            priceHtml = '<span class="om-row-price">+' + rupee(m.price || 0) + '</span>';
+            tagHtml = '';
+            priceHtml = '<span class="om-row-price">' + rupee(m.price || 0) + '</span>';
           } else if (state === 'new') {
             qtyHtml = '<span class="qty">Qty 1</span>';
             tagHtml = '<span class="om-tag new">New item</span>';
-            priceHtml = '<span class="om-row-price">+' + rupee(m.price || 0) + '</span>';
+            priceHtml = '<span class="om-row-price">' + rupee(m.price || 0) + '</span>';
           } else {
             qtyHtml = '<span class="qty">Qty 1</span>';
             tagHtml = '<span class="om-tag unchanged">In order</span>';
@@ -679,7 +678,7 @@
       <div class="om-handle"></div>
       <div class="om-scroll">
         <div class="om-head">
-          <div class="om-ic"><i id="omIc" class="fa-solid fa-arrows-rotate"></i></div>
+          <div class="om-ic"><i id="omIc" class="fa-solid fa-code-merge"></i></div>
           <div class="om-title" id="omTitle">Merge items in your recent order</div>
         </div>
 

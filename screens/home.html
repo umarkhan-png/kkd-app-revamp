@@ -1300,7 +1300,7 @@
                 <a href="pdp.html" class="ba-name">Humic</a>
                 <div class="ba-tech">Activated Humic + Fulvic</div>
                 <div class="ba-pricerow"><span class="ba-size">500 ml</span><span class="ba-price tnum">&#8377;276</span><span class="ba-mrp tnum">&#8377;390</span></div>
-                <a href="cart.html?reorder=humic" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+                <a href="checkout.html" data-demo-case="A" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
               </div>
             </div>
           </div>
@@ -1313,7 +1313,7 @@
                 <a href="pdp.html" class="ba-name">Chakrawarti ZC</a>
                 <div class="ba-tech">Thiamethoxam + Lambda</div>
                 <div class="ba-pricerow"><span class="ba-size">100 ml</span><span class="ba-price tnum">&#8377;358</span><span class="ba-mrp tnum">&#8377;495</span></div>
-                <a href="cart.html?reorder=chakrawarti" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+                <a href="checkout.html" data-demo-case="B" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
               </div>
             </div>
           </div>
@@ -3738,6 +3738,28 @@
         row.innerHTML = html;
         row.querySelectorAll('.bs').forEach(function(s){ s.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if (row.classList.contains('rated')) return; open(name, img, row, parseInt(s.dataset.v, 10)); }); });
         card.appendChild(row);
+      });
+    })();
+  </script>
+  <script>
+    // Buy-again demo wiring · seeds kkd.lastOrder + kkd.cart so the checkout merge sheet shows the intended case
+    // · tile 1 (Humic, data-demo-case="A") → cart matches recent order → "same item already in order" branch
+    // · tile 2 (Chakrawarti, data-demo-case="B") → cart adds a brand-new product on top of the recent order → diff/merge branch
+    (function(){
+      var SEED = {
+        A: { recent: ['humic'],      cart: ['humic']      },
+        B: { recent: ['humic','npk'], cart: ['chakrawarti'] }
+      };
+      document.querySelectorAll('.ba-reorder[data-demo-case]').forEach(function(a){
+        a.addEventListener('click', function(e){
+          var c = a.getAttribute('data-demo-case');
+          var s = SEED[c]; if (!s) return;
+          try {
+            localStorage.setItem('kkd.lastOrder', JSON.stringify({ id:'KKD-26194-7821', items:s.recent, ts:Date.now(), mode:'paynow' }));
+            localStorage.setItem('kkd.cart', JSON.stringify(s.cart));
+            localStorage.removeItem('kkd.mergeInfo');
+          } catch(_) {}
+        });
       });
     })();
   </script>

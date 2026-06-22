@@ -499,6 +499,33 @@
   </div>
 
   <script>
+  // Persist a snapshot of THIS order so checkout.html can offer "merge with previous order" if the user comes back and tries to place another one within 60 minutes
+  (function(){
+    try {
+      const params = new URLSearchParams(location.search);
+      // When checkout merged into a previous order, keep the existing snapshot (already saved); just refresh its timestamp
+      const merged = params.get('merged') === '1';
+      if (merged) {
+        const cur = JSON.parse(localStorage.getItem('kkd.lastOrder') || 'null');
+        if (cur) { cur.ts = Date.now(); localStorage.setItem('kkd.lastOrder', JSON.stringify(cur)); return; }
+      }
+      const cart = JSON.parse(localStorage.getItem('kkd.cart') || '[]') || [];
+      if (!Array.isArray(cart) || !cart.length) return;
+      const orderEl = document.querySelector('.order-pill');
+      let id = 'KKD-26194-7821';
+      if (orderEl) {
+        const m = orderEl.textContent.match(/KKD-[\w-]+/);
+        if (m) id = m[0];
+      }
+      localStorage.setItem('kkd.lastOrder', JSON.stringify({
+        id: id,
+        items: cart.slice().sort(),
+        ts: Date.now(),
+        mode: params.get('mode') || 'paynow'
+      }));
+    } catch(e){}
+  })();
+
   window.KKD_MODIFY = {
     mount: 'modifyMount',
     note: 'Add or remove items before your order is confirmed',

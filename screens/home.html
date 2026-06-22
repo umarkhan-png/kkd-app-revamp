@@ -3747,15 +3747,17 @@
     // · tile 2 (Chakrawarti, data-demo-case="B") → cart adds a brand-new product on top of the recent order → diff/merge branch
     (function(){
       var SEED = {
-        A: { recent: ['humic'],      cart: ['humic']      },
-        B: { recent: ['humic','npk'], cart: ['chakrawarti'] }
+        // Case A · cart is the same item already in the recent order → modal asks "merge or discard"
+        A: { recent: ['humic'], qtys: { humic: 1 },                                   cart: ['humic']                },
+        // Case B · recent has 3 items at qty 1/2/3; cart bumps one (humic) and adds a brand-new product (bhumiraja)
+        B: { recent: ['humic','chakrawarti','npk'], qtys: { humic:1, chakrawarti:2, npk:3 }, cart: ['humic','bhumiraja'] }
       };
       document.querySelectorAll('.ba-reorder[data-demo-case]').forEach(function(a){
         a.addEventListener('click', function(e){
           var c = a.getAttribute('data-demo-case');
           var s = SEED[c]; if (!s) return;
           try {
-            localStorage.setItem('kkd.lastOrder', JSON.stringify({ id:'KKD-26194-7821', items:s.recent, ts:Date.now(), mode:'paynow' }));
+            localStorage.setItem('kkd.lastOrder', JSON.stringify({ id:'KKD-26194-7821', items:s.recent, qtys:s.qtys, ts:Date.now(), mode:'paynow' }));
             localStorage.setItem('kkd.cart', JSON.stringify(s.cart));
             localStorage.removeItem('kkd.mergeInfo');
           } catch(_) {}

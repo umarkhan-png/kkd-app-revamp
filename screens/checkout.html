@@ -172,6 +172,8 @@
   .om-btn{width:100%;height:48px;border-radius:12px;border:0;font-size:14.5px;font-weight:800;cursor:pointer;transition:transform .15s ease;font-family:inherit}
   .om-btn:active{transform:scale(.985)}
   .om-btn.primary{background:#258046;color:#FFFFFF;box-shadow:0 8px 18px -6px rgba(5,150,105,0.45)}
+  .om-btn.ghost{background:#FFFFFF;color:#475569;border:1px solid #E2E8F0}
+  .om-btn.ghost:hover{background:#F8FAFC}
 </style></head>
 <body>
 
@@ -521,34 +523,48 @@
         const onlineSave = document.getElementById('omOnlineSave');
         const chips    = ov.querySelectorAll('.om-chip');
         const confirmBtn = document.getElementById('omConfirm');
+        const discardBtn = document.getElementById('omDiscard');
         const bd = ov.querySelector('.om-bd');
 
         const cart = getCart();
         const oid = recent.id || 'KKD-26194';
+        const prevQtys = (recent.qtys && typeof recent.qtys === 'object') ? recent.qtys : {};
+        const qtyOf = (k) => (prevQtys[k] && prevQtys[k] > 0) ? prevQtys[k] : 1;
         const prevSet = new Set(recent.items);
         const cartSet = new Set(cart);
         const updatedIds   = recent.items.filter(k => cartSet.has(k));   // in both → qty bump
         const newIds       = cart.filter(k => !prevSet.has(k));          // cart only → brand new
         const unchangedIds = recent.items.filter(k => !cartSet.has(k));  // prev only → no change
         const isCaseA = !newIds.length && updatedIds.length === cart.length; // every cart item is already in the recent order
+        // Merge requires at least one actual change · if nothing differs, just place the order without the sheet
+        if (!updatedIds.length && !newIds.length) { proceed(false); return; }
 
         function close(){ ov.classList.remove('open'); }
         if (bd) bd.onclick = close;
 
-        // Header · single flavour · the diff list below carries the case-specific detail (UPDATED qty bumps vs NEW additions vs IN ORDER untouched rows)
-        icEl.className = 'fa-solid fa-code-merge';
-        titleEl.textContent = 'Merge items in your recent order';
+        // Header · Case A (same item already in order) gets a distinct title + Discard option;
+        // Case B (at least one new item) uses the generic merge title
+        if (isCaseA) {
+          icEl.className = 'fa-solid fa-clone';
+          titleEl.textContent = 'Same item already in your recent order';
+          discardBtn.style.display = '';
+        } else {
+          icEl.className = 'fa-solid fa-code-merge';
+          titleEl.textContent = 'Merge items in your recent order';
+          discardBtn.style.display = 'none';
+        }
         orderIdEl.textContent = '#' + oid;
         const mergedCount = updatedIds.length + newIds.length + unchangedIds.length;
         orderCt.textContent = mergedCount + ' item' + (mergedCount > 1 ? 's' : '') + ' after merge';
 
         // Unified list · UPDATED first, NEW next, IN ORDER last so the changing items lead the view
-        function row(state, key, extra){
+        function row(state, key){
           const m = itemMeta(key);
+          const q = qtyOf(key);
           let qtyHtml = '<span class="qty">Qty 1</span>';
           let tagHtml = '', priceHtml = '';
           if (state === 'updated') {
-            qtyHtml = '<span class="qty">Qty <span class="prev">1</span><i class="fa-solid fa-arrow-right arrow"></i><span class="next">2</span></span>';
+            qtyHtml = '<span class="qty">Qty <span class="prev">' + q + '</span><i class="fa-solid fa-arrow-right arrow"></i><span class="next">' + (q + 1) + '</span></span>';
             tagHtml = '';
             priceHtml = '<span class="om-row-price">' + rupee(m.price || 0) + '</span>';
           } else if (state === 'new') {
@@ -556,7 +572,7 @@
             tagHtml = '<span class="om-tag new">New item</span>';
             priceHtml = '<span class="om-row-price">' + rupee(m.price || 0) + '</span>';
           } else {
-            qtyHtml = '<span class="qty">Qty 1</span>';
+            qtyHtml = '<span class="qty">Qty ' + q + '</span>';
             tagHtml = '<span class="om-tag unchanged">In order</span>';
             priceHtml = '<span class="om-row-price none">No change</span>';
           }
@@ -578,15 +594,15 @@
         listEl.innerHTML = html;
 
         // Pay totals
-        //   extra        = qty-bump prices + new-item prices (the line items being added now)
-        //   prevTotal    = the recent order's total (sum of all its items' prices)
-        //   mergedTotal  = prevTotal + extra (what the order is worth after merge, gross)
-        //   onlineTotal  = extra − 5% (what the user pays online · COD pays the full extra)
+        //   extra        = qty-bump prices (+1 per updated item) + new-item prices
+        //   prevTotal    = the recent order's total (sum of items × their qtys)
+        //   mergedTotal  = prevTotal + extra
+        //   onlineTotal  = extra − 5%
         let extra = 0;
         updatedIds.forEach(k => { extra += (itemMeta(k).price || 0); });
         newIds.forEach(k => { extra += (itemMeta(k).price || 0); });
         let prevTotal = 0;
-        recent.items.forEach(k => { prevTotal += (itemMeta(k).price || 0); });
+        recent.items.forEach(k => { prevTotal += (itemMeta(k).price || 0) * qtyOf(k); });
         const onlineDiscount = Math.round(extra * 0.05);
         const onlineTotal = Math.max(0, extra - onlineDiscount);
 
@@ -629,12 +645,19 @@
               updated: updatedIds.slice(),
               added: newIds.slice(),
               unchanged: unchangedIds.slice(),
+              prevQtys: prevQtys,
               method: selected,
               amountPaid: pay
             }));
           } catch(e){}
           close();
           proceed(true);
+        };
+        discardBtn.onclick = function(){
+          // Case A discard · drop the duplicate attempt, clear cart, stay on the existing recent order
+          try { localStorage.removeItem('kkd.cart'); } catch(e){}
+          close();
+          location.href = 'order-details.html';
         };
         ov.classList.add('open');
       }
@@ -731,6 +754,7 @@
       </div>
       <div class="om-actions">
         <button type="button" class="om-btn primary" id="omConfirm">Pay ₹0 &amp; Merge order</button>
+        <button type="button" class="om-btn ghost" id="omDiscard" style="display:none">Discard</button>
       </div>
     </div>
   </div>

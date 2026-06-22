@@ -564,14 +564,16 @@
         return { key:d.key, name:m.name, sub:m.sub + ' · Qty ' + d.qty, price:m.price * d.qty, img:m.img };
       });
     }
+    const prevQtys = (info.prevQtys && typeof info.prevQtys === 'object') ? info.prevQtys : {};
+    const qFor = function(k){ return (prevQtys[k] && prevQtys[k] > 0) ? prevQtys[k] : 1; };
     const rows = [];
     (info.unchanged || []).forEach(function(k){
-      const m = _meta(k);
-      rows.push({ key:k, name:m.name, sub:m.sub + ' · Qty 1', price:m.price, img:m.img });
+      const m = _meta(k); const q = qFor(k);
+      rows.push({ key:k, name:m.name, sub:m.sub + ' · Qty ' + q, price:m.price * q, img:m.img });
     });
     (info.updated || []).forEach(function(k){
-      const m = _meta(k);
-      rows.push({ key:k, name:m.name, sub:m.sub + ' · Qty 2', price:m.price * 2, img:m.img });
+      const m = _meta(k); const q = qFor(k) + 1;
+      rows.push({ key:k, name:m.name, sub:m.sub + ' · Qty ' + q, price:m.price * q, img:m.img });
     });
     (info.added || []).forEach(function(k){
       const m = _meta(k);

@@ -555,7 +555,7 @@
         }
         orderIdEl.textContent = '#' + oid;
         const mergedCount = updatedIds.length + newIds.length + unchangedIds.length;
-        orderCt.textContent = mergedCount + ' item' + (mergedCount > 1 ? 's' : '') + ' after merge';
+        orderCt.textContent = mergedCount + ' item' + (mergedCount > 1 ? 's' : '') + (isCaseA ? '' : ' after merge');
 
         // Unified list · UPDATED first, NEW next, IN ORDER last so the changing items lead the view
         function row(state, key){
@@ -607,8 +607,8 @@
         const onlineTotal = Math.max(0, extra - onlineDiscount);
 
         let addLabelBits = [];
-        if (updatedIds.length) addLabelBits.push(updatedIds.length + '× Qty +1');
-        if (newIds.length)     addLabelBits.push(newIds.length + '× new');
+        if (!isCaseA && updatedIds.length) addLabelBits.push(updatedIds.length + '× Qty +1');
+        if (newIds.length)                 addLabelBits.push(newIds.length + '× new');
         payAddLbl.innerHTML = 'Adding now' + (addLabelBits.length ? ' <span style="color:#94A3B8;font-weight:600">· ' + addLabelBits.join(' · ') + '</span>' : '');
         payPrev.textContent = rupee(prevTotal);
         payAdd.textContent  = rupee(extra);

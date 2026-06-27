@@ -56,10 +56,12 @@
   .low-stock{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#DC2626;background:#FEF2F2;border:1px solid #FECACA;padding:4px 10px;border-radius:9999px}
   .low-stock i{font-size:10px}
   /* Wallet + Coins effective price · tappable inline link sitting beside the MRP · "or buy at ₹0 how?" opens a sheet explaining the wallet ₹540 + coins ₹120 maths · grey normal-weight label, coloured amount, plain "how?" — all Poppins */
-  .wc-link{display:inline-flex;align-items:baseline;gap:4px;padding:0;background:none;border:0;cursor:pointer;font-size:12.5px;line-height:1;font-family:'Poppins',system-ui,sans-serif}
+  .wc-link{display:inline-flex;align-items:center;gap:5px;padding:0;background:none;border:0;cursor:pointer;font-size:12.5px;line-height:1;font-family:'Poppins',system-ui,sans-serif}
   .wc-or{color:#94A3B8;font-weight:400}
   .wc-link b{color:#0C831F;font-weight:900}
-  .wc-how{color:#64748B;font-weight:500;text-decoration:underline;text-decoration-style:dashed;text-decoration-color:#B6C0CE;text-underline-offset:3px}
+  /* "how?" → neutral grey chip · reads as tappable without an underline or colour highlight */
+  .wc-how{color:#64748B;font-weight:600;font-size:11px;background:#EEF1F5;border:1px solid #E2E8F0;border-radius:9999px;padding:2px 8px}
+  .wc-how:active{background:#E2E8F0}
   /* "How you pay" breakdown sheet (reuses the trust-sheet shell) */
   .wc-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:10px 0;border-bottom:1px dashed #EAE0CA}
   .wc-row .kw{display:flex;flex-direction:column;gap:2px}
@@ -233,7 +235,7 @@
         <span class="text-[28px] font-black tnum text-[#0F172A]">₹376</span>
         <span class="text-[14px] text-[#94A3B8] line-through tnum">₹520</span>
         <!-- Wallet + Coins effective price · sits beside the MRP · taps open the "how you pay" sheet · ₹0 when ₹540 wallet + 120 coins fully cover the pack · recomputes per pack -->
-        <button class="wc-link" id="wcLink"><span class="wc-or">or buy at</span> <b class="tnum" id="wcEff">₹0</b> <span class="wc-how">how?</span></button>
+        <button class="wc-link" id="wcLink"><span class="wc-or">buy at</span> <b class="tnum" id="wcEff">₹0</b> <span class="wc-how">how?</span></button>
       </div>
       <div class="text-[12.5px] font-semibold mt-0.5" style="color:#258046">28% off · You save ₹144</div>
     </div>
@@ -1048,8 +1050,8 @@
         packEl.textContent = sizeTxt ? 'Pack · ' + sizeTxt : '';
         breakEl.innerHTML =
           row('Pack price', inr(p)) +
-          rowSub('Wallet balance', inr(WC_WALLET - wUsed) + ' left', '−' + inr(wUsed)) +
-          rowSub('Krishi coins', (WC_COINS - cUsed) + ' coins left', '−' + inr(cUsed)) +
+          rowSub('Wallet', inr(WC_WALLET - wUsed) + ' balance', '−' + inr(wUsed)) +
+          rowSub('Krishi coins', (WC_COINS - cUsed) + ' coins balance', '−' + inr(cUsed)) +
           row('You pay', inr(pay), 'tot');
       }
       function open(){ render(); bd.classList.add('open'); sheet.classList.add('open'); }

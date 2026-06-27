@@ -720,8 +720,10 @@
         const partialChip = document.getElementById('omPartialChip');
         const partialSub  = document.getElementById('omPartialSub');
         const payPrevLbl  = document.getElementById('omPayPrevLabel');
-        const advNote     = document.getElementById('omAdvNote');
-        const advNoteTx   = advNote ? advNote.querySelector('span') : null;
+        const payPaidRow  = document.getElementById('omPayPaidRow');
+        const payPaid     = document.getElementById('omPayPaid');
+        const payRemainRow= document.getElementById('omPayRemainRow');
+        const payRemain   = document.getElementById('omPayRemain');
         if (paynowChip && paynowChip.dataset.orig === undefined) paynowChip.dataset.orig = paynowChip.innerHTML;
         let currentPayNow = 0;
 
@@ -739,37 +741,31 @@
           if (partialChip) partialChip.style.display = 'none';
           if (codChip){ codChip.classList.remove('disabled','full'); codChip.removeAttribute('aria-disabled'); }
         }
-        if (advNote) advNote.style.display = advanceRegime ? 'flex' : 'none';
 
         function applyChip(){
           chips.forEach(c => c.setAttribute('aria-checked', c.dataset.pay === selected ? 'true' : 'false'));
           if (advanceRegime){
-            // Transparent breakdown: Previous order + This order = Total · then Already paid · You pay now
+            // Transparent breakdown: Previous order + This order = Total · Already paid · Remaining · You pay now
+            const remaining = Math.max(0, mergedOrderValue - alreadyPaid);
             const payNow = (selected === 'advpartial') ? advanceMin : fullPrepaidNow;
             currentPayNow = payNow;
+            payDiscRow.style.display = 'none';
             if (payPrevLbl) payPrevLbl.textContent = 'Previous order';
             payPrev.textContent = rupee(prevTotal);
             if (payAddLbl) payAddLbl.textContent = 'This order (adding)';
             payAdd.textContent = rupee(extra);
             payMerged.textContent = rupee(mergedOrderValue);
-            if (alreadyPaid > 0){
-              payDiscRow.style.display = 'flex';
-              var dl = payDiscRow.querySelector('span'); if (dl) dl.textContent = 'Already paid';
-              payDisc.textContent = '−' + rupee(alreadyPaid);
-            } else { payDiscRow.style.display = 'none'; }
+            if (alreadyPaid > 0){ payPaidRow.style.display = 'flex'; payPaid.textContent = '−' + rupee(alreadyPaid); } else { payPaidRow.style.display = 'none'; }
+            if (payRemainRow){ payRemainRow.style.display = 'flex'; payRemain.textContent = rupee(remaining); }
             payTotal.textContent = rupee(payNow);
-            const balance = Math.max(0, (mergedOrderValue - alreadyPaid) - payNow);   // collected on delivery
-            if (advNoteTx){
-              advNoteTx.innerHTML = (selected === 'advpartial')
-                ? 'Order is above ₹10,000 — COD unavailable. Pay <b>' + rupee(payNow) + '</b> (10%) advance now · <b>' + rupee(balance) + '</b> on delivery.'
-                : 'Order is above ₹10,000 — COD unavailable. Pay the full <b>' + rupee(payNow) + '</b> now' + (alreadyPaid > 0 ? ' (' + rupee(alreadyPaid) + ' already paid).' : '.');
-            }
             confirmBtn.textContent = (selected === 'advpartial' ? 'Pay ' + rupee(payNow) + ' advance' : 'Pay ' + rupee(payNow)) + ' & Merge';
             return;
           }
           // Normal regime · pay the newly-added amount online (5% off) or as COD
           if (payPrevLbl) payPrevLbl.textContent = 'Previous order paid';
           var dl2 = payDiscRow.querySelector('span'); if (dl2) dl2.textContent = 'Pay Online discount (5%)';
+          if (payPaidRow) payPaidRow.style.display = 'none';
+          if (payRemainRow) payRemainRow.style.display = 'none';
           const pay = selected === 'paynow' ? onlineTotal : extra;
           currentPayNow = pay;
           const merged = prevTotal + pay;
@@ -887,6 +883,8 @@
           <div class="om-pay-row sub" id="omPayDiscRow" style="display:none"><span>Pay Online discount (5%)</span><span id="omPayDisc" class="tnum">−₹0</span></div>
           <div class="om-pay-divider"></div>
           <div class="om-pay-row total"><span>Total order value</span><b id="omPayMerged" class="tnum">₹0</b></div>
+          <div class="om-pay-row sub" id="omPayPaidRow" style="display:none"><span>Already paid</span><span id="omPayPaid" class="tnum">−₹0</span></div>
+          <div class="om-pay-row sub" id="omPayRemainRow" style="display:none"><span>Remaining</span><span id="omPayRemain" class="tnum">₹0</span></div>
           <div class="om-pay-row hi"><span>You pay now</span><b id="omPayTotal" class="tnum">₹0</b></div>
           <div class="om-pay-method-label">Choose how to pay</div>
           <div class="om-pay-chips" role="radiogroup">
@@ -904,8 +902,6 @@
               <div class="lab"><b>Cash on Delivery</b><span>Pay when it arrives</span></div>
             </button>
           </div>
-          <!-- Advance-payment note · shown when the MERGED total crosses ₹10,000 (e.g. an ₹8k order + ₹2k addition) · COD chip is disabled above -->
-          <div class="om-adv-note" id="omAdvNote"><i class="fa-solid fa-shield-halved"></i><span>Merged order is above ₹10,000 — a 10% advance must be paid online, so Cash on Delivery isn't available. Balance is collected on delivery.</span></div>
         </div>
       </div>
       <div class="om-actions">

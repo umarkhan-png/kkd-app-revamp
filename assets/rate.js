@@ -27,7 +27,16 @@
     '.kr-testi-sub{font-size:11px;color:#64748B;margin-top:3px;line-height:1.35}' +
     '.kr-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;margin-top:11px;min-height:88px;border:1.5px dashed #A7F3D0;border-radius:12px;background:#FFFFFF;color:#258046;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center;padding:12px}' +
     '.kr-upload i{font-size:22px}' +
-    '.kr-upload.has{border-style:solid;border-color:#258046;background:#ECFDF5}';
+    '.kr-upload.has{border-style:solid;border-color:#258046;background:#ECFDF5}' +
+    '.kr-crop-h{font-size:13.5px;font-weight:800;color:#0F172A;margin:14px 0 8px}' +
+    '.kr-crop-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}' +
+    '.kr-crop-tile{position:relative;display:flex;flex-direction:column;align-items:center;padding:10px;border-radius:12px;background:#fff;border:2px solid #E2E8F0;cursor:pointer;font-family:inherit}' +
+    '.kr-crop-tile.on{border-color:#258046;background:#ECFDF5}' +
+    '.kr-crop-tile .ci{width:48px;height:48px;border-radius:9999px;overflow:hidden;margin-bottom:6px;display:flex;align-items:center;justify-content:center;font-size:24px;background:#F1F5F9}' +
+    '.kr-crop-tile .ci img{width:100%;height:100%;object-fit:cover}' +
+    '.kr-crop-tile .cl{font-size:11.5px;font-weight:700;color:#0F172A}' +
+    '.kr-crop-chk{position:absolute;top:5px;right:5px;width:18px;height:18px;border-radius:9999px;background:#258046;color:#fff;display:none;align-items:center;justify-content:center;font-size:8px}' +
+    '.kr-crop-tile.on .kr-crop-chk{display:flex}';
 
   var MARKUP = '' +
     '<div class="kr-backdrop" style="position:absolute;inset:0;background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>' +
@@ -48,10 +57,12 @@
         '<textarea class="kr-review" placeholder="Write a quick review — how did it work on your crop?"></textarea>' +
         '<label class="kr-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input class="kr-media" type="file" accept="image/*,video/*" capture="environment" multiple style="display:none"/></label>' +
         '<div class="kr-attach-info"><i class="fa-solid fa-paperclip"></i> <span></span></div>' +
+        '<div class="kr-crop-h">Select crop</div>' +
+        '<div class="kr-crop-grid"></div>' +
         '<div class="kr-testi">' +
           '<div class="kr-testi-h"><i class="fa-solid fa-bullhorn" style="color:#258046"></i> Share a testimonial <span><i class="fa-solid fa-coins"></i> +25 coins</span></div>' +
-          '<div class="kr-testi-sub">Upload a short video to help other farmers</div>' +
-          '<label class="kr-upload kr-testibox"><i class="fa-solid fa-cloud-arrow-up"></i><span class="kr-testilabel">Upload video testimonial</span><input class="kr-testi-input" type="file" accept="video/*" style="display:none"/></label>' +
+          '<div class="kr-testi-sub">Upload a short photo or video to help other farmers</div>' +
+          '<label class="kr-upload kr-testibox"><i class="fa-solid fa-cloud-arrow-up"></i><span class="kr-testilabel">Upload photo / video testimonial</span><input class="kr-testi-input" type="file" accept="image/*,video/*" style="display:none"/></label>' +
         '</div>' +
       '</div>' +
       '<div style="flex-shrink:0;padding:8px 20px;border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px)">' +
@@ -59,8 +70,19 @@
       '</div>' +
     '</div>';
 
-  var ov, bg, pnl, stars, nameEl, imgEl, textEl, media, mediaInfo, testi, testiBox, testiLabel, submit;
-  var rating = 0, testiUp = false, onSubmit = null;
+  var ov, bg, pnl, stars, nameEl, imgEl, textEl, media, mediaInfo, testi, testiBox, testiLabel, submit, cropGrid;
+  var rating = 0, testiUp = false, onSubmit = null, krCrops = null;
+  var CROPS = [
+    { k:'tomato', label:'Tomato', emoji:'🍅', img:'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=128&q=80&fit=crop' },
+    { k:'chilli', label:'Chilli', emoji:'🌶️', img:'https://images.unsplash.com/photo-1583852048850-31c0d0e7cdde?w=128&q=80&fit=crop' },
+    { k:'wheat', label:'Wheat', emoji:'🌾', img:'https://images.unsplash.com/photo-1574226516831-e1dff420e562?w=128&q=80&fit=crop' },
+    { k:'maize', label:'Maize', emoji:'🌽', img:'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=128&q=80&fit=crop' },
+    { k:'cotton', label:'Cotton', emoji:'☁️', img:'https://images.unsplash.com/photo-1591885503007-9b80d9c89a52?w=128&q=80&fit=crop' },
+    { k:'sugarcane', label:'Sugarcane', emoji:'🎋', img:'https://images.unsplash.com/photo-1597106776019-b4ecc878c202?w=128&q=80&fit=crop' },
+    { k:'paddy', label:'Paddy', emoji:'🌱', img:'https://images.unsplash.com/photo-1568347877321-f8935c7dc5a8?w=128&q=80&fit=crop' },
+    { k:'onion', label:'Onion', emoji:'🧅', img:'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=128&q=80&fit=crop' },
+    { k:'potato', label:'Potato', emoji:'🥔', img:'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=128&q=80&fit=crop' }
+  ];
 
   function setStars(v) { rating = v; stars.forEach(function (s, i) { s.classList.toggle('on', i < v); }); }
   function syncSubmit() { var ok = (textEl.value.trim().length > 0) || testiUp; submit.disabled = !ok; submit.style.opacity = ok ? '1' : '.55'; }
@@ -83,10 +105,20 @@
     textEl = ov.querySelector('.kr-review'); media = ov.querySelector('.kr-media'); mediaInfo = ov.querySelector('.kr-attach-info');
     testi = ov.querySelector('.kr-testi-input'); testiBox = ov.querySelector('.kr-testibox'); testiLabel = ov.querySelector('.kr-testilabel');
     submit = ov.querySelector('.kr-submit');
+    // Select-crop grid (multi-select) · same image-tile UI as the All-Crops sheet
+    cropGrid = ov.querySelector('.kr-crop-grid'); krCrops = new Set();
+    if (cropGrid) {
+      cropGrid.innerHTML = CROPS.map(function (c) {
+        return '<button type="button" class="kr-crop-tile" data-k="' + c.k + '"><span class="ci"><img src="' + c.img + '" onerror="this.parentNode.textContent=\'' + c.emoji + '\'"/></span><span class="cl">' + c.label + '</span><span class="kr-crop-chk"><i class="fa-solid fa-check"></i></span></button>';
+      }).join('');
+      cropGrid.querySelectorAll('.kr-crop-tile').forEach(function (t) {
+        t.addEventListener('click', function () { var k = t.dataset.k; if (krCrops.has(k)) { krCrops.delete(k); t.classList.remove('on'); } else { krCrops.add(k); t.classList.add('on'); } });
+      });
+    }
     stars.forEach(function (s) { s.addEventListener('click', function () { setStars(parseInt(s.dataset.v, 10)); }); });
     textEl.addEventListener('input', syncSubmit);
     media.addEventListener('change', function () { var n = media.files ? media.files.length : 0; if (n) { mediaInfo.style.display = 'block'; mediaInfo.querySelector('span').textContent = n + ' file' + (n > 1 ? 's' : '') + ' attached'; } else mediaInfo.style.display = 'none'; });
-    testi.addEventListener('change', function () { testiUp = !!(testi.files && testi.files.length); if (testiUp) { testiBox.classList.add('has'); testiLabel.innerHTML = '<i class="fa-solid fa-circle-check"></i> Testimonial added'; } else { testiBox.classList.remove('has'); testiLabel.textContent = 'Upload video testimonial'; } syncSubmit(); });
+    testi.addEventListener('change', function () { testiUp = !!(testi.files && testi.files.length); if (testiUp) { testiBox.classList.add('has'); testiLabel.innerHTML = '<i class="fa-solid fa-circle-check"></i> Testimonial added'; } else { testiBox.classList.remove('has'); testiLabel.textContent = 'Upload photo / video testimonial'; } syncSubmit(); });
     ov.querySelector('.kr-close').addEventListener('click', close);
     bg.addEventListener('click', close);
     submit.addEventListener('click', function () {
@@ -110,7 +142,8 @@
     imgEl.src = opts.img || '';
     setStars(opts.rating || 0);
     textEl.value = ''; mediaInfo.style.display = 'none'; if (media) media.value = '';
-    testiUp = false; if (testi) testi.value = ''; testiBox.classList.remove('has'); testiLabel.textContent = 'Upload video testimonial';
+    testiUp = false; if (testi) testi.value = ''; testiBox.classList.remove('has'); testiLabel.textContent = 'Upload photo / video testimonial';
+    if (krCrops) { krCrops.clear(); if (cropGrid) cropGrid.querySelectorAll('.kr-crop-tile.on').forEach(function (t) { t.classList.remove('on'); }); }
     syncSubmit();
     ov.style.display = 'block';
     requestAnimationFrame(function () { bg.style.opacity = '1'; pnl.style.transform = 'translateY(0)'; });

@@ -1555,13 +1555,8 @@
         .cp-prod-add:active{transform:scale(.98)}
         .cp-rec-all{display:flex;align-items:center;justify-content:center;gap:6px;height:38px;border-radius:10px;background:#ECFDF5;border:1px solid #BBF7D0;color:#258046;font-size:12.5px;font-weight:800;text-decoration:none;margin-top:11px}
         .cp-rec-all i{font-size:10px}
-        /* Image quiz widget · single-answer, image-based options (sits below the crop widget) */
-        .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
-        .quiz-opt{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:11px;border:1.5px solid #E5E7EB;background:#fff;cursor:pointer;font-family:inherit;text-align:left}
-        .quiz-opt:active{transform:scale(.98)}
-        .quiz-opt .qi{width:34px;height:34px;border-radius:8px;overflow:hidden;flex-shrink:0;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:16px}
-        .quiz-opt .qi img{width:100%;height:100%;object-fit:cover}
-        .quiz-opt .ql{font-size:12.5px;font-weight:700;color:#0F172A}
+        /* Image quiz widget · one photo, single-answer crop choices (sits below the crop widget) */
+        .quiz-img{width:100%;height:150px;object-fit:cover;border-radius:12px;margin:4px 0 10px;background:#F1F5F9;display:block}
       </style>
       <div class="px-4 space-y-3" id="engRow">
 
@@ -1582,21 +1577,22 @@
             <div class="eng-done"><div class="ic">🌾</div><div class="t">+15 coins earned!</div><div class="s">Thanks — we'll tailor your feed</div></div>
           </div>
 
-          <!-- Image quiz · single-answer · image-based options · sits right below the crop widget -->
-          <div class="eng-card" id="cropStageCard">
+          <!-- Image quiz · one photo + single-answer crop choices · "which crop's disease is this?" -->
+          <div class="eng-card" id="cropDiseaseCard">
             <div class="eng-head">
-              <span class="eng-ic" style="background:#ECFDF5;color:#258046"><i class="fa-solid fa-seedling"></i></span>
-              <div class="eng-q">Which stage is your crop in?</div>
+              <span class="eng-ic" style="background:#FEE2E2;color:#DC2626"><i class="fa-solid fa-bug"></i></span>
+              <div class="eng-q">Which crop's disease is this?</div>
               <span class="eng-coin"><i class="fa-solid fa-coins"></i> +15</span>
               <button class="eng-close" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="quiz-opts">
-              <button class="quiz-opt" data-reward><span class="qi"><img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=96&q=80&fit=crop" onerror="this.parentNode.textContent='🌱'"/></span><span class="ql">Sowing</span></button>
-              <button class="quiz-opt" data-reward><span class="qi"><img src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=96&q=80&fit=crop" onerror="this.parentNode.textContent='🌿'"/></span><span class="ql">Growing</span></button>
-              <button class="quiz-opt" data-reward><span class="qi"><img src="https://images.unsplash.com/photo-1597106776019-b4ecc878c202?w=96&q=80&fit=crop" onerror="this.parentNode.textContent='🌼'"/></span><span class="ql">Flowering</span></button>
-              <button class="quiz-opt" data-reward><span class="qi"><img src="https://images.unsplash.com/photo-1574226516831-e1dff420e562?w=96&q=80&fit=crop" onerror="this.parentNode.textContent='🌾'"/></span><span class="ql">Harvest</span></button>
+            <img class="quiz-img" src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=480&q=80&fit=crop" alt="Crop disease" onerror="this.style.display='none'"/>
+            <div class="eng-opts">
+              <button class="eng-chip" data-reward>Tomato</button>
+              <button class="eng-chip" data-reward>Chilli</button>
+              <button class="eng-chip" data-reward>Cotton</button>
+              <button class="eng-chip" data-reward>Wheat</button>
             </div>
-            <div class="eng-done"><div class="ic">✅</div><div class="t">+15 coins earned!</div><div class="s">Thanks — we'll time your tips</div></div>
+            <div class="eng-done"><div class="ic">✅</div><div class="t">+15 coins earned!</div><div class="s">Thanks — sharpening our crop-disease AI</div></div>
           </div>
 
           <!-- Crop problem -->

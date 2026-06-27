@@ -394,6 +394,23 @@
       const ca  = document.getElementById('codAmt');    if (ca)  ca.textContent  = fmt(SUBTOTAL);
     })();
 
+    // Real cart → checkout · reflect the actual cart value (persisted by cart.html) so the order value is live and the
+    // >₹10,000 COD rule triggers naturally when the cart crosses the threshold. ?big demos override this.
+    (function(){
+      if (IS_BIG) return;
+      try {
+        const c = JSON.parse(localStorage.getItem('kkd.checkout') || 'null');
+        if (!c || !c.subtotal) return;
+        SUBTOTAL = c.subtotal;
+        const vals = document.querySelectorAll('.card .bill-row .val');
+        if (vals[0] && c.itemsTotal) vals[0].innerHTML = fmt(c.itemsTotal);
+        document.querySelectorAll('.card .bill-row .lbl').forEach(l => { if (/^Items/.test(l.textContent)) l.textContent = 'Items (' + (c.count || 3) + ')'; });
+        const st = document.querySelector('.sticky-sum .ttl'); if (st && c.count) st.textContent = c.count + (c.count === 1 ? ' item' : ' items');
+        const pna = document.getElementById('payNowAmt'); if (pna) pna.textContent = fmt(SUBTOTAL - Math.round(SUBTOTAL * 0.05) - 190 - 540);
+        const ca  = document.getElementById('codAmt');    if (ca)  ca.textContent  = fmt(SUBTOTAL);
+      } catch (e) {}
+    })();
+
     const COIN_REDEEM = 190;   // capped Krishi Coins redemption (1 coin = ₹1) · now auto-applied (toggle section removed) and shown as a bill line
     let coinsRedeem = COIN_REDEEM;
     const WALLET_BALANCE = 540;   // money wallet · MANDATORY auto-apply (capped to the order)

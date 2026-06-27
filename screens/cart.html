@@ -642,6 +642,8 @@
       set('billWalletVal', '− ₹' + wallet.toLocaleString('en-IN'));
       const coinRow = document.getElementById('coinBillRow'); if (coinRow) coinRow.style.display = coinOn ? 'flex' : 'none';
       set('cartBillTotal', '₹' + cartTotal.toLocaleString('en-IN'));
+      // Persist the live cart value so checkout reflects the real order (and the >₹10,000 COD rule can trigger)
+      try { localStorage.setItem('kkd.checkout', JSON.stringify({ itemsTotal: sub, subtotal: afterDisc, count: lines })); } catch (e) {}
       updateSticky();
     }
     function updateSticky(){

@@ -54,10 +54,11 @@
   @keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(249,115,22,0.5)}100%{box-shadow:0 0 0 8px rgba(249,115,22,0)}}
   .low-stock{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#DC2626;background:#FEF2F2;border:1px solid #FECACA;padding:4px 10px;border-radius:9999px}
   .low-stock i{font-size:10px}
-  /* Wallet + Coins effective price · tappable link right under the price · "…or buy at ₹0" opens a small sheet explaining how (wallet ₹540 + coins ₹120 auto-applied) · near-zero vertical footprint */
-  .wc-link{display:inline-flex;align-items:center;gap:5px;margin-top:5px;padding:0;background:none;border:0;cursor:pointer;font-size:12.5px;font-weight:800;color:#0C831F;line-height:1}
-  .wc-link b{font-weight:900;border-bottom:1.5px solid rgba(12,131,31,.35);padding-bottom:1px}
-  .wc-link i{font-size:11px;color:#0C831F;opacity:.85}
+  /* Wallet + Coins effective price · tappable inline link sitting beside the MRP · "or buy at ₹0 how?" opens a sheet explaining the wallet ₹540 + coins ₹120 maths · grey label, coloured amount, underlined "how?" */
+  .wc-link{display:inline-flex;align-items:baseline;gap:4px;padding:0;background:none;border:0;cursor:pointer;font-size:12.5px;line-height:1}
+  .wc-or{color:#94A3B8;font-weight:600}
+  .wc-link b{color:#0C831F;font-weight:900}
+  .wc-how{color:#0C831F;font-weight:800;text-decoration:underline;text-underline-offset:2px}
   /* "How you pay" breakdown sheet (reuses the trust-sheet shell) */
   .wc-hd{display:flex;align-items:center;gap:11px;margin-bottom:14px}
   .wc-hic{width:40px;height:40px;border-radius:9999px;background:linear-gradient(135deg,#FDE68A,#F59E0B);color:#78350F;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 5px 12px -4px rgba(245,158,11,.55)}
@@ -229,13 +230,13 @@
 <div class="px-4 mt-4 flex items-center justify-between gap-3" id="priceRow">
   <div class="price-add">
     <div>
-      <div class="flex items-baseline gap-2">
+      <div class="flex items-baseline gap-2 flex-wrap">
         <span class="text-[28px] font-black tnum text-[#0F172A]">₹376</span>
         <span class="text-[14px] text-[#94A3B8] line-through tnum">₹520</span>
+        <!-- Wallet + Coins effective price · sits beside the MRP · taps open the "how you pay" sheet · ₹0 when ₹540 wallet + 120 coins fully cover the pack · recomputes per pack -->
+        <button class="wc-link" id="wcLink"><span class="wc-or">or buy at</span> <b class="tnum" id="wcEff">₹0</b> <span class="wc-how">how?</span></button>
       </div>
       <div class="text-[12.5px] font-semibold mt-0.5" style="color:#258046">28% off · You save ₹144</div>
-      <!-- Wallet + Coins effective price · tappable link under the price · taps open the "how you pay" sheet · ₹0 when ₹540 wallet + 120 coins fully cover the pack · recomputes per pack -->
-      <button class="wc-link" id="wcLink">…or buy at <b class="tnum" id="wcEff">₹0</b> <i class="fa-solid fa-circle-info"></i></button>
     </div>
   </div>
   <div>

@@ -86,6 +86,16 @@
   .bill-total{border-top:1px dashed #CBD5E1;margin-top:8px;padding-top:10px;display:flex;align-items:baseline;justify-content:space-between}
   .bill-total .lbl{font-size:14px;font-weight:800}
   .bill-total .val{font-size:18px;font-weight:800}
+  /* Advance-payment rule · orders above ₹10,000 need a 10% online advance · COD is then unavailable */
+  .adv-banner{display:flex;gap:10px;align-items:flex-start;margin:0 0 12px;padding:11px 13px;border-radius:12px;background:#FFF7ED;border:1px solid #FED7AA}
+  .adv-banner > i{color:#EA580C;font-size:15px;margin-top:2px;flex-shrink:0}
+  .adv-banner b{color:#9A3412;font-weight:800}
+  .adv-banner > div{display:flex;flex-direction:column;gap:2px;font-size:12px;line-height:1.5;color:#9A3412}
+  .adv-banner span{font-weight:600}
+  /* Merge sheet · COD chip disabled state when the merged total crosses ₹10,000 */
+  .om-chip.disabled{opacity:.5;pointer-events:none;position:relative}
+  .om-adv-note{display:none;gap:8px;align-items:flex-start;margin-top:10px;padding:10px 12px;border-radius:10px;background:#FFF7ED;border:1px solid #FED7AA;font-size:11.5px;font-weight:600;line-height:1.5;color:#9A3412}
+  .om-adv-note i{color:#EA580C;font-size:11px;margin-top:2px;flex-shrink:0}
 
   /* Sticky place-order CTA · amount + item count live OUTSIDE the button (left column) · button is roughly 2/3 of the row width on the right · mirrors the cart pattern */
   .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 14px;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -268,6 +278,14 @@
   <!-- Payment method · 3 rows · Pay Now (5% off, recommended) · Partial (with %-pills + breakdown when active) · Cash on Delivery · each row shows the amount inline -->
   <div class="sec-title">Payment method</div>
   <div class="pay-card">
+    <!-- Advance-payment banner · shown only when the order value is above ₹10,000 · 10% online advance mandatory, COD disabled below -->
+    <div id="advBanner" class="adv-banner" style="display:none">
+      <i class="fa-solid fa-shield-halved"></i>
+      <div>
+        <b>10% advance payment required</b>
+        <span>This order is above ₹10,000, so <b id="advAmt">₹1,240</b> must be paid online now. Cash on Delivery isn't available — pay the balance on delivery.</span>
+      </div>
+    </div>
     <!-- Pay Now · payment icon column dropped · RECOMMENDED chip sits inline next to the name -->
     <label class="pay active" data-pay="paynow">
       <span class="pay-head">
@@ -368,9 +386,24 @@
 
   <script>
     // Payment state + math · subtotal is the after-coupon amount (₹1,900) · Pay Now applies 5% off (₹95) · Partial pays a % of subtotal now in cash-collect + earns 2% coins on prepaid · COD pays full subtotal
-    const SUBTOTAL = 1900;
+    let SUBTOTAL = 1900;
 
     function fmt(n){ return '₹' + n.toLocaleString('en-IN'); }
+
+    // Advance-payment rule · orders above ₹10,000 require a 10% online advance and cannot use Cash on Delivery
+    const ADVANCE_THRESHOLD = 10000, ADVANCE_PCT = 10;
+    const IS_BIG = new URLSearchParams(location.search).get('big') === '1';
+
+    // Demo · ?big=1 simulates a high-value cart (> ₹10,000) so the advance rule + COD-disable can be reviewed
+    (function(){
+      if (!IS_BIG) return;
+      SUBTOTAL = 12400;
+      const vals = document.querySelectorAll('.card .bill-row .val');
+      if (vals[0]) vals[0].innerHTML = '&#8377;13,000';   // Items
+      if (vals[1]) vals[1].innerHTML = '&minus; &#8377;500';   // Discount
+      const pna = document.getElementById('payNowAmt'); if (pna) pna.textContent = '₹11,050';
+      const ca  = document.getElementById('codAmt');    if (ca)  ca.textContent  = '₹12,400';
+    })();
 
     const COIN_REDEEM = 190;   // capped Krishi Coins redemption (1 coin = ₹1) · now auto-applied (toggle section removed) and shown as a bill line
     let coinsRedeem = COIN_REDEEM;
@@ -454,9 +487,33 @@
       if (b) b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); const pn = document.querySelector('.pay[data-pay="paynow"]'); if (pn) pn.click(); });
     })();
 
+    // Advance-payment rule · when the order value exceeds ₹10,000: show the advance banner, disable Cash on Delivery,
+    // and bounce off COD to Pay Now. The 10% floor is already enforced by the Partial tray's lowest pill (10%).
+    function applyAdvanceRule(){
+      const need = SUBTOTAL > ADVANCE_THRESHOLD;
+      const banner = document.getElementById('advBanner');
+      if (banner){
+        banner.style.display = need ? 'flex' : 'none';
+        const a = document.getElementById('advAmt'); if (a && need) a.textContent = fmt(Math.round(SUBTOTAL * ADVANCE_PCT / 100));
+      }
+      const cod = document.querySelector('.pay[data-pay="cod"]');
+      if (!cod) return;
+      const sub = cod.querySelector('.pay-sub');
+      if (need){
+        cod.style.opacity = '.55'; cod.style.pointerEvents = 'none';
+        if (sub){ if (!sub.dataset.orig) sub.dataset.orig = sub.innerHTML; sub.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:#DC2626"></i> Not available above ₹10,000 — 10% advance required'; }
+        const ce = document.getElementById('codExtra'); if (ce) ce.style.display = 'none';
+        if (currentMethod === 'cod'){ const pn = document.querySelector('.pay[data-pay="paynow"]'); if (pn) pn.click(); }
+      } else if (sub && sub.dataset.orig){
+        cod.style.opacity = ''; cod.style.pointerEvents = '';
+        sub.innerHTML = sub.dataset.orig;
+      }
+    }
+
     // Initial paint
     updatePartialSplit(currentPct);
     updateBill(currentMethod, currentPct);
+    applyAdvanceRule();
 
     // Place order · carries the chosen payment method to the success screen so the COD-pay option shows for COD/Partial
     // · if a recent order (kkd.lastOrder · placed within the last 60 minutes) exists, intercept the tap and show the merge sheet
@@ -502,6 +559,15 @@
         const s = a.slice().sort(), t = b.slice().sort();
         for (let i = 0; i < s.length; i++) if (s[i] !== t[i]) return false;
         return true;
+      }
+
+      // Demo · in ?big=1 mode, seed a recent ~₹8k order + a fresh ~₹2k item in the cart so Place Order opens the
+      // merge sheet and the >₹10,000 advance rule (COD disabled) can be reviewed end-to-end
+      if (IS_BIG && !getRecentOrder()){
+        try {
+          localStorage.setItem('kkd.lastOrder', JSON.stringify({ items:['humic','chakraveer','triple'], ts: Date.now() }));
+          localStorage.setItem('kkd.cart', JSON.stringify(['npk']));
+        } catch(e){}
       }
 
       // DOM refs are looked up lazily — modal markup sits AFTER this script
@@ -603,6 +669,8 @@
         newIds.forEach(k => { extra += (itemMeta(k).price || 0); });
         let prevTotal = 0;
         recent.items.forEach(k => { prevTotal += (itemMeta(k).price || 0) * qtyOf(k); });
+        // Demo · ?big=1 reproduces the PM's edge case — an existing ₹8k order + a fresh ₹2k addition merging past ₹10,000
+        if (IS_BIG){ prevTotal = 8200; extra = 2400; }
         const onlineDiscount = Math.round(extra * 0.05);
         const onlineTotal = Math.max(0, extra - onlineDiscount);
 
@@ -633,6 +701,23 @@
         chips.forEach(c => {
           c.onclick = function(){ selected = c.dataset.pay; applyChip(); };
         });
+
+        // Advance-payment rule on the MERGED order value · above ₹10,000 → disable COD chip, force online, show the note
+        const mergedOrderValue = prevTotal + extra;
+        const advNeed = mergedOrderValue > ADVANCE_THRESHOLD;
+        const codChip = Array.prototype.find.call(chips, c => c.dataset.pay === 'cod');
+        const advNote = document.getElementById('omAdvNote');
+        if (advNote) advNote.style.display = advNeed ? 'flex' : 'none';
+        if (codChip){
+          if (advNeed){
+            codChip.classList.add('disabled'); codChip.setAttribute('aria-disabled', 'true');
+            const s = codChip.querySelector('.lab span'); if (s) s.textContent = 'Not available above ₹10,000';
+            if (selected === 'cod') selected = 'paynow';
+          } else {
+            codChip.classList.remove('disabled'); codChip.removeAttribute('aria-disabled');
+          }
+        }
+
         applyChip();
 
         confirmBtn.onclick = function(){
@@ -750,6 +835,8 @@
               <div class="lab"><b>Cash on Delivery</b><span>Pay when it arrives</span></div>
             </button>
           </div>
+          <!-- Advance-payment note · shown when the MERGED total crosses ₹10,000 (e.g. an ₹8k order + ₹2k addition) · COD chip is disabled above -->
+          <div class="om-adv-note" id="omAdvNote"><i class="fa-solid fa-shield-halved"></i><span>Merged order is above ₹10,000 — a 10% advance must be paid online, so Cash on Delivery isn't available. Balance is collected on delivery.</span></div>
         </div>
       </div>
       <div class="om-actions">

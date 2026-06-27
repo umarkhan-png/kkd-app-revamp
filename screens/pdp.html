@@ -54,23 +54,14 @@
   @keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(249,115,22,0.5)}100%{box-shadow:0 0 0 8px rgba(249,115,22,0)}}
   .low-stock{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#DC2626;background:#FEF2F2;border:1px solid #FECACA;padding:4px 10px;border-radius:9999px}
   .low-stock i{font-size:10px}
-  /* Wallet + Coins effective-price strip · tells the farmer what they actually pay after applying available wallet balance + Krishi coins · earthy gold→mint, hand-written dashed border (farmer-first, not Partner-App) */
-  .wc-card{border:1.5px dashed #E3C77A;border-radius:16px;background:linear-gradient(135deg,#FFFBF0,#F1F9EE);padding:11px 13px}
-  .wc-top{display:flex;align-items:center;gap:10px}
-  .wc-ic{width:34px;height:34px;border-radius:9999px;background:linear-gradient(135deg,#FDE68A,#F59E0B);color:#78350F;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;box-shadow:0 4px 10px -3px rgba(245,158,11,.5)}
-  .wc-have{font-size:13.5px;font-weight:700;color:#5A3D0E}
-  .wc-have b{font-weight:900}
-  .wc-sub{font-size:11px;font-weight:600;color:#A07B2E;margin-top:1px}
-  .wc-line{border-top:1px dashed #E3C77A;margin:9px 0}
-  .wc-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
-  .wc-lbl{font-size:11.5px;font-weight:600;color:#3F6B2E}
-  .wc-eff{display:flex;align-items:baseline;gap:7px;margin-top:2px}
-  .wc-eff-amt{font-size:24px;font-weight:900;color:#0C831F;line-height:1}
-  .wc-eff-was{font-size:13px;font-weight:600;color:#94A3B8;text-decoration:line-through}
-  .wc-free{font-size:10px;font-weight:800;color:#0C831F;background:#DCFCE7;border-radius:9999px;padding:2px 7px;display:none}
-  .wc-applied{text-align:right;flex-shrink:0}
-  .wc-applied-lbl{font-size:10px;font-weight:600;color:#A07B2E;text-transform:uppercase;letter-spacing:.04em}
-  .wc-applied-amt{font-size:14px;font-weight:800;color:#B45309;margin-top:1px}
+  /* Wallet + Coins effective-price strip · compact single line · what the farmer actually pays after applying available wallet balance + Krishi coins */
+  .wc-card{display:flex;align-items:center;gap:9px;border:1.2px dashed #E3C77A;border-radius:11px;background:linear-gradient(135deg,#FFFBF0,#F1F9EE);padding:7px 11px}
+  .wc-ic{width:26px;height:26px;border-radius:9999px;background:linear-gradient(135deg,#FDE68A,#F59E0B);color:#78350F;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;box-shadow:0 3px 8px -3px rgba(245,158,11,.5)}
+  .wc-l1{display:flex;align-items:baseline;gap:6px}
+  .wc-pay{font-size:14.5px;font-weight:900;color:#0C831F;line-height:1.05}
+  .wc-eff-was{font-size:12px;font-weight:600;color:#94A3B8;text-decoration:line-through}
+  .wc-free{font-size:9.5px;font-weight:800;color:#0C831F;background:#DCFCE7;border-radius:9999px;padding:1px 6px;display:none}
+  .wc-sub{font-size:10.5px;font-weight:600;color:#A07B2E;margin-top:1px}
   /* ADD button · more prominent · bigger height + stronger emerald glow + tracked-uppercase label · stepper matches the same dimensions */
   .price-add{display:flex;align-items:center;gap:8px}
   .add-btn{height:48px;padding:0 22px;border-radius:12px;background:#258046;color:#FFFFFF;font-size:14.5px;font-weight:900;letter-spacing:0.06em;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 12px 22px -8px rgba(5,150,105,0.6),inset 0 1px 0 rgba(255,255,255,0.18);cursor:pointer;border:0;text-transform:uppercase}
@@ -249,30 +240,17 @@
   </div>
 </div>
 
-<!-- Wallet + Coins effective-price strip · what the farmer actually pays once available wallet balance (₹540) + Krishi coins (120 = ₹120) are applied · recomputes per selected pack size · ₹0 when credits cover the whole price -->
-<div class="px-4 mt-3" id="wcWrap">
+<!-- Wallet + Coins effective-price strip · compact · what the farmer pays once available wallet balance (₹540) + Krishi coins (120 = ₹120) are applied · recomputes per pack -->
+<div class="px-4 mt-2.5" id="wcWrap">
   <div class="wc-card">
-    <div class="wc-top">
-      <span class="wc-ic"><i class="fa-solid fa-piggy-bank"></i></span>
-      <div class="leading-tight">
-        <div class="wc-have">आपके पास <b class="tnum">₹660</b> जमा है</div>
-        <div class="wc-sub">₹540 wallet + 120 सिक्के (₹120)</div>
+    <span class="wc-ic"><i class="fa-solid fa-piggy-bank"></i></span>
+    <div class="leading-tight">
+      <div class="wc-l1">
+        <span class="wc-pay tnum"><span id="wcEff">₹0</span> to pay</span>
+        <span class="wc-eff-was tnum" id="wcWas">₹376</span>
+        <span class="wc-free" id="wcFree">fully covered</span>
       </div>
-    </div>
-    <div class="wc-line"></div>
-    <div class="wc-bottom">
-      <div>
-        <div class="wc-lbl">लगाने के बाद आपको देना है</div>
-        <div class="wc-eff">
-          <span class="wc-eff-amt tnum" id="wcEff">₹0</span>
-          <span class="wc-eff-was tnum" id="wcWas">₹376</span>
-          <span class="wc-free" id="wcFree">पूरा कवर!</span>
-        </div>
-      </div>
-      <div class="wc-applied">
-        <div class="wc-applied-lbl">लागू</div>
-        <div class="wc-applied-amt tnum" id="wcApplied">−₹376</div>
-      </div>
+      <div class="wc-sub"><span id="wcApplied">₹376</span> from your ₹660 wallet + coins applied</div>
     </div>
   </div>
 </div>
@@ -1043,7 +1021,8 @@
       const eff = price - applied;
       wcEff.textContent = inr(eff);
       wcWas.textContent = inr(price);
-      wcApplied.textContent = '−' + inr(applied);
+      wcApplied.textContent = inr(applied);
+      wcWas.style.display = eff === 0 ? 'none' : 'inline';   // hide struck price when nothing left to pay
       wcFree.style.display = eff === 0 ? 'inline-block' : 'none';
     }
     function showSteps(){ btn.style.display = 'none'; steps.style.display = 'flex'; }

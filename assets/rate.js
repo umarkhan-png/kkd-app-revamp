@@ -29,13 +29,20 @@
     '.kr-upload i{font-size:22px}' +
     '.kr-upload.has{border-style:solid;border-color:#258046;background:#ECFDF5}' +
     '.kr-crop-h{font-size:13.5px;font-weight:800;color:#0F172A;margin:14px 0 8px}' +
-    '.kr-crop-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}' +
-    '.kr-crop-tile{position:relative;display:flex;flex-direction:column;align-items:center;padding:10px;border-radius:12px;background:#fff;border:2px solid #E2E8F0;cursor:pointer;font-family:inherit}' +
+    '.kr-crop-trigger{display:flex;align-items:center;gap:8px;width:100%;padding:11px 13px;border-radius:11px;border:1.5px solid #E5E7EB;background:#fff;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;color:#0F172A}' +
+    '.kr-crop-trigger > i:first-child{color:#258046;font-size:13px}' +
+    '.kr-crop-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}' +
+    '.kr-cp-chip{display:inline-flex;padding:4px 10px;border-radius:9999px;background:#ECFDF5;border:1px solid #A7F3D0;font-size:11.5px;font-weight:700;color:#0E7A4E}' +
+    '.kr-cropov{position:fixed;inset:0;z-index:340;display:none}' +
+    '.kr-cropov .bd{position:absolute;inset:0;background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease}' +
+    '.kr-cropov .pnl{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;display:flex;flex-direction:column;max-height:78vh;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)}' +
+    '.kr-crop-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:12px 20px;overflow-y:auto;flex:1}' +
+    '.kr-crop-tile{position:relative;display:flex;flex-direction:column;align-items:center;padding:12px;border-radius:12px;background:#fff;border:2px solid #E2E8F0;cursor:pointer;font-family:inherit}' +
     '.kr-crop-tile.on{border-color:#258046;background:#ECFDF5}' +
-    '.kr-crop-tile .ci{width:48px;height:48px;border-radius:9999px;overflow:hidden;margin-bottom:6px;display:flex;align-items:center;justify-content:center;font-size:24px;background:#F1F5F9}' +
+    '.kr-crop-tile .ci{width:56px;height:56px;border-radius:9999px;overflow:hidden;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:28px;background:#F1F5F9}' +
     '.kr-crop-tile .ci img{width:100%;height:100%;object-fit:cover}' +
-    '.kr-crop-tile .cl{font-size:11.5px;font-weight:700;color:#0F172A}' +
-    '.kr-crop-chk{position:absolute;top:5px;right:5px;width:18px;height:18px;border-radius:9999px;background:#258046;color:#fff;display:none;align-items:center;justify-content:center;font-size:8px}' +
+    '.kr-crop-tile .cl{font-size:12px;font-weight:700;color:#0F172A}' +
+    '.kr-crop-chk{position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:9999px;background:#258046;color:#fff;display:none;align-items:center;justify-content:center;font-size:9px}' +
     '.kr-crop-tile.on .kr-crop-chk{display:flex}';
 
   var MARKUP = '' +
@@ -58,7 +65,8 @@
         '<label class="kr-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input class="kr-media" type="file" accept="image/*,video/*" capture="environment" multiple style="display:none"/></label>' +
         '<div class="kr-attach-info"><i class="fa-solid fa-paperclip"></i> <span></span></div>' +
         '<div class="kr-crop-h">Select crop</div>' +
-        '<div class="kr-crop-grid"></div>' +
+        '<button type="button" class="kr-crop-trigger"><i class="fa-solid fa-seedling"></i><span class="kr-crop-lbl">Select crop</span><i class="fa-solid fa-chevron-right" style="margin-left:auto;color:#94A3B8;font-size:11px"></i></button>' +
+        '<div class="kr-crop-chips"></div>' +
         '<div class="kr-testi">' +
           '<div class="kr-testi-h"><i class="fa-solid fa-bullhorn" style="color:#258046"></i> Share a testimonial <span><i class="fa-solid fa-coins"></i> +25 coins</span></div>' +
           '<div class="kr-testi-sub">Upload a short photo or video to help other farmers</div>' +
@@ -70,8 +78,21 @@
       '</div>' +
     '</div>';
 
-  var ov, bg, pnl, stars, nameEl, imgEl, textEl, media, mediaInfo, testi, testiBox, testiLabel, submit, cropGrid;
+  var ov, bg, pnl, stars, nameEl, imgEl, textEl, media, mediaInfo, testi, testiBox, testiLabel, submit, cropGrid, cropChips, cropLbl;
   var rating = 0, testiUp = false, onSubmit = null, krCrops = null;
+  var CROP_OV = '' +
+    '<div class="bd"></div>' +
+    '<div class="pnl">' +
+      '<div style="flex-shrink:0;padding:12px 20px 4px">' +
+        '<div style="margin:0 auto 12px;width:40px;height:4px;border-radius:9999px;background:#E2E8F0"></div>' +
+        '<div style="display:flex;align-items:flex-start;justify-content:space-between">' +
+          '<div><div style="font-size:17px;font-weight:800;color:#0F172A">All Crops</div><div style="font-size:11.5px;color:#64748B;margin-top:2px">Tap all crops you grow</div></div>' +
+          '<button class="kr-crop-x" style="width:36px;height:36px;border-radius:50%;background:#F1F5F9;border:0;cursor:pointer"><i class="fa-solid fa-xmark" style="font-size:13px;color:#475569"></i></button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="kr-crop-grid"></div>' +
+      '<div style="flex-shrink:0;padding:12px 20px;border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)"><button class="kr-crop-done" style="width:100%;height:48px;border-radius:12px;background:#258046;color:#fff;font-size:14px;font-weight:800;border:0;cursor:pointer">Done</button></div>' +
+    '</div>';
   var CROPS = [
     { k:'tomato', label:'Tomato', emoji:'🍅', img:'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=128&q=80&fit=crop' },
     { k:'chilli', label:'Chilli', emoji:'🌶️', img:'https://images.unsplash.com/photo-1583852048850-31c0d0e7cdde?w=128&q=80&fit=crop' },
@@ -83,6 +104,7 @@
     { k:'onion', label:'Onion', emoji:'🧅', img:'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=128&q=80&fit=crop' },
     { k:'potato', label:'Potato', emoji:'🥔', img:'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=128&q=80&fit=crop' }
   ];
+  var CROPMAP = {}; CROPS.forEach(function (c) { CROPMAP[c.k] = c; });
 
   function setStars(v) { rating = v; stars.forEach(function (s, i) { s.classList.toggle('on', i < v); }); }
   function syncSubmit() { var ok = (textEl.value.trim().length > 0) || testiUp; submit.disabled = !ok; submit.style.opacity = ok ? '1' : '.55'; }
@@ -105,16 +127,32 @@
     textEl = ov.querySelector('.kr-review'); media = ov.querySelector('.kr-media'); mediaInfo = ov.querySelector('.kr-attach-info');
     testi = ov.querySelector('.kr-testi-input'); testiBox = ov.querySelector('.kr-testibox'); testiLabel = ov.querySelector('.kr-testilabel');
     submit = ov.querySelector('.kr-submit');
-    // Select-crop grid (multi-select) · same image-tile UI as the All-Crops sheet
-    cropGrid = ov.querySelector('.kr-crop-grid'); krCrops = new Set();
-    if (cropGrid) {
-      cropGrid.innerHTML = CROPS.map(function (c) {
-        return '<button type="button" class="kr-crop-tile" data-k="' + c.k + '"><span class="ci"><img src="' + c.img + '" onerror="this.parentNode.textContent=\'' + c.emoji + '\'"/></span><span class="cl">' + c.label + '</span><span class="kr-crop-chk"><i class="fa-solid fa-check"></i></span></button>';
-      }).join('');
-      cropGrid.querySelectorAll('.kr-crop-tile').forEach(function (t) {
-        t.addEventListener('click', function () { var k = t.dataset.k; if (krCrops.has(k)) { krCrops.delete(k); t.classList.remove('on'); } else { krCrops.add(k); t.classList.add('on'); } });
-      });
+    // Select crop · trigger opens an "All Crops" bottom sheet (same as the home All-Crops modal) · multi-select
+    krCrops = new Set();
+    cropChips = ov.querySelector('.kr-crop-chips');
+    cropLbl = ov.querySelector('.kr-crop-lbl');
+    var cropTrigger = ov.querySelector('.kr-crop-trigger');
+    var cropOv = document.createElement('div'); cropOv.className = 'kr-cropov'; cropOv.innerHTML = CROP_OV;
+    document.body.appendChild(cropOv);
+    var cbg = cropOv.querySelector('.bd'), cpnl = cropOv.querySelector('.pnl');
+    cropGrid = cropOv.querySelector('.kr-crop-grid');
+    var cropTemp = new Set();
+    cropGrid.innerHTML = CROPS.map(function (c) {
+      return '<button type="button" class="kr-crop-tile" data-k="' + c.k + '"><span class="ci"><img src="' + c.img + '" onerror="this.parentNode.textContent=\'' + c.emoji + '\'"/></span><span class="cl">' + c.label + '</span><span class="kr-crop-chk"><i class="fa-solid fa-check"></i></span></button>';
+    }).join('');
+    var cropTiles = cropGrid.querySelectorAll('.kr-crop-tile');
+    function paintTiles() { cropTiles.forEach(function (t) { t.classList.toggle('on', cropTemp.has(t.dataset.k)); }); }
+    cropTiles.forEach(function (t) { t.addEventListener('click', function () { var k = t.dataset.k; if (cropTemp.has(k)) cropTemp.delete(k); else cropTemp.add(k); paintTiles(); }); });
+    function renderCropChips() {
+      var arr = Array.prototype.slice.call(krCrops);
+      if (cropChips) cropChips.innerHTML = arr.map(function (k) { return '<span class="kr-cp-chip">' + (CROPMAP[k] ? CROPMAP[k].label : k) + '</span>'; }).join('');
+      if (cropLbl) cropLbl.textContent = arr.length ? 'Edit crops (' + arr.length + ')' : 'Select crop';
     }
+    function closeCrop() { cbg.style.opacity = '0'; cpnl.style.transform = 'translateY(100%)'; setTimeout(function () { cropOv.style.display = 'none'; }, 280); }
+    cropTrigger.addEventListener('click', function () { cropTemp = new Set(krCrops); paintTiles(); cropOv.style.display = 'block'; requestAnimationFrame(function () { cbg.style.opacity = '1'; cpnl.style.transform = 'translateY(0)'; }); });
+    cbg.addEventListener('click', closeCrop);
+    cropOv.querySelector('.kr-crop-x').addEventListener('click', closeCrop);
+    cropOv.querySelector('.kr-crop-done').addEventListener('click', function () { krCrops = new Set(cropTemp); renderCropChips(); closeCrop(); });
     stars.forEach(function (s) { s.addEventListener('click', function () { setStars(parseInt(s.dataset.v, 10)); }); });
     textEl.addEventListener('input', syncSubmit);
     media.addEventListener('change', function () { var n = media.files ? media.files.length : 0; if (n) { mediaInfo.style.display = 'block'; mediaInfo.querySelector('span').textContent = n + ' file' + (n > 1 ? 's' : '') + ' attached'; } else mediaInfo.style.display = 'none'; });
@@ -143,7 +181,7 @@
     setStars(opts.rating || 0);
     textEl.value = ''; mediaInfo.style.display = 'none'; if (media) media.value = '';
     testiUp = false; if (testi) testi.value = ''; testiBox.classList.remove('has'); testiLabel.textContent = 'Upload photo / video testimonial';
-    if (krCrops) { krCrops.clear(); if (cropGrid) cropGrid.querySelectorAll('.kr-crop-tile.on').forEach(function (t) { t.classList.remove('on'); }); }
+    krCrops = new Set(); if (cropChips) cropChips.innerHTML = ''; if (cropLbl) cropLbl.textContent = 'Select crop';
     syncSubmit();
     ov.style.display = 'block';
     requestAnimationFrame(function () { bg.style.opacity = '1'; pnl.style.transform = 'translateY(0)'; });

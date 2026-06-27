@@ -500,14 +500,18 @@
       const cod = document.querySelector('.pay[data-pay="cod"]');
       if (!cod) return;
       const sub = cod.querySelector('.pay-sub');
+      const top = cod.querySelector('.pay-toprow');
       if (need){
-        cod.style.opacity = '.55'; cod.style.pointerEvents = 'none';
-        if (sub){ if (!sub.dataset.orig) sub.dataset.orig = sub.innerHTML; sub.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:#DC2626"></i> Not available on orders above ₹10,000 — pay 10% advance online'; }
+        // Only the name/amount are dimmed; the unavailable notice stays fully visible at the bottom of the row
+        cod.style.pointerEvents = 'none';
+        if (top) top.style.opacity = '.5';
+        if (sub){ if (!sub.dataset.orig) sub.dataset.orig = sub.innerHTML; sub.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:#DC2626"></i> Not available on orders above ₹10,000'; sub.style.color = '#DC2626'; sub.style.fontWeight = '700'; }
         const ce = document.getElementById('codExtra'); if (ce) ce.style.display = 'none';
         if (currentMethod === 'cod'){ const pn = document.querySelector('.pay[data-pay="paynow"]'); if (pn) pn.click(); }
       } else if (sub && sub.dataset.orig){
-        cod.style.opacity = ''; cod.style.pointerEvents = '';
-        sub.innerHTML = sub.dataset.orig;
+        cod.style.pointerEvents = '';
+        if (top) top.style.opacity = '';
+        sub.innerHTML = sub.dataset.orig; sub.style.color = ''; sub.style.fontWeight = '';
       }
     }
 

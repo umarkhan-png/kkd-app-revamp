@@ -1658,7 +1658,9 @@
       <input id="engTestiProd" type="text" placeholder="e.g. Humic on tomato" class="w-full mt-1.5 rounded-[10px] text-[13px] outline-none" style="border:1px solid #E5E7EB;background:#FAFAFA;padding:11px 12px;font-family:inherit;color:#0F172A"/>
       <div class="mt-3 text-[11px] font-semibold uppercase tracking-wider" style="color:#64748B">Your story</div>
       <textarea id="engTestiText" placeholder="What result did you see? How many days? Any tips for other farmers…" class="w-full mt-1.5 rounded-[10px] text-[12.5px] outline-none" style="border:1px solid #E5E7EB;background:#FAFAFA;padding:10px 12px;min-height:74px;resize:none;font-family:inherit;color:#0F172A"></textarea>
-      <div><label class="eng-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input type="file" accept="image/*,video/*" capture="environment" multiple id="engTestiMedia" style="display:none"/></label></div>
+      <div class="mt-3 text-[11px] font-semibold uppercase tracking-wider" style="color:#64748B">Select crop</div>
+      <div class="crop-pick" data-crop-pick style="margin-top:6px"><button type="button" class="crop-pick-btn" data-crop-open><i class="fa-solid fa-seedling"></i> Select crop <i class="fa-solid fa-chevron-down cp-chev"></i></button><div class="crop-pick-chips" data-crop-chips></div></div>
+      <div class="mt-3"><label class="eng-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input type="file" accept="image/*,video/*" capture="environment" multiple id="engTestiMedia" style="display:none"/></label></div>
       <div class="eng-attach-info" id="engTestiAttachInfo"></div>
       <button id="engTestiSubmit" class="w-full h-[50px] mt-3 rounded-[12px] text-white text-[14.5px] font-semibold" style="background:#258046;border:0;opacity:.55" disabled><i class="fa-solid fa-paper-plane text-[12px]"></i> Submit story &amp; earn +30</button>
     </div>
@@ -1682,7 +1684,8 @@
         <span class="s" data-v="5"><i class="fa-solid fa-star"></i></span>
       </div>
       <textarea id="engRateText" placeholder="Write a quick review (optional)…" class="w-full rounded-[10px] text-[12.5px] outline-none" style="border:1px solid #E5E7EB;background:#FAFAFA;padding:10px 12px;min-height:60px;resize:none;font-family:inherit;color:#0F172A"></textarea>
-      <div><label class="eng-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input type="file" accept="image/*,video/*" capture="environment" multiple id="engRateMedia" style="display:none"/></label></div>
+      <div class="crop-pick" data-crop-pick><button type="button" class="crop-pick-btn" data-crop-open><i class="fa-solid fa-seedling"></i> Select crop <i class="fa-solid fa-chevron-down cp-chev"></i></button><div class="crop-pick-chips" data-crop-chips></div></div>
+      <div class="mt-3"><label class="eng-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input type="file" accept="image/*,video/*" capture="environment" multiple id="engRateMedia" style="display:none"/></label></div>
       <div class="eng-attach-info" id="engRateAttachInfo"></div>
       <button id="engRateSubmit" class="w-full h-[50px] mt-3 rounded-[12px] text-white text-[14.5px] font-semibold" style="background:#258046;border:0;opacity:.55" disabled>Submit &amp; earn +25 coins</button>
     </div>
@@ -3628,15 +3631,16 @@
         </div>
         <div class="bar-review-h">Write a review <span><i class="fa-solid fa-coins"></i> +10 coins</span></div>
         <textarea id="baRateText" placeholder="Write a quick review — how did it work on your crop?" class="bar-review"></textarea>
+        <div class="crop-pick" data-crop-pick><button type="button" class="crop-pick-btn" data-crop-open><i class="fa-solid fa-seedling"></i> Select crop <i class="fa-solid fa-chevron-down cp-chev"></i></button><div class="crop-pick-chips" data-crop-chips></div></div>
         <label class="bar-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input id="baRateMedia" type="file" accept="image/*,video/*" capture="environment" multiple style="display:none"/></label>
         <div id="baRateMediaInfo" class="bar-attach-info"><i class="fa-solid fa-paperclip"></i> <span></span></div>
         <div class="bar-testi">
           <div class="bar-testi-h"><i class="fa-solid fa-bullhorn" style="color:#258046"></i> Share a testimonial <span><i class="fa-solid fa-coins"></i> +25 coins</span></div>
-          <div class="bar-testi-sub">Upload a short video to help other farmers</div>
+          <div class="bar-testi-sub">Upload a short photo or video to help other farmers</div>
           <label class="bar-upload" id="baTestiBox">
             <i class="fa-solid fa-cloud-arrow-up"></i>
-            <span id="baTestiLabel">Upload video testimonial</span>
-            <input id="baRateTesti" type="file" accept="video/*" style="display:none"/>
+            <span id="baTestiLabel">Upload photo / video testimonial</span>
+            <input id="baRateTesti" type="file" accept="image/*,video/*" style="display:none"/>
           </label>
         </div>
       </div>
@@ -3690,7 +3694,7 @@
       mstars.forEach(function(s){ s.addEventListener('click', function(){ setStars(parseInt(s.dataset.v, 10)); }); });
       if (textEl) textEl.addEventListener('input', syncSubmit);
       media.addEventListener('change', function(){ const n = media.files ? media.files.length : 0; if (n) { mediaInfo.style.display = 'block'; mediaInfo.querySelector('span').textContent = n + ' file' + (n > 1 ? 's' : '') + ' attached'; } else { mediaInfo.style.display = 'none'; } });
-      testi.addEventListener('change', function(){ testiUp = !!(testi.files && testi.files.length); if (testiUp){ testiBox.classList.add('has'); testiLabel.innerHTML = '<i class="fa-solid fa-circle-check"></i> Testimonial added'; } else { testiBox.classList.remove('has'); testiLabel.textContent = 'Upload video testimonial'; } syncSubmit(); });
+      testi.addEventListener('change', function(){ testiUp = !!(testi.files && testi.files.length); if (testiUp){ testiBox.classList.add('has'); testiLabel.innerHTML = '<i class="fa-solid fa-circle-check"></i> Testimonial added'; } else { testiBox.classList.remove('has'); testiLabel.textContent = 'Upload photo / video testimonial'; } syncSubmit(); });
 
       function fillTileStars(row, val){
         if (!row) return;
@@ -3703,7 +3707,7 @@
         nameEl.textContent = name; imgEl.src = img || '';
         setStars(preset || 0); textEl.value = '';
         mediaInfo.style.display = 'none'; if (media) media.value = '';
-        testiUp = false; if (testi) testi.value = ''; testiBox.classList.remove('has'); testiLabel.textContent = 'Upload video testimonial';
+        testiUp = false; if (testi) testi.value = ''; testiBox.classList.remove('has'); testiLabel.textContent = 'Upload photo / video testimonial';
         syncSubmit();
         bd.style.display = 'block';
         requestAnimationFrame(function(){ bg.style.opacity = '1'; pnl.style.transform = 'translateY(0)'; });
@@ -3788,6 +3792,84 @@
     })();
     // Chakrawarti ZC cards open the product-aware Chakrawarti PDP (so the banned-in-state case is viewable)
     document.querySelectorAll('a[href="pdp.html"]').forEach(function(a){ if (/Chakrawarti\s*ZC/i.test(a.textContent || '')) a.setAttribute('href', 'pdp.html?p=chakrawarti'); });
+  </script>
+  <!-- ===== Reusable "Select crop" multi-select picker · replicates the "Select your crops" grid UI · event-delegated ===== -->
+  <style>
+    .crop-pick{margin-top:10px}
+    .crop-pick-btn{display:inline-flex;align-items:center;gap:7px;width:100%;padding:9px 12px;border-radius:10px;border:1.5px dashed #CBD5E1;background:#FFFFFF;color:#0F172A;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
+    .crop-pick-btn > i:first-child{color:#258046;font-size:13px}
+    .crop-pick-btn .cp-chev{margin-left:auto;color:#94A3B8;font-size:11px}
+    .crop-pick-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+    .crop-pick-chips:empty{margin-top:0}
+    .cp-chip{display:inline-flex;align-items:center;padding:4px 10px;border-radius:9999px;background:#ECFDF5;border:1px solid #A7F3D0;font-size:11.5px;font-weight:700;color:#0E7A4E}
+    .cropp-bd{position:fixed;inset:0;background:rgba(15,23,42,.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:160}
+    .cropp-bd.open{opacity:1;pointer-events:auto}
+    .cropp-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:161;max-height:82vh;display:flex;flex-direction:column}
+    .cropp-sheet.open{transform:translateY(0)}
+    .cropp-handle{width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 4px;flex-shrink:0}
+    .cropp-head{display:flex;align-items:flex-start;justify-content:space-between;padding:6px 20px 4px;flex-shrink:0}
+    .cropp-title{font-size:18px;font-weight:800;color:#0F172A}
+    .cropp-sub{font-size:12px;color:#64748B;margin-top:2px}
+    .cropp-x{width:36px;height:36px;border-radius:9999px;background:#F1F5F9;border:0;color:#475569;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .cropp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:12px 20px;overflow-y:auto;flex:1}
+    .cropp-tile{position:relative;display:flex;flex-direction:column;align-items:center;padding:12px;border-radius:12px;background:#fff;border:2px solid #E2E8F0;cursor:pointer;font-family:inherit}
+    .cropp-tile.on{border-color:#258046;background:#ECFDF5}
+    .cropp-tile .ci{width:56px;height:56px;border-radius:9999px;overflow:hidden;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:28px;background:#F1F5F9}
+    .cropp-tile .ci img{width:100%;height:100%;object-fit:cover}
+    .cropp-tile span{font-size:12px;font-weight:700;color:#0F172A}
+    .cropp-chk{position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:9999px;background:#258046;color:#fff;display:none;align-items:center;justify-content:center;font-size:9px}
+    .cropp-tile.on .cropp-chk{display:flex}
+    .cropp-foot{padding:12px 20px calc(env(safe-area-inset-bottom,0px) + 16px);border-top:1px solid #F1F5F9;flex-shrink:0}
+    .cropp-apply{width:100%;height:48px;border-radius:12px;background:#258046;color:#fff;font-size:14px;font-weight:800;border:0;cursor:pointer}
+  </style>
+  <div id="croppBd" class="cropp-bd"></div>
+  <div id="croppSheet" class="cropp-sheet">
+    <div class="cropp-handle"></div>
+    <div class="cropp-head">
+      <div><div class="cropp-title">Select crop</div><div class="cropp-sub">Tap all crops you grew with this product</div></div>
+      <button id="croppClose" class="cropp-x"><i class="fa-solid fa-xmark text-[13px]"></i></button>
+    </div>
+    <div class="cropp-grid" id="croppGrid"></div>
+    <div class="cropp-foot"><button id="croppApply" class="cropp-apply">Add 0 crops</button></div>
+  </div>
+  <script>
+  (function(){
+    const CROPS = [
+      {k:'tomato',label:'Tomato',emoji:'🍅',img:'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=128&q=80&fit=crop'},
+      {k:'chilli',label:'Chilli',emoji:'🌶️',img:'https://images.unsplash.com/photo-1583852048850-31c0d0e7cdde?w=128&q=80&fit=crop'},
+      {k:'wheat',label:'Wheat',emoji:'🌾',img:'https://images.unsplash.com/photo-1574226516831-e1dff420e562?w=128&q=80&fit=crop'},
+      {k:'maize',label:'Maize',emoji:'🌽',img:'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=128&q=80&fit=crop'},
+      {k:'cotton',label:'Cotton',emoji:'☁️',img:'https://images.unsplash.com/photo-1591885503007-9b80d9c89a52?w=128&q=80&fit=crop'},
+      {k:'sugarcane',label:'Sugarcane',emoji:'🎋',img:'https://images.unsplash.com/photo-1597106776019-b4ecc878c202?w=128&q=80&fit=crop'},
+      {k:'paddy',label:'Paddy',emoji:'🌱',img:'https://images.unsplash.com/photo-1568347877321-f8935c7dc5a8?w=128&q=80&fit=crop'},
+      {k:'onion',label:'Onion',emoji:'🧅',img:'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=128&q=80&fit=crop'},
+      {k:'potato',label:'Potato',emoji:'🥔',img:'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=128&q=80&fit=crop'}
+    ];
+    const META = {}; CROPS.forEach(c => META[c.k] = c);
+    const bd = document.getElementById('croppBd'), sheet = document.getElementById('croppSheet'), grid = document.getElementById('croppGrid'), applyBtn = document.getElementById('croppApply');
+    if (!sheet) return;
+    let targetPick = null, temp = new Set();
+    function selectionOf(pick){ return pick._crops || (pick._crops = new Set()); }
+    grid.innerHTML = CROPS.map(c =>
+      '<button type="button" class="cropp-tile" data-k="' + c.k + '"><span class="ci"><img src="' + c.img + '" onerror="this.parentNode.textContent=\'' + c.emoji + '\'"/></span><span>' + c.label + '</span><span class="cropp-chk"><i class="fa-solid fa-check"></i></span></button>'
+    ).join('');
+    const tiles = grid.querySelectorAll('.cropp-tile');
+    function refreshTiles(){ tiles.forEach(t => t.classList.toggle('on', temp.has(t.dataset.k))); applyBtn.textContent = temp.size ? 'Add ' + temp.size + ' crop' + (temp.size === 1 ? '' : 's') : 'Done'; }
+    tiles.forEach(t => t.addEventListener('click', () => { const k = t.dataset.k; if (temp.has(k)) temp.delete(k); else temp.add(k); refreshTiles(); }));
+    function open(pick){ targetPick = pick; temp = new Set(selectionOf(pick)); refreshTiles(); bd.classList.add('open'); sheet.classList.add('open'); }
+    function close(){ bd.classList.remove('open'); sheet.classList.remove('open'); }
+    function renderChips(pick){
+      const box = pick.querySelector('[data-crop-chips]');
+      const sel = selectionOf(pick);
+      if (box) box.innerHTML = Array.from(sel).map(k => '<span class="cp-chip">' + (META[k] ? META[k].label : k) + '</span>').join('');
+      const btn = pick.querySelector('.crop-pick-btn');
+      if (btn) btn.innerHTML = '<i class="fa-solid fa-seedling"></i> ' + (sel.size ? 'Edit crops' : 'Select crop') + ' <i class="fa-solid fa-chevron-down cp-chev"></i>';
+    }
+    applyBtn.addEventListener('click', () => { if (targetPick){ const s = selectionOf(targetPick); s.clear(); temp.forEach(k => s.add(k)); renderChips(targetPick); } close(); });
+    document.getElementById('croppClose').addEventListener('click', close);
+    bd.addEventListener('click', close);
+    document.addEventListener('click', e => { const btn = e.target.closest && e.target.closest('[data-crop-open]'); if (btn){ const pick = btn.closest('[data-crop-pick]'); if (pick) open(pick); } });
+  })();
   </script>
   <script src="../assets/weight-ladder.js"></script>
 </body>

@@ -21,6 +21,10 @@
   .row-amt{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;flex-shrink:0}
   .row-amt.earn{color:#258046}
   .row-amt.spend{color:#DC2626}
+  /* Pending coin transaction · credited only after the action is approved */
+  .row-ic.pending{background:#FEF3C7;color:#D97706}
+  .row-amt.pending{color:#D97706}
+  .row-pending-tag{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:800;color:#92400E;background:#FEF3C7;border:1px solid #FCD34D;padding:1px 6px;border-radius:9999px;margin-left:6px;vertical-align:middle}
 </style></head>
 <body>
 
@@ -57,6 +61,15 @@
   <!-- Recent activity -->
   <div class="sec-title">Recent activity</div>
   <div class="card">
+    <!-- Pending case · coins reserved for an action awaiting approval (e.g. a submitted review/testimonial) -->
+    <div class="row">
+      <div class="row-ic pending"><i class="fa-solid fa-clock"></i></div>
+      <div class="row-body">
+        <div class="row-title">Testimonial reward <span class="row-pending-tag"><i class="fa-solid fa-hourglass-half"></i> Pending</span></div>
+        <div class="row-sub">Today &middot; credited after your video is approved</div>
+      </div>
+      <div class="row-amt pending tnum">+25</div>
+    </div>
     <div class="row">
       <div class="row-ic earn"><i class="fa-solid fa-plus"></i></div>
       <div class="row-body">

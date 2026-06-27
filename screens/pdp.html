@@ -3,6 +3,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Poppins','system-ui','sans-serif']}}}}</script>
 <script src="../assets/celebrate.js"></script>
 <script src="../assets/appstate.js"></script>
 <style>
@@ -54,14 +55,12 @@
   @keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(249,115,22,0.5)}100%{box-shadow:0 0 0 8px rgba(249,115,22,0)}}
   .low-stock{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#DC2626;background:#FEF2F2;border:1px solid #FECACA;padding:4px 10px;border-radius:9999px}
   .low-stock i{font-size:10px}
-  /* Wallet + Coins effective price · tappable inline link sitting beside the MRP · "or buy at ₹0 how?" opens a sheet explaining the wallet ₹540 + coins ₹120 maths · grey label, coloured amount, underlined "how?" */
-  .wc-link{display:inline-flex;align-items:baseline;gap:4px;padding:0;background:none;border:0;cursor:pointer;font-size:12.5px;line-height:1}
-  .wc-or{color:#94A3B8;font-weight:600}
-  .wc-link b{color:#0C831F;font-weight:900}
-  .wc-how{color:#0C831F;font-weight:800;text-decoration:underline;text-underline-offset:2px}
+  /* Wallet + Coins effective price · tappable inline link sitting beside the MRP · "or buy at ₹0 how?" opens a sheet explaining the wallet ₹540 + coins ₹120 maths · grey normal-weight label, coloured amount, plain "how?" — all Poppins */
+  .wc-link{display:inline-flex;align-items:baseline;gap:4px;padding:0;background:none;border:0;cursor:pointer;font-size:12.5px;line-height:1;font-family:'Poppins',system-ui,sans-serif}
+  .wc-or{color:#94A3B8;font-weight:400}
+  .wc-link b{color:#0C831F;font-weight:800}
+  .wc-how{color:#0C831F;font-weight:700}
   /* "How you pay" breakdown sheet (reuses the trust-sheet shell) */
-  .wc-hd{display:flex;align-items:center;gap:11px;margin-bottom:14px}
-  .wc-hic{width:40px;height:40px;border-radius:9999px;background:linear-gradient(135deg,#FDE68A,#F59E0B);color:#78350F;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 5px 12px -4px rgba(245,158,11,.55)}
   .wc-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:10px 0;border-bottom:1px dashed #EAE0CA}
   .wc-row .k{color:#475569;font-weight:600}
   .wc-row .v{font-weight:800;color:#0F172A}
@@ -69,8 +68,8 @@
   .wc-row.tot{border-bottom:0;padding-top:13px}
   .wc-row.tot .k{color:#0F172A;font-weight:900;font-size:14px}
   .wc-row.tot .v{color:#0C831F;font-weight:900;font-size:19px}
-  .wc-note{margin-top:12px;font-size:12px;font-weight:600;color:#92591A;background:#FFF7E6;border:1px solid #F2D98E;border-radius:11px;padding:9px 11px;display:flex;gap:7px;align-items:flex-start}
-  .wc-note i{color:#D97706;font-size:11px;margin-top:2px;flex-shrink:0}
+  .wc-left{margin-top:11px;font-size:12px;font-weight:700;color:#475569;display:flex;justify-content:space-between}
+  .wc-left span:last-child{color:#0F172A;font-weight:800}
   .wc-got{margin-top:16px;width:100%;height:48px;border-radius:12px;background:#258046;color:#fff;font-size:14.5px;font-weight:900;border:0;cursor:pointer;box-shadow:0 10px 22px -8px rgba(5,150,105,.6)}
   /* ADD button · more prominent · bigger height + stronger emerald glow + tracked-uppercase label · stepper matches the same dimensions */
   .price-add{display:flex;align-items:center;gap:8px}
@@ -355,16 +354,15 @@
 <div id="wcBd" class="trust-bd"></div>
 <div id="wcSheet" class="trust-sheet">
   <div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 14px"></div>
-  <div class="wc-hd">
-    <span class="wc-hic"><i class="fa-solid fa-piggy-bank"></i></span>
-    <div>
-      <div class="text-[17px] font-bold text-[#0F172A]" id="wcSheetTitle">Buy at ₹0</div>
-      <div class="text-[12px] text-[#64748B]">Wallet + Krishi coins applied automatically</div>
+  <div class="flex items-start gap-3 mb-3.5">
+    <div class="min-w-0">
+      <div class="text-[17px] font-bold text-[#0F172A] leading-tight truncate" id="wcSheetTitle">Chakrawarti ZC</div>
+      <div class="text-[12.5px] text-[#64748B] font-medium mt-0.5" id="wcSheetPack">500 ml</div>
     </div>
-    <button id="wcClose" class="ml-auto w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    <button id="wcClose" class="ml-auto w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
   </div>
   <div id="wcBreak"></div>
-  <div class="wc-note" id="wcNote"><i class="fa-solid fa-circle-info"></i><span></span></div>
+  <div class="wc-left" id="wcLeft"><span>Wallet balance left</span><span>₹164</span></div>
   <button class="wc-got" id="wcGot">Got it</button>
 </div>
 <script>
@@ -1035,24 +1033,24 @@
     (function(){
       const link = document.getElementById('wcLink'), bd = document.getElementById('wcBd'), sheet = document.getElementById('wcSheet');
       if (!link || !sheet) return;
-      const breakEl = document.getElementById('wcBreak'), noteEl = document.querySelector('#wcNote span'), titleEl = document.getElementById('wcSheetTitle');
+      const breakEl = document.getElementById('wcBreak'), titleEl = document.getElementById('wcSheetTitle'), packEl = document.getElementById('wcSheetPack'), leftEl = document.getElementById('wcLeft');
+      const pNameEl = document.getElementById('pName');
       function row(k, v, cls){ return '<div class="wc-row ' + (cls||'') + '"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>'; }
       function render(){
-        const p = wcPrice;
+        const av = document.querySelector('.var.active');               // keep pack + price in sync with the selected variant
+        const p = av ? num(av.dataset.price) : wcPrice;
+        const sizeTxt = av ? (av.querySelector('.vk-size') || {}).textContent || '' : '';
         const wUsed = Math.min(p, WC_WALLET);
         const cUsed = Math.min(p - wUsed, WC_COINS);
         const pay = p - wUsed - cUsed;
-        const leftW = WC_WALLET - wUsed, leftC = WC_COINS - cUsed;
-        titleEl.textContent = pay === 0 ? 'Buy at ' + inr(0) : 'Pay only ' + inr(pay);
+        titleEl.textContent = pNameEl ? pNameEl.textContent : 'This product';
+        packEl.textContent = sizeTxt ? 'Pack · ' + sizeTxt : '';
         breakEl.innerHTML =
           row('Pack price', inr(p)) +
           row('Wallet balance', '−' + inr(wUsed), 'cr') +
           row('Krishi coins (' + WC_COINS + ')', '−' + inr(cUsed), 'cr') +
           row('You pay', inr(pay), 'tot');
-        const left = leftW + leftC;
-        noteEl.innerHTML = pay === 0
-          ? 'Fully covered! <b>' + inr(left) + '</b> stays in your account for the next order.'
-          : 'Your full <b>' + inr(WC_CREDIT) + '</b> balance is used. Coins &amp; wallet apply automatically at checkout.';
+        leftEl.innerHTML = '<span>Wallet balance left</span><span>' + inr(WC_WALLET - wUsed) + '</span>';
       }
       function open(){ render(); bd.classList.add('open'); sheet.classList.add('open'); }
       function close(){ bd.classList.remove('open'); sheet.classList.remove('open'); }

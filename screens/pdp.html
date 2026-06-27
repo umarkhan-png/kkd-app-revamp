@@ -58,18 +58,18 @@
   /* Wallet + Coins effective price · tappable inline link sitting beside the MRP · "or buy at ₹0 how?" opens a sheet explaining the wallet ₹540 + coins ₹120 maths · grey normal-weight label, coloured amount, plain "how?" — all Poppins */
   .wc-link{display:inline-flex;align-items:baseline;gap:4px;padding:0;background:none;border:0;cursor:pointer;font-size:12.5px;line-height:1;font-family:'Poppins',system-ui,sans-serif}
   .wc-or{color:#94A3B8;font-weight:400}
-  .wc-link b{color:#0C831F;font-weight:800}
-  .wc-how{color:#0C831F;font-weight:700}
+  .wc-link b{color:#0C831F;font-weight:900}
+  .wc-how{color:#64748B;font-weight:500;text-decoration:underline;text-decoration-style:dashed;text-decoration-color:#B6C0CE;text-underline-offset:3px}
   /* "How you pay" breakdown sheet (reuses the trust-sheet shell) */
   .wc-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:10px 0;border-bottom:1px dashed #EAE0CA}
+  .wc-row .kw{display:flex;flex-direction:column;gap:2px}
   .wc-row .k{color:#475569;font-weight:600}
+  .wc-row .sub{font-size:11px;font-weight:600;color:#94A3B8}
   .wc-row .v{font-weight:800;color:#0F172A}
   .wc-row.cr .v{color:#0C831F}
   .wc-row.tot{border-bottom:0;padding-top:13px}
   .wc-row.tot .k{color:#0F172A;font-weight:900;font-size:14px}
   .wc-row.tot .v{color:#0C831F;font-weight:900;font-size:19px}
-  .wc-left{margin-top:11px;font-size:12px;font-weight:700;color:#475569;display:flex;justify-content:space-between}
-  .wc-left span:last-child{color:#0F172A;font-weight:800}
   .wc-got{margin-top:16px;width:100%;height:48px;border-radius:12px;background:#258046;color:#fff;font-size:14.5px;font-weight:900;border:0;cursor:pointer;box-shadow:0 10px 22px -8px rgba(5,150,105,.6)}
   /* ADD button · more prominent · bigger height + stronger emerald glow + tracked-uppercase label · stepper matches the same dimensions */
   .price-add{display:flex;align-items:center;gap:8px}
@@ -362,7 +362,6 @@
     <button id="wcClose" class="ml-auto w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
   </div>
   <div id="wcBreak"></div>
-  <div class="wc-left" id="wcLeft"><span>Wallet balance left</span><span>₹164</span></div>
   <button class="wc-got" id="wcGot">Got it</button>
 </div>
 <script>
@@ -1033,9 +1032,11 @@
     (function(){
       const link = document.getElementById('wcLink'), bd = document.getElementById('wcBd'), sheet = document.getElementById('wcSheet');
       if (!link || !sheet) return;
-      const breakEl = document.getElementById('wcBreak'), titleEl = document.getElementById('wcSheetTitle'), packEl = document.getElementById('wcSheetPack'), leftEl = document.getElementById('wcLeft');
+      const breakEl = document.getElementById('wcBreak'), titleEl = document.getElementById('wcSheetTitle'), packEl = document.getElementById('wcSheetPack');
       const pNameEl = document.getElementById('pName');
+      // simple row (label + value) and a credit row that carries a "balance left" subline under the label
       function row(k, v, cls){ return '<div class="wc-row ' + (cls||'') + '"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>'; }
+      function rowSub(k, sub, v){ return '<div class="wc-row cr"><span class="kw"><span class="k">' + k + '</span><span class="sub">' + sub + '</span></span><span class="v">' + v + '</span></div>'; }
       function render(){
         const av = document.querySelector('.var.active');               // keep pack + price in sync with the selected variant
         const p = av ? num(av.dataset.price) : wcPrice;
@@ -1047,10 +1048,9 @@
         packEl.textContent = sizeTxt ? 'Pack · ' + sizeTxt : '';
         breakEl.innerHTML =
           row('Pack price', inr(p)) +
-          row('Wallet balance', '−' + inr(wUsed), 'cr') +
-          row('Krishi coins (' + WC_COINS + ')', '−' + inr(cUsed), 'cr') +
+          rowSub('Wallet balance', inr(WC_WALLET - wUsed) + ' left', '−' + inr(wUsed)) +
+          rowSub('Krishi coins', (WC_COINS - cUsed) + ' coins left', '−' + inr(cUsed)) +
           row('You pay', inr(pay), 'tot');
-        leftEl.innerHTML = '<span>Wallet balance left</span><span>' + inr(WC_WALLET - wUsed) + '</span>';
       }
       function open(){ render(); bd.classList.add('open'); sheet.classList.add('open'); }
       function close(){ bd.classList.remove('open'); sheet.classList.remove('open'); }

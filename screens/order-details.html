@@ -525,7 +525,7 @@
   <!-- Sticky bottom · 2 CTAs · Return (outline) + Reorder (primary emerald, fa-repeat) · Download invoice moved back into the kebab menu -->
   <div class="sticky-cta">
     <a class="cta-out hide-pending" id="returnCta" href="#return">
-      <i class="fa-solid fa-right-left"></i> Return
+      <i class="fa-solid fa-right-left"></i> Refund or Replace
     </a>
     <a class="cta-pri hide-pending" href="cart.html?reorder=1">
       <i class="fa-solid fa-repeat"></i> Reorder
@@ -688,6 +688,13 @@
     .rtn-voice-pill.rec{border-color:#FCA5A5;background:#FEF2F2;color:#DC2626}
     .rtn-voice-pill.rec i{color:#DC2626}
     /* Attached-file previews */
+    /* Auto-added unboxing video · pre-attached proof on every return/replace request · video-only flow */
+    .rtn-autoproof{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:11px;background:#ECFDF5;border:1px solid #A7F3D0;margin-bottom:10px}
+    .rtn-autoproof .thumb{width:42px;height:42px;border-radius:9px;background:#0F172A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+    .rtn-autoproof .meta{flex:1;line-height:1.3;min-width:0}
+    .rtn-autoproof .meta b{display:block;font-size:13px;font-weight:800;color:#0F172A}
+    .rtn-autoproof .meta small{font-size:11px;font-weight:600;color:#258046}
+    .rtn-autoproof .ok{font-size:11px;font-weight:800;color:#258046;display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
     .rtn-preview{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
     .rtn-thumb{position:relative;width:66px;height:66px;border-radius:10px;overflow:hidden;border:1px solid #E5E7EB;background:#F8FAFC;flex-shrink:0}
     .rtn-thumb img,.rtn-thumb video{width:100%;height:100%;object-fit:cover}
@@ -787,8 +794,14 @@
       <button type="button" class="rtn-voice-pill" id="rtnVoice"><i class="fa-solid fa-microphone"></i> Record a voice note instead</button>
       <div id="rtnVoiceStatus" class="text-[11.5px] font-semibold mt-2" style="color:#258046;display:none"><i class="fa-solid fa-circle-check text-[10px]"></i> Voice note recorded</div>
 
-      <div class="text-[11px] font-semibold uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Add proof (photo / video)</div>
-      <button type="button" id="rtnProofBtn" class="rtn-attach" style="width:100%"><i class="fa-solid fa-camera"></i> Add photo / video</button>
+      <div class="text-[11px] font-semibold uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Add proof · video only</div>
+      <!-- Unboxing video auto-attached from the order-proof card · only videos are accepted here, no photos -->
+      <div class="rtn-autoproof">
+        <span class="thumb"><i class="fa-solid fa-circle-play"></i></span>
+        <span class="meta"><b>Unboxing video</b><small>Auto-added from your order proof</small></span>
+        <span class="ok"><i class="fa-solid fa-circle-check"></i> Added</span>
+      </div>
+      <button type="button" id="rtnProofBtn" class="rtn-attach" style="width:100%"><i class="fa-solid fa-video"></i> Add another video (optional)</button>
       <div id="rtnPreview" class="rtn-preview"></div>
 
       <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-4 text-[12px] font-semibold" style="color:#258046;text-decoration:none"><i class="fa-solid fa-circle-info text-[11px]"></i> Read returns &amp; refund policy</a>
@@ -805,7 +818,7 @@
   <div id="rtnProofSheet" class="modal-sheet" style="padding:0 0 20px">
     <div class="modal-handle"></div>
     <div class="px-5 pt-2 pb-1 flex items-center justify-between">
-      <div class="text-[16px] font-bold text-[#0F172A]">Add photo / video</div>
+      <div class="text-[16px] font-bold text-[#0F172A]">Add video</div>
       <button id="rtnProofClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
     <div class="px-5 pt-3 grid grid-cols-2 gap-3">
@@ -813,8 +826,8 @@
       <button type="button" id="rtnSrcGal" class="rtn-src"><i class="fa-solid fa-images"></i> Gallery</button>
     </div>
   </div>
-  <input type="file" accept="image/*,video/*" capture="environment" multiple id="rtnCam" style="display:none"/>
-  <input type="file" accept="image/*,video/*" multiple id="rtnGal" style="display:none"/>
+  <input type="file" accept="video/*" capture="environment" multiple id="rtnCam" style="display:none"/>
+  <input type="file" accept="video/*" multiple id="rtnGal" style="display:none"/>
 
   <!-- Return success -->
   <div id="rtnOk" class="rate-ok">
@@ -1130,7 +1143,7 @@
           });
           preview.querySelectorAll('.rm').forEach(b => b.addEventListener('click', () => { proofFiles.splice(parseInt(b.dataset.i, 10), 1); renderPreview(); }));
         }
-        function addFiles(fl){ for (let i = 0; i < fl.length; i++) proofFiles.push(fl[i]); renderPreview(); }
+        function addFiles(fl){ let skipped = 0; for (let i = 0; i < fl.length; i++) { if ((fl[i].type || '').indexOf('video') === 0) proofFiles.push(fl[i]); else skipped++; } if (skipped) alert('Only videos can be added as proof.'); renderPreview(); }
         function closeProof(){ proofBd.classList.remove('open'); proofSheet.classList.remove('open'); }
         proofBtn && proofBtn.addEventListener('click', () => { proofBd.classList.add('open'); proofSheet.classList.add('open'); });
         proofClose && proofClose.addEventListener('click', closeProof);

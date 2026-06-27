@@ -724,6 +724,7 @@
         const payPaid     = document.getElementById('omPayPaid');
         const payRemainRow= document.getElementById('omPayRemainRow');
         const payRemain   = document.getElementById('omPayRemain');
+        const payHint     = document.getElementById('omPayHint');
         if (paynowChip && paynowChip.dataset.orig === undefined) paynowChip.dataset.orig = paynowChip.innerHTML;
         let currentPayNow = 0;
 
@@ -758,6 +759,15 @@
             if (alreadyPaid > 0){ payPaidRow.style.display = 'flex'; payPaid.textContent = '−' + rupee(alreadyPaid); } else { payPaidRow.style.display = 'none'; }
             if (payRemainRow){ payRemainRow.style.display = 'flex'; payRemain.textContent = rupee(remaining); }
             payTotal.textContent = rupee(payNow);
+            if (payHint){
+              if (selected === 'advpartial'){
+                payHint.style.display = 'block';
+                payHint.textContent = '= 10% of ' + rupee(mergedOrderValue) + ' (' + rupee(Math.round(mergedOrderValue * ADVANCE_PCT / 100)) + ')' + (alreadyPaid > 0 ? ' − ' + rupee(alreadyPaid) + ' already paid' : '');
+              } else {
+                payHint.style.display = 'block';
+                payHint.textContent = alreadyPaid > 0 ? '= full ' + rupee(mergedOrderValue) + ' − ' + rupee(alreadyPaid) + ' already paid' : '= full order value';
+              }
+            }
             confirmBtn.textContent = (selected === 'advpartial' ? 'Pay ' + rupee(payNow) + ' advance' : 'Pay ' + rupee(payNow)) + ' & Merge';
             return;
           }
@@ -766,6 +776,7 @@
           var dl2 = payDiscRow.querySelector('span'); if (dl2) dl2.textContent = 'Pay Online discount (5%)';
           if (payPaidRow) payPaidRow.style.display = 'none';
           if (payRemainRow) payRemainRow.style.display = 'none';
+          if (payHint) payHint.style.display = 'none';
           const pay = selected === 'paynow' ? onlineTotal : extra;
           currentPayNow = pay;
           const merged = prevTotal + pay;
@@ -886,6 +897,7 @@
           <div class="om-pay-row sub" id="omPayPaidRow" style="display:none"><span>Already paid</span><span id="omPayPaid" class="tnum">−₹0</span></div>
           <div class="om-pay-row sub" id="omPayRemainRow" style="display:none"><span>Remaining</span><span id="omPayRemain" class="tnum">₹0</span></div>
           <div class="om-pay-row hi"><span>You pay now</span><b id="omPayTotal" class="tnum">₹0</b></div>
+          <div id="omPayHint" style="display:none;font-size:11px;font-weight:600;color:#64748B;margin-top:-2px"></div>
           <div class="om-pay-method-label">Choose how to pay</div>
           <div class="om-pay-chips" role="radiogroup">
             <button type="button" class="om-chip" data-pay="paynow" role="radio" aria-checked="true">

@@ -54,14 +54,10 @@
   @keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(249,115,22,0.5)}100%{box-shadow:0 0 0 8px rgba(249,115,22,0)}}
   .low-stock{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#DC2626;background:#FEF2F2;border:1px solid #FECACA;padding:4px 10px;border-radius:9999px}
   .low-stock i{font-size:10px}
-  /* Wallet + Coins effective-price strip · compact single line · what the farmer actually pays after applying available wallet balance + Krishi coins */
-  .wc-card{display:flex;align-items:center;gap:9px;border:1.2px dashed #E3C77A;border-radius:11px;background:linear-gradient(135deg,#FFFBF0,#F1F9EE);padding:7px 11px}
-  .wc-ic{width:26px;height:26px;border-radius:9999px;background:linear-gradient(135deg,#FDE68A,#F59E0B);color:#78350F;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;box-shadow:0 3px 8px -3px rgba(245,158,11,.5)}
-  .wc-l1{display:flex;align-items:baseline;gap:6px}
-  .wc-pay{font-size:14.5px;font-weight:900;color:#0C831F;line-height:1.05}
-  .wc-eff-was{font-size:12px;font-weight:600;color:#94A3B8;text-decoration:line-through}
-  .wc-free{font-size:9.5px;font-weight:800;color:#0C831F;background:#DCFCE7;border-radius:9999px;padding:1px 6px;display:none}
-  .wc-sub{font-size:10.5px;font-weight:600;color:#A07B2E;margin-top:1px}
+  /* Wallet + Coins effective-price · tiny inline chip tucked right under the price · communicates what the farmer pays after wallet (₹540) + coins (₹120) with almost no extra vertical space */
+  .wc-chip{display:inline-flex;align-items:center;gap:5px;margin-top:5px;padding:2px 9px 2px 7px;border-radius:9999px;background:#FFF7E6;border:1px solid #F2D98E;font-size:11px;font-weight:700;color:#92591A;line-height:1}
+  .wc-chip i{font-size:10px;color:#D97706}
+  .wc-chip b{font-weight:900;color:#0C831F}
   /* ADD button · more prominent · bigger height + stronger emerald glow + tracked-uppercase label · stepper matches the same dimensions */
   .price-add{display:flex;align-items:center;gap:8px}
   .add-btn{height:48px;padding:0 22px;border-radius:12px;background:#258046;color:#FFFFFF;font-size:14.5px;font-weight:900;letter-spacing:0.06em;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 12px 22px -8px rgba(5,150,105,0.6),inset 0 1px 0 rgba(255,255,255,0.18);cursor:pointer;border:0;text-transform:uppercase}
@@ -225,6 +221,8 @@
         <span class="text-[14px] text-[#94A3B8] line-through tnum">₹520</span>
       </div>
       <div class="text-[12.5px] font-semibold mt-0.5" style="color:#258046">28% off · You save ₹144</div>
+      <!-- Wallet + Coins effective price · tiny chip right under the price · ₹0 when ₹540 wallet + 120 coins fully cover the price · recomputes per pack -->
+      <div class="wc-chip" id="wcChip"><i class="fa-solid fa-piggy-bank"></i> Pay <b class="tnum" id="wcEff">₹0</b> after wallet + coins</div>
     </div>
   </div>
   <div>
@@ -236,21 +234,6 @@
       <button id="addDec">−</button>
       <span class="add-val tnum" id="addVal">1</span>
       <button id="addInc">+</button>
-    </div>
-  </div>
-</div>
-
-<!-- Wallet + Coins effective-price strip · compact · what the farmer pays once available wallet balance (₹540) + Krishi coins (120 = ₹120) are applied · recomputes per pack -->
-<div class="px-4 mt-2.5" id="wcWrap">
-  <div class="wc-card">
-    <span class="wc-ic"><i class="fa-solid fa-piggy-bank"></i></span>
-    <div class="leading-tight">
-      <div class="wc-l1">
-        <span class="wc-pay tnum"><span id="wcEff">₹0</span> to pay</span>
-        <span class="wc-eff-was tnum" id="wcWas">₹376</span>
-        <span class="wc-free" id="wcFree">fully covered</span>
-      </div>
-      <div class="wc-sub"><span id="wcApplied">₹376</span> from your ₹660 wallet + coins applied</div>
     </div>
   </div>
 </div>
@@ -1008,22 +991,13 @@
     const addHTML = btn.innerHTML;         // original ADD markup (icon + label) to restore after an OOS variant
     const stickyHTML = stickyAdd ? stickyAdd.innerHTML : '';
     const isOOS = size => { const t = document.querySelector('.var[data-size="' + size + '"]'); return !!(t && t.classList.contains('oos')); };
-    // Wallet + Coins effective-price strip · available credit = ₹540 wallet + 120 coins (₹120) = ₹660 · effective = price − min(price, credit)
+    // Wallet + Coins effective price · available credit = ₹540 wallet + 120 coins (₹120) = ₹660 · effective = price − min(price, credit)
     const WC_CREDIT = 660;
     const wcEff = document.getElementById('wcEff');
-    const wcWas = document.getElementById('wcWas');
-    const wcApplied = document.getElementById('wcApplied');
-    const wcFree = document.getElementById('wcFree');
     const inr = n => '₹' + n.toLocaleString('en-IN');
     function recomputeWallet(price){
       if (!wcEff) return;
-      const applied = Math.min(price, WC_CREDIT);
-      const eff = price - applied;
-      wcEff.textContent = inr(eff);
-      wcWas.textContent = inr(price);
-      wcApplied.textContent = inr(applied);
-      wcWas.style.display = eff === 0 ? 'none' : 'inline';   // hide struck price when nothing left to pay
-      wcFree.style.display = eff === 0 ? 'inline-block' : 'none';
+      wcEff.textContent = inr(Math.max(0, price - WC_CREDIT));
     }
     function showSteps(){ btn.style.display = 'none'; steps.style.display = 'flex'; }
     function showAdd(){ btn.style.display = 'flex'; steps.style.display = 'none'; }

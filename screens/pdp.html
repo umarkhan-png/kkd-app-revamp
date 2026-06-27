@@ -61,6 +61,12 @@
   .wc-link b{color:#0C831F;font-weight:900}
   /* "how?" → plain text · no badge / highlight, just a normal-looking tappable word */
   .wc-how{color:#64748B;font-weight:600}
+  /* Farmer-testimonial · crop name shown at the TOP of each video card · text only, no icon/image */
+  .testi-crop{display:inline-block;font-size:9px;font-weight:800;color:#fff;background:rgba(0,0,0,.5);padding:2px 8px;border-radius:6px;letter-spacing:.02em}
+  /* Review · per-review crop tag + crop-wise filter chip (sits in the same filter row as "With photos") */
+  .rev-crop{display:inline-block;font-size:10px;font-weight:700;color:#0E7A4E;background:#ECFDF5;border:1px solid #A7F3D0;padding:1px 8px;border-radius:9999px}
+  .rev-cropf{cursor:pointer}
+  .rev-cropf.on{background:#0F172A !important;color:#fff !important;border-color:#0F172A !important}
   /* "How you pay" breakdown sheet (reuses the trust-sheet shell) */
   .wc-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:10px 0;border-bottom:1px dashed #EAE0CA}
   .wc-row .kw{display:flex;flex-direction:column;gap:2px}
@@ -549,6 +555,7 @@
     <div class="flex gap-3 min-w-max" id="pdpTestiRow">
       <div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">
         <img src="https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=400&q=80" class="w-full h-full object-cover" style="opacity:.55"/>
+        <div class="absolute top-2 left-2"><span class="testi-crop">Tomato</span></div>
         <div class="absolute inset-0 flex flex-col items-center justify-center">
           <div class="w-11 h-11 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg></div>
           <div class="text-white text-[10px] font-semibold text-center px-2">Ramesh Patel</div>
@@ -558,6 +565,7 @@
       </div>
       <div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">
         <img src="https://images.unsplash.com/photo-1572177812156-58036aae439c?w=400&q=80" class="w-full h-full object-cover" style="opacity:.55"/>
+        <div class="absolute top-2 left-2"><span class="testi-crop">Cotton</span></div>
         <div class="absolute inset-0 flex flex-col items-center justify-center">
           <div class="w-11 h-11 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg></div>
           <div class="text-white text-[10px] font-semibold text-center px-2">Mohan Verma</div>
@@ -567,6 +575,7 @@
       </div>
       <div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">
         <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=400&q=80" class="w-full h-full object-cover" style="opacity:.55"/>
+        <div class="absolute top-2 left-2"><span class="testi-crop">Wheat</span></div>
         <div class="absolute inset-0 flex flex-col items-center justify-center">
           <div class="w-11 h-11 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg></div>
           <div class="text-white text-[10px] font-semibold text-center px-2">Balram Kushwaha</div>
@@ -589,8 +598,10 @@
       ];
       let idx = 0, loading = false, done = false;
       function tile(t){
+        const crop = (t.loc || '').split('·')[0].trim();
         return '<div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">'
           + '<img src="' + t.img + '" class="w-full h-full object-cover" style="opacity:.55"/>'
+          + (crop ? '<div class="absolute top-2 left-2"><span class="testi-crop">' + crop + '</span></div>' : '')
           + '<div class="absolute inset-0 flex flex-col items-center justify-center"><div class="w-11 h-11 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg></div>'
           + '<div class="text-white text-[10px] font-semibold text-center px-2">' + t.n + '</div><div class="text-[9px] text-center" style="color:rgba(255,255,255,0.7)">' + t.loc + '</div></div>'
           + '<div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-semibold leading-tight">' + t.q + '</div></div></div>';
@@ -836,6 +847,11 @@
       <span class="text-white text-[12.5px] font-semibold px-3.5 py-1.5 rounded-full" style="background:#0F172A">All (2,020)</span>
       <span class="bg-white border border-[#E5E7EB] text-[12.5px] font-semibold px-3.5 py-1.5 rounded-full" style="color:#64748B">Most helpful</span>
       <span class="bg-white border border-[#E5E7EB] text-[12.5px] font-semibold px-3.5 py-1.5 rounded-full" style="color:#64748B">With photos (412)</span>
+      <!-- Crop-wise review filter · same chip style · filters the list by the crop the product was used on -->
+      <span class="rev-cropf bg-white border border-[#E5E7EB] text-[12.5px] font-semibold px-3.5 py-1.5 rounded-full" style="color:#64748B" data-crop="tomato">Tomato</span>
+      <span class="rev-cropf bg-white border border-[#E5E7EB] text-[12.5px] font-semibold px-3.5 py-1.5 rounded-full" style="color:#64748B" data-crop="wheat">Wheat</span>
+      <span class="rev-cropf bg-white border border-[#E5E7EB] text-[12.5px] font-semibold px-3.5 py-1.5 rounded-full" style="color:#64748B" data-crop="cotton">Cotton</span>
+      <span class="rev-cropf bg-white border border-[#E5E7EB] text-[12.5px] font-semibold px-3.5 py-1.5 rounded-full" style="color:#64748B" data-crop="chilli">Chilli</span>
       <span class="bg-white border border-[#E5E7EB] text-[12.5px] font-semibold px-3.5 py-1.5 rounded-full" style="color:#64748B">5★ only</span>
       <span class="bg-white border border-[#E5E7EB] text-[12.5px] font-semibold px-3.5 py-1.5 rounded-full" style="color:#64748B">Critical</span>
     </div>
@@ -843,7 +859,7 @@
 
   <!-- Review list · larger fonts · Helpful/Report/Verified stripped per spec · "View more" reveals 3 more reviews per tap -->
   <div id="reviewList" class="mt-3 space-y-2.5">
-    <div class="bg-white border border-[#E5E7EB] rounded-[12px] p-3.5">
+    <div class="bg-white border border-[#E5E7EB] rounded-[12px] p-3.5" data-crop="tomato">
       <div class="flex items-center gap-2.5">
         <div class="w-9 h-9 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[14px] font-semibold" style="color:#258046">R</div>
         <div class="flex-1 leading-tight">
@@ -851,6 +867,7 @@
           <div class="flex items-center gap-1.5 mt-1">
             <div class="flex items-center gap-0.5 text-white text-[10.5px] font-semibold px-1.5 py-0.5 rounded" style="background:#258046"><svg width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg>5</div>
             <span class="text-[11px]" style="color:#64748B">Indore · 12 days ago</span>
+            <span class="rev-crop">Tomato</span>
           </div>
         </div>
       </div>
@@ -1128,29 +1145,32 @@
     const btn = document.getElementById('viewMoreBtn');
     if (!btn || !list) return;
     const pool = [
-      { n:'Mohan Verma', loc:'Khandwa · 1 month ago', initials:'M', star:5, body:'Cotton crop me lagaya — leaves greener within 10 days. Strong roots.', imgs:[] },
-      { n:'Balram Kushwaha', loc:'Sehore · 2 months ago', initials:'B', star:4, body:'Used for 2 seasons on wheat. Yield is consistently up.', imgs:[] },
-      { n:'Suresh Yadav', loc:'Bhopal · 3 weeks ago', initials:'S', star:5, body:'Mix easily with urea. No clumping. Highly recommend.', imgs:['https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=200&q=80'] },
-      { n:'Anita Devi', loc:'Ujjain · 5 days ago', initials:'A', star:5, body:'Tomato patch had stunted growth. After 3 sprays, plants are thriving.', imgs:[] },
-      { n:'Pradeep Singh', loc:'Dewas · 2 weeks ago', initials:'P', star:4, body:'Good quality. Pack arrived sealed. Will order again next season.', imgs:[] },
-      { n:'Dinesh Patidar', loc:'Ratlam · 1 week ago', initials:'D', star:5, body:'Mirchi ki fasal me result accha mila. Patte healthy ho gaye.', imgs:[] },
-      { n:'Kailash Meena', loc:'Mandsaur · 4 days ago', initials:'K', star:4, body:'Delivery time pe aayi. Product original laga. Soyabean me try kiya.', imgs:['https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=200&q=80'] },
-      { n:'Ramnivas Gurjar', loc:'Shajapur · 2 months ago', initials:'R', star:5, body:'Teesri baar order kiya. Bharosa ban gaya hai is brand par.', imgs:[] },
-      { n:'Lakhan Lal', loc:'Vidisha · 6 days ago', initials:'L', star:5, body:'Gehu me daala, growth tezi se hui. Paisa vasool.', imgs:[] },
-      { n:'Gopal Sahu', loc:'Hoshangabad · 3 weeks ago', initials:'G', star:4, body:'Quality theek hai. Packaging thodi aur strong honi chahiye.', imgs:[] },
-      { n:'Shivnarayan', loc:'Betul · 1 month ago', initials:'S', star:5, body:'Makka ki fasal ke liye best. Jad mazboot ho gayi.', imgs:['https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=200&q=80'] },
-      { n:'Phoolchand Jat', loc:'Neemuch · 10 days ago', initials:'P', star:5, body:'Costly laga pehle, par result dekh ke worth it.', imgs:[] },
-      { n:'Hariom Tiwari', loc:'Sagar · 2 weeks ago', initials:'H', star:4, body:'Spray karne me aasan. Pump me jam nahi hota.', imgs:[] },
-      { n:'Devkaran', loc:'Rajgarh · 5 weeks ago', initials:'D', star:5, body:'Pyaaz ki kheti me change saaf dikha. Recommend karta hoon.', imgs:[] },
-      { n:'Bhagwan Das', loc:'Guna · 8 days ago', initials:'B', star:5, body:'Customer support ne sahi guidance di. Product accha hai.', imgs:[] },
-      { n:'Mangilal Patidar', loc:'Dhar · 3 days ago', initials:'M', star:4, body:'Chana fasal me use kiya. Phool zyada aaye is baar.', imgs:['https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=200&q=80'] }
+      { n:'Mohan Verma', loc:'Khandwa · 1 month ago', initials:'M', star:5, crop:'cotton', body:'Cotton crop me lagaya — leaves greener within 10 days. Strong roots.', imgs:[] },
+      { n:'Balram Kushwaha', loc:'Sehore · 2 months ago', initials:'B', star:4, crop:'wheat', body:'Used for 2 seasons on wheat. Yield is consistently up.', imgs:[] },
+      { n:'Suresh Yadav', loc:'Bhopal · 3 weeks ago', initials:'S', star:5, crop:'wheat', body:'Mix easily with urea. No clumping. Highly recommend.', imgs:['https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=200&q=80'] },
+      { n:'Anita Devi', loc:'Ujjain · 5 days ago', initials:'A', star:5, crop:'tomato', body:'Tomato patch had stunted growth. After 3 sprays, plants are thriving.', imgs:[] },
+      { n:'Pradeep Singh', loc:'Dewas · 2 weeks ago', initials:'P', star:4, crop:'cotton', body:'Good quality. Pack arrived sealed. Will order again next season.', imgs:[] },
+      { n:'Dinesh Patidar', loc:'Ratlam · 1 week ago', initials:'D', star:5, crop:'chilli', body:'Mirchi ki fasal me result accha mila. Patte healthy ho gaye.', imgs:[] },
+      { n:'Kailash Meena', loc:'Mandsaur · 4 days ago', initials:'K', star:4, crop:'tomato', body:'Delivery time pe aayi. Product original laga. Tamatar me try kiya.', imgs:['https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=200&q=80'] },
+      { n:'Ramnivas Gurjar', loc:'Shajapur · 2 months ago', initials:'R', star:5, crop:'wheat', body:'Teesri baar order kiya. Bharosa ban gaya hai is brand par.', imgs:[] },
+      { n:'Lakhan Lal', loc:'Vidisha · 6 days ago', initials:'L', star:5, crop:'wheat', body:'Gehu me daala, growth tezi se hui. Paisa vasool.', imgs:[] },
+      { n:'Gopal Sahu', loc:'Hoshangabad · 3 weeks ago', initials:'G', star:4, crop:'cotton', body:'Quality theek hai. Packaging thodi aur strong honi chahiye.', imgs:[] },
+      { n:'Shivnarayan', loc:'Betul · 1 month ago', initials:'S', star:5, crop:'chilli', body:'Mirchi ki fasal ke liye best. Paudhe mazboot ho gaye.', imgs:['https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=200&q=80'] },
+      { n:'Phoolchand Jat', loc:'Neemuch · 10 days ago', initials:'P', star:5, crop:'tomato', body:'Costly laga pehle, par result dekh ke worth it.', imgs:[] },
+      { n:'Hariom Tiwari', loc:'Sagar · 2 weeks ago', initials:'H', star:4, crop:'cotton', body:'Spray karne me aasan. Pump me jam nahi hota.', imgs:[] },
+      { n:'Devkaran', loc:'Rajgarh · 5 weeks ago', initials:'D', star:5, crop:'tomato', body:'Tamatar ki kheti me change saaf dikha. Recommend karta hoon.', imgs:[] },
+      { n:'Bhagwan Das', loc:'Guna · 8 days ago', initials:'B', star:5, crop:'wheat', body:'Customer support ne sahi guidance di. Product accha hai.', imgs:[] },
+      { n:'Mangilal Patidar', loc:'Dhar · 3 days ago', initials:'M', star:4, crop:'chilli', body:'Mirchi fasal me use kiya. Phool zyada aaye is baar.', imgs:['https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=200&q=80'] }
     ];
+    const CROP_LBL = { tomato:'Tomato', wheat:'Wheat', cotton:'Cotton', chilli:'Chilli', maize:'Maize', onion:'Onion' };
     let shown = 0;
     btn.addEventListener('click', () => {
       const batch = pool.slice(shown, shown + 3);
       batch.forEach(r => {
         const card = document.createElement('div');
         card.className = 'bg-white border border-[#E5E7EB] rounded-[12px] p-3.5';
+        if (r.crop) card.dataset.crop = r.crop;
+        const cropPill = r.crop ? '<span class="rev-crop">' + (CROP_LBL[r.crop] || r.crop) + '</span>' : '';
         const imgs = r.imgs.map(s => '<img src="'+s+'" class="w-14 h-14 rounded-lg object-cover"/>').join('');
         card.innerHTML = '<div class="flex items-center gap-2.5">'
           + '<div class="w-9 h-9 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[14px] font-semibold" style="color:#258046">' + r.initials + '</div>'
@@ -1159,6 +1179,7 @@
           +   '<div class="flex items-center gap-1.5 mt-1">'
           +     '<div class="flex items-center gap-0.5 text-white text-[10.5px] font-semibold px-1.5 py-0.5 rounded" style="background:#258046"><svg width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg>' + r.star + '</div>'
           +     '<span class="text-[11px]" style="color:#64748B">' + r.loc + '</span>'
+          +     cropPill
           +   '</div>'
           + '</div>'
           + '</div>'
@@ -1169,6 +1190,25 @@
       shown += batch.length;
       if (shown >= pool.length) btn.style.display = 'none';
     });
+
+    // Crop-wise review filter · clicking a crop chip loads all reviews then shows only that crop · click again → All
+    (function(){
+      const chips = document.querySelectorAll('.rev-cropf');
+      if (!chips.length) return;
+      function loadAll(){ let g = 0; while (btn && btn.style.display !== 'none' && g < 30){ btn.click(); g++; } }
+      function showAll(){ list.querySelectorAll('[data-crop]').forEach(c => { c.style.display = ''; }); }
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          const wasOn = chip.classList.contains('on');
+          chips.forEach(c => c.classList.remove('on'));
+          if (wasOn){ showAll(); return; }
+          chip.classList.add('on');
+          loadAll();
+          const crop = chip.dataset.crop;
+          list.querySelectorAll('[data-crop]').forEach(c => { c.style.display = (c.dataset.crop === crop) ? '' : 'none'; });
+        });
+      });
+    })();
   })();
 </script>
 <script>

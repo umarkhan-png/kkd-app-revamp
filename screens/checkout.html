@@ -502,16 +502,19 @@
       const sub = cod.querySelector('.pay-sub');
       const top = cod.querySelector('.pay-toprow');
       if (need){
-        // Only the name/amount are dimmed; the unavailable notice stays fully visible at the bottom of the row
+        // Only the name/amount are dimmed; hide the other COD sub-lines (e.g. "we'll call to confirm") so the single
+        // unavailable notice sits clean at the bottom with no congestion
         cod.style.pointerEvents = 'none';
         if (top) top.style.opacity = '.5';
-        if (sub){ if (!sub.dataset.orig) sub.dataset.orig = sub.innerHTML; sub.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:#DC2626"></i> Not available on orders above ₹10,000'; sub.style.color = '#DC2626'; sub.style.fontWeight = '700'; }
+        cod.querySelectorAll('.pay-sub').forEach((s, i) => { if (i > 0) { s.dataset.advHidden = '1'; s.style.display = 'none'; } });
+        if (sub){ if (!sub.dataset.orig) sub.dataset.orig = sub.innerHTML; sub.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:#DC2626"></i> Not available on orders above ₹10,000'; sub.style.color = '#DC2626'; sub.style.fontWeight = '700'; sub.style.marginTop = '6px'; }
         const ce = document.getElementById('codExtra'); if (ce) ce.style.display = 'none';
         if (currentMethod === 'cod'){ const pn = document.querySelector('.pay[data-pay="paynow"]'); if (pn) pn.click(); }
       } else if (sub && sub.dataset.orig){
         cod.style.pointerEvents = '';
         if (top) top.style.opacity = '';
-        sub.innerHTML = sub.dataset.orig; sub.style.color = ''; sub.style.fontWeight = '';
+        cod.querySelectorAll('.pay-sub[data-adv-hidden]').forEach(s => { s.style.display = ''; delete s.dataset.advHidden; });
+        sub.innerHTML = sub.dataset.orig; sub.style.color = ''; sub.style.fontWeight = ''; sub.style.marginTop = '';
       }
     }
 
@@ -687,6 +690,9 @@
         if (IS_BIG){
           if (BIG_CASE === '2'){ prevTotal = 1000; extra = 20000; }
           else { prevTotal = 8000; extra = 3000; }
+        } else if (recent && recent.demoPrev != null){
+          // Buy-again demo · clean forced totals so the merged-value breakdown is easy to read
+          prevTotal = recent.demoPrev; if (recent.demoAdd != null) extra = recent.demoAdd;
         }
         const onlineDiscount = Math.round(extra * 0.05);
         const onlineTotal = Math.max(0, extra - onlineDiscount);
@@ -738,12 +744,19 @@
         function applyChip(){
           chips.forEach(c => c.setAttribute('aria-checked', c.dataset.pay === selected ? 'true' : 'false'));
           if (advanceRegime){
-            payDiscRow.style.display = 'none';
+            // Transparent breakdown: Previous order + This order = Total · then Already paid · You pay now
             const payNow = (selected === 'advpartial') ? advanceMin : fullPrepaidNow;
             currentPayNow = payNow;
-            if (payPrevLbl) payPrevLbl.textContent = 'Already paid';
-            payPrev.textContent = rupee(alreadyPaid);
+            if (payPrevLbl) payPrevLbl.textContent = 'Previous order';
+            payPrev.textContent = rupee(prevTotal);
+            if (payAddLbl) payAddLbl.textContent = 'This order (adding)';
+            payAdd.textContent = rupee(extra);
             payMerged.textContent = rupee(mergedOrderValue);
+            if (alreadyPaid > 0){
+              payDiscRow.style.display = 'flex';
+              var dl = payDiscRow.querySelector('span'); if (dl) dl.textContent = 'Already paid';
+              payDisc.textContent = '−' + rupee(alreadyPaid);
+            } else { payDiscRow.style.display = 'none'; }
             payTotal.textContent = rupee(payNow);
             const balance = Math.max(0, (mergedOrderValue - alreadyPaid) - payNow);   // collected on delivery
             if (advNoteTx){
@@ -756,6 +769,7 @@
           }
           // Normal regime · pay the newly-added amount online (5% off) or as COD
           if (payPrevLbl) payPrevLbl.textContent = 'Previous order paid';
+          var dl2 = payDiscRow.querySelector('span'); if (dl2) dl2.textContent = 'Pay Online discount (5%)';
           const pay = selected === 'paynow' ? onlineTotal : extra;
           currentPayNow = pay;
           const merged = prevTotal + pay;

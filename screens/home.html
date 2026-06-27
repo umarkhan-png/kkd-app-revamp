@@ -1940,7 +1940,8 @@
         </div>
       </div>
     </section>
-    <style>@keyframes tspin{to{transform:rotate(360deg)}}</style>
+    <style>@keyframes tspin{to{transform:rotate(360deg)}}
+    .testi-crop{display:inline-block;font-size:9px;font-weight:800;color:#fff;background:rgba(0,0,0,.5);padding:2px 8px;border-radius:6px;letter-spacing:.02em}</style>
     <script>
       // Farmer testimonials · load more as the row is scrolled to its right end (loader shows briefly)
       (function(){
@@ -1956,9 +1957,21 @@
           {img:'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=400&q=80', n:'Ramlal Meena', loc:'Cotton · Ratlam', q:'"Healthier bolls"'}
         ];
         let idx = 0, loading = false, done = false;
+        // Prepend a crop-name tag (text only) to the top of every static testimonial card
+        document.querySelectorAll('#testiRow > div').forEach(function(card){
+          if (card.querySelector('.testi-crop')) return;
+          var locDiv = card.querySelector('div[style*="rgba(255,255,255,0.7)"]');
+          var crop = locDiv ? (locDiv.textContent || '').split('·')[0].trim() : '';
+          if (!crop) return;
+          var tag = document.createElement('div'); tag.className = 'absolute top-2 left-2';
+          tag.innerHTML = '<span class="testi-crop">' + crop + '</span>';
+          card.appendChild(tag);
+        });
         function tile(t){
+          const crop = (t.loc || '').split('·')[0].trim();
           return '<div class="w-[152px] h-[200px] rounded-[12px] overflow-hidden relative flex-shrink-0" style="background:#0F172A">'
             + '<img src="' + t.img + '" class="w-full h-full object-cover" style="opacity:.55"/>'
+            + (crop ? '<div class="absolute top-2 left-2"><span class="testi-crop">' + crop + '</span></div>' : '')
             + '<div class="absolute inset-0 flex flex-col items-center justify-center"><div class="w-11 h-11 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M8 5v14l11-7z"/></svg></div>'
             + '<div class="text-white text-[10px] font-semibold text-center px-2">' + t.n + '</div><div class="text-[9px] text-center" style="color:rgba(255,255,255,0.7)">' + t.loc + '</div></div>'
             + '<div class="absolute bottom-2 left-2 right-2 rounded-[8px] px-2 py-1" style="background:rgba(0,0,0,0.55)"><div class="text-white text-[9px] font-semibold leading-tight">' + t.q + '</div></div></div>';
@@ -3800,18 +3813,19 @@
     // · tile 2 (Chakrawarti, data-demo-case="B") → cart adds a brand-new product on top of the recent order → diff/merge branch
     (function(){
       var SEED = {
-        // Case A · cart is the same item already in the recent order → modal asks "merge or discard"
-        A: { recent: ['humic'], qtys: { humic: 1 },                                   cart: ['humic']                },
-        // Case B · big recent order on COD (≈₹10k) + a fresh addition so the MERGED value crosses ₹10,000 →
-        //   exercises the advance rule (COD disabled, Pay-full / 10%-Partial) in the real buy-again flow
-        B: { recent: ['humic','chakraveer','npk'], qtys: { humic:6, chakraveer:5, npk:5 }, cart: ['humic','bhumiraja'], mode: 'cod' }
+        // Case A · EXAMPLE 2 · previous order ₹1,000 fully PREPAID + a fresh ₹20,000 order → merged ₹21,000
+        //   → COD disabled · pay ₹20,000 (₹1,000 already paid) OR 10% partial = ₹1,100
+        A: { recent: ['npk'], qtys: { npk:1 }, cart: ['humic'], demoPrev: 1000, demoAdd: 20000, mode: 'paynow' },
+        // Case B · EXAMPLE 1 · previous order ₹8,000 on COD + a fresh ₹3,000 order → merged ₹11,000
+        //   → COD disabled · pay ₹11,000 OR 10% partial = ₹1,100
+        B: { recent: ['humic','chakraveer'], qtys: { humic:1, chakraveer:1 }, cart: ['humic','bhumiraja'], demoPrev: 8000, demoAdd: 3000, mode: 'cod' }
       };
       document.querySelectorAll('.ba-reorder[data-demo-case]').forEach(function(a){
         a.addEventListener('click', function(e){
           var c = a.getAttribute('data-demo-case');
           var s = SEED[c]; if (!s) return;
           try {
-            localStorage.setItem('kkd.lastOrder', JSON.stringify({ id:'KKD-26194-7821', items:s.recent, qtys:s.qtys, ts:Date.now(), mode:(s.mode || 'paynow') }));
+            localStorage.setItem('kkd.lastOrder', JSON.stringify({ id:'KKD-26194-7821', items:s.recent, qtys:s.qtys, ts:Date.now(), mode:(s.mode || 'paynow'), demoPrev:s.demoPrev, demoAdd:s.demoAdd }));
             localStorage.setItem('kkd.cart', JSON.stringify(s.cart));
             localStorage.removeItem('kkd.mergeInfo');
           } catch(_) {}

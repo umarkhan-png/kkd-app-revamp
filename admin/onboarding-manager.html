@@ -144,6 +144,9 @@ if(!O.phone.hero.imgByState) O.phone.hero.imgByState={};
 // OTP resend channels — enable/disable toggles (copy lives in Translations)
 if(O.otp.resendWhatsapp===undefined) O.otp.resendWhatsapp=true;
 if(O.otp.resendSms===undefined) O.otp.resendSms=true;
+// Welcome — show the user's name in the greeting (toggle per variant)
+if(O.welcomeAboard && O.welcomeAboard.showName===undefined) O.welcomeAboard.showName=true;
+if(O.welcomeBack && O.welcomeBack.showName===undefined) O.welcomeBack.showName=true;
 
 const SECTIONS = [
   { key:'splash',   icon:'📲', name:'Splash',          sub:'Logo + background',     screen:'splash.html' },
@@ -320,26 +323,18 @@ const EDITORS = {
       );
   },
   welcome(){
-    const bullets = O.permissionBullets.map((b,i)=>`
-      <div class="li">
-        <div class="factic"><i class="fa-solid fa-${esc(b.icon||'circle-info')}"></i></div>
-        <div class="li-body"><div class="row" style="margin-bottom:0">
-          <div class="fg fix" style="max-width:170px"><label>Icon</label><input type="text" value="${esc(b.icon||'')}" oninput="setPath('permissionBullets.${i}.icon',this.value)" onchange="commit();rerender()"/></div>
-          ${tField('permissionBullets.'+i+'.text','Benefit line')}
-        </div></div>
-        <div class="li-act"><button class="btn btn-d btn-ic" onclick="delBullet(${i})"><i class="fa-solid fa-trash"></i></button></div>
-      </div>`).join('');
     return head(meta('welcome')) + langBar() +
       card('Welcome — new user (Welcome aboard)',
+        toggle('welcomeAboard.showName',"Show the farmer's name",'e.g. “Welcome aboard, Ramesh!” — off shows a generic greeting') +
+        `<div style="height:12px"></div>`+
         `<div class="row">`+ tField('welcomeAboard.eyebrow','Eyebrow') + tField('welcomeAboard.headline','Headline') +`</div>`+
         tField('welcomeAboard.sub','Sub-text',{area:true})
       ) +
       card('Welcome — returning user (Welcome back)',
+        toggle('welcomeBack.showName',"Show the farmer's name",'e.g. “Welcome back, Ramesh!” — off shows a generic greeting') +
+        `<div style="height:12px"></div>`+
         `<div class="row">`+ tField('welcomeBack.eyebrow','Eyebrow') + tField('welcomeBack.headline','Headline') +`</div>`+
         tField('welcomeBack.sub','Sub-text',{area:true})
-      ) +
-      card('Location permission — benefit lines',
-        bullets + `<button class="btn btn-s btn-sm" onclick="addBullet()"><i class="fa-solid fa-plus"></i> Add benefit line</button>`
       );
   },
 };
@@ -348,8 +343,6 @@ function meta(k){ return SECTIONS.find(s=>s.key===k); }
 /* ---------- list mutations ---------- */
 function addFact(){ O.otp.facts.push({ icon:'circle-info', text:{ en:'New message' } }); commit('Message added'); rerender(); }
 function delFact(i){ O.otp.facts.splice(i,1); commit('Message removed'); rerender(); }
-function addBullet(){ O.permissionBullets.push({ icon:'circle-check', text:{ en:'New benefit' } }); commit('Line added'); rerender(); }
-function delBullet(i){ O.permissionBullets.splice(i,1); commit('Line removed'); rerender(); }
 
 /* ---------- predefined icon picker (OTP rotating strip) ---------- */
 const PRESET_ICONS=['truck-fast','box-open','shield-halved','lock','circle-check','headset','phone','clock',

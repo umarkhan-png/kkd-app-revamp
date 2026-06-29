@@ -35,8 +35,8 @@
   const SPECS = {
     // Full-width promo banner — fixed 9:4 strip in every carousel slot.
     banner:    { label: 'Promo banner',      formats: IMG,    maxMB: 2, gifMB: 4, dim: { w: 1080, h: 480, mode: 'exact' }, tol: 4 },
-    // Top-of-Home hero / theme background — landscape, some crop tolerated.
-    hero:      { label: 'Home hero / theme', formats: IMG,    maxMB: 2, gifMB: 4, dim: { w: 1080, h: 600, mode: 'aspect' } },
+    // Mobile-number / Home hero card — matches the real hero (362×292 on the 390px screen → 3× = 1080×870, ~5:4).
+    hero:      { label: 'Hero image', formats: IMG,    maxMB: 2, gifMB: 4, dim: { w: 1080, h: 870, mode: 'aspect' } },
     // App logo — small, square, ideally transparent PNG/SVG.
     logo:      { label: 'App logo',          formats: IMG_NS, maxMB: 0.5,          dim: { w: 512, h: 512, mode: 'square' } },
     // Product shot — square, shown on Shop tiles + PDP.

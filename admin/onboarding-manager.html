@@ -95,6 +95,10 @@
 .hm .splash-nest .sdiv:first-child{padding-top:0;}
 .hm .up-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:8px 10px;border:1px solid var(--g200);border-radius:9px;background:#fff;}
 .hm .date-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:6px;}
+.hm .hero-prev{width:100%;max-width:360px;aspect-ratio:1080/600;border-radius:12px;border:1px solid var(--g200);background:var(--g50);overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.hm .hero-prev img{width:100%;height:100%;object-fit:cover;}
+.hm .hero-ph{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--g400);font-size:12px;}
+.hm .hero-ph i{font-size:28px;}
 @media (max-width:1080px){ .hm .hm-layout{flex-direction:column;} .hm .lp{width:100%;position:static;} }
 </style>
 </head>
@@ -388,11 +392,27 @@ function heroVar(path,label,spec,emptyHint){
     ${isImg?`<button class="btn btn-d btn-ic btn-sm" onclick="clearImg('${path}')"><i class="fa-solid fa-xmark"></i></button>`:''}
   </div>`;
 }
+// large full-image hero preview (proper aspect) + upload/replace/remove
+function heroBig(path,label,hint,spec){
+  spec=spec||'hero';
+  const v=getPath(path)||'';
+  const isImg = /\.(png|jpe?g|webp|svg|gif)(\?|$)/i.test(v) || v.startsWith('blob:') || v.startsWith('data:') || v.startsWith('http');
+  return `<div class="fg"><label>${label}</label>
+    <div class="hero-prev">${isImg?`<img src="${esc(v)}" onerror="this.parentNode.innerHTML='<div class=\\'hero-ph\\'><i class=\\'fa-solid fa-image\\'></i><span>Image not found</span></div>'"/>`:`<div class="hero-ph"><i class="fa-solid fa-image"></i><span>No hero image yet</span></div>`}</div>
+    <div style="display:flex;gap:7px;margin-top:8px;align-items:center;flex-wrap:wrap">
+      <button class="btn btn-s btn-sm" onclick="pickImg('${path}','${spec}')"><i class="fa-solid fa-upload"></i> ${isImg?'Replace image':'Upload image'}</button>
+      ${isImg?`<button class="btn btn-d btn-sm" onclick="clearImg('${path}')"><i class="fa-solid fa-xmark"></i> Remove</button>`:''}
+      ${hint?`<span class="hint">${hint}</span>`:''}
+    </div>
+    ${(spec&&window.KKDV)?`<div class="kkdv-hint" style="margin-top:8px"><i class="fa-solid fa-circle-info"></i> ${KKDV.specHint(spec)}</div>`:''}
+    <div class="kkdv-msg" id="msg_${cssId(path)}"></div>
+  </div>`;
+}
 function phoneHeroBlock(){
   const langs=O.languages.filter(L=>L.on);
   const sts=O.phone.hero.states||[], all=sts.length===STATES.length;
   const chips=STATES.map(st=>`<span class="cchip ${sts.indexOf(st)>=0?'on':''}" onclick="heroScope('${st}')">${st}</span>`).join('');
-  return imgField('phone.hero.img','Default hero — shown to all users','Used unless a state version below applies','hero')
+  return heroBig('phone.hero.img','Default hero — shown to all users','Used unless a state version below applies','hero')
     + `<div class="sdiv" style="margin-top:16px">States</div>`
     + `<div><span class="cchip ${all?'on':''}" onclick="heroScopeAll()">All states</span> ${chips}</div>`
     + `<div class="splash-nest">`

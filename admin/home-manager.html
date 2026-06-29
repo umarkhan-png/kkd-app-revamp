@@ -170,13 +170,6 @@
     <div class="work">
 
       <div class="hm">
-        <div class="flex items-center justify-between" style="margin-bottom:18px">
-          <div>
-            <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Home Page Manager</h2>
-          </div>
-          <span class="tag tag-green" id="hmCount" style="font-size:12px;padding:5px 11px"></span>
-        </div>
-
         <div class="hm-layout">
           <!-- LEFT -->
           <div class="lp">
@@ -258,7 +251,6 @@ let sel=null,dragId=null;
 
 /* ── RENDER LIST ── */
 function renderList(){
-  document.getElementById('hmCount').textContent = SECS.length + ' sections';
   document.getElementById('secList').innerHTML=SECS.map(s=>`
     <div class="sec-item${sel===s.id?' active':''}${s.on?'':' off'}" id="si-${s.id}"
       draggable="true"
@@ -289,8 +281,9 @@ function toggleVis(id){const s=SECS.find(s=>s.id===id);s.on=!s.on;persist();rend
 function pick(id){sel=id;renderList();document.getElementById('rp').innerHTML=EDITORS[id]?EDITORS[id]():`<div class="empty-state"><div class="ei">🚧</div><p>Editor coming soon</p></div>`;}
 
 /* ── HELPERS ── */
-function LT(ac='hi'){return`<div class="lang-tabs">${LANGS.map(l=>`<div class="lt${l.c===ac?' on':''}" onclick="swL(this)">${l.l}</div>`).join('')}</div>`;}
-function swL(el){el.closest('.lang-tabs').querySelectorAll('.lt').forEach(t=>t.classList.remove('on'));el.classList.add('on');}
+/* Language tabs removed — per-language copy lives in the Translations tool, not in screen editors. */
+function LT(ac='hi'){return'';}
+function swL(el){}
 function SP(selSt=['All States']){return`<div class="sp-wrap">${STATES.map(st=>`<div class="sp${st==='All States'&&selSt.includes(st)?' all':selSt.includes(st)?' on':''}" onclick="swS(this,'${st}')">${st}</div>`).join('')}</div>`;}
 function swS(el,st){if(st==='All States'){el.closest('.sp-wrap').querySelectorAll('.sp').forEach(p=>p.classList.remove('on','all'));el.classList.add('all');}else{el.closest('.sp-wrap').querySelector('.sp:first-child').classList.remove('all');el.classList.toggle('on');}}
 function TG(id,on,tt,td=''){return`<div class="tr"><div class="tr-l"><div class="tt">${tt}</div>${td?`<div class="td">${td}</div>`:''}</div><div class="tg${on?' on':''}" id="${id}" onclick="this.classList.toggle('on')"></div></div>`;}

@@ -58,12 +58,16 @@
   /* Wallet + Coins effective price · tappable inline link sitting beside the MRP · "or buy at ₹0 how?" opens a sheet explaining the wallet ₹540 + coins ₹120 maths · grey normal-weight label, coloured amount, plain "how?" — all Poppins */
   .wc-link{display:inline-flex;align-items:center;gap:6px;padding:0;background:none;border:0;cursor:pointer;font-size:13.5px;line-height:1;font-family:'Poppins',system-ui,sans-serif}
   .wc-or{color:#64748B;font-weight:500}
-  .wc-link b{color:#0C831F;font-weight:800;font-size:15px}
+  .wc-link b{color:#0C831F;font-weight:600;font-size:19px}
   /* effective-price help → white circle with green stroke + an upright "?" (FontAwesome glyph, never italic) */
   .wc-how{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:9999px;background:#FFFFFF;border:1.4px solid #258046;color:#258046;line-height:1;font-style:normal}
   .wc-how i{font-size:8px;font-style:normal}
   /* Farmer-testimonial · crop name shown at the TOP of each video card · text only, no icon/image */
   .testi-crop{display:inline-block;font-size:9px;font-weight:800;color:#fff;background:rgba(0,0,0,.5);padding:2px 8px;border-radius:6px;letter-spacing:.02em}
+  /* Certifications trust strip · muted greyish logos (grayscale + low opacity) at the PDP bottom */
+  .cert-strip{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;padding:16px 14px;border-radius:14px;background:#F8FAFC;border:1px solid #EEF2F6}
+  .cert-strip img{height:44px;width:auto;object-fit:contain;filter:grayscale(1);opacity:.5;transition:filter .2s ease,opacity .2s ease}
+  .cert-strip img:active{filter:grayscale(0);opacity:1}
   /* Review · per-review crop tag + crop-wise filter chip (sits in the same filter row as "With photos") */
   .rev-crop{display:inline-block;font-size:10px;font-weight:700;color:#0E7A4E;background:#ECFDF5;border:1px solid #A7F3D0;padding:1px 8px;border-radius:9999px}
   .rev-cropf{cursor:pointer}
@@ -906,6 +910,17 @@
     </span>
     <span class="ar">→</span>
   </a>
+</div>
+
+<!-- Certifications · trust badges (muted greyish) -->
+<div class="px-4 mb-6">
+  <div class="text-[11px] font-semibold uppercase tracking-wider text-center mb-3" style="color:#94A3B8">Certified &amp; quality assured</div>
+  <div class="cert-strip">
+    <img src="../assets/certs/iso.png" alt="ISO 9001:2015 Certified"/>
+    <img src="../assets/certs/gmp.png" alt="WHO-GMP Quality"/>
+    <img src="../assets/certs/organic.gif" alt="USDA Organic"/>
+    <img src="../assets/certs/eurocert.png" alt="EURO CERT"/>
+  </div>
 </div>
 
 <!-- Floating cart bar -->

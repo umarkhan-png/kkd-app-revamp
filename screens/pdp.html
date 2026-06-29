@@ -56,18 +56,23 @@
   .low-stock{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#DC2626;background:#FEF2F2;border:1px solid #FECACA;padding:4px 10px;border-radius:9999px}
   .low-stock i{font-size:10px}
   /* Wallet + Coins effective price · tappable inline link sitting beside the MRP · "or buy at ₹0 how?" opens a sheet explaining the wallet ₹540 + coins ₹120 maths · grey normal-weight label, coloured amount, plain "how?" — all Poppins */
-  .wc-link{display:inline-flex;align-items:center;gap:6px;padding:0;background:none;border:0;cursor:pointer;font-size:13.5px;line-height:1;font-family:'Poppins',system-ui,sans-serif}
-  .wc-or{color:#64748B;font-weight:500}
-  .wc-link b{color:#0C831F;font-weight:600;font-size:19px}
-  /* effective-price help → white circle with green stroke + an upright "?" (FontAwesome glyph, never italic) */
-  .wc-how{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:9999px;background:#FFFFFF;border:1.4px solid #258046;color:#258046;line-height:1;font-style:normal}
-  .wc-how i{font-size:8px;font-style:normal}
+  .wc-link{display:inline-flex;align-items:flex-end;gap:5px;padding:0;background:none;border:0;cursor:pointer;font-size:13.5px;line-height:1;font-family:'Poppins',system-ui,sans-serif}
+  .wc-or{color:#64748B;font-weight:500;line-height:1}
+  .wc-link b{color:#0C831F;font-weight:600;font-size:19px;line-height:1}
+  /* effective-price help → small white circle with green stroke + an upright "?" (FontAwesome glyph, never italic) */
+  .wc-how{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:9999px;background:#FFFFFF;border:1.2px solid #258046;color:#258046;line-height:1;font-style:normal;margin-bottom:1px}
+  .wc-how i{font-size:7px;font-style:normal}
   /* Farmer-testimonial · crop name shown at the TOP of each video card · text only, no icon/image */
   .testi-crop{display:inline-block;font-size:9px;font-weight:800;color:#fff;background:rgba(0,0,0,.5);padding:2px 8px;border-radius:6px;letter-spacing:.02em}
-  /* Certifications trust strip · muted greyish logos (grayscale + low opacity) at the PDP bottom */
-  .cert-strip{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;padding:16px 14px;border-radius:14px;background:#F8FAFC;border:1px solid #EEF2F6}
-  .cert-strip img{height:44px;width:auto;object-fit:contain;filter:grayscale(1);opacity:.5;transition:filter .2s ease,opacity .2s ease}
+  /* Certifications trust strip · muted greyish logos directly on the page background (no container) · normalized sizes */
+  .cert-strip{display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;padding:2px 0}
+  .cert-strip img{width:auto;object-fit:contain;filter:grayscale(.65);opacity:.82;transition:filter .2s ease,opacity .2s ease}
   .cert-strip img:active{filter:grayscale(0);opacity:1}
+  /* per-logo heights · ISO/GMP are landscape with padding → sized up so every badge reads the same size */
+  .cert-iso{height:50px}
+  .cert-gmp{height:52px}
+  .cert-usda{height:42px}
+  .cert-euro{height:46px}
   /* Review · per-review crop tag + crop-wise filter chip (sits in the same filter row as "With photos") */
   .rev-crop{display:inline-block;font-size:10px;font-weight:700;color:#0E7A4E;background:#ECFDF5;border:1px solid #A7F3D0;padding:1px 8px;border-radius:9999px}
   .rev-cropf{cursor:pointer}
@@ -241,9 +246,9 @@
 <div class="px-4 mt-4 flex items-center justify-between gap-3" id="priceRow">
   <div class="price-add">
     <div>
-      <div class="flex items-baseline gap-2 flex-wrap">
-        <span class="text-[28px] font-black tnum text-[#0F172A]">₹376</span>
-        <span class="text-[14px] text-[#94A3B8] line-through tnum">₹520</span>
+      <div class="flex items-end gap-2 flex-wrap">
+        <span class="text-[28px] font-black tnum text-[#0F172A] leading-none">₹376</span>
+        <span class="text-[14px] text-[#94A3B8] line-through tnum leading-none">₹520</span>
         <!-- Wallet + Coins effective price · sits beside the MRP · taps open the "how you pay" sheet · ₹0 when ₹540 wallet + 120 coins fully cover the pack · recomputes per pack -->
         <button class="wc-link" id="wcLink"><span class="wc-or">buy at</span> <b class="tnum" id="wcEff">₹0</b> <span class="wc-how"><i class="fa-solid fa-question"></i></span></button>
       </div>
@@ -916,10 +921,10 @@
 <div class="px-4 mb-6">
   <div class="text-[11px] font-semibold uppercase tracking-wider text-center mb-3" style="color:#94A3B8">Certified &amp; quality assured</div>
   <div class="cert-strip">
-    <img src="../assets/certs/iso.png" alt="ISO 9001:2015 Certified"/>
-    <img src="../assets/certs/gmp.png" alt="WHO-GMP Quality"/>
-    <img src="../assets/certs/organic.gif" alt="USDA Organic"/>
-    <img src="../assets/certs/eurocert.png" alt="EURO CERT"/>
+    <img class="cert-iso" src="../assets/certs/iso.png" alt="ISO 9001:2015 Certified"/>
+    <img class="cert-gmp" src="../assets/certs/gmp.png" alt="WHO-GMP Quality"/>
+    <img class="cert-usda" src="../assets/certs/organic.gif" alt="USDA Organic"/>
+    <img class="cert-euro" src="../assets/certs/eurocert.png" alt="EURO CERT"/>
   </div>
 </div>
 

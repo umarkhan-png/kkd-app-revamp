@@ -97,7 +97,7 @@
     } else {
       qtyHtml = '<span class="qty">Qty ' + q + '</span>';
       tagHtml = '<span class="om-tag unchanged">In order</span>';
-      priceHtml = '<span class="om-row-price none">No change</span>';
+      priceHtml = '<span class="om-row-price" style="color:#475569">' + rupee((m.price || 0) * q) + '</span>';
     }
     return '<div class="om-row" data-state="' + state + '">' +
       '<div class="om-row-img">' + (m.img ? '<img src="' + m.img + '" alt="" onerror="this.style.display=\'none\'"/>' : '') + '</div>' +

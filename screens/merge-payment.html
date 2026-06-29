@@ -23,8 +23,6 @@
 
   /* Simple amount-calculation card */
   .calc{margin:0 18px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:15px 16px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
-  .calc .lead{font-size:13px;color:#475569;font-weight:600;line-height:1.5;margin-bottom:12px}
-  .calc .lead b{color:#0F172A;font-weight:800}
   .calc .r{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:#475569;font-weight:600;padding:5px 0}
   .calc .r .v{font-weight:700;color:#0F172A;font-variant-numeric:tabular-nums}
   .calc .r .v.minus{color:#258046}
@@ -35,12 +33,17 @@
   .calc .note{font-size:12px;color:#64748B;font-weight:500;margin-top:11px;line-height:1.5;display:flex;gap:7px;align-items:flex-start;background:#F8FAFC;border:1px solid #EEF2F6;border-radius:10px;padding:10px 11px}
   .calc .note i{color:#258046;font-size:12px;margin-top:2px;flex-shrink:0}
 
-  /* Payment method · EXACT same rows as checkout.html */
+  /* Payment method · EXACT same UI as checkout.html (rows + partial %-tray + COD sub-lines) */
   .pay-card{margin:0 18px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
   .pay{position:relative;padding:14px;cursor:pointer;border-bottom:1px solid #F1F5F9;transition:background .15s ease;display:block}
   .pay:last-child{border-bottom:0}
   .pay.active{background:#ECFDF5}
-  .pay.disabled{opacity:.55;pointer-events:none}
+  .pay.disabled{opacity:.6}
+  .pay.disabled .pay-radio{border-color:#CBD5E1;background:transparent}
+  /* Tap-feedback toast */
+  .kkd-toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(10px);background:#0F172A;color:#fff;font-size:12.5px;font-weight:600;padding:11px 16px;border-radius:12px;box-shadow:0 10px 28px rgba(0,0,0,0.28);max-width:88%;text-align:center;line-height:1.45;opacity:0;pointer-events:none;transition:opacity .22s ease,transform .22s ease;z-index:120;display:flex;align-items:center;gap:8px}
+  .kkd-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .kkd-toast i{color:#FCA5A5;font-size:13px;flex-shrink:0}
   .pay-head{display:flex;align-items:flex-start;gap:12px}
   .pay-radio{width:20px;height:20px;border-radius:9999px;border:2px solid #CBD5E1;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s ease;margin-top:4px}
   .pay.active .pay-radio{border-color:#258046;background:#258046}
@@ -56,6 +59,18 @@
   .pay-bene i{font-size:9px}
   .pay-bene.gold{background:#FEF3C7;border-color:#FDE68A;color:#B45309}
   .pay-best{display:inline-block;background:#FBBF24;color:#0F172A;font-size:9px;font-weight:900;letter-spacing:0.08em;padding:2px 7px;border-radius:9999px;box-shadow:0 2px 6px rgba(251,191,36,0.4)}
+  /* Partial expansion tray · shows ONLY when the Partial row is active */
+  .partial-tray{display:none;padding:0 14px 14px 46px;background:#ECFDF5}
+  .pay.active.partial-row + .partial-tray{display:block}
+  .pp-head{font-size:11px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
+  .pp-opts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+  .pp-opt{padding:9px 4px;border-radius:10px;border:1.5px solid #BBF7D0;background:#FFFFFF;color:#0F172A;font-size:13px;font-weight:800;cursor:pointer;transition:all .15s ease;text-align:center}
+  .pp-opt.active{background:#258046;color:#FFFFFF;border-color:#258046;box-shadow:0 4px 10px -2px rgba(4,120,87,0.45)}
+  .pp-split{background:#FFFFFF;border:1px solid #BBF7D0;border-radius:10px;padding:10px 12px}
+  .pp-split .row{display:flex;align-items:baseline;justify-content:space-between;font-size:12.5px;padding:3px 0}
+  .pp-split .row .lbl{color:#64748B}
+  .pp-split .row .val{font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
+  .pp-split .row .val.green{color:#258046}
 
   /* Sticky CTA bar · EXACT same as cart.html */
   .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 14px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -106,8 +121,73 @@
   <div class="sec-title">Amount</div>
   <div class="calc" id="calc"></div>
 
+  <!-- Payment method · complete UI like checkout.html -->
   <div class="sec-title">Payment method</div>
-  <div class="pay-card" id="payCard"></div>
+  <div class="pay-card">
+    <!-- Pay Now -->
+    <label class="pay active" data-pay="paynow">
+      <span class="pay-head">
+        <span class="pay-radio"></span>
+        <span class="pay-body">
+          <span class="pay-toprow">
+            <span class="pay-name-row"><span class="pay-name">Pay Now</span><span class="pay-best">RECOMMENDED</span></span>
+            <span class="pay-amt tnum" id="payNowAmt">₹0</span>
+          </span>
+          <div class="pay-sub">UPI &middot; Cards &middot; Net banking &middot; Wallets</div>
+          <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:5px">
+            <span class="pay-bene" id="payNowDiscPill"><i class="fa-solid fa-tag"></i> 5% instant off · save ₹0</span>
+            <span class="pay-bene"><i class="fa-solid fa-bolt"></i> Faster order processing</span>
+          </div>
+        </span>
+      </span>
+    </label>
+
+    <!-- Partial payment · expandable %-tray -->
+    <label class="pay partial-row" data-pay="partial">
+      <span class="pay-head">
+        <span class="pay-radio"></span>
+        <span class="pay-body">
+          <span class="pay-toprow"><span class="pay-name">Partial payment</span></span>
+          <div class="pay-sub">Pay part now · balance on delivery</div>
+          <span class="pay-bene gold"><i class="fa-solid fa-coins"></i> Earn 2% coins on prepaid amount</span>
+        </span>
+      </span>
+    </label>
+    <div class="partial-tray" id="partialTray">
+      <div class="pp-head">Choose prepaid %</div>
+      <div class="pp-opts">
+        <button type="button" class="pp-opt active" data-pct="10">10%</button>
+        <button type="button" class="pp-opt" data-pct="25">25%</button>
+        <button type="button" class="pp-opt" data-pct="50">50%</button>
+        <button type="button" class="pp-opt" data-pct="75">75%</button>
+      </div>
+      <div class="pp-split">
+        <div class="row"><span class="lbl">Pay now</span><span class="val tnum" id="ppPayNow">₹0</span></div>
+        <div class="row"><span class="lbl">On delivery (cash)</span><span class="val tnum" id="ppOnDelivery">₹0</span></div>
+        <div class="row"><span class="lbl">Coins earned</span><span class="val green tnum" id="ppCoins">+0 coins</span></div>
+      </div>
+    </div>
+
+    <!-- Cash on Delivery -->
+    <label class="pay" data-pay="cod" id="codRow">
+      <span class="pay-head">
+        <span class="pay-radio"></span>
+        <span class="pay-body">
+          <span class="pay-toprow">
+            <span class="pay-name">Cash on Delivery</span>
+            <span class="pay-amt tnum" id="codAmt">₹0</span>
+          </span>
+          <div class="pay-sub" id="codSub">Pay in cash when the order arrives</div>
+          <div class="pay-sub" id="codCallLine" style="color:#B45309;margin-top:3px"><i class="fa-solid fa-phone-volume text-[10px]"></i> We'll call to confirm — please pick up calls starting from 92019</div>
+          <div id="codExtra" style="display:none;margin-top:9px;padding:10px 12px;border-radius:10px;background:#FFF7ED;border:1px solid #FED7AA;color:#9A3412;font-size:11.5px;font-weight:600;line-height:1.55">
+            <i class="fa-solid fa-circle-info" style="color:#EA580C"></i> COD costs <b id="codExtraAmt" class="tnum">₹0</b> more — prepaid orders get 5% off. <span id="codSwitchPay" role="button" tabindex="0" style="color:#258046;font-weight:800;cursor:pointer;text-decoration:underline;white-space:nowrap">Pay now &amp; save</span>
+          </div>
+        </span>
+      </span>
+    </label>
+  </div>
+
+  <div id="kkdToast" class="kkd-toast"><i class="fa-solid fa-circle-info"></i> <span id="kkdToastMsg"></span></div>
 
   <div class="sticky-cta">
     <div class="sticky-sum">
@@ -124,92 +204,121 @@
       var rupee = window.kkdMerge.rupee;
 
       var calc = document.getElementById('calc');
-      var payCard = document.getElementById('payCard');
       var ctaAmt = document.getElementById('ctaAmt');
       var payBtn = document.getElementById('payBtn');
+      var payLabels = document.querySelectorAll('.pay');
+      var ppOpts = document.querySelectorAll('.pp-opt');
 
-      // ---- Build the payment-method rows (checkout style) for this regime ----
-      var rows;
-      if (m.advanceRegime){
-        rows = [
-          { pay:'paynow', name:'Pay Now', best:true, amt:m.fullPrepaidNow, sub:'Prepaid · pay the full remaining now', bene:'<span class="pay-bene"><i class="fa-solid fa-bolt"></i> Fastest order processing</span>' },
-          { pay:'advpartial', name:'Partial payment', amt:m.advanceMin, sub:'Pay 10% advance now · balance on delivery', bene:'<span class="pay-bene gold"><i class="fa-solid fa-coins"></i> Earn 2% coins on prepaid amount</span>' },
-          { pay:'cod', name:'Cash on Delivery', amt:null, sub:'Not available above ₹10,000', disabled:true }
-        ];
-      } else {
-        rows = [
-          { pay:'paynow', name:'Pay Now', best:true, amt:m.onlineTotal, sub:'UPI · Cards · Net banking · Wallets', bene:'<span class="pay-bene"><i class="fa-solid fa-tag"></i> 5% instant off · save ' + rupee(m.onlineDiscount) + '</span>' },
-          { pay:'cod', name:'Cash on Delivery', amt:m.extra, sub:'Pay in cash when the order arrives' }
-        ];
-      }
-      payCard.innerHTML = rows.map(function(r, i){
-        return '<label class="pay' + (i===0?' active':'') + (r.disabled?' disabled':'') + '" data-pay="' + r.pay + '">'
-          + '<span class="pay-head"><span class="pay-radio"></span><span class="pay-body">'
-          +   '<span class="pay-toprow"><span class="pay-name-row"><span class="pay-name">' + r.name + '</span>'
-          +     (r.best?'<span class="pay-best">RECOMMENDED</span>':'') + '</span>'
-          +     (r.amt!=null?'<span class="pay-amt tnum">' + rupee(r.amt) + '</span>':'') + '</span>'
-          +   '<div class="pay-sub"' + (r.disabled?' style="color:#B45309"':'') + '>' + r.sub + '</div>'
-          +   (r.bene||'')
-          + '</span></span></label>';
-      }).join('');
+      // Amount due in THIS step: normal = the newly added amount · advance = remaining after what's already paid
+      var dueNow = m.advanceRegime ? Math.max(0, m.mergedOrderValue - m.alreadyPaid) : m.extra;
+      var onlineDisc = m.advanceRegime ? 0 : m.onlineDiscount;   // 5% prepaid discount only in the normal regime
+      var payNowAmount = Math.max(0, dueNow - onlineDisc);
 
-      // ---- Selected payment method ----
       var selected = 'paynow';
+      var pct = 10;
 
-      // ---- Render the simple amount breakdown for the current selection ----
+      // ---- Static row figures ----
+      document.getElementById('payNowAmt').textContent = rupee(payNowAmount);
+      var discPill = document.getElementById('payNowDiscPill');
+      if (onlineDisc > 0) { discPill.innerHTML = '<i class="fa-solid fa-tag"></i> 5% instant off · save ' + rupee(onlineDisc); discPill.style.display = ''; }
+      else { discPill.style.display = 'none'; }
+      // COD · available only in the normal regime
+      var codRow = document.getElementById('codRow');
+      if (m.advanceRegime){
+        codRow.classList.add('disabled');
+        document.getElementById('codAmt').textContent = '';
+        document.getElementById('codSub').textContent = 'Not available above ₹10,000';
+        document.getElementById('codCallLine').style.display = 'none';
+      } else {
+        document.getElementById('codAmt').textContent = rupee(dueNow);
+        document.getElementById('codExtraAmt').textContent = rupee(onlineDisc);
+      }
+
+      function partialNow(){ return Math.round(dueNow * pct / 100); }
+
+      function renderPartialTray(){
+        var pn = partialNow();
+        document.getElementById('ppPayNow').textContent = rupee(pn);
+        document.getElementById('ppOnDelivery').textContent = rupee(Math.max(0, dueNow - pn));
+        document.getElementById('ppCoins').textContent = '+' + Math.round(pn * 0.02) + ' coins';
+      }
+
+      function currentPayNow(){
+        if (selected === 'partial') return partialNow();
+        if (selected === 'cod') return dueNow;
+        return payNowAmount;   // paynow
+      }
+
+      // ---- Simple amount card (no "you're adding…" lead line) ----
       function renderCalc(){
-        var html = '', payNow;
+        var pn = currentPayNow();
+        var html = '';
         if (m.advanceRegime){
-          payNow = (selected === 'advpartial') ? m.advanceMin : m.fullPrepaidNow;
-          html += '<div class="lead">Your total order after merge is <b>' + rupee(m.mergedOrderValue) + '</b>'
-                + (m.alreadyPaid > 0 ? ', and <b>' + rupee(m.alreadyPaid) + '</b> is already paid on the earlier order.' : '.') + '</div>';
           html += '<div class="r"><span>Total order value</span><span class="v">' + rupee(m.mergedOrderValue) + '</span></div>';
           if (m.alreadyPaid > 0) html += '<div class="r"><span>Already paid earlier</span><span class="v minus">− ' + rupee(m.alreadyPaid) + '</span></div>';
+          html += '<div class="r"><span>Remaining</span><span class="v">' + rupee(dueNow) + '</span></div>';
+          if (selected === 'partial') html += '<div class="r"><span>Balance on delivery (cash)</span><span class="v">' + rupee(Math.max(0, dueNow - pn)) + '</span></div>';
           html += '<div class="div"></div>';
-          html += '<div class="paynow"><span class="l">You pay now</span><span class="v">' + rupee(payNow) + '</span></div>';
-          html += '<div class="note"><i class="fa-solid fa-circle-info"></i> <span>'
-                + (selected === 'advpartial'
-                    ? 'Paying 10% advance now (' + rupee(payNow) + '). The remaining balance is collected on delivery.'
-                    : 'Paying the full remaining amount now. Cash on Delivery isn’t available above ₹10,000.')
-                + '</span></div>';
+          html += '<div class="paynow"><span class="l">You pay now</span><span class="v">' + rupee(pn) + '</span></div>';
+          if (selected !== 'partial') html += '<div class="note"><i class="fa-solid fa-circle-info"></i> <span>Paying the full remaining amount now. Cash on Delivery isn’t available above ₹10,000.</span></div>';
         } else {
-          var disc = (selected === 'paynow') ? m.onlineDiscount : 0;
-          payNow = (selected === 'paynow') ? m.onlineTotal : m.extra;
-          html += '<div class="lead">You’re adding <b>' + rupee(m.extra) + '</b> of items to order <b>#' + m.oid + '</b>. Your earlier total stays as placed — you only pay for what’s new.</div>';
           html += '<div class="r"><span>New items added</span><span class="v">' + rupee(m.extra) + '</span></div>';
-          if (disc > 0) html += '<div class="r"><span>Online payment discount (5%)</span><span class="v minus">− ' + rupee(disc) + '</span></div>';
+          if (selected === 'paynow' && onlineDisc > 0) html += '<div class="r"><span>Online payment discount (5%)</span><span class="v minus">− ' + rupee(onlineDisc) + '</span></div>';
+          if (selected === 'partial') html += '<div class="r"><span>Balance on delivery (cash)</span><span class="v">' + rupee(Math.max(0, dueNow - pn)) + '</span></div>';
           html += '<div class="div"></div>';
-          html += '<div class="paynow"><span class="l">You pay now</span><span class="v">' + rupee(payNow) + '</span></div>';
-          html += '<div class="note"><i class="fa-solid fa-circle-info"></i> <span>'
-                + (selected === 'cod' ? 'You’ll pay ' + rupee(m.extra) + ' in cash on delivery for the added items.' : 'Pay online now and save ' + rupee(m.onlineDiscount) + ' with the 5% discount.')
+          html += '<div class="paynow"><span class="l">You pay now</span><span class="v">' + rupee(pn) + '</span></div>';
+          if (selected !== 'partial') html += '<div class="note"><i class="fa-solid fa-circle-info"></i> <span>'
+                + (selected === 'cod' ? 'You’ll pay ' + rupee(dueNow) + ' in cash on delivery for the added items.'
+                   : 'Pay online now and save ' + rupee(onlineDisc) + ' with the 5% discount.')
                 + '</span></div>';
         }
         calc.innerHTML = html;
-        ctaAmt.textContent = rupee(payNow);
-        payBtn.innerHTML = 'Pay ' + rupee(payNow) + ' &amp; Merge <i class="fa-solid fa-arrow-right text-[12px]"></i>';
-        return payNow;
+        ctaAmt.textContent = rupee(pn);
+        payBtn.innerHTML = 'Pay ' + rupee(pn) + ' &amp; Merge <i class="fa-solid fa-arrow-right text-[12px]"></i>';
       }
 
+      // ---- Tap-feedback toast ----
+      var toastEl = document.getElementById('kkdToast'), toastMsg = document.getElementById('kkdToastMsg'), toastTimer;
+      function showToast(msg){ toastMsg.textContent = msg; toastEl.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 2600); }
+
       // ---- Wire payment-row selection ----
-      var payLabels = payCard.querySelectorAll('.pay');
       payLabels.forEach(function(lbl){
         lbl.addEventListener('click', function(){
-          if (lbl.classList.contains('disabled')) return;
+          if (lbl.classList.contains('disabled')){
+            // COD disabled above ₹10,000 → explain why instead of silently ignoring the tap
+            showToast('Cash on Delivery isn’t available for orders above ₹10,000. Please pay online or choose Partial.');
+            return;
+          }
           selected = lbl.dataset.pay;
           payLabels.forEach(function(x){ x.classList.toggle('active', x === lbl); });
           renderCalc();
         });
       });
+      // ---- Wire partial %-pills ----
+      ppOpts.forEach(function(b){
+        b.addEventListener('click', function(e){
+          e.preventDefault(); e.stopPropagation();
+          pct = parseInt(b.dataset.pct, 10) || 10;
+          ppOpts.forEach(function(x){ x.classList.toggle('active', x === b); });
+          renderPartialTray();
+          if (selected === 'partial') renderCalc();
+        });
+      });
+      // ---- COD note "Pay now & save" → jump to Pay Now ----
+      var codSwitch = document.getElementById('codSwitchPay');
+      if (codSwitch) codSwitch.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); document.querySelector('.pay[data-pay="paynow"]').click(); });
+
+      renderPartialTray();
       renderCalc();
 
       payBtn.addEventListener('click', function(){
-        var method = m.advanceRegime ? (selected === 'advpartial' ? 'partial' : 'paynow') : selected;
-        var payNow = renderCalc();
+        var method = selected === 'partial' ? 'partial' : selected;   // paynow | partial | cod
+        var pn = currentPayNow();
         try {
           localStorage.setItem('kkd.mergeInfo', JSON.stringify({
             ts: Date.now(), orderId: m.oid,
             updated: m.updatedIds.slice(), added: m.newIds.slice(), unchanged: m.unchangedIds.slice(),
-            prevQtys: m.prevQtys, method: method, amountPaid: payNow
+            prevQtys: m.prevQtys, method: method, amountPaid: pn
           }));
         } catch(e){}
         window.kkdMerge.clearMergeCart();

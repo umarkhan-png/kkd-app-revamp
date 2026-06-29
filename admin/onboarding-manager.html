@@ -288,15 +288,13 @@ const EDITORS = {
   },
   phone(){
     return head(meta('phone')) +
-      card('Top bar &amp; hero',
-        imgField('phone.logo','Top-bar logo','Shown ~40px tall at the top-left','logo') +
-        `<div class="sdiv" style="margin:16px 0 8px">Hero image · one image (with optional per-language versions)</div>`+
+      card('Top bar',
+        imgField('phone.logo','Top-bar logo','Shown ~40px tall at the top-left','logo')
+      ) +
+      card('Hero',
         phoneHeroBlock() +
-        `<div style="margin-top:14px">`+ toggle('phone.offerEnabled','Show first-order offer banner','The glass strip on top of the hero') +`</div>`+
-        `<div class="row" style="margin-top:14px">`+
-          tField('phone.offer','Offer banner text') +
-          tField('phone.tagline','Hero tagline') +
-        `</div>`+
+        `<div class="sdiv" style="margin-top:18px">Hero text</div>`+
+        `<div class="row">`+ tField('phone.tagline','Hero tagline') +`</div>`+
         `<div class="row" style="margin-bottom:0">`+
           tField('phone.statFarmersNum','Stat 1 — number',{style:'min-width:110px'}) +
           tField('phone.statFarmersLbl','Stat 1 — label',{style:'min-width:110px'}) +

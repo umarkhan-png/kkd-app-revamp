@@ -294,12 +294,26 @@
       ],
       cropPicker: ['Wheat','Rice','Tomato','Chilli','Maize','Soybean','Cotton','Sugarcane','More'],
 
-      // 1) Splash — logo-only over the emerald background (NO text on this screen)
+      // 1) Splash — logo-only over the emerald background (NO text on this screen).
+      // This is the DEFAULT splash: locked, always-on, never editable — the guaranteed
+      // fallback every user sees on launch.
       splash: {
         logo: '../assets/kd-logo-white.png',
         logoWidth: 172,
         bg: '#083D28',
         durationMs: 2500,
+      },
+      // Optional SECOND splash — fully customizable, shows only when its condition matches
+      // (festival/date range or specific states). At most these two splashes can ever exist.
+      // When disabled or the condition doesn't match, the default splash above is shown.
+      splashCustom: {
+        enabled: false,
+        logo: '../assets/kd-logo-white.png',
+        logoWidth: 172,
+        bg: '#083D28',
+        bgImage: '',                 // optional full-screen background (portrait 1080×1920)
+        durationMs: 2500,
+        trigger: { type: 'festival', start: '', end: '', states: ['All'] },
       },
 
       // 2) Language select

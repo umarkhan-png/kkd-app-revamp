@@ -145,9 +145,10 @@ if(!O.splashCustom.imgByLocale) O.splashCustom.imgByLocale={};
 if(!Array.isArray(O.splashCustom.trigger.states) || O.splashCustom.trigger.states.indexOf('All')>=0) O.splashCustom.trigger.states=STATES.slice();
 // Phone screen hero: a SINGLE hero image (not separate product components) with optional
 // per-language variants. Migrate from the older 3-image array if present.
-if(!O.phone.hero) O.phone.hero = { img:(O.phone.heroImages&&O.phone.heroImages[0])||'', imgByLocale:{}, imgByState:{} };
+if(!O.phone.hero) O.phone.hero = { img:(O.phone.heroImages&&O.phone.heroImages[0])||'', imgByLocale:{}, states:STATES.slice(), stateImg:'' };
 if(!O.phone.hero.imgByLocale) O.phone.hero.imgByLocale={};
-if(!O.phone.hero.imgByState) O.phone.hero.imgByState={};
+if(!Array.isArray(O.phone.hero.states)) O.phone.hero.states=STATES.slice();
+if(O.phone.hero.stateImg===undefined) O.phone.hero.stateImg='';
 // OTP resend channels — enable/disable toggles (copy lives in Translations)
 if(O.otp.resendWhatsapp===undefined) O.otp.resendWhatsapp=true;
 if(O.otp.resendSms===undefined) O.otp.resendSms=true;
@@ -281,9 +282,9 @@ const EDITORS = {
       );
   },
   phone(){
-    return head(meta('phone')) + langBar() +
+    return head(meta('phone')) +
       card('Top bar &amp; hero',
-        imgField('phone.logo','Top-bar logo','Small KKD logo at the top-left (~40px)') +
+        imgField('phone.logo','Top-bar logo','Shown ~40px tall at the top-left','logo') +
         `<div class="sdiv" style="margin:16px 0 8px">Hero image · one image (with optional per-language versions)</div>`+
         phoneHeroBlock() +
         `<div style="margin-top:14px">`+ toggle('phone.offerEnabled','Show first-order offer banner','The glass strip on top of the hero') +`</div>`+
@@ -379,14 +380,21 @@ function heroVar(path,label,spec){
 }
 function phoneHeroBlock(){
   const langs=O.languages.filter(L=>L.on);
-  let h = imgField('phone.hero.img','Default hero — shown to all users','Used unless a state or language version below is set','hero');
-  h += `<div class="sdiv" style="margin-top:16px">By language <span class="hint" style="font-weight:500;text-transform:none;letter-spacing:0">· optional</span></div>`;
-  h += langs.map(L=>heroVar('phone.hero.imgByLocale.'+L.code, esc(L.native||L.name||L.code)+' <span class="hint" style="font-weight:500">'+esc(L.code)+'</span>')).join('') || `<div class="hint">No languages enabled.</div>`;
-  h += `<div class="sdiv" style="margin-top:16px">By state <span class="hint" style="font-weight:500;text-transform:none;letter-spacing:0">· optional</span></div>`;
-  h += STATES.map(s=>heroVar('phone.hero.imgByState.'+s, esc(s))).join('');
-  h += `<div class="info-box" style="margin-top:12px"><i class="fa-solid fa-circle-info" style="margin-top:1px"></i><span>What a user sees: their <b>state</b> version if set, otherwise their <b>language</b> version, otherwise the <b>default</b>.</span></div>`;
-  return h;
+  const sts=O.phone.hero.states||[], all=sts.length===STATES.length;
+  const chips=STATES.map(st=>`<span class="cchip ${sts.indexOf(st)>=0?'on':''}" onclick="heroScope('${st}')">${st}</span>`).join('');
+  return imgField('phone.hero.img','Default hero — shown to all users','Used unless a state version below applies','hero')
+    + `<div class="sdiv" style="margin-top:16px">States</div>`
+    + `<div><span class="cchip ${all?'on':''}" onclick="heroScopeAll()">All states</span> ${chips}</div>`
+    + `<div class="splash-nest">`
+    +   `<div class="sdiv">Hero for the selected states</div>`
+    +   imgField('phone.hero.stateImg','Hero image','Shown to users in the selected states','hero')
+    +   `<div class="sdiv" style="margin-top:16px">By language <span class="hint" style="font-weight:500;text-transform:none;letter-spacing:0">· optional</span></div>`
+    +   (langs.map(L=>heroVar('phone.hero.imgByLocale.'+L.code, esc(L.native||L.name||L.code)+' <span class="hint" style="font-weight:500">'+esc(L.code)+'</span>','hero')).join('') || `<div class="hint">No languages enabled.</div>`)
+    + `</div>`
+    + `<div class="info-box" style="margin-top:12px"><i class="fa-solid fa-circle-info" style="margin-top:1px"></i><span>A user in a selected state sees that state's hero (their <b>language</b> version if set); everyone else sees the <b>default</b>.</span></div>`;
 }
+function heroScopeAll(){ const s=O.phone.hero.states||[]; O.phone.hero.states = s.length===STATES.length?[]:STATES.slice(); commit(); rerender(); }
+function heroScope(st){ let s=(O.phone.hero.states||[]).slice(); const i=s.indexOf(st); i>=0?s.splice(i,1):s.push(st); O.phone.hero.states=s; commit(); rerender(); }
 
 /* ---------- SPLASH (max 2: locked default + 1 conditional custom) ---------- */
 // Locked default — read-only, never editable. The guaranteed fallback.

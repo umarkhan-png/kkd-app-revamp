@@ -574,8 +574,8 @@
     .cropp-sheet.open{transform:translateY(0)}
     .cropp-handle{width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 4px;flex-shrink:0}
     .cropp-head{display:flex;align-items:flex-start;justify-content:space-between;padding:6px 20px 4px;flex-shrink:0}
-    .cropp-title{font-size:18px;font-weight:800;color:#0F172A}
-    .cropp-sub{font-size:12px;color:#64748B;margin-top:2px}
+    .cropp-title{font-size:17px;font-weight:800;color:#0F172A}
+    .cropp-sub{font-size:11.5px;color:#64748B;margin-top:2px}
     .cropp-x{width:36px;height:36px;border-radius:9999px;background:#F1F5F9;border:0;color:#475569;display:flex;align-items:center;justify-content:center;flex-shrink:0}
     .cropp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:12px 20px;overflow-y:auto;flex:1}
     .cropp-tile{position:relative;display:flex;flex-direction:column;align-items:center;padding:12px;border-radius:12px;background:#fff;border:2px solid #E2E8F0;cursor:pointer;font-family:inherit}
@@ -592,37 +592,58 @@
   <div id="croppSheet" class="cropp-sheet">
     <div class="cropp-handle"></div>
     <div class="cropp-head">
-      <div><div class="cropp-title">Select crop</div><div class="cropp-sub">Tap all crops you grew with this product</div></div>
+      <div><div class="cropp-title">All Crops</div><div class="cropp-sub">Tap all crops you grow</div></div>
       <button id="croppClose" class="cropp-x"><i class="fa-solid fa-xmark text-[13px]"></i></button>
     </div>
     <div class="cropp-grid" id="croppGrid"></div>
-    <div class="cropp-foot"><button id="croppApply" class="cropp-apply">Add 0 crops</button></div>
+    <div class="cropp-foot"><button id="croppApply" class="cropp-apply">Done</button></div>
   </div>
   <script>
   (function(){
-    const CROPS = [
-      {k:'tomato',label:'Tomato',emoji:'🍅',img:'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=128&q=80&fit=crop'},
-      {k:'chilli',label:'Chilli',emoji:'🌶️',img:'https://images.unsplash.com/photo-1583852048850-31c0d0e7cdde?w=128&q=80&fit=crop'},
-      {k:'wheat',label:'Wheat',emoji:'🌾',img:'https://images.unsplash.com/photo-1574226516831-e1dff420e562?w=128&q=80&fit=crop'},
-      {k:'maize',label:'Maize',emoji:'🌽',img:'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=128&q=80&fit=crop'},
-      {k:'cotton',label:'Cotton',emoji:'☁️',img:'https://images.unsplash.com/photo-1591885503007-9b80d9c89a52?w=128&q=80&fit=crop'},
-      {k:'sugarcane',label:'Sugarcane',emoji:'🎋',img:'https://images.unsplash.com/photo-1597106776019-b4ecc878c202?w=128&q=80&fit=crop'},
-      {k:'paddy',label:'Paddy',emoji:'🌱',img:'https://images.unsplash.com/photo-1568347877321-f8935c7dc5a8?w=128&q=80&fit=crop'},
-      {k:'onion',label:'Onion',emoji:'🧅',img:'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=128&q=80&fit=crop'},
-      {k:'potato',label:'Potato',emoji:'🥔',img:'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=128&q=80&fit=crop'}
-    ];
-    const META = {}; CROPS.forEach(c => META[c.k] = c);
+    // EXACT same crop catalog + local images + 120px card tiles as the shared rate.js "All Crops" sheet (order-details flow)
+    const CROP_IMG = '../assets/crops/';
+    const CROP_META = {
+      tomato:{label:'Tomato',emoji:'🍅',bg:'#FEE2E2'}, chilli:{label:'Chilli',emoji:'🌶',bg:'#FFEDD5'},
+      wheat:{label:'Wheat',emoji:'🌾',bg:'#FEF3C7'}, maize:{label:'Maize',emoji:'🌽',bg:'#FEF9C3'},
+      onion:{label:'Onion',emoji:'🧅',bg:'#FCE7F3'}, potato:{label:'Potato',emoji:'🥔',bg:'#FEF3C7'},
+      sugarcane:{label:'Sugarcane',emoji:'🎋',bg:'#DCFCE7'}, banana:{label:'Banana',emoji:'🍌',bg:'#FEF9C3'},
+      mango:{label:'Mango',emoji:'🥭',bg:'#FED7AA'}, grapes:{label:'Grapes',emoji:'🍇',bg:'#F3E8FF'},
+      orange:{label:'Orange',emoji:'🍊',bg:'#FFEDD5'}, watermelon:{label:'Watermelon',emoji:'🍉',bg:'#FECACA'},
+      papaya:{label:'Papaya',emoji:'🥭',bg:'#FED7AA'}, pomegranate:{label:'Pomegranate',emoji:'🍎',bg:'#FEE2E2'},
+      brinjal:{label:'Brinjal',emoji:'🍆',bg:'#EDE9FE'}, cauliflower:{label:'Cauliflower',emoji:'🥦',bg:'#FEF3C7'},
+      cabbage:{label:'Cabbage',emoji:'🥬',bg:'#DCFCE7'}, okra:{label:'Okra',emoji:'🌿',bg:'#DCFCE7'},
+      garlic:{label:'Garlic',emoji:'🧄',bg:'#F5F5F4'}, cumin:{label:'Cumin',emoji:'🌱',bg:'#FEF3C7'},
+      cardamom:{label:'Cardamom',emoji:'🌿',bg:'#D1FAE5'}, chickpea:{label:'Chickpea',emoji:'🫘',bg:'#FEF3C7'},
+      soyabean:{label:'Soyabean',emoji:'🫘',bg:'#DCFCE7'}, blackgram:{label:'Black Gram',emoji:'🫘',bg:'#E5E7EB'}
+    };
+    Object.keys(CROP_META).forEach(function (k) { CROP_META[k].img = CROP_IMG + k + '.jpg'; });
+    const META = CROP_META;
+    if (!window.cropFallback) { window.cropFallback = function (img, emoji, size) { img.outerHTML = '<div class="w-full h-full flex items-center justify-center" style="font-size:' + (size || 32) + 'px;line-height:1">' + emoji + '</div>'; }; }
     const bd = document.getElementById('croppBd'), sheet = document.getElementById('croppSheet'), grid = document.getElementById('croppGrid'), applyBtn = document.getElementById('croppApply');
     if (!sheet) return;
     let targetPick = null, temp = new Set();
     function selectionOf(pick){ return pick._crops || (pick._crops = new Set()); }
-    grid.innerHTML = CROPS.map(c =>
-      '<button type="button" class="cropp-tile" data-k="' + c.k + '"><span class="ci"><img src="' + c.img + '" onerror="this.parentNode.textContent=\'' + c.emoji + '\'"/></span><span>' + c.label + '</span><span class="cropp-chk"><i class="fa-solid fa-check"></i></span></button>'
-    ).join('');
-    const tiles = grid.querySelectorAll('.cropp-tile');
-    function refreshTiles(){ tiles.forEach(t => t.classList.toggle('on', temp.has(t.dataset.k))); applyBtn.textContent = temp.size ? 'Add ' + temp.size + ' crop' + (temp.size === 1 ? '' : 's') : 'Done'; }
-    tiles.forEach(t => t.addEventListener('click', () => { const k = t.dataset.k; if (temp.has(k)) temp.delete(k); else temp.add(k); refreshTiles(); }));
-    function open(pick){ targetPick = pick; temp = new Set(selectionOf(pick)); refreshTiles(); bd.classList.add('open'); sheet.classList.add('open'); }
+    function renderGrid(){
+      grid.innerHTML = Object.keys(CROP_META).map(function (key) {
+        const m = CROP_META[key]; const sel = temp.has(key);
+        const borderColor = sel ? '#258046' : '#E5E7EB';
+        const shadow = sel ? '0 6px 14px -4px rgba(5,150,105,0.32)' : '0 1px 3px rgba(0,0,0,0.05)';
+        const labelColor = sel ? '#258046' : '#0F172A';
+        const tick = sel
+          ? '<span class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center" style="background:#258046;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff;z-index:2"><i class="fa-solid fa-check text-white text-[9px]"></i></span>'
+          : '<span class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full" style="background:rgba(255,255,255,0.95);border:1.5px solid #CBD5E1;box-shadow:0 1px 3px rgba(15,23,42,0.18);z-index:2"></span>';
+        return '<button type="button" data-k="' + key + '" class="rounded-xl overflow-hidden transition-all" style="background:#FFFFFF;border:1.5px solid ' + borderColor + ';box-shadow:' + shadow + ';height:120px;display:flex;flex-direction:column">'
+          + '<div class="relative w-full" style="height:90px;background:' + m.bg + ';overflow:hidden;flex-shrink:0">'
+          + '<img src="' + m.img + '" class="w-full h-full object-cover" style="display:block" onerror="cropFallback(this,\'' + m.emoji + '\',38)"/>'
+          + tick + '</div>'
+          + '<div class="flex-1 flex items-center justify-center px-1"><span class="text-[12.5px] font-semibold leading-none" style="color:' + labelColor + '">' + m.label + '</span></div>'
+          + '</button>';
+      }).join('');
+      grid.querySelectorAll('[data-k]').forEach(function (btn) {
+        btn.addEventListener('click', function () { const k = btn.dataset.k; if (temp.has(k)) temp.delete(k); else temp.add(k); renderGrid(); });
+      });
+    }
+    function open(pick){ targetPick = pick; temp = new Set(selectionOf(pick)); renderGrid(); bd.classList.add('open'); sheet.classList.add('open'); }
     function close(){ bd.classList.remove('open'); sheet.classList.remove('open'); }
     function renderChips(pick){
       const box = pick.querySelector('[data-crop-chips]');

@@ -339,16 +339,16 @@ const EDITORS = {
   welcome(){
     return head(meta('welcome')) + langBar() +
       card('Welcome — new user (Welcome aboard)',
-        toggle('welcomeAboard.showName',"Show the farmer's name",'e.g. “Welcome aboard, Ramesh!” — off shows a generic greeting') +
-        `<div style="height:12px"></div>`+
         `<div class="row">`+ tField('welcomeAboard.eyebrow','Eyebrow') + tField('welcomeAboard.headline','Headline') +`</div>`+
-        tField('welcomeAboard.sub','Sub-text',{area:true})
+        tField('welcomeAboard.sub','Sub-text',{area:true}) +
+        `<div style="height:12px"></div>`+
+        nameToggle('welcomeAboard')
       ) +
       card('Welcome — returning user (Welcome back)',
-        toggle('welcomeBack.showName',"Show the farmer's name",'e.g. “Welcome back, Ramesh!” — off shows a generic greeting') +
-        `<div style="height:12px"></div>`+
         `<div class="row">`+ tField('welcomeBack.eyebrow','Eyebrow') + tField('welcomeBack.headline','Headline') +`</div>`+
-        tField('welcomeBack.sub','Sub-text',{area:true})
+        tField('welcomeBack.sub','Sub-text',{area:true}) +
+        `<div style="height:12px"></div>`+
+        nameToggle('welcomeBack')
       );
   },
 };
@@ -356,6 +356,17 @@ function meta(k){ return SECTIONS.find(s=>s.key===k); }
 
 /* ---------- list mutations ---------- */
 function addFact(){ O.otp.facts.push({ icon:'circle-info', text:{ en:'New message' }, on:true }); commit('Message added'); rerender(); }
+
+/* ---------- Welcome: name on/off, shown linked to the greeting headline ---------- */
+function nameToggle(base){
+  const on = getPath(base+'.showName')!==false;
+  const hl = getPath(base+'.headline.'+activeLang) || getPath(base+'.headline.en') || 'Welcome';
+  const ex = on ? esc(hl)+', <span style="color:var(--green);font-weight:700">[user name]</span>' : esc(hl);
+  return `<div style="border:1.5px solid ${on?'var(--green)':'var(--g200)'};border-radius:10px;padding:2px 14px 12px;background:${on?'var(--green-lt)':'var(--g50)'}">
+    ${toggle(base+'.showName',"Show the user's name","Adds the logged-in user’s name to the greeting headline above")}
+    <div class="hint" style="margin-top:2px">In the app the greeting reads: <b>“${ex}”</b></div>
+  </div>`;
+}
 
 /* ---------- predefined icon picker (OTP rotating strip) ---------- */
 const PRESET_ICONS=['truck-fast','box-open','shield-halved','lock','circle-check','headset','phone','clock',

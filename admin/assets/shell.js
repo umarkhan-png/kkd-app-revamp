@@ -99,17 +99,6 @@
       document.getElementById('side').innerHTML = sidebar(o.active);
       document.getElementById('top').innerHTML = topbar(o);
       this.refreshPending();
-      // friendliness: a "Controls: … / Preview in app" context bar at the top of the work area
-      if (o.controls) {
-        const work = document.querySelector('.work');
-        if (work && !work.querySelector('.context-bar')) {
-          const bar = document.createElement('div');
-          bar.className = 'context-bar';
-          bar.innerHTML = `<i class="fa-solid fa-circle-info"></i><span><b>Controls:</b> ${esc(o.controls)}</span>` +
-            (o.preview ? `<button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="AdminShell.previewApp('${o.preview}')"><i class="fa-solid fa-mobile-screen-button"></i> Preview in app</button>` : '');
-          work.insertBefore(bar, work.firstChild);
-        }
-      }
       if (!document.querySelector('.toast-wrap')) {
         const w = document.createElement('div'); w.className = 'toast-wrap'; document.body.appendChild(w);
       }

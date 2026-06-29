@@ -38,10 +38,13 @@
 .hm .fg{display:flex;flex-direction:column;flex:1;min-width:150px;}
 .hm .fg.fix{flex:0 0 auto;}
 .hm label{font-size:11px;font-weight:700;color:var(--g600);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;display:block;}
-.hm input[type=text],.hm input[type=number],.hm input[type=url],.hm textarea,.hm select.s{
+.hm input[type=text],.hm input[type=number],.hm input[type=url],.hm input[type=date],.hm textarea,.hm select.s{
   border:1px solid var(--g200);border-radius:8px;padding:8px 10px;font-size:13px;
   color:var(--g800);outline:none;background:#fff;width:100%;font-family:inherit;transition:border .15s;
 }
+.hm input[type=date]{max-width:200px;cursor:pointer;}
+.hm input[type=date]::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.65;}
+.hm input[type=date]:hover{border-color:var(--g300);}
 .hm input:focus,.hm textarea:focus,.hm select.s:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
 .hm textarea{resize:vertical;min-height:60px;}
 .hm input[type=color]{width:44px;height:34px;border:1px solid var(--g200);border-radius:6px;padding:2px;cursor:pointer;}
@@ -90,6 +93,8 @@
 .hm .icpick.on{background:var(--green-lt);border-color:var(--green);color:var(--green);}
 .hm .splash-nest{margin-top:14px;padding:14px 16px;border:1px solid var(--g200);border-left:3px solid var(--green);border-radius:10px;background:var(--g50);}
 .hm .splash-nest .sdiv:first-child{padding-top:0;}
+.hm .up-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:8px 10px;border:1px solid var(--g200);border-radius:9px;background:#fff;}
+.hm .date-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:6px;}
 @media (max-width:1080px){ .hm .hm-layout{flex-direction:column;} .hm .lp{width:100%;position:static;} }
 </style>
 </head>
@@ -103,7 +108,6 @@
         <div class="flex items-center justify-between" style="margin-bottom:18px">
           <div>
             <h2 style="font-size:21px;font-weight:800;margin:0 0 3px">Onboarding Manager</h2>
-            <p class="muted" style="margin:0;font-size:13.5px">Every first-run screen — splash, language, mobile number, OTP, name &amp; welcome. Edit copy in all 12 languages, swap images, and manage the auto-rotating messages.</p>
           </div>
           <span class="tag tag-green" style="font-size:12px;padding:5px 11px">6 screens</span>
         </div>
@@ -380,14 +384,14 @@ function iconPicker(path,cur){
 /* ---------- PHONE hero: one image + per-language + per-state variants ---------- */
 function clearImg(path){ setPath(path,''); commit('Image removed'); rerender(); }
 // compact variant row (small preview + Upload/Replace/Clear + validation message)
-function heroVar(path,label,spec){
+function heroVar(path,label,spec,emptyHint){
   spec=spec||'hero';
   const v=getPath(path)||'';
   const isImg = /\.(png|jpe?g|webp|svg|gif)(\?|$)/i.test(v) || v.startsWith('blob:') || v.startsWith('data:') || v.startsWith('http');
-  return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">
+  return `<div class="up-row">
     <div class="imgbox" style="width:46px;height:46px">${isImg?`<img src="${esc(v)}" onerror="this.style.display='none'"/>`:'<i class="fa-solid fa-image"></i>'}</div>
     <div style="flex:1;min-width:0">
-      <div style="font-size:12.5px;font-weight:600">${label}${isImg?' <span class="lang-pill" style="background:#ECFDF5;color:#258046">set</span>':' <span class="hint" style="font-weight:500">falls back to default</span>'}</div>
+      <div style="font-size:12.5px;font-weight:600">${label}${isImg?' <span class="lang-pill" style="background:#ECFDF5;color:#258046">set</span>':' <span class="hint" style="font-weight:500">'+(emptyHint||'falls back to default')+'</span>'}</div>
       <div class="kkdv-msg" id="msg_${cssId(path)}"></div>
     </div>
     <button class="btn btn-s btn-sm" onclick="pickImg('${path}','${spec}')"><i class="fa-solid fa-upload"></i> ${isImg?'Replace':'Upload'}</button>
@@ -446,16 +450,15 @@ function splashCustomCard(){
     body=`
       ${splashScopeRow()}
       <div class="splash-nest">
-        <div class="sdiv">Splash details</div>
-        <div class="sdiv" style="font-weight:700">Active dates · festival / date range</div>
-        <div class="row" style="margin-bottom:6px">
-          ${field('splashCustom.trigger.start','Start date',{type:'date'})}
-          ${field('splashCustom.trigger.end','End date',{type:'date'})}
+        <div class="sdiv">Active dates · festival / date range</div>
+        <div class="date-row">
+          ${field('splashCustom.trigger.start','Start date',{type:'date',fix:true})}
+          ${field('splashCustom.trigger.end','End date',{type:'date',fix:true})}
         </div>
         ${splashCondSummary()}
-        <div class="sdiv" style="margin-top:16px">Splash image</div>
-        ${imgField('splashCustom.img','Splash image — shown to all users','Full-screen image used for this splash','splash')}
-        <div class="sdiv" style="margin-top:16px">By language <span class="hint" style="font-weight:500;text-transform:none;letter-spacing:0">· optional</span></div>
+        <div class="sdiv" style="margin-top:16px">Splash image <span class="hint" style="font-weight:500;text-transform:none;letter-spacing:0">· ${window.KKDV?KKDV.specHint('splash'):''}</span></div>
+        ${heroVar('splashCustom.img','Default — shown to all users','splash','No image yet')}
+        <div class="sdiv" style="margin-top:14px">By language <span class="hint" style="font-weight:500;text-transform:none;letter-spacing:0">· optional</span></div>
         ${langs.map(L=>heroVar('splashCustom.imgByLocale.'+L.code, esc(L.native||L.name||L.code)+' <span class="hint" style="font-weight:500">'+esc(L.code)+'</span>', 'splash')).join('') || `<div class="hint">No languages enabled.</div>`}
       </div>`;
   }
@@ -475,9 +478,7 @@ function splashCondSummary(){
   const tr=O.splashCustom.trigger, sts=tr.states||[], all=sts.length===STATES.length;
   const scope = all?'all states':(sts.length?sts.join(', '):'no states');
   let warn='';
-  if(!tr.start||!tr.end) warn='Set both a start and end date, or this custom splash won\'t show.';
-  else if(tr.end<tr.start) warn='End date is before the start date — fix the range.';
-  else if(!sts.length) warn='No states selected — pick states (or “All states”), or this splash won\'t show anywhere.';
+  if(tr.start&&tr.end&&tr.end<tr.start) warn='End date is before the start date — fix the range.';
   const summary = (tr.start&&tr.end&&sts.length)
     ? `Shows from <b>${esc(tr.start)}</b> to <b>${esc(tr.end)}</b> in <b>${esc(scope)}</b>. Outside this window, the default splash shows.` : '';
   return (summary?`<div class="info-box" style="margin-top:10px"><i class="fa-solid fa-eye" style="margin-top:1px"></i><span>${summary}</span></div>`:'')

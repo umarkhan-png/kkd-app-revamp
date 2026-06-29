@@ -93,18 +93,25 @@
       '<div class="kr-crop-grid"></div>' +
       '<div style="flex-shrink:0;padding:12px 20px;border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)"><button class="kr-crop-done" style="width:100%;height:48px;border-radius:12px;background:#258046;color:#fff;font-size:14px;font-weight:800;border:0;cursor:pointer">Done</button></div>' +
     '</div>';
-  var CROPS = [
-    { k:'tomato', label:'Tomato', emoji:'🍅', img:'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=128&q=80&fit=crop' },
-    { k:'chilli', label:'Chilli', emoji:'🌶️', img:'https://images.unsplash.com/photo-1583852048850-31c0d0e7cdde?w=128&q=80&fit=crop' },
-    { k:'wheat', label:'Wheat', emoji:'🌾', img:'https://images.unsplash.com/photo-1574226516831-e1dff420e562?w=128&q=80&fit=crop' },
-    { k:'maize', label:'Maize', emoji:'🌽', img:'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=128&q=80&fit=crop' },
-    { k:'cotton', label:'Cotton', emoji:'☁️', img:'https://images.unsplash.com/photo-1591885503007-9b80d9c89a52?w=128&q=80&fit=crop' },
-    { k:'sugarcane', label:'Sugarcane', emoji:'🎋', img:'https://images.unsplash.com/photo-1597106776019-b4ecc878c202?w=128&q=80&fit=crop' },
-    { k:'paddy', label:'Paddy', emoji:'🌱', img:'https://images.unsplash.com/photo-1568347877321-f8935c7dc5a8?w=128&q=80&fit=crop' },
-    { k:'onion', label:'Onion', emoji:'🧅', img:'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=128&q=80&fit=crop' },
-    { k:'potato', label:'Potato', emoji:'🥔', img:'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=128&q=80&fit=crop' }
-  ];
-  var CROPMAP = {}; CROPS.forEach(function (c) { CROPMAP[c.k] = c; });
+  // EXACT same crop catalog + local images as the homepage "All Crops" modal
+  var CROP_IMG = '../assets/crops/';
+  var CROP_META = {
+    tomato:{label:'Tomato',emoji:'🍅',bg:'#FEE2E2'}, chilli:{label:'Chilli',emoji:'🌶',bg:'#FFEDD5'},
+    wheat:{label:'Wheat',emoji:'🌾',bg:'#FEF3C7'}, maize:{label:'Maize',emoji:'🌽',bg:'#FEF9C3'},
+    onion:{label:'Onion',emoji:'🧅',bg:'#FCE7F3'}, potato:{label:'Potato',emoji:'🥔',bg:'#FEF3C7'},
+    sugarcane:{label:'Sugarcane',emoji:'🎋',bg:'#DCFCE7'}, banana:{label:'Banana',emoji:'🍌',bg:'#FEF9C3'},
+    mango:{label:'Mango',emoji:'🥭',bg:'#FED7AA'}, grapes:{label:'Grapes',emoji:'🍇',bg:'#F3E8FF'},
+    orange:{label:'Orange',emoji:'🍊',bg:'#FFEDD5'}, watermelon:{label:'Watermelon',emoji:'🍉',bg:'#FECACA'},
+    papaya:{label:'Papaya',emoji:'🥭',bg:'#FED7AA'}, pomegranate:{label:'Pomegranate',emoji:'🍎',bg:'#FEE2E2'},
+    brinjal:{label:'Brinjal',emoji:'🍆',bg:'#EDE9FE'}, cauliflower:{label:'Cauliflower',emoji:'🥦',bg:'#FEF3C7'},
+    cabbage:{label:'Cabbage',emoji:'🥬',bg:'#DCFCE7'}, okra:{label:'Okra',emoji:'🌿',bg:'#DCFCE7'},
+    garlic:{label:'Garlic',emoji:'🧄',bg:'#F5F5F4'}, cumin:{label:'Cumin',emoji:'🌱',bg:'#FEF3C7'},
+    cardamom:{label:'Cardamom',emoji:'🌿',bg:'#D1FAE5'}, chickpea:{label:'Chickpea',emoji:'🫘',bg:'#FEF3C7'},
+    soyabean:{label:'Soyabean',emoji:'🫘',bg:'#DCFCE7'}, blackgram:{label:'Black Gram',emoji:'🫘',bg:'#E5E7EB'}
+  };
+  Object.keys(CROP_META).forEach(function (k) { CROP_META[k].img = CROP_IMG + k + '.jpg'; });
+  var CROPMAP = CROP_META;
+  if (!window.cropFallback) { window.cropFallback = function (img, emoji, size) { img.outerHTML = '<div class="w-full h-full flex items-center justify-center" style="font-size:' + (size || 32) + 'px;line-height:1">' + emoji + '</div>'; }; }
 
   function setStars(v) { rating = v; stars.forEach(function (s, i) { s.classList.toggle('on', i < v); }); }
   function syncSubmit() { var ok = (textEl.value.trim().length > 0) || testiUp; submit.disabled = !ok; submit.style.opacity = ok ? '1' : '.55'; }
@@ -137,19 +144,34 @@
     var cbg = cropOv.querySelector('.bd'), cpnl = cropOv.querySelector('.pnl');
     cropGrid = cropOv.querySelector('.kr-crop-grid');
     var cropTemp = new Set();
-    cropGrid.innerHTML = CROPS.map(function (c) {
-      return '<button type="button" class="kr-crop-tile" data-k="' + c.k + '"><span class="ci"><img src="' + c.img + '" onerror="this.parentNode.textContent=\'' + c.emoji + '\'"/></span><span class="cl">' + c.label + '</span><span class="kr-crop-chk"><i class="fa-solid fa-check"></i></span></button>';
-    }).join('');
-    var cropTiles = cropGrid.querySelectorAll('.kr-crop-tile');
-    function paintTiles() { cropTiles.forEach(function (t) { t.classList.toggle('on', cropTemp.has(t.dataset.k)); }); }
-    cropTiles.forEach(function (t) { t.addEventListener('click', function () { var k = t.dataset.k; if (cropTemp.has(k)) cropTemp.delete(k); else cropTemp.add(k); paintTiles(); }); });
+    // Render the grid EXACTLY like the homepage All-Crops sheet (120px card · 90px image area + emoji fallback · check tick)
+    function renderGrid() {
+      cropGrid.innerHTML = Object.keys(CROP_META).map(function (key) {
+        var m = CROP_META[key]; var sel = cropTemp.has(key);
+        var borderColor = sel ? '#258046' : '#E5E7EB';
+        var shadow = sel ? '0 6px 14px -4px rgba(5,150,105,0.32)' : '0 1px 3px rgba(0,0,0,0.05)';
+        var labelColor = sel ? '#258046' : '#0F172A';
+        var tick = sel
+          ? '<span class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center" style="background:#258046;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff;z-index:2"><i class="fa-solid fa-check text-white text-[9px]"></i></span>'
+          : '<span class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full" style="background:rgba(255,255,255,0.95);border:1.5px solid #CBD5E1;box-shadow:0 1px 3px rgba(15,23,42,0.18);z-index:2"></span>';
+        return '<button type="button" data-k="' + key + '" class="rounded-xl overflow-hidden transition-all" style="background:#FFFFFF;border:1.5px solid ' + borderColor + ';box-shadow:' + shadow + ';height:120px;display:flex;flex-direction:column">'
+          + '<div class="relative w-full" style="height:90px;background:' + m.bg + ';overflow:hidden;flex-shrink:0">'
+          + '<img src="' + m.img + '" class="w-full h-full object-cover" style="display:block" onerror="cropFallback(this,\'' + m.emoji + '\',38)"/>'
+          + tick + '</div>'
+          + '<div class="flex-1 flex items-center justify-center px-1"><span class="text-[12.5px] font-semibold leading-none" style="color:' + labelColor + '">' + m.label + '</span></div>'
+          + '</button>';
+      }).join('');
+      cropGrid.querySelectorAll('[data-k]').forEach(function (btn) {
+        btn.addEventListener('click', function () { var k = btn.dataset.k; if (cropTemp.has(k)) cropTemp.delete(k); else cropTemp.add(k); renderGrid(); });
+      });
+    }
     function renderCropChips() {
       var arr = Array.prototype.slice.call(krCrops);
       if (cropChips) cropChips.innerHTML = arr.map(function (k) { return '<span class="kr-cp-chip">' + (CROPMAP[k] ? CROPMAP[k].label : k) + '</span>'; }).join('');
       if (cropLbl) cropLbl.textContent = arr.length ? 'Edit crops (' + arr.length + ')' : 'Select crop';
     }
     function closeCrop() { cbg.style.opacity = '0'; cpnl.style.transform = 'translateY(100%)'; setTimeout(function () { cropOv.style.display = 'none'; }, 280); }
-    cropTrigger.addEventListener('click', function () { cropTemp = new Set(krCrops); paintTiles(); cropOv.style.display = 'block'; requestAnimationFrame(function () { cbg.style.opacity = '1'; cpnl.style.transform = 'translateY(0)'; }); });
+    cropTrigger.addEventListener('click', function () { cropTemp = new Set(krCrops); renderGrid(); cropOv.style.display = 'block'; requestAnimationFrame(function () { cbg.style.opacity = '1'; cpnl.style.transform = 'translateY(0)'; }); });
     cbg.addEventListener('click', closeCrop);
     cropOv.querySelector('.kr-crop-x').addEventListener('click', closeCrop);
     cropOv.querySelector('.kr-crop-done').addEventListener('click', function () { krCrops = new Set(cropTemp); renderCropChips(); closeCrop(); });

@@ -1300,7 +1300,7 @@
                 <a href="pdp.html" class="ba-name">Humic</a>
                 <div class="ba-tech">Activated Humic + Fulvic</div>
                 <div class="ba-pricerow"><span class="ba-size">500 ml</span><span class="ba-price tnum">&#8377;276</span><span class="ba-mrp tnum">&#8377;390</span></div>
-                <a href="merge-review.html" data-demo-case="1" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+                <a href="cart.html?merge=1" data-demo-case="1" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
               </div>
             </div>
           </div>
@@ -1313,7 +1313,7 @@
                 <a href="pdp.html" class="ba-name">Chakrawarti ZC</a>
                 <div class="ba-tech">Thiamethoxam + Lambda</div>
                 <div class="ba-pricerow"><span class="ba-size">100 ml</span><span class="ba-price tnum">&#8377;358</span><span class="ba-mrp tnum">&#8377;495</span></div>
-                <a href="merge-review.html" data-demo-case="2" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+                <a href="cart.html?merge=1" data-demo-case="2" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
               </div>
             </div>
           </div>
@@ -1326,7 +1326,7 @@
                 <a href="pdp.html" class="ba-name">NPK 19-19-19</a>
                 <div class="ba-tech">Water-soluble fertilizer</div>
                 <div class="ba-pricerow"><span class="ba-size">1 kg</span><span class="ba-price tnum">&#8377;330</span></div>
-                <a href="merge-review.html" data-demo-case="3" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+                <a href="cart.html?merge=1" data-demo-case="3" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
               </div>
             </div>
           </div>
@@ -1339,7 +1339,7 @@
                 <a href="pdp.html" class="ba-name">Antivirus</a>
                 <div class="ba-tech">Bio bactericide + virucide</div>
                 <div class="ba-pricerow"><span class="ba-size">250 ml</span><span class="ba-price tnum">&#8377;327</span><span class="ba-mrp tnum">&#8377;425</span></div>
-                <a href="merge-review.html" data-demo-case="4" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+                <a href="cart.html?merge=1" data-demo-case="4" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
               </div>
             </div>
           </div>
@@ -3808,8 +3808,8 @@
     })();
   </script>
   <script>
-    // Buy-again demo wiring · seeds kkd.lastOrder + kkd.cart, then the tile's href opens the 2-page merge flow
-    // (merge-review.html → merge-payment.html, powered by assets/merge-core.js) — skips checkout.html entirely.
+    // Buy-again demo wiring · seeds kkd.lastOrder + kkd.mergeCart, then the tile's href opens cart.html?merge=1
+    // which shows the merge-ask modal → merge-review.html → merge-payment.html (powered by assets/merge-core.js).
     // Four cases (2×2: below/above ₹10k × same-item/new-item / prev-COD/prev-prepaid) map to tiles 1–4:
     //   1 (Humic)        → BELOW ₹10k · SAME item re-ordered → "Same item already in order" + Discard · pay just the added qty
     //   2 (Chakrawarti)  → BELOW ₹10k · NEW item merged into the recent order → normal merge · pay only the new item
@@ -3834,7 +3834,7 @@
           var s = SEED[c]; if (!s) return;
           try {
             localStorage.setItem('kkd.lastOrder', JSON.stringify({ id:'KKD-26194-7821', items:s.recent, qtys:s.qtys, ts:Date.now(), mode:(s.mode || 'paynow'), demoPrev:s.demoPrev, demoAdd:s.demoAdd }));
-            localStorage.setItem('kkd.cart', JSON.stringify(s.cart));
+            localStorage.setItem('kkd.mergeCart', JSON.stringify(s.cart));   // own key · cart.html won't clobber it
             localStorage.removeItem('kkd.mergeInfo');
           } catch(_) {}
         });

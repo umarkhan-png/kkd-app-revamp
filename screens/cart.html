@@ -5,6 +5,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="../assets/celebrate.js"></script>
 <script src="../assets/appstate.js"></script>
+<script src="../assets/merge-core.js"></script>
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   html,body{font-family:'Poppins',system-ui,sans-serif;margin:0;padding:0}
@@ -875,6 +876,73 @@
         btn.style.background = '#DC2626';
         btn.addEventListener('click', function(e){ e.preventDefault(); e.stopImmediatePropagation(); if (it) it.remove(); if (note) note.remove(); persist(); location.reload(); }, true);
       }
+    })();
+  </script>
+  <!-- ===== Buy-again merge-ask modal · shown on cart.html?merge=1 when a recent order exists ·
+       asks the user to merge the buy-again item into their recent order → merge-review.html ===== -->
+  <style>
+    .mq-bd{position:fixed;inset:0;background:rgba(15,23,42,.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:170}
+    .mq-bd.open{opacity:1;pointer-events:auto}
+    .mq-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:26px 26px 0 0;box-shadow:0 -10px 32px rgba(0,0,0,.18);transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1);z-index:171;max-height:90vh;display:flex;flex-direction:column;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}
+    .mq-sheet.open{transform:translateY(0)}
+    .mq-handle{width:44px;height:5px;border-radius:999px;background:#E2E8F0;margin:12px auto 6px;flex-shrink:0}
+    .mq-body{padding:8px 22px 4px;text-align:center}
+    .mq-ic{width:64px;height:64px;border-radius:50%;margin:6px auto 16px;display:flex;align-items:center;justify-content:center;background:#ECFDF5;color:#258046;font-size:27px}
+    .mq-title{font-size:21px;font-weight:800;color:#0F172A;line-height:1.25}
+    .mq-sub{font-size:14px;color:#64748B;font-weight:500;margin-top:10px;line-height:1.5}
+    .mq-recap{margin:20px 22px 0;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:14px;padding:14px 15px;display:flex;align-items:center;gap:12px}
+    .mq-recap .ic{width:38px;height:38px;border-radius:10px;background:#fff;color:#475569;display:flex;align-items:center;justify-content:center;font-size:15px;border:1px solid #E2E8F0;flex-shrink:0}
+    .mq-recap .tx{flex:1;min-width:0;text-align:left;line-height:1.3}
+    .mq-recap .tx b{display:block;font-size:14.5px;color:#0F172A;font-weight:800}
+    .mq-recap .tx em{display:block;font-size:12.5px;color:#64748B;font-weight:600;font-style:normal;margin-top:2px}
+    .mq-actions{padding:20px 22px 6px;display:flex;flex-direction:column;gap:11px}
+    .mq-btn{width:100%;height:54px;border-radius:13px;border:0;font-size:15.5px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:inherit;transition:transform .15s ease}
+    .mq-btn:active{transform:scale(.985)}
+    .mq-btn.primary{background:#258046;color:#fff;box-shadow:0 10px 22px -6px rgba(5,150,105,0.45)}
+    .mq-btn.ghost{height:48px;background:#fff;color:#64748B;border:1px solid #E2E8F0;font-weight:700;font-size:14px}
+  </style>
+  <div id="mqBd" class="mq-bd"></div>
+  <div id="mqSheet" class="mq-sheet">
+    <div class="mq-handle"></div>
+    <div class="mq-body">
+      <div class="mq-ic"><i id="mqIc" class="fa-solid fa-code-merge"></i></div>
+      <div class="mq-title" id="mqTitle">Merge in your recent order</div>
+      <div class="mq-sub" id="mqSub">You have a recent order that hasn't shipped yet. Add this to it so everything arrives together.</div>
+    </div>
+    <div class="mq-recap">
+      <div class="ic"><i class="fa-solid fa-receipt"></i></div>
+      <div class="tx"><b id="mqOrderId">#KKD-26194</b><em id="mqOrderSub">Recent order · not shipped yet</em></div>
+    </div>
+    <div class="mq-actions">
+      <button type="button" class="mq-btn primary" id="mqMerge"><i class="fa-solid fa-code-merge text-[14px]"></i> Merge into previous order</button>
+      <button type="button" class="mq-btn ghost" id="mqSkip">Not now</button>
+    </div>
+  </div>
+  <script>
+    (function(){
+      var params = new URLSearchParams(location.search);
+      if (params.get('merge') !== '1') return;
+      var m = window.kkdMerge && window.kkdMerge.compute();
+      if (!m) return;   // nothing to merge → behave as a normal cart
+      var bd = document.getElementById('mqBd'), sheet = document.getElementById('mqSheet');
+      // Title · Case A (same item) vs Case B (new item merge)
+      if (m.isCaseA){
+        document.getElementById('mqIc').className = 'fa-solid fa-clone';
+        document.getElementById('mqTitle').textContent = 'Same item already in your recent order';
+        document.getElementById('mqSub').textContent = 'This item is already in a recent order that hasn’t shipped. Merge to just increase the quantity instead of placing a separate order.';
+      } else {
+        document.getElementById('mqIc').className = 'fa-solid fa-code-merge';
+        document.getElementById('mqTitle').textContent = 'Merge in your recent order';
+        document.getElementById('mqSub').textContent = 'You have a recent order that hasn’t shipped yet. Add this to it so everything arrives together.';
+      }
+      document.getElementById('mqOrderId').textContent = '#' + m.oid;
+      document.getElementById('mqOrderSub').textContent = m.mergedCount + ' item' + (m.mergedCount > 1 ? 's' : '') + ' after merge · not shipped yet';
+      function close(){ bd.classList.remove('open'); sheet.classList.remove('open'); }
+      document.getElementById('mqMerge').addEventListener('click', function(){ location.href = 'merge-review.html'; });
+      document.getElementById('mqSkip').addEventListener('click', function(){ window.kkdMerge.clearMergeCart(); close(); });
+      bd.addEventListener('click', function(){ window.kkdMerge.clearMergeCart(); close(); });
+      // open on next frame so the slide-up animates
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ bd.classList.add('open'); sheet.classList.add('open'); }); });
     })();
   </script>
   <script src="../assets/weight-ladder.js"></script>

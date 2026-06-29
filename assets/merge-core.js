@@ -28,10 +28,17 @@
       return lo;
     } catch (e) { return null; }
   }
+  // The buy-again merge selection lives in its OWN key (kkd.mergeCart) so cart.html's cart-reconcile
+  // (which rewrites kkd.cart from its static markup) can never clobber it. Falls back to kkd.cart.
   function getCart() {
+    try {
+      var mc = JSON.parse(localStorage.getItem('kkd.mergeCart') || 'null');
+      if (mc && Array.isArray(mc) && mc.length) return mc.slice().sort();
+    } catch (e) {}
     try { return (JSON.parse(localStorage.getItem('kkd.cart') || '[]') || []).slice().sort(); }
     catch (e) { return []; }
   }
+  function clearMergeCart() { try { localStorage.removeItem('kkd.mergeCart'); } catch (e) {} }
 
   // Compute the full merge model · returns null when there's no recent order or nothing actually changes
   function compute() {
@@ -109,5 +116,5 @@
     el.innerHTML = html;
   }
 
-  window.kkdMerge = { compute: compute, row: row, renderList: renderList, itemMeta: itemMeta, rupee: rupee };
+  window.kkdMerge = { compute: compute, row: row, renderList: renderList, itemMeta: itemMeta, rupee: rupee, clearMergeCart: clearMergeCart };
 })();

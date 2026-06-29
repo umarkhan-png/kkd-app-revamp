@@ -11,47 +11,37 @@
   input,button,select,textarea,optgroup{font-family:inherit}
   body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:110px}
   .tnum{font-variant-numeric:tabular-nums}
-  .sec-title{margin:18px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
-
-  /* Step indicator */
-  .steps{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px 2px}
-  .step{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:800;color:#94A3B8}
-  .step .dot{width:22px;height:22px;border-radius:9999px;background:#E2E8F0;color:#94A3B8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900}
-  .step.done{color:#258046}
-  .step.done .dot{background:#ECFDF5;color:#258046;border:1.5px solid #258046}
-  .step.on{color:#258046}
-  .step.on .dot{background:#258046;color:#fff}
-  .step-line{width:26px;height:2px;border-radius:2px;background:#258046}
+  .sec-title{margin:22px 18px 10px;font-size:12.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
 
   /* Recap tile */
-  .om-recap-tile{margin:14px 16px 0;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
-  .om-recap-id{flex:1;min-width:0;display:flex;align-items:center;gap:9px;line-height:1.2}
-  .om-recap-id i{width:30px;height:30px;border-radius:8px;background:#F8FAFC;color:#475569;display:flex;align-items:center;justify-content:center;font-size:13px;border:1px solid #E2E8F0;flex-shrink:0}
-  .om-recap-id b{display:block;font-size:13px;color:#0F172A;font-weight:800}
-  .om-recap-id em{display:block;font-size:11px;color:#64748B;font-weight:600;font-style:normal;margin-top:1px}
-  .om-recap-view{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:9999px;background:#FFFFFF;border:1.5px solid #258046;color:#258046;font-size:11.5px;font-weight:800;text-decoration:none}
+  .om-recap-tile{margin:18px 18px 0;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .om-recap-id{flex:1;min-width:0;display:flex;align-items:center;gap:11px;line-height:1.25}
+  .om-recap-id i{width:38px;height:38px;border-radius:10px;background:#F8FAFC;color:#475569;display:flex;align-items:center;justify-content:center;font-size:15px;border:1px solid #E2E8F0;flex-shrink:0}
+  .om-recap-id b{display:block;font-size:15px;color:#0F172A;font-weight:800}
+  .om-recap-id em{display:block;font-size:12.5px;color:#64748B;font-weight:600;font-style:normal;margin-top:2px}
+  .om-recap-view{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9999px;background:#FFFFFF;border:1.5px solid #258046;color:#258046;font-size:13px;font-weight:800;text-decoration:none}
 
   /* Pay box */
-  .om-pay{margin:0 16px;background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border:1px solid #BBF7D0;border-radius:14px;padding:14px}
-  .om-pay-row{display:flex;align-items:baseline;justify-content:space-between;font-size:13px;color:#0F172A;font-weight:700;padding:3px 0}
-  .om-pay-row.sub{font-size:12px;color:#475569;font-weight:600}
+  .om-pay{margin:0 18px;background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border:1px solid #BBF7D0;border-radius:16px;padding:17px}
+  .om-pay-row{display:flex;align-items:baseline;justify-content:space-between;font-size:14.5px;color:#0F172A;font-weight:700;padding:4px 0}
+  .om-pay-row.sub{font-size:14px;color:#475569;font-weight:600}
   .om-pay-row.sub span:last-child{font-weight:700;color:#0F172A;font-variant-numeric:tabular-nums}
-  .om-pay-row.total{font-size:13px;color:#0F172A;font-weight:700}
-  .om-pay-row.total b{font-size:15px;font-weight:900;color:#0F172A;font-variant-numeric:tabular-nums}
-  .om-pay-row.hi{font-size:14px;color:#258046;font-weight:800}
-  .om-pay-row.hi b{font-size:22px;font-weight:900;color:#258046;font-variant-numeric:tabular-nums}
-  .om-pay-divider{margin:6px 0 4px;border-top:1px dashed #A7F3D0}
-  .om-pay-hint{font-size:11px;font-weight:600;color:#64748B;margin-top:2px}
-  .om-pay-method-label{margin:16px 16px 0;font-size:10.5px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:.06em}
-  .om-pay-chips{margin:8px 16px 0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .om-chip{display:flex;align-items:center;gap:9px;padding:11px;border-radius:11px;background:#FFFFFF;border:1.5px solid #E2E8F0;cursor:pointer;text-align:left;font-family:inherit;transition:all .15s ease}
+  .om-pay-row.total{font-size:15px;color:#0F172A;font-weight:700}
+  .om-pay-row.total b{font-size:17px;font-weight:900;color:#0F172A;font-variant-numeric:tabular-nums}
+  .om-pay-row.hi{font-size:16px;color:#258046;font-weight:800;margin-top:2px}
+  .om-pay-row.hi b{font-size:26px;font-weight:900;color:#258046;font-variant-numeric:tabular-nums}
+  .om-pay-divider{margin:9px 0 6px;border-top:1px dashed #A7F3D0}
+  .om-pay-hint{font-size:12.5px;font-weight:600;color:#64748B;margin-top:3px}
+  .om-pay-method-label{margin:20px 18px 0;font-size:12px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:.06em}
+  .om-pay-chips{margin:10px 18px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .om-chip{display:flex;align-items:center;gap:11px;padding:14px;border-radius:13px;background:#FFFFFF;border:1.5px solid #E2E8F0;cursor:pointer;text-align:left;font-family:inherit;transition:all .15s ease}
   .om-chip:active{transform:scale(.98)}
   .om-chip[aria-checked="true"]{border-color:#258046;box-shadow:0 4px 12px -4px rgba(5,150,105,0.3)}
-  .om-chip > i{width:30px;height:30px;border-radius:8px;background:#F1F5F9;color:#64748B;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:all .15s ease}
+  .om-chip > i{width:36px;height:36px;border-radius:10px;background:#F1F5F9;color:#64748B;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:all .15s ease}
   .om-chip[aria-checked="true"] > i{background:#258046;color:#FFFFFF}
-  .om-chip .lab{flex:1;min-width:0;line-height:1.2}
-  .om-chip .lab b{display:block;font-size:12.5px;font-weight:800;color:#0F172A}
-  .om-chip .lab span{display:block;font-size:10.5px;color:#64748B;font-weight:600;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .om-chip .lab{flex:1;min-width:0;line-height:1.25}
+  .om-chip .lab b{display:block;font-size:14.5px;font-weight:800;color:#0F172A}
+  .om-chip .lab span{display:block;font-size:12px;color:#64748B;font-weight:600;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .om-chip[aria-checked="true"] .lab span{color:#258046}
   .om-chip.disabled{opacity:.5;pointer-events:none}
   .om-chip.full{grid-column:1 / -1}
@@ -77,13 +67,6 @@
       <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
     </a>
     <h1 class="text-[22px] font-extrabold leading-tight" style="color:#0F172A">Payment</h1>
-  </div>
-
-  <!-- Step indicator -->
-  <div class="steps">
-    <div class="step done"><span class="dot"><i class="fa-solid fa-check text-[10px]"></i></span> Review</div>
-    <div class="step-line"></div>
-    <div class="step on"><span class="dot">2</span> Payment</div>
   </div>
 
   <div class="om-recap-tile">
@@ -233,6 +216,7 @@
             prevQtys: m.prevQtys, method: method, amountPaid: currentPayNow
           }));
         } catch(e){}
+        window.kkdMerge.clearMergeCart();
         location.href = 'order-success.html?merged=1&mode=' + method;
       });
     })();

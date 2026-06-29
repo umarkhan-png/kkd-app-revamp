@@ -88,6 +88,8 @@
 .hm .icpick{width:38px;height:38px;border-radius:9px;border:1.5px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--g500);cursor:pointer;transition:all .12s;background:#fff;}
 .hm .icpick:hover{border-color:var(--g400);color:var(--g700);}
 .hm .icpick.on{background:var(--green-lt);border-color:var(--green);color:var(--green);}
+.hm .splash-nest{margin-top:14px;padding:14px 16px;border:1px solid var(--g200);border-left:3px solid var(--green);border-radius:10px;background:var(--g50);}
+.hm .splash-nest .sdiv:first-child{padding-top:0;}
 @media (max-width:1080px){ .hm .hm-layout{flex-direction:column;} .hm .lp{width:100%;position:static;} }
 </style>
 </head>
@@ -418,17 +420,20 @@ function splashCustomCard(){
     body=`<div class="hint" style="font-size:12.5px;line-height:1.5">Off — every user sees the default splash. Turn this on to run a festival/seasonal splash that replaces the default during a chosen date range.</div>`;
   } else {
     body=`
-      <div class="sdiv">Active dates · festival / date range</div>
-      <div class="row" style="margin-bottom:6px">
-        ${field('splashCustom.trigger.start','Start date',{type:'date'})}
-        ${field('splashCustom.trigger.end','End date',{type:'date'})}
-      </div>
       ${splashScopeRow()}
-      ${splashCondSummary()}
-      <div class="sdiv" style="margin-top:16px">Splash image</div>
-      ${imgField('splashCustom.img','Splash image — shown to all users','Full-screen image used for this splash','splash')}
-      <div class="sdiv" style="margin-top:16px">By language <span class="hint" style="font-weight:500;text-transform:none;letter-spacing:0">· optional</span></div>
-      ${langs.map(L=>heroVar('splashCustom.imgByLocale.'+L.code, esc(L.native||L.name||L.code)+' <span class="hint" style="font-weight:500">'+esc(L.code)+'</span>', 'splash')).join('') || `<div class="hint">No languages enabled.</div>`}`;
+      <div class="splash-nest">
+        <div class="sdiv">Splash details</div>
+        <div class="sdiv" style="font-weight:700">Active dates · festival / date range</div>
+        <div class="row" style="margin-bottom:6px">
+          ${field('splashCustom.trigger.start','Start date',{type:'date'})}
+          ${field('splashCustom.trigger.end','End date',{type:'date'})}
+        </div>
+        ${splashCondSummary()}
+        <div class="sdiv" style="margin-top:16px">Splash image</div>
+        ${imgField('splashCustom.img','Splash image — shown to all users','Full-screen image used for this splash','splash')}
+        <div class="sdiv" style="margin-top:16px">By language <span class="hint" style="font-weight:500;text-transform:none;letter-spacing:0">· optional</span></div>
+        ${langs.map(L=>heroVar('splashCustom.imgByLocale.'+L.code, esc(L.native||L.name||L.code)+' <span class="hint" style="font-weight:500">'+esc(L.code)+'</span>', 'splash')).join('') || `<div class="hint">No languages enabled.</div>`}
+      </div>`;
   }
   return `<div class="card">
     <div class="card-head"><h3>Custom splash <span class="lang-pill" style="background:#EEF2FF;color:#4338CA">2nd of 2</span></h3>

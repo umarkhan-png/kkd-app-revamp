@@ -84,6 +84,10 @@
 .hm .ro-row .k{color:var(--g500);font-weight:600;}
 .hm .ro-row .v{color:var(--g800);font-weight:600;}
 .hm .warn-box{background:#FFFBEB;color:var(--amber);border:1px solid #FDE68A;border-radius:8px;padding:9px 12px;font-size:12px;margin-top:10px;display:flex;gap:7px;align-items:flex-start;}
+.hm .icon-grid{display:flex;flex-wrap:wrap;gap:6px;}
+.hm .icpick{width:38px;height:38px;border-radius:9px;border:1.5px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--g500);cursor:pointer;transition:all .12s;background:#fff;}
+.hm .icpick:hover{border-color:var(--g400);color:var(--g700);}
+.hm .icpick.on{background:var(--green-lt);border-color:var(--green);color:var(--green);}
 @media (max-width:1080px){ .hm .hm-layout{flex-direction:column;} .hm .lp{width:100%;position:static;} }
 </style>
 </head>
@@ -137,6 +141,9 @@ if(!O.splashCustom.trigger) O.splashCustom.trigger={type:'festival',start:'',end
 if(!O.phone.hero) O.phone.hero = { img:(O.phone.heroImages&&O.phone.heroImages[0])||'', imgByLocale:{}, imgByState:{} };
 if(!O.phone.hero.imgByLocale) O.phone.hero.imgByLocale={};
 if(!O.phone.hero.imgByState) O.phone.hero.imgByState={};
+// OTP resend channels — enable/disable toggles (copy lives in Translations)
+if(O.otp.resendWhatsapp===undefined) O.otp.resendWhatsapp=true;
+if(O.otp.resendSms===undefined) O.otp.resendSms=true;
 
 const SECTIONS = [
   { key:'splash',   icon:'📲', name:'Splash',          sub:'Logo + background',     screen:'splash.html' },
@@ -287,21 +294,20 @@ const EDITORS = {
       <div class="li">
         <div class="factic"><i class="fa-solid fa-${esc(f.icon||'circle-info')}"></i></div>
         <div class="li-body">
-          <div class="row" style="margin-bottom:0">
-            <div class="fg fix" style="max-width:170px"><label>Icon (Font Awesome)</label><input type="text" value="${esc(f.icon||'')}" oninput="setPath('otp.facts.${i}.icon',this.value)" onchange="commit();rerender()" placeholder="truck-fast"/></div>
-            ${tField('otp.facts.'+i+'.text','Message')}
-          </div>
+          ${iconPicker('otp.facts.'+i+'.icon', f.icon)}
+          <div style="height:10px"></div>
+          ${tField('otp.facts.'+i+'.text','Message')}
         </div>
         <div class="li-act"><button class="btn btn-d btn-ic" onclick="delFact(${i})"><i class="fa-solid fa-trash"></i></button></div>
       </div>`).join('');
     return head(meta('otp')) + langBar() +
-      card('Heading &amp; resend',
-        `<div class="row">`+ tField('otp.heading','Heading') + tField('otp.codeSentTo','"Code sent to" label') + tField('otp.change','Change link',{style:'min-width:110px'}) +`</div>`+
-        `<div class="row">`+ tField('otp.noCode','No-code prompt') + tField('otp.resendIn','"Resend in" label') + field('otp.resendSecs','Resend timer (secs)',{type:'number'}) +`</div>`+
-        `<div class="row" style="margin-bottom:0">`+ tField('otp.whatsapp','WhatsApp button') + tField('otp.sms','SMS button') + tField('otp.verify','Verify button') +`</div>`
+      card('Resend',
+        `<div class="row">`+ field('otp.resendSecs','Resend timer (secs)',{type:'number'}) +`</div>`+
+        toggle('otp.resendWhatsapp','WhatsApp resend','Let users request the code on WhatsApp') +
+        toggle('otp.resendSms','SMS resend','Let users request the code over SMS')
       ) +
       card('Auto-rotating message strip',
-        `<p class="hint" style="margin:0 0 12px">These messages rotate one after another below the OTP boxes. Add, edit or remove them, set the icon, and translate each one.</p>`+
+        `<p class="hint" style="margin:0 0 12px">These messages rotate one after another below the OTP boxes. Add or remove them, pick an icon, and translate each one.</p>`+
         `<div class="row" style="margin-bottom:14px">`+ field('otp.factRotateMs','Rotation speed (ms)',{type:'number',hint:'Time each message stays on screen'}) +`</div>`+
         facts +
         `<button class="btn btn-s btn-sm" onclick="addFact()"><i class="fa-solid fa-plus"></i> Add rotating message</button>`
@@ -310,9 +316,7 @@ const EDITORS = {
   name(){
     return head(meta('name')) + langBar() +
       card('Screen text',
-        `<div class="row">`+ tField('name.heading','Heading') +`</div>`+
-        `<div class="row">`+ tField('name.firstPh','First-name placeholder') + tField('name.lastPh','Last-name placeholder') +`</div>`+
-        `<div class="row" style="margin-bottom:0">`+ tField('name.continue','Continue button',{style:'max-width:240px'}) +`</div>`
+        `<div class="row" style="margin-bottom:0">`+ tField('name.heading','Heading') +`</div>`
       );
   },
   welcome(){
@@ -346,6 +350,15 @@ function addFact(){ O.otp.facts.push({ icon:'circle-info', text:{ en:'New messag
 function delFact(i){ O.otp.facts.splice(i,1); commit('Message removed'); rerender(); }
 function addBullet(){ O.permissionBullets.push({ icon:'circle-check', text:{ en:'New benefit' } }); commit('Line added'); rerender(); }
 function delBullet(i){ O.permissionBullets.splice(i,1); commit('Line removed'); rerender(); }
+
+/* ---------- predefined icon picker (OTP rotating strip) ---------- */
+const PRESET_ICONS=['truck-fast','box-open','shield-halved','lock','circle-check','headset','phone','clock',
+  'leaf','seedling','wheat-awn','tractor','bug','flask','droplet',
+  'hand-holding-dollar','indian-rupee-sign','percent','gift','star','tag','bolt'];
+function iconPicker(path,cur){
+  return `<div class="fg"><label>Icon</label>
+    <div class="icon-grid">${PRESET_ICONS.map(ic=>`<span class="icpick ${ic===cur?'on':''}" title="${ic}" onclick="setPath('${path}','${ic}');commit('Icon updated');rerender()"><i class="fa-solid fa-${ic}"></i></span>`).join('')}</div></div>`;
+}
 
 /* ---------- PHONE hero: one image + per-language + per-state variants ---------- */
 function clearImg(path){ setPath(path,''); commit('Image removed'); rerender(); }

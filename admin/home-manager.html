@@ -278,7 +278,15 @@ function dd(e,tid){
 function toggleVis(id){const s=SECS.find(s=>s.id===id);s.on=!s.on;persist();renderList();AdminShell.saved(s.nm+(s.on?' shown on app':' hidden on app'));}
 
 /* ── SELECT ── */
-function pick(id){sel=id;renderList();document.getElementById('rp').innerHTML=EDITORS[id]?EDITORS[id]():`<div class="empty-state"><div class="ei">🚧</div><p>Editor coming soon</p></div>`;}
+// onboarding-style editor header: big section title + Preview-in-app (no per-card Save buttons)
+function edHead(id){
+  const s=SECS.find(x=>x.id===id)||{ic:'🏠',nm:''};
+  return `<div class="flex items-center justify-between" style="margin-bottom:14px">
+    <div><h2 style="font-size:18px;font-weight:800;margin:0">${s.ic} ${s.nm}</h2>${s.sub?`<p class="muted" style="margin:2px 0 0;font-size:12.5px">${s.sub}</p>`:''}</div>
+    <button class="btn btn-s btn-sm" onclick="AdminShell.previewApp('home.html')"><i class="fa-solid fa-mobile-screen-button"></i> Preview in app</button>
+  </div>`;
+}
+function pick(id){sel=id;renderList();document.getElementById('rp').innerHTML=EDITORS[id]?(edHead(id)+EDITORS[id]()):`<div class="empty-state"><div class="ei">🚧</div><p>Editor coming soon</p></div>`;}
 
 /* ── HELPERS ── */
 /* Language tabs removed — per-language copy lives in the Translations tool, not in screen editors. */
@@ -485,7 +493,6 @@ const EDITORS={
 /* 0a ── HEADER / TOP BAR */
 header:()=>`
 <div class="card">
-  <div class="card-head"><h3>🏠 Header / Top Bar</h3><button class="btn btn-p btn-sm" onclick="save('Header saved')">Save</button></div>
   <div class="card-body">
     <div class="sdiv">Logo</div>
     <div class="row" style="align-items:flex-end;">
@@ -536,7 +543,6 @@ header:()=>`
 /* 0b ── THEME RULES (state / weather / festival · one theme at a time, by priority) */
 theme:()=>{ const T=themeData(); return `
 <div class="card">
-  <div class="card-head"><h3>🎨 Theme Rules</h3><button class="btn btn-p btn-sm" onclick="save('Themes saved')">Save</button></div>
   <div class="card-body">
     <p class="hint-p">Themes change the top of Home automatically — by <b>state</b>, by <b>weather</b>, or on <b>festival dates</b> (Holi, Diwali, Christmas…). A user only ever sees <b>one theme at a time</b>: themes are checked top-to-bottom and the first whose rule matches wins. So if Holi <i>and</i> rain both apply, whichever sits higher here is what shows — drag priority with the ↑ ↓ buttons.</p>
 
@@ -559,7 +565,6 @@ theme:()=>{ const T=themeData(); return `
 /* 0c ── TOP STATUS BANNER */
 statusbanner:()=>`
 <div class="card">
-  <div class="card-head"><h3>📢 Top Status Banner</h3><button class="btn btn-p btn-sm" onclick="save('Status banner saved')">Save</button></div>
   <div class="card-body">
     ${TG('sb1',true,'Show status banner','Rotating ticker above the search bar')}
     <div class="row" style="margin-top:12px;">
@@ -597,7 +602,6 @@ statusbanner:()=>`
 /* 0d ── SEARCH BAR */
 search:()=>`
 <div class="card">
-  <div class="card-head"><h3>🔍 Search Bar</h3><button class="btn btn-p btn-sm" onclick="save('Search bar saved')">Save</button></div>
   <div class="card-body">
     ${LT()}
     <div class="row">
@@ -613,7 +617,6 @@ search:()=>`
 /* 1 ── OFFER STRIP */
 offer:()=>`
 <div class="card">
-  <div class="card-head"><h3>🎁 Offer Strip — Header Ticker</h3><button class="btn btn-p btn-sm" onclick="save('Offer strip saved')">Save</button></div>
   <div class="card-body">
     ${LT()}
     <div class="sdiv">Active Offers (scroll as ticker)</div>
@@ -644,7 +647,6 @@ offer:()=>`
 /* 2 ── CATEGORIES */
 cats:()=>`
 <div class="card">
-  <div class="card-head"><h3>🗂️ Categories</h3><button class="btn btn-p btn-sm" onclick="save('Categories saved')">Save</button></div>
   <div class="card-body">
     ${LT()}
     <p class="hint-p">Drag to reorder · Toggle show/hide · Click emoji to change icon</p>
@@ -672,7 +674,6 @@ cats:()=>`
 /* 3 ── ORDER STATUS */
 ordstatus:()=>`
 <div class="card">
-  <div class="card-head"><h3>📦 Order Status Sticky Bar</h3><button class="btn btn-p btn-sm" onclick="save('Order status saved')">Save</button></div>
   <div class="card-body">
     ${TG('os1',true,'Show Order Status Bar','Sticky bar with live order status above categories')}
     ${TG('os2',true,'Show Full Expanded Card','Full tracking card visible when user scrolls to top')}
@@ -697,7 +698,6 @@ ordstatus:()=>`
 /* 4 ── EARN COINS */
 coins:()=>`
 <div class="card">
-  <div class="card-head"><h3>🪙 Earn Coins — Task Screen</h3><button class="btn btn-p btn-sm" onclick="save('Tasks saved')">Save</button></div>
   <div class="card-body">
     <div class="sdiv">Tasks (shown in drawer)</div>
     <div id="taskList">
@@ -745,7 +745,6 @@ coins:()=>`
 /* 5 ── FLASH SALE */
 flash:()=>`
 <div class="card">
-  <div class="card-head"><h3>⚡ Flash Sale</h3><button class="btn btn-p btn-sm" onclick="save('Flash sale saved')">Save</button></div>
   <div class="card-body">
     ${TG('fs0',true,'Flash Sale Active','Section auto-hides when schedule ends')}
     <div style="margin-top:14px;"></div>
@@ -776,7 +775,6 @@ flash:()=>`
 /* 6 ── BANNERS */
 banners:()=>`
 <div class="card">
-  <div class="card-head"><h3>🖼️ Promotional Banners</h3><button class="btn btn-p btn-sm" onclick="save('Banners saved')">Save</button></div>
   <div class="card-body">
     <p class="hint-p">Each banner targets specific state · language · time window</p>
     <div data-img-hint="banner" style="margin-bottom:10px"></div>
@@ -812,7 +810,6 @@ banners:()=>`
 /* 7 ── SHOP BY CROP */
 crops:()=>`
 <div class="card">
-  <div class="card-head"><h3>🌾 Shop by Crop</h3><button class="btn btn-p btn-sm" onclick="save('Shop by Crop saved')">Save</button></div>
   <div class="card-body">
     ${LT()}
     ${TG('sbc1',true,'Auto Seasonal Mode','Shows crops in-season for user\'s state based on current month')}
@@ -831,7 +828,6 @@ crops:()=>`
 /* 8 ── BESTSELLERS */
 best:()=>`
 <div class="card">
-  <div class="card-head"><h3>⭐ Bestsellers</h3><button class="btn btn-p btn-sm" onclick="save('Bestsellers saved')">Save</button></div>
   <div class="card-body">
     ${LT()}
     <div class="row">
@@ -849,7 +845,6 @@ best:()=>`
 /* 9 ── RECENTLY VIEWED */
 recent:()=>`
 <div class="card">
-  <div class="card-head"><h3>👁️ Recently Viewed</h3><button class="btn btn-p btn-sm" onclick="save('Recently Viewed saved')">Save</button></div>
   <div class="card-body">
     ${TG('rv1',true,'Show Section','Per-user recently viewed products')}
     <div style="margin-top:14px;"></div>
@@ -864,7 +859,6 @@ recent:()=>`
 /* 10 ── BUY AGAIN */
 buyagain:()=>`
 <div class="card">
-  <div class="card-head"><h3>🔄 Buy Again</h3><button class="btn btn-p btn-sm" onclick="save('Buy Again saved')">Save</button></div>
   <div class="card-body">
     ${TG('ba1',true,'Show Section','Past purchases for quick reorder')}
     <div style="margin-top:14px;"></div>
@@ -878,7 +872,6 @@ buyagain:()=>`
 /* 11 ── FEATURED PRODUCTS */
 featured:()=>`
 <div class="card">
-  <div class="card-head"><h3>🎯 Featured Products</h3><button class="btn btn-p btn-sm" onclick="save('Featured Products saved')">Save</button></div>
   <div class="card-body">
     <p class="hint-p">Each collection can target a specific state and language. Drag to reorder.</p>
     <div id="fcList">
@@ -908,7 +901,6 @@ featured:()=>`
 /* 12 ── WIDGETS */
 widgets:()=>`
 <div class="card">
-  <div class="card-head"><h3>🧩 Widgets</h3><button class="btn btn-p btn-sm" onclick="save('Widgets saved')">Save</button></div>
   <div class="card-body">
     <p class="hint-p">Drag to reorder · Toggle show/hide · Edit content per language · Add new widgets</p>
     <div id="wList">
@@ -953,7 +945,6 @@ widgets:()=>`
 /* 13 ── TESTIMONIALS */
 testi:()=>`
 <div class="card">
-  <div class="card-head"><h3>🎥 Farmer Testimonials</h3><button class="btn btn-p btn-sm" onclick="save('Testimonials saved')">Save</button></div>
   <div class="card-body">
     ${TG('tm1',true,'Show Section','Farmer video testimonials on home page')}
     <div style="margin-top:14px;"></div>
@@ -986,7 +977,6 @@ testi:()=>`
 /* 14 ── MOST SELLING */
 mostsell:()=>`
 <div class="card">
-  <div class="card-head"><h3>🔥 Most Selling in [State]</h3><button class="btn btn-p btn-sm" onclick="save('Most Selling saved')">Save</button></div>
   <div class="card-body">
     ${TG('ms1',true,'Show Section','Auto-personalizes based on user\'s state')}
     <div style="margin-top:14px;"></div>
@@ -1001,7 +991,6 @@ mostsell:()=>`
 /* 15 ── ASK EXPERT */
 expert:()=>`
 <div class="card">
-  <div class="card-head"><h3>💬 Ask Expert — Floating Button</h3><button class="btn btn-p btn-sm" onclick="save('Ask Expert saved')">Save</button></div>
   <div class="card-body">
     ${TG('ae1',true,'Show Floating Button','Agronomist bubble on home page')}
     <div style="margin-top:14px;"></div>
@@ -1024,7 +1013,6 @@ expert:()=>`
 /* 16 ── CART BAR (FLOATING) */
 cartfab:()=>`
 <div class="card">
-  <div class="card-head"><h3>🛒 Cart Bar — Floating</h3><button class="btn btn-p btn-sm" onclick="save('Cart bar saved')">Save</button></div>
   <div class="card-body">
     <div class="row">
       <div class="fg fix"><label>BG Color</label><div class="color-r"><input type="color" value="#0F172A"/><span>#0F172A</span></div></div>
@@ -1038,7 +1026,6 @@ cartfab:()=>`
 /* 17 ── BEHAVIOR & ANIMATIONS */
 behavior:()=>`
 <div class="card">
-  <div class="card-head"><h3>⚙️ Behavior &amp; Animations</h3><button class="btn btn-p btn-sm" onclick="save('Behavior saved')">Save</button></div>
   <div class="card-body">
     <div class="sdiv">Timings</div>
     <div class="row">

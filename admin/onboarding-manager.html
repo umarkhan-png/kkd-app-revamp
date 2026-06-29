@@ -152,6 +152,7 @@ if(O.phone.hero.stateImg===undefined) O.phone.hero.stateImg='';
 // OTP resend channels — enable/disable toggles (copy lives in Translations)
 if(O.otp.resendWhatsapp===undefined) O.otp.resendWhatsapp=true;
 if(O.otp.resendSms===undefined) O.otp.resendSms=true;
+if(O.otp.factsEnabled===undefined) O.otp.factsEnabled=true;   // master on/off for the rotating strip
 // Welcome — show the user's name in the greeting (toggle per variant)
 if(O.welcomeAboard && O.welcomeAboard.showName===undefined) O.welcomeAboard.showName=true;
 if(O.welcomeBack && O.welcomeBack.showName===undefined) O.welcomeBack.showName=true;
@@ -250,7 +251,7 @@ function langBar(){ return `<div class="lang-tabs">${LANGS.map(l=>`<div class="l
 function setLang(c){ activeLang=c; rerender(); }
 function head(meta){
   return `<div class="flex items-center justify-between" style="margin-bottom:14px">
-    <div><h2 style="font-size:18px;font-weight:800;margin:0">${meta.icon} ${meta.name}</h2><p class="muted" style="margin:2px 0 0;font-size:12.5px">${meta.sub}</p></div>
+    <div><h2 style="font-size:18px;font-weight:800;margin:0">${meta.icon} ${meta.name}</h2></div>
     <button class="btn btn-s btn-sm" onclick="AdminShell.previewApp('${meta.screen}')"><i class="fa-solid fa-mobile-screen-button"></i> Preview in app</button>
   </div>`;
 }
@@ -301,31 +302,36 @@ const EDITORS = {
       );
   },
   otp(){
-    const facts = O.otp.facts.map((f,i)=>`
-      <div class="li">
+    const stripOn = O.otp.factsEnabled!==false;
+    const facts = O.otp.facts.map((f,i)=>{
+      const on = f.on!==false;
+      return `
+      <div class="li" style="${on?'':'opacity:.55'}">
         <div class="factic"><i class="fa-solid fa-${esc(f.icon||'circle-info')}"></i></div>
         <div class="li-body">
           ${iconPicker('otp.facts.'+i+'.icon', f.icon)}
           <div style="height:10px"></div>
           ${tField('otp.facts.'+i+'.text','Message')}
         </div>
-        <div class="li-act"><button class="btn btn-d btn-ic" onclick="delFact(${i})"><i class="fa-solid fa-trash"></i></button></div>
-      </div>`).join('');
-    return head(meta('otp')) + langBar() +
+        <div class="li-act"><div class="tg ${on?'on':''}" title="${on?'Shown in the strip':'Hidden'}" onclick="setPath('otp.facts.${i}.on',${!on});commit();rerender()"></div></div>
+      </div>`;}).join('');
+    return head(meta('otp')) +
       card('Resend',
         `<div class="row">`+ field('otp.resendSecs','Resend timer (secs)',{type:'number'}) +`</div>`+
         toggle('otp.resendWhatsapp','WhatsApp resend','Let users request the code on WhatsApp') +
         toggle('otp.resendSms','SMS resend','Let users request the code over SMS')
       ) +
       card('Auto-rotating message strip',
-        `<p class="hint" style="margin:0 0 12px">These messages rotate one after another below the OTP boxes. Add or remove them, pick an icon, and translate each one.</p>`+
+        toggle('otp.factsEnabled','Show the rotating message strip','Turn the whole strip on or off below the OTP boxes') +
+        `<div style="height:8px"></div>`+
+        `<p class="hint" style="margin:0 0 12px">Each message rotates one after another. Pick an icon, write the text, and turn individual messages on or off.</p>`+
         `<div class="row" style="margin-bottom:14px">`+ field('otp.factRotateMs','Rotation speed (ms)',{type:'number',hint:'Time each message stays on screen'}) +`</div>`+
         facts +
         `<button class="btn btn-s btn-sm" onclick="addFact()"><i class="fa-solid fa-plus"></i> Add rotating message</button>`
       );
   },
   name(){
-    return head(meta('name')) + langBar() +
+    return head(meta('name')) +
       card('Screen text',
         `<div class="row" style="margin-bottom:0">`+ tField('name.heading','Heading') +`</div>`
       );
@@ -349,8 +355,7 @@ const EDITORS = {
 function meta(k){ return SECTIONS.find(s=>s.key===k); }
 
 /* ---------- list mutations ---------- */
-function addFact(){ O.otp.facts.push({ icon:'circle-info', text:{ en:'New message' } }); commit('Message added'); rerender(); }
-function delFact(i){ O.otp.facts.splice(i,1); commit('Message removed'); rerender(); }
+function addFact(){ O.otp.facts.push({ icon:'circle-info', text:{ en:'New message' }, on:true }); commit('Message added'); rerender(); }
 
 /* ---------- predefined icon picker (OTP rotating strip) ---------- */
 const PRESET_ICONS=['truck-fast','box-open','shield-halved','lock','circle-check','headset','phone','clock',

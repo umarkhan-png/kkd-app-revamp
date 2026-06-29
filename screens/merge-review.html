@@ -51,19 +51,20 @@
   .om-row-price{font-size:15px;font-weight:800;color:#258046;font-variant-numeric:tabular-nums}
   .om-row-price.none{color:#94A3B8;font-weight:600;font-size:12.5px}
 
-  /* Deliver-to card */
-  .addr-card{margin:0 18px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
-  .addr-top{display:flex;align-items:center;gap:12px;padding:15px 16px}
-  .addr-ic{width:40px;height:40px;border-radius:11px;background:#ECFDF5;color:#258046;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-  .addr-row-bottom{display:flex;align-items:flex-start;gap:12px;padding:15px 16px;background:#F8FAFC;border-top:1px solid #F1F5F9}
-  .addr-change{font-size:13px;font-weight:800;color:#258046;background:transparent;border:0;cursor:pointer;letter-spacing:0.02em;text-transform:uppercase;flex-shrink:0;align-self:flex-start;margin-top:1px;text-decoration:none}
+  /* Deliver-to card · EXACT same tile as cart.html */
+  .addr-card{margin:0 18px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .addr-top{display:flex;align-items:center;gap:10px;padding:12px 14px}
+  .addr-ic{width:34px;height:34px;border-radius:10px;background:#ECFDF5;color:#258046;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+  .addr-body{flex:1;line-height:1.3;min-width:0}
+  .addr-row-bottom{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F8FAFC;border-top:1px solid #F1F5F9}
+  .addr-change{font-size:12px;font-weight:800;color:#258046;background:transparent;border:0;cursor:pointer;letter-spacing:0.02em;text-transform:uppercase;text-decoration:none;flex-shrink:0}
 
-  /* Sticky CTA bar · cart-style · order-value amount on the left + CTA on the right */
-  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 16px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -4px 16px rgba(0,0,0,0.05)}
-  .sticky-sum{display:flex;flex-direction:column;line-height:1.15;flex-shrink:0;min-width:96px}
-  .sticky-sum .ttl{font-size:11.5px;color:#64748B;font-weight:600}
-  .sticky-sum .amt{font-size:22px;font-weight:800;color:#0F172A;letter-spacing:-0.01em;font-variant-numeric:tabular-nums}
-  .sticky-cta-btn{flex:2;height:54px;padding:0 18px;border-radius:13px;background:#258046;color:#FFFFFF;border:0;font-size:15.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45);font-family:inherit;transition:transform .15s ease}
+  /* Sticky CTA bar · EXACT same as cart.html */
+  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 14px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .sticky-sum{display:flex;flex-direction:column;line-height:1.15;flex-shrink:0;min-width:90px}
+  .sticky-sum .ttl{font-size:11px;color:#64748B;font-weight:500}
+  .sticky-sum .amt{font-size:20px;font-weight:700;color:#0F172A;letter-spacing:-0.01em;font-variant-numeric:tabular-nums}
+  .sticky-cta-btn{flex:2;height:52px;padding:0 18px;border-radius:12px;background:#258046;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45);font-family:inherit}
   .sticky-cta-btn:active{transform:scale(.985)}
 </style></head>
 <body>
@@ -103,20 +104,17 @@
   <div class="addr-card">
     <div class="addr-top">
       <div class="addr-ic"><i class="fa-solid fa-truck-fast"></i></div>
-      <div class="flex-1 leading-tight">
+      <div class="addr-body">
         <div class="flex items-center gap-1.5">
-          <span class="text-[16px] font-semibold text-[#0F172A]">Tomorrow, 28 May</span>
-          <span class="text-[10px] font-semibold text-[#258046] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider">Free</span>
+          <span class="text-[14.5px] font-semibold text-[#0F172A]">Tomorrow, 28 May</span>
+          <span class="text-[9px] font-semibold text-[#258046] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider">Free</span>
         </div>
-        <div class="text-[13px] text-[#64748B] mt-0.5">Order before <span class="font-bold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
+        <div class="text-[11.5px] text-[#64748B] mt-0.5">Order before <span class="font-bold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
       </div>
     </div>
     <div class="addr-row-bottom">
-      <i class="fa-solid fa-location-dot text-[15px] mt-0.5" style="color:#94A3B8"></i>
-      <div class="flex-1 min-w-0 text-[14px] leading-snug" style="color:#475569">
-        <div class="font-bold text-[#0F172A]" id="addrName">Ramesh Patel · +91 98765 43210</div>
-        <div class="mt-0.5 font-medium" id="addrLine">Plot 22, Khasra No. 145, Village Bawadia, Indore — 452001, MP</div>
-      </div>
+      <i class="fa-solid fa-location-dot text-[14px]" style="color:#94A3B8"></i>
+      <div class="flex-1 min-w-0 text-[12.5px] font-medium truncate" style="color:#475569">Ramesh Patel · Mahidpur, Ujjain · 456440</div>
       <a href="addresses.html" class="addr-change">Change</a>
     </div>
   </div>

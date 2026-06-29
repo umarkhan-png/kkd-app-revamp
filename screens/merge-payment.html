@@ -13,43 +13,57 @@
   .tnum{font-variant-numeric:tabular-nums}
   .sec-title{margin:22px 18px 10px;font-size:12.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
 
-  /* Recap tile */
-  .om-recap-tile{margin:18px 18px 0;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
-  .om-recap-id{flex:1;min-width:0;display:flex;align-items:center;gap:11px;line-height:1.25}
-  .om-recap-id i{width:38px;height:38px;border-radius:10px;background:#F8FAFC;color:#475569;display:flex;align-items:center;justify-content:center;font-size:15px;border:1px solid #E2E8F0;flex-shrink:0}
-  .om-recap-id b{display:block;font-size:15px;color:#0F172A;font-weight:800}
-  .om-recap-id em{display:block;font-size:12.5px;color:#64748B;font-weight:600;font-style:normal;margin-top:2px}
-  .om-recap-view{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9999px;background:#FFFFFF;border:1.5px solid #258046;color:#258046;font-size:13px;font-weight:800;text-decoration:none}
+  /* Deliver-to card · EXACT same tile as cart.html */
+  .addr-card{margin:0 18px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .addr-top{display:flex;align-items:center;gap:10px;padding:12px 14px}
+  .addr-ic{width:34px;height:34px;border-radius:10px;background:#ECFDF5;color:#258046;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+  .addr-body{flex:1;line-height:1.3;min-width:0}
+  .addr-row-bottom{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F8FAFC;border-top:1px solid #F1F5F9}
+  .addr-change{font-size:12px;font-weight:800;color:#258046;background:transparent;border:0;cursor:pointer;letter-spacing:0.02em;text-transform:uppercase;text-decoration:none;flex-shrink:0}
 
-  /* Pay box */
-  .om-pay{margin:0 18px;background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border:1px solid #BBF7D0;border-radius:16px;padding:17px}
-  .om-pay-row{display:flex;align-items:baseline;justify-content:space-between;font-size:14.5px;color:#0F172A;font-weight:700;padding:4px 0}
-  .om-pay-row.sub{font-size:14px;color:#475569;font-weight:600}
-  .om-pay-row.sub span:last-child{font-weight:700;color:#0F172A;font-variant-numeric:tabular-nums}
-  .om-pay-row.total{font-size:15px;color:#0F172A;font-weight:700}
-  .om-pay-row.total b{font-size:17px;font-weight:900;color:#0F172A;font-variant-numeric:tabular-nums}
-  .om-pay-row.hi{font-size:16px;color:#258046;font-weight:800;margin-top:2px}
-  .om-pay-row.hi b{font-size:26px;font-weight:900;color:#258046;font-variant-numeric:tabular-nums}
-  .om-pay-divider{margin:9px 0 6px;border-top:1px dashed #A7F3D0}
-  .om-pay-hint{font-size:12.5px;font-weight:600;color:#64748B;margin-top:3px}
-  .om-pay-method-label{margin:20px 18px 0;font-size:12px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:.06em}
-  .om-pay-chips{margin:10px 18px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .om-chip{display:flex;align-items:center;gap:11px;padding:14px;border-radius:13px;background:#FFFFFF;border:1.5px solid #E2E8F0;cursor:pointer;text-align:left;font-family:inherit;transition:all .15s ease}
-  .om-chip:active{transform:scale(.98)}
-  .om-chip[aria-checked="true"]{border-color:#258046;box-shadow:0 4px 12px -4px rgba(5,150,105,0.3)}
-  .om-chip > i{width:36px;height:36px;border-radius:10px;background:#F1F5F9;color:#64748B;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:all .15s ease}
-  .om-chip[aria-checked="true"] > i{background:#258046;color:#FFFFFF}
-  .om-chip .lab{flex:1;min-width:0;line-height:1.25}
-  .om-chip .lab b{display:block;font-size:14.5px;font-weight:800;color:#0F172A}
-  .om-chip .lab span{display:block;font-size:12px;color:#64748B;font-weight:600;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .om-chip[aria-checked="true"] .lab span{color:#258046}
-  .om-chip.disabled{opacity:.5;pointer-events:none}
-  .om-chip.full{grid-column:1 / -1}
+  /* Simple amount-calculation card */
+  .calc{margin:0 18px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:15px 16px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .calc .lead{font-size:13px;color:#475569;font-weight:600;line-height:1.5;margin-bottom:12px}
+  .calc .lead b{color:#0F172A;font-weight:800}
+  .calc .r{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:#475569;font-weight:600;padding:5px 0}
+  .calc .r .v{font-weight:700;color:#0F172A;font-variant-numeric:tabular-nums}
+  .calc .r .v.minus{color:#258046}
+  .calc .div{margin:9px 0 5px;border-top:1px dashed #E2E8F0}
+  .calc .paynow{display:flex;justify-content:space-between;align-items:center;padding-top:3px}
+  .calc .paynow .l{font-size:15px;font-weight:800;color:#0F172A}
+  .calc .paynow .v{font-size:24px;font-weight:900;color:#258046;font-variant-numeric:tabular-nums}
+  .calc .note{font-size:12px;color:#64748B;font-weight:500;margin-top:11px;line-height:1.5;display:flex;gap:7px;align-items:flex-start;background:#F8FAFC;border:1px solid #EEF2F6;border-radius:10px;padding:10px 11px}
+  .calc .note i{color:#258046;font-size:12px;margin-top:2px;flex-shrink:0}
 
-  /* Sticky CTA */
-  .foot{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 16px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:50;box-shadow:0 -4px 16px rgba(0,0,0,0.05)}
-  .pay-btn{width:100%;height:52px;border-radius:12px;background:#258046;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
-  .pay-btn:active{transform:scale(.985)}
+  /* Payment method · EXACT same rows as checkout.html */
+  .pay-card{margin:0 18px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .pay{position:relative;padding:14px;cursor:pointer;border-bottom:1px solid #F1F5F9;transition:background .15s ease;display:block}
+  .pay:last-child{border-bottom:0}
+  .pay.active{background:#ECFDF5}
+  .pay.disabled{opacity:.55;pointer-events:none}
+  .pay-head{display:flex;align-items:flex-start;gap:12px}
+  .pay-radio{width:20px;height:20px;border-radius:9999px;border:2px solid #CBD5E1;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s ease;margin-top:4px}
+  .pay.active .pay-radio{border-color:#258046;background:#258046}
+  .pay.active .pay-radio::after{content:'';width:8px;height:8px;border-radius:9999px;background:#FFFFFF}
+  .pay-body{flex:1;min-width:0;line-height:1.3}
+  .pay-toprow{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .pay-name-row{display:inline-flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .pay-name{font-size:14.5px;font-weight:800;color:#0F172A;line-height:1.1}
+  .pay-amt{font-size:14.5px;font-weight:800;color:#0F172A;line-height:1;font-variant-numeric:tabular-nums;margin-left:auto}
+  .pay.active .pay-amt{color:#258046}
+  .pay-sub{font-size:11.5px;color:#64748B;margin-top:3px}
+  .pay-bene{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:4px 9px;border-radius:9999px;background:#ECFDF5;border:1px solid #A7F3D0;color:#258046;font-size:10.5px;font-weight:800;letter-spacing:0.02em}
+  .pay-bene i{font-size:9px}
+  .pay-bene.gold{background:#FEF3C7;border-color:#FDE68A;color:#B45309}
+  .pay-best{display:inline-block;background:#FBBF24;color:#0F172A;font-size:9px;font-weight:900;letter-spacing:0.08em;padding:2px 7px;border-radius:9999px;box-shadow:0 2px 6px rgba(251,191,36,0.4)}
+
+  /* Sticky CTA bar · EXACT same as cart.html */
+  .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 14px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .sticky-sum{display:flex;flex-direction:column;line-height:1.15;flex-shrink:0;min-width:90px}
+  .sticky-sum .ttl{font-size:11px;color:#64748B;font-weight:500}
+  .sticky-sum .amt{font-size:20px;font-weight:700;color:#0F172A;letter-spacing:-0.01em;font-variant-numeric:tabular-nums}
+  .sticky-cta-btn{flex:2;height:52px;padding:0 18px;border-radius:12px;background:#258046;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45);font-family:inherit}
+  .sticky-cta-btn:active{transform:scale(.985)}
 </style></head>
 <body>
 
@@ -69,45 +83,38 @@
     <h1 class="text-[22px] font-extrabold leading-tight" style="color:#0F172A">Payment</h1>
   </div>
 
-  <div class="om-recap-tile">
-    <div class="om-recap-id">
-      <i class="fa-solid fa-code-merge"></i>
-      <span><b id="omOrderId">#KKD-26194</b><em id="omOrderCount">Merging into your recent order</em></span>
+  <!-- Deliver to · same tile as cart (replaces the previous-order recap) -->
+  <div class="sec-title">Deliver to</div>
+  <div class="addr-card">
+    <div class="addr-top">
+      <div class="addr-ic"><i class="fa-solid fa-truck-fast"></i></div>
+      <div class="addr-body">
+        <div class="flex items-center gap-1.5">
+          <span class="text-[14.5px] font-semibold text-[#0F172A]">Tomorrow, 28 May</span>
+          <span class="text-[9px] font-semibold text-[#258046] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider">Free</span>
+        </div>
+        <div class="text-[11.5px] text-[#64748B] mt-0.5">Order before <span class="font-bold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
+      </div>
     </div>
-    <button type="button" onclick="history.back()" class="om-recap-view" style="cursor:pointer">Edit <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
+    <div class="addr-row-bottom">
+      <i class="fa-solid fa-location-dot text-[14px]" style="color:#94A3B8"></i>
+      <div class="flex-1 min-w-0 text-[12.5px] font-medium truncate" style="color:#475569">Ramesh Patel · Mahidpur, Ujjain · 456440</div>
+      <a href="addresses.html" class="addr-change">Change</a>
+    </div>
   </div>
 
-  <div class="sec-title">Amount calculation</div>
-  <div class="om-pay">
-    <div class="om-pay-row sub"><span id="omPayPrevLabel">Previous order paid</span><span id="omPayPrev" class="tnum">₹0</span></div>
-    <div class="om-pay-row sub"><span id="omPayAddLabel">Adding now</span><span id="omPayAdd" class="tnum">₹0</span></div>
-    <div class="om-pay-row sub" id="omPayDiscRow" style="display:none"><span>Pay Online discount (5%)</span><span id="omPayDisc" class="tnum">−₹0</span></div>
-    <div class="om-pay-divider"></div>
-    <div class="om-pay-row total"><span>Total order value</span><b id="omPayMerged" class="tnum">₹0</b></div>
-    <div class="om-pay-row sub" id="omPayPaidRow" style="display:none"><span>Already paid</span><span id="omPayPaid" class="tnum">−₹0</span></div>
-    <div class="om-pay-row sub" id="omPayRemainRow" style="display:none"><span>Remaining</span><span id="omPayRemain" class="tnum">₹0</span></div>
-    <div class="om-pay-row hi"><span>You pay now</span><b id="omPayTotal" class="tnum">₹0</b></div>
-    <div class="om-pay-hint" id="omPayHint" style="display:none"></div>
-  </div>
+  <div class="sec-title">Amount</div>
+  <div class="calc" id="calc"></div>
 
-  <div class="om-pay-method-label">Choose how to pay</div>
-  <div class="om-pay-chips" role="radiogroup">
-    <button type="button" class="om-chip" data-pay="paynow" role="radio" aria-checked="true">
-      <i class="fa-solid fa-bolt"></i>
-      <div class="lab"><b id="omPaynowTitle">Pay Online</b><span id="omPaynowSub">5% off · save ₹<span id="omOnlineSave">0</span></span></div>
-    </button>
-    <button type="button" class="om-chip" id="omPartialChip" data-pay="advpartial" role="radio" aria-checked="false" style="display:none">
-      <i class="fa-solid fa-coins"></i>
-      <div class="lab"><b>Partial</b><span id="omPartialSub">10% advance</span></div>
-    </button>
-    <button type="button" class="om-chip" id="omCodChip" data-pay="cod" role="radio" aria-checked="false">
-      <i class="fa-solid fa-truck"></i>
-      <div class="lab"><b>Cash on Delivery</b><span id="omCodSub">Pay when it arrives</span></div>
-    </button>
-  </div>
+  <div class="sec-title">Payment method</div>
+  <div class="pay-card" id="payCard"></div>
 
-  <div class="foot">
-    <button type="button" class="pay-btn" id="payBtn">Pay ₹0 &amp; Merge</button>
+  <div class="sticky-cta">
+    <div class="sticky-sum">
+      <div class="ttl">You pay now</div>
+      <div class="amt tnum" id="ctaAmt">₹0</div>
+    </div>
+    <button type="button" class="sticky-cta-btn" id="payBtn">Pay &amp; Merge <i class="fa-solid fa-arrow-right text-[12px]"></i></button>
   </div>
 
   <script>
@@ -116,104 +123,93 @@
       if (!m){ location.replace('home.html'); return; }
       var rupee = window.kkdMerge.rupee;
 
-      document.getElementById('omOrderId').textContent = '#' + m.oid;
-      document.getElementById('omOrderCount').textContent = m.mergedCount + ' item' + (m.mergedCount > 1 ? 's' : '') + ' after merge';
+      var calc = document.getElementById('calc');
+      var payCard = document.getElementById('payCard');
+      var ctaAmt = document.getElementById('ctaAmt');
+      var payBtn = document.getElementById('payBtn');
 
-      var chips    = document.querySelectorAll('.om-chip');
-      var paynowChip = document.querySelector('.om-chip[data-pay="paynow"]');
-      var partialChip= document.getElementById('omPartialChip');
-      var codChip    = document.getElementById('omCodChip');
-      var payPrev  = document.getElementById('omPayPrev');
-      var payAdd   = document.getElementById('omPayAdd');
-      var payDiscRow = document.getElementById('omPayDiscRow');
-      var payDisc  = document.getElementById('omPayDisc');
-      var payMerged= document.getElementById('omPayMerged');
-      var payPrevLbl = document.getElementById('omPayPrevLabel');
-      var payAddLbl  = document.getElementById('omPayAddLabel');
-      var payPaidRow = document.getElementById('omPayPaidRow');
-      var payPaid    = document.getElementById('omPayPaid');
-      var payRemainRow = document.getElementById('omPayRemainRow');
-      var payRemain  = document.getElementById('omPayRemain');
-      var payTotal = document.getElementById('omPayTotal');
-      var payHint  = document.getElementById('omPayHint');
-      var payBtn   = document.getElementById('payBtn');
-
-      // Adding-now label · qty / new breakdown
-      var addBits = [];
-      if (!m.isCaseA && m.updatedIds.length) addBits.push(m.updatedIds.length + '× Qty +1');
-      if (m.newIds.length) addBits.push(m.newIds.length + '× new');
-
-      var selected, currentPayNow = 0;
-
-      // Configure chips for this order's regime (once)
+      // ---- Build the payment-method rows (checkout style) for this regime ----
+      var rows;
       if (m.advanceRegime){
-        selected = 'paynow';   // "Pay full"
-        document.getElementById('omPaynowTitle').textContent = 'Pay full';
-        document.getElementById('omPaynowSub').textContent = 'Prepaid · ' + rupee(m.fullPrepaidNow);
-        partialChip.style.display = 'flex';
-        document.getElementById('omPartialSub').textContent = '10% adv · ' + rupee(m.advanceMin);
-        codChip.classList.add('disabled','full');
-        codChip.setAttribute('aria-disabled','true');
-        document.getElementById('omCodSub').textContent = 'Not available above ₹10,000';
+        rows = [
+          { pay:'paynow', name:'Pay Now', best:true, amt:m.fullPrepaidNow, sub:'Prepaid · pay the full remaining now', bene:'<span class="pay-bene"><i class="fa-solid fa-bolt"></i> Fastest order processing</span>' },
+          { pay:'advpartial', name:'Partial payment', amt:m.advanceMin, sub:'Pay 10% advance now · balance on delivery', bene:'<span class="pay-bene gold"><i class="fa-solid fa-coins"></i> Earn 2% coins on prepaid amount</span>' },
+          { pay:'cod', name:'Cash on Delivery', amt:null, sub:'Not available above ₹10,000', disabled:true }
+        ];
       } else {
-        selected = 'paynow';   // "Pay Online"
-        document.getElementById('omPaynowTitle').textContent = 'Pay Online';
-        document.getElementById('omOnlineSave').textContent = m.onlineDiscount.toLocaleString('en-IN');
-        partialChip.style.display = 'none';
-        codChip.classList.remove('disabled','full');
+        rows = [
+          { pay:'paynow', name:'Pay Now', best:true, amt:m.onlineTotal, sub:'UPI · Cards · Net banking · Wallets', bene:'<span class="pay-bene"><i class="fa-solid fa-tag"></i> 5% instant off · save ' + rupee(m.onlineDiscount) + '</span>' },
+          { pay:'cod', name:'Cash on Delivery', amt:m.extra, sub:'Pay in cash when the order arrives' }
+        ];
       }
+      payCard.innerHTML = rows.map(function(r, i){
+        return '<label class="pay' + (i===0?' active':'') + (r.disabled?' disabled':'') + '" data-pay="' + r.pay + '">'
+          + '<span class="pay-head"><span class="pay-radio"></span><span class="pay-body">'
+          +   '<span class="pay-toprow"><span class="pay-name-row"><span class="pay-name">' + r.name + '</span>'
+          +     (r.best?'<span class="pay-best">RECOMMENDED</span>':'') + '</span>'
+          +     (r.amt!=null?'<span class="pay-amt tnum">' + rupee(r.amt) + '</span>':'') + '</span>'
+          +   '<div class="pay-sub"' + (r.disabled?' style="color:#B45309"':'') + '>' + r.sub + '</div>'
+          +   (r.bene||'')
+          + '</span></span></label>';
+      }).join('');
 
-      function applyChip(){
-        chips.forEach(function(c){ c.setAttribute('aria-checked', c.dataset.pay === selected ? 'true' : 'false'); });
+      // ---- Selected payment method ----
+      var selected = 'paynow';
+
+      // ---- Render the simple amount breakdown for the current selection ----
+      function renderCalc(){
+        var html = '', payNow;
         if (m.advanceRegime){
-          var remaining = Math.max(0, m.mergedOrderValue - m.alreadyPaid);
-          var payNow = (selected === 'advpartial') ? m.advanceMin : m.fullPrepaidNow;
-          currentPayNow = payNow;
-          payDiscRow.style.display = 'none';
-          payPrevLbl.textContent = 'Previous order';
-          payPrev.textContent = rupee(m.prevTotal);
-          payAddLbl.innerHTML = 'This order (adding)' + (addBits.length ? ' <span style="color:#94A3B8;font-weight:600">· ' + addBits.join(' · ') + '</span>' : '');
-          payAdd.textContent = rupee(m.extra);
-          payMerged.textContent = rupee(m.mergedOrderValue);
-          if (m.alreadyPaid > 0){ payPaidRow.style.display = 'flex'; payPaid.textContent = '−' + rupee(m.alreadyPaid); } else { payPaidRow.style.display = 'none'; }
-          payRemainRow.style.display = 'flex'; payRemain.textContent = rupee(remaining);
-          payTotal.textContent = rupee(payNow);
-          payHint.style.display = 'block';
-          if (selected === 'advpartial'){
-            payHint.textContent = '= 10% of ' + rupee(m.mergedOrderValue) + ' (' + rupee(Math.round(m.mergedOrderValue * m.ADVANCE_PCT / 100)) + ')' + (m.alreadyPaid > 0 ? ' − ' + rupee(m.alreadyPaid) + ' already paid' : '');
-          } else {
-            payHint.textContent = m.alreadyPaid > 0 ? '= full ' + rupee(m.mergedOrderValue) + ' − ' + rupee(m.alreadyPaid) + ' already paid' : '= full order value';
-          }
-          payBtn.textContent = (selected === 'advpartial' ? 'Pay ' + rupee(payNow) + ' advance' : 'Pay ' + rupee(payNow)) + ' & Merge';
-          return;
+          payNow = (selected === 'advpartial') ? m.advanceMin : m.fullPrepaidNow;
+          html += '<div class="lead">Your total order after merge is <b>' + rupee(m.mergedOrderValue) + '</b>'
+                + (m.alreadyPaid > 0 ? ', and <b>' + rupee(m.alreadyPaid) + '</b> is already paid on the earlier order.' : '.') + '</div>';
+          html += '<div class="r"><span>Total order value</span><span class="v">' + rupee(m.mergedOrderValue) + '</span></div>';
+          if (m.alreadyPaid > 0) html += '<div class="r"><span>Already paid earlier</span><span class="v minus">− ' + rupee(m.alreadyPaid) + '</span></div>';
+          html += '<div class="div"></div>';
+          html += '<div class="paynow"><span class="l">You pay now</span><span class="v">' + rupee(payNow) + '</span></div>';
+          html += '<div class="note"><i class="fa-solid fa-circle-info"></i> <span>'
+                + (selected === 'advpartial'
+                    ? 'Paying 10% advance now (' + rupee(payNow) + '). The remaining balance is collected on delivery.'
+                    : 'Paying the full remaining amount now. Cash on Delivery isn’t available above ₹10,000.')
+                + '</span></div>';
+        } else {
+          var disc = (selected === 'paynow') ? m.onlineDiscount : 0;
+          payNow = (selected === 'paynow') ? m.onlineTotal : m.extra;
+          html += '<div class="lead">You’re adding <b>' + rupee(m.extra) + '</b> of items to order <b>#' + m.oid + '</b>. Your earlier total stays as placed — you only pay for what’s new.</div>';
+          html += '<div class="r"><span>New items added</span><span class="v">' + rupee(m.extra) + '</span></div>';
+          if (disc > 0) html += '<div class="r"><span>Online payment discount (5%)</span><span class="v minus">− ' + rupee(disc) + '</span></div>';
+          html += '<div class="div"></div>';
+          html += '<div class="paynow"><span class="l">You pay now</span><span class="v">' + rupee(payNow) + '</span></div>';
+          html += '<div class="note"><i class="fa-solid fa-circle-info"></i> <span>'
+                + (selected === 'cod' ? 'You’ll pay ' + rupee(m.extra) + ' in cash on delivery for the added items.' : 'Pay online now and save ' + rupee(m.onlineDiscount) + ' with the 5% discount.')
+                + '</span></div>';
         }
-        // Normal regime · pay just the newly-added amount (online 5% off / COD)
-        payPrevLbl.textContent = 'Previous order paid';
-        payAddLbl.innerHTML = 'Adding now' + (addBits.length ? ' <span style="color:#94A3B8;font-weight:600">· ' + addBits.join(' · ') + '</span>' : '');
-        payPaidRow.style.display = 'none';
-        payRemainRow.style.display = 'none';
-        payHint.style.display = 'none';
-        payPrev.textContent = rupee(m.prevTotal);
-        payAdd.textContent = rupee(m.extra);
-        var pay = selected === 'paynow' ? m.onlineTotal : m.extra;
-        currentPayNow = pay;
-        payMerged.textContent = rupee(m.prevTotal + pay);
-        if (selected === 'paynow'){ payDiscRow.style.display = m.onlineDiscount > 0 ? 'flex' : 'none'; payDisc.textContent = '−' + rupee(m.onlineDiscount); }
-        else { payDiscRow.style.display = 'none'; }
-        payTotal.textContent = rupee(pay);
-        payBtn.textContent = (selected === 'paynow' ? 'Pay ' + rupee(pay) : 'Place order · ' + rupee(pay) + ' COD') + ' & Merge';
+        calc.innerHTML = html;
+        ctaAmt.textContent = rupee(payNow);
+        payBtn.innerHTML = 'Pay ' + rupee(payNow) + ' &amp; Merge <i class="fa-solid fa-arrow-right text-[12px]"></i>';
+        return payNow;
       }
 
-      chips.forEach(function(c){ c.onclick = function(){ if (c.classList.contains('disabled')) return; selected = c.dataset.pay; applyChip(); }; });
-      applyChip();
+      // ---- Wire payment-row selection ----
+      var payLabels = payCard.querySelectorAll('.pay');
+      payLabels.forEach(function(lbl){
+        lbl.addEventListener('click', function(){
+          if (lbl.classList.contains('disabled')) return;
+          selected = lbl.dataset.pay;
+          payLabels.forEach(function(x){ x.classList.toggle('active', x === lbl); });
+          renderCalc();
+        });
+      });
+      renderCalc();
 
       payBtn.addEventListener('click', function(){
         var method = m.advanceRegime ? (selected === 'advpartial' ? 'partial' : 'paynow') : selected;
+        var payNow = renderCalc();
         try {
           localStorage.setItem('kkd.mergeInfo', JSON.stringify({
             ts: Date.now(), orderId: m.oid,
             updated: m.updatedIds.slice(), added: m.newIds.slice(), unchanged: m.unchangedIds.slice(),
-            prevQtys: m.prevQtys, method: method, amountPaid: currentPayNow
+            prevQtys: m.prevQtys, method: method, amountPaid: payNow
           }));
         } catch(e){}
         window.kkdMerge.clearMergeCart();

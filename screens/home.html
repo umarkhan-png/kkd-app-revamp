@@ -1300,7 +1300,7 @@
                 <a href="pdp.html" class="ba-name">Humic</a>
                 <div class="ba-tech">Activated Humic + Fulvic</div>
                 <div class="ba-pricerow"><span class="ba-size">500 ml</span><span class="ba-price tnum">&#8377;276</span><span class="ba-mrp tnum">&#8377;390</span></div>
-                <a href="checkout.html" data-demo-case="A" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+                <a href="checkout.html" data-demo-case="1" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
               </div>
             </div>
           </div>
@@ -1313,7 +1313,7 @@
                 <a href="pdp.html" class="ba-name">Chakrawarti ZC</a>
                 <div class="ba-tech">Thiamethoxam + Lambda</div>
                 <div class="ba-pricerow"><span class="ba-size">100 ml</span><span class="ba-price tnum">&#8377;358</span><span class="ba-mrp tnum">&#8377;495</span></div>
-                <a href="checkout.html" data-demo-case="B" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+                <a href="checkout.html" data-demo-case="2" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
               </div>
             </div>
           </div>
@@ -1326,7 +1326,7 @@
                 <a href="pdp.html" class="ba-name">NPK 19-19-19</a>
                 <div class="ba-tech">Water-soluble fertilizer</div>
                 <div class="ba-pricerow"><span class="ba-size">1 kg</span><span class="ba-price tnum">&#8377;330</span></div>
-                <a href="cart.html?reorder=npk" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+                <a href="checkout.html" data-demo-case="3" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
               </div>
             </div>
           </div>
@@ -1339,7 +1339,7 @@
                 <a href="pdp.html" class="ba-name">Antivirus</a>
                 <div class="ba-tech">Bio bactericide + virucide</div>
                 <div class="ba-pricerow"><span class="ba-size">250 ml</span><span class="ba-price tnum">&#8377;327</span><span class="ba-mrp tnum">&#8377;425</span></div>
-                <a href="cart.html?reorder=antivirus" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
+                <a href="checkout.html" data-demo-case="4" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
               </div>
             </div>
           </div>
@@ -3808,17 +3808,24 @@
     })();
   </script>
   <script>
-    // Buy-again demo wiring · seeds kkd.lastOrder + kkd.cart so the checkout merge sheet shows the intended case
-    // · tile 1 (Humic, data-demo-case="A") → cart matches recent order → "same item already in order" branch
-    // · tile 2 (Chakrawarti, data-demo-case="B") → cart adds a brand-new product on top of the recent order → diff/merge branch
+    // Buy-again demo wiring · seeds kkd.lastOrder + kkd.cart so the checkout merge sheet shows the intended case.
+    // Four cases (2×2: below/above ₹10k × same-item/new-item / prev-COD/prev-prepaid) map to tiles 1–4:
+    //   1 (Humic)        → BELOW ₹10k · SAME item re-ordered → "Same item already in order" + Discard · pay just the added qty
+    //   2 (Chakrawarti)  → BELOW ₹10k · NEW item merged into the recent order → normal merge · pay only the new item
+    //   3 (NPK)          → ABOVE ₹10k · previous order was COD (nothing paid) → advance regime · pay full ₹11,000 OR 10% = ₹1,100 · COD disabled
+    //   4 (Antivirus)    → ABOVE ₹10k · previous order was PREPAID (₹1,000 paid) → advance regime · pay ₹20,000 remaining OR 10% = ₹1,100 · COD disabled
     (function(){
       var SEED = {
-        // Case A · EXAMPLE 2 · previous order ₹1,000 fully PREPAID + a fresh ₹20,000 order → merged ₹21,000
+        // Case 1 · below ₹10k · same item · prev ₹2,000 + one more Humic ₹752 → merged ₹2,752 (normal regime)
+        '1': { recent: ['humic'], qtys: { humic:1 }, cart: ['humic'], demoPrev: 2000, demoAdd: 752, mode: 'paynow' },
+        // Case 2 · below ₹10k · new item · prev ₹3,000 (NPK) + new Chakrawarti ₹700 → merged ₹3,700 (normal regime)
+        '2': { recent: ['npk'], qtys: { npk:1 }, cart: ['chakrawarti'], demoPrev: 3000, demoAdd: 700, mode: 'paynow' },
+        // Case 3 · above ₹10k · previous order on COD · prev ₹8,000 (COD) + new ₹3,000 (NPK) → merged ₹11,000
+        //   → COD disabled · pay full ₹11,000 OR 10% partial = ₹1,100 (nothing already paid)
+        '3': { recent: ['humic','chakraveer'], qtys: { humic:1, chakraveer:1 }, cart: ['npk'], demoPrev: 8000, demoAdd: 3000, mode: 'cod' },
+        // Case 4 · above ₹10k · previous order PREPAID · prev ₹1,000 (paid) + new ₹20,000 (Antivirus) → merged ₹21,000
         //   → COD disabled · pay ₹20,000 (₹1,000 already paid) OR 10% partial = ₹1,100
-        A: { recent: ['npk'], qtys: { npk:1 }, cart: ['humic'], demoPrev: 1000, demoAdd: 20000, mode: 'paynow' },
-        // Case B · EXAMPLE 1 · previous order ₹8,000 on COD + a fresh ₹3,000 order → merged ₹11,000
-        //   → COD disabled · pay ₹11,000 OR 10% partial = ₹1,100
-        B: { recent: ['humic','chakraveer'], qtys: { humic:1, chakraveer:1 }, cart: ['humic','bhumiraja'], demoPrev: 8000, demoAdd: 3000, mode: 'cod' }
+        '4': { recent: ['npk'], qtys: { npk:1 }, cart: ['antivirus'], demoPrev: 1000, demoAdd: 20000, mode: 'paynow' }
       };
       document.querySelectorAll('.ba-reorder[data-demo-case]').forEach(function(a){
         a.addEventListener('click', function(e){

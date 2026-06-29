@@ -27,7 +27,7 @@
           <i class="fa-solid fa-magnifying-glass" style="font-size:12px"></i>
           <input id="mSearch" placeholder="Search assets…" oninput="renderGrid()"/>
         </div>
-        <select class="select" id="mType" style="width:180px" onchange="renderGrid()">
+        <select class="select" id="mType" style="width:180px" onchange="updHint();renderGrid()">
           <option value="all">All types</option>
           <option value="Banners">Banners</option>
           <option value="Products">Products</option>
@@ -37,11 +37,14 @@
       </div>
 
       <!-- Dropzone -->
-      <div class="dropzone" id="dz" onclick="fakeUpload()" style="margin-bottom:20px">
+      <div class="dropzone" id="dz" onclick="fakeUpload()" style="margin-bottom:8px">
         <i class="fa-solid fa-cloud-arrow-up"></i>
         <div class="t">Click or drop files to upload</div>
-        <div class="s">JPG / PNG / WebP · max 2 MB each</div>
+        <div class="s">Pick a type above — each has its own required size</div>
       </div>
+      <div id="dzHint"></div>
+      <input type="file" id="mFile" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none"/>
+      <div id="mFileMsg" class="kkdv-msg" style="margin-bottom:20px"></div>
 
       <!-- Asset grid -->
       <div class="grid-cards" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))" id="grid"></div>
@@ -66,6 +69,7 @@
 
 <script src="assets/data.js"></script>
 <script src="assets/shell.js"></script>
+<script src="assets/validate.js"></script>
 <script>
   AdminShell.mount({ active: 'media', title: 'Media Library', crumb: 'Content & Languages', controls: 'Images & assets used across the app' });
 
@@ -105,8 +109,8 @@
     );
     document.getElementById('grid').innerHTML = list.map(a => `
       <div class="card m-tile" onclick="openAsset('${a.id}')">
-        <div class="m-thumb" style="background:linear-gradient(135deg,${a.color},${a.color}cc)">
-          <i class="fa-solid ${TYPE_ICON[a.type]||'fa-image'}"></i>
+        <div class="m-thumb" style="background:${a.url?`url(${a.url}) center/cover`:`linear-gradient(135deg,${a.color},${a.color}cc)`}">
+          ${a.url?'':`<i class="fa-solid ${TYPE_ICON[a.type]||'fa-image'}"></i>`}
           <span class="tag" style="position:absolute;top:8px;left:8px">${a.type}</span>
         </div>
         <div class="card-pad" style="padding:10px 12px">
@@ -119,8 +123,8 @@
   function openAsset(id){
     const a = media.find(x=>x.id===id); if(!a) return;
     document.getElementById('mModalBody').innerHTML = `
-      <div class="m-thumb" style="height:200px;border-radius:12px;background:linear-gradient(135deg,${a.color},${a.color}cc);font-size:48px">
-        <i class="fa-solid ${TYPE_ICON[a.type]||'fa-image'}"></i>
+      <div class="m-thumb" style="height:200px;border-radius:12px;background:${a.url?`url(${a.url}) center/cover`:`linear-gradient(135deg,${a.color},${a.color}cc)`};font-size:48px">
+        ${a.url?'':`<i class="fa-solid ${TYPE_ICON[a.type]||'fa-image'}"></i>`}
       </div>
       <div style="font-size:15px;font-weight:800;margin:16px 0 4px">${esc(a.name)}</div>
       <div class="flex items-center gap-2" style="margin-bottom:16px">
@@ -139,16 +143,51 @@
     AdminShell.open('mModal');
   }
 
-  function fakeUpload(){
-    const a = {
-      id:'m'+Date.now(),
-      name:'upload-'+Date.now().toString().slice(-5)+'.webp',
-      color: rnd(COLORS), w:1080, h:480, type:'Banners',
-      usedIn:['Unused']
-    };
-    media.unshift(a); renderGrid(); AdminShell.saved('1 asset uploaded');
+  // each library type maps to a validation spec (required size lives in validate.js)
+  const TYPE_SPEC = { Banners:'banner', Products:'product', Crops:'crop', Icons:'icon' };
+  const SPEC_TYPE = { banner:'Banners', product:'Products', crop:'Crops', icon:'Icons' };
+  function curSpec(){ return TYPE_SPEC[document.getElementById('mType').value] || 'banner'; }
+  function updHint(){
+    const ty=document.getElementById('mType').value;
+    const el=document.getElementById('dzHint');
+    el.innerHTML = ty==='all'
+      ? `<div class="kkdv-hint"><i class="fa-solid fa-circle-info"></i> Choose a type (Banners / Products / Crops / Icons) to enforce its required size — otherwise the type is guessed from the image.</div>`
+      : `<div class="kkdv-hint" data-img-hint="${TYPE_SPEC[ty]}"></div>`;
+    if(window.KKDV) KKDV.scan(el);
   }
 
-  renderGrid();
+  function fakeUpload(){ const f=document.getElementById('mFile'); f.value=''; f.click(); }
+  document.getElementById('mFile').addEventListener('change', async function(){
+    const f=this.files&&this.files[0]; if(!f) return;
+    const ty=document.getElementById('mType').value;
+    const spec = ty==='all' ? null : curSpec();
+    const msg=document.getElementById('mFileMsg');
+    msg.className='kkdv-msg show muted'; msg.textContent='Checking image…';
+    if(spec){
+      const res=await KKDV.checkImage(f,spec);
+      msg.className='kkdv-msg show '+res.kind; msg.textContent=res.text;
+      if(res.kind==='err') return;                                  // wrong size for this type
+      media.unshift({ id:'m'+Date.now(), name:f.name, url:res.url, color:rnd(COLORS),
+        w:res.w, h:res.h, type:SPEC_TYPE[spec], usedIn:['Unused'] });
+      renderGrid(); AdminShell.saved('1 asset uploaded');
+    } else {
+      // 'all' — generic guard, then guess the type from the dimensions
+      const ok=['image/png','image/jpeg','image/webp','image/gif'];
+      if(ok.indexOf(f.type)<0){ msg.className='kkdv-msg show err'; msg.textContent='Unsupported file type. Use PNG, JPG, WebP or GIF.'; return; }
+      if(f.size/1048576>4){ msg.className='kkdv-msg show err'; msg.textContent='Too large — keep files under 4 MB.'; return; }
+      const url=URL.createObjectURL(f), img=new Image();
+      img.onload=()=>{
+        const w=img.naturalWidth,h=img.naturalHeight, sq=Math.abs(w-h)<=2;
+        const guess = !sq ? 'Banners' : (w<=300?'Icons':(w<=700?'Crops':'Products'));
+        msg.className='kkdv-msg show ok'; msg.textContent=`Uploaded — ${w}×${h} px, guessed type: ${guess}. Set a type above next time to enforce its size.`;
+        media.unshift({ id:'m'+Date.now(), name:f.name, url, color:rnd(COLORS), w, h, type:guess, usedIn:['Unused'] });
+        renderGrid(); AdminShell.refreshPending();
+      };
+      img.onerror=()=>{ msg.className='kkdv-msg show err'; msg.textContent='That image could not be read — it may be corrupt.'; };
+      img.src=url;
+    }
+  });
+
+  updHint(); renderGrid();
 </script>
 </body></html>

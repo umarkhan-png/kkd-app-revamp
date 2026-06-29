@@ -108,6 +108,9 @@
         <div class="t">Click or drop an image</div>
         <div class="s">Square · JPG / PNG / WebP · max 2 MB</div>
       </div>
+      <div data-img-hint="product"></div>
+      <input type="file" id="pFile" accept="image/png,image/jpeg,image/webp" style="display:none"/>
+      <div id="pFileMsg" class="kkdv-msg"></div>
       <div id="pDzPreview" style="display:none;margin-top:10px"></div>
     </div>
     <div class="field flex items-center justify-between" style="padding:12px 14px;background:var(--slate-50);border-radius:10px;border:1px solid var(--slate-200)">
@@ -123,6 +126,7 @@
 
 <script src="assets/data.js"></script>
 <script src="assets/shell.js"></script>
+<script src="assets/validate.js"></script>
 <script>
   AdminShell.mount({ active: 'products', title: 'Products', crumb: 'Catalog', controls: 'Your product catalogue (Shop + product pages)', preview: 'shop.html' });
   let data = KKD.load();
@@ -227,16 +231,23 @@
       c.classList.toggle('on', on); c.querySelector('input').checked = on;
     });
     document.getElementById('pDzPreview').style.display='none';
-    document.getElementById('pDzPreview').dataset.color='';
+    document.getElementById('pDzPreview').dataset.url='';
+    const fm=document.getElementById('pFileMsg'); fm.className='kkdv-msg'; fm.textContent='';
     AdminShell.open('pDrawer');
   }
 
-  function fakeUpload(){
-    const c=['#258046','#2563EB','#B45309','#7C3AED','#DC2626'][Math.floor(Math.random()*5)];
+  function fakeUpload(){ const f=document.getElementById('pFile'); f.value=''; f.click(); }
+  document.getElementById('pFile').addEventListener('change', async function(){
+    const f=this.files&&this.files[0]; if(!f) return;
+    const msg=document.getElementById('pFileMsg');
+    msg.className='kkdv-msg show muted'; msg.textContent='Checking image…';
+    const res=await KKDV.checkImage(f,'product');           // square, 800×800 recommended
+    msg.className='kkdv-msg show '+res.kind; msg.textContent=res.text;
+    if(res.kind==='err') return;                            // not square / too big → rejected
     const p=document.getElementById('pDzPreview'); p.style.display='';
-    p.innerHTML=`<div style="height:90px;border-radius:10px;background:linear-gradient(135deg,${c},${c}cc);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700"><i class="fa-solid fa-image" style="margin-right:8px"></i> product-${Date.now().toString().slice(-5)}.webp</div>`;
-    p.dataset.color=c;
-  }
+    p.innerHTML=`<div style="height:120px;border-radius:10px;background:url(${res.url}) center/cover"></div>`;
+    p.dataset.url=res.url;
+  });
 
   function saveProduct(){
     const badges = Array.from(document.querySelectorAll('#pBadges .chip input:checked')).map(i=>i.value);

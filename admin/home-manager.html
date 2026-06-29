@@ -200,6 +200,7 @@
 
 <script src="assets/data.js"></script>
 <script src="assets/shell.js"></script>
+<script src="assets/validate.js"></script>
 <script>
 AdminShell.mount({ active:'sc-home', title:'Home Page Manager', crumb:'App Screens', controls:'Every section of the app Home screen', preview:'home.html' });
 
@@ -502,6 +503,7 @@ header:()=>`
       <div class="fg"><label>Current File</label><input type="text" value="../assets/kkd-logo.png"/></div>
       <div class="fg"><label>Logo Tap Link</label><input type="text" value="home.html"/></div>
     </div>
+    <div data-img-hint="logo" style="margin-top:8px"></div>
 
     <div class="sdiv">Greeting</div>
     ${LT()}
@@ -827,6 +829,7 @@ banners:()=>`
   <div class="card-head"><h3>🖼️ Promotional Banners</h3><button class="btn btn-p btn-sm" onclick="save('Banners saved')">Save</button></div>
   <div class="card-body">
     <p class="hint-p">Each banner targets specific state · language · time window</p>
+    <div data-img-hint="banner" style="margin-bottom:10px"></div>
     <div id="bnList">
       ${[
         {nm:'Mega Krishi Bachat Mela',link:'/shop?sale=mela',states:['All States'],lang:'All'},
@@ -1027,6 +1030,7 @@ testi:()=>`
     <div style="margin-top:14px;"></div>
     ${LT()}
     <div class="row"><div class="fg"><label>Section Title</label><input type="text" value="Farmer testimonials"/></div></div>
+    <div data-img-hint="video" style="margin-bottom:6px"></div>
     <div class="sdiv">Testimonials</div>
     <div id="tmList">
       ${[
@@ -1089,6 +1093,7 @@ expert:()=>`
       </div>
       <div class="fg"><label>Current File</label><input type="text" value="../assets/expert.png"/></div>
     </div>
+    <div data-img-hint="avatar" style="margin-top:8px"></div>
     ${LT()}
     <div class="row">
       <div class="fg"><label>Button Label</label><input type="text" value="Ask Expert"/></div>

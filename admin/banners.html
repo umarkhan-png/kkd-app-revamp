@@ -37,10 +37,13 @@
   <div class="drawer-body">
     <div class="field">
       <label>Banner image — one per language</label>
-      <div class="hint" style="margin-top:0;margin-bottom:10px">Upload a separate image for each language. Languages without their own image fall back to the default (English).</div>
+      <div class="hint" style="margin-top:0;margin-bottom:6px">Upload a separate image for each language. Languages without their own image fall back to the default (English).</div>
+      <div data-img-hint="banner" style="margin-bottom:10px"></div>
       <div id="bnImgs"></div>
+      <div id="bnImgMsg" class="kkdv-msg"></div>
+      <input type="file" id="bnFile" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none"/>
     </div>
-    <div class="field"><label>Title</label><input class="input" id="bnTitle" placeholder="e.g. Monsoon Mega Sale"/></div>
+    <div class="field"><label>Title</label><input class="input" id="bnTitle" data-maxlen="40" placeholder="e.g. Monsoon Mega Sale"/></div>
     <div class="field"><label>Slot</label>
       <select class="select" id="bnSlot">
         <option value="home_hero">Home · Hero carousel</option>
@@ -76,6 +79,7 @@
 
 <script src="assets/data.js"></script>
 <script src="assets/shell.js"></script>
+<script src="assets/validate.js"></script>
 <script>
   AdminShell.mount({ active: 'banners', title: 'Banners', crumb: 'Merchandising', controls: 'Promotional banners across the app (image per language)', preview: 'home.html' });
   let data = KKD.load();
@@ -99,10 +103,10 @@
       const nLoc = b.imgByLocale ? Object.keys(b.imgByLocale).filter(k=>b.imgByLocale[k]).length : 0;
       // little swatch per language so the multi-language nature is visible at a glance
       const swatches = [['en',b.img]].concat(Object.entries(b.imgByLocale||{})).filter(([k,v])=>v).map(([k,v])=>
-        `<span title="${k}" style="display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;color:#fff;background:rgba(0,0,0,.28);padding:2px 6px;border-radius:6px"><span style="width:8px;height:8px;border-radius:2px;background:${v}"></span>${shortLoc(k)}</span>`).join('');
+        `<span title="${k}" style="display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;color:#fff;background:rgba(0,0,0,.28);padding:2px 6px;border-radius:6px"><span style="width:8px;height:8px;border-radius:2px;background:${v&&v[0]==='#'?v:'#258046'}"></span>${shortLoc(k)}</span>`).join('');
       return `
       <div class="card" style="overflow:hidden">
-        <div style="height:120px;background:linear-gradient(135deg,${b.img},${b.img}cc);position:relative;display:flex;align-items:flex-end;padding:12px">
+        <div style="height:120px;background:${b.img&&b.img[0]!=='#'?`url(${b.img}) center/cover`:`linear-gradient(135deg,${b.img},${b.img}cc)`};position:relative;display:flex;align-items:flex-end;padding:12px">
           <span style="position:absolute;top:10px;left:10px">${statusBadge(b.status)}</span>
           <span style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,.35);color:#fff;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:7px">${SLOTS[b.slot]||b.slot}</span>
           <span style="color:#fff;font-weight:800;font-size:15px;text-shadow:0 1px 4px rgba(0,0,0,.3)">${esc(b.title)}</span>
@@ -122,8 +126,15 @@
       </div>`;}).join('') || '<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-images"></i><div>No banners in this slot yet.</div></div>';
   }
 
-  // per-locale image state while editing: { code: '#color' }
-  let editId = null, imgState = {};
+  // per-locale image state while editing: value is either a '#color' (legacy/demo
+  // swatch) or a real uploaded blob URL once validated as a 1080×480 banner.
+  let editId = null, imgState = {}, uploadCode = null;
+  const isImg = v => v && v[0] !== '#';                 // blob URL vs colour swatch
+  function swatch(v, label){
+    return isImg(v)
+      ? `<div style="height:36px;border-radius:8px;background:url(${v}) center/cover;display:flex;align-items:center;justify-content:flex-end;padding-right:8px"><span style="background:rgba(0,0,0,.45);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:5px">${label}</span></div>`
+      : `<div style="height:36px;border-radius:8px;background:linear-gradient(135deg,${v},${v}cc);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700"><i class="fa-solid fa-image" style="margin-right:6px"></i> ${label}-banner.webp</div>`;
+  }
   function renderImgRows(){
     document.getElementById('bnImgs').innerHTML = enabledLocales().map(l=>{
       const c = imgState[l.code]; const isDefault = l.code==='en'; const name = l.label.split(' ')[0];
@@ -131,14 +142,24 @@
         <span class="tag ${isDefault?'tag-green':''}" style="min-width:48px;justify-content:center">${shortLoc(l.code)}</span>
         <div class="dropzone" style="flex:1;padding:9px;text-align:left" onclick="uploadLoc('${l.code}')">
           ${c
-            ? `<div style="height:36px;border-radius:8px;background:linear-gradient(135deg,${c},${c}cc);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700"><i class="fa-solid fa-image" style="margin-right:6px"></i> ${name}-banner.webp</div>`
+            ? swatch(c, name)
             : `<div style="font-size:11.5px;color:var(--slate-500)"><i class="fa-solid fa-cloud-arrow-up" style="margin-right:6px;color:var(--green)"></i> ${isDefault?'Upload default image':'Upload '+name+' image (optional)'}</div>`}
         </div>
         ${c && !isDefault ? `<button class="btn btn-ghost btn-icon btn-sm" onclick="event.stopPropagation();clearLoc('${l.code}')"><i class="fa-solid fa-xmark"></i></button>` : '<span style="width:32px"></span>'}
       </div>`;
     }).join('');
   }
-  function uploadLoc(code){ const pal=['#258046','#2563EB','#B45309','#7C3AED','#DC2626','#0891B2','#DB2777']; imgState[code]=pal[Math.floor(Math.random()*pal.length)]; renderImgRows(); }
+  // real upload + dimension validation against the 'banner' spec (1080×480)
+  function uploadLoc(code){ uploadCode = code; document.getElementById('bnFile').value=''; document.getElementById('bnFile').click(); }
+  document.getElementById('bnFile').addEventListener('change', async function(){
+    const f = this.files && this.files[0]; if(!f || !uploadCode) return;
+    const msg = document.getElementById('bnImgMsg');
+    msg.className='kkdv-msg show muted'; msg.textContent='Checking banner…';
+    const res = await KKDV.checkImage(f, 'banner');
+    msg.className='kkdv-msg show '+res.kind; msg.textContent=res.text;
+    if(res.kind==='err') return;                         // wrong size/type → rejected
+    imgState[uploadCode] = res.url; renderImgRows();
+  });
   function clearLoc(code){ delete imgState[code]; renderImgRows(); }
 
   function openBanner(id){
@@ -153,6 +174,7 @@
     document.getElementById('bnActive').checked = b? b.status!=='off' : true;
     imgState = {};
     if (b) { imgState.en = b.img; Object.assign(imgState, b.imgByLocale || {}); }
+    const msg=document.getElementById('bnImgMsg'); msg.className='kkdv-msg'; msg.textContent='';
     renderImgRows();
     AdminShell.open('bnDrawer');
   }

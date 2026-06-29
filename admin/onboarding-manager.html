@@ -134,8 +134,13 @@ const STATES=['MP','UP','Maharashtra','Gujarat','Rajasthan','Karnataka','AP','Te
 
 // At most TWO splashes: the locked default (O.splash) + one optional custom (O.splashCustom).
 // Defensive init for older saved state (top-level merge won't add nested keys).
-if(!O.splashCustom) O.splashCustom = { enabled:false, logo:O.splash.logo, logoWidth:O.splash.logoWidth, bg:O.splash.bg, bgImage:'', durationMs:O.splash.durationMs, trigger:{type:'festival',start:'',end:'',states:['All']} };
-if(!O.splashCustom.trigger) O.splashCustom.trigger={type:'festival',start:'',end:'',states:['All']};
+if(!O.splashCustom) O.splashCustom = { enabled:false, img:'', imgByLocale:{}, trigger:{type:'festival',start:'',end:'',states:STATES.slice()} };
+if(!O.splashCustom.trigger) O.splashCustom.trigger={type:'festival',start:'',end:'',states:STATES.slice()};
+O.splashCustom.trigger.type='festival';                       // condition is always a festival/date range now
+if(O.splashCustom.img===undefined) O.splashCustom.img = O.splashCustom.bgImage || '';   // migrate to direct image
+if(!O.splashCustom.imgByLocale) O.splashCustom.imgByLocale={};
+// normalize states: legacy ['All'] sentinel → every state selected
+if(!Array.isArray(O.splashCustom.trigger.states) || O.splashCustom.trigger.states.indexOf('All')>=0) O.splashCustom.trigger.states=STATES.slice();
 // Phone screen hero: a SINGLE hero image (not separate product components) with optional
 // per-language variants. Migrate from the older 3-image array if present.
 if(!O.phone.hero) O.phone.hero = { img:(O.phone.heroImages&&O.phone.heroImages[0])||'', imgByLocale:{}, imgByState:{} };
@@ -356,7 +361,8 @@ function iconPicker(path,cur){
 /* ---------- PHONE hero: one image + per-language + per-state variants ---------- */
 function clearImg(path){ setPath(path,''); commit('Image removed'); rerender(); }
 // compact variant row (small preview + Upload/Replace/Clear + validation message)
-function heroVar(path,label){
+function heroVar(path,label,spec){
+  spec=spec||'hero';
   const v=getPath(path)||'';
   const isImg = /\.(png|jpe?g|webp|svg|gif)(\?|$)/i.test(v) || v.startsWith('blob:') || v.startsWith('data:') || v.startsWith('http');
   return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">
@@ -365,7 +371,7 @@ function heroVar(path,label){
       <div style="font-size:12.5px;font-weight:600">${label}${isImg?' <span class="lang-pill" style="background:#ECFDF5;color:#258046">set</span>':' <span class="hint" style="font-weight:500">falls back to default</span>'}</div>
       <div class="kkdv-msg" id="msg_${cssId(path)}"></div>
     </div>
-    <button class="btn btn-s btn-sm" onclick="pickImg('${path}','hero')"><i class="fa-solid fa-upload"></i> ${isImg?'Replace':'Upload'}</button>
+    <button class="btn btn-s btn-sm" onclick="pickImg('${path}','${spec}')"><i class="fa-solid fa-upload"></i> ${isImg?'Replace':'Upload'}</button>
     ${isImg?`<button class="btn btn-d btn-ic btn-sm" onclick="clearImg('${path}')"><i class="fa-solid fa-xmark"></i></button>`:''}
   </div>`;
 }
@@ -403,39 +409,26 @@ function splashDefaultCard(){
   </div>`;
 }
 
-// Optional second splash — customizable, condition-driven.
+// Optional second splash — a festival/date-range splash. Direct image upload (+ per-language).
 function splashCustomCard(){
-  const c=O.splashCustom, on=!!c.enabled, tr=c.trigger||{};
+  const c=O.splashCustom, on=!!c.enabled;
+  const langs=O.languages.filter(L=>L.on);
   let body;
   if(!on){
-    body=`<div class="hint" style="font-size:12.5px;line-height:1.5">Off — every user sees the default splash. Turn this on to run a festival or seasonal splash that replaces the default while its condition is active.</div>`;
+    body=`<div class="hint" style="font-size:12.5px;line-height:1.5">Off — every user sees the default splash. Turn this on to run a festival/seasonal splash that replaces the default during a chosen date range.</div>`;
   } else {
-    const tabs=[['festival','🎉 Festival / date range'],['state','📍 Specific states'],['always','♾️ Always (replace default)']]
-      .map(([v,l])=>`<div class="cchip ${tr.type===v?'on':''}" onclick="splashCondType('${v}')">${l}</div>`).join('');
-    let cond='';
-    if(tr.type==='festival'){
-      cond=`<div class="row" style="margin-bottom:6px">`+
-        field('splashCustom.trigger.start','Start date',{type:'date'}) +
-        field('splashCustom.trigger.end','End date',{type:'date'}) +
-        `</div>`+ splashScopeRow();
-    } else if(tr.type==='state'){
-      cond=splashScopeRow(true);
-    } else {
-      cond=`<div class="hint" style="font-size:12.5px">Replaces the default for <b>all users</b> until you turn this off.</div>`;
-    }
     body=`
-      <div class="sdiv">When should this custom splash show?</div>
-      <div style="margin-bottom:12px">${tabs}</div>
-      ${cond}
-      ${splashCondSummary()}
-      <div class="sdiv" style="margin-top:16px">Appearance</div>
-      ${imgField('splashCustom.logo','Logo image','PNG with transparency')}
-      <div class="row" style="margin-top:14px">
-        ${colorField('splashCustom.bg','Background colour')}
-        ${field('splashCustom.logoWidth','Logo width (px)',{type:'number'})}
-        ${field('splashCustom.durationMs','Auto-advance after (ms)',{type:'number'})}
+      <div class="sdiv">Active dates · festival / date range</div>
+      <div class="row" style="margin-bottom:6px">
+        ${field('splashCustom.trigger.start','Start date',{type:'date'})}
+        ${field('splashCustom.trigger.end','End date',{type:'date'})}
       </div>
-      ${imgField('splashCustom.bgImage','Full-screen background (optional)','Used instead of the colour if set','splash')}`;
+      ${splashScopeRow()}
+      ${splashCondSummary()}
+      <div class="sdiv" style="margin-top:16px">Splash image</div>
+      ${imgField('splashCustom.img','Splash image — shown to all users','Full-screen image used for this splash','splash')}
+      <div class="sdiv" style="margin-top:16px">By language <span class="hint" style="font-weight:500;text-transform:none;letter-spacing:0">· optional</span></div>
+      ${langs.map(L=>heroVar('splashCustom.imgByLocale.'+L.code, esc(L.native||L.name||L.code)+' <span class="hint" style="font-weight:500">'+esc(L.code)+'</span>', 'splash')).join('') || `<div class="hint">No languages enabled.</div>`}`;
   }
   return `<div class="card">
     <div class="card-head"><h3>Custom splash <span class="lang-pill" style="background:#EEF2FF;color:#4338CA">2nd of 2</span></h3>
@@ -443,32 +436,26 @@ function splashCustomCard(){
     <div class="card-body">${body}</div>
   </div>`;
 }
-function splashScopeRow(soloLabel){
-  const tr=O.splashCustom.trigger, all=(tr.states||['All']).indexOf('All')>=0;
-  const chips=STATES.map(st=>`<span class="cchip ${(!all&&(tr.states||[]).indexOf(st)>=0)?'on':''}" onclick="splashScope('${st}')">${st}</span>`).join('');
-  return `<div class="sdiv">${soloLabel?'Show in these states':'Limit to states (optional)'}</div>
+function splashScopeRow(){
+  const sts=O.splashCustom.trigger.states||[], all=sts.length===STATES.length;
+  const chips=STATES.map(st=>`<span class="cchip ${sts.indexOf(st)>=0?'on':''}" onclick="splashScope('${st}')">${st}</span>`).join('');
+  return `<div class="sdiv">States</div>
     <div><span class="cchip ${all?'on':''}" onclick="splashScopeAll()">All states</span> ${chips}</div>`;
 }
 function splashCondSummary(){
-  const tr=O.splashCustom.trigger, all=(tr.states||['All']).indexOf('All')>=0;
-  const scope = all?'all states':(tr.states||[]).join(', ');
+  const tr=O.splashCustom.trigger, sts=tr.states||[], all=sts.length===STATES.length;
+  const scope = all?'all states':(sts.length?sts.join(', '):'no states');
   let warn='';
-  if(tr.type==='festival'){
-    if(!tr.start||!tr.end) warn='Set both a start and end date, or this custom splash won\'t show.';
-    else if(tr.end<tr.start) warn='End date is before the start date — fix the range.';
-  }
-  if(tr.type==='state' && all) warn='Pick at least one state, or this behaves the same as "Always".';
-  const summary = tr.type==='festival'
-      ? (tr.start&&tr.end?`Shows from <b>${esc(tr.start)}</b> to <b>${esc(tr.end)}</b> in <b>${esc(scope)}</b>. Outside this window, the default splash shows.`:'')
-    : tr.type==='state'
-      ? `Shows in <b>${esc(scope)}</b>. Everywhere else, the default splash shows.`
-      : `Replaces the default splash for everyone.`;
+  if(!tr.start||!tr.end) warn='Set both a start and end date, or this custom splash won\'t show.';
+  else if(tr.end<tr.start) warn='End date is before the start date — fix the range.';
+  else if(!sts.length) warn='No states selected — pick states (or “All states”), or this splash won\'t show anywhere.';
+  const summary = (tr.start&&tr.end&&sts.length)
+    ? `Shows from <b>${esc(tr.start)}</b> to <b>${esc(tr.end)}</b> in <b>${esc(scope)}</b>. Outside this window, the default splash shows.` : '';
   return (summary?`<div class="info-box" style="margin-top:10px"><i class="fa-solid fa-eye" style="margin-top:1px"></i><span>${summary}</span></div>`:'')
     + (warn?`<div class="warn-box"><i class="fa-solid fa-triangle-exclamation" style="margin-top:1px"></i><span>${warn}</span></div>`:'');
 }
-function splashCondType(v){ setPath('splashCustom.trigger.type',v); commit(); rerender(); }
-function splashScopeAll(){ O.splashCustom.trigger.states=['All']; commit(); rerender(); }
-function splashScope(st){ let s=(O.splashCustom.trigger.states||[]).filter(x=>x!=='All'); s.indexOf(st)>=0?(s=s.filter(x=>x!==st)):s.push(st); if(!s.length)s=['All']; O.splashCustom.trigger.states=s; commit(); rerender(); }
+function splashScopeAll(){ const sts=O.splashCustom.trigger.states||[]; O.splashCustom.trigger.states = sts.length===STATES.length ? [] : STATES.slice(); commit(); rerender(); }
+function splashScope(st){ let s=(O.splashCustom.trigger.states||[]).slice(); const i=s.indexOf(st); i>=0?s.splice(i,1):s.push(st); O.splashCustom.trigger.states=s; commit(); rerender(); }
 
 /* ---------- render ---------- */
 function renderList(){

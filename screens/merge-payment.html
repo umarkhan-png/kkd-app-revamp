@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Merge Payment</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="../assets/appstate.js"></script>
+<script src="../assets/merge-core.js"></script>
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0;font-family:'Poppins',system-ui,sans-serif}
+  input,button,select,textarea,optgroup{font-family:inherit}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:110px}
+  .tnum{font-variant-numeric:tabular-nums}
+  .sec-title{margin:18px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
+
+  /* Step indicator */
+  .steps{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px 2px}
+  .step{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:800;color:#94A3B8}
+  .step .dot{width:22px;height:22px;border-radius:9999px;background:#E2E8F0;color:#94A3B8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900}
+  .step.done{color:#258046}
+  .step.done .dot{background:#ECFDF5;color:#258046;border:1.5px solid #258046}
+  .step.on{color:#258046}
+  .step.on .dot{background:#258046;color:#fff}
+  .step-line{width:26px;height:2px;border-radius:2px;background:#258046}
+
+  /* Recap tile */
+  .om-recap-tile{margin:14px 16px 0;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .om-recap-id{flex:1;min-width:0;display:flex;align-items:center;gap:9px;line-height:1.2}
+  .om-recap-id i{width:30px;height:30px;border-radius:8px;background:#F8FAFC;color:#475569;display:flex;align-items:center;justify-content:center;font-size:13px;border:1px solid #E2E8F0;flex-shrink:0}
+  .om-recap-id b{display:block;font-size:13px;color:#0F172A;font-weight:800}
+  .om-recap-id em{display:block;font-size:11px;color:#64748B;font-weight:600;font-style:normal;margin-top:1px}
+  .om-recap-view{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:9999px;background:#FFFFFF;border:1.5px solid #258046;color:#258046;font-size:11.5px;font-weight:800;text-decoration:none}
+
+  /* Pay box */
+  .om-pay{margin:0 16px;background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border:1px solid #BBF7D0;border-radius:14px;padding:14px}
+  .om-pay-row{display:flex;align-items:baseline;justify-content:space-between;font-size:13px;color:#0F172A;font-weight:700;padding:3px 0}
+  .om-pay-row.sub{font-size:12px;color:#475569;font-weight:600}
+  .om-pay-row.sub span:last-child{font-weight:700;color:#0F172A;font-variant-numeric:tabular-nums}
+  .om-pay-row.total{font-size:13px;color:#0F172A;font-weight:700}
+  .om-pay-row.total b{font-size:15px;font-weight:900;color:#0F172A;font-variant-numeric:tabular-nums}
+  .om-pay-row.hi{font-size:14px;color:#258046;font-weight:800}
+  .om-pay-row.hi b{font-size:22px;font-weight:900;color:#258046;font-variant-numeric:tabular-nums}
+  .om-pay-divider{margin:6px 0 4px;border-top:1px dashed #A7F3D0}
+  .om-pay-hint{font-size:11px;font-weight:600;color:#64748B;margin-top:2px}
+  .om-pay-method-label{margin:16px 16px 0;font-size:10.5px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:.06em}
+  .om-pay-chips{margin:8px 16px 0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .om-chip{display:flex;align-items:center;gap:9px;padding:11px;border-radius:11px;background:#FFFFFF;border:1.5px solid #E2E8F0;cursor:pointer;text-align:left;font-family:inherit;transition:all .15s ease}
+  .om-chip:active{transform:scale(.98)}
+  .om-chip[aria-checked="true"]{border-color:#258046;box-shadow:0 4px 12px -4px rgba(5,150,105,0.3)}
+  .om-chip > i{width:30px;height:30px;border-radius:8px;background:#F1F5F9;color:#64748B;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:all .15s ease}
+  .om-chip[aria-checked="true"] > i{background:#258046;color:#FFFFFF}
+  .om-chip .lab{flex:1;min-width:0;line-height:1.2}
+  .om-chip .lab b{display:block;font-size:12.5px;font-weight:800;color:#0F172A}
+  .om-chip .lab span{display:block;font-size:10.5px;color:#64748B;font-weight:600;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .om-chip[aria-checked="true"] .lab span{color:#258046}
+  .om-chip.disabled{opacity:.5;pointer-events:none}
+  .om-chip.full{grid-column:1 / -1}
+
+  /* Sticky CTA */
+  .foot{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 16px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:50;box-shadow:0 -4px 16px rgba(0,0,0,0.05)}
+  .pay-btn{width:100%;height:52px;border-radius:12px;background:#258046;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+  .pay-btn:active{transform:scale(.985)}
+</style></head>
+<body>
+
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-semibold">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
+    </div>
+  </div>
+
+  <div class="px-4 pt-4 pb-1 flex items-center gap-3 bg-white">
+    <a href="merge-review.html" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB">
+      <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
+    </a>
+    <h1 class="text-[22px] font-extrabold leading-tight" style="color:#0F172A">Payment</h1>
+  </div>
+
+  <!-- Step indicator -->
+  <div class="steps">
+    <div class="step done"><span class="dot"><i class="fa-solid fa-check text-[10px]"></i></span> Review</div>
+    <div class="step-line"></div>
+    <div class="step on"><span class="dot">2</span> Payment</div>
+  </div>
+
+  <div class="om-recap-tile">
+    <div class="om-recap-id">
+      <i class="fa-solid fa-code-merge"></i>
+      <span><b id="omOrderId">#KKD-26194</b><em id="omOrderCount">Merging into your recent order</em></span>
+    </div>
+    <a href="merge-review.html" class="om-recap-view">Edit <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
+  </div>
+
+  <div class="sec-title">Amount calculation</div>
+  <div class="om-pay">
+    <div class="om-pay-row sub"><span id="omPayPrevLabel">Previous order paid</span><span id="omPayPrev" class="tnum">₹0</span></div>
+    <div class="om-pay-row sub"><span id="omPayAddLabel">Adding now</span><span id="omPayAdd" class="tnum">₹0</span></div>
+    <div class="om-pay-row sub" id="omPayDiscRow" style="display:none"><span>Pay Online discount (5%)</span><span id="omPayDisc" class="tnum">−₹0</span></div>
+    <div class="om-pay-divider"></div>
+    <div class="om-pay-row total"><span>Total order value</span><b id="omPayMerged" class="tnum">₹0</b></div>
+    <div class="om-pay-row sub" id="omPayPaidRow" style="display:none"><span>Already paid</span><span id="omPayPaid" class="tnum">−₹0</span></div>
+    <div class="om-pay-row sub" id="omPayRemainRow" style="display:none"><span>Remaining</span><span id="omPayRemain" class="tnum">₹0</span></div>
+    <div class="om-pay-row hi"><span>You pay now</span><b id="omPayTotal" class="tnum">₹0</b></div>
+    <div class="om-pay-hint" id="omPayHint" style="display:none"></div>
+  </div>
+
+  <div class="om-pay-method-label">Choose how to pay</div>
+  <div class="om-pay-chips" role="radiogroup">
+    <button type="button" class="om-chip" data-pay="paynow" role="radio" aria-checked="true">
+      <i class="fa-solid fa-bolt"></i>
+      <div class="lab"><b id="omPaynowTitle">Pay Online</b><span id="omPaynowSub">5% off · save ₹<span id="omOnlineSave">0</span></span></div>
+    </button>
+    <button type="button" class="om-chip" id="omPartialChip" data-pay="advpartial" role="radio" aria-checked="false" style="display:none">
+      <i class="fa-solid fa-coins"></i>
+      <div class="lab"><b>Partial</b><span id="omPartialSub">10% advance</span></div>
+    </button>
+    <button type="button" class="om-chip" id="omCodChip" data-pay="cod" role="radio" aria-checked="false">
+      <i class="fa-solid fa-truck"></i>
+      <div class="lab"><b>Cash on Delivery</b><span id="omCodSub">Pay when it arrives</span></div>
+    </button>
+  </div>
+
+  <div class="foot">
+    <button type="button" class="pay-btn" id="payBtn">Pay ₹0 &amp; Merge</button>
+  </div>
+
+  <script>
+    (function(){
+      var m = window.kkdMerge && window.kkdMerge.compute();
+      if (!m){ location.replace('home.html'); return; }
+      var rupee = window.kkdMerge.rupee;
+
+      document.getElementById('omOrderId').textContent = '#' + m.oid;
+      document.getElementById('omOrderCount').textContent = m.mergedCount + ' item' + (m.mergedCount > 1 ? 's' : '') + ' after merge';
+
+      var chips    = document.querySelectorAll('.om-chip');
+      var paynowChip = document.querySelector('.om-chip[data-pay="paynow"]');
+      var partialChip= document.getElementById('omPartialChip');
+      var codChip    = document.getElementById('omCodChip');
+      var payPrev  = document.getElementById('omPayPrev');
+      var payAdd   = document.getElementById('omPayAdd');
+      var payDiscRow = document.getElementById('omPayDiscRow');
+      var payDisc  = document.getElementById('omPayDisc');
+      var payMerged= document.getElementById('omPayMerged');
+      var payPrevLbl = document.getElementById('omPayPrevLabel');
+      var payAddLbl  = document.getElementById('omPayAddLabel');
+      var payPaidRow = document.getElementById('omPayPaidRow');
+      var payPaid    = document.getElementById('omPayPaid');
+      var payRemainRow = document.getElementById('omPayRemainRow');
+      var payRemain  = document.getElementById('omPayRemain');
+      var payTotal = document.getElementById('omPayTotal');
+      var payHint  = document.getElementById('omPayHint');
+      var payBtn   = document.getElementById('payBtn');
+
+      // Adding-now label · qty / new breakdown
+      var addBits = [];
+      if (!m.isCaseA && m.updatedIds.length) addBits.push(m.updatedIds.length + '× Qty +1');
+      if (m.newIds.length) addBits.push(m.newIds.length + '× new');
+
+      var selected, currentPayNow = 0;
+
+      // Configure chips for this order's regime (once)
+      if (m.advanceRegime){
+        selected = 'paynow';   // "Pay full"
+        document.getElementById('omPaynowTitle').textContent = 'Pay full';
+        document.getElementById('omPaynowSub').textContent = 'Prepaid · ' + rupee(m.fullPrepaidNow);
+        partialChip.style.display = 'flex';
+        document.getElementById('omPartialSub').textContent = '10% adv · ' + rupee(m.advanceMin);
+        codChip.classList.add('disabled','full');
+        codChip.setAttribute('aria-disabled','true');
+        document.getElementById('omCodSub').textContent = 'Not available above ₹10,000';
+      } else {
+        selected = 'paynow';   // "Pay Online"
+        document.getElementById('omPaynowTitle').textContent = 'Pay Online';
+        document.getElementById('omOnlineSave').textContent = m.onlineDiscount.toLocaleString('en-IN');
+        partialChip.style.display = 'none';
+        codChip.classList.remove('disabled','full');
+      }
+
+      function applyChip(){
+        chips.forEach(function(c){ c.setAttribute('aria-checked', c.dataset.pay === selected ? 'true' : 'false'); });
+        if (m.advanceRegime){
+          var remaining = Math.max(0, m.mergedOrderValue - m.alreadyPaid);
+          var payNow = (selected === 'advpartial') ? m.advanceMin : m.fullPrepaidNow;
+          currentPayNow = payNow;
+          payDiscRow.style.display = 'none';
+          payPrevLbl.textContent = 'Previous order';
+          payPrev.textContent = rupee(m.prevTotal);
+          payAddLbl.innerHTML = 'This order (adding)' + (addBits.length ? ' <span style="color:#94A3B8;font-weight:600">· ' + addBits.join(' · ') + '</span>' : '');
+          payAdd.textContent = rupee(m.extra);
+          payMerged.textContent = rupee(m.mergedOrderValue);
+          if (m.alreadyPaid > 0){ payPaidRow.style.display = 'flex'; payPaid.textContent = '−' + rupee(m.alreadyPaid); } else { payPaidRow.style.display = 'none'; }
+          payRemainRow.style.display = 'flex'; payRemain.textContent = rupee(remaining);
+          payTotal.textContent = rupee(payNow);
+          payHint.style.display = 'block';
+          if (selected === 'advpartial'){
+            payHint.textContent = '= 10% of ' + rupee(m.mergedOrderValue) + ' (' + rupee(Math.round(m.mergedOrderValue * m.ADVANCE_PCT / 100)) + ')' + (m.alreadyPaid > 0 ? ' − ' + rupee(m.alreadyPaid) + ' already paid' : '');
+          } else {
+            payHint.textContent = m.alreadyPaid > 0 ? '= full ' + rupee(m.mergedOrderValue) + ' − ' + rupee(m.alreadyPaid) + ' already paid' : '= full order value';
+          }
+          payBtn.textContent = (selected === 'advpartial' ? 'Pay ' + rupee(payNow) + ' advance' : 'Pay ' + rupee(payNow)) + ' & Merge';
+          return;
+        }
+        // Normal regime · pay just the newly-added amount (online 5% off / COD)
+        payPrevLbl.textContent = 'Previous order paid';
+        payAddLbl.innerHTML = 'Adding now' + (addBits.length ? ' <span style="color:#94A3B8;font-weight:600">· ' + addBits.join(' · ') + '</span>' : '');
+        payPaidRow.style.display = 'none';
+        payRemainRow.style.display = 'none';
+        payHint.style.display = 'none';
+        payPrev.textContent = rupee(m.prevTotal);
+        payAdd.textContent = rupee(m.extra);
+        var pay = selected === 'paynow' ? m.onlineTotal : m.extra;
+        currentPayNow = pay;
+        payMerged.textContent = rupee(m.prevTotal + pay);
+        if (selected === 'paynow'){ payDiscRow.style.display = m.onlineDiscount > 0 ? 'flex' : 'none'; payDisc.textContent = '−' + rupee(m.onlineDiscount); }
+        else { payDiscRow.style.display = 'none'; }
+        payTotal.textContent = rupee(pay);
+        payBtn.textContent = (selected === 'paynow' ? 'Pay ' + rupee(pay) : 'Place order · ' + rupee(pay) + ' COD') + ' & Merge';
+      }
+
+      chips.forEach(function(c){ c.onclick = function(){ if (c.classList.contains('disabled')) return; selected = c.dataset.pay; applyChip(); }; });
+      applyChip();
+
+      payBtn.addEventListener('click', function(){
+        var method = m.advanceRegime ? (selected === 'advpartial' ? 'partial' : 'paynow') : selected;
+        try {
+          localStorage.setItem('kkd.mergeInfo', JSON.stringify({
+            ts: Date.now(), orderId: m.oid,
+            updated: m.updatedIds.slice(), added: m.newIds.slice(), unchanged: m.unchangedIds.slice(),
+            prevQtys: m.prevQtys, method: method, amountPaid: currentPayNow
+          }));
+        } catch(e){}
+        location.href = 'order-success.html?merged=1&mode=' + method;
+      });
+    })();
+  </script>
+  <script src="../assets/weight-ladder.js"></script>
+</body></html>

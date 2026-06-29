@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Review Merge</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="../assets/appstate.js"></script>
+<script src="../assets/merge-core.js"></script>
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0;font-family:'Poppins',system-ui,sans-serif}
+  input,button,select,textarea,optgroup{font-family:inherit}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:150px}
+  .tnum{font-variant-numeric:tabular-nums}
+  .sec-title{margin:18px 16px 8px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
+
+  /* Step indicator */
+  .steps{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px 2px}
+  .step{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:800;color:#94A3B8}
+  .step .dot{width:22px;height:22px;border-radius:9999px;background:#E2E8F0;color:#94A3B8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900}
+  .step.on{color:#258046}
+  .step.on .dot{background:#258046;color:#fff}
+  .step-line{width:26px;height:2px;border-radius:2px;background:#E2E8F0}
+
+  /* Merge hero */
+  .om-head{text-align:center;padding:8px 16px 0}
+  .om-ic{width:50px;height:50px;border-radius:50%;margin:4px auto 10px;display:flex;align-items:center;justify-content:center;background:#ECFDF5;color:#258046;font-size:20px}
+  .om-title{font-size:18px;font-weight:800;color:#0F172A;line-height:1.25}
+  .om-sub{font-size:12.5px;color:#64748B;font-weight:500;margin-top:6px;line-height:1.45}
+
+  /* Recap tile */
+  .om-recap-tile{margin:14px 16px 0;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .om-recap-id{flex:1;min-width:0;display:flex;align-items:center;gap:9px;line-height:1.2}
+  .om-recap-id i{width:30px;height:30px;border-radius:8px;background:#F8FAFC;color:#475569;display:flex;align-items:center;justify-content:center;font-size:13px;border:1px solid #E2E8F0;flex-shrink:0}
+  .om-recap-id b{display:block;font-size:13px;color:#0F172A;font-weight:800}
+  .om-recap-id em{display:block;font-size:11px;color:#64748B;font-weight:600;font-style:normal;margin-top:1px}
+  .om-recap-view{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:9999px;background:#FFFFFF;border:1.5px solid #258046;color:#258046;font-size:11.5px;font-weight:800;text-decoration:none}
+
+  /* Unified item list */
+  .om-list{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .om-row{display:flex;align-items:center;gap:11px;padding:11px 12px;border-top:1px solid #F1F5F9;position:relative}
+  .om-row:first-child{border-top:0}
+  .om-row[data-state="unchanged"]{background:#FAFBFC}
+  .om-row[data-state="unchanged"] .om-row-body .n{color:#475569}
+  .om-row[data-state="updated"]{background:#FFFBEB}
+  .om-row[data-state="new"]{background:#F0FDF4}
+  .om-row-img{width:44px;height:44px;border-radius:9px;background:#FFFFFF;border:1px solid #E2E8F0;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:3px}
+  .om-row-img img{max-width:100%;max-height:100%;object-fit:contain}
+  .om-row-body{flex:1;min-width:0;line-height:1.25}
+  .om-row-body .n{font-size:13.5px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .om-row-body .s{font-size:11px;color:#94A3B8;font-weight:600;margin-top:1px}
+  .om-row-body .qty{margin-top:5px;display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:#475569;font-variant-numeric:tabular-nums}
+  .om-row-body .qty .prev{color:#94A3B8;text-decoration:line-through}
+  .om-row-body .qty .arrow{font-size:10px;color:#B45309;font-weight:900}
+  .om-row-body .qty .next{color:#0F172A;font-weight:900}
+  .om-row-right{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:4px;text-align:right}
+  .om-tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:800;padding:3px 9px;border-radius:9999px;line-height:1.4;white-space:nowrap}
+  .om-tag.new{background:#ECFDF5;color:#258046;border:1px solid #BBF7D0}
+  .om-tag.unchanged{background:#F1F5F9;color:#64748B;border:1px solid #E2E8F0}
+  .om-row-price{font-size:13px;font-weight:800;color:#258046;font-variant-numeric:tabular-nums}
+  .om-row-price.none{color:#94A3B8;font-weight:600;font-size:11px}
+
+  /* Order-value box (light · no payment details here) */
+  .ov-box{margin:0 16px;background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border:1px solid #BBF7D0;border-radius:14px;padding:12px 14px 14px}
+  .ov-row{display:flex;align-items:baseline;justify-content:space-between;font-size:12px;color:#475569;font-weight:600;padding:3px 0}
+  .ov-row span:last-child{font-weight:700;color:#0F172A;font-variant-numeric:tabular-nums}
+  .ov-divider{margin:6px 0 4px;border-top:1px dashed #A7F3D0}
+  .ov-total{display:flex;align-items:baseline;justify-content:space-between;padding-top:2px}
+  .ov-total .l{font-size:13px;font-weight:800;color:#0F172A}
+  .ov-total .v{font-size:20px;font-weight:900;color:#258046;font-variant-numeric:tabular-nums}
+  .ov-note{font-size:11px;font-weight:600;color:#64748B;margin-top:8px;display:flex;align-items:flex-start;gap:6px;line-height:1.45}
+  .ov-note i{color:#258046;font-size:11px;margin-top:2px;flex-shrink:0}
+
+  /* Deliver-to card */
+  .addr-card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .addr-top{display:flex;align-items:center;gap:10px;padding:12px 14px}
+  .addr-ic{width:34px;height:34px;border-radius:10px;background:#ECFDF5;color:#258046;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+  .addr-row-bottom{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:#F8FAFC;border-top:1px solid #F1F5F9}
+  .addr-change{font-size:12px;font-weight:800;color:#258046;background:transparent;border:0;cursor:pointer;letter-spacing:0.02em;text-transform:uppercase;flex-shrink:0;align-self:flex-start;margin-top:1px;text-decoration:none}
+
+  /* Sticky footer · primary + discard */
+  .foot{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 16px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:50;display:flex;flex-direction:column;gap:10px;box-shadow:0 -4px 16px rgba(0,0,0,0.05)}
+  .foot-btn{width:100%;height:50px;border-radius:12px;border:0;font-size:14.5px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;transition:transform .15s ease}
+  .foot-btn:active{transform:scale(.985)}
+  .foot-btn.primary{background:#258046;color:#FFFFFF;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+  .foot-btn.ghost{height:44px;background:#FFFFFF;color:#64748B;border:1px solid #E2E8F0;font-weight:700;font-size:13.5px}
+</style></head>
+<body>
+
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-semibold">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
+    </div>
+  </div>
+
+  <div class="px-4 pt-4 pb-1 flex items-center gap-3 bg-white">
+    <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB">
+      <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
+    </button>
+    <h1 class="text-[22px] font-extrabold leading-tight" style="color:#0F172A">Review merge</h1>
+  </div>
+
+  <!-- Step indicator -->
+  <div class="steps">
+    <div class="step on"><span class="dot">1</span> Review</div>
+    <div class="step-line"></div>
+    <div class="step"><span class="dot">2</span> Payment</div>
+  </div>
+
+  <div class="om-head">
+    <div class="om-ic"><i id="omIc" class="fa-solid fa-code-merge"></i></div>
+    <div class="om-title" id="omTitle">Merge items in your recent order</div>
+    <div class="om-sub" id="omSub">We'll add these to your recent order so everything ships together.</div>
+  </div>
+
+  <div class="om-recap-tile">
+    <div class="om-recap-id">
+      <i class="fa-solid fa-receipt"></i>
+      <span><b id="omOrderId">#KKD-26194</b><em id="omOrderCount">3 items</em></span>
+    </div>
+    <a href="order-details.html" class="om-recap-view">View <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
+  </div>
+
+  <div class="sec-title">After merge</div>
+  <div class="om-list" id="omList"></div>
+
+  <div class="sec-title">Order value</div>
+  <div class="ov-box">
+    <div class="ov-row"><span>Previous order</span><span id="ovPrev" class="tnum">₹0</span></div>
+    <div class="ov-row"><span id="ovAddLbl">Adding now</span><span id="ovAdd" class="tnum">₹0</span></div>
+    <div class="ov-divider"></div>
+    <div class="ov-total"><span class="l">Total order value</span><span class="v" id="ovTotal">₹0</span></div>
+    <div class="ov-note"><i class="fa-solid fa-circle-info"></i> <span id="ovNote">You'll only pay for the newly added items on the next step.</span></div>
+  </div>
+
+  <div class="sec-title">Deliver to</div>
+  <div class="addr-card">
+    <div class="addr-top">
+      <div class="addr-ic"><i class="fa-solid fa-truck-fast"></i></div>
+      <div class="flex-1 leading-tight">
+        <div class="flex items-center gap-1.5">
+          <span class="text-[14.5px] font-semibold text-[#0F172A]">Tomorrow, 28 May</span>
+          <span class="text-[9px] font-semibold text-[#258046] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.5 rounded uppercase tracking-wider">Free</span>
+        </div>
+        <div class="text-[11.5px] text-[#64748B] mt-0.5">Order before <span class="font-bold text-[#0F172A]">6 PM</span> for next-day dispatch</div>
+      </div>
+    </div>
+    <div class="addr-row-bottom">
+      <i class="fa-solid fa-location-dot text-[14px] mt-0.5" style="color:#94A3B8"></i>
+      <div class="flex-1 min-w-0 text-[12.5px] leading-tight" style="color:#475569">
+        <div class="font-bold text-[#0F172A]" id="addrName">Ramesh Patel · +91 98765 43210</div>
+        <div class="mt-0.5 font-medium" id="addrLine">Plot 22, Khasra No. 145, Village Bawadia, Indore — 452001, MP</div>
+      </div>
+      <a href="addresses.html" class="addr-change">Change</a>
+    </div>
+  </div>
+
+  <div class="foot">
+    <button type="button" class="foot-btn primary" id="mergeBtn"><i class="fa-solid fa-code-merge text-[13px]"></i> Merge &amp; continue</button>
+    <button type="button" class="foot-btn ghost" id="discardBtn">Discard this</button>
+  </div>
+
+  <script>
+    (function(){
+      var m = window.kkdMerge && window.kkdMerge.compute();
+      if (!m){
+        // Nothing to merge → no recent order seeded · bounce to home
+        location.replace('home.html');
+        return;
+      }
+      var rupee = window.kkdMerge.rupee;
+
+      // Header · Case A (same item) vs Case B (new items)
+      if (m.isCaseA){
+        document.getElementById('omIc').className = 'fa-solid fa-clone';
+        document.getElementById('omTitle').textContent = 'Same item already in your recent order';
+        document.getElementById('omSub').textContent = 'This item is already in your recent order — we’ll just increase the quantity.';
+      } else {
+        document.getElementById('omIc').className = 'fa-solid fa-code-merge';
+        document.getElementById('omTitle').textContent = 'Merge items in your recent order';
+        document.getElementById('omSub').textContent = 'We’ll add these to your recent order so everything ships together.';
+      }
+      document.getElementById('omOrderId').textContent = '#' + m.oid;
+      document.getElementById('omOrderCount').textContent = m.mergedCount + ' item' + (m.mergedCount > 1 ? 's' : '') + (m.isCaseA ? '' : ' after merge');
+
+      window.kkdMerge.renderList(document.getElementById('omList'), m);
+
+      // Order-value summary
+      var addBits = [];
+      if (!m.isCaseA && m.updatedIds.length) addBits.push(m.updatedIds.length + '× Qty +1');
+      if (m.newIds.length) addBits.push(m.newIds.length + '× new');
+      document.getElementById('ovAddLbl').innerHTML = 'Adding now' + (addBits.length ? ' <span style="color:#94A3B8;font-weight:600">· ' + addBits.join(' · ') + '</span>' : '');
+      document.getElementById('ovPrev').textContent = rupee(m.prevTotal);
+      document.getElementById('ovAdd').textContent = rupee(m.extra);
+      document.getElementById('ovTotal').textContent = rupee(m.mergedOrderValue);
+      // Note tuned to the regime
+      var note = document.getElementById('ovNote');
+      if (m.advanceRegime){
+        note.textContent = 'This order crosses ₹10,000, so payment is online (full or 10% advance) — choose on the next step.';
+      } else {
+        note.textContent = 'You’ll only pay for the newly added amount (' + rupee(m.extra) + ') on the next step.';
+      }
+
+      document.getElementById('mergeBtn').addEventListener('click', function(){ location.href = 'merge-payment.html'; });
+      document.getElementById('discardBtn').addEventListener('click', function(){
+        try { localStorage.removeItem('kkd.cart'); } catch(e){}
+        location.href = 'order-details.html';
+      });
+    })();
+  </script>
+  <script src="../assets/weight-ladder.js"></script>
+</body></html>

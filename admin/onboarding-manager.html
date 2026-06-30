@@ -147,10 +147,12 @@ if(!O.splashCustom.imgByLocale) O.splashCustom.imgByLocale={};
 if(!Array.isArray(O.splashCustom.trigger.states) || O.splashCustom.trigger.states.indexOf('All')>=0) O.splashCustom.trigger.states=STATES.slice();
 // Phone screen hero: a SINGLE hero image (not separate product components) with optional
 // per-language variants. Migrate from the older 3-image array if present.
-if(!O.phone.hero) O.phone.hero = { img:(O.phone.heroImages&&O.phone.heroImages[0])||'', imgByLocale:{}, states:STATES.slice(), stateImg:'' };
+if(!O.phone.hero) O.phone.hero = { img:'', imgByLocale:{}, states:STATES.slice(), stateImg:'' };
 if(!O.phone.hero.imgByLocale) O.phone.hero.imgByLocale={};
 if(!Array.isArray(O.phone.hero.states)) O.phone.hero.states=STATES.slice();
 if(O.phone.hero.stateImg===undefined) O.phone.hero.stateImg='';
+// the hero is the WHOLE banner image, not a product shot — clear any legacy product-image default
+if(Array.isArray(O.phone.heroImages) && O.phone.hero.img && O.phone.heroImages.indexOf(O.phone.hero.img)>=0) O.phone.hero.img='';
 // OTP resend channels — enable/disable toggles (copy lives in Translations)
 if(O.otp.resendWhatsapp===undefined) O.otp.resendWhatsapp=true;
 if(O.otp.resendSms===undefined) O.otp.resendSms=true;
@@ -268,19 +270,25 @@ const EDITORS = {
       splashCustomCard();
   },
   language(){
+    const n=O.languages.length;
     const tiles = O.languages.map((L,i)=>`
-      <div class="li" style="align-items:center">
+      <div class="li" style="align-items:center" draggable="true"
+        ondragstart="langDragStart(event,${i})" ondragover="langDragOver(event)" ondrop="langDrop(event,${i})" ondragend="langDragEnd(event)">
+        <span class="drag-h" title="Drag to reorder">⠿</span>
+        <span style="font-size:11px;font-weight:700;color:var(--g400);min-width:18px;text-align:center">${i+1}</span>
         <div class="li-body">
           <div style="font-size:13.5px;font-weight:700">${esc(L.native||'—')}
             <span class="hint" style="font-weight:500;margin-left:4px">${esc(L.name||'')}${L.code?' · '+esc(L.code):''}</span></div>
         </div>
-        <div class="li-act" style="align-items:center">
+        <div class="li-act" style="align-items:center;gap:6px">
+          <button class="btn btn-s btn-ic" title="Move up" onclick="langMove(${i},-1)" ${i===0?'disabled style="opacity:.35"':''}><i class="fa-solid fa-arrow-up"></i></button>
+          <button class="btn btn-s btn-ic" title="Move down" onclick="langMove(${i},1)" ${i===n-1?'disabled style="opacity:.35"':''}><i class="fa-solid fa-arrow-down"></i></button>
           <div class="tg ${L.on?'on':''}" title="${L.on?'Shown in the picker':'Hidden from the picker'}" onclick="setPath('languages.${i}.on',${!L.on});commit('Language '+(${!L.on}?'enabled':'disabled'));rerender()"></div>
         </div>
       </div>`).join('');
     return head(meta('language')) +
-      card(`Languages in the picker · ${O.languages.length}`,
-        `<p class="hint" style="margin:0 0 12px">The only action here is to <b>enable or disable</b> a language in the picker. Language names and all screen copy are managed in <b>Translations</b>.</p>`+
+      card(`Languages in the picker · ${n}`,
+        `<p class="hint" style="margin:0 0 12px">Drag (⠿) or use ↑ ↓ to <b>reorder</b> — this is the order languages appear in the app picker. Toggle to <b>enable / disable</b>. Names &amp; copy are managed in <b>Translations</b>.</p>`+
         tiles
       );
   },
@@ -347,6 +355,14 @@ const EDITORS = {
 function meta(k){ return SECTIONS.find(s=>s.key===k); }
 
 /* ---------- list mutations ---------- */
+/* ---------- language picker reorder (order = app picker order) ---------- */
+function langMove(i,d){ const a=O.languages, j=i+d; if(j<0||j>=a.length) return; [a[i],a[j]]=[a[j],a[i]]; commit('Language order updated'); rerender(); }
+let langDragI=null;
+function langDragStart(e,i){ langDragI=i; e.dataTransfer.effectAllowed='move'; }
+function langDragOver(e){ e.preventDefault(); }
+function langDrop(e,i){ e.preventDefault(); if(langDragI==null||langDragI===i) return; const a=O.languages; const [m]=a.splice(langDragI,1); a.splice(i,0,m); langDragI=null; commit('Language order updated'); rerender(); }
+function langDragEnd(e){ langDragI=null; }
+
 function addFact(){ O.otp.facts.push({ icon:'circle-info', text:{ en:'New message' }, on:true }); commit('Message added'); rerender(); }
 
 /* ---------- Welcome: name on/off, shown linked to the greeting headline ---------- */

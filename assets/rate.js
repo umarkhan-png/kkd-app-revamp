@@ -42,11 +42,11 @@
     /* Home "Shop by Crop" inline tile picker (replaces the old select-crop trigger) */
     '.kr-sbc{margin-top:14px;background:#ECFDF5;border:1px solid #BBF7D0;border-radius:14px;padding:12px 0}' +
     '.kr-sbc-h{font-size:13.5px;font-weight:800;color:#0F172A;padding:0 14px 9px}' +
-    '.kr-sbc-scroll{}' +
-    '.kr-crop-picker{display:flex;gap:8px;padding:2px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch}' +
-    '.kr-crop-picker::-webkit-scrollbar{display:none}' +
-    /* tile width = ~3.9 visible per viewport so the 4th is ~10% cut at ANY screen width (stays narrow on phones) */
-    '.kr-crop-picker > button{flex:0 0 calc((100% - 24px) / 3.9)}';
+    '.kr-sbc-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}' +
+    '.kr-sbc-scroll::-webkit-scrollbar{display:none}' +
+    '.kr-crop-picker{display:flex;gap:8px;padding:2px 14px;min-width:max-content}' +
+    /* tile width tracks the viewport so ~3.9 show (4th ~10% cut) — stays narrow on phones, wider on large screens */
+    '.kr-crop-picker > button{flex:0 0 auto;width:calc((100vw - 78px) / 3.9)}';
 
   var MARKUP = '' +
     '<div class="kr-backdrop" style="position:absolute;inset:0;background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>' +
@@ -183,14 +183,14 @@
         var tick = sel
           ? '<span class="absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center" style="background:#258046;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff;z-index:2"><i class="fa-solid fa-check text-white text-[9px]"></i></span>'
           : '<span class="absolute top-1 right-1 w-5 h-5 rounded-full" style="background:rgba(255,255,255,0.95);border:1.5px solid #CBD5E1;box-shadow:0 1px 3px rgba(15,23,42,0.18);z-index:2"></span>';
-        return '<button type="button" data-crop-key="' + key + '" class="flex-shrink-0 rounded-xl overflow-hidden transition-all" style="background:' + tileBg + ';border:1.5px solid ' + borderColor + ';box-shadow:' + shadow + ';width:104px;height:100px;display:flex;flex-direction:column">'
+        return '<button type="button" data-crop-key="' + key + '" class="flex-shrink-0 rounded-xl overflow-hidden transition-all" style="background:' + tileBg + ';border:1.5px solid ' + borderColor + ';box-shadow:' + shadow + ';height:100px;display:flex;flex-direction:column">'
           + '<div class="relative w-full" style="height:78px;background:' + m.bg + ';overflow:hidden;flex-shrink:0">'
           + '<img src="' + m.img + '" class="w-full h-full object-cover" style="display:block" onerror="cropFallback(this,\'' + m.emoji + '\',34)"/>'
           + tick + '</div>'
           + '<div class="flex-1 flex items-center justify-center px-1" style="background:' + tileBg + '"><span class="text-[11.5px] font-semibold leading-none whitespace-nowrap" style="color:' + labelColor + '">' + m.label + '</span></div>'
           + '</button>';
       }).join('');
-      var moreChip = '<button type="button" data-crop-more class="flex-shrink-0 rounded-xl overflow-hidden transition-all" style="background:#FFFFFF;border:1.5px solid #E5E7EB;width:104px;height:100px;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(0,0,0,0.05)">'
+      var moreChip = '<button type="button" data-crop-more class="flex-shrink-0 rounded-xl overflow-hidden transition-all" style="background:#FFFFFF;border:1.5px solid #E5E7EB;height:100px;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(0,0,0,0.05)">'
         + '<div class="w-full flex items-center justify-center" style="height:78px;background:#ECFDF5;flex-shrink:0"><div class="rounded-full flex items-center justify-center" style="width:40px;height:40px;background:#258046;box-shadow:0 4px 10px -2px rgba(5,150,105,0.45)"><i class="fa-solid fa-plus text-[16px]" style="color:#FFFFFF"></i></div></div>'
         + '<div class="flex-1 flex items-center justify-center px-1" style="background:#FFFFFF"><span class="text-[11.5px] font-semibold leading-none whitespace-nowrap" style="color:#0F172A">All crops</span></div>'
         + '</button>';

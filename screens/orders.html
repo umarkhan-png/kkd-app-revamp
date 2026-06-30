@@ -572,11 +572,11 @@
     /* Inline "Shop by Crop" tile strip · replaces the old Select-crop button+chips inside every [data-crop-pick] */
     .cp-sbc{background:#ECFDF5;border:1px solid #BBF7D0;border-radius:12px;padding:10px 0;margin-top:6px}
     .cp-sbc-h{font-size:12.5px;font-weight:800;color:#0F172A;padding:0 12px 8px}
-    .cp-sbc-scroll{}
-    .cp-picker{display:flex;gap:8px;padding:2px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-    .cp-picker::-webkit-scrollbar{display:none}
-    /* tile width = ~3.9 visible per viewport so the 4th is ~10% cut at any screen width */
-    .cp-picker > button{flex:0 0 calc((100% - 24px) / 3.9)}
+    .cp-sbc-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .cp-sbc-scroll::-webkit-scrollbar{display:none}
+    .cp-picker{display:flex;gap:8px;padding:2px 12px;min-width:max-content}
+    /* tile width tracks the viewport so ~3.9 show (4th ~10% cut) — stays narrow on phones */
+    .cp-picker > button{flex:0 0 auto;width:calc((100vw - 74px) / 3.9)}
     .cropp-bd{position:fixed;inset:0;background:rgba(15,23,42,.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:150}
     .cropp-bd.open{opacity:1;pointer-events:auto}
     .cropp-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:151;max-height:82vh;display:flex;flex-direction:column}
@@ -665,7 +665,7 @@
       const tick = sel
         ? '<span class="absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center" style="background:#258046;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff;z-index:2"><i class="fa-solid fa-check text-white text-[9px]"></i></span>'
         : '<span class="absolute top-1 right-1 w-5 h-5 rounded-full" style="background:rgba(255,255,255,0.95);border:1.5px solid #CBD5E1;box-shadow:0 1px 3px rgba(15,23,42,0.18);z-index:2"></span>';
-      return '<button type="button" data-crop-key="' + key + '" class="flex-shrink-0 rounded-xl overflow-hidden transition-all" style="background:' + tileBg + ';border:1.5px solid ' + borderColor + ';box-shadow:' + shadow + ';width:104px;height:100px;display:flex;flex-direction:column">'
+      return '<button type="button" data-crop-key="' + key + '" class="flex-shrink-0 rounded-xl overflow-hidden transition-all" style="background:' + tileBg + ';border:1.5px solid ' + borderColor + ';box-shadow:' + shadow + ';height:100px;display:flex;flex-direction:column">'
         + '<div class="relative w-full" style="height:78px;background:' + m.bg + ';overflow:hidden;flex-shrink:0">'
         + '<img src="' + m.img + '" class="w-full h-full object-cover" style="display:block" onerror="cropFallback(this,\'' + m.emoji + '\',34)"/>'
         + tick + '</div>'
@@ -676,7 +676,7 @@
       const sel = selectionOf(pick);
       const allKeys = Object.keys(META).slice().sort(function (a, b) { return (sel.has(b) ? 1 : 0) - (sel.has(a) ? 1 : 0); });
       const chips = allKeys.slice(0, INLINE_COUNT).map(function (k) { return pickTile(k, sel.has(k)); }).join('');
-      const more = '<button type="button" data-crop-more class="flex-shrink-0 rounded-xl overflow-hidden transition-all" style="background:#FFFFFF;border:1.5px solid #E5E7EB;width:104px;height:100px;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(0,0,0,0.05)">'
+      const more = '<button type="button" data-crop-more class="flex-shrink-0 rounded-xl overflow-hidden transition-all" style="background:#FFFFFF;border:1.5px solid #E5E7EB;height:100px;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(0,0,0,0.05)">'
         + '<div class="w-full flex items-center justify-center" style="height:78px;background:#ECFDF5;flex-shrink:0"><div class="rounded-full flex items-center justify-center" style="width:40px;height:40px;background:#258046;box-shadow:0 4px 10px -2px rgba(5,150,105,0.45)"><i class="fa-solid fa-plus text-[16px]" style="color:#FFFFFF"></i></div></div>'
         + '<div class="flex-1 flex items-center justify-center px-1" style="background:#FFFFFF"><span class="text-[11.5px] font-semibold leading-none whitespace-nowrap" style="color:#0F172A">All crops</span></div>'
         + '</button>';

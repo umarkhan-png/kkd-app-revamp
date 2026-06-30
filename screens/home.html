@@ -1745,7 +1745,7 @@
       <div class="mt-3 text-[11px] font-semibold uppercase tracking-wider" style="color:#64748B">Your story</div>
       <textarea id="engTestiText" placeholder="What result did you see? How many days? Any tips for other farmers…" class="w-full mt-1.5 rounded-[10px] text-[12.5px] outline-none" style="border:1px solid #E5E7EB;background:#FAFAFA;padding:10px 12px;min-height:74px;resize:none;font-family:inherit;color:#0F172A"></textarea>
       <div class="mt-3 text-[11px] font-semibold uppercase tracking-wider" style="color:#64748B">Select crop</div>
-      <div class="crop-pick" data-crop-pick style="margin-top:6px"><button type="button" class="crop-pick-btn" data-crop-open><i class="fa-solid fa-seedling"></i> Select crop <i class="fa-solid fa-chevron-down cp-chev"></i></button><div class="crop-pick-chips" data-crop-chips></div></div>
+      <div class="crop-pick" data-crop-pick></div>
       <div class="mt-3"><label class="eng-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input type="file" accept="image/*,video/*" capture="environment" multiple id="engTestiMedia" style="display:none"/></label></div>
       <div class="eng-attach-info" id="engTestiAttachInfo"></div>
       <button id="engTestiSubmit" class="w-full h-[50px] mt-3 rounded-[12px] text-white text-[14.5px] font-semibold" style="background:#258046;border:0;opacity:.55" disabled><i class="fa-solid fa-paper-plane text-[12px]"></i> Submit story &amp; earn +30</button>
@@ -1789,7 +1789,7 @@
         <span class="s" data-v="5"><i class="fa-solid fa-star"></i></span>
       </div>
       <textarea id="engRateText" placeholder="Write a quick review (optional)…" class="w-full rounded-[10px] text-[12.5px] outline-none" style="border:1px solid #E5E7EB;background:#FAFAFA;padding:10px 12px;min-height:60px;resize:none;font-family:inherit;color:#0F172A"></textarea>
-      <div class="crop-pick" data-crop-pick><button type="button" class="crop-pick-btn" data-crop-open><i class="fa-solid fa-seedling"></i> Select crop <i class="fa-solid fa-chevron-down cp-chev"></i></button><div class="crop-pick-chips" data-crop-chips></div></div>
+      <div class="crop-pick" data-crop-pick></div>
       <div class="mt-3"><label class="eng-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input type="file" accept="image/*,video/*" capture="environment" multiple id="engRateMedia" style="display:none"/></label></div>
       <div class="eng-attach-info" id="engRateAttachInfo"></div>
       <button id="engRateSubmit" class="w-full h-[50px] mt-3 rounded-[12px] text-white text-[14.5px] font-semibold" style="background:#258046;border:0;opacity:.55" disabled>Submit &amp; earn +25 coins</button>
@@ -3749,7 +3749,7 @@
         </div>
         <div class="bar-review-h">Write a review <span><i class="fa-solid fa-coins"></i> +10 coins</span></div>
         <textarea id="baRateText" placeholder="Write a quick review — how did it work on your crop?" class="bar-review"></textarea>
-        <div class="crop-pick" data-crop-pick><button type="button" class="crop-pick-btn" data-crop-open><i class="fa-solid fa-seedling"></i> Select crop <i class="fa-solid fa-chevron-down cp-chev"></i></button><div class="crop-pick-chips" data-crop-chips></div></div>
+        <div class="crop-pick" data-crop-pick></div>
         <label class="bar-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input id="baRateMedia" type="file" accept="image/*,video/*" capture="environment" multiple style="display:none"/></label>
         <div id="baRateMediaInfo" class="bar-attach-info"><i class="fa-solid fa-paperclip"></i> <span></span></div>
         <div class="bar-testi">
@@ -3930,6 +3930,12 @@
     .crop-pick-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
     .crop-pick-chips:empty{margin-top:0}
     .cp-chip{display:inline-flex;align-items:center;padding:4px 10px;border-radius:9999px;background:#ECFDF5;border:1px solid #A7F3D0;font-size:11.5px;font-weight:700;color:#0E7A4E}
+    /* Inline "Shop by Crop" tile strip · replaces the old Select-crop button+chips inside every [data-crop-pick] */
+    .cp-sbc{background:#ECFDF5;border:1px solid #BBF7D0;border-radius:12px;padding:10px 0;margin-top:6px}
+    .cp-sbc-h{font-size:12.5px;font-weight:800;color:#0F172A;padding:0 12px 8px}
+    .cp-sbc-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .cp-sbc-scroll::-webkit-scrollbar{display:none}
+    .cp-picker{display:flex;gap:8px;padding:2px 12px;min-width:max-content}
     .cropp-bd{position:fixed;inset:0;background:rgba(15,23,42,.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:160}
     .cropp-bd.open{opacity:1;pointer-events:auto}
     .cropp-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:161;max-height:82vh;display:flex;flex-direction:column}
@@ -4007,17 +4013,44 @@
     }
     function open(pick){ targetPick = pick; temp = new Set(selectionOf(pick)); renderGrid(); bd.classList.add('open'); sheet.classList.add('open'); }
     function close(){ bd.classList.remove('open'); sheet.classList.remove('open'); }
-    function renderChips(pick){
-      const box = pick.querySelector('[data-crop-chips]');
-      const sel = selectionOf(pick);
-      if (box) box.innerHTML = Array.from(sel).map(k => '<span class="cp-chip">' + (META[k] ? META[k].label : k) + '</span>').join('');
-      const btn = pick.querySelector('.crop-pick-btn');
-      if (btn) btn.innerHTML = '<i class="fa-solid fa-seedling"></i> ' + (sel.size ? 'Edit crops' : 'Select crop') + ' <i class="fa-solid fa-chevron-down cp-chev"></i>';
+    // Inline "Shop by Crop" tile strip · copied 1:1 from the home Shop-by-Crop section · 112px tiles so the 4th peeks (clearly scrollable) · "All crops" tile opens the full-catalog sheet
+    const INLINE_COUNT = 8;
+    function pickTile(key, sel){
+      const m = META[key];
+      const borderColor = sel ? '#258046' : '#E5E7EB';
+      const tileBg = sel ? '#258046' : '#FFFFFF';
+      const shadow = sel ? '0 8px 18px -4px rgba(5,150,105,0.4)' : '0 1px 3px rgba(0,0,0,0.05)';
+      const labelColor = sel ? '#FFFFFF' : '#0F172A';
+      const tick = sel
+        ? '<span class="absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center" style="background:#258046;box-shadow:0 2px 6px rgba(5,150,105,0.5);border:1.5px solid #fff;z-index:2"><i class="fa-solid fa-check text-white text-[9px]"></i></span>'
+        : '<span class="absolute top-1 right-1 w-5 h-5 rounded-full" style="background:rgba(255,255,255,0.95);border:1.5px solid #CBD5E1;box-shadow:0 1px 3px rgba(15,23,42,0.18);z-index:2"></span>';
+      return '<button type="button" data-crop-key="' + key + '" class="flex-shrink-0 rounded-xl overflow-hidden transition-all" style="background:' + tileBg + ';border:1.5px solid ' + borderColor + ';box-shadow:' + shadow + ';width:112px;height:100px;display:flex;flex-direction:column">'
+        + '<div class="relative w-full" style="height:78px;background:' + m.bg + ';overflow:hidden;flex-shrink:0">'
+        + '<img src="' + m.img + '" class="w-full h-full object-cover" style="display:block" onerror="cropFallback(this,\'' + m.emoji + '\',34)"/>'
+        + tick + '</div>'
+        + '<div class="flex-1 flex items-center justify-center px-1" style="background:' + tileBg + '"><span class="text-[11.5px] font-semibold leading-none whitespace-nowrap" style="color:' + labelColor + '">' + m.label + '</span></div>'
+        + '</button>';
     }
-    applyBtn.addEventListener('click', () => { if (targetPick){ const s = selectionOf(targetPick); s.clear(); temp.forEach(k => s.add(k)); renderChips(targetPick); } close(); });
+    function renderInlinePick(pick){
+      const sel = selectionOf(pick);
+      const allKeys = Object.keys(META).slice().sort(function (a, b) { return (sel.has(b) ? 1 : 0) - (sel.has(a) ? 1 : 0); });
+      const chips = allKeys.slice(0, INLINE_COUNT).map(function (k) { return pickTile(k, sel.has(k)); }).join('');
+      const more = '<button type="button" data-crop-more class="flex-shrink-0 rounded-xl overflow-hidden transition-all" style="background:#FFFFFF;border:1.5px solid #E5E7EB;width:112px;height:100px;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(0,0,0,0.05)">'
+        + '<div class="w-full flex items-center justify-center" style="height:78px;background:#ECFDF5;flex-shrink:0"><div class="rounded-full flex items-center justify-center" style="width:40px;height:40px;background:#258046;box-shadow:0 4px 10px -2px rgba(5,150,105,0.45)"><i class="fa-solid fa-plus text-[16px]" style="color:#FFFFFF"></i></div></div>'
+        + '<div class="flex-1 flex items-center justify-center px-1" style="background:#FFFFFF"><span class="text-[11.5px] font-semibold leading-none whitespace-nowrap" style="color:#0F172A">All crops</span></div>'
+        + '</button>';
+      pick.innerHTML = '<div class="cp-sbc"><div class="cp-sbc-h">Select crop</div><div class="cp-sbc-scroll"><div class="cp-picker">' + chips + more + '</div></div></div>';
+      pick.querySelectorAll('[data-crop-key]').forEach(function (btn) {
+        btn.addEventListener('click', function () { const k = btn.getAttribute('data-crop-key'); if (sel.has(k)) sel.delete(k); else sel.add(k); renderInlinePick(pick); });
+      });
+      const mb = pick.querySelector('[data-crop-more]'); if (mb) mb.addEventListener('click', function () { open(pick); });
+    }
+    // Expose so dynamically-built rate sheets (e.g. orders.html) can render their picks too
+    window.kkdInitCropPicks = function (root) { (root || document).querySelectorAll('[data-crop-pick]').forEach(renderInlinePick); };
+    applyBtn.addEventListener('click', () => { if (targetPick){ const s = selectionOf(targetPick); s.clear(); temp.forEach(k => s.add(k)); renderInlinePick(targetPick); } close(); });
     document.getElementById('croppClose').addEventListener('click', close);
     bd.addEventListener('click', close);
-    document.addEventListener('click', e => { const btn = e.target.closest && e.target.closest('[data-crop-open]'); if (btn){ const pick = btn.closest('[data-crop-pick]'); if (pick) open(pick); } });
+    window.kkdInitCropPicks();
   })();
   </script>
   <script>

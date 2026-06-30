@@ -92,10 +92,10 @@
   .bill-total .val{font-size:18px;font-weight:800}
   /* Merge sheet · COD chip disabled state when the merged total crosses ₹10,000 · still tappable so we can explain why */
   .om-chip.disabled{opacity:.5;position:relative}
-  /* Tap-feedback nudge · compact square card · message wraps to ~4 lines */
-  .kkd-toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(10px) scale(.96);background:#0F172A;color:#fff;font-size:13px;font-weight:600;width:228px;padding:18px 20px;border-radius:18px;box-shadow:0 16px 36px rgba(0,0,0,0.32);text-align:center;line-height:1.5;opacity:0;pointer-events:none;transition:opacity .22s ease,transform .22s ease;z-index:200;display:flex;flex-direction:column;align-items:center;gap:10px}
+  /* Tap-feedback nudge · compact pill · icon inline with the message */
+  .kkd-toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(10px) scale(.97);background:#0F172A;color:#fff;font-size:12.5px;font-weight:600;max-width:88%;padding:12px 16px;border-radius:13px;box-shadow:0 14px 32px rgba(0,0,0,0.3);text-align:left;line-height:1.45;opacity:0;pointer-events:none;transition:opacity .22s ease,transform .22s ease;z-index:200;display:flex;flex-direction:row;align-items:center;gap:9px}
   .kkd-toast.show{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
-  .kkd-toast i{color:#FCA5A5;font-size:22px}
+  .kkd-toast i{color:#FCA5A5;font-size:15px;flex-shrink:0}
   .om-chip.full{grid-column:1 / -1}
   .om-adv-note{display:none;gap:8px;align-items:flex-start;margin-top:10px;padding:10px 12px;border-radius:10px;background:#FFF7ED;border:1px solid #FED7AA;font-size:11.5px;font-weight:600;line-height:1.5;color:#9A3412}
   .om-adv-note i{color:#EA580C;font-size:11px;margin-top:2px;flex-shrink:0}
@@ -402,41 +402,54 @@
       return Math.max(0, dueNow - (m.advanceRegime ? 0 : m.onlineDiscount));
     }
     var _billHost = null;   // cached once · first render replaces the card inner (and removes #billTotal), so we can't re-find it later
-    // Full merge bill breakdown · same line items as the normal checkout bill (discount, Krishi Coins, Wallet, Delivery)
-    // applied to the amount collected NOW, on top of the merge math (total / already-paid / balance-on-delivery).
+    // Full merge bill · SAME line items as the normal checkout bill (Items, Discount, Coupon, Prepaid extra off,
+    // Krishi Coins, Wallet, Delivery, Total to pay) — the 4 merge cases are handled WITHIN this format by adding
+    // "Already paid earlier" (advance) and a "Cash on delivery" line (partial / COD) below the total.
     function mBillDetail(method, pct){
       var m = MERGE;
-      var dueNow = m.advanceRegime ? Math.max(0, m.mergedOrderValue - m.alreadyPaid) : m.extra;
-      var base, disc = 0, bal = 0;
-      if (method === 'partial'){ base = mPayNow('partial', pct); bal = Math.max(0, dueNow - base); }
-      else if (method === 'cod'){ base = 0; bal = dueNow; }                                  // COD · nothing online now, full amount on delivery
-      else { base = m.advanceRegime ? m.fullPrepaidNow : m.extra; disc = m.advanceRegime ? 0 : m.onlineDiscount; }
-      var afterDisc = Math.max(0, base - disc);
-      var coins = Math.min(COIN_REDEEM, afterDisc);
-      var wallet = Math.min(WALLET_BALANCE, afterDisc - coins);
-      var youPay = Math.max(0, afterDisc - coins - wallet);
-      return { dueNow: dueNow, base: base, disc: disc, coins: coins, wallet: wallet, youPay: youPay, bal: bal };
+      var ordVal = m.advanceRegime ? m.mergedOrderValue : m.extra;   // order value this payment covers
+      var itemsGross = Math.round(ordVal / 0.8);                     // MRP (≈20% product discount)
+      var discount = itemsGross - ordVal;
+      var coupon = Math.min(100, ordVal);                            // WELCOME100
+      var net = ordVal - coupon;
+      var alreadyPaid = (m.advanceRegime && m.alreadyPaid > 0) ? m.alreadyPaid : 0;
+      var payNowBase, codCash = 0;                                   // payNowBase = settled online now (before prepaid/coins/wallet)
+      if (method === 'partial'){
+        payNowBase = m.advanceRegime ? Math.max(0, Math.round(m.mergedOrderValue * pct / 100) - alreadyPaid) : Math.round(net * pct / 100);
+        codCash = Math.max(0, (net - alreadyPaid) - payNowBase);
+      } else if (method === 'cod'){
+        payNowBase = 0;
+        codCash = Math.max(0, net - alreadyPaid);
+      } else {
+        payNowBase = Math.max(0, net - alreadyPaid);
+      }
+      var prepaidOff = (method === 'paynow') ? Math.round(payNowBase * 0.05) : 0;
+      var afterPre = Math.max(0, payNowBase - prepaidOff);
+      var coins = Math.min(COIN_REDEEM, afterPre);
+      var wallet = Math.min(WALLET_BALANCE, afterPre - coins);
+      var total = Math.max(0, afterPre - coins - wallet);
+      return { itemsGross: itemsGross, discount: discount, coupon: coupon, prepaidOff: prepaidOff,
+               alreadyPaid: alreadyPaid, coins: coins, wallet: wallet, total: total, codCash: codCash };
     }
-    function mYouPayNow(method, pct){ return mBillDetail(method, pct).youPay; }
+    function mYouPayNow(method, pct){ return mBillDetail(method, pct).total; }
     function renderMergeBill(method, pct){
       var m = MERGE, R = window.kkdMerge.rupee, d = mBillDetail(method, pct);
       var row = function(l, v, g){ return '<div class="bill-row"><span class="lbl">' + l + '</span><span class="val' + (g ? ' green' : '') + ' tnum">' + v + '</span></div>'; };
       var html = '';
-      if (m.advanceRegime){
-        html += row('Total order value', R(m.mergedOrderValue));
-        if (m.alreadyPaid > 0) html += row('Already paid earlier', '− ' + R(m.alreadyPaid), true);
-      } else {
-        html += row('New items added', R(m.extra));
-      }
-      if (d.disc > 0)   html += row('Online payment discount (5%)', '− ' + R(d.disc), true);
+      html += row('Items (' + m.mergedCount + ')', R(d.itemsGross));
+      if (d.discount > 0) html += row('Discount', '− ' + R(d.discount), true);
+      if (d.coupon > 0)   html += row('Coupon (WELCOME100)', '− ' + R(d.coupon), true);
+      if (d.prepaidOff > 0) html += '<div class="bill-row"><span class="lbl" style="color:#258046;font-weight:700">Prepaid extra off</span><span class="val green tnum">− ' + R(d.prepaidOff) + '</span></div>';
+      if (d.alreadyPaid > 0) html += row('Already paid earlier', '− ' + R(d.alreadyPaid), true);
       if (d.coins > 0)  html += row('<i class="fa-solid fa-coins text-[11px]" style="color:#94A3B8"></i> Krishi Coins', '− ' + R(d.coins));
       if (d.wallet > 0) html += row('<i class="fa-solid fa-wallet text-[10px]" style="color:#94A3B8"></i> Wallet', '− ' + R(d.wallet));
       html += row('Delivery', 'FREE', true);
-      html += '<div class="bill-total"><span class="lbl">You pay now</span><span class="val tnum">' + R(d.youPay) + '</span></div>';
-      if (d.bal > 0) html += '<div class="bill-row" style="margin-top:7px"><span class="lbl">Balance on delivery (cash)</span><span class="val tnum">' + R(d.bal) + '</span></div>';
+      html += '<div class="bill-total"><span class="lbl">Total to pay</span><span class="val tnum">' + R(d.total) + '</span></div>';
+      // Cash-on-delivery line · always shown under the total for Partial + COD
+      if (method === 'partial' || method === 'cod') html += '<div class="bill-row" style="margin-top:7px"><span class="lbl">Cash on delivery</span><span class="val tnum">' + R(d.codCash) + '</span></div>';
       if (!_billHost){ var bt = document.getElementById('billTotal'); _billHost = bt ? bt.closest('.card').firstElementChild : null; }
       if (_billHost) _billHost.innerHTML = html;
-      var ca = document.getElementById('ctaAmt'); if (ca) ca.textContent = R(d.youPay);
+      var ca = document.getElementById('ctaAmt'); if (ca) ca.textContent = R(d.total);
     }
     function renderMergePartial(pct){
       var m = MERGE, R = window.kkdMerge.rupee;
@@ -455,11 +468,12 @@
     function initMergeCheckout(){
       var m = MERGE, R = window.kkdMerge.rupee;
       var dueNow = m.advanceRegime ? Math.max(0, m.mergedOrderValue - m.alreadyPaid) : m.extra;
-      var pna = document.getElementById('payNowAmt'); if (pna) pna.textContent = R(m.advanceRegime ? m.fullPrepaidNow : m.onlineTotal);
+      var pna = document.getElementById('payNowAmt'); if (pna) pna.textContent = R(mYouPayNow('paynow', currentPct));
       var savePill = document.getElementById('pnSavePill');
       if (savePill){
-        if (m.advanceRegime) savePill.style.display = 'none';   // full prepaid · no 5% discount on advance orders
-        else savePill.innerHTML = '<i class="fa-solid fa-tag text-[9px]"></i> 5% instant off · save ' + R(m.onlineDiscount);
+        var save = mBillDetail('paynow', currentPct).prepaidOff;   // 5% prepaid off applies in both regimes now
+        savePill.innerHTML = '<i class="fa-solid fa-tag text-[9px]"></i> 5% instant off · save ' + R(save);
+        savePill.style.display = save > 0 ? '' : 'none';
       }
       var cod = document.querySelector('.pay[data-pay="cod"]'), codAmtEl = document.getElementById('codAmt');
       if (m.advanceRegime){
@@ -473,7 +487,7 @@
           cod.addEventListener('click', function(e){ e.preventDefault(); e.stopImmediatePropagation(); if (window.kkdToast) window.kkdToast('COD is available only up to ₹10,000 order.'); }, true);
           if (currentMethod === 'cod'){ var p = document.querySelector('.pay[data-pay="paynow"]'); if (p) p.click(); }
         }
-      } else if (codAmtEl){ codAmtEl.textContent = R(dueNow); }
+      } else if (codAmtEl){ codAmtEl.textContent = R(mBillDetail('cod', currentPct).codCash); }
       var ttl = document.querySelector('.sticky-sum .ttl'); if (ttl) ttl.textContent = m.mergedCount + ' item' + (m.mergedCount > 1 ? 's' : '');
       renderMergePartial(currentPct);
       renderMergeBill(currentMethod, currentPct);

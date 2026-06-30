@@ -1564,10 +1564,17 @@
         /* Image quiz widget · one photo, single-answer crop choices (sits below the crop widget) */
         .quiz-img{width:100%;height:150px;object-fit:cover;border-radius:12px;margin:4px 0 10px;background:#F1F5F9;display:block}
         /* Quiz → recommendation result line (shown after answering, above the recommended products) */
-        .qz-res{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;padding:10px 12px;border-radius:10px;margin-bottom:11px;line-height:1.4}
+        .qz-res{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;padding:10px 12px;border-radius:10px;line-height:1.4}
         .qz-res.ok{background:#ECFDF5;border:1px solid #A7F3D0;color:#0E7A4E}
         .qz-res.no{background:#FFF7ED;border:1px solid #FED7AA;color:#9A3412}
         .qz-res b{font-weight:900}
+        /* Story bridge · ties the answer (above) to the crop-guide stage section (below) into one narrative */
+        .qz-thread{display:flex;flex-direction:column;align-items:center;text-align:center}
+        .qz-thread .ln{width:2px;height:16px;background:linear-gradient(#A7F3D0,#258046);border-radius:2px}
+        .qz-thread .msg{font-size:12px;line-height:1.55;color:#475569;background:#F8FAFC;border:1px dashed #BBF7D0;border-radius:11px;padding:9px 12px}
+        .qz-thread .msg b{color:#0E7A4E;font-weight:800}
+        .qz-thread .ln.lo{height:14px}
+        .qz-thread .dn{font-size:10px;color:#258046;margin-top:1px}
         /* Answered quiz chip states · tapped-correct uses the existing .sel (green ✓); wrong-tapped = red ✗; the rest dim+disabled */
         .eng-chip.eq-wrong{background:#FEF2F2;border-color:#FCA5A5;color:#DC2626;font-weight:800;pointer-events:none}
         .eng-chip.eq-wrong::before{content:"\f00d";font-family:"Font Awesome 6 Free";font-weight:900;margin-right:6px;font-size:10px}
@@ -4036,6 +4043,12 @@
         var html =
           '<div class="qz-res ' + (correct ? 'ok' : 'no') + '"><i class="fa-solid ' + (correct ? 'fa-circle-check' : 'fa-circle-info') + '"></i> '
             + (correct ? 'Correct answer! It\'s <b>Tomato Early Blight</b>.' : 'Not quite — the answer is <b>Tomato</b> (Early Blight).') + '</div>'
+          + '<div class="qz-thread">'
+          +   '<span class="ln"></span>'
+          +   '<div class="msg">Your <b>Tomato</b> is in its <b>Vegetative</b> stage right now — the exact window when Early Blight strikes.</div>'
+          +   '<span class="ln lo"></span>'
+          +   '<div class="dn"><i class="fa-solid fa-chevron-down"></i></div>'
+          + '</div>'
           + '<div class="vstg open">'
           +   '<button type="button" class="vstg-head"><span class="vstg-dot">3</span>'
           +     '<div class="vstg-info"><div class="nm">Vegetative</div><div class="meta">Day 25–45 · 20 days · 30% of lifecycle</div></div>'

@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="../assets/appstate.js"></script>
+<script src="../assets/merge-core.js"></script>
 <style>
   *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   html,body{margin:0;padding:0;font-family:'Poppins',system-ui,sans-serif}
@@ -53,6 +54,9 @@
   .pp-split .row .lbl{color:#64748B}
   .pp-split .row .val{font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
   .pp-split .row .val.green{color:#258046}
+  .pp-split .row.hi{border-top:1px dashed #BBF7D0;margin-top:4px;padding-top:7px}
+  .pp-split .row.hi .lbl{color:#0F172A;font-weight:800}
+  .pp-split .row.hi .val{color:#258046;font-weight:600;font-size:14px}
 
   /* Bill · same pattern as cart */
   .bill-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:3px 0}
@@ -291,7 +295,7 @@
           </span>
           <div class="pay-sub">UPI &middot; Cards &middot; Net banking &middot; Wallets</div>
           <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:5px">
-            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#258046;background:#ECFDF5;border:1px solid #BBF7D0;padding:3px 9px;border-radius:9999px"><i class="fa-solid fa-tag text-[9px]"></i> 5% instant off · save ₹95</span>
+            <span id="pnSavePill" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#258046;background:#ECFDF5;border:1px solid #BBF7D0;padding:3px 9px;border-radius:9999px"><i class="fa-solid fa-tag text-[9px]"></i> 5% instant off · save ₹95</span>
             <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#258046;background:#ECFDF5;border:1px solid #BBF7D0;padding:3px 9px;border-radius:9999px"><i class="fa-solid fa-bolt text-[9px]"></i> Faster order processing</span>
           </div>
         </span>
@@ -386,6 +390,79 @@
     const BIG_CASE = new URLSearchParams(location.search).get('big');   // '1' = 8k(COD)+3k merge · '2' = 1k(prepaid)+20k merge
     const IS_BIG = BIG_CASE === '1' || BIG_CASE === '2';
 
+    // ===== Merge mode · checkout IS the payment page for the buy-again merge flow (cart → merge-review → checkout?merge=1) =====
+    // When active, the bill summary + payment amounts are driven by the merge model (handles all 4 cases) and Place order
+    // goes straight to the merged success (the old bottom-sheet is bypassed). Normal checkout is untouched when MERGE is null.
+    var MERGE = null;
+    (function(){ if (new URLSearchParams(location.search).get('merge') === '1' && window.kkdMerge) MERGE = window.kkdMerge.compute(); })();
+    function mPayNow(method, pct){
+      var m = MERGE, dueNow = m.advanceRegime ? Math.max(0, m.mergedOrderValue - m.alreadyPaid) : m.extra;
+      if (method === 'partial') return m.advanceRegime ? Math.max(0, Math.round(m.mergedOrderValue * pct / 100) - m.alreadyPaid) : Math.round(dueNow * pct / 100);
+      if (method === 'cod') return dueNow;
+      return Math.max(0, dueNow - (m.advanceRegime ? 0 : m.onlineDiscount));
+    }
+    var _billHost = null;   // cached once · first render replaces the card inner (and removes #billTotal), so we can't re-find it later
+    function renderMergeBill(method, pct){
+      var m = MERGE, R = window.kkdMerge.rupee;
+      var dueNow = m.advanceRegime ? Math.max(0, m.mergedOrderValue - m.alreadyPaid) : m.extra;
+      var pn = mPayNow(method, pct);
+      var bal = (method === 'partial') ? Math.max(0, dueNow - pn) : 0;
+      var row = function(l, v, g){ return '<div class="bill-row"><span class="lbl">' + l + '</span><span class="val' + (g ? ' green' : '') + ' tnum">' + v + '</span></div>'; };
+      var html = '';
+      if (m.advanceRegime){
+        html += row('Total order value', R(m.mergedOrderValue));
+        if (m.alreadyPaid > 0) html += row('Already paid earlier', '− ' + R(m.alreadyPaid), true);
+      } else {
+        html += row('New items added', R(m.extra));
+        if (method === 'paynow' && m.onlineDiscount > 0) html += row('Online payment discount (5%)', '− ' + R(m.onlineDiscount), true);
+      }
+      html += '<div class="bill-total"><span class="lbl">You pay now</span><span class="val tnum">' + R(pn) + '</span></div>';
+      if (bal > 0) html += '<div class="bill-row" style="margin-top:7px"><span class="lbl">Balance on delivery (cash)</span><span class="val tnum">' + R(bal) + '</span></div>';
+      if (!_billHost){ var bt = document.getElementById('billTotal'); _billHost = bt ? bt.closest('.card').firstElementChild : null; }
+      if (_billHost) _billHost.innerHTML = html;
+      var ca = document.getElementById('ctaAmt'); if (ca) ca.textContent = R(pn);
+    }
+    function renderMergePartial(pct){
+      var m = MERGE, R = window.kkdMerge.rupee;
+      var pn = mPayNow('partial', pct);
+      var html = '';
+      if (m.advanceRegime){
+        html += '<div class="row"><span class="lbl">' + pct + '% of ' + R(m.mergedOrderValue) + '</span><span class="val tnum">' + R(Math.round(m.mergedOrderValue * pct / 100)) + '</span></div>';
+        if (m.alreadyPaid > 0) html += '<div class="row"><span class="lbl">Already paid</span><span class="val green tnum">− ' + R(m.alreadyPaid) + '</span></div>';
+        html += '<div class="row hi"><span class="lbl">Pay now</span><span class="val tnum">' + R(pn) + '</span></div>';
+      } else {
+        html += '<div class="row hi"><span class="lbl">Pay now (' + pct + '%)</span><span class="val tnum">' + R(pn) + '</span></div>';
+      }
+      html += '<div class="row"><span class="lbl">Coins earned</span><span class="val green tnum">+' + Math.round(pn * 0.02) + ' coins</span></div>';
+      var split = document.querySelector('.pp-split'); if (split) split.innerHTML = html;
+    }
+    function initMergeCheckout(){
+      var m = MERGE, R = window.kkdMerge.rupee;
+      var dueNow = m.advanceRegime ? Math.max(0, m.mergedOrderValue - m.alreadyPaid) : m.extra;
+      var pna = document.getElementById('payNowAmt'); if (pna) pna.textContent = R(m.advanceRegime ? m.fullPrepaidNow : m.onlineTotal);
+      var savePill = document.getElementById('pnSavePill');
+      if (savePill){
+        if (m.advanceRegime) savePill.style.display = 'none';   // full prepaid · no 5% discount on advance orders
+        else savePill.innerHTML = '<i class="fa-solid fa-tag text-[9px]"></i> 5% instant off · save ' + R(m.onlineDiscount);
+      }
+      var cod = document.querySelector('.pay[data-pay="cod"]'), codAmtEl = document.getElementById('codAmt');
+      if (m.advanceRegime){
+        if (codAmtEl) codAmtEl.textContent = '';   // COD disabled above ₹10,000 · clear the leftover amount
+        if (cod){
+          var top = cod.querySelector('.pay-toprow'); if (top) top.style.opacity = '.5';
+          cod.querySelectorAll('.pay-sub').forEach(function(s, i){ if (i > 0) s.style.display = 'none'; });
+          var sub = cod.querySelector('.pay-sub'); if (sub){ sub.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:#DC2626"></i> Not available above ₹10,000'; sub.style.color = '#DC2626'; sub.style.fontWeight = '700'; sub.style.marginTop = '6px'; }
+          var ce = document.getElementById('codExtra'); if (ce) ce.style.display = 'none';
+          cod.dataset.codDisabled = '1';
+          cod.addEventListener('click', function(e){ e.preventDefault(); e.stopImmediatePropagation(); if (window.kkdToast) window.kkdToast('COD is available only up to ₹10,000 order.'); }, true);
+          if (currentMethod === 'cod'){ var p = document.querySelector('.pay[data-pay="paynow"]'); if (p) p.click(); }
+        }
+      } else if (codAmtEl){ codAmtEl.textContent = R(dueNow); }
+      var ttl = document.querySelector('.sticky-sum .ttl'); if (ttl) ttl.textContent = m.mergedCount + ' item' + (m.mergedCount > 1 ? 's' : '');
+      renderMergePartial(currentPct);
+      renderMergeBill(currentMethod, currentPct);
+    }
+
     // Demo · the cart value of THIS (new) order drives the on-screen COD rule;
     //   case 1 → ₹3,000 (COD allowed here, blocked only after the 8k merge crosses ₹10k)
     //   case 2 → ₹20,000 (already above ₹10k, so COD is blocked on this screen too)
@@ -421,6 +498,7 @@
     let walletApplied = 0;
 
     function updateBill(method, pct){
+      if (MERGE) { renderMergeBill(method, pct); return; }
       const billRow = document.getElementById('prepaidBillRow');
       const billAmt = document.getElementById('prepaidBillAmt');
       const billTotal = document.getElementById('billTotal');
@@ -459,6 +537,7 @@
     })();
 
     function updatePartialSplit(pct){
+      if (MERGE) { renderMergePartial(pct); return; }
       const prepaid = Math.round(SUBTOTAL * pct / 100);
       const rest = SUBTOTAL - prepaid;
       const coins = Math.round(prepaid * 0.02);
@@ -500,6 +579,7 @@
     // Advance-payment rule · when the cart value exceeds ₹10,000, disable Cash on Delivery, explain the condition on the
     // row, and bounce off COD to Pay Now. The 10% advance floor is enforced by the Partial tray's lowest pill (10%).
     function applyAdvanceRule(){
+      if (MERGE) return;   // merge mode handles COD/advance itself (initMergeCheckout)
       const need = SUBTOTAL > ADVANCE_THRESHOLD;
       const cod = document.querySelector('.pay[data-pay="cod"]');
       if (!cod) return;
@@ -526,6 +606,7 @@
     updatePartialSplit(currentPct);
     updateBill(currentMethod, currentPct);
     applyAdvanceRule();
+    if (MERGE) initMergeCheckout();
 
     // Place order · carries the chosen payment method to the success screen so the COD-pay option shows for COD/Partial
     // · if a recent order (kkd.lastOrder · placed within the last 60 minutes) exists, intercept the tap and show the merge sheet
@@ -827,6 +908,22 @@
 
       btn.addEventListener('click', (e) => {
         if (btn.disabled) return;
+        // Merge mode · review already happened on merge-review · skip the bottom sheet, place the merged order directly
+        if (MERGE) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          var pn = mPayNow(currentMethod, currentPct);
+          try {
+            localStorage.setItem('kkd.mergeInfo', JSON.stringify({
+              ts: Date.now(), orderId: MERGE.oid,
+              updated: MERGE.updatedIds.slice(), added: MERGE.newIds.slice(), unchanged: MERGE.unchangedIds.slice(),
+              prevQtys: MERGE.prevQtys, method: currentMethod, amountPaid: pn
+            }));
+          } catch(err){}
+          window.kkdMerge.clearMergeCart();
+          location.href = 'order-success.html?merged=1&mode=' + currentMethod;
+          return;
+        }
         const recent = getRecentOrder();
         if (recent) {
           e.preventDefault();

@@ -1563,14 +1563,17 @@
         .cp-rec-all i{font-size:10px}
         /* Image quiz widget · one photo, single-answer crop choices (sits below the crop widget) */
         .quiz-img{width:100%;height:150px;object-fit:cover;border-radius:12px;margin:4px 0 10px;background:#F1F5F9;display:block}
-        /* Quiz → recommendation result line (shown after answering, above the recommended products) */
-        .qz-res{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;padding:10px 12px;border-radius:10px;line-height:1.4;margin-top:12px}
-        .qz-res.ok{background:#ECFDF5;border:1px solid #A7F3D0;color:#0E7A4E}
-        .qz-res.no{background:#FFF7ED;border:1px solid #FED7AA;color:#9A3412}
-        .qz-res b{font-weight:900}
-        /* Simple line + lead tying the answer to the related crop details below */
+        /* Simple line + generic lead introducing the growth-stage details below (after answering) */
         .qz-lead{font-size:12px;line-height:1.55;color:#475569;margin:13px 0 12px;padding-top:13px;border-top:1px solid #F1F5F9}
         .qz-lead b{color:#0E7A4E;font-weight:800}
+        /* Wrong-answer feedback · gentle dim-blur backdrop + scale-in card (mirrors the correct-answer celebration) */
+        .qz-wrong-ov{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,0.42);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);opacity:0;transition:opacity .25s ease}
+        .qz-wrong-ov.show{opacity:1}
+        .qz-wrong-card{background:#FFFFFF;border-radius:18px;padding:22px 28px;display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;box-shadow:0 20px 50px -12px rgba(0,0,0,0.35);transform:scale(.86);transition:transform .3s cubic-bezier(.2,.85,.3,1)}
+        .qz-wrong-ov.show .qz-wrong-card{transform:scale(1)}
+        .qz-wrong-ic{width:60px;height:60px;border-radius:50%;background:#FEF2F2;color:#DC2626;display:flex;align-items:center;justify-content:center;font-size:27px}
+        .qz-wrong-t{font-size:19px;font-weight:900;color:#DC2626;margin-top:3px}
+        .qz-wrong-s{font-size:12px;color:#64748B;line-height:1.4}
         /* Answered quiz chip states · tapped-correct uses the existing .sel (green ✓); wrong-tapped = red ✗; the rest dim+disabled */
         .eng-chip.eq-wrong{background:#FEF2F2;border-color:#FCA5A5;color:#DC2626;font-weight:800;pointer-events:none}
         .eng-chip.eq-wrong::before{content:"\f00d";font-family:"Font Awesome 6 Free";font-weight:900;margin-right:6px;font-size:10px}
@@ -4037,9 +4040,7 @@
         var rows = ['metamanco','coc','zyme'].map(prodRow).join('');
         // append BELOW the (still-visible) question + options · do not replace the card
         var html =
-          '<div class="qz-res ' + (correct ? 'ok' : 'no') + '"><i class="fa-solid ' + (correct ? 'fa-circle-check' : 'fa-circle-info') + '"></i> '
-            + (correct ? 'Correct answer! It\'s <b>Tomato Early Blight</b>.' : 'Not quite — the answer is <b>Tomato</b> (Early Blight).') + '</div>'
-          + '<div class="qz-lead">Your <b>Tomato</b> is in its <b>Vegetative</b> stage now — the exact window when Early Blight strikes. Here\'s the threat and what to use.</div>'
+          '<div class="qz-lead">Did you know when and how it happens? Here\'s a closer look 👇</div>'
           + '<div class="vstg open">'
           +   '<button type="button" class="vstg-head"><span class="vstg-dot">3</span>'
           +     '<div class="vstg-info"><div class="nm">Vegetative</div><div class="meta">Day 25–45 · 20 days · 30% of lifecycle</div></div>'
@@ -4062,6 +4063,14 @@
           b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if (typeof bumpCart === 'function') bumpCart(); b.textContent = 'Added ✓'; setTimeout(function(){ b.textContent = 'Add'; }, 900); });
         });
       }
+      function showWrongFeedback(){
+        var ov = document.createElement('div'); ov.className = 'qz-wrong-ov';
+        ov.innerHTML = '<div class="qz-wrong-card"><div class="qz-wrong-ic"><i class="fa-solid fa-xmark"></i></div>'
+          + '<div class="qz-wrong-t">Wrong Answer</div><div class="qz-wrong-s">The correct answer is highlighted</div></div>';
+        document.body.appendChild(ov);
+        requestAnimationFrame(function(){ ov.classList.add('show'); });
+        setTimeout(function(){ ov.classList.remove('show'); setTimeout(function(){ ov.remove(); }, 260); }, 1150);
+      }
       var chips = card.querySelectorAll('.eng-opts [data-quiz]');
       var answerChip = card.querySelector('.eng-opts [data-quiz][data-correct]');
       chips.forEach(function(opt){
@@ -4075,8 +4084,9 @@
             else if (c === opt) c.classList.add('eq-wrong');        // user's wrong pick → red ✗
             else c.classList.add('eq-dis');                         // others dimmed/disabled
           });
-          if (correct && window.kkdCelebrate) window.kkdCelebrate(15, { title: 'Correct! 🎉' });
-          setTimeout(function(){ showRecommendation(correct); }, correct ? 1100 : 320);
+          if (correct){ if (window.kkdCelebrate) window.kkdCelebrate(15, { title: 'Correct! 🎉' }); }
+          else { showWrongFeedback(); }
+          setTimeout(function(){ showRecommendation(correct); }, correct ? 1100 : 1450);
         });
       });
     })();

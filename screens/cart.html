@@ -854,6 +854,8 @@
       document.querySelectorAll('.trash-btn').forEach(function(b){ b.addEventListener('click', function(){ setTimeout(persist, 360); }); });
 
       var st = (window.kkdAppStates && window.kkdAppStates()) || {};
+      // Buy-again merge flow (?merge=1) is curated · don't surface the demo banned/non-serviceable states here
+      if (new URLSearchParams(location.search).get('merge') === '1') st = {};
       // Non-serviceable pincode → delivery card date turns red "Not serviceable"
       if (st.nonservice) { var dd = document.getElementById('cartDelivDate'); if (dd) { dd.textContent = 'Not serviceable'; dd.style.color = '#DC2626'; } var df = document.getElementById('cartDelivFree'); if (df) df.style.display = 'none'; var ds2 = document.getElementById('cartDelivSub'); if (ds2) ds2.style.display = 'none'; }
       // Banned product (Chakrawarti ZC) · keep its trash usable so it can be deleted; block checkout until removed

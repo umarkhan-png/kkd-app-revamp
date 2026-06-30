@@ -1308,11 +1308,11 @@
           <div class="ba-card">
             <div class="ba-datestrip">Ordered on 28 Apr</div>
             <div class="ba-row">
-              <a href="pdp.html" class="ba-imgwrap"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend"/></a>
+              <a href="pdp.html" class="ba-imgwrap"><img src="https://katyayanikrishidirect.com/cdn/shop/files/ChakraveerNewMockup.webp" class="img-blend"/></a>
               <div class="ba-body">
-                <a href="pdp.html" class="ba-name">Chakrawarti ZC</a>
-                <div class="ba-tech">Thiamethoxam + Lambda</div>
-                <div class="ba-pricerow"><span class="ba-size">100 ml</span><span class="ba-price tnum">&#8377;358</span><span class="ba-mrp tnum">&#8377;495</span></div>
+                <a href="pdp.html" class="ba-name">Chakraveer</a>
+                <div class="ba-tech">Bio insecticide · 1 L</div>
+                <div class="ba-pricerow"><span class="ba-size">1 L</span><span class="ba-price tnum">&#8377;640</span><span class="ba-mrp tnum">&#8377;850</span></div>
                 <a href="cart.html?merge=1" data-demo-case="2" class="ba-reorder"><i class="fa-solid fa-repeat"></i> Buy again</a>
               </div>
             </div>
@@ -3819,8 +3819,8 @@
       var SEED = {
         // Case 1 · below ₹10k · same item · prev ₹2,000 + one more Humic ₹752 → merged ₹2,752 (normal regime)
         '1': { recent: ['humic'], qtys: { humic:1 }, cart: ['humic'], demoPrev: 2000, demoAdd: 752, mode: 'paynow' },
-        // Case 2 · below ₹10k · new item · prev ₹3,000 (NPK) + new Chakrawarti ₹700 → merged ₹3,700 (normal regime)
-        '2': { recent: ['npk'], qtys: { npk:1 }, cart: ['chakrawarti'], demoPrev: 3000, demoAdd: 700, mode: 'paynow' },
+        // Case 2 · below ₹10k · new item · prev ₹3,000 (NPK) + new Chakraveer ₹700 → merged ₹3,700 (normal regime · non-banned product)
+        '2': { recent: ['npk'], qtys: { npk:1 }, cart: ['chakraveer'], demoPrev: 3000, demoAdd: 700, mode: 'paynow' },
         // Case 3 · above ₹10k · previous order on COD · prev ₹8,000 (COD) + new ₹3,000 (NPK) → merged ₹11,000
         //   → COD disabled · pay full ₹11,000 OR 10% partial = ₹1,100 (nothing already paid)
         '3': { recent: ['humic','chakraveer'], qtys: { humic:1, chakraveer:1 }, cart: ['npk'], demoPrev: 8000, demoAdd: 3000, mode: 'cod' },

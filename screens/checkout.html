@@ -967,6 +967,7 @@
 
     // ===== App-states (data-driven via appstate.js) · nonservice (pincode 123456) / bannedproduct (Chakrawarti in cart) / codoff (mobile 12345) =====
     (function(){
+      if (MERGE) return;   // buy-again merge is a curated flow · don't surface the demo app-state banners (banned product, etc.) here
       const st = (window.kkdAppStates && window.kkdAppStates()) || {};
       const banner = document.getElementById('stateBanner');
       function show(bg, bd, col, ic, icbg, iccol, title, sub, action, href){

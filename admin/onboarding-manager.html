@@ -180,7 +180,7 @@ function tField(path,label,opts){
   const cur = getPath(path+'.'+activeLang) || '';
   const en  = getPath(path+'.en') || '';
   const ph  = (activeLang!=='en' && en) ? en : (opts.ph||'Enter text');
-  const badge = activeLang!=='en' ? `<span class="lang-pill">${activeLang.toUpperCase()}</span>` : '';
+  const badge = '';   // language tabs removed from screen editors — the per-language tag is meaningless here (copy lives in Translations)
   const ctrl = opts.area
     ? `<textarea oninput="setPath('${path}.${activeLang}',this.value)" onchange="commit()" placeholder="${esc(ph)}">${esc(cur)}</textarea>`
     : `<input type="text" value="${esc(cur)}" oninput="setPath('${path}.${activeLang}',this.value)" onchange="commit()" placeholder="${esc(ph)}"/>`;

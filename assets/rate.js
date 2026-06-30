@@ -42,9 +42,11 @@
     /* Home "Shop by Crop" inline tile picker (replaces the old select-crop trigger) */
     '.kr-sbc{margin-top:14px;background:#ECFDF5;border:1px solid #BBF7D0;border-radius:14px;padding:12px 0}' +
     '.kr-sbc-h{font-size:13.5px;font-weight:800;color:#0F172A;padding:0 14px 9px}' +
-    '.kr-sbc-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}' +
-    '.kr-sbc-scroll::-webkit-scrollbar{display:none}' +
-    '.kr-crop-picker{display:flex;gap:8px;padding:2px 14px;min-width:max-content}';
+    '.kr-sbc-scroll{}' +
+    '.kr-crop-picker{display:flex;gap:8px;padding:2px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch}' +
+    '.kr-crop-picker::-webkit-scrollbar{display:none}' +
+    /* tile width = ~3.9 visible per viewport so the 4th is ~10% cut at ANY screen width (stays narrow on phones) */
+    '.kr-crop-picker > button{flex:0 0 calc((100% - 24px) / 3.9)}';
 
   var MARKUP = '' +
     '<div class="kr-backdrop" style="position:absolute;inset:0;background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>' +

@@ -1568,6 +1568,46 @@
         .qz-res.ok{background:#ECFDF5;border:1px solid #A7F3D0;color:#0E7A4E}
         .qz-res.no{background:#FFF7ED;border:1px solid #FED7AA;color:#9A3412}
         .qz-res b{font-weight:900}
+        /* Crop-guide growth-stage section · copied 1:1 from crop-detail.html (the actual 3rd-stage accordion) */
+        .vstg{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+        .vstg-head{display:flex;align-items:center;gap:12px;width:100%;padding:15px 15px;background:transparent;border:0;cursor:pointer;text-align:left}
+        .vstg-dot{width:30px;height:30px;border-radius:50%;background:#F1F5F9;border:2px solid #E5E7EB;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#64748B;flex-shrink:0;transition:all .15s ease}
+        .vstg.open .vstg-dot{background:#258046;border-color:#258046;color:#fff;box-shadow:0 4px 10px -3px rgba(5,150,105,0.5)}
+        .vstg-info{flex:1;min-width:0;line-height:1.25}
+        .vstg-info .nm{font-size:15.5px;font-weight:800;color:#0F172A}
+        .vstg-info .meta{font-size:12px;color:#94A3B8;margin-top:2px}
+        .vstg-iss{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:800;color:#B45309;background:#FEF3C7;border:1px solid #FCD34D;padding:4px 9px;border-radius:9999px}
+        .vstg-chev{font-size:12px;color:#94A3B8;transition:transform .2s ease;flex-shrink:0}
+        .vstg.open .vstg-chev{transform:rotate(180deg)}
+        .vstg-body{display:none;padding:0 14px 14px}
+        .vstg.open .vstg-body{display:block}
+        .prob-block{border:1px solid #F1F5F9;border-radius:12px;overflow:hidden;margin-top:10px}
+        .prob-h{display:flex;align-items:center;gap:10px;padding:11px 12px;background:#FFFBEB}
+        .prob-h .pic{width:28px;height:28px;border-radius:8px;background:#FEF3C7;color:#B45309;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+        .prob-h .pn{font-size:14.5px;font-weight:800;color:#0F172A;line-height:1.2}
+        .sev{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;margin-top:2px}
+        .sev::before{content:"";width:6px;height:6px;border-radius:50%}
+        .sev.high{color:#DC2626}.sev.high::before{background:#DC2626}
+        .prob-desc{font-size:13px;line-height:1.55;color:#475569;padding:10px 12px 0}
+        .prob-img{width:100%;height:132px;background:#F1F5F9;overflow:hidden}
+        .prob-img img{width:100%;height:100%;object-fit:cover;display:block}
+        .rp-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;padding:11px 12px;margin-top:4px;background:#F8FAFC;border:0;border-top:1px solid #F1F5F9;font-size:12.5px;font-weight:800;color:#258046;cursor:pointer}
+        .rp-toggle .chev{transition:transform .25s ease;font-size:11px}
+        .rp-toggle.open .chev{transform:rotate(180deg)}
+        .rp-list{display:none}
+        .rp-list.open{display:block}
+        .prod-row{display:flex;align-items:flex-start;gap:12px;padding:12px;border-top:1px solid #F1F5F9;text-decoration:none;color:inherit}
+        .prod-thumb{width:52px;height:52px;border-radius:11px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:6px;flex-shrink:0}
+        .prod-thumb img{max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:multiply}
+        .prod-meta{flex:1;min-width:0;line-height:1.3}
+        .prod-meta .pn{font-size:14px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .prod-meta .ptech{font-size:11.5px;color:#475569;font-weight:600;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .prod-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+        .prod-tags .tg{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;background:#F1F5F9;color:#475569}
+        .prod-price{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0}
+        .prod-price .amt{font-size:14px;font-weight:900;color:#0F172A}
+        .prod-price .add{display:inline-flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800;color:#FFFFFF;background:#258046;padding:8px 18px;border-radius:9px;cursor:pointer;box-shadow:0 4px 10px -4px rgba(5,150,105,0.5)}
+        .vstg-stage-link{display:flex;align-items:center;justify-content:center;gap:6px;height:38px;border-radius:10px;background:#ECFDF5;border:1px solid #BBF7D0;color:#258046;font-size:12.5px;font-weight:800;text-decoration:none;margin-top:11px}
       </style>
       <div class="px-4 space-y-3" id="engRow">
 
@@ -1596,15 +1636,15 @@
               <span class="eng-coin"><i class="fa-solid fa-coins"></i> +15</span>
               <button class="eng-close" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <img class="quiz-img" src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=480&q=80&fit=crop" alt="Crop disease" onerror="this.style.display='none'"/>
+            <img class="quiz-img" src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=500&q=70" alt="Crop disease" onerror="this.style.display='none'"/>
             <div class="eng-opts">
               <button class="eng-chip" data-quiz data-correct>Tomato</button>
               <button class="eng-chip" data-quiz>Chilli</button>
               <button class="eng-chip" data-quiz>Cotton</button>
               <button class="eng-chip" data-quiz>Wheat</button>
             </div>
-            <div class="eng-done"><div class="ic">✅</div><div class="t">Correct! +15 coins</div><div class="s">It's Tomato leaf-curl disease</div></div>
-            <div class="eng-wrong"><div class="ic">❌</div><div class="t">Not quite!</div><div class="s">It's Tomato leaf-curl disease</div></div>
+            <div class="eng-done"><div class="ic">✅</div><div class="t">Correct! +15 coins</div><div class="s">It's Tomato Early Blight</div></div>
+            <div class="eng-wrong"><div class="ic">❌</div><div class="t">Not quite!</div><div class="s">It's Tomato Early Blight</div></div>
           </div>
 
           <!-- Crop problem -->
@@ -3971,36 +4011,45 @@
   </script>
   <script>
     // Disease quiz · single answer · 1st option (Tomato) = correct (green + coins), any other = wrong (red).
-    // After answering (correct OR wrong), the card converts into a "what to use" recommendation — the same
-    // stage-3 recommended-products section from the crop guide — so the moment of awareness leads straight to purchase.
+    // After answering (correct OR wrong), the card converts into the crop guide's actual 3rd growth-stage section
+    // (crop-detail.html · Tomato · Vegetative · Early Blight) with its recommended products auto-expanded — copied 1:1.
     (function(){
       var card = document.getElementById('cropDiseaseCard');
       if (!card) return;
-      // Treatment for Tomato leaf-curl (whitefly-spread virus) · stops the vector + rebuilds plant immunity
-      var REC = [
-        { name:'Antivirus',      sub:'Bio bactericide + virucide', size:'250 ml', price:327, mrp:425, r:4.6, img:'../assets/AntiVirus_nobg.png' },
-        { name:'Chakrawarti ZC', sub:'Controls whitefly vector',   size:'100 ml', price:358, mrp:495, r:4.7, img:'../assets/Chakrawarti_nobg.png' },
-        { name:'Humic + Fulvic', sub:'Rebuilds plant immunity',    size:'500 ml', price:276, mrp:390, r:4.5, img:'../assets/Humic_nobg.png' }
-      ];
+      // Stage-3 data · copied verbatim from crop-detail.html (tomato stage 3 + Early Blight problem + its products)
+      var PROD = {
+        metamanco:{ n:'META-MANCO', tech:'Metalaxyl 8% + Mancozeb 64% WP', pack:'500 g', p:'₹22,500', img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' },
+        coc:      { n:'COC 50',     tech:'Copper Oxychloride 50% WP',       pack:'500 g', p:'₹2,800',  img:'https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp' },
+        zyme:     { n:'ZYME PLUS',  tech:'Bio-enzyme + seaweed',            pack:'500 ml',p:'₹14,850', img:'../assets/AntiVirus_nobg.png' }
+      };
+      function prodRow(k){ var p = PROD[k]; return '<a href="pdp.html" class="prod-row"><div class="prod-thumb"><img src="' + p.img + '"/></div>'
+        + '<div class="prod-meta"><div class="pn">' + p.n + '</div><div class="ptech">' + p.tech + '</div>'
+        + '<div class="prod-tags"><span class="tg"><i class="fa-solid fa-box-open" style="font-size:8px"></i> ' + p.pack + '</span></div></div>'
+        + '<div class="prod-price"><div class="amt tnum">' + p.p + '</div><span class="add">Add</span></div></a>'; }
       function showRecommendation(correct){
-        var strip = REC.map(function(it){
-          var off = it.mrp ? Math.round((1 - it.price / it.mrp) * 100) : 0;
-          return '<a href="pdp.html" class="cp-prod">'
-            + '<div class="cp-prod-img"><span class="cp-prod-star"><i class="fa-solid fa-star"></i> ' + it.r + '</span><img src="' + it.img + '" class="img-blend"/></div>'
-            + '<div class="cp-prod-b"><div class="cp-prod-nm">' + it.name + '</div><div class="cp-prod-sub">' + it.sub + '</div>'
-            + '<span class="cp-prod-sz">' + it.size + '</span>'
-            + '<div class="cp-prod-pr"><span class="cur tnum">&#8377;' + it.price + '</span><span class="mrp tnum">&#8377;' + it.mrp + '</span>' + (off ? '<span class="off">' + off + '% off</span>' : '') + '</div>'
-            + '<button type="button" class="cp-prod-add">Add</button></div></a>';
-        }).join('');
         card.classList.remove('done', 'wrong');
+        var rows = ['metamanco','coc','zyme'].map(prodRow).join('');
         card.innerHTML =
           '<div class="qz-res ' + (correct ? 'ok' : 'no') + '"><i class="fa-solid ' + (correct ? 'fa-circle-check' : 'fa-circle-info') + '"></i> '
-            + (correct ? 'Correct! This is <b>Tomato leaf-curl</b>.' : 'Close — this is <b>Tomato leaf-curl</b>.') + '</div>'
-          + '<div class="cp-rec-head"><span class="cp-rec-lbl">Tomato · Vegetative stage (3 of 6)</span><span class="cp-rec-pills"><span class="cp-rec-pill">Leaf-curl</span></span></div>'
-          + '<div class="cp-rec-strip">' + strip + '</div>'
-          + '<a href="crop-detail.html?crop=tomato" class="cp-rec-all">View full crop guide <i class="fa-solid fa-arrow-right"></i></a>';
-        card.querySelectorAll('.cp-prod-add').forEach(function(b){
-          b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if (typeof bumpCart === 'function') bumpCart(); b.textContent = 'Added ✓'; setTimeout(function(){ b.textContent = 'Add'; }, 1000); });
+            + (correct ? 'Correct! This is <b>Tomato Early Blight</b>.' : 'Close — this is <b>Tomato Early Blight</b>.') + '</div>'
+          + '<div class="vstg open">'
+          +   '<button type="button" class="vstg-head"><span class="vstg-dot">3</span>'
+          +     '<div class="vstg-info"><div class="nm">Vegetative</div><div class="meta">Day 25–45 · 20 days · 30% of lifecycle</div></div>'
+          +     '<span class="vstg-iss"><i class="fa-solid fa-triangle-exclamation"></i> 1 issue</span><i class="fa-solid fa-chevron-down vstg-chev"></i></button>'
+          +   '<div class="vstg-body"><div class="prob-block">'
+          +     '<div class="prob-img"><img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=500&q=70" alt="Early Blight" onerror="this.parentNode.style.display=\'none\'"/></div>'
+          +     '<div class="prob-h"><span class="pic"><i class="fa-solid fa-shield-virus"></i></span><div><div class="pn">Early Blight</div><span class="sev high">High · Disease</span></div></div>'
+          +     '<div class="prob-desc">Concentric dark “target” rings on older leaves; spreads upward, defoliating the plant.</div>'
+          +     '<button type="button" class="rp-toggle open" data-count="3"><span>Hide recommended products</span><i class="fa-solid fa-chevron-down chev"></i></button>'
+          +     '<div class="rp-list open">' + rows + '</div>'
+          +   '</div></div>'
+          + '</div>'
+          + '<a href="crop-detail.html?crop=tomato" class="vstg-stage-link">View full crop guide <i class="fa-solid fa-arrow-right"></i></a>';
+        // wiring (mirrors crop-detail): accordion head, rp-toggle, Add buttons
+        var head = card.querySelector('.vstg-head'); if (head) head.addEventListener('click', function(){ head.closest('.vstg').classList.toggle('open'); });
+        var tog = card.querySelector('.rp-toggle'); if (tog) tog.addEventListener('click', function(e){ e.preventDefault(); var list = tog.nextElementSibling; var op = tog.classList.toggle('open'); if (list) list.classList.toggle('open', op); var sp = tog.querySelector('span'); if (sp) sp.textContent = op ? 'Hide recommended products' : 'Show recommended products (' + tog.dataset.count + ')'; });
+        card.querySelectorAll('.prod-price .add').forEach(function(b){
+          b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if (typeof bumpCart === 'function') bumpCart(); b.textContent = 'Added ✓'; setTimeout(function(){ b.textContent = 'Add'; }, 900); });
         });
       }
       document.querySelectorAll('#cropDiseaseCard [data-quiz]').forEach(function(opt){

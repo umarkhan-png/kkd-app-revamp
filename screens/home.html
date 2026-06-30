@@ -1563,6 +1563,11 @@
         .cp-rec-all i{font-size:10px}
         /* Image quiz widget · one photo, single-answer crop choices (sits below the crop widget) */
         .quiz-img{width:100%;height:150px;object-fit:cover;border-radius:12px;margin:4px 0 10px;background:#F1F5F9;display:block}
+        /* Quiz → recommendation result line (shown after answering, above the recommended products) */
+        .qz-res{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;padding:10px 12px;border-radius:10px;margin-bottom:11px;line-height:1.4}
+        .qz-res.ok{background:#ECFDF5;border:1px solid #A7F3D0;color:#0E7A4E}
+        .qz-res.no{background:#FFF7ED;border:1px solid #FED7AA;color:#9A3412}
+        .qz-res b{font-weight:900}
       </style>
       <div class="px-4 space-y-3" id="engRow">
 
@@ -3965,14 +3970,47 @@
   })();
   </script>
   <script>
-    // Disease quiz · single answer · 1st option (Tomato) = correct (green + coins), any other = wrong (red)
+    // Disease quiz · single answer · 1st option (Tomato) = correct (green + coins), any other = wrong (red).
+    // After answering (correct OR wrong), the card converts into a "what to use" recommendation — the same
+    // stage-3 recommended-products section from the crop guide — so the moment of awareness leads straight to purchase.
     (function(){
+      var card = document.getElementById('cropDiseaseCard');
+      if (!card) return;
+      // Treatment for Tomato leaf-curl (whitefly-spread virus) · stops the vector + rebuilds plant immunity
+      var REC = [
+        { name:'Antivirus',      sub:'Bio bactericide + virucide', size:'250 ml', price:327, mrp:425, r:4.6, img:'../assets/AntiVirus_nobg.png' },
+        { name:'Chakrawarti ZC', sub:'Controls whitefly vector',   size:'100 ml', price:358, mrp:495, r:4.7, img:'../assets/Chakrawarti_nobg.png' },
+        { name:'Humic + Fulvic', sub:'Rebuilds plant immunity',    size:'500 ml', price:276, mrp:390, r:4.5, img:'../assets/Humic_nobg.png' }
+      ];
+      function showRecommendation(correct){
+        var strip = REC.map(function(it){
+          var off = it.mrp ? Math.round((1 - it.price / it.mrp) * 100) : 0;
+          return '<a href="pdp.html" class="cp-prod">'
+            + '<div class="cp-prod-img"><span class="cp-prod-star"><i class="fa-solid fa-star"></i> ' + it.r + '</span><img src="' + it.img + '" class="img-blend"/></div>'
+            + '<div class="cp-prod-b"><div class="cp-prod-nm">' + it.name + '</div><div class="cp-prod-sub">' + it.sub + '</div>'
+            + '<span class="cp-prod-sz">' + it.size + '</span>'
+            + '<div class="cp-prod-pr"><span class="cur tnum">&#8377;' + it.price + '</span><span class="mrp tnum">&#8377;' + it.mrp + '</span>' + (off ? '<span class="off">' + off + '% off</span>' : '') + '</div>'
+            + '<button type="button" class="cp-prod-add">Add</button></div></a>';
+        }).join('');
+        card.classList.remove('done', 'wrong');
+        card.innerHTML =
+          '<div class="qz-res ' + (correct ? 'ok' : 'no') + '"><i class="fa-solid ' + (correct ? 'fa-circle-check' : 'fa-circle-info') + '"></i> '
+            + (correct ? 'Correct! This is <b>Tomato leaf-curl</b>.' : 'Close — this is <b>Tomato leaf-curl</b>.') + '</div>'
+          + '<div class="cp-rec-head"><span class="cp-rec-lbl">Tomato · Vegetative stage (3 of 6)</span><span class="cp-rec-pills"><span class="cp-rec-pill">Leaf-curl</span></span></div>'
+          + '<div class="cp-rec-strip">' + strip + '</div>'
+          + '<a href="crop-detail.html?crop=tomato" class="cp-rec-all">View full crop guide <i class="fa-solid fa-arrow-right"></i></a>';
+        card.querySelectorAll('.cp-prod-add').forEach(function(b){
+          b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if (typeof bumpCart === 'function') bumpCart(); b.textContent = 'Added ✓'; setTimeout(function(){ b.textContent = 'Add'; }, 1000); });
+        });
+      }
       document.querySelectorAll('#cropDiseaseCard [data-quiz]').forEach(function(opt){
         opt.addEventListener('click', function(){
-          var card = opt.closest('.eng-card');
-          if (!card || card.classList.contains('done') || card.classList.contains('wrong')) return;
-          if (opt.hasAttribute('data-correct')){ card.classList.add('done'); if (window.kkdCelebrate) window.kkdCelebrate(15); }
+          if (card.classList.contains('done') || card.classList.contains('wrong')) return;
+          var correct = opt.hasAttribute('data-correct');
+          if (correct){ card.classList.add('done'); if (window.kkdCelebrate) window.kkdCelebrate(15); }
           else { card.classList.add('wrong'); }
+          // show the correct/wrong overlay briefly, then convert into the recommendation
+          setTimeout(function(){ showRecommendation(correct); }, 1100);
         });
       });
     })();

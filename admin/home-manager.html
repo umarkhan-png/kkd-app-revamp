@@ -72,6 +72,11 @@
 .hm input:focus,.hm textarea:focus,.hm select.s:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
 .hm textarea{resize:vertical;min-height:65px;}
 .hm input[type=color]{width:44px;height:34px;border:1px solid var(--g200);border-radius:6px;padding:2px;cursor:pointer;}
+.hm .sub-l{font-size:12px;font-weight:700;color:var(--g600,#475569);margin:12px 0 5px;}
+.hm .ed-toggle{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:700;color:var(--g600,#475569);cursor:pointer;}
+.hm .ed-lock{font-size:12px;font-weight:700;color:var(--g500,#64748B);background:var(--g100,#F1F5F9);padding:6px 11px;border-radius:8px;white-space:nowrap;}
+.hm .sec-hidden{font-size:10px;font-weight:700;color:var(--g500,#64748B);background:var(--g100,#F1F5F9);padding:2px 8px;border-radius:9999px;flex-shrink:0;}
+.hm .tt-lock{font-size:13px;opacity:.7;width:30px;text-align:center;}
 .hm .hexpick{display:flex;align-items:center;gap:6px;}
 .hm .hexpick .hexin{width:84px;flex:0 0 84px;height:34px;box-sizing:border-box;border:1px solid var(--g200);border-radius:6px;padding:0 8px;font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase;color:var(--g600,#475569);outline:none;}
 .hm .hexpick .hexin:focus{border-color:var(--green);}
@@ -211,7 +216,7 @@ const CROPS=['🍅 Tomato','🌶️ Chilli','🌾 Wheat','🌽 Maize','🧅 Onio
 // Reference SECS — used to seed data.homeSections on first load
 const DEFAULT_SECS=[
   {id:'header',   ic:'🏠', nm:'Header / Top Bar',     sub:'Logo, greeting, location, wallet, coins, bell', on:true, fixed:true},
-  {id:'theme',    ic:'🎨', nm:'Theme & Seasons',      sub:'Green / Rain / Festival + animations', on:true, fixed:true},
+  {id:'theme',    ic:'🎨', nm:'Theme',                sub:'Green default + state / date / weather rules', on:true, fixed:true},
   {id:'statusbanner',ic:'📢', nm:'Top Status Banner', sub:'Rotating rain/offer ticker',     on:true},
   {id:'search',   ic:'🔍', nm:'Search Bar',           sub:'Placeholder, voice, colors',     on:true},
   {id:'offer',    ic:'🎁', nm:'Offer Strip',         sub:'Header announcement ticker',     on:true},
@@ -273,7 +278,7 @@ function renderList(){
       ${handle}
       <span class="sec-icon">${s.ic}</span>
       <div class="sec-info"><div class="sec-name">${s.nm}</div><div class="sec-sub">${s.sub}</div></div>
-      <button class="vis-btn" title="${s.on?'Hide on app':'Show on app'}" onclick="event.stopPropagation();toggleVis('${s.id}')">${s.on?'👁️':'🚫'}</button>
+      ${s.on?'':'<span class="sec-hidden">Hidden</span>'}
     </div>`;
   }).join('');
 }
@@ -292,15 +297,24 @@ function dd(e,tid){
   const[it]=SECS.splice(si,1);SECS.splice(ti,0,it);dragId=null;
   persist();renderList();AdminShell.saved('Section order updated');
 }
-function toggleVis(id){const s=SECS.find(s=>s.id===id);s.on=!s.on;persist();renderList();AdminShell.saved(s.nm+(s.on?' shown on app':' hidden on app'));}
+function toggleVis(id){const s=SECS.find(s=>s.id===id);if(!s)return;const meta=Object.fromEntries(DEFAULT_SECS.map(d=>[d.id,d]));if(meta[id]&&meta[id].fixed)return;/* locked sections can't be hidden */ s.on=!s.on;persist();if(sel===id)pick(id);else renderList();AdminShell.saved(s.nm+(s.on?' shown on app':' hidden on app'));}
 
 /* ── SELECT ── */
 // onboarding-style editor header: big section title + Preview-in-app (no per-card Save buttons)
 function edHead(id){
   const s=SECS.find(x=>x.id===id)||{ic:'🏠',nm:''};
-  return `<div class="flex items-center justify-between" style="margin-bottom:14px">
+  const meta=Object.fromEntries(DEFAULT_SECS.map(d=>[d.id,d]));
+  const locked=meta[id]&&meta[id].fixed;
+  // Enable/disable lives INSIDE the editor. Locked sections are always on and can't be hidden.
+  const ctrl = locked
+    ? `<span class="ed-lock" title="This section is always on and can’t be hidden">🔒 Always on</span>`
+    : `<label class="ed-toggle"><span>Show on Home</span><div class="tg ${s.on?'on':''}" onclick="toggleVis('${id}')"></div></label>`;
+  return `<div class="flex items-center justify-between" style="margin-bottom:14px;gap:14px">
     <div><h2 style="font-size:18px;font-weight:800;margin:0">${s.ic} ${s.nm}</h2>${s.sub?`<p class="muted" style="margin:2px 0 0;font-size:12.5px">${s.sub}</p>`:''}</div>
-    <button class="btn btn-s btn-sm" onclick="AdminShell.previewApp('home.html')"><i class="fa-solid fa-mobile-screen-button"></i> Preview in app</button>
+    <div style="display:flex;align-items:center;gap:14px;flex-shrink:0">
+      ${ctrl}
+      <button class="btn btn-s btn-sm" onclick="AdminShell.previewApp('home.html')"><i class="fa-solid fa-mobile-screen-button"></i> Preview in app</button>
+    </div>
   </div>`;
 }
 function pick(id){
@@ -345,40 +359,57 @@ function save(msg){AdminShell.saved(msg);}
    time: themes are tried top-to-bottom (priority) and the first whose rule matches
    the user's state + current weather + date wins. So when Holi (festival) AND rain
    both match, whichever sits higher in the list is what the user sees. */
-const WEATHERS=['clear','rain','cloudy','hot','cold','storm'];
+const WEATHERS=['clear','rain','cloudy','storm','fog'];   // sky conditions (temperature handled separately)
 let teEdit=null;                                   // id of theme being edited (inline)
-let teSim={state:'All States',weather:'rain',date:'2026-03-14'};  // resolver simulator
+let teSim={state:'All States',weather:'rain',temp:30,date:'2026-03-14'};  // resolver simulator
 let teMsg=null;                                    // last upload message {kind,text}
 function themeData(){
   if(!data.homeThemes) data.homeThemes={ default:'green', themes:[] };
   if(!Array.isArray(data.homeThemes.themes)) data.homeThemes.themes=[];
-  return data.homeThemes;
+  const T=data.homeThemes; let changed=false;
+  // normalise to the new rule shape: state(s) + optional date range + optional weather {mode:any|sky|temp}
+  T.themes.forEach(t=>{
+    const tr=t.trigger=t.trigger||{};
+    if(!Array.isArray(tr.states)||!tr.states.length){ tr.states=['All']; changed=true; }
+    if(typeof tr.weather==='string'){ tr.weather={mode:'sky',sky:tr.weather}; changed=true; }
+    if(!tr.weather||typeof tr.weather!=='object'){ tr.weather={mode:'any'}; changed=true; }
+    if(tr.weather.op==null) tr.weather.op='above';
+    if(tr.weather.temp==null) tr.weather.temp=40;
+    if(tr.start==null) tr.start='';
+    if(tr.end==null) tr.end='';
+    if(tr.type){ delete tr.type; changed=true; }
+    if(t.id===T.default && !t.isDefault){ t.isDefault=true; changed=true; }
+  });
+  if(changed) KKD.save(data);
+  return T;
 }
 function editTheme(){ return themeData().themes.find(t=>t.id===teEdit); }
 function themeUI(){ if(sel==='theme') document.getElementById('rp').innerHTML=EDITORS.theme(); }
-function ruleMatches(t,state,weather,date){
-  if(!t.enabled) return false;
-  const tr=t.trigger||{}; const st=(tr.states&&tr.states.indexOf('All')>=0)? true : (tr.states||[]).indexOf(state)>=0;
-  if(!st) return false;
-  if(tr.type==='always') return true;
-  if(tr.type==='state')   return true;             // state scope already checked
-  if(tr.type==='weather') return tr.weather===weather;
-  if(tr.type==='festival')return tr.start&&tr.end&&date>=tr.start&&date<=tr.end;
-  return false;                                    // 'manual' never auto-applies
+function ruleMatches(t,state,weather,temp,date){
+  if(!t.enabled || t.isDefault) return false;        // default is fallback only — never auto-wins
+  const tr=t.trigger||{};
+  const stOk=(tr.states&&tr.states.indexOf('All')>=0)?true:(tr.states||[]).indexOf(state)>=0;
+  if(!stOk) return false;
+  if(tr.start&&tr.end){ if(!(date>=tr.start&&date<=tr.end)) return false; }   // date range (if set)
+  const w=tr.weather||{mode:'any'};
+  if(w.mode==='sky'){ if(w.sky!==weather) return false; }
+  else if(w.mode==='temp'){ const v=+temp; if(w.op==='below'){ if(!(v<=+w.temp)) return false; } else { if(!(v>=+w.temp)) return false; } }
+  return true;
 }
-function resolveTheme(state,weather,date){
+function resolveTheme(state,weather,temp,date){
   const T=themeData();
-  for(const t of T.themes){ if(ruleMatches(t,state,weather,date)) return t; }
-  return T.themes.find(t=>t.id===T.default) || T.themes[0] || null;
+  for(const t of T.themes){ if(ruleMatches(t,state,weather,temp,date)) return t; }
+  return T.themes.find(t=>t.isDefault) || T.themes.find(t=>t.id===T.default) || T.themes[T.themes.length-1] || null;
 }
 function triggerBadge(t){
-  const tr=t.trigger||{}; const scope=(tr.states&&tr.states.indexOf('All')<0)?` · 📍 ${tr.states.join(', ')}`:'';
-  if(tr.type==='always')  return `⭐ Always (default)${scope}`;
-  if(tr.type==='state')   return `📍 State: ${(tr.states||[]).join(', ')||'—'}`;
-  if(tr.type==='weather') return `🌦 Weather: ${tr.weather||'—'}${scope}`;
-  if(tr.type==='festival')return `🎉 Festival: ${tr.start||'?'} → ${tr.end||'?'}${scope}`;
-  if(tr.type==='manual')  return `✋ Manual only${scope}`;
-  return '—';
+  if(t.isDefault) return '⭐ Default — shown when no rule matches';
+  const tr=t.trigger||{}; const parts=[];
+  parts.push((tr.states&&tr.states.indexOf('All')<0)?`📍 ${tr.states.join(', ')}`:'📍 All states');
+  if(tr.start&&tr.end) parts.push(`🗓 ${tr.start} → ${tr.end}`);
+  const w=tr.weather||{mode:'any'};
+  if(w.mode==='sky') parts.push(`🌦 ${w.sky||'—'}`);
+  else if(w.mode==='temp') parts.push(`🌡 ${w.op==='below'?'≤':'≥'} ${w.temp}°C`);
+  return parts.join(' · ');
 }
 function themeGrad(t){ const c=t.colors||{}; return `linear-gradient(180deg, ${c.a||'#258046'} 0%, ${c.b||'#10B981'} 100%)`; }
 
@@ -407,14 +438,14 @@ function teBgSet(k,v){ const t=editTheme(); if(!t) return; t.bg=t.bg||{}; t.bg[k
 
 /* ---- mutations ---- */
 function themeAdd(){
-  const T=themeData(); const id='t'+(T.themes.length+1)+'_'+T.themes.reduce((n)=>n+1,0);
-  T.themes.unshift({ id, name:'New theme', enabled:true, trigger:{type:'manual',states:['All']}, bg:{image:'',fit:'cover',overlay:'light'}, colors:{a:'#258046',b:'#10B981',c:'#D9A441'}, anim:'none', animCount:8, animSpeed:2 });
+  const T=themeData(); const id='t'+Date.now().toString(36);
+  T.themes.unshift({ id, name:'New theme', enabled:true, trigger:{states:['All'],start:'',end:'',weather:{mode:'any',op:'above',temp:40}}, bg:{image:'',fit:'cover',overlay:'light'}, colors:{a:'#258046',b:'#10B981',c:'#D9A441'}, anim:'none', animCount:8, animSpeed:2 });
   teEdit=id; teMsg=null; KKD.save(data); AdminShell.refreshPending(); themeUI();
 }
-function themeDel(id){ const T=themeData(); T.themes=T.themes.filter(t=>t.id!==id); if(T.default===id) T.default=(T.themes[T.themes.length-1]||{}).id||''; if(teEdit===id) teEdit=null; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeEdit(id){ teEdit=(teEdit===id?null:id); teMsg=null; themeUI(); }
-function themeMove(i,d){ const T=themeData(); const j=i+d; if(j<0||j>=T.themes.length) return; const a=T.themes; [a[i],a[j]]=[a[j],a[i]]; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
-function themeToggle(id){ const t=themeData().themes.find(x=>x.id===id); if(!t)return; t.enabled=!t.enabled; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
+function themeMove(i,d){ const T=themeData(); const j=i+d; if(j<0||j>=T.themes.length) return; if(T.themes[i].isDefault||T.themes[j].isDefault) return; const a=T.themes; [a[i],a[j]]=[a[j],a[i]]; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
+function themeToggle(id){ const t=themeData().themes.find(x=>x.id===id); if(!t||t.isDefault)return; t.enabled=!t.enabled; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
+function themeWeatherMode(id,v){ themeField(id,'trigger.weather.mode',v); themeUI(); }
 function themeSetDefault(v){ themeData().default=v; KKD.save(data); AdminShell.refreshPending(); }
 function themeField(id,path,v){ const t=themeData().themes.find(x=>x.id===id); if(!t)return; const ks=path.split('.'); let o=t; for(let i=0;i<ks.length-1;i++){ if(o[ks[i]]==null)o[ks[i]]={}; o=o[ks[i]]; } o[ks[ks.length-1]]=v; KKD.save(data); AdminShell.refreshPending(); }
 function themeSetTriggerType(id,v){ themeField(id,'trigger.type',v); themeUI(); }
@@ -424,68 +455,78 @@ function themeSim(k,v){ teSim[k]=v; themeUI(); }
 
 /* ---- views ---- */
 function themeResolverBox(){
-  const win=resolveTheme(teSim.state,teSim.weather,teSim.date);
+  const win=resolveTheme(teSim.state,teSim.weather,teSim.temp,teSim.date);
   const stOpts=['All States'].concat(STATES.filter(s=>s!=='All States')).map(s=>`<option${s===teSim.state?' selected':''}>${s}</option>`).join('');
   const wOpts=WEATHERS.map(w=>`<option${w===teSim.weather?' selected':''}>${w}</option>`).join('');
   return `<div class="sch-box">
     <div class="sl">🔎 What will users see? — test your rules</div>
     <div class="row" style="margin-bottom:10px">
       <div class="fg fix"><label>User's state</label><select class="s" onchange="themeSim('state',this.value)">${stOpts}</select></div>
-      <div class="fg fix"><label>Weather now</label><select class="s" onchange="themeSim('weather',this.value)">${wOpts}</select></div>
+      <div class="fg fix"><label>Sky now</label><select class="s" onchange="themeSim('weather',this.value)">${wOpts}</select></div>
+      <div class="fg fix"><label>Temp (°C)</label><input type="number" style="width:90px" value="${teSim.temp}" onchange="themeSim('temp',+this.value)"/></div>
       <div class="fg fix"><label>Date</label><input type="date" value="${teSim.date}" onchange="themeSim('date',this.value)"/></div>
     </div>
-    <div class="info-box"><i class="fa-solid fa-eye" style="margin-top:1px"></i><span>A user in <b>${esc(teSim.state)}</b> · <b>${esc(teSim.weather)}</b> weather · <b>${esc(teSim.date)}</b> sees → <b>${win?esc(win.name):'no theme'}</b>${win?` <span class="hint">(${triggerBadge(win)})</span>`:''}</span></div>
+    <div class="info-box"><i class="fa-solid fa-eye" style="margin-top:1px"></i><span>A user in <b>${esc(teSim.state)}</b> · <b>${esc(teSim.weather)}</b> · <b>${esc(String(teSim.temp))}°C</b> · <b>${esc(teSim.date)}</b> sees → <b>${win?esc(win.name):'no theme'}</b>${win?` <span class="hint">(${triggerBadge(win)})</span>`:''}</span></div>
   </div>`;
 }
 function themeTile(t,i){
-  const T=themeData(); const isDef=t.id===T.default;
+  const T=themeData(); const isDef=t.isDefault||t.id===T.default;
   const prev=(t.bg&&t.bg.image)?`<img src="${t.bg.image}" alt=""/>`:'';
-  return `<div class="theme-tile${t.id===teEdit?' editing':''}${t.enabled?'':' off'}">
+  return `<div class="theme-tile${t.id===teEdit?' editing':''}${(!t.enabled&&!isDef)?' off':''}">
     <div class="tt-prev" style="background:${themeGrad(t)}">${prev}</div>
     <div class="tt-body">
-      <div class="tt-name">${esc(t.name)}${isDef?' <span class="tt-def">fallback</span>':''}</div>
+      <div class="tt-name">${esc(t.name)}${isDef?' <span class="tt-def">default</span>':''}</div>
       <div class="tt-badge">${triggerBadge(t)}</div>
-      <div class="tt-prio">Priority ${i+1}${i===0?' · highest':''}</div>
+      <div class="tt-prio">${isDef?'Fallback · always last':'Priority '+(i+1)+(i===0?' · highest':'')}</div>
     </div>
     <div class="tt-act">
-      <button class="btn btn-s btn-ic" title="Move up" onclick="themeMove(${i},-1)" ${i===0?'disabled style=opacity:.4':''}><i class="fa-solid fa-arrow-up"></i></button>
-      <button class="btn btn-s btn-ic" title="Move down" onclick="themeMove(${i},1)" ${i===T.themes.length-1?'disabled style=opacity:.4':''}><i class="fa-solid fa-arrow-down"></i></button>
-      <div class="tg ${t.enabled?'on':''}" title="Enable / disable" onclick="themeToggle('${t.id}')"></div>
+      ${isDef?'':`<button class="btn btn-s btn-ic" title="Move up" onclick="themeMove(${i},-1)" ${i===0?'disabled style=opacity:.4':''}><i class="fa-solid fa-arrow-up"></i></button>
+      <button class="btn btn-s btn-ic" title="Move down" onclick="themeMove(${i},1)" ${i>=T.themes.length-2?'disabled style=opacity:.4':''}><i class="fa-solid fa-arrow-down"></i></button>`}
+      ${isDef?'<span class="tt-lock" title="Default theme — always on, can’t be disabled">🔒</span>':`<div class="tg ${t.enabled?'on':''}" title="Enable / disable" onclick="themeToggle('${t.id}')"></div>`}
       <button class="btn ${t.id===teEdit?'btn-p':'btn-s'} btn-ic" title="Edit" onclick="themeEdit('${t.id}')"><i class="fa-solid fa-pen"></i></button>
-      <button class="btn btn-d btn-ic" title="Delete" onclick="themeDel('${t.id}')"><i class="fa-solid fa-trash"></i></button>
     </div>
   </div>`;
 }
 function themeEditor(t){
   if(!t) return '';
+  const T=themeData(); const isDef=t.isDefault||t.id===T.default;
   const tr=t.trigger||{}; const bg=t.bg||{}; const c=t.colors||{};
   const selO=(v,c2)=>v===c2?' selected':'';
   const scopeAll=(tr.states||['All']).indexOf('All')>=0;
   const stateChips=STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!scopeAll&&(tr.states||[]).indexOf(s)>=0)?'on':''}" onclick="themeToggleScope('${t.id}','${s}')">${s}</span>`).join('');
-  const condRow = tr.type==='weather'
-      ? `<div class="fg fix"><label>Weather condition</label><select class="s" onchange="themeField('${t.id}','trigger.weather',this.value);">${WEATHERS.map(w=>`<option${selO(w,tr.weather)}>${w}</option>`).join('')}</select></div>`
-    : tr.type==='festival'
-      ? `<div class="fg fix"><label>Start date</label><input type="date" value="${tr.start||''}" onchange="themeField('${t.id}','trigger.start',this.value)"/></div>
-         <div class="fg fix"><label>End date</label><input type="date" value="${tr.end||''}" onchange="themeField('${t.id}','trigger.end',this.value)"/></div>`
-      : '';
+  const w=tr.weather||{mode:'any'};
+  const weatherCfg = w.mode==='temp'
+    ? `<div class="fg fix"><label>When temperature is</label><select class="s" onchange="themeField('${t.id}','trigger.weather.op',this.value)"><option value="above"${selO('above',w.op)}>Above (≥)</option><option value="below"${selO('below',w.op)}>Below (≤)</option></select></div>
+       <div class="fg fix"><label>Temperature (°C)</label><input type="number" style="width:120px" value="${w.temp!=null?w.temp:40}" onchange="themeField('${t.id}','trigger.weather.temp',+this.value)"/></div>`
+    : w.mode==='sky'
+    ? `<div class="fg fix"><label>Sky condition</label><select class="s" onchange="themeField('${t.id}','trigger.weather.sky',this.value)">${WEATHERS.map(x=>`<option${selO(x,w.sky)}>${x}</option>`).join('')}</select></div>`
+    : '';
+  const rulesBlock = isDef
+    ? `<div class="info-box"><i class="fa-solid fa-star" style="margin-top:1px"></i><span>This is the <b>default theme</b> — it always shows when no other theme's rules match, and can't be disabled or deleted. Just set its look below.</span></div>`
+    : `<div class="sdiv">When does this theme show?</div>
+    <p class="hint-p">Set any combination — the theme shows only when <b>all</b> the conditions you set are true.</p>
+    <div class="sub-l">📍 States</div>
+    <div style="margin-bottom:12px"><span class="cchip ${scopeAll?'on':''}" onclick="themeToggleScopeAll('${t.id}')">All states</span> ${stateChips}</div>
+    <div class="sub-l">🗓 Date range <span class="hint">(optional — leave blank for any date)</span></div>
+    <div class="row">
+      <div class="fg fix"><label>Start date</label><input type="date" value="${tr.start||''}" onchange="themeField('${t.id}','trigger.start',this.value);themeUI()"/></div>
+      <div class="fg fix"><label>End date</label><input type="date" value="${tr.end||''}" onchange="themeField('${t.id}','trigger.end',this.value);themeUI()"/></div>
+    </div>
+    <div class="sub-l">🌦 Weather <span class="hint">(optional)</span></div>
+    <div class="row">
+      <div class="fg fix"><label>Condition</label><select class="s" onchange="themeWeatherMode('${t.id}',this.value)">
+        <option value="any"${selO('any',w.mode)}>Any weather</option>
+        <option value="temp"${selO('temp',w.mode)}>Temperature threshold</option>
+        <option value="sky"${selO('sky',w.mode)}>Sky condition</option>
+      </select></div>
+      ${weatherCfg}
+    </div>`;
   return `<div class="theme-ed">
     <div class="card-head" style="padding:0 0 12px;border:0"><h3>✏️ Editing: ${esc(t.name)}</h3><button class="btn btn-s btn-sm" onclick="themeEdit('${t.id}')">Done</button></div>
 
-    <div class="row"><div class="fg" style="max-width:320px"><label>Theme name</label><input type="text" value="${esc(t.name)}" onchange="themeField('${t.id}','name',this.value);themeUI()"/></div></div>
+    <div class="row"><div class="fg" style="max-width:320px"><label>Theme name</label><input type="text" value="${esc(t.name)}"${isDef?' disabled style="opacity:.65"':''} onchange="themeField('${t.id}','name',this.value);themeUI()"/></div></div>
 
-    <div class="sdiv">When does this theme show?</div>
-    <div class="row">
-      <div class="fg fix"><label>Rule type</label><select class="s" onchange="themeSetTriggerType('${t.id}',this.value)">
-        <option value="always"${selO('always',tr.type)}>Always (catch-all / default)</option>
-        <option value="weather"${selO('weather',tr.type)}>Weather-based</option>
-        <option value="festival"${selO('festival',tr.type)}>Festival / date range</option>
-        <option value="state"${selO('state',tr.type)}>State only</option>
-        <option value="manual"${selO('manual',tr.type)}>Manual only (user taps to switch)</option>
-      </select></div>
-      ${condRow}
-    </div>
-    <div class="sdiv" style="padding-top:4px">Applies to states</div>
-    <div style="margin-bottom:6px"><span class="cchip ${scopeAll?'on':''}" onclick="themeToggleScopeAll('${t.id}')">All states</span> ${stateChips}</div>
+    ${rulesBlock}
 
     <div class="sdiv">Background image / GIF</div>
     <p class="hint-p">Shows in this theme's tile and behind the top of Home. Optional — without an image the gradient colours below are used.</p>
@@ -608,19 +649,13 @@ header:()=>`
 theme:()=>{ const T=themeData(); return `
 <div class="card">
   <div class="card-body">
-    <p class="hint-p">Themes change the top of Home automatically — by <b>state</b>, by <b>weather</b>, or on <b>festival dates</b> (Holi, Diwali, Christmas…). A user only ever sees <b>one theme at a time</b>: themes are checked top-to-bottom and the first whose rule matches wins. So if Holi <i>and</i> rain both apply, whichever sits higher here is what shows — drag priority with the ↑ ↓ buttons.</p>
+    <p class="hint-p">The top of Home changes automatically by <b>state</b>, <b>date range</b>, and <b>weather</b> (sky condition or temperature). A user sees <b>one theme at a time</b>: themes are checked top-to-bottom and the first whose conditions all match wins. <b>Green</b> is the fixed default — it always shows when nothing else matches and can't be disabled or deleted.</p>
 
     ${themeResolverBox()}
 
-    <div class="sdiv">Themes · top = highest priority</div>
+    <div class="sdiv">Themes · top = highest priority · 🔒 Green default always last</div>
     <div class="theme-tiles">${T.themes.map((t,i)=>themeTile(t,i)).join('')}</div>
     <button class="btn btn-s btn-sm" onclick="themeAdd()" style="margin-top:6px"><i class="fa-solid fa-plus"></i> Add theme</button>
-
-    <div class="row" style="margin-top:18px;margin-bottom:0">
-      <div class="fg" style="max-width:320px"><label>Fallback theme (shown when no rule matches)</label>
-        <select class="s" onchange="themeSetDefault(this.value)">${T.themes.map(t=>`<option value="${t.id}"${t.id===T.default?' selected':''}>${esc(t.name)}</option>`).join('')}</select>
-      </div>
-    </div>
 
     ${teEdit?`<div style="margin-top:16px">${themeEditor(T.themes.find(x=>x.id===teEdit))}</div>`:''}
   </div>
@@ -634,47 +669,28 @@ statusbanner:()=>`
     <div class="row" style="margin-top:12px;">
       <div class="fg fix"><label>Rotation interval (sec)</label><input type="number" style="width:140px;" value="4"/></div>
     </div>
-    <div class="sdiv">Variants (rotate in order)</div>
-    ${LT()}
+    <div class="sdiv">Messages (rotate in order)</div>
+    <p class="hint-p">Set each banner's <b>text</b>, who sees it (<b>state · date</b>), and link its <b>weather</b> rule to a Theme.</p>
     <div id="sbList">
       ${[
-        {ic:'⛅',bold:'Rain expected',body:'8 mm in 24 hrs · Hold spray for today',tc:'#1E40AF',iconc:'#2563EB',link:'shop.html?weather=rain'},
-        {ic:'🎁',bold:'Christmas offer',body:'20% off + free gift on ₹999+',tc:'#7F1D1D',iconc:'#DC2626',link:'shop.html'},
-      ].map(v=>`
-      <div class="li">
-        <span class="drag-h">⠿</span>
-        <div class="li-body">
-          <div class="row" style="margin-bottom:10px;">
-            <div class="fg fix"><label>Icon</label><div class="ep" onclick="promptE(this)">${v.ic}</div></div>
-          </div>
-          <div class="row" style="margin-bottom:0;">
-            <div class="fg fix"><label>Text Color</label><div class="color-r"><input type="color" value="${v.tc}"/><span>${v.tc}</span></div></div>
-            <div class="fg fix"><label>Icon Color</label><div class="color-r"><input type="color" value="${v.iconc}"/><span>${v.iconc}</span></div></div>
-            <div class="fg"><label>Deeplink / URL</label><input type="text" value="${v.link}"/></div>
-          </div>
-        </div>
-        <div class="li-act" style="padding-top:16px;">
-          <div class="tg on" onclick="this.classList.toggle('on')"></div>
-          <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
-        </div>
-      </div>`).join('')}
+        {ic:'⛅',bold:'Rain expected',body:'8 mm in 24 hrs · Hold spray for today',tc:'#1E40AF',iconc:'#2563EB',link:'shop.html?weather=rain',states:['All'],theme:'Monsoon / Rain'},
+        {ic:'🎁',bold:'Christmas offer',body:'20% off + free gift on ₹999+',tc:'#7F1D1D',iconc:'#DC2626',link:'shop.html',states:['All'],start:'2026-12-20',end:'2026-12-26'},
+      ].map(sbVariant).join('')}
     </div>
-    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addStatusVariant()">+ Add Variant</button>
+    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addStatusVariant()">+ Add message</button>
   </div>
 </div>`,
 
-/* 0d ── SEARCH BAR */
+/* 0d ── SEARCH BAR · placeholder text only */
 search:()=>`
 <div class="card">
   <div class="card-body">
-    ${LT()}
-    <div class="row">
-      <div class="fg"><label>Tap Target</label><input type="text" value="search.html"/></div>
+    <div class="sdiv">Search placeholder text</div>
+    <p class="hint-p">These hints rotate inside the search bar on Home. Add or edit what appears.</p>
+    <div id="phList">
+      ${['Search Humic, Antivirus…','Search by crop or problem','Try "NPK 19:19:19"'].map(phRow).join('')}
     </div>
-    ${TG('se1',true,'Show voice search','Microphone shortcut inside the search bar')}
-    <div class="row" style="margin-top:12px;">
-      <div class="fg fix"><label>BG Color</label><div class="color-r"><input type="color" value="#F1F5F9"/><span>#F1F5F9</span></div></div>
-    </div>
+    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addPlaceholder()">+ Add placeholder</button>
   </div>
 </div>`,
 
@@ -1107,25 +1123,56 @@ behavior:()=>`
 };/* end EDITORS */
 
 /* ── ADD FUNCTIONS ── */
-function addStatusVariant(){
-  document.getElementById('sbList').insertAdjacentHTML('beforeend',`
+/* Top Status Banner · one message = text + state/date targeting + weather linked from a Theme (no delete) */
+function sbStateChips(states){ states=states||['All']; const all=states.indexOf('All')>=0;
+  return '<span class="cchip '+(all?'on':'')+'" onclick="sbChip(this,true)">All states</span> '+
+    STATES.filter(s=>s!=='All States').map(s=>'<span class="cchip '+(!all&&states.indexOf(s)>=0?'on':'')+'" onclick="sbChip(this,false)">'+s+'</span>').join('');
+}
+function sbThemeOpts(selName){ const T=themeData(); return '<option value="">None</option>'+T.themes.filter(t=>!t.isDefault).map(t=>'<option'+(t.name===selName?' selected':'')+'>'+esc(t.name)+'</option>').join(''); }
+function sbChip(el,isAll){ const wrap=el.parentElement; const chips=wrap.querySelectorAll('.cchip'); const allChip=chips[0];
+  if(isAll){ chips.forEach(c=>c.classList.remove('on')); el.classList.add('on'); }
+  else { allChip.classList.remove('on'); el.classList.toggle('on'); if(!wrap.querySelector('.cchip.on')) allChip.classList.add('on'); } }
+function sbVariant(v){ v=v||{}; return `
   <div class="li">
     <span class="drag-h">⠿</span>
     <div class="li-body">
       <div class="row" style="margin-bottom:10px;">
-        <div class="fg fix"><label>Icon</label><div class="ep" onclick="promptE(this)">📢</div></div>
+        <div class="fg fix"><label>Icon</label><div class="ep" onclick="promptE(this)">${v.ic||'📢'}</div></div>
+        <div class="fg"><label>Title</label><input type="text" value="${esc(v.bold||'')}" placeholder="e.g. Rain expected"/></div>
       </div>
-      <div class="row" style="margin-bottom:0;">
-        <div class="fg fix"><label>Text Color</label><div class="color-r"><input type="color" value="#1E40AF"/></div></div>
-        <div class="fg fix"><label>Icon Color</label><div class="color-r"><input type="color" value="#2563EB"/></div></div>
-        <div class="fg"><label>Deeplink / URL</label><input type="text" placeholder="shop.html"/></div>
+      <div class="row" style="margin-bottom:10px;">
+        <div class="fg"><label>Subtitle</label><input type="text" value="${esc(v.body||'')}" placeholder="e.g. 8 mm in 24 hrs · Hold spray for today"/></div>
       </div>
+      <div class="row" style="margin-bottom:10px;">
+        <div class="fg fix"><label>Text Color</label><div class="color-r"><input type="color" value="${v.tc||'#1E40AF'}"/></div></div>
+        <div class="fg fix"><label>Icon Color</label><div class="color-r"><input type="color" value="${v.iconc||'#2563EB'}"/></div></div>
+        <div class="fg"><label>Deeplink / URL</label><input type="text" value="${esc(v.link||'')}" placeholder="shop.html"/></div>
+      </div>
+      <div class="sub-l">📍 States</div>
+      <div style="margin-bottom:10px">${sbStateChips(v.states)}</div>
+      <div class="sub-l">🗓 Date range <span class="hint">(optional)</span></div>
+      <div class="row" style="margin-bottom:10px;">
+        <div class="fg fix"><label>Start date</label><input type="date" value="${v.start||''}"/></div>
+        <div class="fg fix"><label>End date</label><input type="date" value="${v.end||''}"/></div>
+      </div>
+      <div class="sub-l">🌦 Weather <span class="hint">(linked from a Theme — set the rule in the Theme section)</span></div>
+      <div class="fg fix" style="max-width:300px;margin-bottom:0"><label>Use weather rule from theme</label><select class="s">${sbThemeOpts(v.theme)}</select></div>
     </div>
     <div class="li-act" style="padding-top:16px;">
       <div class="tg on" onclick="this.classList.toggle('on')"></div>
-      <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
     </div>
-  </div>`);}
+  </div>`;
+}
+function addStatusVariant(){ document.getElementById('sbList').insertAdjacentHTML('beforeend', sbVariant({})); }
+
+/* Search bar · rotating placeholder text list */
+function phRow(p){ return `
+  <div class="li">
+    <span class="drag-h">⠿</span>
+    <div class="li-body"><div class="row" style="margin-bottom:0;"><div class="fg"><label>Placeholder text</label><input type="text" value="${esc(p||'')}" placeholder="Search products…"/></div></div></div>
+    <div class="li-act" style="padding-top:16px;"><div class="tg on" onclick="this.classList.toggle('on')"></div><button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button></div>
+  </div>`; }
+function addPlaceholder(){ document.getElementById('phList').insertAdjacentHTML('beforeend', phRow('')); }
 
 function addOffer(){
   document.getElementById('ofList').insertAdjacentHTML('beforeend',`

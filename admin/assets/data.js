@@ -386,17 +386,24 @@
     // user's state + current weather + date wins. `default` is the catch-all.
     homeThemes: {
       default: 'green',
+      // Each non-default theme matches when ALL its set conditions hold:
+      // state(s) + (optional date range) + (optional weather: sky condition OR temperature threshold).
+      // `green` is the fixed default/fallback — always shown when nothing else matches; can't be disabled/deleted.
       themes: [
+        { id:'heat', name:'Heatwave Alert', enabled:true,
+          trigger:{ states:['All'], start:'', end:'', weather:{ mode:'temp', op:'above', temp:40 } },
+          bg:{ image:'', fit:'cover', overlay:'light' },
+          colors:{ a:'#EA580C', b:'#F59E0B', c:'#7C2D12' }, anim:'none', animCount:0, animSpeed:0 },
         { id:'festival', name:'Holi Festival', enabled:true,
-          trigger:{ type:'festival', start:'2026-03-13', end:'2026-03-15', states:['All'] },
+          trigger:{ states:['All'], start:'2026-03-13', end:'2026-03-15', weather:{ mode:'any' } },
           bg:{ image:'', fit:'cover', overlay:'medium' },
           colors:{ a:'#DC2626', b:'#9333EA', c:'#D9A441' }, anim:'snow', animCount:14, animSpeed:3.4 },
         { id:'rain', name:'Monsoon / Rain', enabled:true,
-          trigger:{ type:'weather', weather:'rain', states:['All'] },
+          trigger:{ states:['All'], start:'', end:'', weather:{ mode:'sky', sky:'rain' } },
           bg:{ image:'', fit:'cover', overlay:'light' },
           colors:{ a:'#2563EB', b:'#DBEAFE', c:'#1E40AF' }, anim:'rain', animCount:6, animSpeed:1.4 },
-        { id:'green', name:'Green (default)', enabled:true,
-          trigger:{ type:'always', states:['All'] },
+        { id:'green', name:'Green', enabled:true, isDefault:true,
+          trigger:{ states:['All'], start:'', end:'', weather:{ mode:'any' } },
           bg:{ image:'', fit:'cover', overlay:'none' },
           colors:{ a:'#258046', b:'#10B981', c:'#D9A441' }, anim:'none', animCount:0, animSpeed:0 },
       ],

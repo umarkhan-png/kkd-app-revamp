@@ -1569,11 +1569,12 @@
         /* Wrong-answer feedback · gentle dim-blur backdrop + scale-in card (mirrors the correct-answer celebration) */
         .qz-wrong-ov{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,0.42);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);opacity:0;transition:opacity .25s ease}
         .qz-wrong-ov.show{opacity:1}
-        .qz-wrong-card{background:#FFFFFF;border-radius:18px;padding:22px 28px;display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;box-shadow:0 20px 50px -12px rgba(0,0,0,0.35);transform:scale(.86);transition:transform .3s cubic-bezier(.2,.85,.3,1)}
-        .qz-wrong-ov.show .qz-wrong-card{transform:scale(1)}
-        .qz-wrong-ic{width:60px;height:60px;border-radius:50%;background:#FEF2F2;color:#DC2626;display:flex;align-items:center;justify-content:center;font-size:27px}
-        .qz-wrong-t{font-size:19px;font-weight:900;color:#DC2626;margin-top:3px}
-        .qz-wrong-s{font-size:12px;color:#64748B;line-height:1.4}
+        .qz-wrong-card{background:#FFFFFF;border-radius:22px;padding:28px 30px 26px;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;max-width:300px;box-shadow:0 24px 60px -14px rgba(0,0,0,0.4);transform:scale(.85) translateY(8px);transition:transform .34s cubic-bezier(.18,.9,.28,1)}
+        .qz-wrong-ov.show .qz-wrong-card{transform:scale(1) translateY(0)}
+        .qz-wrong-ic{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,#EF4444,#DC2626);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 0 0 9px rgba(220,38,38,0.09),0 0 0 18px rgba(220,38,38,0.045),0 10px 22px -6px rgba(220,38,38,0.55)}
+        .qz-wrong-t{font-size:20px;font-weight:900;color:#0F172A;margin-top:5px;letter-spacing:-0.01em}
+        .qz-wrong-s{font-size:12.5px;color:#64748B;line-height:1.5;max-width:230px}
+        .qz-wrong-s b{color:#258046;font-weight:800}
         /* Answered quiz chip states · tapped-correct uses the existing .sel (green ✓); wrong-tapped = red ✗; the rest dim+disabled */
         .eng-chip.eq-wrong{background:#FEF2F2;border-color:#FCA5A5;color:#DC2626;font-weight:800;pointer-events:none}
         .eng-chip.eq-wrong::before{content:"\f00d";font-family:"Font Awesome 6 Free";font-weight:900;margin-right:6px;font-size:10px}
@@ -4040,7 +4041,7 @@
         var rows = ['metamanco','coc','zyme'].map(prodRow).join('');
         // append BELOW the (still-visible) question + options · do not replace the card
         var html =
-          '<div class="qz-lead">Did you know when and how it happens? Here\'s a closer look 👇</div>'
+          '<div class="qz-lead">Did you know when and how it happens? Here\'s a closer look.</div>'
           + '<div class="vstg open">'
           +   '<button type="button" class="vstg-head"><span class="vstg-dot">3</span>'
           +     '<div class="vstg-info"><div class="nm">Vegetative</div><div class="meta">Day 25–45 · 20 days · 30% of lifecycle</div></div>'
@@ -4066,7 +4067,7 @@
       function showWrongFeedback(){
         var ov = document.createElement('div'); ov.className = 'qz-wrong-ov';
         ov.innerHTML = '<div class="qz-wrong-card"><div class="qz-wrong-ic"><i class="fa-solid fa-xmark"></i></div>'
-          + '<div class="qz-wrong-t">Wrong Answer</div><div class="qz-wrong-s">The correct answer is highlighted</div></div>';
+          + '<div class="qz-wrong-t">Wrong Answer</div><div class="qz-wrong-s">No worries — the <b>correct answer</b> is highlighted for you.</div></div>';
         document.body.appendChild(ov);
         requestAnimationFrame(function(){ ov.classList.add('show'); });
         setTimeout(function(){ ov.classList.remove('show'); setTimeout(function(){ ov.remove(); }, 260); }, 1150);

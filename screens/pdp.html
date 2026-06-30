@@ -1269,5 +1269,38 @@
   })();
 </script>
 
+  <script>
+    // Your own submitted reviews · shown at the top of the list with a "Pending" badge until the admin approves them
+    (function(){
+      var list = document.getElementById('reviewList');
+      if (!list) return;
+      var mine;
+      try { mine = JSON.parse(localStorage.getItem('kkd.myReviews') || '[]') || []; } catch(e){ mine = []; }
+      if (!mine.length) return;
+      function ago(ts){ var s = Math.floor((Date.now() - (ts||0))/1000); if (s < 60) return 'Just now'; var m = Math.floor(s/60); if (m < 60) return m + ' min ago'; var h = Math.floor(m/60); if (h < 24) return h + ' hr ago'; return Math.floor(h/24) + ' days ago'; }
+      function esc(t){ return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+      var html = mine.map(function(rv){
+        var crop = (rv.crops && rv.crops.length) ? '<span class="rev-crop">' + esc(rv.crops[0]) + '</span>' : '';
+        var photos = rv.photos > 0 ? '<div class="text-[11.5px] mt-2" style="color:#64748B"><i class="fa-solid fa-paperclip text-[10px]"></i> ' + rv.photos + ' photo/video added</div>' : '';
+        var body = rv.text ? '<p class="text-[13.5px] mt-2.5 text-[#0F172A] leading-snug">' + esc(rv.text) + '</p>' : '';
+        return '<div class="rounded-[12px] p-3.5" style="border:1px solid #FDE68A;background:#FFFBEB">'
+          + '<div class="flex items-center gap-2.5">'
+          +   '<div class="w-9 h-9 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-center text-[14px] font-semibold" style="color:#258046"><i class="fa-solid fa-user text-[12px]"></i></div>'
+          +   '<div class="flex-1 leading-tight">'
+          +     '<div class="flex items-center gap-2"><span class="text-[14px] font-semibold text-[#0F172A]">You</span>'
+          +       '<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;color:#B45309;background:#FEF3C7;border:1px solid #FDE68A;padding:2px 8px;border-radius:9999px"><i class="fa-regular fa-clock text-[9px]"></i> Pending</span></div>'
+          +     '<div class="flex items-center gap-1.5 mt-1">'
+          +       '<div class="flex items-center gap-0.5 text-white text-[10.5px] font-semibold px-1.5 py-0.5 rounded" style="background:#258046"><svg width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg>' + (rv.rating || 5) + '</div>'
+          +       '<span class="text-[11px]" style="color:#64748B">' + ago(rv.ts) + '</span>' + crop
+          +     '</div>'
+          +   '</div>'
+          + '</div>'
+          + body + photos
+          + '<div class="text-[11px] mt-2.5 pt-2.5" style="color:#B45309;border-top:1px dashed #FDE68A"><i class="fa-regular fa-clock text-[10px]"></i> Your review is under review — others will see it once approved.</div>'
+          + '</div>';
+      }).join('');
+      list.insertAdjacentHTML('afterbegin', html);
+    })();
+  </script>
   <script src="../assets/weight-ladder.js"></script>
 </body></html>

@@ -185,6 +185,21 @@
       if (submit.disabled) return;
       var coins = (textEl.value.trim().length > 0 ? 10 : 0) + (testiUp ? 25 : 0);
       var r = rating || 5, cb = onSubmit;
+      // Persist the user's own review so they can see it (badged "Pending") on the PDP before admin approval
+      try {
+        var arr = JSON.parse(localStorage.getItem('kkd.myReviews') || '[]') || [];
+        var cropLabels = Array.prototype.slice.call(krCrops || []).map(function (k) { return (CROPMAP[k] ? CROPMAP[k].label : k); });
+        arr.unshift({
+          product: (nameEl && nameEl.textContent) || 'product',
+          rating: r,
+          text: textEl.value.trim(),
+          crops: cropLabels,
+          photos: (media && media.files ? media.files.length : 0) + (testiUp ? 1 : 0),
+          ts: Date.now(),
+          status: 'pending'
+        });
+        localStorage.setItem('kkd.myReviews', JSON.stringify(arr.slice(0, 20)));
+      } catch (e) {}
       close();
       setTimeout(function () { if (window.kkdCelebrate) window.kkdCelebrate(coins); if (cb) cb(coins, r); }, 300);
     });

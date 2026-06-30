@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · App / Edge States</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0;font-family:'Poppins',system-ui,sans-serif}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:32px}
+  .dev-banner{background:#0F172A;color:#fff;font-size:11px;font-weight:700;padding:8px 16px;display:flex;align-items:center;gap:8px}
+  .dev-banner i{color:#FBBF24}
+  .state-label{font-size:10px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:.08em;margin:22px 16px 10px;display:flex;align-items:center;gap:8px}
+  .state-label .tg{margin-left:auto;font-size:9.5px;font-weight:800;color:#475569;background:#EEF2F6;border:1px solid #E2E8F0;padding:2px 8px;border-radius:9999px;letter-spacing:.02em;text-transform:none}
+  .card{margin:0 16px;background:#fff;border:1px solid #E5E7EB;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .banner-red{display:flex;align-items:center;gap:10px;background:#FEF2F2;border-bottom:1px solid #FECACA;padding:12px 14px;color:#B91C1C;font-size:12.5px;font-weight:700}
+  .banner-red i{font-size:14px}
+  .mini-head{display:flex;align-items:center;gap:9px;padding:12px 14px;border-bottom:1px solid #F1F5F9}
+  .mini-ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+  .row{display:flex;align-items:center;gap:11px;padding:12px 14px}
+  .thumb{width:44px;height:44px;border-radius:10px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .pay-row{display:flex;align-items:center;gap:11px;padding:12px 14px;border-top:1px solid #F1F5F9}
+  .radio{width:18px;height:18px;border-radius:9999px;border:2px solid #CBD5E1;flex-shrink:0}
+  .note{font-size:11.5px;color:#64748B;font-weight:600;line-height:1.5;padding:11px 14px;background:#F8FAFC;border-top:1px solid #F1F5F9;display:flex;gap:7px;align-items:flex-start}
+  .note i{color:#258046;margin-top:1px;flex-shrink:0}
+  .note b{color:#0F172A;font-weight:800}
+  .btn{margin:12px 14px;display:block;text-align:center;height:44px;line-height:44px;border-radius:11px;font-size:13.5px;font-weight:800}
+  .btn.dis{background:#E2E8F0;color:#94A3B8}
+  .susp{padding:32px 22px;text-align:center;background:#0B1120;color:#fff}
+  .susp .ic{width:64px;height:64px;border-radius:9999px;background:rgba(220,38,38,0.15);color:#F87171;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px}
+</style></head>
+<body>
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-semibold">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
+    </div>
+  </div>
+
+  <div class="dev-banner"><i class="fa-solid fa-flask"></i> DEV REFERENCE · conditional app states (trigger live via <b>?st=</b>)</div>
+
+  <div class="px-4 pt-4 pb-1 flex items-center gap-3">
+    <span class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB"><i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i></span>
+    <h1 class="text-[20px] font-extrabold leading-tight" style="color:#0F172A">App / edge states</h1>
+  </div>
+
+  <!-- 1 · Non-serviceable pincode -->
+  <div class="state-label">Non-serviceable area <span class="tg">pincode 123456</span></div>
+  <div class="card">
+    <div class="banner-red"><i class="fa-solid fa-location-dot"></i> We don't deliver to this pincode yet</div>
+    <div class="row">
+      <div class="thumb" style="background:#ECFDF5;color:#258046"><i class="fa-solid fa-truck-fast"></i></div>
+      <div class="flex-1 leading-tight"><div class="text-[13.5px] font-bold" style="color:#DC2626">Not serviceable</div><div class="text-[11.5px] mt-0.5" style="color:#64748B">Indore · 123456</div></div>
+      <span class="text-[11.5px] font-extrabold" style="color:#258046">CHANGE</span>
+    </div>
+    <div class="note"><i class="fa-solid fa-circle-info"></i> <span>Shown on <b>home</b> (top banner), <b>checkout</b> (place-order blocked) and <b>addresses</b> (card flagged). Trigger: save pincode <b>123456</b>.</span></div>
+  </div>
+
+  <!-- 2 · Banned product in state -->
+  <div class="state-label">Product banned in state <span class="tg">Chakrawarti ZC</span></div>
+  <div class="card">
+    <div class="row">
+      <div class="thumb">🧪</div>
+      <div class="flex-1 leading-tight"><div class="text-[13.5px] font-bold text-[#0F172A]">Chakrawarti ZC</div><div class="text-[11.5px] mt-0.5" style="color:#DC2626"><i class="fa-solid fa-ban text-[10px]"></i> Not available in Madhya Pradesh</div></div>
+      <span class="text-[12px] font-extrabold px-3 py-1.5 rounded-lg" style="background:#E2E8F0;color:#94A3B8">Add</span>
+    </div>
+    <div class="note"><i class="fa-solid fa-circle-info"></i> <span>On <b>PDP</b> (Add disabled) and <b>cart</b> (item dimmed + "remove to checkout"; checkout blocked). Trigger: <b>Chakrawarti</b> in cart.</span></div>
+  </div>
+
+  <!-- 3 · Account suspended (banned user) -->
+  <div class="state-label">Account suspended <span class="tg">mobile 12345</span></div>
+  <div class="card">
+    <div class="susp">
+      <div class="ic"><i class="fa-solid fa-user-lock"></i></div>
+      <div class="text-[18px] font-black">Account suspended</div>
+      <div class="text-[12px] mt-2" style="color:rgba(255,255,255,0.72);line-height:1.5">Your account is temporarily blocked due to a policy issue. Contact support to restore access.</div>
+      <div class="text-[11px] mt-4" style="color:rgba(255,255,255,0.5)">Ref: KKD-USR-4471</div>
+    </div>
+    <div class="note"><i class="fa-solid fa-circle-info"></i> <span>Full-screen block on <b>home</b> with a Contact-support CTA. Trigger: login with mobile <b>12345</b>.</span></div>
+  </div>
+
+  <!-- 4 · COD unavailable -->
+  <div class="state-label">COD unavailable <span class="tg">order &gt; ₹10,000</span></div>
+  <div class="card">
+    <div class="pay-row" style="border-top:0">
+      <span class="radio" style="border-color:#258046;background:#258046"></span>
+      <div class="flex-1 leading-tight"><div class="text-[13.5px] font-bold text-[#0F172A]">Pay Now</div><div class="text-[11px] mt-0.5" style="color:#64748B">UPI · Cards · Net banking</div></div>
+      <span class="text-[13px] font-extrabold" style="color:#258046">₹20,000</span>
+    </div>
+    <div class="pay-row" style="opacity:.6">
+      <span class="radio"></span>
+      <div class="flex-1 leading-tight"><div class="text-[13.5px] font-bold text-[#0F172A]">Cash on Delivery</div><div class="text-[11.5px] mt-0.5" style="color:#DC2626;font-weight:700"><i class="fa-solid fa-circle-xmark text-[10px]"></i> Not available above ₹10,000</div></div>
+    </div>
+    <div class="note"><i class="fa-solid fa-circle-info"></i> <span>On <b>checkout</b> the COD row is disabled and falls back to Pay Now. Trigger: order value over <b>₹10,000</b> (or account flag <b>codoff</b>).</span></div>
+  </div>
+
+  <script src="../assets/weight-ladder.js"></script>
+</body></html>

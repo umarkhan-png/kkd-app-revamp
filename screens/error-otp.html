@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · OTP Error States</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0;font-family:'Poppins',system-ui,sans-serif}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:32px}
+  .dev-banner{background:#0F172A;color:#fff;font-size:11px;font-weight:700;padding:8px 16px;display:flex;align-items:center;gap:8px}
+  .dev-banner i{color:#FBBF24}
+  .state-label{font-size:10px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:.08em;margin:22px 16px 10px;display:flex;align-items:center;gap:8px}
+  .state-label::before{content:'';width:6px;height:6px;border-radius:9999px;background:#94A3B8}
+  .state-label.err::before{background:#DC2626}
+  .state-label.warn::before{background:#D97706}
+  .state-label.ok::before{background:#258046}
+  .card{margin:0 16px;background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:18px 16px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .otp-row{display:flex;gap:9px;justify-content:center;margin:4px 0 12px}
+  .otp-box{width:46px;height:52px;border:1.5px solid #E5E7EB;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;background:#F8FAFC;color:#0F172A}
+  .otp-box.err{border-color:#FCA5A5;background:#FEF2F2;color:#DC2626}
+  .otp-box.warn{border-color:#FCD34D;background:#FFFBEB;color:#B45309}
+  .otp-box.ok{border-color:#A7F3D0;background:#ECFDF5;color:#258046}
+  .msg{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;font-weight:600;line-height:1.5;padding:10px 12px;border-radius:10px}
+  .msg.err{background:#FEF2F2;border:1px solid #FECACA;color:#B91C1C}
+  .msg.warn{background:#FFFBEB;border:1px solid #FDE68A;color:#92400E}
+  .msg.ok{background:#ECFDF5;border:1px solid #A7F3D0;color:#0E7A4E}
+  .msg i{margin-top:1px;flex-shrink:0}
+  .otp-title{font-size:14px;font-weight:800;color:#0F172A;text-align:center;margin-bottom:2px}
+  .otp-sub{font-size:11.5px;color:#64748B;text-align:center;margin-bottom:14px}
+  .btn{margin-top:14px;width:100%;height:46px;border-radius:11px;font-size:14px;font-weight:800;border:0;font-family:inherit}
+  .btn.primary{background:#258046;color:#fff}
+  .btn.ghost{background:#fff;color:#64748B;border:1px solid #E2E8F0}
+  .btn.disabled{background:#E2E8F0;color:#94A3B8}
+  .resend{text-align:center;font-size:12px;color:#64748B;margin-top:12px}
+  .resend b{color:#258046;font-weight:800}
+</style></head>
+<body>
+  <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-semibold">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
+    </div>
+  </div>
+
+  <div class="dev-banner"><i class="fa-solid fa-flask"></i> DEV REFERENCE · OTP verification error states (single spec screen)</div>
+
+  <div class="px-4 pt-4 pb-1 flex items-center gap-3">
+    <span class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB"><i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i></span>
+    <h1 class="text-[20px] font-extrabold leading-tight" style="color:#0F172A">OTP error states</h1>
+  </div>
+
+  <!-- 1 · Wrong code -->
+  <div class="state-label err">Wrong code entered</div>
+  <div class="card">
+    <div class="otp-title">Enter OTP</div>
+    <div class="otp-sub">Sent to +91 98765 43210</div>
+    <div class="otp-row"><div class="otp-box err">4</div><div class="otp-box err">1</div><div class="otp-box err">2</div><div class="otp-box err">9</div></div>
+    <div class="msg err"><i class="fa-solid fa-circle-exclamation"></i> <span>Incorrect OTP. Please check the code and try again. 2 attempts left.</span></div>
+    <button class="btn primary">Verify</button>
+  </div>
+
+  <!-- 2 · Expired -->
+  <div class="state-label warn">Code expired</div>
+  <div class="card">
+    <div class="otp-title">Enter OTP</div>
+    <div class="otp-sub">Sent to +91 98765 43210</div>
+    <div class="otp-row"><div class="otp-box warn">2</div><div class="otp-box warn">8</div><div class="otp-box warn">0</div><div class="otp-box warn">5</div></div>
+    <div class="msg warn"><i class="fa-regular fa-clock"></i> <span>This code has expired. Request a new OTP to continue.</span></div>
+    <div class="resend">Didn't get it? <b>Resend OTP</b></div>
+  </div>
+
+  <!-- 3 · Too many attempts -->
+  <div class="state-label err">Too many attempts · locked</div>
+  <div class="card">
+    <div class="otp-title">Enter OTP</div>
+    <div class="otp-sub">Sent to +91 98765 43210</div>
+    <div class="otp-row"><div class="otp-box err">•</div><div class="otp-box err">•</div><div class="otp-box err">•</div><div class="otp-box err">•</div></div>
+    <div class="msg err"><i class="fa-solid fa-lock"></i> <span>Too many wrong attempts. For your security, try again after <b>30 min</b> or contact support.</span></div>
+    <button class="btn disabled">Try again in 29:58</button>
+    <div class="resend"><b>Contact support</b></div>
+  </div>
+
+  <!-- 4 · Verified -->
+  <div class="state-label ok">Verified · success</div>
+  <div class="card">
+    <div class="otp-title">Enter OTP</div>
+    <div class="otp-sub">Sent to +91 98765 43210</div>
+    <div class="otp-row"><div class="otp-box ok">9</div><div class="otp-box ok">3</div><div class="otp-box ok">4</div><div class="otp-box ok">7</div></div>
+    <div class="msg ok"><i class="fa-solid fa-circle-check"></i> <span>Number verified successfully. Taking you in…</span></div>
+    <button class="btn primary"><i class="fa-solid fa-check text-[12px]"></i> Verified</button>
+  </div>
+
+  <script src="../assets/weight-ladder.js"></script>
+</body></html>

@@ -135,8 +135,8 @@
           </span>
           <div class="pay-sub">UPI &middot; Cards &middot; Net banking &middot; Wallets</div>
           <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:5px">
-            <span class="pay-bene" id="payNowDiscPill"><i class="fa-solid fa-tag"></i> 5% instant off · save ₹0</span>
-            <span class="pay-bene"><i class="fa-solid fa-bolt"></i> Faster order processing</span>
+            <span id="payNowDiscPill" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#258046;background:#ECFDF5;border:1px solid #BBF7D0;padding:3px 9px;border-radius:9999px"><i class="fa-solid fa-tag text-[9px]"></i> 5% instant off · save ₹0</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#258046;background:#ECFDF5;border:1px solid #BBF7D0;padding:3px 9px;border-radius:9999px"><i class="fa-solid fa-bolt text-[9px]"></i> Faster order processing</span>
           </div>
         </span>
       </span>
@@ -220,7 +220,7 @@
       // ---- Static row figures ----
       document.getElementById('payNowAmt').textContent = rupee(payNowAmount);
       var discPill = document.getElementById('payNowDiscPill');
-      if (onlineDisc > 0) { discPill.innerHTML = '<i class="fa-solid fa-tag"></i> 5% instant off · save ' + rupee(onlineDisc); discPill.style.display = ''; }
+      if (onlineDisc > 0) { discPill.innerHTML = '<i class="fa-solid fa-tag text-[9px]"></i> 5% instant off · save ' + rupee(onlineDisc); discPill.style.display = ''; }
       else { discPill.style.display = 'none'; }
       // COD · available only in the normal regime
       var codRow = document.getElementById('codRow');

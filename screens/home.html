@@ -1568,6 +1568,10 @@
         .qz-res.ok{background:#ECFDF5;border:1px solid #A7F3D0;color:#0E7A4E}
         .qz-res.no{background:#FFF7ED;border:1px solid #FED7AA;color:#9A3412}
         .qz-res b{font-weight:900}
+        /* Answered quiz chip states · tapped-correct uses the existing .sel (green ✓); wrong-tapped = red ✗; the rest dim+disabled */
+        .eng-chip.eq-wrong{background:#FEF2F2;border-color:#FCA5A5;color:#DC2626;font-weight:800;pointer-events:none}
+        .eng-chip.eq-wrong::before{content:"\f00d";font-family:"Font Awesome 6 Free";font-weight:900;margin-right:6px;font-size:10px}
+        .eng-chip.eq-dis{opacity:.45;pointer-events:none}
         /* Crop-guide growth-stage section · copied 1:1 from crop-detail.html (the actual 3rd-stage accordion) */
         .vstg{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
         .vstg-head{display:flex;align-items:center;gap:12px;width:100%;padding:15px 15px;background:transparent;border:0;cursor:pointer;text-align:left}
@@ -4027,11 +4031,11 @@
         + '<div class="prod-tags"><span class="tg"><i class="fa-solid fa-box-open" style="font-size:8px"></i> ' + p.pack + '</span></div></div>'
         + '<div class="prod-price"><div class="amt tnum">' + p.p + '</div><span class="add">Add</span></div></a>'; }
       function showRecommendation(correct){
-        card.classList.remove('done', 'wrong');
         var rows = ['metamanco','coc','zyme'].map(prodRow).join('');
-        card.innerHTML =
+        // append BELOW the (still-visible) question + options · do not replace the card
+        var html =
           '<div class="qz-res ' + (correct ? 'ok' : 'no') + '"><i class="fa-solid ' + (correct ? 'fa-circle-check' : 'fa-circle-info') + '"></i> '
-            + (correct ? 'Correct! This is <b>Tomato Early Blight</b>.' : 'Close — this is <b>Tomato Early Blight</b>.') + '</div>'
+            + (correct ? 'Correct answer! It\'s <b>Tomato Early Blight</b>.' : 'Not quite — the answer is <b>Tomato</b> (Early Blight).') + '</div>'
           + '<div class="vstg open">'
           +   '<button type="button" class="vstg-head"><span class="vstg-dot">3</span>'
           +     '<div class="vstg-info"><div class="nm">Vegetative</div><div class="meta">Day 25–45 · 20 days · 30% of lifecycle</div></div>'
@@ -4045,6 +4049,8 @@
           +   '</div></div>'
           + '</div>'
           + '<a href="crop-detail.html?crop=tomato" class="vstg-stage-link">View full crop guide <i class="fa-solid fa-arrow-right"></i></a>';
+        // append BELOW the question + options (keep them visible) — do not replace the card
+        card.insertAdjacentHTML('beforeend', html);
         // wiring (mirrors crop-detail): accordion head, rp-toggle, Add buttons
         var head = card.querySelector('.vstg-head'); if (head) head.addEventListener('click', function(){ head.closest('.vstg').classList.toggle('open'); });
         var tog = card.querySelector('.rp-toggle'); if (tog) tog.addEventListener('click', function(e){ e.preventDefault(); var list = tog.nextElementSibling; var op = tog.classList.toggle('open'); if (list) list.classList.toggle('open', op); var sp = tog.querySelector('span'); if (sp) sp.textContent = op ? 'Hide recommended products' : 'Show recommended products (' + tog.dataset.count + ')'; });
@@ -4052,14 +4058,21 @@
           b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); if (typeof bumpCart === 'function') bumpCart(); b.textContent = 'Added ✓'; setTimeout(function(){ b.textContent = 'Add'; }, 900); });
         });
       }
-      document.querySelectorAll('#cropDiseaseCard [data-quiz]').forEach(function(opt){
+      var chips = card.querySelectorAll('.eng-opts [data-quiz]');
+      var answerChip = card.querySelector('.eng-opts [data-quiz][data-correct]');
+      chips.forEach(function(opt){
         opt.addEventListener('click', function(){
-          if (card.classList.contains('done') || card.classList.contains('wrong')) return;
+          if (card.dataset.answered) return;      // sticky · answer once
+          card.dataset.answered = '1';
           var correct = opt.hasAttribute('data-correct');
-          if (correct){ card.classList.add('done'); if (window.kkdCelebrate) window.kkdCelebrate(15); }
-          else { card.classList.add('wrong'); }
-          // show the correct/wrong overlay briefly, then convert into the recommendation
-          setTimeout(function(){ showRecommendation(correct); }, 1100);
+          // keep question + ALL options visible: tapped chip → selected/wrong, correct answer always green ✓, rest disabled
+          chips.forEach(function(c){
+            if (c === answerChip) c.classList.add('sel');           // correct answer shown for both paths
+            else if (c === opt) c.classList.add('eq-wrong');        // user's wrong pick → red ✗
+            else c.classList.add('eq-dis');                         // others dimmed/disabled
+          });
+          if (correct && window.kkdCelebrate) window.kkdCelebrate(15);
+          setTimeout(function(){ showRecommendation(correct); }, correct ? 1100 : 320);
         });
       });
     })();

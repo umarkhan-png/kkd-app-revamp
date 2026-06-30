@@ -76,6 +76,9 @@
   .pp-split .row .lbl{color:#64748B}
   .pp-split .row .val{font-weight:800;color:#0F172A;font-variant-numeric:tabular-nums}
   .pp-split .row .val.green{color:#258046}
+  .pp-split .row.hi{border-top:1px dashed #BBF7D0;margin-top:4px;padding-top:7px}
+  .pp-split .row.hi .lbl{color:#0F172A;font-weight:800}
+  .pp-split .row.hi .val{color:#258046;font-weight:900;font-size:14px}
 
   /* Sticky CTA bar · EXACT same as cart.html */
   .sticky-cta{position:fixed;bottom:0;left:0;right:0;background:#FFFFFF;border-top:1px solid #F1F5F9;padding:12px 14px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px);z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -163,11 +166,7 @@
         <button type="button" class="pp-opt" data-pct="50">50%</button>
         <button type="button" class="pp-opt" data-pct="75">75%</button>
       </div>
-      <div class="pp-split">
-        <div class="row"><span class="lbl">Pay now</span><span class="val tnum" id="ppPayNow">₹0</span></div>
-        <div class="row"><span class="lbl">On delivery (cash)</span><span class="val tnum" id="ppOnDelivery">₹0</span></div>
-        <div class="row"><span class="lbl">Coins earned</span><span class="val green tnum" id="ppCoins">+0 coins</span></div>
-      </div>
+      <div class="pp-split" id="ppSplit"></div>
     </div>
 
     <!-- Cash on Delivery -->
@@ -256,11 +255,20 @@
         return Math.round(dueNow * pct / 100);
       }
 
+      // Partial breakdown · shows pct% of order value → minus already-paid → Pay now (no on-delivery line)
       function renderPartialTray(){
         var pn = partialNow();
-        document.getElementById('ppPayNow').textContent = rupee(pn);
-        document.getElementById('ppOnDelivery').textContent = rupee(Math.max(0, dueNow - pn));
-        document.getElementById('ppCoins').textContent = '+' + Math.round(pn * 0.02) + ' coins';
+        var html = '';
+        if (m.advanceRegime){
+          var pctAmt = Math.round(m.mergedOrderValue * pct / 100);
+          html += '<div class="row"><span class="lbl">' + pct + '% of ' + rupee(m.mergedOrderValue) + '</span><span class="val tnum">' + rupee(pctAmt) + '</span></div>';
+          if (m.alreadyPaid > 0) html += '<div class="row"><span class="lbl">Already paid</span><span class="val green tnum">− ' + rupee(m.alreadyPaid) + '</span></div>';
+          html += '<div class="row hi"><span class="lbl">Pay now</span><span class="val tnum">' + rupee(pn) + '</span></div>';
+        } else {
+          html += '<div class="row hi"><span class="lbl">Pay now (' + pct + '%)</span><span class="val tnum">' + rupee(pn) + '</span></div>';
+        }
+        html += '<div class="row"><span class="lbl">Coins earned</span><span class="val green tnum">+' + Math.round(pn * 0.02) + ' coins</span></div>';
+        document.getElementById('ppSplit').innerHTML = html;
       }
 
       function currentPayNow(){
@@ -272,18 +280,18 @@
       // ---- Bill summary · holds the amount breakdown (checkout-style rows + total) ----
       function renderBill(){
         var pn = currentPayNow();
+        var bal = (selected === 'partial') ? Math.max(0, dueNow - partialNow()) : 0;   // cash collected on delivery
         var html = '';
         if (m.advanceRegime){
           html += '<div class="bill-row"><span class="lbl">Total order value</span><span class="val">' + rupee(m.mergedOrderValue) + '</span></div>';
           if (m.alreadyPaid > 0) html += '<div class="bill-row"><span class="lbl">Already paid earlier</span><span class="val green">− ' + rupee(m.alreadyPaid) + '</span></div>';
-          html += '<div class="bill-row"><span class="lbl">Remaining</span><span class="val">' + rupee(dueNow) + '</span></div>';
-          if (selected === 'partial') html += '<div class="bill-row"><span class="lbl">Balance on delivery (cash)</span><span class="val">' + rupee(Math.max(0, dueNow - pn)) + '</span></div>';
         } else {
           html += '<div class="bill-row"><span class="lbl">New items added</span><span class="val">' + rupee(m.extra) + '</span></div>';
           if (selected === 'paynow' && onlineDisc > 0) html += '<div class="bill-row"><span class="lbl">Online payment discount (5%)</span><span class="val green">− ' + rupee(onlineDisc) + '</span></div>';
-          if (selected === 'partial') html += '<div class="bill-row"><span class="lbl">Balance on delivery (cash)</span><span class="val">' + rupee(Math.max(0, dueNow - pn)) + '</span></div>';
         }
+        // You pay now right after the above; balance on delivery (cash) as the last line
         html += '<div class="bill-total"><span class="lbl">You pay now</span><span class="val">' + rupee(pn) + '</span></div>';
+        if (bal > 0) html += '<div class="bill-row" style="margin-top:7px"><span class="lbl">Balance on delivery (cash)</span><span class="val">' + rupee(bal) + '</span></div>';
         bill.innerHTML = html;
         var ca = document.getElementById('ctaAmt'); if (ca) ca.textContent = rupee(pn);   // sticky amount tracks the selection (like checkout)
       }

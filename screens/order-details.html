@@ -524,8 +524,8 @@
 
   <!-- Sticky bottom · 2 CTAs · Return (outline) + Reorder (primary emerald, fa-repeat) · Download invoice moved back into the kebab menu -->
   <div class="sticky-cta">
-    <a class="cta-out hide-pending" id="returnCta" href="#return">
-      <i class="fa-solid fa-right-left"></i> Refund or Replace
+    <a class="cta-out hide-pending" id="returnCta" href="#complaint">
+      <i class="fa-solid fa-flag"></i> Raise a complaint
     </a>
     <a class="cta-pri hide-pending" href="cart.html?reorder=1">
       <i class="fa-solid fa-repeat"></i> Reorder
@@ -643,10 +643,84 @@
     </div>
   </div>
 
+  <!-- Complaint · step 1 · what's wrong (categories) -->
+  <div id="cmpBd" class="modal-bd"></div>
+  <div id="cmpSheet" class="modal-sheet" style="padding:0 0 16px">
+    <div class="modal-handle"></div>
+    <div class="px-5 pt-3 pb-1 flex items-center justify-between">
+      <div class="text-[18px] font-bold">Raise a complaint</div>
+      <button id="cmpClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <p class="px-5 text-[12px] mb-1" style="color:#64748B">Tell us what went wrong — we'll suggest the right resolution.</p>
+    <div class="px-3 pt-2 space-y-2">
+      <button type="button" class="cmp-cat" data-cat="received"><span class="ic" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-box-open"></i></span><span class="tx">I received it, but there's a problem</span><i class="fa-solid fa-chevron-right ch"></i></button>
+      <button type="button" class="cmp-cat" data-cat="notreceived"><span class="ic" style="background:#FEE2E2;color:#DC2626"><i class="fa-solid fa-truck-ramp-box"></i></span><span class="tx">I never received it</span><i class="fa-solid fa-chevron-right ch"></i></button>
+      <button type="button" class="cmp-cat" data-act="track"><span class="ic" style="background:#ECFDF5;color:#258046"><i class="fa-solid fa-location-crosshairs"></i></span><span class="tx">Track my refund / replacement</span><i class="fa-solid fa-chevron-right ch"></i></button>
+      <button type="button" class="cmp-cat" data-act="other"><span class="ic" style="background:#EFF6FF;color:#2563EB"><i class="fa-solid fa-headset"></i></span><span class="tx">Something else</span><i class="fa-solid fa-chevron-right ch"></i></button>
+    </div>
+  </div>
+
+  <!-- Complaint · step 2 · reasons for the chosen category -->
+  <div id="cmpRBd" class="modal-bd"></div>
+  <div id="cmpRSheet" class="modal-sheet" style="padding:0 0 16px">
+    <div class="modal-handle"></div>
+    <div class="px-5 pt-3 pb-2 flex items-center gap-2.5">
+      <button id="cmpRBack" class="cmp-back"><i class="fa-solid fa-arrow-left text-[13px]"></i></button>
+      <div class="text-[16px] font-bold leading-tight flex-1 min-w-0" id="cmpRTitle">What's the problem?</div>
+      <button id="cmpRClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0;flex-shrink:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div class="px-3 pt-1 space-y-2" id="cmpRList"></div>
+  </div>
+
+  <!-- Complaint · step 3 · resolution the app decides from the reason -->
+  <div id="cmpResBd" class="modal-bd"></div>
+  <div id="cmpResSheet" class="modal-sheet" style="padding:0;max-height:88vh;display:flex;flex-direction:column">
+    <div class="modal-handle"></div>
+    <div class="px-5 pt-3 pb-2 flex items-center gap-2.5" style="flex-shrink:0">
+      <button id="cmpResBack" class="cmp-back"><i class="fa-solid fa-arrow-left text-[13px]"></i></button>
+      <div class="text-[16px] font-bold leading-tight flex-1">Your resolution</div>
+      <button id="cmpResClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0;flex-shrink:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div class="px-5 pb-3 overflow-y-auto" style="flex:1">
+      <span class="cmp-pill" id="cmpResReason"><i class="fa-solid fa-flag"></i> <span></span></span>
+      <div class="text-[16px] font-extrabold mt-3 leading-snug" id="cmpResHead">—</div>
+      <div class="text-[12.5px] mt-1 leading-relaxed" style="color:#64748B" id="cmpResSub">—</div>
+      <div id="cmpResBody"></div>
+    </div>
+    <div class="px-5 pt-3 pb-5" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px);flex-shrink:0">
+      <button id="cmpResCta" class="w-full h-[52px] rounded-[12px] text-[15px] font-semibold" style="background:#258046;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">Continue</button>
+    </div>
+  </div>
+
   <style>
     .hopt{ transition: background .15s ease; }
     .hopt:hover{ background:#F8FAFC; }
     .hopt:active{ transform: scale(.98); }
+
+    /* Complaint flow · category / reason / resolution */
+    .cmp-cat{display:flex;align-items:center;gap:12px;width:100%;padding:14px 13px;border-radius:12px;background:#fff;border:1px solid #E5E7EB;text-align:left;cursor:pointer;font-family:inherit}
+    .cmp-cat:active{background:#F8FAFC;transform:scale(.99)}
+    .cmp-cat .ic{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+    .cmp-cat .tx{flex:1;min-width:0;font-size:13.5px;font-weight:700;color:#0F172A;line-height:1.3}
+    .cmp-cat .ch{color:#94A3B8;font-size:12px;flex-shrink:0}
+    .cmp-reason{display:flex;align-items:center;gap:11px;width:100%;padding:13px;border-radius:11px;background:#fff;border:1px solid #E5E7EB;text-align:left;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#0F172A}
+    .cmp-reason:active{background:#F8FAFC}
+    .cmp-reason .rch{margin-left:auto;color:#94A3B8;font-size:11px;flex-shrink:0}
+    .cmp-back{width:32px;height:32px;border-radius:9999px;background:#F1F5F9;border:0;display:flex;align-items:center;justify-content:center;color:#475569;flex-shrink:0;cursor:pointer}
+    .cmp-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#475569;background:#F1F5F9;padding:5px 11px;border-radius:9999px}
+    .cmp-pill i{font-size:9px;color:#94A3B8}
+    .cmp-elig{display:flex;align-items:flex-start;gap:12px;padding:14px;border-radius:14px;border:1.5px solid #E5E7EB;background:#fff;cursor:pointer;width:100%;text-align:left;font-family:inherit;margin-top:10px}
+    .cmp-elig.sel{border-color:#258046;background:#ECFDF5}
+    .cmp-elig.solo{cursor:default}
+    .cmp-elig .eic{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
+    .cmp-elig .et{font-size:14.5px;font-weight:800;color:#0F172A;line-height:1.2}
+    .cmp-elig .ed{font-size:11.5px;color:#64748B;margin-top:3px;line-height:1.45}
+    .cmp-elig .eck{margin-left:auto;width:20px;height:20px;border-radius:50%;border:1.5px solid #CBD5E1;flex-shrink:0;display:none;align-items:center;justify-content:center;font-size:9px;color:#fff;margin-top:2px}
+    .cmp-elig.pick .eck{display:flex}
+    .cmp-elig.sel .eck{background:#258046;border-color:#258046}
+    .cmp-note{display:flex;gap:11px;padding:13px;border-radius:12px;background:#FFFBEB;border:1px solid #FCD34D;margin-top:12px}
+    .cmp-note i{color:#B45309;font-size:14px;flex-shrink:0;margin-top:1px}
+    .cmp-note p{font-size:12px;color:#78350F;line-height:1.5}
 
     /* Return / replace form */
     .rtn-seg{display:flex;gap:8px}
@@ -1076,10 +1150,124 @@
       const tncClose = document.getElementById('rtnTncClose');
       const tncAgree = document.getElementById('rtnTncAgree');
       const tncProceed = document.getElementById('rtnTncProceed');
-      if (returnCta) returnCta.addEventListener('click', (e) => { e.preventDefault(); openSheet(tncBd, tncSheet); });
+      // returnCta now opens the complaint flow (wired in the complaint IIFE below) — not the old T&C/return form
       if (tncClose) tncClose.addEventListener('click', () => closeSheet(tncBd, tncSheet));
       if (tncBd) tncBd.addEventListener('click', () => closeSheet(tncBd, tncSheet));
       if (tncAgree) tncAgree.addEventListener('change', () => { tncProceed.disabled = !tncAgree.checked; tncProceed.style.opacity = tncAgree.checked ? '1' : '.55'; });
+
+      // ---- Complaint flow · capture the reason, then the APP decides the resolution (refund / replacement / both / investigation) ----
+      (function(){
+        const cmpBd=document.getElementById('cmpBd'), cmpSheet=document.getElementById('cmpSheet');
+        const rBd=document.getElementById('cmpRBd'), rSheet=document.getElementById('cmpRSheet'), rList=document.getElementById('cmpRList'), rTitle=document.getElementById('cmpRTitle');
+        const resBd=document.getElementById('cmpResBd'), resSheet=document.getElementById('cmpResSheet');
+        if(!cmpSheet) return;
+        const resReason=document.getElementById('cmpResReason').querySelector('span'), resHead=document.getElementById('cmpResHead'), resSub=document.getElementById('cmpResSub'), resBody=document.getElementById('cmpResBody'), resCta=document.getElementById('cmpResCta');
+        const ok=document.getElementById('rtnOk'), okTitle=document.getElementById('rtnOkTitle'), okSub=document.getElementById('rtnOkSub');
+
+        // Reason → outcome map · the app decides; the user does NOT pick refund-vs-replace upfront
+        const CATS={
+          received:{title:"I received it, but there's a problem", reasons:[
+            {id:'missing',  label:'Missing item(s)',                       out:'both'},
+            {id:'damaged',  label:'Damaged / leaked / broken',            out:'both'},
+            {id:'wrong',    label:'Received wrong product',               out:'replace'},
+            {id:'quality',  label:'Quality issue (less quantity / expired)', out:'refund'},
+            {id:'other',    label:'Other',                                out:'investigate'}
+          ]},
+          notreceived:{title:"I never received it", reasons:[
+            {id:'nocall',   label:'No call from delivery agent',          out:'both'},
+            {id:'otp',      label:'OTP shared but no parcel',             out:'investigate'},
+            {id:'marked',   label:'Marked delivered but not received',    out:'investigate'},
+            {id:'other2',   label:'Other',                                out:'investigate'}
+          ]}
+        };
+        const ELIG={
+          refund:{ic:'fa-indian-rupee-sign',bg:'#ECFDF5',color:'#258046',t:'Refund',d:'Money back to your KKD wallet or original payment method in 3–5 days after a quick quality check.'},
+          replace:{ic:'fa-right-left',bg:'#EFF6FF',color:'#2563EB',t:'Free replacement',d:'We pick up the item and ship a fresh one — usually within 24–48 hrs.'}
+        };
+        let pick=null;
+
+        function eligCard(kind, selectable){
+          const e=ELIG[kind];
+          return '<div class="cmp-elig'+(selectable?' pick':' solo')+'" data-pick="'+kind+'">'
+            +'<span class="eic" style="background:'+e.bg+';color:'+e.color+'"><i class="fa-solid '+e.ic+'"></i></span>'
+            +'<div style="flex:1;min-width:0"><div class="et">'+e.t+'</div><div class="ed">'+e.d+'</div></div>'
+            +'<span class="eck"><i class="fa-solid fa-check"></i></span></div>';
+        }
+        function openResolution(r){
+          pick=null; resReason.textContent=r.label; resBody.innerHTML='';
+          if(r.out==='both'){
+            resHead.textContent='Good news — you can choose a refund or a replacement';
+            resSub.textContent='Pick whichever works best for you. We’ll take it from here.';
+            resBody.innerHTML=eligCard('refund',true)+eligCard('replace',true);
+            resCta.textContent='Continue'; resCta.disabled=true; resCta.style.opacity='.55';
+            resBody.querySelectorAll('.cmp-elig').forEach(function(c){
+              c.addEventListener('click', function(){
+                resBody.querySelectorAll('.cmp-elig').forEach(function(x){x.classList.remove('sel');});
+                c.classList.add('sel'); pick=c.getAttribute('data-pick');
+                resCta.disabled=false; resCta.style.opacity='1';
+              });
+            });
+          } else if(r.out==='refund'){
+            pick='refund';
+            resHead.textContent='You’re eligible for a refund';
+            resSub.textContent='Based on your complaint, a refund is the fastest fix.';
+            resBody.innerHTML=eligCard('refund',false);
+            resCta.textContent='Confirm refund'; resCta.disabled=false; resCta.style.opacity='1';
+          } else if(r.out==='replace'){
+            pick='replace';
+            resHead.textContent='We’ll send you a free replacement';
+            resSub.textContent='We’ll pick up the wrong item and ship the correct one.';
+            resBody.innerHTML=eligCard('replace',false);
+            resCta.textContent='Confirm replacement'; resCta.disabled=false; resCta.style.opacity='1';
+          } else {
+            pick='investigate';
+            resHead.textContent='We’ll investigate this for you';
+            resSub.textContent='Our team will verify with the delivery partner and update you.';
+            resBody.innerHTML='<div class="cmp-note"><i class="fa-solid fa-shield-halved"></i><p>You’ll get an update within <b>24–48 hrs</b>. If the parcel can’t be confirmed delivered, you’ll get a <b>full refund or a re-delivery</b> — no extra steps.</p></div>';
+            resCta.textContent='Raise complaint'; resCta.disabled=false; resCta.style.opacity='1';
+          }
+          closeSheet(rBd,rSheet); setTimeout(function(){ openSheet(resBd,resSheet); },180);
+        }
+        function openReasons(catKey){
+          const cat=CATS[catKey]; rTitle.textContent=cat.title; rList.innerHTML='';
+          cat.reasons.forEach(function(r){
+            const b=document.createElement('button'); b.type='button'; b.className='cmp-reason';
+            b.innerHTML='<span>'+r.label+'</span><i class="fa-solid fa-chevron-right rch"></i>';
+            b.addEventListener('click', function(){ openResolution(r); });
+            rList.appendChild(b);
+          });
+          closeSheet(cmpBd,cmpSheet); setTimeout(function(){ openSheet(rBd,rSheet); },180);
+        }
+        function finish(){
+          if(resCta.disabled) return;
+          closeSheet(resBd,resSheet);
+          let t,s;
+          if(pick==='refund'){ t='Refund request raised'; s='Refund to your wallet in 3–5 days after a quick quality check.'; }
+          else if(pick==='replace'){ t='Replacement requested'; s='Free pickup in 24–48 hrs · a fresh item ships right after.'; }
+          else { t='Complaint registered'; s='We’ll investigate and update you within 24–48 hrs.'; }
+          okTitle.textContent=t; okSub.textContent=s;
+          setTimeout(function(){ ok.classList.add('show'); setTimeout(function(){ ok.classList.remove('show'); }, 2600); }, 200);
+        }
+
+        cmpSheet.querySelectorAll('.cmp-cat').forEach(function(b){
+          b.addEventListener('click', function(){
+            const cat=b.getAttribute('data-cat'), act=b.getAttribute('data-act');
+            if(cat){ openReasons(cat); }
+            else if(act==='track'){ closeSheet(cmpBd,cmpSheet); setTimeout(function(){ const dB=document.getElementById('rtnDetBd'), dS=document.getElementById('rtnDetSheet'); if(dB&&dS) openSheet(dB,dS); },180); }
+            else if(act==='other'){ closeSheet(cmpBd,cmpSheet); setTimeout(function(){ openSheet(helpBd,helpSheet); },180); }
+          });
+        });
+        document.getElementById('cmpClose').addEventListener('click', function(){ closeSheet(cmpBd,cmpSheet); });
+        cmpBd.addEventListener('click', function(){ closeSheet(cmpBd,cmpSheet); });
+        document.getElementById('cmpRBack').addEventListener('click', function(){ closeSheet(rBd,rSheet); setTimeout(function(){ openSheet(cmpBd,cmpSheet); },180); });
+        document.getElementById('cmpRClose').addEventListener('click', function(){ closeSheet(rBd,rSheet); });
+        rBd.addEventListener('click', function(){ closeSheet(rBd,rSheet); });
+        document.getElementById('cmpResBack').addEventListener('click', function(){ closeSheet(resBd,resSheet); setTimeout(function(){ openSheet(rBd,rSheet); },180); });
+        document.getElementById('cmpResClose').addEventListener('click', function(){ closeSheet(resBd,resSheet); });
+        resBd.addEventListener('click', function(){ closeSheet(resBd,resSheet); });
+        resCta.addEventListener('click', finish);
+        if(returnCta) returnCta.addEventListener('click', function(e){ e.preventDefault(); openSheet(cmpBd,cmpSheet); });
+      })();
 
       // Unboxing video · standalone card · device camera capture · confirm once a clip is chosen
       const unbox = document.getElementById('unboxVideo');

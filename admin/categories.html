@@ -5,10 +5,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="assets/admin.css">
 <style>
-  .ic-tile{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-  .icon-pick{display:flex;flex-wrap:wrap;gap:8px}
-  .icon-opt{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;border:1px solid var(--slate-200);background:#fff;color:var(--slate-600);cursor:pointer}
-  .icon-opt.sel{border-color:var(--green);color:var(--green);background:var(--green-50);box-shadow:0 0 0 3px var(--green-50)}
+  /* Real app category tile (colour wash + product cut-out) */
+  .cat-thumb{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;padding:4px}
+  .cat-thumb img{max-width:100%;max-height:100%;object-fit:contain}
+  .cat-thumb.lg{width:72px;height:72px;border-radius:16px;padding:8px}
 </style>
 </head>
 <body>
@@ -56,9 +56,17 @@
     <div class="field"><label>Name</label><input class="input" id="catName" placeholder="e.g. Fungicide"/></div>
     <div class="field"><label>Key</label><input class="input" id="catKey" placeholder="fungicide"/><div class="hint">Lowercase slug used in deep links (shop.html?cat=key).</div></div>
     <div class="field">
-      <label>Icon</label>
-      <div class="icon-pick" id="iconPick"></div>
+      <label>Category icon</label>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="cat-thumb lg" id="catIconPrev" style="background:#BFE8CB"><img id="catIconImg" src="" alt=""/></div>
+        <div>
+          <input type="file" id="catIconFile" accept="image/png,image/webp,image/jpeg,image/svg+xml" style="display:none" onchange="catIconPick(this)"/>
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('catIconFile').click()"><i class="fa-solid fa-upload"></i> Upload / change icon</button>
+          <div class="hint" style="margin-top:6px">Transparent PNG/WebP cut-out · ~240×240px. Sits on the tile colour below.</div>
+        </div>
+      </div>
     </div>
+    <div class="field"><label>Tile colour</label><input type="color" id="catColor" value="#BFE8CB" style="width:54px;height:36px;border:1px solid var(--slate-200);border-radius:8px;padding:2px;cursor:pointer" onchange="editColor=this.value;document.getElementById('catIconPrev').style.background=this.value"/></div>
     <div class="field flex items-center justify-between" style="padding:12px 14px;background:var(--slate-50);border-radius:10px;border:1px solid var(--slate-200)">
       <div><label style="margin:0">Active</label><div class="hint" style="margin-top:2px">Show this category in the app grid</div></div>
       <label class="switch"><input type="checkbox" id="catActive" checked><span class="track"></span></label>
@@ -77,8 +85,12 @@
   AdminShell.mount({ active: 'categories', title: 'Categories', crumb: 'Catalog', controls: 'The Shop-by-category grid on Home', preview: 'categories.html' });
   let data = KKD.load();
 
-  const ICONS = ['leaf','flask','droplet','spray-can','shapes','seedling'];
-  function iconFor(c){ return c.icon || 'shapes'; }
+  // backfill colour/img for categories saved before icons existed, so the real app tiles always show
+  const CAT_DEF={pesticide:{color:'#BFE8CB',img:'../assets/cat/pool/chakrawarti.png'},fungicide:{color:'#F9CFE0',img:'../assets/cat/pool/antivirus.png'},fertilizer:{color:'#FCE7AE',img:'../assets/cat/pool/humic.png'},herbicide:{color:'#FAD0BC',img:'../assets/cat/pool/triple.png'},combo:{color:'#D2DAF7',img:'../assets/cat/pool/npk.png'}};
+  (data.categories||[]).forEach(c=>{ const d=CAT_DEF[c.key]; if(d){ if(!c.color)c.color=d.color; if(!c.img)c.img=d.img; } });
+
+  function colorFor(c){ return c.color || '#E5E7EB'; }
+  function imgFor(c){ return c.img || ''; }
 
   function renderRows(){
     const list = data.categories.slice().sort((a,b)=>a.order-b.order);
@@ -89,7 +101,7 @@
         <td><i class="fa-solid fa-grip-vertical grip"></i></td>
         <td>
           <div class="flex items-center gap-2">
-            <div class="ic-tile ic-green"><i class="fa-solid fa-${iconFor(c)}"></i></div>
+            <div class="cat-thumb" style="background:${colorFor(c)}">${imgFor(c)?`<img src="${imgFor(c)}" alt=""/>`:''}</div>
             <span class="cell-main">${esc(c.name)}</span>
           </div>
         </td>
@@ -98,8 +110,7 @@
         <td><label class="switch"><input type="checkbox" ${c.active?'checked':''} onchange="toggleCat('${c.id}',this.checked)"><span class="track"></span></label></td>
         <td style="text-align:right">
           <div class="flex gap-2" style="justify-content:flex-end">
-            <button class="btn btn-ghost btn-sm" onclick="openCat('${c.id}')"><i class="fa-solid fa-pen"></i></button>
-            <button class="btn btn-danger btn-sm" onclick="delCat('${c.id}')"><i class="fa-solid fa-trash"></i></button>
+            <button class="btn btn-ghost btn-sm" onclick="openCat('${c.id}')"><i class="fa-solid fa-pen"></i> Edit</button>
           </div>
         </td>
       </tr>`).join('') || '<tr><td colspan="6"><div class="empty"><i class="fa-solid fa-shapes"></i><div>No categories yet.</div></div></td></tr>';
@@ -125,13 +136,9 @@
 
   function toggleCat(id,on){ const c=data.categories.find(x=>x.id===id); if(c){ c.active=on; KKD.save(data); AdminShell.saved(on?'Category activated':'Category hidden'); } }
 
-  let editId=null;
-  function renderIconPick(sel){
-    document.getElementById('iconPick').innerHTML = ICONS.map(ic=>
-      `<div class="icon-opt ${ic===sel?'sel':''}" data-icon="${ic}" onclick="pickIcon('${ic}')"><i class="fa-solid fa-${ic}"></i></div>`).join('');
-  }
-  function pickIcon(ic){ renderIconPick(ic); }
-  function currentIcon(){ const el=document.querySelector('.icon-opt.sel'); return el?el.dataset.icon:'shapes'; }
+  let editId=null, editImg='', editColor='#BFE8CB';
+  // Upload / change the category icon — transparent cut-out shown on the tile colour
+  function catIconPick(inp){ const f=inp.files&&inp.files[0]; if(!f) return; editImg=URL.createObjectURL(f); document.getElementById('catIconImg').src=editImg; }
 
   function openCat(id){
     editId = id || null;
@@ -140,22 +147,24 @@
     document.getElementById('catName').value = c? c.name : '';
     document.getElementById('catKey').value = c? c.key : '';
     document.getElementById('catActive').checked = c? c.active : true;
-    renderIconPick(c? iconFor(c) : 'shapes');
+    editImg   = c ? (c.img||'')      : '';
+    editColor = c ? (c.color||'#BFE8CB') : '#BFE8CB';
+    document.getElementById('catIconImg').src = editImg;
+    document.getElementById('catIconPrev').style.background = editColor;
+    document.getElementById('catColor').value = editColor;
     AdminShell.open('catDrawer');
   }
   function saveCat(){
     const name=document.getElementById('catName').value.trim()||'Untitled';
     const key=(document.getElementById('catKey').value.trim()||name.toLowerCase().replace(/[^a-z0-9]+/g,'-')).toLowerCase();
     const active=document.getElementById('catActive').checked;
-    const icon=currentIcon();
-    if(editId){ Object.assign(data.categories.find(x=>x.id===editId), { name, key, active, icon }); }
+    if(editId){ Object.assign(data.categories.find(x=>x.id===editId), { name, key, active, img:editImg, color:editColor }); }
     else {
       const last = data.categories.reduce((m,c)=>Math.max(m,c.order),0);
-      data.categories.push({ id:'c'+Date.now(), key, name, order:last+1, products:0, active, icon });
+      data.categories.push({ id:'c'+Date.now(), key, name, order:last+1, products:0, active, img:editImg, color:editColor });
     }
     KKD.save(data); AdminShell.close('catDrawer'); renderRows(); AdminShell.saved(editId?'Category updated':'Category added');
   }
-  function delCat(id){ data.categories=data.categories.filter(c=>c.id!==id); KKD.save(data); renderRows(); AdminShell.saved('Category removed'); }
 
   renderRows();
 </script>

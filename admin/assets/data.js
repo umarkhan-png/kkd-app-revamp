@@ -33,12 +33,13 @@
       { id: 'bn5', title: 'Diwali special (old)', slot: 'home_hero', status: 'off', start: '2025-10-20', end: '2025-11-05', target: 'home.html', clicks: 45120, img: '#DC2626' },
     ],
 
+    // color + img mirror the actual app category tiles (screens/home.html · assets/cat/pool)
     categories: [
-      { id: 'c1', key: 'pesticide', name: 'Pesticide', order: 1, products: 42, active: true },
-      { id: 'c2', key: 'fungicide', name: 'Fungicide', order: 2, products: 38, active: true },
-      { id: 'c3', key: 'fertilizer', name: 'Fertilizer', order: 3, products: 56, active: true },
-      { id: 'c4', key: 'herbicide', name: 'Herbicide', order: 4, products: 27, active: true },
-      { id: 'c5', key: 'combo', name: 'Combo Packs', order: 5, products: 14, active: true },
+      { id: 'c1', key: 'pesticide', name: 'Pesticide', order: 1, products: 42, active: true, color: '#BFE8CB', img: '../assets/cat/pool/chakrawarti.png' },
+      { id: 'c2', key: 'fungicide', name: 'Fungicide', order: 2, products: 38, active: true, color: '#F9CFE0', img: '../assets/cat/pool/antivirus.png' },
+      { id: 'c3', key: 'fertilizer', name: 'Fertilizer', order: 3, products: 56, active: true, color: '#FCE7AE', img: '../assets/cat/pool/humic.png' },
+      { id: 'c4', key: 'herbicide', name: 'Herbicide', order: 4, products: 27, active: true, color: '#FAD0BC', img: '../assets/cat/pool/triple.png' },
+      { id: 'c5', key: 'combo', name: 'Combo Packs', order: 5, products: 14, active: true, color: '#D2DAF7', img: '../assets/cat/pool/npk.png' },
       { id: 'c6', key: 'seeds', name: 'Seeds', order: 6, products: 9, active: false },
     ],
 

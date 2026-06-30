@@ -306,11 +306,12 @@ const EDITORS = {
     const facts = O.otp.facts.map((f,i)=>{
       const on = f.on!==false;
       return `
-      <div class="li" style="${on?'':'opacity:.55'}">
-        <div class="factic"><i class="fa-solid fa-${esc(f.icon||'circle-info')}"></i></div>
+      <div class="li" style="${on?'':'opacity:.55'};align-items:center">
+        <div class="factic" style="cursor:pointer;position:relative" title="Tap to change icon" onclick="openIconModal('otp.facts.${i}.icon')">
+          <i class="fa-solid fa-${esc(f.icon||'circle-info')}"></i>
+          <span style="position:absolute;right:-4px;bottom:-4px;width:17px;height:17px;border-radius:50%;background:var(--green);color:#fff;font-size:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.25)"><i class="fa-solid fa-pen"></i></span>
+        </div>
         <div class="li-body">
-          ${iconPicker('otp.facts.'+i+'.icon', f.icon)}
-          <div style="height:10px"></div>
           ${tField('otp.facts.'+i+'.text','Message')}
         </div>
         <div class="li-act"><div class="tg ${on?'on':''}" title="${on?'Shown in the strip':'Hidden'}" onclick="setPath('otp.facts.${i}.on',${!on});commit();rerender()"></div></div>
@@ -384,6 +385,24 @@ function iconPicker(path,cur){
   return `<div class="fg"><label>Icon</label>
     <div class="icon-grid">${PRESET_ICONS.map(ic=>`<span class="icpick ${ic===cur?'on':''}" title="${ic}" onclick="setPath('${path}','${ic}');commit('Icon updated');rerender()"><i class="fa-solid fa-${ic}"></i></span>`).join('')}</div></div>`;
 }
+// Icon picker as a MODAL: tap the current icon → choose from the predefined grid in a popup.
+let iconModalPath=null;
+function openIconModal(path){
+  iconModalPath=path;
+  let m=document.getElementById('iconModal');
+  if(!m){
+    const scrim=document.createElement('div'); scrim.className='scrim'; scrim.id='iconModalScrim'; scrim.onclick=closeIconModal;
+    m=document.createElement('div'); m.id='iconModal'; m.className='modal';
+    m.innerHTML=`<div class="drawer-head"><h3>Choose an icon</h3><button class="x-btn" onclick="closeIconModal()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="drawer-body"><div class="icon-grid" id="iconModalGrid" style="gap:8px"></div></div>`;
+    document.body.appendChild(scrim); document.body.appendChild(m);
+  }
+  const cur=getPath(path)||'';
+  document.getElementById('iconModalGrid').innerHTML=PRESET_ICONS.map(ic=>`<span class="icpick ${ic===cur?'on':''}" title="${ic}" onclick="pickIconModal('${ic}')"><i class="fa-solid fa-${ic}"></i></span>`).join('');
+  AdminShell.open('iconModal');
+}
+function pickIconModal(ic){ if(iconModalPath){ setPath(iconModalPath,ic); commit('Icon updated'); } AdminShell.close('iconModal'); rerender(); }
+function closeIconModal(){ AdminShell.close('iconModal'); }
 
 /* ---------- PHONE hero: one image + per-language + per-state variants ---------- */
 function clearImg(path){ setPath(path,''); commit('Image removed'); rerender(); }

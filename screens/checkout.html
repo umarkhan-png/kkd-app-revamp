@@ -402,11 +402,24 @@
       return Math.max(0, dueNow - (m.advanceRegime ? 0 : m.onlineDiscount));
     }
     var _billHost = null;   // cached once · first render replaces the card inner (and removes #billTotal), so we can't re-find it later
-    function renderMergeBill(method, pct){
-      var m = MERGE, R = window.kkdMerge.rupee;
+    // Full merge bill breakdown · same line items as the normal checkout bill (discount, Krishi Coins, Wallet, Delivery)
+    // applied to the amount collected NOW, on top of the merge math (total / already-paid / balance-on-delivery).
+    function mBillDetail(method, pct){
+      var m = MERGE;
       var dueNow = m.advanceRegime ? Math.max(0, m.mergedOrderValue - m.alreadyPaid) : m.extra;
-      var pn = mPayNow(method, pct);
-      var bal = (method === 'partial') ? Math.max(0, dueNow - pn) : 0;
+      var base, disc = 0, bal = 0;
+      if (method === 'partial'){ base = mPayNow('partial', pct); bal = Math.max(0, dueNow - base); }
+      else if (method === 'cod'){ base = 0; bal = dueNow; }                                  // COD · nothing online now, full amount on delivery
+      else { base = m.advanceRegime ? m.fullPrepaidNow : m.extra; disc = m.advanceRegime ? 0 : m.onlineDiscount; }
+      var afterDisc = Math.max(0, base - disc);
+      var coins = Math.min(COIN_REDEEM, afterDisc);
+      var wallet = Math.min(WALLET_BALANCE, afterDisc - coins);
+      var youPay = Math.max(0, afterDisc - coins - wallet);
+      return { dueNow: dueNow, base: base, disc: disc, coins: coins, wallet: wallet, youPay: youPay, bal: bal };
+    }
+    function mYouPayNow(method, pct){ return mBillDetail(method, pct).youPay; }
+    function renderMergeBill(method, pct){
+      var m = MERGE, R = window.kkdMerge.rupee, d = mBillDetail(method, pct);
       var row = function(l, v, g){ return '<div class="bill-row"><span class="lbl">' + l + '</span><span class="val' + (g ? ' green' : '') + ' tnum">' + v + '</span></div>'; };
       var html = '';
       if (m.advanceRegime){
@@ -414,13 +427,16 @@
         if (m.alreadyPaid > 0) html += row('Already paid earlier', '− ' + R(m.alreadyPaid), true);
       } else {
         html += row('New items added', R(m.extra));
-        if (method === 'paynow' && m.onlineDiscount > 0) html += row('Online payment discount (5%)', '− ' + R(m.onlineDiscount), true);
       }
-      html += '<div class="bill-total"><span class="lbl">You pay now</span><span class="val tnum">' + R(pn) + '</span></div>';
-      if (bal > 0) html += '<div class="bill-row" style="margin-top:7px"><span class="lbl">Balance on delivery (cash)</span><span class="val tnum">' + R(bal) + '</span></div>';
+      if (d.disc > 0)   html += row('Online payment discount (5%)', '− ' + R(d.disc), true);
+      if (d.coins > 0)  html += row('<i class="fa-solid fa-coins text-[11px]" style="color:#94A3B8"></i> Krishi Coins', '− ' + R(d.coins));
+      if (d.wallet > 0) html += row('<i class="fa-solid fa-wallet text-[10px]" style="color:#94A3B8"></i> Wallet', '− ' + R(d.wallet));
+      html += row('Delivery', 'FREE', true);
+      html += '<div class="bill-total"><span class="lbl">You pay now</span><span class="val tnum">' + R(d.youPay) + '</span></div>';
+      if (d.bal > 0) html += '<div class="bill-row" style="margin-top:7px"><span class="lbl">Balance on delivery (cash)</span><span class="val tnum">' + R(d.bal) + '</span></div>';
       if (!_billHost){ var bt = document.getElementById('billTotal'); _billHost = bt ? bt.closest('.card').firstElementChild : null; }
       if (_billHost) _billHost.innerHTML = html;
-      var ca = document.getElementById('ctaAmt'); if (ca) ca.textContent = R(pn);
+      var ca = document.getElementById('ctaAmt'); if (ca) ca.textContent = R(d.youPay);
     }
     function renderMergePartial(pct){
       var m = MERGE, R = window.kkdMerge.rupee;
@@ -912,7 +928,7 @@
         if (MERGE) {
           e.preventDefault();
           e.stopImmediatePropagation();
-          var pn = mPayNow(currentMethod, currentPct);
+          var pn = mYouPayNow(currentMethod, currentPct);
           try {
             localStorage.setItem('kkd.mergeInfo', JSON.stringify({
               ts: Date.now(), orderId: MERGE.oid,

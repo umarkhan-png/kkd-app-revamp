@@ -167,7 +167,23 @@
     'see all label': 14, '"see all" label': 14, 'reward': 14, 'badge label': 30, 'status label': 20,
     'eta template': 50, 'coins label': 26, 'sub-label': 30, 'placeholder': 42, 'widget title': 46,
     'status label template': 40, '"ordered on" prefix': 16, 'coins balance label': 26,
+    // generic copy fields seen across managers (headings, labels, chips, buttons, notes)
+    'heading': 40, 'sub heading': 40, 'subheading': 40, 'subtitle': 50, 'tagline': 45, 'headline': 45,
+    'label': 24, 'text': 60, 'message': 120, 'note': 120, 'tooltip': 80, 'hint': 90,
+    'cta': 20, 'cta text': 22, 'cta label': 22, 'button': 20, 'button text': 20, 'link text': 24,
+    'chip label': 18, 'pill label': 18, 'tag': 18, 'tag label': 18, 'tab label': 16, 'nav label': 14, 'menu label': 18,
+    'offer text': 40, 'offer label': 30, 'discount text': 24, 'coupon title': 40, 'coupon description': 90,
+    'empty state text': 70, 'empty text': 70, 'error text': 90, 'success text': 90,
+    'question': 90, 'answer': 160, 'option': 40, 'option text': 40, 'reason': 60, 'reason text': 60,
+    'value prop': 60, 'benefit': 60, 'benefit text': 60, 'feature': 50, 'highlight': 50,
+    'notification title': 50, 'notification body': 120, 'push title': 40, 'push body': 110,
+    'expert name': 30, 'expert title': 40, 'designation': 40, 'role': 30, 'category name': 24,
+    'search placeholder': 42, 'unit': 12, 'pack size': 16, 'variant name': 24, 'variant label': 20,
   };
+  // safety net for single-line copy fields with no explicit rule — long text in these
+  // clips/wraps and breaks the fixed phone layout. Structural fields are skipped below.
+  const DEFAULT_MAX = 80;
+  const SKIP_DEFAULT = /url|link|deeplink|deep\s*link|https?|www|\.com|path|route|slug|\bid\b|sku|code|coupon\s*code|promo\s*code|token|api|secret|\bkey\b|hex|colou?r|query|utm|target|screen|version|email|phone|mobile|whatsapp|number|amount|price|percent|discount %|qty|quantity|count|value|lat|lng|pincode|gst|coordinate|order id|txn|reference/i;
   function normLabel(s) { return String(s || '').trim().toLowerCase().replace(/[:：]\s*$/, '').replace(/\s+/g, ' '); }
   function labelFor(inp) {
     // nearest preceding <label> within the same field group
@@ -207,7 +223,14 @@
     // implicit, label-driven limits on free-text fields (skip url/number/date/etc.)
     root.querySelectorAll('input[type=text]:not([data-kkdv-seen]):not([data-maxlen]), textarea:not([data-kkdv-seen]):not([data-maxlen]), input:not([type]):not([data-kkdv-seen]):not([data-maxlen])').forEach(inp => {
       inp.dataset.kkdvSeen = '1';
-      const m = ruleMax(inp); if (m) { inp.dataset.maxlen = m; bindText(inp); }
+      let m = ruleMax(inp);
+      // safety net: any labelled single-line copy field with no explicit rule gets a
+      // generous default cap (textareas are meant for long copy — leave them to rules).
+      if (!m && inp.tagName !== 'TEXTAREA' && inp.dataset.noLimit == null) {
+        const lbl = normLabel(labelFor(inp));
+        if (lbl && !SKIP_DEFAULT.test(lbl)) m = DEFAULT_MAX;
+      }
+      if (m) { inp.dataset.maxlen = m; bindText(inp); }
     });
     // fill any standalone spec hints: <span data-img-hint="banner"></span>
     (root || document).querySelectorAll('[data-img-hint]:not([data-kkdv-bound])').forEach(el => {

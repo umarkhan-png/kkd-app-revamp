@@ -226,7 +226,7 @@ const CROPS=['🍅 Tomato','🌶️ Chilli','🌾 Wheat','🌽 Maize','🧅 Onio
 const DEFAULT_SECS=[
   {id:'header',   ic:'🏠', nm:'Header / Top Bar',     sub:'Logo, greeting, location, wallet, coins, bell', on:true, fixed:true},
   {id:'theme',    ic:'🎨', nm:'Theme',                sub:'Green default + state / date / weather rules', on:true, fixed:true},
-  {id:'statusbanner',ic:'📢', nm:'Top Status Banner', sub:'Rotating rain/offer ticker',     on:true},
+  {id:'statusbanner',ic:'📢', nm:'Top Status Banner', sub:'Fixed · rotating rain/offer ticker', on:true, fixed:true},
   {id:'search',   ic:'🔍', nm:'Search Bar',           sub:'Fixed · default + rotating hints', on:true, fixed:true},
   {id:'offer',    ic:'🎁', nm:'Offer Strip',         sub:'Header announcement ticker',     on:true},
   {id:'cats',     ic:'🗂️', nm:'Categories',           sub:'Pesticide, Fertilizer…',         on:true},
@@ -242,9 +242,9 @@ const DEFAULT_SECS=[
   {id:'widgets',  ic:'🧩', nm:'Widgets',                sub:'Crop Q, Refer, Rate…',            on:true},
   {id:'testi',    ic:'🎥', nm:'Testimonials',            sub:'Farmer video section',            on:true},
   {id:'mostsell', ic:'🔥', nm:'Most Selling',            sub:'Auto state-wise trending',        on:true},
+  {id:'behavior', ic:'⚙️', nm:'Behavior & Animations',   sub:'Timings & scroll effects',         on:true},
   {id:'expert',   ic:'💬', nm:'Ask Expert',              sub:'Floating agronomist button',       on:true, fixed:true},
   {id:'cartfab',  ic:'🛒', nm:'Cart Bar (floating)',     sub:'Sticky view-cart bar',             on:true, fixed:true},
-  {id:'behavior', ic:'⚙️', nm:'Behavior & Animations',   sub:'Timings & scroll effects',         on:true},
 ];
 
 /* ── PERSISTENCE: order + visibility live in data.homeSections ── */
@@ -261,8 +261,23 @@ function seedSecs(){
   const stored = data.homeSections.filter(s=>meta[s.id]);
   const seen = new Set(stored.map(s=>s.id));
   DEFAULT_SECS.forEach(s=>{ if(!seen.has(s.id)) stored.push({id:s.id,on:s.on}); });
-  data.homeSections = stored;
-  SECS = stored.map(s=>({...meta[s.id], on:s.on}));
+  // Enforce placement: fixed (locked) sections stay at their canonical slots from DEFAULT_SECS
+  // (top + bottom blocks); non-fixed keep their saved relative order in between. So a non-fixed
+  // section can never sit above or between the locked ones.
+  data.homeSections = normalizeOrder(stored, meta);
+  SECS = data.homeSections.map(s=>({...meta[s.id], on:s.on}));
+  KKD.save(data);
+}
+function normalizeOrder(list, meta){
+  const nonFixed = list.filter(s=>meta[s.id] && !meta[s.id].fixed);
+  const byId = Object.fromEntries(list.map(s=>[s.id,s]));
+  const out=[]; let ni=0;
+  DEFAULT_SECS.forEach(d=>{
+    if(d.fixed){ out.push(byId[d.id] || {id:d.id,on:d.on}); }
+    else if(ni<nonFixed.length){ out.push(nonFixed[ni++]); }
+  });
+  while(ni<nonFixed.length) out.push(nonFixed[ni++]); // safety: any leftover non-fixed
+  return out;
 }
 function persist(){ data.homeSections = SECS.map(s=>({id:s.id,on:s.on})); KKD.save(data); }
 seedSecs();
@@ -302,8 +317,14 @@ function dd(e,tid){
   if(!dragId||dragId===tid)return;
   const tgt=SECS.find(s=>s.id===tid); if(tgt&&tgt.fixed)return;   // can't drop onto a fixed-placement section
   const src=SECS.find(s=>s.id===dragId); if(src&&src.fixed)return;
-  const si=SECS.findIndex(s=>s.id===dragId),ti=SECS.findIndex(s=>s.id===tid);
-  const[it]=SECS.splice(si,1);SECS.splice(ti,0,it);dragId=null;
+  const si=SECS.findIndex(s=>s.id===dragId);
+  const[it]=SECS.splice(si,1);
+  let ti=SECS.findIndex(s=>s.id===tid);
+  // clamp inside the draggable band — never above the top locked block or below the bottom one
+  let lo=0; while(lo<SECS.length && SECS[lo].fixed) lo++;
+  let hi=SECS.length; while(hi>0 && SECS[hi-1].fixed) hi--;
+  ti=Math.max(lo, Math.min(ti, hi-1));
+  SECS.splice(ti,0,it);dragId=null;
   persist();renderList();AdminShell.saved('Section order updated');
 }
 function toggleVis(id){const s=SECS.find(s=>s.id===id);if(!s)return;const meta=Object.fromEntries(DEFAULT_SECS.map(d=>[d.id,d]));if(meta[id]&&meta[id].fixed)return;/* locked sections can't be hidden */ s.on=!s.on;persist();if(sel===id)pick(id);else renderList();AdminShell.saved(s.nm+(s.on?' shown on app':' hidden on app'));}

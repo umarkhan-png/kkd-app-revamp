@@ -258,6 +258,9 @@
 <script src="assets/shell.js"></script>
 <script src="assets/validate.js"></script>
 <script>
+// One-click reset: home-manager.html?reset clears stale saved admin data so the
+// browser shows the latest seed (old localStorage otherwise masks seed changes).
+if(/[?&]reset\b/i.test(location.search) && window.KKD && KKD.reset){ KKD.reset(); location.replace(location.pathname + location.hash); }
 AdminShell.mount({ active:'sc-home', title:'Home Page Manager', crumb:'App Screens', controls:'Every section of the app Home screen', preview:'home.html' });
 
 // All 12 app languages (screens/language.html) — every per-section language tab now offers the full set

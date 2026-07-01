@@ -390,19 +390,8 @@
       // Each non-default theme matches when its State scope AND its single Condition hold.
       // Condition is one of: 'event' → date range (start/end); 'weather' → sky condition and/or temperature threshold.
       // `green` is the fixed default/fallback — always shown when nothing else matches; can't be disabled/deleted.
+      // Starts with ONLY the Green default (the always-on fallback). Admins add themes as needed.
       themes: [
-        { id:'heat', name:'Heatwave Alert', enabled:true,
-          trigger:{ states:['All'], condType:'weather', start:'', end:'', weather:{ sky:'any', op:'above', temp:40 } },
-          bg:{ image:'', fit:'cover', overlay:'light' },
-          colors:{ a:'#EA580C', b:'#F59E0B', c:'#7C2D12' }, anim:'none', animCount:0, animSpeed:0 },
-        { id:'festival', name:'Holi Festival', enabled:true,
-          trigger:{ states:['All'], condType:'event', start:'2026-03-13', end:'2026-03-15', weather:{ sky:'any', op:'any', temp:40 } },
-          bg:{ image:'', fit:'cover', overlay:'medium' },
-          colors:{ a:'#DC2626', b:'#9333EA', c:'#D9A441' }, anim:'snow', animCount:14, animSpeed:3.4 },
-        { id:'rain', name:'Monsoon / Rain', enabled:true,
-          trigger:{ states:['All'], condType:'weather', start:'', end:'', weather:{ sky:'rain', op:'any', temp:40 } },
-          bg:{ image:'', fit:'cover', overlay:'light' },
-          colors:{ a:'#2563EB', b:'#DBEAFE', c:'#1E40AF' }, anim:'rain', animCount:6, animSpeed:1.4 },
         { id:'green', name:'Green', enabled:true, isDefault:true,
           trigger:{ states:['All'], condType:'event', start:'', end:'', weather:{ sky:'any', op:'any', temp:40 } },
           bg:{ image:'', fit:'cover', overlay:'none' },

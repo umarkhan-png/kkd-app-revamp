@@ -87,6 +87,22 @@
 .hm .apv-badge{position:absolute;top:5px;left:5px;background:rgba(255,255,255,.92);color:var(--green);font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;display:flex;align-items:center;gap:3px;}
 .hm .apv-nm{font-size:11.5px;font-weight:600;padding:6px 9px;display:flex;align-items:center;justify-content:space-between;gap:6px;}
 .hm .apv-ck{color:var(--green);}
+.hm .apv-live{position:absolute;top:5px;left:5px;background:rgba(255,255,255,.94);color:var(--green);font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;display:flex;align-items:center;gap:4px;}
+.hm .apv-live .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.18);}
+.hm .apv-livein{font-size:9.5px;font-weight:600;color:var(--green);background:var(--green-lt);padding:1px 6px;border-radius:20px;}
+.hm #apvModal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;}
+.hm .apv-scrim{position:absolute;inset:0;background:rgba(15,23,42,.5);}
+.hm .apv-box{position:relative;background:#fff;border-radius:14px;width:660px;max-width:92vw;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 64px -20px rgba(0,0,0,.45);}
+.hm .apv-box-head{display:flex;align-items:center;justify-content:space-between;padding:15px 20px;border-bottom:1px solid var(--g200);}
+.hm .apv-box-head h3{margin:0;font-size:15px;font-weight:800;}
+.hm .apv-box-body{padding:18px 20px;overflow-y:auto;}
+.hm .apv-grid-modal{grid-template-columns:repeat(3,1fr);margin-bottom:0;}
+.hm .res-box{display:flex;align-items:center;gap:13px;background:#fff;border:1px solid var(--g200);border-radius:10px;padding:10px;}
+.hm .res-prev{width:96px;height:54px;border-radius:8px;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.9);font-size:9.5px;}
+.hm .res-prev img{width:100%;height:100%;object-fit:cover;}
+.hm .res-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--green);}
+.hm .res-nm{font-size:14px;font-weight:800;margin-top:1px;}
+.hm .res-sub{font-size:11.5px;color:var(--g500);margin-top:1px;}
 .hm .sb-sum{display:flex;align-items:center;gap:12px;}
 .hm .sb-ic{font-size:20px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--g50);border:1px solid var(--g200);border-radius:9px;flex-shrink:0;}
 .hm .sb-title{font-size:13.5px;font-weight:700;}
@@ -514,6 +530,29 @@ function tePick(input){
 function teBgRemove(){ const t=editTheme(); if(!t||!t.bg) return; t.bg.image=''; delete t.bg.name; delete t.bg.w; delete t.bg.h; KKD.save(data); teMsg={kind:'ok',text:'Image removed — this theme falls back to its gradient colours.'}; AdminShell.refreshPending(); themeUI(); }
 function teBgSet(k,v){ const t=editTheme(); if(!t) return; t.bg=t.bg||{}; t.bg[k]=v; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function teApproved(img,name){ const t=editTheme(); if(!t) return; t.bg=t.bg||{}; t.bg.image=img; t.bg.name=name; t.bg.approved=true; delete t.bg.w; delete t.bg.h; KKD.save(data); teMsg={kind:'ok',text:name+' theme image applied.'}; AdminShell.refreshPending(); themeUI(); }
+/* ---- approved-images modal ---- */
+function liveThemeImages(){ // image → theme name currently live (enabled) in the app
+  const m={}; themeData().themes.forEach(t=>{ if(t.enabled && t.bg && t.bg.image) m[t.bg.image]=t.name; }); return m;
+}
+function teApvOpen(){
+  const t=editTheme(); if(!t) return; teApvClose();
+  const cur=(t.bg&&t.bg.image)||''; const live=liveThemeImages();
+  const tiles=APPROVED_BG.map(a=>{ const on=cur===a.img; const liveName=live[a.img];
+    return `<div class="apv${on?' on':''}" onclick="teApproved('${a.img}','${esc(a.name)}');teApvClose()">
+      <div class="apv-img" style="background-image:url(${a.img})">${liveName?`<span class="apv-live"><span class="dot"></span> Live</span>`:''}</div>
+      <div class="apv-nm">${esc(a.name)}${on?' <i class="fa-solid fa-circle-check apv-ck"></i>':liveName?`<span class="apv-livein">on ${esc(liveName)}</span>`:''}</div>
+    </div>`; }).join('');
+  const html=`<div id="apvModal"><div class="apv-scrim" onclick="teApvClose()"></div>
+    <div class="apv-box">
+      <div class="apv-box-head"><h3>Approved theme images</h3><button class="x-btn" onclick="teApvClose()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-body">
+        <p class="hint" style="margin:0 0 14px">Tap an image to apply it to “${esc(t.name)}”. A <b style="color:var(--green)">Live</b> tag means the image is already showing in the app.</p>
+        <div class="apv-grid apv-grid-modal">${tiles}</div>
+      </div>
+    </div></div>`;
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+}
+function teApvClose(){ const m=document.getElementById('apvModal'); if(m) m.remove(); }
 
 /* ---- mutations ---- */
 function themeAdd(){
@@ -544,7 +583,14 @@ function themeResolverBox(){
       <div class="fg fix"><label>Temp °C</label><input type="number" style="width:90px" value="${teSim.temp}" onchange="themeSim('temp',+this.value)"/></div>
       <div class="fg fix"><label>Date</label><input type="date" value="${teSim.date}" onchange="themeSim('date',this.value)"/></div>
     </div>
-    <div class="info-box"><i class="fa-solid fa-eye"></i><span>Result: <b>${win?esc(win.name):'no theme'}</b></span></div>
+    <div class="res-box">
+      <div class="res-prev" style="background:${win?themeGrad(win):'#E2E8F0'}">${win&&win.bg&&win.bg.image?`<img src="${win.bg.image}" alt=""/>`:'<span>No image</span>'}</div>
+      <div style="min-width:0">
+        <div class="res-lbl">Live in the app now</div>
+        <div class="res-nm">${win?esc(win.name):'no theme'}</div>
+        <div class="res-sub">${win?(win.bg&&win.bg.image?(win.bg.name?esc(win.bg.name)+' image':'custom image'):'gradient — no image set'):''}</div>
+      </div>
+    </div>
   </div>`;
 }
 function themeTile(t,i){
@@ -610,24 +656,17 @@ function themeEditor(t){
     ${rulesBlock}
 
     <div class="sub-l" style="margin-top:20px">Theme image</div>
-    <div class="apv-note"><i class="fa-solid fa-circle-check"></i> Pick an <b>approved</b> image. Designers submit in the Design Studio and a manager approves them — only approved images appear here.</div>
-    <div class="apv-grid">
-      ${APPROVED_BG.map(a=>{const on=bg.image===a.img;return `<div class="apv${on?' on':''}" onclick="teApproved('${a.img}','${esc(a.name)}')">
-        <div class="apv-img" style="background-image:url(${a.img})"><span class="apv-badge"><i class="fa-solid fa-circle-check"></i> Approved</span></div>
-        <div class="apv-nm">${esc(a.name)}${on?'<i class="fa-solid fa-circle-check apv-ck"></i>':''}</div>
-      </div>`;}).join('')}
-    </div>
-    <div class="sub-l">Or upload your own <span class="hint">(optional)</span></div>
     <div class="bg-up">
       <div class="bg-prev" style="background:${themeGrad(t)}">${bg.image?`<img src="${bg.image}" alt=""/>`:'No image'}</div>
       <div style="flex:1;min-width:0">
         <input type="file" id="teFile" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none" onchange="tePick(this)"/>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-s btn-sm" onclick="document.getElementById('teFile').click()"><i class="fa-solid fa-upload"></i> Upload image / GIF</button>
+          <button class="btn btn-p btn-sm" onclick="teApvOpen()"><i class="fa-solid fa-images"></i> Choose approved image</button>
+          <button class="btn btn-s btn-sm" onclick="document.getElementById('teFile').click()"><i class="fa-solid fa-upload"></i> Upload your own</button>
           ${bg.image?`<button class="btn btn-d btn-sm" onclick="teBgRemove()"><i class="fa-solid fa-trash"></i> Remove</button>`:''}
         </div>
-        <div class="bg-guide"><i class="fa-solid fa-circle-info"></i>1080 × 600 px · max 2 MB (GIF 4 MB) · PNG, JPG, WebP, GIF</div>
-        ${bg.image&&bg.w?`<div class="hint" style="margin-top:7px">Current: ${bg.name?esc(bg.name)+' · ':''}${bg.w}×${bg.h}px</div>`:''}
+        <div class="bg-guide"><i class="fa-solid fa-circle-info"></i>Approved images come from the Design Studio (manager-approved). Custom upload: 1080 × 600 px · max 2 MB.</div>
+        ${bg.image?`<div class="hint" style="margin-top:7px">Current: ${bg.name?esc(bg.name):'custom image'}${bg.approved?' · <span style="color:var(--green);font-weight:700">approved</span>':''}${bg.w?` · ${bg.w}×${bg.h}px`:''}</div>`:''}
         ${teMsg?`<div class="bg-msg ${teMsg.kind}">${esc(teMsg.text)}</div>`:''}
       </div>
     </div>

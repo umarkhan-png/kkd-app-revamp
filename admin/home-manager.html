@@ -481,6 +481,8 @@ function themeData(){
     if(tr.condType===undefined){ tr.condType=(w.sky!=='any'||w.op!=='any')?'weather':'event'; changed=true; }
     if(tr.type){ delete tr.type; changed=true; }
     if(t.id===T.default && !t.isDefault){ t.isDefault=true; changed=true; }
+    // per-theme status banner (merged into the theme — shows when this theme is live)
+    if(!t.banner){ t.banner={enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:''}; changed=true; }
   });
   if(changed) KKD.save(data);
   return T;
@@ -578,10 +580,11 @@ function teApvClose(){ const m=document.getElementById('apvModal'); if(m) m.remo
 /* ---- mutations ---- */
 function themeAdd(){
   const T=themeData(); const id='t'+Date.now().toString(36);
-  T.themes.unshift({ id, name:'New theme', enabled:true, trigger:{states:['All'],condType:'',start:'',end:'',weather:{sky:'any',op:'any',temp:40,when:'live',hours:6,days:3}}, bg:{image:'',fit:'cover',overlay:'light'}, colors:{a:'#258046',b:'#10B981',c:'#D9A441'}, anim:'none', animCount:8, animSpeed:2 });
+  T.themes.unshift({ id, name:'New theme', enabled:true, trigger:{states:['All'],condType:'',start:'',end:'',weather:{sky:'any',op:'any',temp:40,when:'live',hours:6,days:3}}, bg:{image:'',fit:'cover',overlay:'light'}, colors:{a:'#258046',b:'#10B981',c:'#D9A441'}, anim:'none', animCount:8, animSpeed:2, banner:{enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:''} });
   teEdit=id; teMsg=null; KKD.save(data); AdminShell.refreshPending(); themeUI();
 }
 function themeEdit(id){ const t=themeData().themes.find(x=>x.id===id); if(t&&t.isDefault) return; /* green default is not editable */ teEdit=(teEdit===id?null:id); teMsg=null; themeUI(); }
+function themeRemove(id){ const T=themeData(); const t=T.themes.find(x=>x.id===id); if(!t||t.isDefault) return; T.themes=T.themes.filter(x=>x.id!==id); if(teEdit===id)teEdit=null; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeMove(i,d){ const T=themeData(); const j=i+d; if(j<0||j>=T.themes.length) return; if(T.themes[i].isDefault||T.themes[j].isDefault) return; const a=T.themes; [a[i],a[j]]=[a[j],a[i]]; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeToggle(id){ const t=themeData().themes.find(x=>x.id===id); if(!t||t.isDefault)return; t.enabled=!t.enabled; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeCondType(id,v){ themeField(id,'trigger.condType',v); themeUI(); }
@@ -628,7 +631,7 @@ function themeTile(t,i){
 function themeEditor(t){
   if(!t) return '';
   const T=themeData(); const isDef=t.isDefault||t.id===T.default;
-  const tr=t.trigger||{}; const bg=t.bg||{}; const c=t.colors||{};
+  const tr=t.trigger||{}; const bg=t.bg||{}; const c=t.colors||{}; const bn=t.banner||{enabled:false,icon:'fa-bell',bg:'#EFF6FF',tc:'#1E40AF'};
   const selO=(v,c2)=>v===c2?' selected':'';
   const scopeAll=(tr.states||['All']).indexOf('All')>=0;
   const stateChips=STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!scopeAll&&(tr.states||[]).indexOf(s)>=0)?'on':''}" onclick="themeToggleScope('${t.id}','${s}')">${s}</span>`).join('');
@@ -684,7 +687,22 @@ function themeEditor(t){
       </div>
     </div>
     <div class="sub-l">Text-protection overlay</div>
-    <div class="row" style="margin-bottom:0"><div class="fg fix" style="max-width:220px"><select class="s" onchange="teBgSet('overlay',this.value)"><option value="none"${selO('none',bg.overlay||'light')}>None</option><option value="light"${selO('light',bg.overlay||'light')}>Light dim</option><option value="medium"${selO('medium',bg.overlay||'light')}>Medium dim</option><option value="strong"${selO('strong',bg.overlay||'light')}>Strong dim</option></select></div></div>
+    <div class="row"><div class="fg fix" style="max-width:220px"><select class="s" onchange="teBgSet('overlay',this.value)"><option value="none"${selO('none',bg.overlay||'light')}>None</option><option value="light"${selO('light',bg.overlay||'light')}>Light dim</option><option value="medium"${selO('medium',bg.overlay||'light')}>Medium dim</option><option value="strong"${selO('strong',bg.overlay||'light')}>Strong dim</option></select></div></div>
+
+    <div class="sub-l" style="margin-top:20px">Status banner <span class="hint">(shows above the search bar while this theme is live)</span></div>
+    <label class="ed-toggle" style="justify-content:flex-start;gap:10px;margin-bottom:2px"><div class="tg ${bn.enabled?'on':''}" onclick="themeField('${t.id}','banner.enabled',${!bn.enabled});themeUI()"></div><span>Show a status banner with this theme</span></label>
+    ${bn.enabled?`
+    <div class="sub-l">Icon</div>
+    <div class="ic-grid">${SB_ICONS.map(ic=>`<div class="ic-opt${bn.icon===ic?' on':''}" onclick="themeField('${t.id}','banner.icon','${ic}');themeUI()"><i class="fa-solid ${ic}"></i></div>`).join('')}</div>
+    <div class="row" style="margin-top:8px"><div class="fg"><label>Title</label><input type="text" value="${esc(bn.title||'')}" onchange="themeField('${t.id}','banner.title',this.value)" placeholder="e.g. Rain expected"/></div></div>
+    <div class="row"><div class="fg"><label>Subtitle</label><input type="text" value="${esc(bn.sub||'')}" onchange="themeField('${t.id}','banner.sub',this.value)" placeholder="e.g. 8 mm in 24 hrs · hold spray"/></div></div>
+    <div class="row" style="margin-bottom:0">
+      <div class="fg fix"><label>Background</label><div class="color-r"><input type="color" value="${bn.bg||'#EFF6FF'}" onchange="themeField('${t.id}','banner.bg',this.value)"/><span>${esc(bn.bg||'#EFF6FF')}</span></div></div>
+      <div class="fg fix"><label>Text / icon</label><div class="color-r"><input type="color" value="${bn.tc||'#1E40AF'}" onchange="themeField('${t.id}','banner.tc',this.value)"/><span>${esc(bn.tc||'#1E40AF')}</span></div></div>
+      <div class="fg"><label>Deeplink</label><input type="text" value="${esc(bn.link||'')}" onchange="themeField('${t.id}','banner.link',this.value)" placeholder="shop.html"/></div>
+    </div>`:''}
+
+    ${isDef?'':`<div style="margin-top:20px;border-top:1px solid var(--g200);padding-top:14px"><button class="btn btn-d btn-sm" onclick="themeRemove('${t.id}')"><i class="fa-solid fa-trash"></i> Remove theme</button></div>`}
   </div>`;
 }
 
@@ -789,7 +807,7 @@ statusbanner:()=>{ const S=sbData(); return `
 <div class="card">
   <div class="card-body">
     <div class="row"><div class="fg fix"><label>Rotation interval (sec)</label><input type="number" style="width:140px;" value="${S.interval||4}" onchange="sbSet('interval',+this.value)"/></div></div>
-    <div class="info-box"><i class="fa-solid fa-circle-info"></i><span>Link a banner to a <b>theme</b> so they go live together, or keep it <b>standalone</b> (theme-independent).</span></div>
+    <div class="info-box"><i class="fa-solid fa-circle-info"></i><span>Theme-specific banners are set inside each <b>Theme</b>. Banners here are <b>standalone</b> (shown by state / date) — like the always-on <b>Order tracking</b> default.</span></div>
     <div class="sdiv">Banners (rotate in order)</div>
     <div id="sbList">${S.items.map(sbRow).join('')}</div>
     <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="sbAdd()"><i class="fa-solid fa-plus"></i> Add banner</button>
@@ -1224,10 +1242,9 @@ function sbRemove(id){ const S=sbData(); const it=sbFind(id); if(!it||it.locked)
 function sbStateAll(id){ const it=sbFind(id); if(!it)return; it.states=['All']; KKD.save(data); sbUI(); }
 function sbStateTog(id,st){ const it=sbFind(id); if(!it)return; let s=(it.states||[]).filter(x=>x!=='All'); s.indexOf(st)>=0?(s=s.filter(x=>x!==st)):s.push(st); if(!s.length)s=['All']; it.states=s; KKD.save(data); sbUI(); }
 function sbRow(it){
-  const linked=it.theme?`Theme: ${it.theme}`:'Standalone';
-  const scope=it.theme?'':((it.states&&it.states.indexOf('All')<0)?it.states.join(', '):'All states');
+  const scope=(it.states&&it.states.indexOf('All')<0)?it.states.join(', '):'All states';
   const dates=(it.start&&it.end)?`${it.start} → ${it.end}`:'';
-  const cfg=[linked]; if(scope)cfg.push(scope); if(dates)cfg.push(dates);
+  const cfg=[scope]; if(dates)cfg.push(dates);
   const editing=sbEditId===it.id;
   return `<div class="li sb-item${editing?' editing':''}${(!it.enabled&&!it.locked)?' off':''}">
     <span class="drag-h">${it.locked?'🔒':'⠿'}</span>
@@ -1249,7 +1266,6 @@ function sbRow(it){
 }
 function sbForm(it){
   const iconGrid=SB_ICONS.map(ic=>`<div class="ic-opt${it.icon===ic?' on':''}" onclick="sbField('${it.id}','icon','${ic}')"><i class="fa-solid ${ic}"></i></div>`).join('');
-  const themeOpts=`<option value=""${!it.theme?' selected':''}>Standalone (theme-independent)</option>`+themeData().themes.filter(t=>!t.isDefault).map(t=>`<option${it.theme===t.name?' selected':''}>${esc(t.name)}</option>`).join('');
   const states=it.states||['All']; const all=states.indexOf('All')>=0;
   const chips=`<span class="cchip ${all?'on':''}" onclick="sbStateAll('${it.id}')">All states</span> `+STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!all&&states.indexOf(s)>=0)?'on':''}" onclick="sbStateTog('${it.id}','${s}')">${s}</span>`).join('');
   return `
@@ -1262,16 +1278,13 @@ function sbForm(it){
       <div class="fg fix"><label>Text / icon</label><div class="color-r"><input type="color" value="${it.tc||'#1E40AF'}" onchange="sbField('${it.id}','tc',this.value)"/><span>${esc(it.tc||'#1E40AF')}</span></div></div>
       <div class="fg"><label>Deeplink</label><input type="text" value="${esc(it.link||'')}" onchange="sbField('${it.id}','link',this.value)" placeholder="orders.html"/></div>
     </div>
-    <div class="sub-l">Show against</div>
-    <div class="row" style="margin-bottom:${it.theme?'0':'8px'}"><div class="fg fix" style="max-width:300px"><select class="s" onchange="sbField('${it.id}','theme',this.value)">${themeOpts}</select></div></div>
-    ${it.theme?`<p class="hint" style="margin:2px 0 0">Shows whenever the “${esc(it.theme)}” theme is live.</p>`:`
     <div class="sub-l">Show in states</div>
     <div class="chip-row">${chips}</div>
     <div class="sub-l">Date range <span class="hint">(optional)</span></div>
     <div class="row">
       <div class="fg fix"><label>Start date</label><input type="date" value="${it.start||''}" onchange="sbField('${it.id}','start',this.value)"/></div>
       <div class="fg fix"><label>End date</label><input type="date" value="${it.end||''}" onchange="sbField('${it.id}','end',this.value)"/></div>
-    </div>`}
+    </div>
     ${it.locked?'':`<div style="margin-top:14px"><button class="btn btn-d btn-sm" onclick="sbRemove('${it.id}')"><i class="fa-solid fa-trash"></i> Remove banner</button></div>`}
   `;
 }

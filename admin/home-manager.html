@@ -454,6 +454,7 @@ const APPROVED_BG=[
 let teEdit=null;                                   // id of theme being edited (inline)
 let teLiveId=null;                                 // id of the theme currently "Live" per the preview sim
 let teModalId=null;                                // id of the draft theme being added in the Add-theme modal
+let themeDraftObj=null;                             // the draft theme — kept in memory ONLY until "Add theme" is saved
 let teSim={state:'All States',weather:'rain',temp:30,date:'2026-03-14'};  // resolver simulator
 let teMsg=null;                                    // last upload message {kind,text}
 function themeData(){
@@ -490,11 +491,11 @@ function themeData(){
     if(!t.banner){ t.banner={enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:''}; changed=true; }
   });
   // one-time cleanup: drop leftover unrenamed "New theme" entries (PM request)
-  if(!T._cleanNew){ T.themes=T.themes.filter(t=>t.isDefault || t.name!=='New theme'); T._cleanNew=true; changed=true; }
+  if(!T._cleanNew2){ T.themes=T.themes.filter(t=>t.isDefault || t.name!=='New theme'); T._cleanNew2=true; changed=true; }
   if(changed) KKD.save(data);
   return T;
 }
-function editTheme(){ return themeData().themes.find(t=>t.id===teEdit); }
+function editTheme(){ if(themeDraftObj&&themeDraftObj.id===teModalId) return themeDraftObj; return themeData().themes.find(t=>t.id===teEdit); }
 function themeUI(){ if(teModalId){ themeModalRender(); return; } if(sel==='theme') pick('theme'); }
 function ruleMatches(t,state,weather,temp,date){
   if(!t.enabled || t.isDefault) return false;        // default is fallback only — never auto-wins
@@ -586,13 +587,13 @@ function teApvClose(){ const m=document.getElementById('apvModal'); if(m) m.remo
 
 /* ---- mutations ---- */
 function themeAdd(){
-  const T=themeData(); const id='t'+Date.now().toString(36);
-  T.themes.unshift({ id, name:'New theme', enabled:true, trigger:{states:['All'],condType:'',start:'',end:'',weather:{sky:'any',op:'any',temp:40,when:'live',hours:6,days:3}}, bg:{image:'',fit:'cover',overlay:'light'}, colors:{a:'#258046',b:'#10B981',c:'#D9A441'}, anim:'none', animCount:8, animSpeed:2, banner:{enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:''} });
-  teEdit=null; teMsg=null; teModalId=id; KKD.save(data); AdminShell.refreshPending(); themeModalRender();   // open the full form in a modal
+  // draft lives in memory only — NOT written to data/localStorage until "Add theme" is clicked
+  themeDraftObj={ id:'t'+Date.now().toString(36), name:'New theme', enabled:true, trigger:{states:['All'],condType:'',start:'',end:'',weather:{sky:'any',op:'any',temp:40,when:'live',hours:6,days:3}}, bg:{image:'',fit:'cover',overlay:'light'}, colors:{a:'#258046',b:'#10B981',c:'#D9A441'}, anim:'none', animCount:8, animSpeed:2, banner:{enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:''} };
+  teEdit=null; teMsg=null; teModalId=themeDraftObj.id; themeModalRender();
 }
 function themeModalRender(){
   const ex=document.getElementById('addModal'); if(ex) ex.remove();
-  const t=themeData().themes.find(x=>x.id===teModalId); if(!t) return;
+  const t=(themeDraftObj&&themeDraftObj.id===teModalId)?themeDraftObj:null; if(!t) return;
   const html=`<div id="addModal"><div class="apv-scrim" onclick="themeModalCancel()"></div>
     <div class="apv-box" style="width:740px">
       <div class="apv-box-head"><h3>Add theme</h3><button class="x-btn" onclick="themeModalCancel()"><i class="fa-solid fa-xmark"></i></button></div>
@@ -601,14 +602,14 @@ function themeModalRender(){
     </div></div>`;
   document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
 }
-function themeModalSave(){ teModalId=null; const m=document.getElementById('addModal'); if(m)m.remove(); pick('theme'); }
-function themeModalCancel(){ const id=teModalId; teModalId=null; const m=document.getElementById('addModal'); if(m)m.remove(); if(id){ const T=themeData(); T.themes=T.themes.filter(x=>x.id!==id); KKD.save(data); AdminShell.refreshPending(); } pick('theme'); }
+function themeModalSave(){ if(themeDraftObj){ themeData().themes.unshift(themeDraftObj); KKD.save(data); AdminShell.refreshPending(); } themeDraftObj=null; teModalId=null; const m=document.getElementById('addModal'); if(m)m.remove(); pick('theme'); }
+function themeModalCancel(){ themeDraftObj=null; teModalId=null; const m=document.getElementById('addModal'); if(m)m.remove(); pick('theme'); }
 function themeEdit(id){ const t=themeData().themes.find(x=>x.id===id); if(t&&t.isDefault) return; /* green default is not editable */ teEdit=(teEdit===id?null:id); teMsg=null; themeUI(); }
 function themeMove(i,d){ const T=themeData(); const j=i+d; if(j<0||j>=T.themes.length) return; if(T.themes[i].isDefault||T.themes[j].isDefault) return; const a=T.themes; [a[i],a[j]]=[a[j],a[i]]; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeToggle(id){ const t=themeData().themes.find(x=>x.id===id); if(!t||t.isDefault)return; t.enabled=!t.enabled; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeCondType(id,v){ themeField(id,'trigger.condType',v); themeUI(); }
 function themeSetDefault(v){ themeData().default=v; KKD.save(data); AdminShell.refreshPending(); }
-function themeField(id,path,v){ const t=themeData().themes.find(x=>x.id===id); if(!t)return; const ks=path.split('.'); let o=t; for(let i=0;i<ks.length-1;i++){ if(o[ks[i]]==null)o[ks[i]]={}; o=o[ks[i]]; } o[ks[ks.length-1]]=v; KKD.save(data); AdminShell.refreshPending(); }
+function themeField(id,path,v){ const t=(themeDraftObj&&themeDraftObj.id===id)?themeDraftObj:themeData().themes.find(x=>x.id===id); if(!t)return; const ks=path.split('.'); let o=t; for(let i=0;i<ks.length-1;i++){ if(o[ks[i]]==null)o[ks[i]]={}; o=o[ks[i]]; } o[ks[ks.length-1]]=v; if(t!==themeDraftObj){ KKD.save(data); AdminShell.refreshPending(); } }
 function themeToggleScopeAll(id){ const t=themeData().themes.find(x=>x.id===id); if(!t)return; t.trigger.states=['All']; KKD.save(data); themeUI(); }
 function themeToggleScope(id,st){ const t=themeData().themes.find(x=>x.id===id); if(!t)return; let s=(t.trigger.states||[]).filter(x=>x!=='All'); s.indexOf(st)>=0?(s=s.filter(x=>x!==st)):s.push(st); if(!s.length)s=['All']; t.trigger.states=s; KKD.save(data); themeUI(); }
 function themeSim(k,v){ teSim[k]=v; themeUI(); }

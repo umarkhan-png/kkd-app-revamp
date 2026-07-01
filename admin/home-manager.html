@@ -484,6 +484,8 @@ function themeData(){
     // per-theme status banner (merged into the theme — shows when this theme is live)
     if(!t.banner){ t.banner={enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:''}; changed=true; }
   });
+  // one-time cleanup: drop leftover unrenamed "New theme" entries (PM request)
+  if(!T._cleanNew){ T.themes=T.themes.filter(t=>t.isDefault || t.name!=='New theme'); T._cleanNew=true; changed=true; }
   if(changed) KKD.save(data);
   return T;
 }
@@ -584,7 +586,6 @@ function themeAdd(){
   teEdit=id; teMsg=null; KKD.save(data); AdminShell.refreshPending(); themeUI();
 }
 function themeEdit(id){ const t=themeData().themes.find(x=>x.id===id); if(t&&t.isDefault) return; /* green default is not editable */ teEdit=(teEdit===id?null:id); teMsg=null; themeUI(); }
-function themeRemove(id){ const T=themeData(); const t=T.themes.find(x=>x.id===id); if(!t||t.isDefault) return; T.themes=T.themes.filter(x=>x.id!==id); if(teEdit===id)teEdit=null; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeMove(i,d){ const T=themeData(); const j=i+d; if(j<0||j>=T.themes.length) return; if(T.themes[i].isDefault||T.themes[j].isDefault) return; const a=T.themes; [a[i],a[j]]=[a[j],a[i]]; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeToggle(id){ const t=themeData().themes.find(x=>x.id===id); if(!t||t.isDefault)return; t.enabled=!t.enabled; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeCondType(id,v){ themeField(id,'trigger.condType',v); themeUI(); }
@@ -624,8 +625,7 @@ function themeTile(t,i){
       ${isDef?'':`<button class="btn btn-s btn-ic" title="Move up" onclick="themeMove(${i},-1)" ${i===0?'disabled style=opacity:.4':''}><i class="fa-solid fa-arrow-up"></i></button>
       <button class="btn btn-s btn-ic" title="Move down" onclick="themeMove(${i},1)" ${i>=T.themes.length-2?'disabled style=opacity:.4':''}><i class="fa-solid fa-arrow-down"></i></button>`}
       ${isDef?'<span class="tt-lock" title="Default theme — always on, can’t be edited or disabled">🔒</span>':`<div class="tg ${t.enabled?'on':''}" title="Enable / disable" onclick="themeToggle('${t.id}')"></div>`}
-      ${isDef?'':`<button class="btn ${t.id===teEdit?'btn-p':'btn-s'} btn-ic" title="Edit" onclick="themeEdit('${t.id}')"><i class="fa-solid fa-pen"></i></button>
-      <button class="btn btn-d btn-ic" title="Delete theme" onclick="themeRemove('${t.id}')"><i class="fa-solid fa-trash"></i></button>`}
+      ${isDef?'':`<button class="btn ${t.id===teEdit?'btn-p':'btn-s'} btn-ic" title="Edit" onclick="themeEdit('${t.id}')"><i class="fa-solid fa-pen"></i></button>`}
     </div>
   </div>`;
 }
@@ -703,7 +703,6 @@ function themeEditor(t){
       <div class="fg"><label>Deeplink</label><input type="text" value="${esc(bn.link||'')}" onchange="themeField('${t.id}','banner.link',this.value)" placeholder="shop.html"/></div>
     </div>`:''}
 
-    ${isDef?'':`<div style="margin-top:20px;border-top:1px solid var(--g200);padding-top:14px"><button class="btn btn-d btn-sm" onclick="themeRemove('${t.id}')"><i class="fa-solid fa-trash"></i> Remove theme</button></div>`}
   </div>`;
 }
 

@@ -624,7 +624,8 @@ function themeTile(t,i){
       ${isDef?'':`<button class="btn btn-s btn-ic" title="Move up" onclick="themeMove(${i},-1)" ${i===0?'disabled style=opacity:.4':''}><i class="fa-solid fa-arrow-up"></i></button>
       <button class="btn btn-s btn-ic" title="Move down" onclick="themeMove(${i},1)" ${i>=T.themes.length-2?'disabled style=opacity:.4':''}><i class="fa-solid fa-arrow-down"></i></button>`}
       ${isDef?'<span class="tt-lock" title="Default theme — always on, can’t be edited or disabled">🔒</span>':`<div class="tg ${t.enabled?'on':''}" title="Enable / disable" onclick="themeToggle('${t.id}')"></div>`}
-      ${isDef?'':`<button class="btn ${t.id===teEdit?'btn-p':'btn-s'} btn-ic" title="Edit" onclick="themeEdit('${t.id}')"><i class="fa-solid fa-pen"></i></button>`}
+      ${isDef?'':`<button class="btn ${t.id===teEdit?'btn-p':'btn-s'} btn-ic" title="Edit" onclick="themeEdit('${t.id}')"><i class="fa-solid fa-pen"></i></button>
+      <button class="btn btn-d btn-ic" title="Delete theme" onclick="themeRemove('${t.id}')"><i class="fa-solid fa-trash"></i></button>`}
     </div>
   </div>`;
 }

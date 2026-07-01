@@ -800,13 +800,11 @@
     .rtn-prod .ps{font-size:11px;color:#64748B;margin-top:2px}
     /* clickable part + return-qty stepper (capped at ordered qty) */
     .rtn-prod-main{display:flex;align-items:center;gap:11px;flex:1;min-width:0;cursor:pointer}
-    /* Qty control · QTY label sits to the LEFT of the stepper · fixed height so the row never changes size */
+    /* Qty control · QTY label to the LEFT + a dropdown to pick the quantity · fixed height so the row never changes size */
     .rtn-qty-wrap{display:none;flex-direction:row;align-items:center;gap:8px;flex-shrink:0}
     .rtn-qty-lbl{font-size:9px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#258046}
-    .rtn-qty{display:inline-flex;align-items:center;height:32px;border-radius:9px;border:1px solid #BBF7D0;background:#FFFFFF;overflow:hidden;flex-shrink:0}
-    .rtn-qty button{width:30px;height:32px;display:flex;align-items:center;justify-content:center;color:#258046;font-size:15px;font-weight:800;background:transparent;border:0;cursor:pointer}
-    .rtn-qty button:disabled{color:#A7F3D0;cursor:not-allowed}
-    .rtn-qty .qv{min-width:18px;text-align:center;font-size:13px;font-weight:800;color:#258046;font-variant-numeric:tabular-nums}
+    .rtn-qty-select{height:32px;border-radius:9px;border:1px solid #BBF7D0;background:#FFFFFF;color:#258046;font-family:inherit;font-size:13px;font-weight:800;padding:0 26px 0 12px;cursor:pointer;outline:none;-webkit-appearance:none;-moz-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23258046' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 9px center;font-variant-numeric:tabular-nums}
+    .rtn-qty-select:focus{border-color:#258046}
     .rtn-select,.rtn-desc{width:100%;border:1.5px solid #E5E7EB;border-radius:10px;background:#FAFAFA;font-size:13px;font-family:inherit;color:#0F172A;outline:none;box-sizing:border-box;padding:11px 12px}
     .rtn-select:focus,.rtn-desc:focus{border-color:#258046}
     .rtn-desc{min-height:64px;resize:none;margin-top:8px}
@@ -912,11 +910,11 @@
       <div class="space-y-2" id="rtnProducts">
         <div class="rtn-prod">
           <label class="rtn-prod-main"><input type="checkbox" class="rtn-prod-cb" data-key="humic" data-max="2"/><span class="rtn-cbx"><i class="fa-solid fa-check"></i></span><div class="pimg"><img src="../assets/Humic_nobg.png" class="img-blend"/></div><div class="flex-1 leading-tight"><div class="pn">Humic + Fulvic</div><div class="ps">1 L · ₹376 · ordered 2</div></div></label>
-          <div class="rtn-qty-wrap"><span class="rtn-qty-lbl">Qty</span><div class="rtn-qty"><button type="button" class="qd">−</button><span class="qv">1</span><button type="button" class="qi">+</button></div></div>
+          <div class="rtn-qty-wrap"><span class="rtn-qty-lbl">Qty</span><select class="rtn-qty-select"></select></div>
         </div>
         <div class="rtn-prod">
           <label class="rtn-prod-main"><input type="checkbox" class="rtn-prod-cb" data-key="antivirus" data-max="3"/><span class="rtn-cbx"><i class="fa-solid fa-check"></i></span><div class="pimg"><img src="../assets/AntiVirus_nobg.png" class="img-blend"/></div><div class="flex-1 leading-tight"><div class="pn">Antivirus</div><div class="ps">250 ml · ₹327 · ordered 3</div></div></label>
-          <div class="rtn-qty-wrap"><span class="rtn-qty-lbl">Qty</span><div class="rtn-qty"><button type="button" class="qd">−</button><span class="qv">1</span><button type="button" class="qi">+</button></div></div>
+          <div class="rtn-qty-wrap"><span class="rtn-qty-lbl">Qty</span><select class="rtn-qty-select"></select></div>
         </div>
       </div>
 
@@ -1377,21 +1375,20 @@
           seg.querySelectorAll('.rtn-seg-btn').forEach(x => x.classList.remove('active'));
           b.classList.add('active'); choice = b.dataset.choice;
         }));
-        // Product checkbox + return-qty stepper · qty reveals when selected, capped at the ordered quantity
+        // Product checkbox + return-qty dropdown · qty reveals when selected, options capped at the ordered quantity
         document.querySelectorAll('#rtnProducts .rtn-prod').forEach(p => {
           const cb = p.querySelector('.rtn-prod-cb');
           const qtyBox = p.querySelector('.rtn-qty-wrap');
-          const qv = p.querySelector('.qv'), qd = p.querySelector('.qd'), qi = p.querySelector('.qi');
+          const sel = p.querySelector('.rtn-qty-select');
           const max = parseInt(cb.dataset.max, 10) || 1;
-          let n = 1;
-          function paint(){ qv.textContent = n; qd.disabled = n <= 1; qi.disabled = n >= max; }
+          for (let i = 1; i <= max; i++) { const o = document.createElement('option'); o.value = i; o.textContent = i; sel.appendChild(o); }
           cb.addEventListener('change', () => {
             p.classList.toggle('sel', cb.checked);
             qtyBox.style.display = cb.checked ? 'flex' : 'none';
-            if (cb.checked) { n = 1; paint(); }
+            if (cb.checked) sel.value = '1';
           });
-          qd.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); if (n > 1) { n--; paint(); } });
-          qi.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); if (n < max) { n++; paint(); } });
+          // don't let a tap on the dropdown toggle the row's checkbox
+          sel.addEventListener('click', (e) => e.stopPropagation());
         });
 
         // Add proof · "Camera or Gallery" choice → file input → thumbnail previews (removable)

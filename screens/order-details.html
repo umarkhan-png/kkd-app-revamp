@@ -136,6 +136,30 @@
   .tl-time{font-size:10.5px;color:#94A3B8;margin-top:2px}
   .tl-item.cur .tl-title{color:#B45309}
   .tl-item.upcoming .tl-title{color:#94A3B8}
+  /* Delay note + detailed-tracking entry · surfaced on the in-transit stage only when the courier holds the parcel too long */
+  .tl-delay{margin-top:9px}
+  .tl-delay-note{display:flex;gap:7px;align-items:flex-start;font-size:11px;font-weight:600;color:#92400E;background:#FFFBEB;border:1px solid #FCD34D;border-radius:10px;padding:8px 10px;line-height:1.4}
+  .tl-delay-note i{color:#B45309;font-size:11px;margin-top:1px;flex-shrink:0}
+  .tl-track-btn{display:inline-flex;align-items:center;gap:7px;margin-top:8px;font-size:12px;font-weight:700;color:#B45309;background:#FEF3C7;border:1px solid #FCD34D;border-radius:10px;padding:8px 12px;cursor:pointer;font-family:inherit}
+  .tl-track-btn:active{transform:scale(.98)}
+  .tl-track-btn .ch{font-size:9px;opacity:.7}
+  /* Detailed tracking sheet · partner scan log (Date · Location · Remarks) */
+  .trk-status{display:flex;align-items:center;gap:11px;background:linear-gradient(180deg,#FFF7ED,#FEF3C7);border:1px solid #FCD34D;border-radius:14px;padding:12px 13px}
+  .trk-status-ic{width:38px;height:38px;border-radius:11px;background:#FFFFFF;border:1px solid #FCD34D;display:flex;align-items:center;justify-content:center;color:#B45309;font-size:15px;flex-shrink:0}
+  .trk-status-t{font-size:15px;font-weight:800;color:#B45309;line-height:1.1}
+  .trk-status-s{font-size:11px;font-weight:600;color:#92400E;margin-top:2px}
+  .trk-hint{display:flex;gap:7px;align-items:flex-start;font-size:11px;font-weight:500;color:#64748B;margin:12px 2px 15px;line-height:1.45}
+  .trk-hint i{color:#94A3B8;font-size:11px;margin-top:1px;flex-shrink:0}
+  .trk-row{position:relative;padding-left:23px;padding-bottom:16px}
+  .trk-row:last-child{padding-bottom:2px}
+  .trk-dot{position:absolute;left:4px;top:4px;width:9px;height:9px;border-radius:50%;background:#FCD34D;border:2px solid #FDE68A;z-index:1}
+  .trk-row:first-child .trk-dot{background:#B45309;border-color:#FCD34D}
+  .trk-row::before{content:"";position:absolute;left:8px;top:13px;bottom:0;width:2px;background:#F1F5F9}
+  .trk-row:last-child::before{display:none}
+  .trk-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+  .trk-loc{font-size:13px;font-weight:700;color:#0F172A}
+  .trk-date{font-size:10.5px;font-weight:600;color:#94A3B8;white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums}
+  .trk-rmk{font-size:11.5px;font-weight:500;color:#64748B;margin-top:2px;line-height:1.4}
 
   /* Payment · fully paid · single row with chip */
   .pay-row{padding:14px;display:flex;align-items:center;gap:12px}
@@ -318,6 +342,11 @@
         <div class="tl-line"></div>
         <div class="tl-title">Dispatched</div>
         <div class="tl-time" id="tlDispatchTime">9 Apr, 8:00 AM &middot; Out for last-mile</div>
+        <!-- Delay affordance · only shown when the courier holds the parcel past our expected window · lets the user drop into the partner's raw scan log -->
+        <div class="tl-delay" id="tlDelay" style="display:none">
+          <div class="tl-delay-note"><i class="fa-solid fa-triangle-exclamation"></i> Taking longer than usual &mdash; the parcel is moving between our courier's hubs.</div>
+          <button type="button" class="tl-track-btn" id="viewDetailedTrack"><i class="fa-solid fa-location-crosshairs"></i> View detailed tracking <i class="fa-solid fa-chevron-right ch"></i></button>
+        </div>
       </div>
       <div class="tl-item" id="tlDelivered">
         <div class="tl-badge"><i class="fa-solid fa-circle-check"></i></div>
@@ -525,7 +554,7 @@
   <!-- Sticky bottom · 2 CTAs · Return (outline) + Reorder (primary emerald, fa-repeat) · Download invoice moved back into the kebab menu -->
   <div class="sticky-cta">
     <a class="cta-out hide-pending" id="returnCta" href="#complaint">
-      <i class="fa-solid fa-flag"></i> Raise a complaint
+      Raise a complaint
     </a>
     <a class="cta-pri hide-pending" href="cart.html?reorder=1">
       <i class="fa-solid fa-repeat"></i> Reorder
@@ -533,6 +562,42 @@
     <a class="cta-pri only-pending" href="orders.html" style="flex:1">
       <i class="fa-solid fa-check"></i> Done
     </a>
+  </div>
+
+  <!-- Detailed tracking · the courier's raw scan log · shown only when the parcel is stuck at the partner's end -->
+  <div id="trackBd" class="modal-bd"></div>
+  <div id="trackSheet" class="modal-sheet" style="padding:0;max-height:88vh;display:flex;flex-direction:column">
+    <div class="modal-handle"></div>
+    <div class="px-5 pt-3 pb-2 flex items-center justify-between" style="flex-shrink:0">
+      <div class="leading-tight">
+        <div class="text-[18px] font-bold text-[#0F172A]">Detailed tracking</div>
+        <div class="text-[11.5px] font-semibold" style="color:#64748B">Delivery partner &middot; WareIQ &middot; AWB 46095296957</div>
+      </div>
+      <button id="trackClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div class="px-5 pb-5 overflow-y-auto" style="flex:1">
+      <div class="trk-status">
+        <div class="trk-status-ic"><i class="fa-solid fa-truck-fast"></i></div>
+        <div>
+          <div class="trk-status-t">In Transit</div>
+          <div class="trk-status-s">Last update &middot; Wed, 10 Jun 2026 &middot; 08:45 AM</div>
+        </div>
+      </div>
+      <div class="trk-hint"><i class="fa-solid fa-circle-info"></i> This is the live scan log from our delivery partner. The stages above are a simplified view.</div>
+      <div class="trk-log">
+        <div class="trk-row"><div class="trk-dot"></div><div class="trk-body"><div class="trk-top"><span class="trk-loc">Bhopal Branch</span><span class="trk-date">10 Jun, 08:45 AM</span></div><div class="trk-rmk">In transit</div></div></div>
+        <div class="trk-row"><div class="trk-dot"></div><div class="trk-body"><div class="trk-top"><span class="trk-loc">Bhopal Branch</span><span class="trk-date">10 Jun, 08:45 AM</span></div><div class="trk-rmk">Reached destination hub</div></div></div>
+        <div class="trk-row"><div class="trk-dot"></div><div class="trk-body"><div class="trk-top"><span class="trk-loc">Bhopal Branch</span><span class="trk-date">10 Jun, 07:06 AM</span></div><div class="trk-rmk">Mis-route corrected</div></div></div>
+        <div class="trk-row"><div class="trk-dot"></div><div class="trk-body"><div class="trk-top"><span class="trk-loc">Indore Apex</span><span class="trk-date">10 Jun, 01:11 AM</span></div><div class="trk-rmk">In transit</div></div></div>
+        <div class="trk-row"><div class="trk-dot"></div><div class="trk-body"><div class="trk-top"><span class="trk-loc">Indore Apex</span><span class="trk-date">10 Jun, 00:53 AM</span></div><div class="trk-rmk">In transit</div></div></div>
+        <div class="trk-row"><div class="trk-dot"></div><div class="trk-body"><div class="trk-top"><span class="trk-loc">Indore Apex</span><span class="trk-date">09 Jun, 10:31 PM</span></div><div class="trk-rmk">Outbound load made to Bhopal Branch</div></div></div>
+        <div class="trk-row"><div class="trk-dot"></div><div class="trk-body"><div class="trk-top"><span class="trk-loc">Indore Apex</span><span class="trk-date">09 Jun, 02:30 PM</span></div><div class="trk-rmk">In transit</div></div></div>
+        <div class="trk-row"><div class="trk-dot"></div><div class="trk-body"><div class="trk-top"><span class="trk-loc">Market Yard Branch</span><span class="trk-date">09 Jun, 10:03 AM</span></div><div class="trk-rmk">In transit</div></div></div>
+        <div class="trk-row"><div class="trk-dot"></div><div class="trk-body"><div class="trk-top"><span class="trk-loc">Pune Apex</span><span class="trk-date">09 Jun, 09:31 AM</span></div><div class="trk-rmk">In transit</div></div></div>
+        <div class="trk-row"><div class="trk-dot"></div><div class="trk-body"><div class="trk-top"><span class="trk-loc">Pune Apex</span><span class="trk-date">08 Jun, 02:27 PM</span></div><div class="trk-rmk">Outbound load made to Indore Apex</div></div></div>
+        <div class="trk-row"><div class="trk-dot"></div><div class="trk-body"><div class="trk-top"><span class="trk-loc">Market Yard Branch</span><span class="trk-date">07 Jun, 01:12 AM</span></div><div class="trk-rmk">Picked up from seller</div></div></div>
+      </div>
+    </div>
   </div>
 
   <!-- Cancel order · confirmation modal -->
@@ -678,7 +743,7 @@
     <div class="modal-handle"></div>
     <div class="px-5 pt-3 pb-2 flex items-center gap-2.5" style="flex-shrink:0">
       <button id="cmpResBack" class="cmp-back"><i class="fa-solid fa-arrow-left text-[13px]"></i></button>
-      <div class="text-[16px] font-bold leading-tight flex-1">Your resolution</div>
+      <div class="text-[16px] font-bold leading-tight flex-1">Raise a complaint</div>
       <button id="cmpResClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0;flex-shrink:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
     <div class="px-5 pb-3 overflow-y-auto" style="flex:1">
@@ -709,15 +774,6 @@
     .cmp-back{width:32px;height:32px;border-radius:9999px;background:#F1F5F9;border:0;display:flex;align-items:center;justify-content:center;color:#475569;flex-shrink:0;cursor:pointer}
     .cmp-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#475569;background:#F1F5F9;padding:5px 11px;border-radius:9999px}
     .cmp-pill i{font-size:9px;color:#94A3B8}
-    .cmp-elig{display:flex;align-items:flex-start;gap:12px;padding:14px;border-radius:14px;border:1.5px solid #E5E7EB;background:#fff;cursor:pointer;width:100%;text-align:left;font-family:inherit;margin-top:10px}
-    .cmp-elig.sel{border-color:#258046;background:#ECFDF5}
-    .cmp-elig.solo{cursor:default}
-    .cmp-elig .eic{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
-    .cmp-elig .et{font-size:14.5px;font-weight:800;color:#0F172A;line-height:1.2}
-    .cmp-elig .ed{font-size:11.5px;color:#64748B;margin-top:3px;line-height:1.45}
-    .cmp-elig .eck{margin-left:auto;width:20px;height:20px;border-radius:50%;border:1.5px solid #CBD5E1;flex-shrink:0;display:none;align-items:center;justify-content:center;font-size:9px;color:#fff;margin-top:2px}
-    .cmp-elig.pick .eck{display:flex}
-    .cmp-elig.sel .eck{background:#258046;border-color:#258046}
     .cmp-note{display:flex;gap:11px;padding:13px;border-radius:12px;background:#FFFBEB;border:1px solid #FCD34D;margin-top:12px}
     .cmp-note i{color:#B45309;font-size:14px;flex-shrink:0;margin-top:1px}
     .cmp-note p{font-size:12px;color:#78350F;line-height:1.5}
@@ -925,14 +981,14 @@
     </div>
     <div class="px-5 pb-5 overflow-y-auto" style="flex:1">
       <div class="rounded-[12px] p-3 mb-4 flex items-center gap-3" style="background:#FFFBEB;border:1px solid #FCD34D">
-        <i class="fa-solid fa-truck-fast text-[15px]" style="color:#B45309"></i>
-        <div class="text-[12px] font-semibold" style="color:#78350F">Pickup scheduled for <b>Tomorrow, 10am–6pm</b></div>
+        <i class="fa-solid fa-shield-halved text-[15px]" style="color:#B45309"></i>
+        <div class="text-[12px] font-semibold" style="color:#78350F">We’re reviewing your request — we’ll confirm the next step shortly</div>
       </div>
       <div class="px-1">
-        <div class="rtl done"><div class="dot"><i class="fa-solid fa-check"></i></div><div><div class="a">Return requested</div><div class="b">Today · just now</div></div></div>
-        <div class="rtl on"><div class="dot"><i class="fa-solid fa-truck-fast text-[8px]"></i></div><div><div class="a">Pickup scheduled</div><div class="b">Our partner will collect the item</div></div></div>
-        <div class="rtl"><div class="dot"></div><div><div class="a">Item picked up</div><div class="b">Quality check on arrival</div></div></div>
-        <div class="rtl"><div class="dot"></div><div><div class="a" id="rtnDetLast">Refund to wallet</div><div class="b">3–5 days after quality check</div></div></div>
+        <div class="rtl done"><div class="dot"><i class="fa-solid fa-check"></i></div><div><div class="a">Complaint raised</div><div class="b">Today · just now</div></div></div>
+        <div class="rtl on"><div class="dot"><i class="fa-solid fa-magnifying-glass text-[8px]"></i></div><div><div class="a">Under review</div><div class="b">Our team is verifying your request &amp; proof</div></div></div>
+        <div class="rtl"><div class="dot"></div><div><div class="a">Resolution shared</div><div class="b">Refund or replacement, based on the review</div></div></div>
+        <div class="rtl"><div class="dot"></div><div><div class="a" id="rtnDetLast">Refund / replacement processed</div><div class="b">After the resolution is confirmed</div></div></div>
       </div>
       <a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-4 text-[12px] font-semibold" style="color:#258046;text-decoration:none"><i class="fa-solid fa-circle-info text-[11px]"></i> Returns &amp; refund policy</a>
     </div>
@@ -986,6 +1042,7 @@
       const qp = new URLSearchParams(location.search);
       const state = (qp.get('state') || 'delivered').toLowerCase();
       const payment = (qp.get('payment') || '').toLowerCase();
+      const delayed = ['1','true','yes'].includes((qp.get('delayed') || '').toLowerCase());
       const id    = qp.get('id') || 'KAT-2026-04-1198';
       document.body.classList.remove('state-delivered','state-transit','state-pending');
       document.body.classList.add('state-' + (state === 'transit' ? 'transit' : (state === 'pending' ? 'pending' : 'delivered')));
@@ -1010,6 +1067,13 @@
         if (deliv){
           deliv.classList.add('upcoming');
           const dt = document.getElementById('tlDeliveredTime'); if (dt) dt.textContent = 'Arriving tomorrow by 5:00 PM';
+        }
+        // Stuck at the courier past our expected window · reveal the detailed-tracking entry + soften the ETA
+        if (delayed) {
+          const dl = document.getElementById('tlDelay'); if (dl) dl.style.display = 'block';
+          const dt = document.getElementById('tlDispatchTime'); if (dt) dt.textContent = 'In transit since 8 Apr · held at courier';
+          const dsub = document.querySelector('.hero-sub.only-transit'); if (dsub) dsub.innerHTML = 'Running late in transit &middot; we’re following up with the courier';
+          const dtd = document.getElementById('tlDeliveredTime'); if (dtd) dtd.textContent = 'New ETA being confirmed';
         }
         const bt = document.getElementById('billTotal'); if (bt) bt.textContent = '₹1,430';
         if (isPartial) {
@@ -1155,6 +1219,15 @@
       if (tncBd) tncBd.addEventListener('click', () => closeSheet(tncBd, tncSheet));
       if (tncAgree) tncAgree.addEventListener('change', () => { tncProceed.disabled = !tncAgree.checked; tncProceed.style.opacity = tncAgree.checked ? '1' : '.55'; });
 
+      // Detailed tracking · the courier scan-log sheet · opened from the delay note on the in-transit stage
+      const trackBd = document.getElementById('trackBd');
+      const trackSheet = document.getElementById('trackSheet');
+      const trackBtn = document.getElementById('viewDetailedTrack');
+      const trackClose = document.getElementById('trackClose');
+      if (trackBtn) trackBtn.addEventListener('click', () => openSheet(trackBd, trackSheet));
+      if (trackClose) trackClose.addEventListener('click', () => closeSheet(trackBd, trackSheet));
+      if (trackBd) trackBd.addEventListener('click', () => closeSheet(trackBd, trackSheet));
+
       // ---- Complaint flow · capture the reason, then the APP decides the resolution (refund / replacement / both / investigation) ----
       (function(){
         const cmpBd=document.getElementById('cmpBd'), cmpSheet=document.getElementById('cmpSheet');
@@ -1164,76 +1237,71 @@
         const resReason=document.getElementById('cmpResReason').querySelector('span'), resHead=document.getElementById('cmpResHead'), resSub=document.getElementById('cmpResSub'), resBody=document.getElementById('cmpResBody'), resCta=document.getElementById('cmpResCta');
         const ok=document.getElementById('rtnOk'), okTitle=document.getElementById('rtnOkTitle'), okSub=document.getElementById('rtnOkSub');
 
-        // Reason → outcome map · the app decides; the user does NOT pick refund-vs-replace upfront
+        // Reason → next-step map · we DON'T promise an outcome upfront.
+        //  next:'form'       → the reason implies the user wants the item back → open the full return/replace form
+        //  next:'remark'     → free-text describe step (Other / Something else)
+        //  next:'investigate'→ nothing to send back (delivery issue) → we investigate and get back
         const CATS={
           received:{title:"I received it, but there's a problem", reasons:[
-            {id:'missing',  label:'Missing item(s)',                       out:'both'},
-            {id:'damaged',  label:'Damaged / leaked / broken',            out:'both'},
-            {id:'wrong',    label:'Received wrong product',               out:'replace'},
-            {id:'quality',  label:'Quality issue (less quantity / expired)', out:'refund'},
-            {id:'other',    label:'Other',                                out:'investigate'}
+            {id:'missing',  label:'Missing item(s)',                          next:'form', mode:'return'},
+            {id:'damaged',  label:'Damaged / leaked / broken',               next:'form', mode:'return'},
+            {id:'wrong',    label:'Received wrong product',                   next:'form', mode:'replace'},
+            {id:'quality',  label:'Quality issue (less quantity / expired)',  next:'form', mode:'return'},
+            {id:'other',    label:'Other',                                    next:'remark'}
           ]},
           notreceived:{title:"I never received it", reasons:[
-            {id:'nocall',   label:'No call from delivery agent',          out:'both'},
-            {id:'otp',      label:'OTP shared but no parcel',             out:'investigate'},
-            {id:'marked',   label:'Marked delivered but not received',    out:'investigate'},
-            {id:'other2',   label:'Other',                                out:'investigate'}
+            {id:'nocall',   label:'No call from delivery agent',             next:'investigate'},
+            {id:'otp',      label:'OTP shared but no parcel',                next:'investigate'},
+            {id:'marked',   label:'Marked delivered but not received',       next:'investigate'},
+            {id:'other2',   label:'Other',                                   next:'remark'}
           ]}
         };
-        const ELIG={
-          refund:{ic:'fa-indian-rupee-sign',bg:'#ECFDF5',color:'#258046',t:'Refund',d:'Money back to your KKD wallet or original payment method in 3–5 days after a quick quality check.'},
-          replace:{ic:'fa-right-left',bg:'#EFF6FF',color:'#2563EB',t:'Free replacement',d:'We pick up the item and ship a fresh one — usually within 24–48 hrs.'}
-        };
-        let pick=null;
+        const REASON_MAP={missing:'Missing item in package',damaged:'Damaged / leaking on arrival',wrong:'Wrong product delivered',quality:'Quality issue'};
+        let resBack='reasons', remarkEl=null;
 
-        function eligCard(kind, selectable){
-          const e=ELIG[kind];
-          return '<div class="cmp-elig'+(selectable?' pick':' solo')+'" data-pick="'+kind+'">'
-            +'<span class="eic" style="background:'+e.bg+';color:'+e.color+'"><i class="fa-solid '+e.ic+'"></i></span>'
-            +'<div style="flex:1;min-width:0"><div class="et">'+e.t+'</div><div class="ed">'+e.d+'</div></div>'
-            +'<span class="eck"><i class="fa-solid fa-check"></i></span></div>';
+        function goRes(){ closeSheet(rBd,rSheet); closeSheet(cmpBd,cmpSheet); setTimeout(function(){ openSheet(resBd,resSheet); },180); }
+
+        // Return / replacement wanted → hand off to the full form (product select, auto unboxing, remark, video proof)
+        function openReturnForm(r){
+          const sel=document.getElementById('rtnReason');
+          if(sel && REASON_MAP[r.id]){ const opt=Array.from(sel.options).find(o=>o.value===REASON_MAP[r.id]); if(opt) sel.value=opt.value; }
+          const segBtn=document.querySelector('.rtn-seg-btn[data-choice="'+(r.mode==='replace'?'replace':'return')+'"]'); if(segBtn) segBtn.click();
+          const rtnBd=document.getElementById('rtnBd'), rtnSheet=document.getElementById('rtnSheet');
+          closeSheet(rBd,rSheet); closeSheet(cmpBd,cmpSheet);
+          setTimeout(function(){ if(rtnBd&&rtnSheet) openSheet(rtnBd,rtnSheet); },180);
         }
-        function openResolution(r){
-          pick=null; resReason.textContent=r.label; resBody.innerHTML='';
-          if(r.out==='both'){
-            resHead.textContent='Good news — you can choose a refund or a replacement';
-            resSub.textContent='Pick whichever works best for you. We’ll take it from here.';
-            resBody.innerHTML=eligCard('refund',true)+eligCard('replace',true);
-            resCta.textContent='Continue'; resCta.disabled=true; resCta.style.opacity='.55';
-            resBody.querySelectorAll('.cmp-elig').forEach(function(c){
-              c.addEventListener('click', function(){
-                resBody.querySelectorAll('.cmp-elig').forEach(function(x){x.classList.remove('sel');});
-                c.classList.add('sel'); pick=c.getAttribute('data-pick');
-                resCta.disabled=false; resCta.style.opacity='1';
-              });
-            });
-          } else if(r.out==='refund'){
-            pick='refund';
-            resHead.textContent='You’re eligible for a refund';
-            resSub.textContent='Based on your complaint, a refund is the fastest fix.';
-            resBody.innerHTML=eligCard('refund',false);
-            resCta.textContent='Confirm refund'; resCta.disabled=false; resCta.style.opacity='1';
-          } else if(r.out==='replace'){
-            pick='replace';
-            resHead.textContent='We’ll send you a free replacement';
-            resSub.textContent='We’ll pick up the wrong item and ship the correct one.';
-            resBody.innerHTML=eligCard('replace',false);
-            resCta.textContent='Confirm replacement'; resCta.disabled=false; resCta.style.opacity='1';
-          } else {
-            pick='investigate';
-            resHead.textContent='We’ll investigate this for you';
-            resSub.textContent='Our team will verify with the delivery partner and update you.';
-            resBody.innerHTML='<div class="cmp-note"><i class="fa-solid fa-shield-halved"></i><p>You’ll get an update within <b>24–48 hrs</b>. If the parcel can’t be confirmed delivered, you’ll get a <b>full refund or a re-delivery</b> — no extra steps.</p></div>';
-            resCta.textContent='Raise complaint'; resCta.disabled=false; resCta.style.opacity='1';
-          }
-          closeSheet(rBd,rSheet); setTimeout(function(){ openSheet(resBd,resSheet); },180);
+        // Free-text describe step · used by the Other reason and the Something-else category
+        function openRemark(r){
+          remarkEl=null; resReason.textContent=r.label;
+          resHead.textContent='Tell us what happened';
+          resSub.textContent='Add a few details so our team can look into it and share a resolution.';
+          resBody.innerHTML='<textarea class="rtn-desc" id="cmpRemark" style="margin-top:12px" placeholder="Describe the issue in your words…"></textarea>'
+            +'<div class="cmp-note"><i class="fa-solid fa-shield-halved"></i><p>We’ll review your complaint and get back with a resolution — usually within <b>24–48 hrs</b>.</p></div>';
+          remarkEl=document.getElementById('cmpRemark');
+          resCta.textContent='Submit complaint'; resCta.disabled=true; resCta.style.opacity='.55';
+          remarkEl.addEventListener('input', function(){ const okv=remarkEl.value.trim().length>=3; resCta.disabled=!okv; resCta.style.opacity=okv?'1':'.55'; });
+          goRes();
+        }
+        // Nothing to send back · we investigate with the courier · no promised outcome
+        function openInvestigate(r){
+          remarkEl=null; resReason.textContent=r.label;
+          resHead.textContent='We’ll look into this';
+          resSub.textContent='Our team will verify with the delivery partner and share a resolution.';
+          resBody.innerHTML='<div class="cmp-note"><i class="fa-solid fa-shield-halved"></i><p>We’ll review your complaint and get back within <b>24–48 hrs</b> with a resolution. You’ll be updated by app notification and SMS.</p></div>';
+          resCta.textContent='Submit complaint'; resCta.disabled=false; resCta.style.opacity='1';
+          goRes();
         }
         function openReasons(catKey){
           const cat=CATS[catKey]; rTitle.textContent=cat.title; rList.innerHTML='';
           cat.reasons.forEach(function(r){
             const b=document.createElement('button'); b.type='button'; b.className='cmp-reason';
             b.innerHTML='<span>'+r.label+'</span><i class="fa-solid fa-chevron-right rch"></i>';
-            b.addEventListener('click', function(){ openResolution(r); });
+            b.addEventListener('click', function(){
+              resBack='reasons';
+              if(r.next==='form') openReturnForm(r);
+              else if(r.next==='remark') openRemark(r);
+              else openInvestigate(r);
+            });
             rList.appendChild(b);
           });
           closeSheet(cmpBd,cmpSheet); setTimeout(function(){ openSheet(rBd,rSheet); },180);
@@ -1241,11 +1309,8 @@
         function finish(){
           if(resCta.disabled) return;
           closeSheet(resBd,resSheet);
-          let t,s;
-          if(pick==='refund'){ t='Refund request raised'; s='Refund to your wallet in 3–5 days after a quick quality check.'; }
-          else if(pick==='replace'){ t='Replacement requested'; s='Free pickup in 24–48 hrs · a fresh item ships right after.'; }
-          else { t='Complaint registered'; s='We’ll investigate and update you within 24–48 hrs.'; }
-          okTitle.textContent=t; okSub.textContent=s;
+          okTitle.textContent='Complaint registered';
+          okSub.textContent='We’ll review your complaint and share a resolution within 24–48 hrs.';
           setTimeout(function(){ ok.classList.add('show'); setTimeout(function(){ ok.classList.remove('show'); }, 2600); }, 200);
         }
 
@@ -1254,7 +1319,7 @@
             const cat=b.getAttribute('data-cat'), act=b.getAttribute('data-act');
             if(cat){ openReasons(cat); }
             else if(act==='track'){ closeSheet(cmpBd,cmpSheet); setTimeout(function(){ const dB=document.getElementById('rtnDetBd'), dS=document.getElementById('rtnDetSheet'); if(dB&&dS) openSheet(dB,dS); },180); }
-            else if(act==='other'){ closeSheet(cmpBd,cmpSheet); setTimeout(function(){ openSheet(helpBd,helpSheet); },180); }
+            else if(act==='other'){ resBack='cats'; openRemark({id:'somethingelse', label:'Something else'}); }
           });
         });
         document.getElementById('cmpClose').addEventListener('click', function(){ closeSheet(cmpBd,cmpSheet); });
@@ -1262,7 +1327,7 @@
         document.getElementById('cmpRBack').addEventListener('click', function(){ closeSheet(rBd,rSheet); setTimeout(function(){ openSheet(cmpBd,cmpSheet); },180); });
         document.getElementById('cmpRClose').addEventListener('click', function(){ closeSheet(rBd,rSheet); });
         rBd.addEventListener('click', function(){ closeSheet(rBd,rSheet); });
-        document.getElementById('cmpResBack').addEventListener('click', function(){ closeSheet(resBd,resSheet); setTimeout(function(){ openSheet(rBd,rSheet); },180); });
+        document.getElementById('cmpResBack').addEventListener('click', function(){ closeSheet(resBd,resSheet); setTimeout(function(){ openSheet(resBack==='cats'?cmpBd:rBd, resBack==='cats'?cmpSheet:rSheet); },180); });
         document.getElementById('cmpResClose').addEventListener('click', function(){ closeSheet(resBd,resSheet); });
         resBd.addEventListener('click', function(){ closeSheet(resBd,resSheet); });
         resCta.addEventListener('click', finish);
@@ -1357,10 +1422,8 @@
           if (picked === 0) { alert('Please select at least one product.'); return; }
           if (!reason) { alert('Please choose a reason.'); return; }
           closeSheet(rtnBd, rtnSheet);
-          if (okTitle) okTitle.textContent = choice === 'replace' ? 'Replacement requested' : 'Return requested';
-          if (okSub) okSub.innerHTML = choice === 'replace'
-            ? 'Free pickup in 24–48 hrs · replacement ships after we collect the item'
-            : 'Free pickup in 24–48 hrs · refund to your wallet after QC';
+          if (okTitle) okTitle.textContent = choice === 'replace' ? 'Replacement request received' : 'Return request received';
+          if (okSub) okSub.innerHTML = 'We’ll review your request and proof, then share a resolution within 24–48 hrs.';
           // Reveal the return status on each selected product row in the order
           const word = choice === 'replace' ? 'Replacement requested' : 'Return requested';
           document.querySelectorAll('#rtnProducts .rtn-prod-cb:checked').forEach(cb => {
@@ -1386,7 +1449,7 @@
           const isRep = stat && stat.dataset.choice === 'replace';
           document.getElementById('rtnDetTitle').textContent = isRep ? 'Replacement details' : 'Return details';
           document.getElementById('rtnDetProd').textContent = (stat && stat.dataset.prod) ? stat.dataset.prod : 'This product';
-          document.getElementById('rtnDetLast').textContent = isRep ? 'Replacement dispatched' : 'Refund to wallet';
+          document.getElementById('rtnDetLast').textContent = isRep ? 'Replacement processed' : 'Refund processed';
           openSheet(detBd, detSheet);
         }));
         if (document.getElementById('rtnDetClose')) document.getElementById('rtnDetClose').addEventListener('click', () => closeSheet(detBd, detSheet));

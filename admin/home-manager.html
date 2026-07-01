@@ -1347,112 +1347,85 @@ function phRow(p){ return `
     <div class="li-body"><div class="row" style="margin-bottom:0;"><div class="fg"><label>Placeholder text</label><input type="text" value="${esc(p||'')}" placeholder="Search products…"/></div></div></div>
     <div class="li-act" style="padding-top:16px;"><div class="tg on" onclick="this.classList.toggle('on')"></div></div>
   </div>`; }
-function addPlaceholder(){ document.getElementById('phList').insertAdjacentHTML('beforeend', phRow('')); }
+/* generic Add modal — every "Add" opens a modal (fill details → Add); no inline bottom row */
+function amClose(){ const m=document.getElementById('addModal'); if(m) m.remove(); }
+function amVal(id){ const el=document.getElementById(id); return el?el.value:''; }
+function amOpen(title, bodyHTML, saveFn){
+  amClose();
+  const html=`<div id="addModal"><div class="apv-scrim" onclick="amClose()"></div>
+    <div class="apv-box">
+      <div class="apv-box-head"><h3>${title}</h3><button class="x-btn" onclick="amClose()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-body">${bodyHTML}</div>
+      <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="amClose()">Cancel</button><button class="btn btn-p btn-sm" id="amSave"><i class="fa-solid fa-check"></i> Add</button></div>
+    </div></div>`;
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+  document.getElementById('amSave').onclick=function(){ if(saveFn()!==false) amClose(); };
+}
+function addPlaceholder(){ amOpen('Add search hint',
+  `<div class="row" style="margin-bottom:0"><div class="fg"><label>Placeholder text</label><input type="text" id="am_v" placeholder="Search products…"/></div></div>`,
+  function(){ document.getElementById('phList').insertAdjacentHTML('beforeend', phRow(amVal('am_v'))); }); }
 
-function addCat(){
-  document.getElementById('catList').insertAdjacentHTML('beforeend',`
-  <div class="li">
-    <span class="drag-h">⠿</span>
-    <div class="ep" onclick="promptE(this)">🌿</div>
-    <div class="li-body"><div class="row" style="margin-bottom:0;">
-      <div class="fg"><label>Deeplink</label><input type="text" placeholder="/categories?cat=new"/></div>
-    </div></div>
-    <div class="li-act" style="padding-top:16px;">
-      <div class="tg on" onclick="this.classList.toggle('on')"></div>
-          </div>
-  </div>`);}
+function addCat(){ amOpen('Add category',
+  `<div class="row"><div class="fg"><label>Category name</label><input type="text" id="am_n" placeholder="e.g. Organic"/></div></div>
+   <div class="row" style="margin-bottom:0"><div class="fg"><label>Deeplink</label><input type="text" id="am_l" placeholder="/categories?cat=new"/></div></div>`,
+  function(){ const n=esc(amVal('am_n')||'New category'), l=esc(amVal('am_l')||'/categories?cat=new');
+    document.getElementById('catList').insertAdjacentHTML('beforeend',
+     `<div class="li"><span class="drag-h">⠿</span><div class="cat-ic" style="background:#EEF2F7"><i class="fa-solid fa-shapes" style="font-size:15px;color:#64748B"></i></div>
+      <div class="li-body"><div class="row" style="margin-bottom:0"><div class="fg fix"><label>Category</label><div style="font-size:13px;font-weight:700;padding:8px 0">${n}</div></div><div class="fg"><label>Deeplink</label><input type="text" value="${l}"/></div></div></div>
+      <div class="li-act" style="padding-top:16px"><div class="tg on" onclick="this.classList.toggle('on')"></div></div></div>`); }); }
 
-function addTask(){
-  document.getElementById('taskList').insertAdjacentHTML('beforeend',`
-  <div class="li">
-    <span class="drag-h">⠿</span>
-    <div class="ep" onclick="promptE(this)" style="font-size:18px;">✅</div>
-    <div class="li-body">
-      <div class="row" style="margin-bottom:8px;">
-        <div class="fg fix"><label>Coins</label><input type="number" style="width:80px;" value="10"/></div>
-      </div>
-      <div class="row" style="margin-bottom:0;">
-        <div class="fg"><label>Action Type</label>
-          <select class="s"><option>Enable Notifications</option><option>Enable Location</option><option>Add to Cart</option><option>Search Product</option><option>Add Crop</option><option>Make Purchase</option><option>Rate Product</option><option>Refer Friend</option><option>Custom Deeplink</option></select>
-        </div>
-      </div>
-    </div>
-    <div class="li-act" style="padding-top:16px;">
-      <div class="tg on" onclick="this.classList.toggle('on')"></div>
-          </div>
-  </div>`);}
+function addTask(){ const acts=['Enable Notifications','Enable Location','Add to Cart','Search Product','Add Crop','Make Purchase','Rate Product','Refer Friend','Custom Deeplink']; amOpen('Add earn-coins task',
+  `<div class="row"><div class="fg fix"><label>Coins</label><input type="number" id="am_c" style="width:100px" value="10"/></div>
+   <div class="fg"><label>Action type</label><select class="s" id="am_a">${acts.map(a=>`<option>${a}</option>`).join('')}</select></div></div>`,
+  function(){ const c=esc(amVal('am_c')||'10'), a=esc(amVal('am_a')||acts[0]);
+    document.getElementById('taskList').insertAdjacentHTML('beforeend',
+     `<div class="li"><span class="drag-h">⠿</span><div class="ep" onclick="promptE(this)" style="font-size:18px">✅</div>
+      <div class="li-body"><div class="row" style="margin-bottom:8px"><div class="fg fix"><label>Coins</label><input type="number" style="width:80px" value="${c}"/></div></div>
+      <div class="row" style="margin-bottom:0"><div class="fg"><label>Action Type</label><select class="s"><option>${a}</option></select></div></div></div>
+      <div class="li-act" style="padding-top:16px"><div class="tg on" onclick="this.classList.toggle('on')"></div></div></div>`); }); }
 
 function addFP(btn){const p=PRODS.find(p=>!document.getElementById('fpList').innerHTML.includes(p.n));if(!p)return;const c=document.createElement('span');c.className='pchip';c.innerHTML=`🌱 ${p.n} <span class="x" onclick="this.closest('.pchip').remove()">×</span>`;btn.before(c);}
 function addBS(btn){const p=PRODS.find(p=>!document.getElementById('bsList').innerHTML.includes(p.n));if(!p)return;const c=document.createElement('span');c.className='pchip';c.innerHTML=`⭐ ${p.n} <span class="x" onclick="this.closest('.pchip').remove()">×</span>`;btn.before(c);}
 function addFC(btn){const p=PRODS[Math.floor(Math.random()*PRODS.length)];const c=document.createElement('span');c.className='pchip';c.innerHTML=`🌱 ${p.n} <span class="x" onclick="this.closest('.pchip').remove()">×</span>`;btn.before(c);}
 
-function addBanner(){
-  document.getElementById('bnList').insertAdjacentHTML('beforeend',`
-  <div class="li" style="flex-direction:column;gap:11px;align-items:stretch;">
-    <div style="display:flex;align-items:center;gap:8px;">
-      <span class="drag-h">⠿</span>
-      <div class="bimg" style="flex:1;" onclick="this.querySelector('input').click()">🖼️ Click to upload banner<input type="file" accept="image/*" style="display:none;"/></div>
-      <div class="li-act"><div class="tg on" onclick="this.classList.toggle('on')"></div></div>
-    </div>
-    <div class="row" style="margin-bottom:8px;">
-      <div class="fg"><label>Deeplink</label><input type="text" placeholder="kkd://…"/></div>
-    </div>
-    <div class="row" style="margin-bottom:8px;">
-      <div class="fg fix"><label>Language</label><select class="s"><option>All</option>${LANGS.map(l=>`<option>${l.l}</option>`).join('')}</select></div>
-      <div class="fg"><label>Start</label><input type="datetime-local"/></div>
-      <div class="fg"><label>End</label><input type="datetime-local"/></div>
-    </div>
-    <div><label>Target States</label>${SP(['All States'])}</div>
-  </div>`);}
+function addBanner(){ amOpen('Add promo banner',
+  `<div class="bimg" style="width:100%;margin-bottom:12px" onclick="this.querySelector('input').click()">🖼️ Click to upload banner<input type="file" accept="image/*" style="display:none"/></div>
+   <div class="row"><div class="fg"><label>Deeplink</label><input type="text" id="am_l" placeholder="kkd://…"/></div></div>
+   <div class="row"><div class="fg fix"><label>Language</label><select class="s" id="am_lang"><option>All</option>${LANGS.map(l=>`<option>${l.l}</option>`).join('')}</select></div>
+     <div class="fg"><label>Start</label><input type="datetime-local"/></div><div class="fg"><label>End</label><input type="datetime-local"/></div></div>
+   <div><label>Target states</label>${SP(['All States'])}</div>`,
+  function(){ const l=esc(amVal('am_l')), lang=esc(amVal('am_lang')||'All');
+    document.getElementById('bnList').insertAdjacentHTML('beforeend',
+     `<div class="li" style="flex-direction:column;gap:11px;align-items:stretch"><div style="display:flex;align-items:center;gap:8px"><span class="drag-h">⠿</span><div class="bimg" style="flex:1" onclick="this.querySelector('input').click()">🖼️ Banner uploaded<input type="file" accept="image/*" style="display:none"/></div><div class="li-act"><div class="tg on" onclick="this.classList.toggle('on')"></div></div></div>
+      <div class="row" style="margin-bottom:0"><div class="fg"><label>Deeplink</label><input type="text" value="${l}"/></div><div class="fg fix"><label>Language</label><select class="s"><option>${lang}</option></select></div></div></div>`); }); }
 
-function addFColl(){
-  document.getElementById('fcList').insertAdjacentHTML('beforeend',`
-  <div class="li" style="flex-direction:column;gap:11px;align-items:stretch;margin-bottom:10px;">
-    <div style="display:flex;align-items:center;gap:8px;"><span class="drag-h">⠿</span><strong style="flex:1;font-size:13px;">New Collection</strong>
-      <div class="tg on" onclick="this.classList.toggle('on')"></div>
-          </div>
-    <div class="row" style="margin-bottom:8px;">
-      <div class="fg fix"><label>Card BG Color</label><div class="color-r"><input type="color" value="#1B6B3A"/></div></div>
-      <div class="fg"><label>Language</label><select class="s"><option>All</option>${LANGS.map(l=>`<option>${l.l}</option>`).join('')}</select></div>
-    </div>
-    <div><label>Products</label><div style="margin-top:5px;">${newPAdd('addFC')}</div></div>
-    <div><label>Target States</label>${SP(['All States'])}</div>
-  </div>`);}
+function addFColl(){ amOpen('Add collection',
+  `<div class="row"><div class="fg"><label>Collection name</label><input type="text" id="am_n" placeholder="e.g. Monsoon picks"/></div></div>
+   <div class="row" style="margin-bottom:0"><div class="fg fix"><label>Card BG color</label><div class="color-r"><input type="color" id="am_bg" value="#1B6B3A"/></div></div>
+     <div class="fg"><label>Language</label><select class="s" id="am_lang"><option>All</option>${LANGS.map(l=>`<option>${l.l}</option>`).join('')}</select></div></div>`,
+  function(){ const n=esc(amVal('am_n')||'New Collection'), bg=esc(amVal('am_bg')||'#1B6B3A');
+    document.getElementById('fcList').insertAdjacentHTML('beforeend',
+     `<div class="li" style="flex-direction:column;gap:11px;align-items:stretch;margin-bottom:10px"><div style="display:flex;align-items:center;gap:8px"><span class="drag-h">⠿</span><strong style="flex:1;font-size:13px">${n}</strong><div class="tg on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="row" style="margin-bottom:8px"><div class="fg fix"><label>Card BG Color</label><div class="color-r"><input type="color" value="${bg}"/></div></div></div>
+      <div><label>Products</label><div style="margin-top:5px">${newPAdd('addFC')}</div></div></div>`); }); }
 
-function addWidget(){
-  document.getElementById('wList').insertAdjacentHTML('beforeend',`
-  <div class="wi">
-    <div class="wi-head">
-      <div style="display:flex;align-items:center;gap:7px;min-width:0;">
-        <span style="cursor:grab;color:var(--g300);font-size:17px;">⠿</span>
-        <div class="ep" onclick="promptE(this)" style="font-size:18px;">🆕</div>
-        <span class="wi-title">New Widget</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:7px;">
-        <div class="tg on" onclick="this.classList.toggle('on')"></div>
-              </div>
-    </div>
-    <div class="row" style="margin-bottom:10px;">
-      <div class="fg"><label>Type</label>
-        <select class="s"><option>Multi Choice</option><option>Yes / No</option><option>CTA Button</option><option>Star Rating</option><option>Text Input</option></select>
-      </div>
-    </div>
-    <div class="fg"><label>Action / Deeplink</label><input type="text" placeholder="deeplink:/path or action_name"/></div>
-  </div>`);}
+function addWidget(){ const types=['Multi Choice','Yes / No','CTA Button','Star Rating','Text Input']; amOpen('Add widget',
+  `<div class="row"><div class="fg"><label>Widget title</label><input type="text" id="am_n" placeholder="e.g. Crop quiz"/></div></div>
+   <div class="row"><div class="fg"><label>Type</label><select class="s" id="am_t">${types.map(t=>`<option>${t}</option>`).join('')}</select></div></div>
+   <div class="row" style="margin-bottom:0"><div class="fg"><label>Action / Deeplink</label><input type="text" id="am_l" placeholder="deeplink:/path or action_name"/></div></div>`,
+  function(){ const n=esc(amVal('am_n')||'New Widget'), t=esc(amVal('am_t')||types[0]), l=esc(amVal('am_l'));
+    document.getElementById('wList').insertAdjacentHTML('beforeend',
+     `<div class="wi"><div class="wi-head"><div style="display:flex;align-items:center;gap:7px;min-width:0"><span style="cursor:grab;color:var(--g300);font-size:17px">⠿</span><div class="ep" onclick="promptE(this)" style="font-size:18px">🆕</div><span class="wi-title">${n}</span></div><div style="display:flex;align-items:center;gap:7px"><div class="tg on" onclick="this.classList.toggle('on')"></div></div></div>
+      <div class="row" style="margin-bottom:10px"><div class="fg"><label>Type</label><select class="s"><option>${t}</option></select></div></div>
+      <div class="fg"><label>Action / Deeplink</label><input type="text" value="${l}" placeholder="deeplink:/path or action_name"/></div></div>`); }); }
 
-function addTesti(){
-  document.getElementById('tmList').insertAdjacentHTML('beforeend',`
-  <div class="tc">
-    <div class="tc-thumb" onclick="this.querySelector('input').click()">▶️<input type="file" accept="video/*" style="display:none;"/></div>
-    <div class="tc-body">
-      <div class="row" style="margin-bottom:0;">
-        <div class="fg"><label>Video URL</label><input type="text" placeholder="https://youtube.com/…"/></div>
-      </div>
-    </div>
-    <div class="tc-act">
-      <div class="tg on" onclick="this.classList.toggle('on')"></div>
-          </div>
-  </div>`);}
+function addTesti(){ amOpen('Add testimonial',
+  `<div class="row" style="margin-bottom:0"><div class="fg"><label>Video URL</label><input type="text" id="am_l" placeholder="https://youtube.com/…"/></div></div>`,
+  function(){ const l=esc(amVal('am_l'));
+    document.getElementById('tmList').insertAdjacentHTML('beforeend',
+     `<div class="tc"><div class="tc-thumb" onclick="this.querySelector('input').click()">▶️<input type="file" accept="video/*" style="display:none"/></div>
+      <div class="tc-body"><div class="row" style="margin-bottom:0"><div class="fg"><label>Video URL</label><input type="text" value="${l}" placeholder="https://youtube.com/…"/></div></div></div>
+      <div class="tc-act"><div class="tg on" onclick="this.classList.toggle('on')"></div></div></div>`); }); }
 
 // INIT — open the section from #hash (e.g. #theme) or the first one
 renderList();

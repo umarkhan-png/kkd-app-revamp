@@ -98,12 +98,13 @@
 .hm .apv-live{position:absolute;top:5px;left:5px;background:rgba(255,255,255,.94);color:var(--green);font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;display:flex;align-items:center;gap:4px;}
 .hm .apv-live .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.18);}
 .hm .apv-livein{font-size:9.5px;font-weight:600;color:var(--green);background:var(--green-lt);padding:1px 6px;border-radius:20px;}
-.hm #apvModal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;}
+.hm #apvModal,.hm #addModal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;}
 .hm .apv-scrim{position:absolute;inset:0;background:rgba(15,23,42,.5);}
 .hm .apv-box{position:relative;background:#fff;border-radius:14px;width:660px;max-width:92vw;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 64px -20px rgba(0,0,0,.45);}
 .hm .apv-box-head{display:flex;align-items:center;justify-content:space-between;padding:15px 20px;border-bottom:1px solid var(--g200);}
 .hm .apv-box-head h3{margin:0;font-size:15px;font-weight:800;}
 .hm .apv-box-body{padding:18px 20px;overflow-y:auto;}
+.hm .apv-box-foot{display:flex;justify-content:flex-end;gap:10px;padding:14px 20px;border-top:1px solid var(--g200);background:var(--g50);border-radius:0 0 14px 14px;}
 .hm .apv-grid-modal{grid-template-columns:repeat(3,1fr);margin-bottom:0;}
 .hm .res-box{display:flex;align-items:center;gap:13px;background:#fff;border:1px solid var(--g200);border-radius:10px;padding:10px;}
 .hm .res-prev{width:96px;height:54px;border-radius:8px;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.9);font-size:9.5px;}
@@ -216,6 +217,10 @@
 .hm .tt-live .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.18);}
 .hm .tt-badge{font-size:11.5px;color:var(--g600);margin-top:3px;}
 .hm .tt-prio{font-size:10.5px;color:var(--g400);margin-top:2px;}
+.hm .tt-bn{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--green);background:var(--green-lt);border-radius:20px;padding:2px 9px 2px 3px;margin-top:5px;}
+.hm .tt-bn.off{color:var(--g400);background:transparent;padding:2px 0;font-weight:500;}
+.hm .tt-bn.off i{font-size:11px;}
+.hm .tt-bn-ic{width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;}
 .hm .tt-act{display:flex;align-items:center;gap:5px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:160px;}
 .hm .theme-ed{border:1px solid var(--green);border-radius:10px;padding:16px;background:var(--green-lt);}
 .hm .theme-ed .bg-prev{width:176px;height:99px;}
@@ -618,6 +623,7 @@ function themeTile(t,i){
     <div class="tt-body">
       <div class="tt-name">${esc(t.name)}${isDef?' <span class="tt-def">default</span>':''}${t.id===teLiveId?' <span class="tt-live"><span class="dot"></span> Live</span>':''}</div>
       <div class="tt-badge">${triggerBadge(t)}</div>
+      ${isDef?'':`<div class="tt-bn${(t.banner&&t.banner.enabled)?'':' off'}">${(t.banner&&t.banner.enabled)?`<span class="tt-bn-ic" style="background:${esc(t.banner.bg||'#EFF6FF')};color:${esc(t.banner.tc||'#1E40AF')}"><i class="fa-solid ${t.banner.icon||'fa-bell'}"></i></span> Status banner${t.banner.title?': '+esc(t.banner.title):''}`:`<i class="fa-regular fa-circle"></i> No status banner`}</div>`}
       <div class="tt-prio">${isDef?'Always last':'Priority '+(i+1)}</div>
     </div>
     <div class="tt-act">
@@ -803,7 +809,7 @@ theme:()=>{ const T=themeData(); const S=sbData(); return `
     <div class="info-box"><i class="fa-solid fa-circle-info"></i><span>A theme's own banner is set inside that theme above. The banners here are <b>standalone</b> (shown by state / date, no theme needed) — like the always-on <b>Order tracking</b> default. All of them rotate in the ticker.</span></div>
     <div class="row"><div class="fg fix"><label>Rotation interval (sec)</label><input type="number" style="width:140px;" value="${S.interval||4}" onchange="sbSet('interval',+this.value)"/></div></div>
     <div id="sbList">${S.items.map(sbRow).join('')}</div>
-    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="sbAdd()"><i class="fa-solid fa-plus"></i> Add standalone banner</button>
+    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="sbAddOpen()"><i class="fa-solid fa-plus"></i> Add standalone banner</button>
   </div>
 </div>`; },
 
@@ -1228,7 +1234,46 @@ function sbUI(){ if(sel==='theme') pick('theme'); }
 function sbSet(k,v){ sbData()[k]=v; KKD.save(data); AdminShell.refreshPending(); }
 function sbField(id,k,v){ const it=sbFind(id); if(!it)return; it[k]=v; KKD.save(data); AdminShell.refreshPending(); sbUI(); }
 function sbEdit(id){ sbEditId=sbEditId===id?null:id; sbUI(); }
-function sbAdd(){ const S=sbData(); const id='sb'+Date.now().toString(36); S.items.push({id,locked:false,enabled:true,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:'',theme:'',states:['All'],start:'',end:''}); sbEditId=id; KKD.save(data); AdminShell.refreshPending(); sbUI(); }
+/* Add opens a MODAL with a blank form (fill details → Save) — no auto-created row at the bottom */
+let sbDraft=null;
+function sbAddOpen(){ sbDraft={id:'sb'+Date.now().toString(36),locked:false,enabled:true,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:'',states:['All'],start:'',end:''}; sbModalRender(); }
+function sbDraftSet(k,v){ if(sbDraft) sbDraft[k]=v; }
+function sbDraftIcon(ic){ if(sbDraft){ sbDraft.icon=ic; sbModalRender(); } }
+function sbDraftStateAll(){ if(sbDraft){ sbDraft.states=['All']; sbModalRender(); } }
+function sbDraftStateTog(st){ if(!sbDraft)return; let s=(sbDraft.states||[]).filter(x=>x!=='All'); s.indexOf(st)>=0?(s=s.filter(x=>x!==st)):s.push(st); if(!s.length)s=['All']; sbDraft.states=s; sbModalRender(); }
+function sbModalClose(rerender){ const m=document.getElementById('addModal'); if(m)m.remove(); sbDraft=null; if(rerender) sbUI(); }
+function sbDraftSave(){ if(!sbDraft)return; sbData().items.push(sbDraft); KKD.save(data); AdminShell.refreshPending(); sbDraft=null; sbModalClose(true); }
+function sbModalRender(){
+  const ex=document.getElementById('addModal'); if(ex) ex.remove();
+  const it=sbDraft; if(!it) return;
+  const iconGrid=SB_ICONS.map(ic=>`<div class="ic-opt${it.icon===ic?' on':''}" onclick="sbDraftIcon('${ic}')"><i class="fa-solid ${ic}"></i></div>`).join('');
+  const states=it.states||['All']; const all=states.indexOf('All')>=0;
+  const chips=`<span class="cchip ${all?'on':''}" onclick="sbDraftStateAll()">All states</span> `+STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!all&&states.indexOf(s)>=0)?'on':''}" onclick="sbDraftStateTog('${s}')">${s}</span>`).join('');
+  const html=`<div id="addModal"><div class="apv-scrim" onclick="sbModalClose(false)"></div>
+    <div class="apv-box">
+      <div class="apv-box-head"><h3>Add status banner</h3><button class="x-btn" onclick="sbModalClose(false)"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-body">
+        <div class="sub-l" style="margin-top:0">Icon</div>
+        <div class="ic-grid">${iconGrid}</div>
+        <div class="row" style="margin-top:8px"><div class="fg"><label>Title</label><input type="text" value="${esc(it.title)}" oninput="sbDraftSet('title',this.value)" placeholder="e.g. Rain expected"/></div></div>
+        <div class="row"><div class="fg"><label>Subtitle</label><input type="text" value="${esc(it.sub)}" oninput="sbDraftSet('sub',this.value)" placeholder="e.g. 8 mm in 24 hrs · hold spray"/></div></div>
+        <div class="row">
+          <div class="fg fix"><label>Background</label><div class="color-r"><input type="color" value="${it.bg}" oninput="sbDraftSet('bg',this.value)"/></div></div>
+          <div class="fg fix"><label>Text / icon</label><div class="color-r"><input type="color" value="${it.tc}" oninput="sbDraftSet('tc',this.value)"/></div></div>
+          <div class="fg"><label>Deeplink</label><input type="text" value="${esc(it.link)}" oninput="sbDraftSet('link',this.value)" placeholder="orders.html"/></div>
+        </div>
+        <div class="sub-l">Show in states</div>
+        <div class="chip-row">${chips}</div>
+        <div class="sub-l">Date range <span class="hint">(optional)</span></div>
+        <div class="row" style="margin-bottom:0">
+          <div class="fg fix"><label>Start date</label><input type="date" value="${it.start}" onchange="sbDraftSet('start',this.value)"/></div>
+          <div class="fg fix"><label>End date</label><input type="date" value="${it.end}" onchange="sbDraftSet('end',this.value)"/></div>
+        </div>
+      </div>
+      <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="sbModalClose(false)">Cancel</button><button class="btn btn-p btn-sm" onclick="sbDraftSave()"><i class="fa-solid fa-check"></i> Add banner</button></div>
+    </div></div>`;
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+}
 function sbToggle(id){ const it=sbFind(id); if(!it||it.locked)return; it.enabled=!it.enabled; KKD.save(data); AdminShell.refreshPending(); sbUI(); }
 function sbRemove(id){ const S=sbData(); const it=sbFind(id); if(!it||it.locked)return; S.items=S.items.filter(x=>x.id!==id); if(sbEditId===id)sbEditId=null; KKD.save(data); AdminShell.refreshPending(); sbUI(); }
 function sbStateAll(id){ const it=sbFind(id); if(!it)return; it.states=['All']; KKD.save(data); sbUI(); }

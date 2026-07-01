@@ -263,8 +263,6 @@
   body.state-pending .hero{background:linear-gradient(180deg,#EFF6FF,#DBEAFE);border-color:#BFDBFE}
   body.state-pending .hero-ic{border-color:rgba(37,99,235,0.35);box-shadow:0 6px 16px -4px rgba(37,99,235,0.3)}
   body.state-pending .hero-ic i{color:#2563EB}
-  /* No Return/Refund CTA while the order is still out for delivery */
-  body.state-transit #returnCta{display:none}
   body:not(.state-partial) .only-partial{display:none}
   body.state-partial .only-fullpaid{display:none}
 </style></head>
@@ -342,9 +340,9 @@
         <div class="tl-line"></div>
         <div class="tl-title">Dispatched</div>
         <div class="tl-time" id="tlDispatchTime">9 Apr, 8:00 AM &middot; Out for last-mile</div>
-        <!-- Delay affordance · only shown when the courier holds the parcel past our expected window · lets the user drop into the partner's raw scan log -->
+        <!-- Detailed-tracking entry · the button is available for any in-transit order; the amber delay note only appears when the courier holds the parcel past our expected window -->
         <div class="tl-delay" id="tlDelay" style="display:none">
-          <div class="tl-delay-note"><i class="fa-solid fa-triangle-exclamation"></i> Taking longer than usual &mdash; the parcel is moving between our courier's hubs.</div>
+          <div class="tl-delay-note" id="tlDelayNote" style="display:none"><i class="fa-solid fa-triangle-exclamation"></i> Taking longer than usual &mdash; the parcel is moving between our courier's hubs.</div>
           <button type="button" class="tl-track-btn" id="viewDetailedTrack"><i class="fa-solid fa-location-crosshairs"></i> View detailed tracking <i class="fa-solid fa-chevron-right ch"></i></button>
         </div>
       </div>
@@ -540,21 +538,11 @@
   </button>
 
 
-  <!-- Need help · taps open a bottom-sheet of support reach-outs -->
-  <div class="sec-title">Need help?</div>
-  <button id="helpRow" class="card support-row" style="display:flex;width:calc(100% - 32px);text-align:left;cursor:pointer">
-    <div class="ic"><i class="fa-solid fa-circle-question text-[14px]"></i></div>
-    <div class="info">
-      <div class="a">Get help with this order</div>
-      <div class="b">Call, email or live-chat with support</div>
-    </div>
-    <i class="fa-solid fa-chevron-right text-[11px]" style="color:#94A3B8"></i>
-  </button>
-
-  <!-- Sticky bottom · 2 CTAs · Return (outline) + Reorder (primary emerald, fa-repeat) · Download invoice moved back into the kebab menu -->
+  <!-- Sticky bottom · 2 CTAs · Need help (outline) + Reorder (primary emerald) · support reach-outs now live behind the Need-help button -->
+  <!-- Sticky bottom · Download invoice moved back into the kebab menu -->
   <div class="sticky-cta">
-    <a class="cta-out hide-pending" id="returnCta" href="#complaint">
-      Raise a complaint
+    <a class="cta-out hide-pending" id="returnCta" href="#needhelp">
+      Need help
     </a>
     <a class="cta-pri hide-pending" href="cart.html?reorder=1">
       <i class="fa-solid fa-repeat"></i> Reorder
@@ -713,10 +701,10 @@
   <div id="cmpSheet" class="modal-sheet" style="padding:0 0 16px">
     <div class="modal-handle"></div>
     <div class="px-5 pt-3 pb-1 flex items-center justify-between">
-      <div class="text-[18px] font-bold">Raise a complaint</div>
+      <div class="text-[18px] font-bold">Need help</div>
       <button id="cmpClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
-    <p class="px-5 text-[12px] mb-1" style="color:#64748B">Tell us what went wrong — we'll suggest the right resolution.</p>
+    <p class="px-5 text-[12px] mb-1" style="color:#64748B">Tell us what's happening and we'll help you sort it out.</p>
     <div class="px-3 pt-2 space-y-2">
       <button type="button" class="cmp-cat" data-cat="received"><span class="ic" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-box-open"></i></span><span class="tx">I received it, but there's a problem</span><i class="fa-solid fa-chevron-right ch"></i></button>
       <button type="button" class="cmp-cat" data-cat="notreceived"><span class="ic" style="background:#FEE2E2;color:#DC2626"><i class="fa-solid fa-truck-ramp-box"></i></span><span class="tx">I never received it</span><i class="fa-solid fa-chevron-right ch"></i></button>
@@ -743,7 +731,7 @@
     <div class="modal-handle"></div>
     <div class="px-5 pt-3 pb-2 flex items-center gap-2.5" style="flex-shrink:0">
       <button id="cmpResBack" class="cmp-back"><i class="fa-solid fa-arrow-left text-[13px]"></i></button>
-      <div class="text-[16px] font-bold leading-tight flex-1">Raise a complaint</div>
+      <div class="text-[16px] font-bold leading-tight flex-1">Need help</div>
       <button id="cmpResClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0;flex-shrink:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
     </div>
     <div class="px-5 pb-3 overflow-y-auto" style="flex:1">
@@ -783,16 +771,25 @@
     .rtn-seg-btn{flex:1;height:46px;border-radius:11px;border:1.5px solid #E5E7EB;background:#FFFFFF;color:#475569;font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
     .rtn-seg-btn i{font-size:12px}
     .rtn-seg-btn.active{border-color:#258046;background:#ECFDF5;color:#258046}
-    .rtn-prod{display:flex;align-items:center;gap:10px;padding:10px;border:1.5px solid #E5E7EB;border-radius:12px;cursor:pointer}
+    .rtn-prod{display:flex;align-items:center;gap:11px;padding:11px 12px;border:1.5px solid #E5E7EB;border-radius:12px;cursor:pointer;transition:border-color .15s,background .15s}
     .rtn-prod.sel{border-color:#258046;background:#ECFDF5}
-    .rtn-prod input{width:18px;height:18px;accent-color:#258046;flex-shrink:0}
-    .rtn-prod .pimg{width:40px;height:40px;border-radius:9px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:4px;flex-shrink:0}
+    .rtn-prod:active{transform:scale(.995)}
+    /* Custom checkbox · native input hidden, driven by the row's .sel state · far clearer than the raw browser tick */
+    .rtn-prod .rtn-prod-cb{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+    .rtn-cbx{width:22px;height:22px;border-radius:7px;border:2px solid #CBD5E1;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:11px;flex-shrink:0;transition:all .15s}
+    .rtn-cbx i{opacity:0;transform:scale(.5);transition:all .15s}
+    .rtn-prod.sel .rtn-cbx{background:#258046;border-color:#258046}
+    .rtn-prod.sel .rtn-cbx i{opacity:1;transform:scale(1)}
+    .rtn-prod .pimg{width:42px;height:42px;border-radius:9px;background:#F8FAFC;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;padding:4px;flex-shrink:0}
     .rtn-prod .pimg img{max-width:100%;max-height:100%;object-fit:contain}
     .rtn-prod .pn{font-size:13px;font-weight:700;color:#0F172A;line-height:1.2}
-    .rtn-prod .ps{font-size:11px;color:#94A3B8;margin-top:1px}
+    .rtn-prod .ps{font-size:11px;color:#64748B;margin-top:2px}
     /* clickable part + return-qty stepper (capped at ordered qty) */
-    .rtn-prod-main{display:flex;align-items:center;gap:10px;flex:1;min-width:0;cursor:pointer}
-    .rtn-qty{display:inline-flex;align-items:center;height:32px;border-radius:9px;border:1px solid #BBF7D0;background:#ECFDF5;overflow:hidden;flex-shrink:0}
+    .rtn-prod-main{display:flex;align-items:center;gap:11px;flex:1;min-width:0;cursor:pointer}
+    /* Qty control · labelled so it reads as "how many to send back" not a mystery stepper */
+    .rtn-qty-wrap{display:none;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+    .rtn-qty-lbl{font-size:9px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#258046}
+    .rtn-qty{display:inline-flex;align-items:center;height:32px;border-radius:9px;border:1px solid #BBF7D0;background:#FFFFFF;overflow:hidden;flex-shrink:0}
     .rtn-qty button{width:30px;height:32px;display:flex;align-items:center;justify-content:center;color:#258046;font-size:15px;font-weight:800;background:transparent;border:0;cursor:pointer}
     .rtn-qty button:disabled{color:#A7F3D0;cursor:not-allowed}
     .rtn-qty .qv{min-width:18px;text-align:center;font-size:13px;font-weight:800;color:#258046;font-variant-numeric:tabular-nums}
@@ -896,15 +893,16 @@
         <button type="button" class="rtn-seg-btn" data-choice="replace"><i class="fa-solid fa-right-left"></i> Replacement</button>
       </div>
 
-      <div class="text-[11px] font-semibold uppercase tracking-wider mt-4 mb-2" style="color:#64748B">Select product(s)</div>
+      <div class="text-[11px] font-semibold uppercase tracking-wider mt-4 mb-0.5" style="color:#64748B">Select product(s)</div>
+      <div class="text-[11.5px] mb-2" style="color:#94A3B8">Tap the items you're reporting, then set how many.</div>
       <div class="space-y-2" id="rtnProducts">
         <div class="rtn-prod">
-          <label class="rtn-prod-main"><input type="checkbox" class="rtn-prod-cb" data-key="humic" data-max="2"/><div class="pimg"><img src="../assets/Humic_nobg.png" class="img-blend"/></div><div class="flex-1 leading-tight"><div class="pn">Humic + Fulvic</div><div class="ps">1 L · ₹376 · ordered 2</div></div></label>
-          <div class="rtn-qty" style="display:none"><button type="button" class="qd">−</button><span class="qv">1</span><button type="button" class="qi">+</button></div>
+          <label class="rtn-prod-main"><input type="checkbox" class="rtn-prod-cb" data-key="humic" data-max="2"/><span class="rtn-cbx"><i class="fa-solid fa-check"></i></span><div class="pimg"><img src="../assets/Humic_nobg.png" class="img-blend"/></div><div class="flex-1 leading-tight"><div class="pn">Humic + Fulvic</div><div class="ps">1 L · ₹376 · ordered 2</div></div></label>
+          <div class="rtn-qty-wrap"><span class="rtn-qty-lbl">Qty</span><div class="rtn-qty"><button type="button" class="qd">−</button><span class="qv">1</span><button type="button" class="qi">+</button></div></div>
         </div>
         <div class="rtn-prod">
-          <label class="rtn-prod-main"><input type="checkbox" class="rtn-prod-cb" data-key="antivirus" data-max="3"/><div class="pimg"><img src="../assets/AntiVirus_nobg.png" class="img-blend"/></div><div class="flex-1 leading-tight"><div class="pn">Antivirus</div><div class="ps">250 ml · ₹327 · ordered 3</div></div></label>
-          <div class="rtn-qty" style="display:none"><button type="button" class="qd">−</button><span class="qv">1</span><button type="button" class="qi">+</button></div>
+          <label class="rtn-prod-main"><input type="checkbox" class="rtn-prod-cb" data-key="antivirus" data-max="3"/><span class="rtn-cbx"><i class="fa-solid fa-check"></i></span><div class="pimg"><img src="../assets/AntiVirus_nobg.png" class="img-blend"/></div><div class="flex-1 leading-tight"><div class="pn">Antivirus</div><div class="ps">250 ml · ₹327 · ordered 3</div></div></label>
+          <div class="rtn-qty-wrap"><span class="rtn-qty-lbl">Qty</span><div class="rtn-qty"><button type="button" class="qd">−</button><span class="qv">1</span><button type="button" class="qi">+</button></div></div>
         </div>
       </div>
 
@@ -1068,9 +1066,11 @@
           deliv.classList.add('upcoming');
           const dt = document.getElementById('tlDeliveredTime'); if (dt) dt.textContent = 'Arriving tomorrow by 5:00 PM';
         }
-        // Stuck at the courier past our expected window · reveal the detailed-tracking entry + soften the ETA
+        // Detailed tracking is available for any in-transit parcel
+        const dl = document.getElementById('tlDelay'); if (dl) dl.style.display = 'block';
+        // Stuck at the courier past our expected window · surface the delay note + soften the ETA
         if (delayed) {
-          const dl = document.getElementById('tlDelay'); if (dl) dl.style.display = 'block';
+          const note = document.getElementById('tlDelayNote'); if (note) note.style.display = 'flex';
           const dt = document.getElementById('tlDispatchTime'); if (dt) dt.textContent = 'In transit since 8 Apr · held at courier';
           const dsub = document.querySelector('.hero-sub.only-transit'); if (dsub) dsub.innerHTML = 'Running late in transit &middot; we’re following up with the courier';
           const dtd = document.getElementById('tlDeliveredTime'); if (dtd) dtd.textContent = 'New ETA being confirmed';
@@ -1198,10 +1198,7 @@
       const helpRow   = document.getElementById('helpRow');
       const helpClose = document.getElementById('helpClose');
       const returnCta = document.getElementById('returnCta');
-      // Return window · hide the bottom Return CTA once the 7-day window from delivery has closed (prototype: delivered 2 days ago)
-      const daysSinceDelivery = 2;
-      const daysLeft = 7 - daysSinceDelivery;
-      if (daysLeft <= 0 && returnCta) returnCta.style.display = 'none';
+      // Need help stays available regardless of the return window — the 7-day gate lives inside the return/replace path, not on the whole button.
 
       function openHelp(e){ if (e) { e.preventDefault(); e.stopPropagation(); } openSheet(helpBd, helpSheet); }
       if (helpRow)   helpRow.addEventListener('click', openHelp);
@@ -1278,7 +1275,7 @@
           resBody.innerHTML='<textarea class="rtn-desc" id="cmpRemark" style="margin-top:12px" placeholder="Describe the issue in your words…"></textarea>'
             +'<div class="cmp-note"><i class="fa-solid fa-shield-halved"></i><p>We’ll review your complaint and get back with a resolution — usually within <b>24–48 hrs</b>.</p></div>';
           remarkEl=document.getElementById('cmpRemark');
-          resCta.textContent='Submit complaint'; resCta.disabled=true; resCta.style.opacity='.55';
+          resCta.textContent='Submit request'; resCta.disabled=true; resCta.style.opacity='.55';
           remarkEl.addEventListener('input', function(){ const okv=remarkEl.value.trim().length>=3; resCta.disabled=!okv; resCta.style.opacity=okv?'1':'.55'; });
           goRes();
         }
@@ -1288,7 +1285,7 @@
           resHead.textContent='We’ll look into this';
           resSub.textContent='Our team will verify with the delivery partner and share a resolution.';
           resBody.innerHTML='<div class="cmp-note"><i class="fa-solid fa-shield-halved"></i><p>We’ll review your complaint and get back within <b>24–48 hrs</b> with a resolution. You’ll be updated by app notification and SMS.</p></div>';
-          resCta.textContent='Submit complaint'; resCta.disabled=false; resCta.style.opacity='1';
+          resCta.textContent='Submit request'; resCta.disabled=false; resCta.style.opacity='1';
           goRes();
         }
         function openReasons(catKey){
@@ -1309,7 +1306,7 @@
         function finish(){
           if(resCta.disabled) return;
           closeSheet(resBd,resSheet);
-          okTitle.textContent='Complaint registered';
+          okTitle.textContent='Request received';
           okSub.textContent='We’ll review your complaint and share a resolution within 24–48 hrs.';
           setTimeout(function(){ ok.classList.add('show'); setTimeout(function(){ ok.classList.remove('show'); }, 2600); }, 200);
         }
@@ -1319,7 +1316,7 @@
             const cat=b.getAttribute('data-cat'), act=b.getAttribute('data-act');
             if(cat){ openReasons(cat); }
             else if(act==='track'){ closeSheet(cmpBd,cmpSheet); setTimeout(function(){ const dB=document.getElementById('rtnDetBd'), dS=document.getElementById('rtnDetSheet'); if(dB&&dS) openSheet(dB,dS); },180); }
-            else if(act==='other'){ resBack='cats'; openRemark({id:'somethingelse', label:'Something else'}); }
+            else if(act==='other'){ closeSheet(cmpBd,cmpSheet); setTimeout(function(){ openSheet(helpBd,helpSheet); },180); }
           });
         });
         document.getElementById('cmpClose').addEventListener('click', function(){ closeSheet(cmpBd,cmpSheet); });
@@ -1361,14 +1358,14 @@
         // Product checkbox + return-qty stepper · qty reveals when selected, capped at the ordered quantity
         document.querySelectorAll('#rtnProducts .rtn-prod').forEach(p => {
           const cb = p.querySelector('.rtn-prod-cb');
-          const qtyBox = p.querySelector('.rtn-qty');
+          const qtyBox = p.querySelector('.rtn-qty-wrap');
           const qv = p.querySelector('.qv'), qd = p.querySelector('.qd'), qi = p.querySelector('.qi');
           const max = parseInt(cb.dataset.max, 10) || 1;
           let n = 1;
           function paint(){ qv.textContent = n; qd.disabled = n <= 1; qi.disabled = n >= max; }
           cb.addEventListener('change', () => {
             p.classList.toggle('sel', cb.checked);
-            qtyBox.style.display = cb.checked ? 'inline-flex' : 'none';
+            qtyBox.style.display = cb.checked ? 'flex' : 'none';
             if (cb.checked) { n = 1; paint(); }
           });
           qd.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); if (n > 1) { n--; paint(); } });

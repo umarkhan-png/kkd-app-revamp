@@ -129,12 +129,12 @@
   .cmpok-btn{width:100%;height:46px;margin-top:18px;border-radius:12px;background:#258046;color:#FFFFFF;border:0;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
   .cmpok-btn:active{transform:scale(.98)}
 
-  /* Address · roomy so it never reads congested */
-  .addr{padding:18px 16px;display:flex;gap:13px;align-items:flex-start}
-  .addr-ic{width:38px;height:38px;border-radius:11px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#258046}
-  .addr-body{flex:1;line-height:1.6}
-  .addr-name{font-size:14px;font-weight:700;color:#0F172A;margin-bottom:7px}
-  .addr-line{font-size:12.5px;color:#64748B;margin-top:6px}
+  /* Address */
+  .addr{padding:14px;display:flex;gap:12px;align-items:flex-start}
+  .addr-ic{width:36px;height:36px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#258046}
+  .addr-body{flex:1;line-height:1.4}
+  .addr-name{font-size:14px;font-weight:700;color:#0F172A}
+  .addr-line{font-size:12px;color:#64748B;margin-top:3px}
 
   /* Timeline */
   .tl{padding:14px}
@@ -463,9 +463,10 @@
 
   </div>
 
-  <!-- Delivered to · interchanged with Timeline -->
+  <!-- Delivered to · interchanged with Timeline · every state carries a title so the card never sits flush against the items card above -->
   <div class="sec-title only-delivered">Delivered to</div>
   <div class="sec-title only-transit">Delivering to</div>
+  <div class="sec-title only-pending">Deliver to</div>
   <div class="card">
     <div class="addr">
       <div class="addr-ic"><i class="fa-solid fa-location-dot text-[15px]"></i></div>

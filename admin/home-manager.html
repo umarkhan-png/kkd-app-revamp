@@ -634,7 +634,6 @@ header:()=>`
     </div>
 
     <div class="sdiv">Pills</div>
-    <p class="hint-p" style="margin-bottom:6px">Show/hide each header pill and set its background fill colour.</p>
     <div class="tr">
       <div class="tr-l"><div class="tt">💰 Wallet pill</div><div class="td">Money wallet shortcut</div></div>
       <div style="display:flex;align-items:center;gap:16px;flex-shrink:0">
@@ -684,7 +683,6 @@ statusbanner:()=>`
       <div class="fg fix"><label>Rotation interval (sec)</label><input type="number" style="width:140px;" value="4"/></div>
     </div>
     <div class="sdiv">Messages (rotate in order)</div>
-    <p class="hint-p">Set each banner's <b>text</b>, who sees it (<b>state · date</b>), and link its <b>weather</b> rule to a Theme.</p>
     <div id="sbList">
       ${[
         {ic:'⛅',bold:'Rain expected',body:'8 mm in 24 hrs · Hold spray for today',tc:'#1E40AF',iconc:'#2563EB',link:'shop.html?weather=rain',states:['All'],theme:'Monsoon / Rain'},
@@ -700,7 +698,6 @@ search:()=>`
 <div class="card">
   <div class="card-body">
     <div class="sdiv">Search placeholder text</div>
-    <p class="hint-p">These hints rotate inside the search bar on Home. Add or edit what appears.</p>
     <div id="phList">
       ${['Search Humic, Antivirus…','Search by crop or problem','Try "NPK 19:19:19"'].map(phRow).join('')}
     </div>
@@ -743,7 +740,6 @@ cats:()=>`
 <div class="card">
   <div class="card-body">
     ${LT()}
-    <p class="hint-p">Drag to reorder · Toggle show/hide · Click emoji to change icon</p>
     <div id="catList">
       ${[{e:'🐛',n:'Pesticide'},{e:'🍄',n:'Fungicide'},{e:'🌱',n:'Fertilizer'},{e:'🌿',n:'Herbicide'},{e:'📦',n:'Combo'}].map(c=>`
       <div class="li">
@@ -870,7 +866,6 @@ flash:()=>`
 banners:()=>`
 <div class="card">
   <div class="card-body">
-    <p class="hint-p">Each banner targets specific state · language · time window</p>
     <div data-img-hint="banner" style="margin-bottom:10px"></div>
     <div id="bnList">
       ${[
@@ -913,7 +908,6 @@ crops:()=>`
         ${STATES.filter(s=>s!=='All States').map(s=>`<option>${s}</option>`).join('')}
       </select>
     </div></div>
-    <p class="hint-p">Select crops to show · drag to reorder</p>
     <div>${CROPS.map((c,i)=>`<span class="cchip${i<4?' on':''}" onclick="this.classList.toggle('on')">${c}</span>`).join('')}</div>
     <button class="btn btn-s btn-sm" style="margin-top:10px;">+ Add Custom Crop</button>
   </div>
@@ -929,7 +923,6 @@ best:()=>`
     </div>
     ${TG('bs1',true,'Auto Weekly Update','Top 4 selling products auto-populate every Monday')}
     <div class="sdiv" style="margin-top:12px;">Manual Pinned Products (override auto)</div>
-    <p class="hint-p">Pinned always appear · auto fills remaining slots from weekly data</p>
     <div id="bsList">
       ${newPChip('Humic + Fulvic 98')}${newPChip('Chakrawarti ZC')}${newPAdd('addBS')}
     </div>
@@ -967,7 +960,6 @@ buyagain:()=>`
 featured:()=>`
 <div class="card">
   <div class="card-body">
-    <p class="hint-p">Each collection can target a specific state and language. Drag to reorder.</p>
     <div id="fcList">
       ${[
         {nm:'Insecticide Showcase',color:'#1B6B3A',prods:['Chakrawarti ZC','Chakraveer'],states:['All States']},
@@ -996,7 +988,6 @@ featured:()=>`
 widgets:()=>`
 <div class="card">
   <div class="card-body">
-    <p class="hint-p">Drag to reorder · Toggle show/hide · Edit content per language · Add new widgets</p>
     <div id="wList">
       ${[
         {e:'🌾',t:'Which crop do you grow most?',c:'+15 coins',type:'multi_choice',opts:'Wheat,Cotton,Tomato,Other',act:'set_crop'},

@@ -65,13 +65,21 @@
 .hm .fg{display:flex;flex-direction:column;flex:1;min-width:130px;}
 .hm .fg.fix{flex:0 0 auto;}
 .hm label{font-size:11px;font-weight:700;color:var(--g600);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;display:block;}
-.hm input[type=text],.hm input[type=number],.hm input[type=datetime-local],.hm input[type=url],.hm textarea,.hm select.s{
+.hm input[type=text],.hm input[type=number],.hm input[type=date],.hm input[type=datetime-local],.hm input[type=url],.hm textarea,.hm select.s{
   border:1px solid var(--g200);border-radius:9px;padding:9px 12px;font-size:13px;
   color:var(--g800);outline:none;background:#fff;width:100%;font-family:inherit;transition:border .15s;height:auto;
 }
 .hm input:focus,.hm textarea:focus,.hm select.s:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
 .hm textarea{resize:vertical;min-height:65px;}
 .hm input[type=color]{width:44px;height:34px;border:1px solid var(--g200);border-radius:6px;padding:2px;cursor:pointer;}
+/* modern date field (native input looked dated) */
+.hm input[type=date]{cursor:pointer;font-variant-numeric:tabular-nums;letter-spacing:.3px;font-weight:600;min-height:38px;}
+.hm input[type=date]::-webkit-calendar-picker-indicator{opacity:.5;cursor:pointer;padding:3px;margin-left:4px;border-radius:6px;transition:.15s;}
+.hm input[type=date]::-webkit-calendar-picker-indicator:hover{opacity:1;background:var(--green-lt);}
+.hm input[type=date]::-webkit-datetime-edit{color:var(--g800);padding:0;}
+.hm input[type=date]::-webkit-datetime-edit-fields-wrapper{padding:0;}
+.hm input[type=date]:in-range::-webkit-datetime-edit-year-field,
+.hm input[type=date]::-webkit-datetime-edit-text{padding:0 1px;}
 .hm .sub-l{font-size:12px;font-weight:700;color:var(--g600,#475569);margin:15px 0 6px;}
 .hm .chip-row{margin-bottom:8px;}
 .hm .wx-inline{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
@@ -418,7 +426,7 @@ function save(msg){AdminShell.saved(msg);}
    time: themes are tried top-to-bottom (priority) and the first whose rule matches
    the user's state + current weather + date wins. So when Holi (festival) AND rain
    both match, whichever sits higher in the list is what the user sees. */
-const WEATHERS=['clear','rain','cloudy','storm','fog'];   // sky conditions (temperature handled separately)
+const WEATHERS=['sunny','clear','rain','cloudy','storm','fog'];   // sky conditions (temperature handled separately)
 // Approved theme images — in production these come from the Design Studio (designer submits → manager approves).
 const APPROVED_BG=[
   {name:'Monsoon',  img:'../assets/themes/monsoon.jpg'},
@@ -452,8 +460,9 @@ function themeData(){
     if(w.sky==null){ w.sky='any'; changed=true; }
     if(w.op==null){ w.op='any'; changed=true; }
     if(w.temp==null){ w.temp=40; changed=true; }
-    if(w.when==null){ w.when='live'; changed=true; }   // timeframe: live | nexthours | today | tomorrow
+    if(w.when==null){ w.when='live'; changed=true; }   // timeframe: live | nexthours | today | tomorrow | nextdays
     if(w.hours==null){ w.hours=6; changed=true; }
+    if(w.days==null){ w.days=3; changed=true; }
     if(tr.start==null) tr.start='';
     if(tr.end==null) tr.end='';
     // condType: infer ONLY for legacy themes (property absent). New themes keep '' = unselected.
@@ -497,7 +506,7 @@ function triggerBadge(t){
     const w=tr.weather||{}; const wp=[];
     if(w.sky&&w.sky!=='any') wp.push(w.sky);
     if(w.op&&w.op!=='any') wp.push(`${w.op==='below'?'≤':'≥'} ${w.temp}°C`);
-    const wl={nexthours:`next ${w.hours||6}h`,today:'today',tomorrow:'tomorrow'}[w.when];
+    const wl={nexthours:`next ${w.hours||6}h`,today:'today',tomorrow:'tomorrow',nextdays:`next ${w.days||3}d`}[w.when];
     if(wl) wp.push(wl);
     parts.push(wp.length?wp.join(' · '):'Any weather');
   } else {
@@ -557,7 +566,7 @@ function teApvClose(){ const m=document.getElementById('apvModal'); if(m) m.remo
 /* ---- mutations ---- */
 function themeAdd(){
   const T=themeData(); const id='t'+Date.now().toString(36);
-  T.themes.unshift({ id, name:'New theme', enabled:true, trigger:{states:['All'],condType:'',start:'',end:'',weather:{sky:'any',op:'any',temp:40,when:'live',hours:6}}, bg:{image:'',fit:'cover',overlay:'light'}, colors:{a:'#258046',b:'#10B981',c:'#D9A441'}, anim:'none', animCount:8, animSpeed:2 });
+  T.themes.unshift({ id, name:'New theme', enabled:true, trigger:{states:['All'],condType:'',start:'',end:'',weather:{sky:'any',op:'any',temp:40,when:'live',hours:6,days:3}}, bg:{image:'',fit:'cover',overlay:'light'}, colors:{a:'#258046',b:'#10B981',c:'#D9A441'}, anim:'none', animCount:8, animSpeed:2 });
   teEdit=id; teMsg=null; KKD.save(data); AdminShell.refreshPending(); themeUI();
 }
 function themeEdit(id){ const t=themeData().themes.find(x=>x.id===id); if(t&&t.isDefault) return; /* green default is not editable */ teEdit=(teEdit===id?null:id); teMsg=null; themeUI(); }
@@ -636,7 +645,7 @@ function themeEditor(t){
         <div class="sub-l">Temperature is</div>
         <div class="chip-row wx-inline">${wxChip('op','any','Any','any')}${wxChip('op','above','Above ≥','any')}${wxChip('op','below','Below ≤','any')}${(w.op&&w.op!=='any')?`<input type="number" style="width:78px" value="${w.temp!=null?w.temp:40}" onchange="themeField('${t.id}','trigger.weather.temp',+this.value)"/><span class="wx-u">°C</span>`:''}</div>
         <div class="sub-l">Check weather</div>
-        <div class="chip-row wx-inline">${wxChip('when','live','Live now','live')}${wxChip('when','nexthours','Next hours','live')}${wxChip('when','today','Later today','live')}${wxChip('when','tomorrow','Tomorrow','live')}${w.when==='nexthours'?`<input type="number" style="width:66px" value="${w.hours!=null?w.hours:6}" onchange="themeField('${t.id}','trigger.weather.hours',+this.value)"/><span class="wx-u">hours ahead</span>`:''}</div>
+        <div class="chip-row wx-inline">${wxChip('when','live','Live now','live')}${wxChip('when','nexthours','Next hours','live')}${wxChip('when','today','Later today','live')}${wxChip('when','tomorrow','Tomorrow','live')}${wxChip('when','nextdays','Next days','live')}${w.when==='nexthours'?`<input type="number" min="1" style="width:66px" value="${w.hours!=null?w.hours:6}" onchange="themeField('${t.id}','trigger.weather.hours',+this.value)"/><span class="wx-u">hours ahead</span>`:''}${w.when==='nextdays'?`<input type="number" min="1" style="width:66px" value="${w.days!=null?w.days:3}" onchange="themeField('${t.id}','trigger.weather.days',+this.value)"/><span class="wx-u">days ahead</span>`:''}</div>
       </div>`
     : '';
   const rulesBlock = `<div class="sub-l">Show in states</div>

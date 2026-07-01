@@ -265,7 +265,6 @@ const DEFAULT_SECS=[
   {id:'theme',    ic:'🎨', nm:'Theme',                sub:'Green default + state / date / weather rules', on:true, fixed:true},
   {id:'statusbanner',ic:'📢', nm:'Top Status Banner', sub:'Fixed · rotating rain/offer ticker', on:true, fixed:true},
   {id:'search',   ic:'🔍', nm:'Search Bar',           sub:'Fixed · default + rotating hints', on:true, fixed:true},
-  {id:'offer',    ic:'🎁', nm:'Offer Strip',         sub:'Header announcement ticker',     on:true},
   {id:'cats',     ic:'🗂️', nm:'Categories',           sub:'Pesticide, Fertilizer…',         on:true},
   {id:'ordstatus',ic:'📦', nm:'Order Status',          sub:'Sticky active order bar',         on:true},
   {id:'coins',    ic:'🪙', nm:'Earn Coins',             sub:'Task screen + drawer',            on:true},
@@ -812,36 +811,6 @@ search:()=>`
   </div>
 </div>`,
 
-/* 1 ── OFFER STRIP */
-offer:()=>`
-<div class="card">
-  <div class="card-body">
-    ${LT()}
-    <div class="sdiv">Active Offers (scroll as ticker)</div>
-    <div id="ofList">
-      ${[
-        {ic:'🎁',bold:'Christmas offer',body:'20% off + free gift on ₹999+',lc:'#C0392B',bg:'#FFF3E0',link:''},
-        {ic:'🔥',bold:'Kisan Special',body:'₹500 off above ₹2000+',lc:'#1B6B3A',bg:'#F0FDF4',link:''},
-      ].map(o=>`
-      <div class="li">
-        <span class="drag-h">⠿</span>
-        <div class="li-body">
-          <div class="row" style="margin-bottom:10px;">
-            <div class="fg fix"><label>Icon</label><div class="ep" onclick="promptE(this)">${o.ic}</div></div>
-          </div>
-          <div class="row" style="margin-bottom:0;">
-            <div class="fg fix"><label>Label Color</label><div class="color-r"><input type="color" value="${o.lc}"/><span>${o.lc}</span></div></div>
-            <div class="fg fix"><label>BG Color</label><div class="color-r"><input type="color" value="${o.bg}"/></div></div>
-            <div class="fg"><label>Deeplink</label><input type="text" value="${o.link}" placeholder="kkd://sale/christmas"/></div>
-          </div>
-        </div>
-        <div class="li-act"></div>
-      </div>`).join('')}
-    </div>
-    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addOffer()">+ Add Offer</button>
-  </div>
-</div>`,
-
 /* 2 ── CATEGORIES */
 cats:()=>`
 <div class="card">
@@ -1295,23 +1264,6 @@ function phRow(p){ return `
     <div class="li-act" style="padding-top:16px;"><div class="tg on" onclick="this.classList.toggle('on')"></div></div>
   </div>`; }
 function addPlaceholder(){ document.getElementById('phList').insertAdjacentHTML('beforeend', phRow('')); }
-
-function addOffer(){
-  document.getElementById('ofList').insertAdjacentHTML('beforeend',`
-  <div class="li">
-    <span class="drag-h">⠿</span>
-    <div class="li-body">
-      <div class="row" style="margin-bottom:10px;">
-        <div class="fg fix"><label>Icon</label><div class="ep" onclick="promptE(this)">🎉</div></div>
-      </div>
-      <div class="row" style="margin-bottom:0;">
-        <div class="fg fix"><label>Label Color</label><div class="color-r"><input type="color" value="#DC2626"/></div></div>
-        <div class="fg fix"><label>BG Color</label><div class="color-r"><input type="color" value="#FFF7ED"/></div></div>
-        <div class="fg"><label>Deeplink</label><input type="text" placeholder="kkd://…"/></div>
-      </div>
-    </div>
-    <div class="li-act"></div>
-  </div>`);}
 
 function addCat(){
   document.getElementById('catList').insertAdjacentHTML('beforeend',`

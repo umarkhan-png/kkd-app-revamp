@@ -813,15 +813,15 @@ theme:()=>{ const T=themeData(); const S=sbData(); return `
 
     ${themeResolverBox()}
 
-    <div class="sdiv">Themes</div>
+    <div class="sdiv">Themes &amp; status banners</div>
+    <div class="row" style="margin:-4px 0 14px"><div class="fg fix"><label>Ticker rotation interval (sec)</label><input type="number" style="width:140px;" value="${S.interval||4}" onchange="sbSet('interval',+this.value)"/></div></div>
+
+    <div class="sub-l">Themes <span class="hint">(each carries its own banner)</span></div>
     <div class="theme-tiles">${T.themes.map((t,i)=>themeTile(t,i)).join('')}</div>
     <button class="btn btn-s btn-sm" onclick="themeAdd()" style="margin-top:6px"><i class="fa-solid fa-plus"></i> Add theme</button>
-
     ${teEdit?`<div style="margin-top:16px">${themeEditor(T.themes.find(x=>x.id===teEdit))}</div>`:''}
 
-    <div class="sdiv">Top status banners</div>
-    <div class="info-box"><i class="fa-solid fa-circle-info"></i><span>A theme's own banner is set inside that theme above. The banners here are <b>standalone</b> (shown by state / date, no theme needed) — like the always-on <b>Order tracking</b> default. All of them rotate in the ticker.</span></div>
-    <div class="row"><div class="fg fix"><label>Rotation interval (sec)</label><input type="number" style="width:140px;" value="${S.interval||4}" onchange="sbSet('interval',+this.value)"/></div></div>
+    <div class="sub-l" style="margin-top:22px">Standalone banners <span class="hint">(no theme — shown by state / date; e.g. the always-on Order tracking)</span></div>
     <div id="sbList">${S.items.map(sbRow).join('')}</div>
     <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="sbAddOpen()"><i class="fa-solid fa-plus"></i> Add standalone banner</button>
   </div>

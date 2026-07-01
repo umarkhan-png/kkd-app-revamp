@@ -272,8 +272,7 @@ const CROPS=['🍅 Tomato','🌶️ Chilli','🌾 Wheat','🌽 Maize','🧅 Onio
 // Reference SECS — used to seed data.homeSections on first load
 const DEFAULT_SECS=[
   {id:'header',   ic:'🏠', nm:'Header / Top Bar',     sub:'Logo, greeting, location, wallet, coins, bell', on:true, fixed:true},
-  {id:'theme',    ic:'🎨', nm:'Theme',                sub:'Green default + state / date / weather rules', on:true, fixed:true},
-  {id:'statusbanner',ic:'📢', nm:'Top Status Banner', sub:'Fixed · rotating rain/offer ticker', on:true, fixed:true},
+  {id:'theme',    ic:'🎨', nm:'Theme & Top Status Banner', sub:'Themes + the status banner that rides with them', on:true, fixed:true},
   {id:'search',   ic:'🔍', nm:'Search Bar',           sub:'Fixed · default + rotating hints', on:true, fixed:true},
   {id:'cats',     ic:'🗂️', nm:'Categories',           sub:'Pesticide, Fertilizer…',         on:true},
   {id:'ordstatus',ic:'📦', nm:'Order Status',          sub:'Sticky active order bar',         on:true},
@@ -490,7 +489,7 @@ function themeData(){
   return T;
 }
 function editTheme(){ return themeData().themes.find(t=>t.id===teEdit); }
-function themeUI(){ if(sel==='theme') document.getElementById('rp').innerHTML=EDITORS.theme(); }
+function themeUI(){ if(sel==='theme') pick('theme'); }
 function ruleMatches(t,state,weather,temp,date){
   if(!t.enabled || t.isDefault) return false;        // default is fallback only — never auto-wins
   const tr=t.trigger||{};
@@ -787,7 +786,7 @@ header:()=>`
 </div>`,
 
 /* 0b ── THEME RULES (state / weather / festival · one theme at a time, by priority) */
-theme:()=>{ const T=themeData(); return `
+theme:()=>{ const T=themeData(); const S=sbData(); return `
 <div class="card">
   <div class="card-body">
     <p class="hint-p">The Home top banner changes by state + condition. The first matching theme wins (top&nbsp;=&nbsp;highest priority); <b>Green</b> is the always-on fallback.</p>
@@ -799,18 +798,12 @@ theme:()=>{ const T=themeData(); return `
     <button class="btn btn-s btn-sm" onclick="themeAdd()" style="margin-top:6px"><i class="fa-solid fa-plus"></i> Add theme</button>
 
     ${teEdit?`<div style="margin-top:16px">${themeEditor(T.themes.find(x=>x.id===teEdit))}</div>`:''}
-  </div>
-</div>`; },
 
-/* 0c ── TOP STATUS BANNER */
-statusbanner:()=>{ const S=sbData(); return `
-<div class="card">
-  <div class="card-body">
+    <div class="sdiv">Top status banners</div>
+    <div class="info-box"><i class="fa-solid fa-circle-info"></i><span>A theme's own banner is set inside that theme above. The banners here are <b>standalone</b> (shown by state / date, no theme needed) — like the always-on <b>Order tracking</b> default. All of them rotate in the ticker.</span></div>
     <div class="row"><div class="fg fix"><label>Rotation interval (sec)</label><input type="number" style="width:140px;" value="${S.interval||4}" onchange="sbSet('interval',+this.value)"/></div></div>
-    <div class="info-box"><i class="fa-solid fa-circle-info"></i><span>Theme-specific banners are set inside each <b>Theme</b>. Banners here are <b>standalone</b> (shown by state / date) — like the always-on <b>Order tracking</b> default.</span></div>
-    <div class="sdiv">Banners (rotate in order)</div>
     <div id="sbList">${S.items.map(sbRow).join('')}</div>
-    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="sbAdd()"><i class="fa-solid fa-plus"></i> Add banner</button>
+    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="sbAdd()"><i class="fa-solid fa-plus"></i> Add standalone banner</button>
   </div>
 </div>`; },
 
@@ -1231,7 +1224,7 @@ function sbData(){
   return S;
 }
 function sbFind(id){ return sbData().items.find(x=>x.id===id); }
-function sbUI(){ if(sel==='statusbanner') pick('statusbanner'); }
+function sbUI(){ if(sel==='theme') pick('theme'); }
 function sbSet(k,v){ sbData()[k]=v; KKD.save(data); AdminShell.refreshPending(); }
 function sbField(id,k,v){ const it=sbFind(id); if(!it)return; it[k]=v; KKD.save(data); AdminShell.refreshPending(); sbUI(); }
 function sbEdit(id){ sbEditId=sbEditId===id?null:id; sbUI(); }

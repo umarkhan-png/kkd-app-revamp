@@ -453,6 +453,7 @@ const APPROVED_BG=[
 ];
 let teEdit=null;                                   // id of theme being edited (inline)
 let teLiveId=null;                                 // id of the theme currently "Live" per the preview sim
+let teModalId=null;                                // id of the draft theme being added in the Add-theme modal
 let teSim={state:'All States',weather:'rain',temp:30,date:'2026-03-14'};  // resolver simulator
 let teMsg=null;                                    // last upload message {kind,text}
 function themeData(){
@@ -494,7 +495,7 @@ function themeData(){
   return T;
 }
 function editTheme(){ return themeData().themes.find(t=>t.id===teEdit); }
-function themeUI(){ if(sel==='theme') pick('theme'); }
+function themeUI(){ if(teModalId){ themeModalRender(); return; } if(sel==='theme') pick('theme'); }
 function ruleMatches(t,state,weather,temp,date){
   if(!t.enabled || t.isDefault) return false;        // default is fallback only — never auto-wins
   const tr=t.trigger||{};
@@ -587,8 +588,21 @@ function teApvClose(){ const m=document.getElementById('apvModal'); if(m) m.remo
 function themeAdd(){
   const T=themeData(); const id='t'+Date.now().toString(36);
   T.themes.unshift({ id, name:'New theme', enabled:true, trigger:{states:['All'],condType:'',start:'',end:'',weather:{sky:'any',op:'any',temp:40,when:'live',hours:6,days:3}}, bg:{image:'',fit:'cover',overlay:'light'}, colors:{a:'#258046',b:'#10B981',c:'#D9A441'}, anim:'none', animCount:8, animSpeed:2, banner:{enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:''} });
-  teEdit=id; teMsg=null; KKD.save(data); AdminShell.refreshPending(); themeUI();
+  teEdit=null; teMsg=null; teModalId=id; KKD.save(data); AdminShell.refreshPending(); themeModalRender();   // open the full form in a modal
 }
+function themeModalRender(){
+  const ex=document.getElementById('addModal'); if(ex) ex.remove();
+  const t=themeData().themes.find(x=>x.id===teModalId); if(!t) return;
+  const html=`<div id="addModal"><div class="apv-scrim" onclick="themeModalCancel()"></div>
+    <div class="apv-box" style="width:740px">
+      <div class="apv-box-head"><h3>Add theme</h3><button class="x-btn" onclick="themeModalCancel()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-body">${themeEditor(t,true)}</div>
+      <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="themeModalCancel()">Cancel</button><button class="btn btn-p btn-sm" onclick="themeModalSave()"><i class="fa-solid fa-check"></i> Add theme</button></div>
+    </div></div>`;
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+}
+function themeModalSave(){ teModalId=null; const m=document.getElementById('addModal'); if(m)m.remove(); pick('theme'); }
+function themeModalCancel(){ const id=teModalId; teModalId=null; const m=document.getElementById('addModal'); if(m)m.remove(); if(id){ const T=themeData(); T.themes=T.themes.filter(x=>x.id!==id); KKD.save(data); AdminShell.refreshPending(); } pick('theme'); }
 function themeEdit(id){ const t=themeData().themes.find(x=>x.id===id); if(t&&t.isDefault) return; /* green default is not editable */ teEdit=(teEdit===id?null:id); teMsg=null; themeUI(); }
 function themeMove(i,d){ const T=themeData(); const j=i+d; if(j<0||j>=T.themes.length) return; if(T.themes[i].isDefault||T.themes[j].isDefault) return; const a=T.themes; [a[i],a[j]]=[a[j],a[i]]; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeToggle(id){ const t=themeData().themes.find(x=>x.id===id); if(!t||t.isDefault)return; t.enabled=!t.enabled; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
@@ -634,7 +648,7 @@ function themeTile(t,i){
     </div>
   </div>`;
 }
-function themeEditor(t){
+function themeEditor(t,modal){
   if(!t) return '';
   const T=themeData(); const isDef=t.isDefault||t.id===T.default;
   const tr=t.trigger||{}; const bg=t.bg||{}; const c=t.colors||{}; const bn=t.banner||{enabled:false,icon:'fa-bell',bg:'#EFF6FF',tc:'#1E40AF'};
@@ -671,8 +685,8 @@ function themeEditor(t){
       <option value="weather"${selO('weather',ct)}>Weather</option>
     </select></div></div>
     ${condBody}`;
-  return `<div class="theme-ed">
-    <div class="card-head" style="padding:0 0 12px;border:0"><h3>Editing: ${esc(t.name)}</h3><button class="btn btn-s btn-sm" onclick="themeEdit('${t.id}')">Done</button></div>
+  return `<div class="theme-ed"${modal?' style="border:0;background:transparent;padding:0"':''}>
+    ${modal?'':`<div class="card-head" style="padding:0 0 12px;border:0"><h3>Editing: ${esc(t.name)}</h3><button class="btn btn-s btn-sm" onclick="themeEdit('${t.id}')">Done</button></div>`}
 
     <div class="row"><div class="fg" style="max-width:320px"><label>Theme name</label><input type="text" value="${esc(t.name)}" data-maxlen="40" onchange="themeField('${t.id}','name',this.value);themeUI()"/></div></div>
 

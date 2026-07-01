@@ -13,7 +13,7 @@
   /* Sheet shell · matches the app bottom-sheet chrome: dim backdrop fades in, white panel rounded-t slides up with the same easing as trackSheet */
   .sheet{position:fixed;inset:0;z-index:90}
   .sheet-backdrop{position:absolute;inset:0;background:rgba(15,23,42,0.55);opacity:0;transition:opacity .28s ease}
-  .sheet-panel{position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:26px 26px 0 0;display:flex;flex-direction:column;max-height:94vh;transform:translateY(100%);transition:transform .34s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18);padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+  .sheet-panel{position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:26px 26px 0 0;display:flex;flex-direction:column;max-height:94vh;transform:translateY(calc(100% + 60px));transition:transform .34s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18);padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
   .sheet.open .sheet-backdrop{opacity:1}
   .sheet.open .sheet-panel{transform:translateY(0)}
   .grip{margin:10px auto 2px;width:40px;height:4px;border-radius:9999px;background:#E2E8F0}

@@ -204,7 +204,7 @@
 
   <!-- Sign out confirmation · IN-PAGE bottom sheet · the profile page stays visible underneath (covered by a dimmed backdrop) so the user keeps context -->
   <div id="signoutBd" style="position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80"></div>
-  <div id="signoutSheet" style="position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;padding:0 20px 24px">
+  <div id="signoutSheet" style="position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(calc(100% + 60px));transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;padding:0 20px 24px">
     <div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 0"></div>
     <div class="w-14 h-14 mx-auto rounded-full flex items-center justify-center mt-5 mb-3" style="background:#FEE2E2;border:1.5px solid #FECACA">
       <i class="fa-solid fa-right-from-bracket text-[22px]" style="color:#DC2626"></i>
@@ -216,7 +216,7 @@
 
   <!-- Help & Support · in-page bottom sheet of reach-out options (no 'Call an expert' here) · same pattern as the order-details Need-help sheet -->
   <div id="helpBd" style="position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80"></div>
-  <div id="helpSheet" style="position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;padding:0 0 22px">
+  <div id="helpSheet" style="position:fixed;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(calc(100% + 60px));transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;padding:0 0 22px">
     <div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 0"></div>
     <div class="px-5 pt-3 pb-3 flex items-center justify-between">
       <div class="text-[18px] font-bold">How can we help?</div>
@@ -254,7 +254,7 @@
       const sht = document.getElementById('helpSheet');
       const cls = document.getElementById('helpClose');
       function open(){ bd.style.opacity='1'; bd.style.pointerEvents='auto'; sht.style.transform='translateY(0)'; }
-      function close(){ bd.style.opacity='0'; bd.style.pointerEvents='none'; sht.style.transform='translateY(100%)'; }
+      function close(){ bd.style.opacity='0'; bd.style.pointerEvents='none'; sht.style.transform='translateY(calc(100% + 60px))'; }
       if (btn) btn.addEventListener('click', open);
       if (cls) cls.addEventListener('click', close);
       if (bd)  bd.addEventListener('click', close);
@@ -269,7 +269,7 @@
       const sht  = document.getElementById('signoutSheet');
       const cnl  = document.getElementById('signoutCancel');
       function open(){ bd.style.opacity = '1'; bd.style.pointerEvents = 'auto'; sht.style.transform = 'translateY(0)'; }
-      function close(){ bd.style.opacity = '0'; bd.style.pointerEvents = 'none'; sht.style.transform = 'translateY(100%)'; }
+      function close(){ bd.style.opacity = '0'; bd.style.pointerEvents = 'none'; sht.style.transform = 'translateY(calc(100% + 60px))'; }
       if (btn) btn.addEventListener('click', open);
       if (cnl) cnl.addEventListener('click', close);
       if (bd)  bd.addEventListener('click', close);

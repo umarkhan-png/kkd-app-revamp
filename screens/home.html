@@ -588,7 +588,7 @@
     <!-- Earn-coins quest · bottom modal · lists all 5 earning steps with details + per-step action -->
     <div id="questBd" class="fixed inset-0 z-[100]" style="display:none">
       <div id="questBackdrop" class="absolute inset-0" style="background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
-      <div id="questPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:84vh;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
+      <div id="questPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:84vh;transform:translateY(calc(100% + 60px));transition:transform .3s cubic-bezier(.32,.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
         <div class="flex-shrink-0 pt-2.5 px-5">
           <div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div>
           <div class="flex items-center justify-between">
@@ -1526,7 +1526,7 @@
         .eng-wrong .s{font-size:11px;opacity:.92}
         .eng-modal-bd{position:fixed;inset:0;background:rgba(15,23,42,0.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80}
         .eng-modal-bd.open{opacity:1;pointer-events:auto}
-        .eng-modal{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;padding:0 20px 22px}
+        .eng-modal{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,0.18);transform:translateY(calc(100% + 60px));transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:90;padding:0 20px 22px}
         .eng-modal.open{transform:translateY(0)}
         .eng-stars{display:flex;gap:12px;justify-content:center;margin:16px 0}
         .eng-stars .s{font-size:32px;color:#CBD5E1;cursor:pointer;transition:transform .12s ease,color .15s ease}
@@ -1798,7 +1798,7 @@
     <!-- "Sorry to hear" sheet · shown when the user says their last order did NOT arrive OK -->
     <div id="sorryBd" class="fixed inset-0 z-[100]" style="display:none">
       <div id="sorryBackdrop" class="absolute inset-0" style="background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
-      <div id="sorryPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl" style="transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18);padding:0 20px calc(env(safe-area-inset-bottom,0px) + 22px)">
+      <div id="sorryPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl" style="transform:translateY(calc(100% + 60px));transition:transform .3s cubic-bezier(.32,.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18);padding:0 20px calc(env(safe-area-inset-bottom,0px) + 22px)">
         <div class="mx-auto w-10 h-1 rounded-full mt-2.5 mb-4" style="background:#E2E8F0"></div>
         <div class="w-14 h-14 mx-auto rounded-full flex items-center justify-center mb-3" style="background:#FEF2F2;border:1.5px solid #FECACA">
           <i class="fa-solid fa-face-frown text-[24px]" style="color:#DC2626"></i>
@@ -1817,7 +1817,7 @@
         const bd = document.getElementById('sorryBd'), bg = document.getElementById('sorryBackdrop'), pnl = document.getElementById('sorryPanel'), cls = document.getElementById('sorryClose');
         if (!btn || !bd) return;
         function open(){ bd.style.display = 'block'; requestAnimationFrame(function(){ bg.style.opacity = '1'; pnl.style.transform = 'translateY(0)'; }); }
-        function close(){ bg.style.opacity = '0'; pnl.style.transform = 'translateY(100%)'; setTimeout(function(){ bd.style.display = 'none'; }, 280); }
+        function close(){ bg.style.opacity = '0'; pnl.style.transform = 'translateY(calc(100% + 60px))'; setTimeout(function(){ bd.style.display = 'none'; }, 280); }
         btn.addEventListener('click', open);
         if (cls) cls.addEventListener('click', close);
         if (bg) bg.addEventListener('click', close);
@@ -2237,7 +2237,7 @@
   <!-- Delivery detail bottom-sheet modal — opens when delivery tile is tapped · timeline + items + delivery person + map placeholder -->
   <div id="trackSheet" class="fixed inset-0 z-[90]" style="display:none">
     <div id="trackSheetBackdrop" class="absolute inset-0" style="background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
-    <div id="trackSheetPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:88vh;transform:translateY(100%);transition:transform .3s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
+    <div id="trackSheetPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:88vh;transform:translateY(calc(100% + 60px));transition:transform .3s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
       <div class="flex-shrink-0 pt-2.5 pb-3 px-5">
         <div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div>
         <div class="flex items-center justify-between">
@@ -2336,7 +2336,7 @@
   <!-- All-crops bottom-sheet modal — opens when "More" chip in Shop-by-Crop is tapped · 3-col grid of every crop in CROP_META · each tile toggles the corresponding crop selection in the inline picker · close via backdrop tap, X button, or Done button -->
   <div id="cropSheet" class="fixed inset-0 z-[90]" style="display:none">
     <div id="cropSheetBackdrop" class="absolute inset-0" style="background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
-    <div id="cropSheetPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:78vh;transform:translateY(100%);transition:transform .3s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
+    <div id="cropSheetPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:78vh;transform:translateY(calc(100% + 60px));transition:transform .3s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
       <div class="flex-shrink-0 pt-2.5 pb-2 px-5">
         <div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div>
         <div class="flex items-center justify-between">
@@ -2359,7 +2359,7 @@
   <!-- Variant bottom-sheet · opens when a product card with multiple packaging sizes is tapped on its "2 Options" button · each row carries its own thumbnail + +/- qty stepper so users can mix sizes in one cart op -->
   <div id="variantSheet" class="fixed inset-0 z-[95]" style="display:none">
     <div id="variantSheetBackdrop" class="absolute inset-0" style="background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
-    <div id="variantSheetPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:78vh;transform:translateY(100%);transition:transform .3s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
+    <div id="variantSheetPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:78vh;transform:translateY(calc(100% + 60px));transition:transform .3s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
       <div class="flex-shrink-0 px-5 pt-5 pb-4 flex items-start gap-3.5" style="border-bottom:1px solid #F1F5F9">
         <div class="flex-1 min-w-0">
           <div id="vsName" class="text-[16.5px] font-bold text-[#0F172A] leading-tight">Product</div>
@@ -2515,7 +2515,7 @@
         setTimeout(function(){
           // Snap to below the viewport (with transition off) then swap text
           el.style.transition = 'none';
-          el.style.transform = 'translateY(100%)';
+          el.style.transform = 'translateY(calc(100% + 60px))';
           el.textContent = states[idx];
           // Force reflow, then restore transition and slide up to neutral
           void el.offsetHeight;
@@ -3249,7 +3249,7 @@
       function closeQuest(){
         const bd = document.getElementById('questBd'), bg = document.getElementById('questBackdrop'), pnl = document.getElementById('questPanel');
         if (!bd) return;
-        bg.style.opacity = '0'; pnl.style.transform = 'translateY(100%)';
+        bg.style.opacity = '0'; pnl.style.transform = 'translateY(calc(100% + 60px))';
         setTimeout(function(){ bd.style.display = 'none'; }, 280);
       }
       (function(){
@@ -3333,7 +3333,7 @@
       function closeSheet(){
         if (!sheet) return;
         sheetBg.style.opacity = '0';
-        sheetPnl.style.transform = 'translateY(100%)';
+        sheetPnl.style.transform = 'translateY(calc(100% + 60px))';
         setTimeout(function(){ sheet.style.display = 'none'; }, 280);
       }
       if (sheetBg)   sheetBg.addEventListener('click', closeSheet);
@@ -3561,7 +3561,7 @@
       }
       function close(){
         bg.style.opacity = '0';
-        pnl.style.transform = 'translateY(100%)';
+        pnl.style.transform = 'translateY(calc(100% + 60px))';
         setTimeout(function(){ sheet.style.display = 'none'; }, 280);
       }
       bg.addEventListener('click', close);
@@ -3658,7 +3658,7 @@
       }
       function dismiss(){
         bg.style.opacity = '0';
-        pnl.style.transform = 'translateY(100%)';
+        pnl.style.transform = 'translateY(calc(100% + 60px))';
         setTimeout(function(){ sheet.style.display = 'none'; }, 280);
       }
       tiles.forEach(function(t){ t.addEventListener('click', open); });
@@ -3727,7 +3727,7 @@
   <!-- Buy-again · Rate & review bottom modal · rating + review + photo/video + testimonial upload -->
   <div id="baRateBd" class="fixed inset-0 z-[120]" style="display:none">
     <div id="baRateBackdrop" class="absolute inset-0" style="background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
-    <div id="baRatePanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:92vh;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
+    <div id="baRatePanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:92vh;transform:translateY(calc(100% + 60px));transition:transform .3s cubic-bezier(.32,.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
       <div class="flex-shrink-0 px-5 pt-3">
         <div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div>
         <div class="flex items-center gap-3">
@@ -3830,7 +3830,7 @@
         bd.style.display = 'block';
         requestAnimationFrame(function(){ bg.style.opacity = '1'; pnl.style.transform = 'translateY(0)'; });
       }
-      function close(){ bg.style.opacity = '0'; pnl.style.transform = 'translateY(100%)'; setTimeout(function(){ bd.style.display = 'none'; }, 280); }
+      function close(){ bg.style.opacity = '0'; pnl.style.transform = 'translateY(calc(100% + 60px))'; setTimeout(function(){ bd.style.display = 'none'; }, 280); }
       if (closeBtn) closeBtn.addEventListener('click', close);
       if (bg) bg.addEventListener('click', close);
 
@@ -3940,7 +3940,7 @@
     .cp-picker > button{flex:0 0 auto;width:calc((100vw - 74px) / 3.9)}
     .cropp-bd{position:fixed;inset:0;background:rgba(15,23,42,.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:160}
     .cropp-bd.open{opacity:1;pointer-events:auto}
-    .cropp-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,.18);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:161;max-height:82vh;display:flex;flex-direction:column}
+    .cropp-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,.18);transform:translateY(calc(100% + 60px));transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:161;max-height:82vh;display:flex;flex-direction:column}
     .cropp-sheet.open{transform:translateY(0)}
     .cropp-handle{width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 4px;flex-shrink:0}
     .cropp-head{display:flex;align-items:flex-start;justify-content:space-between;padding:6px 20px 4px;flex-shrink:0}

@@ -72,8 +72,11 @@
 .hm input:focus,.hm textarea:focus,.hm select.s:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
 .hm textarea{resize:vertical;min-height:65px;}
 .hm input[type=color]{width:44px;height:34px;border:1px solid var(--g200);border-radius:6px;padding:2px;cursor:pointer;}
-.hm .sub-l{font-size:12px;font-weight:700;color:var(--g600,#475569);margin:14px 0 6px;}
-.hm .chip-row{margin-bottom:14px;}
+.hm .sub-l{font-size:12px;font-weight:700;color:var(--g600,#475569);margin:15px 0 6px;}
+.hm .chip-row{margin-bottom:8px;}
+.hm .wx-inline{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.hm .wx-inline input{border:1.5px solid var(--g200);border-radius:8px;height:34px;padding:0 9px;font-size:13px;color:var(--g700,#334155);}
+.hm .wx-u{font-size:12px;color:var(--g500);}
 .hm .sb-sum{display:flex;align-items:center;gap:12px;}
 .hm .sb-ic{font-size:20px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--g50);border:1px solid var(--g200);border-radius:9px;flex-shrink:0;}
 .hm .sb-title{font-size:13.5px;font-weight:700;}
@@ -549,43 +552,36 @@ function themeEditor(t){
   const selO=(v,c2)=>v===c2?' selected':'';
   const scopeAll=(tr.states||['All']).indexOf('All')>=0;
   const stateChips=STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!scopeAll&&(tr.states||[]).indexOf(s)>=0)?'on':''}" onclick="themeToggleScope('${t.id}','${s}')">${s}</span>`).join('');
-  const w=tr.weather||{sky:'any',op:'any',temp:40};
+  const w=tr.weather||{sky:'any',op:'any',temp:40,when:'live',hours:6};
   const ct=tr.condType||'';
-  // condition-specific fields sit in the SAME row as the type select — one clean line
-  const condFields = ct==='event'
-    ? `<div class="fg fix"><label>Start date</label><input type="date" value="${tr.start||''}" onchange="themeField('${t.id}','trigger.start',this.value);themeUI()"/></div>
-      <div class="fg fix"><label>End date</label><input type="date" value="${tr.end||''}" onchange="themeField('${t.id}','trigger.end',this.value);themeUI()"/></div>`
+  const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+  // clickable option chip (like the States chips) — sets one weather field
+  const wxChip=(field,val,label,def)=>`<span class="cchip ${(w[field]||def)===val?'on':''}" onclick="themeField('${t.id}','trigger.weather.${field}','${val}');themeUI()">${label}</span>`;
+  // condition body — Event (date range) OR Weather (plain-language chip builder)
+  const condBody = ct==='event'
+    ? `<div class="row" style="margin-top:2px">
+        <div class="fg fix"><label>Start date</label><input type="date" value="${tr.start||''}" onchange="themeField('${t.id}','trigger.start',this.value);themeUI()"/></div>
+        <div class="fg fix"><label>End date</label><input type="date" value="${tr.end||''}" onchange="themeField('${t.id}','trigger.end',this.value);themeUI()"/></div>
+      </div>`
     : ct==='weather'
-    ? `<div class="fg fix"><label>When</label><select class="s" onchange="themeField('${t.id}','trigger.weather.when',this.value);themeUI()">
-        <option value="live"${selO('live',w.when||'live')}>Live (now)</option>
-        <option value="nexthours"${selO('nexthours',w.when)}>In next hours</option>
-        <option value="today"${selO('today',w.when)}>Later today</option>
-        <option value="tomorrow"${selO('tomorrow',w.when)}>Tomorrow</option>
-      </select></div>
-      ${w.when==='nexthours'?`<div class="fg fix"><label>Hours</label><input type="number" style="width:80px" value="${w.hours!=null?w.hours:6}" onchange="themeField('${t.id}','trigger.weather.hours',+this.value)"/></div>`:''}
-      <div class="fg fix"><label>Sky</label><select class="s" onchange="themeField('${t.id}','trigger.weather.sky',this.value);themeUI()">
-        <option value="any"${selO('any',w.sky)}>Any sky</option>
-        ${WEATHERS.map(x=>`<option${selO(x,w.sky)}>${x}</option>`).join('')}
-      </select></div>
-      <div class="fg fix"><label>Temperature</label><select class="s" onchange="themeField('${t.id}','trigger.weather.op',this.value);themeUI()">
-        <option value="any"${selO('any',w.op)}>Any</option>
-        <option value="above"${selO('above',w.op)}>Above (≥)</option>
-        <option value="below"${selO('below',w.op)}>Below (≤)</option>
-      </select></div>
-      ${(w.op&&w.op!=='any')?`<div class="fg fix"><label>°C</label><input type="number" style="width:90px" value="${w.temp!=null?w.temp:40}" onchange="themeField('${t.id}','trigger.weather.temp',+this.value)"/></div>`:''}`
+    ? `<div class="wx">
+        <div class="sub-l">Sky is</div>
+        <div class="chip-row">${wxChip('sky','any','Any','any')}${WEATHERS.map(x=>wxChip('sky',x,cap(x),'any')).join('')}</div>
+        <div class="sub-l">Temperature is</div>
+        <div class="chip-row wx-inline">${wxChip('op','any','Any','any')}${wxChip('op','above','Above ≥','any')}${wxChip('op','below','Below ≤','any')}${(w.op&&w.op!=='any')?`<input type="number" style="width:78px" value="${w.temp!=null?w.temp:40}" onchange="themeField('${t.id}','trigger.weather.temp',+this.value)"/><span class="wx-u">°C</span>`:''}</div>
+        <div class="sub-l">Check weather</div>
+        <div class="chip-row wx-inline">${wxChip('when','live','Live now','live')}${wxChip('when','nexthours','Next hours','live')}${wxChip('when','today','Later today','live')}${wxChip('when','tomorrow','Tomorrow','live')}${w.when==='nexthours'?`<input type="number" style="width:66px" value="${w.hours!=null?w.hours:6}" onchange="themeField('${t.id}','trigger.weather.hours',+this.value)"/><span class="wx-u">hours ahead</span>`:''}</div>
+      </div>`
     : '';
-  const rulesBlock = `<div class="sdiv">When does this theme show?</div>
-    <div class="sub-l">States</div>
+  const rulesBlock = `<div class="sub-l">Show in states</div>
     <div class="chip-row"><span class="cchip ${scopeAll?'on':''}" onclick="themeToggleScopeAll('${t.id}')">All states</span> ${stateChips}</div>
-    <div class="sub-l">Condition</div>
-    <div class="row">
-      <div class="fg fix"><label>Type</label><select class="s" onchange="themeCondType('${t.id}',this.value)">
-        <option value=""${selO('',ct)} disabled>Select…</option>
-        <option value="event"${selO('event',ct)}>Event (dates)</option>
-        <option value="weather"${selO('weather',ct)}>Weather</option>
-      </select></div>
-      ${condFields}
-    </div>`;
+    <div class="sub-l">Show on condition</div>
+    <div class="row" style="margin-bottom:${ct?'2px':'0'}"><div class="fg fix" style="max-width:220px"><select class="s" onchange="themeCondType('${t.id}',this.value)">
+      <option value=""${selO('',ct)} disabled>Select…</option>
+      <option value="event"${selO('event',ct)}>Event (dates)</option>
+      <option value="weather"${selO('weather',ct)}>Weather</option>
+    </select></div></div>
+    ${condBody}`;
   return `<div class="theme-ed">
     <div class="card-head" style="padding:0 0 12px;border:0"><h3>Editing: ${esc(t.name)}</h3><button class="btn btn-s btn-sm" onclick="themeEdit('${t.id}')">Done</button></div>
 
@@ -593,13 +589,13 @@ function themeEditor(t){
 
     ${rulesBlock}
 
-    <div class="sdiv">Background image / GIF</div>
+    <div class="sub-l" style="margin-top:20px">Background image / GIF</div>
     <div class="bg-up">
       <div class="bg-prev" style="background:${themeGrad(t)}">${bg.image?`<img src="${bg.image}" alt=""/>`:'No image'}</div>
       <div style="flex:1;min-width:0">
         <input type="file" id="teFile" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none" onchange="tePick(this)"/>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-p btn-sm" onclick="document.getElementById('teFile').click()"><i class="fa-solid fa-upload"></i> Upload image / GIF</button>
+          <button class="btn btn-s btn-sm" onclick="document.getElementById('teFile').click()"><i class="fa-solid fa-upload"></i> Upload image / GIF</button>
           ${bg.image?`<button class="btn btn-d btn-sm" onclick="teBgRemove()"><i class="fa-solid fa-trash"></i> Remove</button>`:''}
         </div>
         <div class="bg-guide"><i class="fa-solid fa-circle-info"></i>1080 × 600 px · max 2 MB (GIF 4 MB) · PNG, JPG, WebP, GIF</div>

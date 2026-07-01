@@ -204,6 +204,26 @@
 .hm .bg-msg.warn{background:#FFFBEB;color:var(--amber);border:1px solid #FDE68A;}
 .hm .bg-msg.ok{background:var(--green-lt);color:var(--green);border:1px solid #A7F3D0;}
 
+/* UNIFIED ENTRY (theme half + banner half) */
+.hm .entry-list{display:flex;flex-direction:column;gap:12px;}
+.hm .entry{border:1px solid var(--g200);border-radius:12px;background:#fff;overflow:hidden;}
+.hm .entry.editing{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
+.hm .entry.theme-off{opacity:.7;}
+.hm .entry-cols{display:grid;grid-template-columns:1fr 1fr;}
+.hm .entry-col{padding:11px 14px 13px;min-width:0;}
+.hm .entry-col:first-child{border-right:1px solid var(--g200);}
+.hm .eh-lbl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--g400);margin-bottom:8px;}
+.hm .eh-top{display:flex;align-items:center;gap:10px;}
+.hm .eh-name{font-size:13.5px;font-weight:700;}
+.hm .eh-sub{font-size:11.5px;color:var(--g500);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hm .eh-none{font-size:12.5px;color:var(--g400);padding:9px 0;display:flex;align-items:center;gap:8px;}
+.hm .tt-prev.sm,.hm .sb-ic.sm{width:58px;height:40px;border-radius:8px;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.hm .sb-ic.sm{font-size:17px;}
+.hm .tt-prev.sm img{width:100%;height:100%;object-fit:cover;}
+.hm .entry-foot{display:flex;align-items:center;gap:8px;justify-content:flex-end;padding:9px 14px;border-top:1px solid #F1F5F9;background:var(--g50);}
+.hm .btn-xs{height:26px;padding:0 9px;font-size:11px;border-radius:7px;}
+@media(max-width:900px){.hm .entry-cols{grid-template-columns:1fr;}.hm .entry-col:first-child{border-right:0;border-bottom:1px solid var(--g200);}}
+
 /* THEME TILES + EDITOR */
 .hm .theme-tiles{display:flex;flex-direction:column;gap:10px;margin-bottom:6px;}
 .hm .theme-tile{display:flex;align-items:center;gap:13px;padding:11px;border:1px solid var(--g200);border-radius:10px;background:#fff;transition:border .15s,box-shadow .15s;}
@@ -225,6 +245,7 @@
 .hm .tt-bn-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:5px;}
 .hm .tt-bn-row .tt-bn{margin-top:0;}
 .hm .tg-mini{transform:scale(.78);transform-origin:right center;flex-shrink:0;}
+.hm .tg.dis{opacity:.45;pointer-events:none;}
 .hm .sb-tile .tt-prev{display:flex;align-items:center;justify-content:center;}
 .hm .sb-edit-open{border:1px solid var(--green);border-radius:10px;padding:16px;background:var(--green-lt);margin:2px 0 4px;}
 .hm .tt-act{display:flex;align-items:center;gap:5px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:160px;}
@@ -493,17 +514,37 @@ function themeData(){
     if(tr.condType===undefined){ tr.condType=(w.sky!=='any'||w.op!=='any')?'weather':'event'; changed=true; }
     if(tr.type){ delete tr.type; changed=true; }
     if(t.id===T.default && !t.isDefault){ t.isDefault=true; changed=true; }
-    // per-theme status banner (merged into the theme — shows when this theme is live)
-    if(!t.banner){ t.banner={enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:''}; changed=true; }
+    // per-entry status banner — a banner can ride with the theme OR stand alone (bannerOnly)
+    if(!t.banner){ t.banner={enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:'',states:['All'],start:'',end:''}; changed=true; }
+    else { if(t.banner.states==null){t.banner.states=['All'];changed=true;} if(t.banner.start==null){t.banner.start='';changed=true;} if(t.banner.end==null){t.banner.end='';changed=true;} }
   });
   // one-time cleanup: drop leftover unrenamed "New theme" entries (PM request)
   if(!T._cleanNew2){ T.themes=T.themes.filter(t=>t.isDefault || t.name!=='New theme'); T._cleanNew2=true; changed=true; }
+  // migrate old standalone banners (data.statusBanners) into the unified list as banner-only entries
+  if(!T._mergedBanners){
+    const S=data.statusBanners;
+    if(S && Array.isArray(S.items)){
+      if(S.interval!=null) T.bannerInterval=S.interval;
+      S.items.forEach(b=>{ if(T.themes.some(x=>x.id===b.id))return; T.themes.push({ id:b.id, bannerOnly:true, locked:!!b.locked, enabled:false, name:b.title||'Banner',
+        banner:{ enabled:b.enabled!==false, icon:b.icon||'fa-bell', title:b.title||'', sub:b.sub||'', bg:b.bg||'#EFF6FF', tc:b.tc||'#1E40AF', link:b.link||'', states:b.states||['All'], start:b.start||'', end:b.end||'' } }); });
+      S.items=[];
+    }
+    T._mergedBanners=true; changed=true;
+  }
+  // ensure the always-on "Order tracking" banner-only default exists
+  if(!T.themes.some(t=>t.id==='order')){
+    T.themes.push({ id:'order', bannerOnly:true, locked:true, enabled:false, name:'Order tracking',
+      banner:{ enabled:true, icon:'fa-truck', title:'Order tracking', sub:'Track your live orders', bg:'#ECFDF5', tc:'#065F46', link:'orders.html', states:['All'], start:'', end:'' } });
+    changed=true;
+  }
+  if(T.bannerInterval==null){ T.bannerInterval=4; changed=true; }
   if(changed) KKD.save(data);
   return T;
 }
 function editTheme(){ if(themeDraftObj&&themeDraftObj.id===teModalId) return themeDraftObj; return themeData().themes.find(t=>t.id===teEdit); }
 function themeUI(){ if(teModalId){ themeModalRender(); return; } if(sel==='theme') pick('theme'); }
 function ruleMatches(t,state,weather,temp,date){
+  if(t.bannerOnly) return false;                     // banner-only entries aren't themes
   if(!t.enabled || t.isDefault) return false;        // default is fallback only — never auto-wins
   const tr=t.trigger||{};
   const stOk=(tr.states&&tr.states.indexOf('All')>=0)?true:(tr.states||[]).indexOf(state)>=0;
@@ -602,7 +643,7 @@ function themeModalRender(){
   const t=(themeDraftObj&&themeDraftObj.id===teModalId)?themeDraftObj:null; if(!t) return;
   const html=`<div id="addModal"><div class="apv-scrim" onclick="themeModalCancel()"></div>
     <div class="apv-box" style="width:740px">
-      <div class="apv-box-head"><h3>Add theme</h3><button class="x-btn" onclick="themeModalCancel()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-head"><h3>Add theme &amp; banner</h3><button class="x-btn" onclick="themeModalCancel()"><i class="fa-solid fa-xmark"></i></button></div>
       <div class="apv-box-body">${themeEditor(t,true)}</div>
       <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="themeModalCancel()">Cancel</button><button class="btn btn-p btn-sm" onclick="themeModalSave()"><i class="fa-solid fa-check"></i> Add theme</button></div>
     </div></div>`;
@@ -613,7 +654,12 @@ function themeModalCancel(){ themeDraftObj=null; teModalId=null; const m=documen
 function themeEdit(id){ const t=themeData().themes.find(x=>x.id===id); if(t&&t.isDefault) return; /* green default is not editable */ teEdit=(teEdit===id?null:id); teMsg=null; themeUI(); }
 function themeMove(i,d){ const T=themeData(); const j=i+d; if(j<0||j>=T.themes.length) return; if(T.themes[i].isDefault||T.themes[j].isDefault) return; const a=T.themes; [a[i],a[j]]=[a[j],a[i]]; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeToggle(id){ const t=themeData().themes.find(x=>x.id===id); if(!t||t.isDefault)return; t.enabled=!t.enabled; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
-function themeBanToggle(id){ const t=themeData().themes.find(x=>x.id===id); if(!t||t.isDefault)return; t.banner=t.banner||{enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:''}; t.banner.enabled=!t.banner.enabled; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
+function themeBanToggle(id){ const t=(themeDraftObj&&themeDraftObj.id===id)?themeDraftObj:themeData().themes.find(x=>x.id===id); if(!t||t.isDefault||t.locked)return; t.banner=t.banner||{enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:'',states:['All'],start:'',end:''}; t.banner.enabled=!t.banner.enabled; if(t!==themeDraftObj){ KKD.save(data); AdminShell.refreshPending(); } themeUI(); }
+function themeRemove(id){ const T=themeData(); const t=T.themes.find(x=>x.id===id); if(!t||t.isDefault||t.locked) return; T.themes=T.themes.filter(x=>x.id!==id); if(teEdit===id)teEdit=null; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
+function themeSetInterval(v){ themeData().bannerInterval=v; KKD.save(data); AdminShell.refreshPending(); }
+function themeSetHasTheme(id,on){ const t=(themeDraftObj&&themeDraftObj.id===id)?themeDraftObj:themeData().themes.find(x=>x.id===id); if(!t||t.isDefault||t.locked)return; if(on){ delete t.bannerOnly; if(!t.name||t.name==='Banner')t.name='New theme'; } else { t.bannerOnly=true; } if(t!==themeDraftObj){KKD.save(data);AdminShell.refreshPending();} themeUI(); }
+function themeBnStateAll(id){ const t=(themeDraftObj&&themeDraftObj.id===id)?themeDraftObj:themeData().themes.find(x=>x.id===id); if(!t)return; t.banner=t.banner||{}; t.banner.states=['All']; if(t!==themeDraftObj)KKD.save(data); themeUI(); }
+function themeBnStateTog(id,st){ const t=(themeDraftObj&&themeDraftObj.id===id)?themeDraftObj:themeData().themes.find(x=>x.id===id); if(!t)return; t.banner=t.banner||{}; let s=(t.banner.states||[]).filter(x=>x!=='All'); s.indexOf(st)>=0?(s=s.filter(x=>x!==st)):s.push(st); if(!s.length)s=['All']; t.banner.states=s; if(t!==themeDraftObj)KKD.save(data); themeUI(); }
 function themeCondType(id,v){ themeField(id,'trigger.condType',v); themeUI(); }
 function themeSetDefault(v){ themeData().default=v; KKD.save(data); AdminShell.refreshPending(); }
 function themeField(id,path,v){ const t=(themeDraftObj&&themeDraftObj.id===id)?themeDraftObj:themeData().themes.find(x=>x.id===id); if(!t)return; const ks=path.split('.'); let o=t; for(let i=0;i<ks.length-1;i++){ if(o[ks[i]]==null)o[ks[i]]={}; o=o[ks[i]]; } o[ks[ks.length-1]]=v; if(t!==themeDraftObj){ KKD.save(data); AdminShell.refreshPending(); } }
@@ -637,22 +683,41 @@ function themeResolverBox(){
     </div>
   </div>`;
 }
-function themeTile(t,i){
-  const T=themeData(); const isDef=t.isDefault||t.id===T.default;
-  const prev=(t.bg&&t.bg.image)?`<img src="${t.bg.image}" alt=""/>`:'';
-  return `<div class="theme-tile${t.id===teEdit?' editing':''}${(!t.enabled&&!isDef)?' off':''}">
-    <div class="tt-prev" style="background:${themeGrad(t)}">${prev}</div>
-    <div class="tt-body">
-      <div class="tt-name">${esc(t.name)}${isDef?' <span class="tt-def">default</span>':''}${t.id===teLiveId?' <span class="tt-live"><span class="dot"></span> Live</span>':''}</div>
-      <div class="tt-badge">${triggerBadge(t)}</div>
-      ${isDef?'':`<div class="tt-bn-row"><div class="tt-bn${(t.banner&&t.banner.enabled)?'':' off'}">${(t.banner&&t.banner.enabled)?`<span class="tt-bn-ic" style="background:${esc(t.banner.bg||'#EFF6FF')};color:${esc(t.banner.tc||'#1E40AF')}"><i class="fa-solid ${t.banner.icon||'fa-bell'}"></i></span> Status banner${t.banner.title?': '+esc(t.banner.title):''}`:`<i class="fa-regular fa-circle"></i> No status banner`}</div><div class="tg tg-mini ${(t.banner&&t.banner.enabled)?'on':''}" title="Enable / disable this theme's banner" onclick="themeBanToggle('${t.id}')"></div></div>`}
-      <div class="tt-prio">${isDef?'Always last':'Priority '+(i+1)}</div>
+/* one entry = a THEME half + a STATUS-BANNER half, each with its own toggle */
+function entryRow(t,i){
+  const T=themeData(); const isDef=t.isDefault||t.id===T.default; const bn=t.banner||{};
+  // THEME half
+  const themeHalf = t.bannerOnly
+    ? `<div class="eh-none">— no theme —</div>`
+    : `<div class="eh-top">
+        <div class="tt-prev sm" style="background:${themeGrad(t)}">${(t.bg&&t.bg.image)?`<img src="${t.bg.image}" alt=""/>`:''}</div>
+        <div style="min-width:0;flex:1">
+          <div class="eh-name">${esc(t.name)}${isDef?' <span class="tt-def">default</span>':''}${t.id===teLiveId?' <span class="tt-live"><span class="dot"></span> Live</span>':''}</div>
+          <div class="eh-sub">${triggerBadge(t)}</div>
+        </div>
+        ${isDef?'<span class="tt-lock" title="Always on">🔒</span>':`<div class="tg tg-mini ${t.enabled?'on':''}" title="Enable / disable theme" onclick="themeToggle('${t.id}')"></div>`}
+      </div>`;
+  // BANNER half
+  const showBanner = t.bannerOnly ? true : (bn && bn.enabled);
+  const bannerHalf = showBanner
+    ? `<div class="eh-top">
+        <div class="sb-ic sm" style="background:${esc(bn.bg||'#EFF6FF')};color:${esc(bn.tc||'#1E40AF')}"><i class="fa-solid ${bn.icon||'fa-bell'}"></i></div>
+        <div style="min-width:0;flex:1">
+          <div class="eh-name">${esc(bn.title||'Status banner')}${(t.bannerOnly&&t.locked)?' <span class="tt-def">default</span>':''}</div>
+          <div class="eh-sub">${bn.sub?esc(bn.sub):(t.bannerOnly?'No theme · shown by state / date':'rides with this theme')}</div>
+        </div>
+        ${(t.bannerOnly&&t.locked)?'<span class="tt-lock" title="Always on">🔒</span>':`<div class="tg tg-mini ${bn.enabled?'on':''}" title="Enable / disable banner" onclick="themeBanToggle('${t.id}')"></div>`}
+      </div>`
+    : `<div class="eh-none">— no banner — <button class="btn btn-s btn-xs" onclick="themeBanToggle('${t.id}')">+ add</button></div>`;
+  const canDel=!isDef&&!t.locked;
+  return `<div class="entry${(!isDef&&!t.bannerOnly&&!t.enabled)?' theme-off':''}${t.id===teEdit?' editing':''}">
+    <div class="entry-cols">
+      <div class="entry-col"><div class="eh-lbl">🎨 Theme</div>${themeHalf}</div>
+      <div class="entry-col"><div class="eh-lbl">📢 Status banner</div>${bannerHalf}</div>
     </div>
-    <div class="tt-act">
-      ${isDef?'':`<button class="btn btn-s btn-ic" title="Move up" onclick="themeMove(${i},-1)" ${i===0?'disabled style=opacity:.4':''}><i class="fa-solid fa-arrow-up"></i></button>
-      <button class="btn btn-s btn-ic" title="Move down" onclick="themeMove(${i},1)" ${i>=T.themes.length-2?'disabled style=opacity:.4':''}><i class="fa-solid fa-arrow-down"></i></button>`}
-      ${isDef?'<span class="tt-lock" title="Default theme — always on, can’t be edited or disabled">🔒</span>':`<div class="tg ${t.enabled?'on':''}" title="Enable / disable theme" onclick="themeToggle('${t.id}')"></div>`}
-      ${isDef?'':`<button class="btn ${t.id===teEdit?'btn-p':'btn-s'} btn-ic" title="Edit" onclick="themeEdit('${t.id}')"><i class="fa-solid fa-pen"></i></button>`}
+    <div class="entry-foot">
+      ${isDef?'':`<button class="btn btn-s btn-sm" onclick="themeEdit('${t.id}')"><i class="fa-solid fa-pen"></i> Edit</button>`}
+      ${canDel?`<button class="btn btn-d btn-sm" onclick="themeRemove('${t.id}')"><i class="fa-solid fa-trash"></i> Delete</button>`:''}
     </div>
   </div>`;
 }
@@ -693,13 +758,9 @@ function themeEditor(t,modal){
       <option value="weather"${selO('weather',ct)}>Weather</option>
     </select></div></div>
     ${condBody}`;
-  return `<div class="theme-ed"${modal?' style="border:0;background:transparent;padding:0"':''}>
-    ${modal?'':`<div class="card-head" style="padding:0 0 12px;border:0"><h3>Editing: ${esc(t.name)}</h3><button class="btn btn-s btn-sm" onclick="themeEdit('${t.id}')">Done</button></div>`}
-
+  const themeFields = `
     <div class="row"><div class="fg" style="max-width:320px"><label>Theme name</label><input type="text" value="${esc(t.name)}" data-maxlen="40" onchange="themeField('${t.id}','name',this.value);themeUI()"/></div></div>
-
     ${rulesBlock}
-
     <div class="sub-l" style="margin-top:20px">Theme image</div>
     <div class="bg-up">
       <div class="bg-prev" style="background:${themeGrad(t)}">${bg.image?`<img src="${bg.image}" alt=""/>`:'No image'}</div>
@@ -715,21 +776,32 @@ function themeEditor(t,modal){
       </div>
     </div>
     <div class="sub-l">Text-protection overlay</div>
-    <div class="row"><div class="fg fix" style="max-width:220px"><select class="s" onchange="teBgSet('overlay',this.value)"><option value="none"${selO('none',bg.overlay||'light')}>None</option><option value="light"${selO('light',bg.overlay||'light')}>Light dim</option><option value="medium"${selO('medium',bg.overlay||'light')}>Medium dim</option><option value="strong"${selO('strong',bg.overlay||'light')}>Strong dim</option></select></div></div>
-
-    <div class="sub-l" style="margin-top:20px">Status banner <span class="hint">(shows above the search bar while this theme is live)</span></div>
-    <label class="ed-toggle" style="justify-content:flex-start;gap:10px;margin-bottom:2px"><div class="tg ${bn.enabled?'on':''}" onclick="themeField('${t.id}','banner.enabled',${!bn.enabled});themeUI()"></div><span>Show a status banner with this theme</span></label>
-    ${bn.enabled?`
+    <div class="row"><div class="fg fix" style="max-width:220px"><select class="s" onchange="teBgSet('overlay',this.value)"><option value="none"${selO('none',bg.overlay||'light')}>None</option><option value="light"${selO('light',bg.overlay||'light')}>Light dim</option><option value="medium"${selO('medium',bg.overlay||'light')}>Medium dim</option><option value="strong"${selO('strong',bg.overlay||'light')}>Strong dim</option></select></div></div>`;
+  const bnScopeAll=(bn.states||['All']).indexOf('All')>=0;
+  const bnStateChips=`<span class="cchip ${bnScopeAll?'on':''}" onclick="themeBnStateAll('${t.id}')">All states</span> `+STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!bnScopeAll&&(bn.states||[]).indexOf(s)>=0)?'on':''}" onclick="themeBnStateTog('${t.id}','${s}')">${s}</span>`).join('');
+  const bannerFields = `
     <div class="sub-l">Icon</div>
     <div class="ic-grid">${SB_ICONS.map(ic=>`<div class="ic-opt${bn.icon===ic?' on':''}" onclick="themeField('${t.id}','banner.icon','${ic}');themeUI()"><i class="fa-solid ${ic}"></i></div>`).join('')}</div>
-    <div class="row" style="margin-top:8px"><div class="fg"><label>Title</label><input type="text" value="${esc(bn.title||'')}" onchange="themeField('${t.id}','banner.title',this.value)" placeholder="e.g. Rain expected"/></div></div>
+    <div class="row" style="margin-top:8px"><div class="fg"><label>Title</label><input type="text" value="${esc(bn.title||'')}" onchange="themeField('${t.id}','banner.title',this.value);themeUI()" placeholder="e.g. Rain expected"/></div></div>
     <div class="row"><div class="fg"><label>Subtitle</label><input type="text" value="${esc(bn.sub||'')}" onchange="themeField('${t.id}','banner.sub',this.value)" placeholder="e.g. 8 mm in 24 hrs · hold spray"/></div></div>
-    <div class="row" style="margin-bottom:0">
+    <div class="row" style="margin-bottom:${t.bannerOnly?'12px':'0'}">
       <div class="fg fix"><label>Background</label><div class="color-r"><input type="color" value="${bn.bg||'#EFF6FF'}" onchange="themeField('${t.id}','banner.bg',this.value)"/><span>${esc(bn.bg||'#EFF6FF')}</span></div></div>
       <div class="fg fix"><label>Text / icon</label><div class="color-r"><input type="color" value="${bn.tc||'#1E40AF'}" onchange="themeField('${t.id}','banner.tc',this.value)"/><span>${esc(bn.tc||'#1E40AF')}</span></div></div>
       <div class="fg"><label>Deeplink</label><input type="text" value="${esc(bn.link||'')}" onchange="themeField('${t.id}','banner.link',this.value)" placeholder="shop.html"/></div>
-    </div>`:''}
+    </div>
+    ${t.bannerOnly?`<div class="sub-l">Show in states</div><div class="chip-row">${bnStateChips}</div>
+    <div class="sub-l">Date range <span class="hint">(optional)</span></div>
+    <div class="row" style="margin-bottom:0"><div class="fg fix"><label>Start date</label><input type="date" value="${bn.start||''}" onchange="themeField('${t.id}','banner.start',this.value)"/></div><div class="fg fix"><label>End date</label><input type="date" value="${bn.end||''}" onchange="themeField('${t.id}','banner.end',this.value)"/></div></div>`:''}`;
+  return `<div class="theme-ed"${modal?' style="border:0;background:transparent;padding:0"':''}>
+    ${modal?'':`<div class="card-head" style="padding:0 0 12px;border:0"><h3>Editing: ${esc(t.bannerOnly?(bn.title||'Banner'):t.name)}</h3><button class="btn btn-s btn-sm" onclick="themeEdit('${t.id}')">Done</button></div>`}
 
+    <div class="sub-l" style="margin-top:0">🎨 Theme</div>
+    ${isDef?'<p class="hint" style="margin:0 0 4px">Default theme — always on.</p>':`<label class="ed-toggle" style="justify-content:flex-start;gap:10px;margin-bottom:2px"><div class="tg ${!t.bannerOnly?'on':''}${t.locked?' dis':''}" onclick="themeSetHasTheme('${t.id}',${t.bannerOnly?'true':'false'})"></div><span>Include a theme in this entry</span></label>`}
+    ${(!t.bannerOnly)?themeFields:''}
+
+    <div class="sub-l" style="margin-top:22px">📢 Status banner</div>
+    <label class="ed-toggle" style="justify-content:flex-start;gap:10px;margin-bottom:2px"><div class="tg ${bn.enabled?'on':''}${t.locked?' dis':''}" onclick="themeBanToggle('${t.id}')"></div><span>${t.bannerOnly?'Show this banner':'Show a status banner with this theme'}</span></label>
+    ${bn.enabled?bannerFields:''}
   </div>`;
 }
 
@@ -814,7 +886,7 @@ header:()=>`
 </div>`,
 
 /* 0b ── THEME RULES (state / weather / festival · one theme at a time, by priority) */
-theme:()=>{ const T=themeData(); const S=sbData(); return `
+theme:()=>{ const T=themeData(); return `
 <div class="card">
   <div class="card-body">
     <p class="hint-p">The Home top banner changes by state + condition. The first matching theme wins (top&nbsp;=&nbsp;highest priority); <b>Green</b> is the always-on fallback.</p>
@@ -822,19 +894,15 @@ theme:()=>{ const T=themeData(); const S=sbData(); return `
     ${themeResolverBox()}
 
     <div class="sdiv">Themes &amp; status banners</div>
-    <div class="row" style="margin:-4px 0 12px"><div class="fg fix"><label>Ticker rotation interval (sec)</label><input type="number" style="width:140px;" value="${S.interval||4}" onchange="sbSet('interval',+this.value)"/></div></div>
-    <p class="hint-p" style="margin:-2px 0 12px">One list — each <b>theme</b> carries its own banner; <b>standalone</b> banners (no theme) show by state / date, like the always-on Order tracking.</p>
+    <div class="row" style="margin:-4px 0 12px"><div class="fg fix"><label>Ticker rotation interval (sec)</label><input type="number" style="width:140px;" value="${T.bannerInterval||4}" onchange="themeSetInterval(+this.value)"/></div></div>
+    <p class="hint-p" style="margin:-2px 0 12px">Each entry pairs a <b>theme</b> with a <b>status banner</b> — either can be turned on/off on its own, and an entry can be theme-only, banner-only, or both.</p>
 
-    <div class="theme-tiles">
-      ${T.themes.map((t,i)=>themeTile(t,i)).join('')}
-      ${S.items.map(sbRow).join('')}
+    <div class="entry-list">
+      ${T.themes.map((t,i)=>entryRow(t,i)).join('')}
     </div>
-    ${teEdit?`<div style="margin-top:16px">${themeEditor(T.themes.find(x=>x.id===teEdit))}</div>`:''}
+    ${teEdit?`<div style="margin-top:14px">${themeEditor(T.themes.find(x=>x.id===teEdit))}</div>`:''}
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-      <button class="btn btn-s btn-sm" onclick="themeAdd()"><i class="fa-solid fa-plus"></i> Add theme</button>
-      <button class="btn btn-s btn-sm" onclick="sbAddOpen()"><i class="fa-solid fa-plus"></i> Add standalone banner</button>
-    </div>
+    <button class="btn btn-p btn-sm" style="margin-top:12px" onclick="themeAdd()"><i class="fa-solid fa-plus"></i> Add theme &amp; banner</button>
   </div>
 </div>`; },
 

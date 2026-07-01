@@ -72,7 +72,8 @@
 .hm input:focus,.hm textarea:focus,.hm select.s:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
 .hm textarea{resize:vertical;min-height:65px;}
 .hm input[type=color]{width:44px;height:34px;border:1px solid var(--g200);border-radius:6px;padding:2px;cursor:pointer;}
-.hm .sub-l{font-size:12px;font-weight:700;color:var(--g600,#475569);margin:12px 0 5px;}
+.hm .sub-l{font-size:12px;font-weight:700;color:var(--g600,#475569);margin:14px 0 6px;}
+.hm .chip-row{margin-bottom:14px;}
 .hm .ed-toggle{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:700;color:var(--g600,#475569);cursor:pointer;}
 .hm .ed-lock{font-size:12px;font-weight:700;color:var(--g500,#64748B);background:var(--g100,#F1F5F9);padding:6px 11px;border-radius:8px;white-space:nowrap;}
 .hm .sec-hidden{font-size:10px;font-weight:700;color:var(--g500,#64748B);background:var(--g100,#F1F5F9);padding:2px 8px;border-radius:9999px;flex-shrink:0;}
@@ -120,7 +121,7 @@
 .hm .padd:hover{border-color:var(--green);color:var(--green);}
 .hm .cchip{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--g200);margin:3px;transition:all .15s;}
 .hm .cchip.on{background:var(--green-lt);border-color:var(--green);color:var(--green);font-weight:600;}
-.hm .info-box{background:var(--green-lt);border-radius:8px;padding:11px 13px;font-size:12px;color:var(--green);margin-top:8px;}
+.hm .info-box{display:flex;align-items:center;gap:8px;background:var(--green-lt);border-radius:8px;padding:10px 13px;font-size:12.5px;color:var(--green);margin-top:8px;}
 .hm .sch-box{background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:13px;margin-bottom:12px;}
 .hm .sch-box .sl{font-size:11px;font-weight:700;color:var(--g500);margin-bottom:9px;text-transform:uppercase;letter-spacing:.4px;}
 .hm .hint-p{font-size:12px;color:var(--g500);margin-bottom:12px;}
@@ -417,19 +418,19 @@ function resolveTheme(state,weather,temp,date){
   return T.themes.find(t=>t.isDefault) || T.themes.find(t=>t.id===T.default) || T.themes[T.themes.length-1] || null;
 }
 function triggerBadge(t){
-  if(t.isDefault) return '⭐ Default — shown when no rule matches';
+  if(t.isDefault) return 'Default — always on';
   const tr=t.trigger||{}; const parts=[];
-  parts.push((tr.states&&tr.states.indexOf('All')<0)?`📍 ${tr.states.join(', ')}`:'📍 All states');
+  parts.push((tr.states&&tr.states.indexOf('All')<0)?tr.states.join(', '):'All states');
   const ct=tr.condType;
   if(ct==='event'){
-    parts.push(tr.start&&tr.end?`🗓 ${tr.start} → ${tr.end}`:'🗓 Event · any date');
+    parts.push(tr.start&&tr.end?`${tr.start} → ${tr.end}`:'Any date');
   } else if(ct==='weather'){
     const w=tr.weather||{}; const wp=[];
-    if(w.sky&&w.sky!=='any') wp.push(`🌦 ${w.sky}`);
-    if(w.op&&w.op!=='any') wp.push(`🌡 ${w.op==='below'?'≤':'≥'} ${w.temp}°C`);
-    parts.push(wp.length?wp.join(' · '):'🌦 Any weather');
+    if(w.sky&&w.sky!=='any') wp.push(w.sky);
+    if(w.op&&w.op!=='any') wp.push(`${w.op==='below'?'≤':'≥'} ${w.temp}°C`);
+    parts.push(wp.length?wp.join(' · '):'Any weather');
   } else {
-    parts.push('⚠️ No condition set');
+    parts.push('No condition set');
   }
   return parts.join(' · ');
 }
@@ -480,14 +481,14 @@ function themeResolverBox(){
   const stOpts=['All States'].concat(STATES.filter(s=>s!=='All States')).map(s=>`<option${s===teSim.state?' selected':''}>${s}</option>`).join('');
   const wOpts=WEATHERS.map(w=>`<option${w===teSim.weather?' selected':''}>${w}</option>`).join('');
   return `<div class="sch-box">
-    <div class="sl">🔎 What will users see? — test your rules</div>
-    <div class="row" style="margin-bottom:10px">
-      <div class="fg fix"><label>User's state</label><select class="s" onchange="themeSim('state',this.value)">${stOpts}</select></div>
-      <div class="fg fix"><label>Sky now</label><select class="s" onchange="themeSim('weather',this.value)">${wOpts}</select></div>
-      <div class="fg fix"><label>Temp (°C)</label><input type="number" style="width:90px" value="${teSim.temp}" onchange="themeSim('temp',+this.value)"/></div>
+    <div class="sl">Preview — what a user sees</div>
+    <div class="row" style="margin-bottom:12px">
+      <div class="fg fix"><label>State</label><select class="s" onchange="themeSim('state',this.value)">${stOpts}</select></div>
+      <div class="fg fix"><label>Sky</label><select class="s" onchange="themeSim('weather',this.value)">${wOpts}</select></div>
+      <div class="fg fix"><label>Temp °C</label><input type="number" style="width:90px" value="${teSim.temp}" onchange="themeSim('temp',+this.value)"/></div>
       <div class="fg fix"><label>Date</label><input type="date" value="${teSim.date}" onchange="themeSim('date',this.value)"/></div>
     </div>
-    <div class="info-box"><i class="fa-solid fa-eye" style="margin-top:1px"></i><span>A user in <b>${esc(teSim.state)}</b> · <b>${esc(teSim.weather)}</b> · <b>${esc(String(teSim.temp))}°C</b> · <b>${esc(teSim.date)}</b> sees → <b>${win?esc(win.name):'no theme'}</b>${win?` <span class="hint">(${triggerBadge(win)})</span>`:''}</span></div>
+    <div class="info-box"><i class="fa-solid fa-eye"></i><span>Result: <b>${win?esc(win.name):'no theme'}</b></span></div>
   </div>`;
 }
 function themeTile(t,i){
@@ -498,7 +499,7 @@ function themeTile(t,i){
     <div class="tt-body">
       <div class="tt-name">${esc(t.name)}${isDef?' <span class="tt-def">default</span>':''}</div>
       <div class="tt-badge">${triggerBadge(t)}</div>
-      <div class="tt-prio">${isDef?'Fallback · always last':'Priority '+(i+1)+(i===0?' · highest':'')}</div>
+      <div class="tt-prio">${isDef?'Always last':'Priority '+(i+1)}</div>
     </div>
     <div class="tt-act">
       ${isDef?'':`<button class="btn btn-s btn-ic" title="Move up" onclick="themeMove(${i},-1)" ${i===0?'disabled style=opacity:.4':''}><i class="fa-solid fa-arrow-up"></i></button>
@@ -517,42 +518,36 @@ function themeEditor(t){
   const stateChips=STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!scopeAll&&(tr.states||[]).indexOf(s)>=0)?'on':''}" onclick="themeToggleScope('${t.id}','${s}')">${s}</span>`).join('');
   const w=tr.weather||{sky:'any',op:'any',temp:40};
   const ct=tr.condType||'';
-  // condition body — Event (date range), Weather (sky + temperature threshold), or unselected
-  const condBody = ct==='event'
-    ? `<div class="sub-l">🗓 Event dates</div>
-    <div class="row">
-      <div class="fg fix"><label>Start date</label><input type="date" value="${tr.start||''}" onchange="themeField('${t.id}','trigger.start',this.value);themeUI()"/></div>
-      <div class="fg fix"><label>End date</label><input type="date" value="${tr.end||''}" onchange="themeField('${t.id}','trigger.end',this.value);themeUI()"/></div>
-    </div>`
+  // condition-specific fields sit in the SAME row as the type select — one clean line
+  const condFields = ct==='event'
+    ? `<div class="fg fix"><label>Start date</label><input type="date" value="${tr.start||''}" onchange="themeField('${t.id}','trigger.start',this.value);themeUI()"/></div>
+      <div class="fg fix"><label>End date</label><input type="date" value="${tr.end||''}" onchange="themeField('${t.id}','trigger.end',this.value);themeUI()"/></div>`
     : ct==='weather'
-    ? `<div class="sub-l">🌦 Weather</div>
-    <div class="row">
-      <div class="fg fix"><label>Sky condition</label><select class="s" onchange="themeField('${t.id}','trigger.weather.sky',this.value);themeUI()">
+    ? `<div class="fg fix"><label>Sky</label><select class="s" onchange="themeField('${t.id}','trigger.weather.sky',this.value);themeUI()">
         <option value="any"${selO('any',w.sky)}>Any sky</option>
         ${WEATHERS.map(x=>`<option${selO(x,w.sky)}>${x}</option>`).join('')}
       </select></div>
-      <div class="fg fix"><label>Temperature threshold</label><select class="s" onchange="themeField('${t.id}','trigger.weather.op',this.value);themeUI()">
-        <option value="any"${selO('any',w.op)}>Any temperature</option>
+      <div class="fg fix"><label>Temperature</label><select class="s" onchange="themeField('${t.id}','trigger.weather.op',this.value);themeUI()">
+        <option value="any"${selO('any',w.op)}>Any</option>
         <option value="above"${selO('above',w.op)}>Above (≥)</option>
         <option value="below"${selO('below',w.op)}>Below (≤)</option>
       </select></div>
-      ${(w.op&&w.op!=='any')?`<div class="fg fix"><label>Temperature (°C)</label><input type="number" style="width:120px" value="${w.temp!=null?w.temp:40}" onchange="themeField('${t.id}','trigger.weather.temp',+this.value)"/></div>`:''}
-    </div>`
-    : `<p class="hint-p" style="margin:2px 0 0">Pick a trigger type above to set when this theme shows.</p>`;
+      ${(w.op&&w.op!=='any')?`<div class="fg fix"><label>°C</label><input type="number" style="width:90px" value="${w.temp!=null?w.temp:40}" onchange="themeField('${t.id}','trigger.weather.temp',+this.value)"/></div>`:''}`
+    : '';
   const rulesBlock = `<div class="sdiv">When does this theme show?</div>
-    <div class="sub-l">📍 States</div>
-    <div style="margin-bottom:14px"><span class="cchip ${scopeAll?'on':''}" onclick="themeToggleScopeAll('${t.id}')">All states</span> ${stateChips}</div>
-    <div class="sub-l">⚡ Condition</div>
-    <div class="row" style="margin-bottom:8px">
-      <div class="fg fix"><label>Trigger type</label><select class="s" onchange="themeCondType('${t.id}',this.value)">
+    <div class="sub-l">States</div>
+    <div class="chip-row"><span class="cchip ${scopeAll?'on':''}" onclick="themeToggleScopeAll('${t.id}')">All states</span> ${stateChips}</div>
+    <div class="sub-l">Condition</div>
+    <div class="row">
+      <div class="fg fix"><label>Type</label><select class="s" onchange="themeCondType('${t.id}',this.value)">
         <option value=""${selO('',ct)} disabled>Select…</option>
-        <option value="event"${selO('event',ct)}>Event (date range)</option>
+        <option value="event"${selO('event',ct)}>Event (dates)</option>
         <option value="weather"${selO('weather',ct)}>Weather</option>
       </select></div>
-    </div>
-    ${condBody}`;
+      ${condFields}
+    </div>`;
   return `<div class="theme-ed">
-    <div class="card-head" style="padding:0 0 12px;border:0"><h3>✏️ Editing: ${esc(t.name)}</h3><button class="btn btn-s btn-sm" onclick="themeEdit('${t.id}')">Done</button></div>
+    <div class="card-head" style="padding:0 0 12px;border:0"><h3>Editing: ${esc(t.name)}</h3><button class="btn btn-s btn-sm" onclick="themeEdit('${t.id}')">Done</button></div>
 
     <div class="row"><div class="fg" style="max-width:320px"><label>Theme name</label><input type="text" value="${esc(t.name)}" data-maxlen="40" onchange="themeField('${t.id}','name',this.value);themeUI()"/></div></div>
 

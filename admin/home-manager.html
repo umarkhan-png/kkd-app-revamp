@@ -246,6 +246,11 @@
 .hm .tt-bn-row .tt-bn{margin-top:0;}
 .hm .tg-mini{transform:scale(.78);transform-origin:right center;flex-shrink:0;}
 .hm .tg.dis{opacity:.45;pointer-events:none;}
+.hm .seg{display:inline-flex;gap:4px;background:var(--g50);border:1px solid var(--g200);border-radius:10px;padding:4px;flex-wrap:wrap;}
+.hm .seg-btn{border:0;background:transparent;border-radius:7px;padding:7px 13px;font-size:12.5px;font-weight:600;color:var(--g600);cursor:pointer;transition:.12s;}
+.hm .seg-btn:hover{color:var(--green);}
+.hm .seg-btn.on{background:#fff;color:var(--green);box-shadow:0 1px 2px rgba(0,0,0,.06);}
+.hm .seg-btn.dis{opacity:.5;pointer-events:none;}
 .hm .sb-tile .tt-prev{display:flex;align-items:center;justify-content:center;}
 .hm .sb-edit-open{border:1px solid var(--green);border-radius:10px;padding:16px;background:var(--green-lt);margin:2px 0 4px;}
 .hm .tt-act{display:flex;align-items:center;gap:5px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:160px;}
@@ -635,7 +640,7 @@ function teApvClose(){ const m=document.getElementById('apvModal'); if(m) m.remo
 /* ---- mutations ---- */
 function themeAdd(){
   // draft lives in memory only — NOT written to data/localStorage until "Add theme" is clicked
-  themeDraftObj={ id:'t'+Date.now().toString(36), name:'New theme', enabled:true, trigger:{states:['All'],condType:'',start:'',end:'',weather:{sky:'any',op:'any',temp:40,when:'live',hours:6,days:3}}, bg:{image:'',fit:'cover',overlay:'light'}, colors:{a:'#258046',b:'#10B981',c:'#D9A441'}, anim:'none', animCount:8, animSpeed:2, banner:{enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:''} };
+  themeDraftObj={ id:'t'+Date.now().toString(36), name:'New theme', enabled:true, trigger:{states:['All'],condType:'',start:'',end:'',weather:{sky:'any',op:'any',temp:40,when:'live',hours:6,days:3}}, bg:{image:'',fit:'cover',overlay:'light'}, colors:{a:'#258046',b:'#10B981',c:'#D9A441'}, anim:'none', animCount:8, animSpeed:2, banner:{enabled:true,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:'',states:['All'],start:'',end:''} };
   teEdit=null; teMsg=null; teModalId=themeDraftObj.id; themeModalRender();
 }
 function themeModalRender(){
@@ -645,7 +650,7 @@ function themeModalRender(){
     <div class="apv-box" style="width:740px">
       <div class="apv-box-head"><h3>Add theme &amp; banner</h3><button class="x-btn" onclick="themeModalCancel()"><i class="fa-solid fa-xmark"></i></button></div>
       <div class="apv-box-body">${themeEditor(t,true)}</div>
-      <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="themeModalCancel()">Cancel</button><button class="btn btn-p btn-sm" onclick="themeModalSave()"><i class="fa-solid fa-check"></i> Add theme</button></div>
+      <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="themeModalCancel()">Cancel</button><button class="btn btn-p btn-sm" onclick="themeModalSave()"><i class="fa-solid fa-check"></i> Add to list</button></div>
     </div></div>`;
   document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
 }
@@ -657,7 +662,12 @@ function themeToggle(id){ const t=themeData().themes.find(x=>x.id===id); if(!t||
 function themeBanToggle(id){ const t=(themeDraftObj&&themeDraftObj.id===id)?themeDraftObj:themeData().themes.find(x=>x.id===id); if(!t||t.isDefault||t.locked)return; t.banner=t.banner||{enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:'',states:['All'],start:'',end:''}; t.banner.enabled=!t.banner.enabled; if(t!==themeDraftObj){ KKD.save(data); AdminShell.refreshPending(); } themeUI(); }
 function themeRemove(id){ const T=themeData(); const t=T.themes.find(x=>x.id===id); if(!t||t.isDefault||t.locked) return; T.themes=T.themes.filter(x=>x.id!==id); if(teEdit===id)teEdit=null; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeSetInterval(v){ themeData().bannerInterval=v; KKD.save(data); AdminShell.refreshPending(); }
-function themeSetHasTheme(id,on){ const t=(themeDraftObj&&themeDraftObj.id===id)?themeDraftObj:themeData().themes.find(x=>x.id===id); if(!t||t.isDefault||t.locked)return; if(on){ delete t.bannerOnly; if(!t.name||t.name==='Banner')t.name='New theme'; } else { t.bannerOnly=true; } if(t!==themeDraftObj){KKD.save(data);AdminShell.refreshPending();} themeUI(); }
+function themeEntryType(t){ return t.bannerOnly?'banner':((t.banner&&t.banner.enabled)?'both':'theme'); }
+function themeSetType(id,type){ const t=(themeDraftObj&&themeDraftObj.id===id)?themeDraftObj:themeData().themes.find(x=>x.id===id); if(!t||t.isDefault||t.locked)return; t.banner=t.banner||{enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:'',states:['All'],start:'',end:''};
+  if(type==='theme'){ delete t.bannerOnly; t.banner.enabled=false; if(!t.name||t.name==='Banner')t.name='New theme'; }
+  else if(type==='banner'){ t.bannerOnly=true; t.banner.enabled=true; }
+  else { delete t.bannerOnly; t.banner.enabled=true; if(!t.name||t.name==='Banner')t.name='New theme'; }
+  if(t!==themeDraftObj){KKD.save(data);AdminShell.refreshPending();} themeUI(); }
 function themeBnStateAll(id){ const t=(themeDraftObj&&themeDraftObj.id===id)?themeDraftObj:themeData().themes.find(x=>x.id===id); if(!t)return; t.banner=t.banner||{}; t.banner.states=['All']; if(t!==themeDraftObj)KKD.save(data); themeUI(); }
 function themeBnStateTog(id,st){ const t=(themeDraftObj&&themeDraftObj.id===id)?themeDraftObj:themeData().themes.find(x=>x.id===id); if(!t)return; t.banner=t.banner||{}; let s=(t.banner.states||[]).filter(x=>x!=='All'); s.indexOf(st)>=0?(s=s.filter(x=>x!==st)):s.push(st); if(!s.length)s=['All']; t.banner.states=s; if(t!==themeDraftObj)KKD.save(data); themeUI(); }
 function themeCondType(id,v){ themeField(id,'trigger.condType',v); themeUI(); }
@@ -792,16 +802,16 @@ function themeEditor(t,modal){
     ${t.bannerOnly?`<div class="sub-l">Show in states</div><div class="chip-row">${bnStateChips}</div>
     <div class="sub-l">Date range <span class="hint">(optional)</span></div>
     <div class="row" style="margin-bottom:0"><div class="fg fix"><label>Start date</label><input type="date" value="${bn.start||''}" onchange="themeField('${t.id}','banner.start',this.value)"/></div><div class="fg fix"><label>End date</label><input type="date" value="${bn.end||''}" onchange="themeField('${t.id}','banner.end',this.value)"/></div></div>`:''}`;
+  const etype=themeEntryType(t); const hasTheme=etype!=='banner', hasBanner=etype!=='theme';
+  const segBtn=(v,label)=>`<button class="seg-btn${etype===v?' on':''}${t.locked?' dis':''}" onclick="themeSetType('${t.id}','${v}')">${label}</button>`;
   return `<div class="theme-ed"${modal?' style="border:0;background:transparent;padding:0"':''}>
     ${modal?'':`<div class="card-head" style="padding:0 0 12px;border:0"><h3>Editing: ${esc(t.bannerOnly?(bn.title||'Banner'):t.name)}</h3><button class="btn btn-s btn-sm" onclick="themeEdit('${t.id}')">Done</button></div>`}
 
-    <div class="sub-l" style="margin-top:0">🎨 Theme</div>
-    ${isDef?'<p class="hint" style="margin:0 0 4px">Default theme — always on.</p>':`<label class="ed-toggle" style="justify-content:flex-start;gap:10px;margin-bottom:2px"><div class="tg ${!t.bannerOnly?'on':''}${t.locked?' dis':''}" onclick="themeSetHasTheme('${t.id}',${t.bannerOnly?'true':'false'})"></div><span>Include a theme in this entry</span></label>`}
-    ${(!t.bannerOnly)?themeFields:''}
+    ${isDef?'<p class="hint" style="margin:0 0 8px">Default theme — always on, no banner.</p>':`<div class="sub-l" style="margin-top:0">What's in this entry?</div>
+    <div class="seg">${segBtn('both','🎨 Theme + 📢 Banner')}${segBtn('theme','🎨 Theme only')}${segBtn('banner','📢 Banner only')}</div>`}
 
-    <div class="sub-l" style="margin-top:22px">📢 Status banner</div>
-    <label class="ed-toggle" style="justify-content:flex-start;gap:10px;margin-bottom:2px"><div class="tg ${bn.enabled?'on':''}${t.locked?' dis':''}" onclick="themeBanToggle('${t.id}')"></div><span>${t.bannerOnly?'Show this banner':'Show a status banner with this theme'}</span></label>
-    ${bn.enabled?bannerFields:''}
+    ${hasTheme?`<div class="sub-l" style="margin-top:18px">🎨 Theme</div>${themeFields}`:''}
+    ${hasBanner?`<div class="sub-l" style="margin-top:18px">📢 Status banner</div>${bannerFields}`:''}
   </div>`;
 }
 

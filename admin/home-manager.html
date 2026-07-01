@@ -222,6 +222,11 @@
 .hm .tt-bn.off{color:var(--g400);background:transparent;padding:2px 0;font-weight:500;}
 .hm .tt-bn.off i{font-size:11px;}
 .hm .tt-bn-ic{width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;}
+.hm .tt-bn-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:5px;}
+.hm .tt-bn-row .tt-bn{margin-top:0;}
+.hm .tg-mini{transform:scale(.78);transform-origin:right center;flex-shrink:0;}
+.hm .sb-tile .tt-prev{display:flex;align-items:center;justify-content:center;}
+.hm .sb-edit-open{border:1px solid var(--green);border-radius:10px;padding:16px;background:var(--green-lt);margin:2px 0 4px;}
 .hm .tt-act{display:flex;align-items:center;gap:5px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:160px;}
 .hm .theme-ed{border:1px solid var(--green);border-radius:10px;padding:16px;background:var(--green-lt);}
 .hm .theme-ed .bg-prev{width:176px;height:99px;}
@@ -608,6 +613,7 @@ function themeModalCancel(){ themeDraftObj=null; teModalId=null; const m=documen
 function themeEdit(id){ const t=themeData().themes.find(x=>x.id===id); if(t&&t.isDefault) return; /* green default is not editable */ teEdit=(teEdit===id?null:id); teMsg=null; themeUI(); }
 function themeMove(i,d){ const T=themeData(); const j=i+d; if(j<0||j>=T.themes.length) return; if(T.themes[i].isDefault||T.themes[j].isDefault) return; const a=T.themes; [a[i],a[j]]=[a[j],a[i]]; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeToggle(id){ const t=themeData().themes.find(x=>x.id===id); if(!t||t.isDefault)return; t.enabled=!t.enabled; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
+function themeBanToggle(id){ const t=themeData().themes.find(x=>x.id===id); if(!t||t.isDefault)return; t.banner=t.banner||{enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:''}; t.banner.enabled=!t.banner.enabled; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeCondType(id,v){ themeField(id,'trigger.condType',v); themeUI(); }
 function themeSetDefault(v){ themeData().default=v; KKD.save(data); AdminShell.refreshPending(); }
 function themeField(id,path,v){ const t=(themeDraftObj&&themeDraftObj.id===id)?themeDraftObj:themeData().themes.find(x=>x.id===id); if(!t)return; const ks=path.split('.'); let o=t; for(let i=0;i<ks.length-1;i++){ if(o[ks[i]]==null)o[ks[i]]={}; o=o[ks[i]]; } o[ks[ks.length-1]]=v; if(t!==themeDraftObj){ KKD.save(data); AdminShell.refreshPending(); } }
@@ -639,13 +645,13 @@ function themeTile(t,i){
     <div class="tt-body">
       <div class="tt-name">${esc(t.name)}${isDef?' <span class="tt-def">default</span>':''}${t.id===teLiveId?' <span class="tt-live"><span class="dot"></span> Live</span>':''}</div>
       <div class="tt-badge">${triggerBadge(t)}</div>
-      ${isDef?'':`<div class="tt-bn${(t.banner&&t.banner.enabled)?'':' off'}">${(t.banner&&t.banner.enabled)?`<span class="tt-bn-ic" style="background:${esc(t.banner.bg||'#EFF6FF')};color:${esc(t.banner.tc||'#1E40AF')}"><i class="fa-solid ${t.banner.icon||'fa-bell'}"></i></span> Status banner${t.banner.title?': '+esc(t.banner.title):''}`:`<i class="fa-regular fa-circle"></i> No status banner`}</div>`}
+      ${isDef?'':`<div class="tt-bn-row"><div class="tt-bn${(t.banner&&t.banner.enabled)?'':' off'}">${(t.banner&&t.banner.enabled)?`<span class="tt-bn-ic" style="background:${esc(t.banner.bg||'#EFF6FF')};color:${esc(t.banner.tc||'#1E40AF')}"><i class="fa-solid ${t.banner.icon||'fa-bell'}"></i></span> Status banner${t.banner.title?': '+esc(t.banner.title):''}`:`<i class="fa-regular fa-circle"></i> No status banner`}</div><div class="tg tg-mini ${(t.banner&&t.banner.enabled)?'on':''}" title="Enable / disable this theme's banner" onclick="themeBanToggle('${t.id}')"></div></div>`}
       <div class="tt-prio">${isDef?'Always last':'Priority '+(i+1)}</div>
     </div>
     <div class="tt-act">
       ${isDef?'':`<button class="btn btn-s btn-ic" title="Move up" onclick="themeMove(${i},-1)" ${i===0?'disabled style=opacity:.4':''}><i class="fa-solid fa-arrow-up"></i></button>
       <button class="btn btn-s btn-ic" title="Move down" onclick="themeMove(${i},1)" ${i>=T.themes.length-2?'disabled style=opacity:.4':''}><i class="fa-solid fa-arrow-down"></i></button>`}
-      ${isDef?'<span class="tt-lock" title="Default theme — always on, can’t be edited or disabled">🔒</span>':`<div class="tg ${t.enabled?'on':''}" title="Enable / disable" onclick="themeToggle('${t.id}')"></div>`}
+      ${isDef?'<span class="tt-lock" title="Default theme — always on, can’t be edited or disabled">🔒</span>':`<div class="tg ${t.enabled?'on':''}" title="Enable / disable theme" onclick="themeToggle('${t.id}')"></div>`}
       ${isDef?'':`<button class="btn ${t.id===teEdit?'btn-p':'btn-s'} btn-ic" title="Edit" onclick="themeEdit('${t.id}')"><i class="fa-solid fa-pen"></i></button>`}
     </div>
   </div>`;
@@ -1302,23 +1308,20 @@ function sbRow(it){
   const dates=(it.start&&it.end)?`${it.start} → ${it.end}`:'';
   const cfg=[scope]; if(dates)cfg.push(dates);
   const editing=sbEditId===it.id;
-  return `<div class="li sb-item${editing?' editing':''}${(!it.enabled&&!it.locked)?' off':''}">
-    <span class="drag-h">${it.locked?'🔒':'⠿'}</span>
-    <div class="li-body">
-      <div class="sb-sum">
-        <div class="sb-ic" style="background:${esc(it.bg||'#EFF6FF')};color:${esc(it.tc||'#1E40AF')};border:0"><i class="fa-solid ${it.icon||'fa-bell'}"></i></div>
-        <div style="min-width:0;flex:1">
-          <div class="sb-title">${esc(it.title||'New banner')}${it.locked?' <span class="tt-def">default</span>':''} <span class="sb-tag">standalone banner</span></div>
-          <div class="sb-cfg">No theme · ${cfg.map(esc).join('  ·  ')}</div>
-        </div>
-        <button class="btn btn-s btn-sm" onclick="sbEdit('${it.id}')">${editing?'Close':'Edit'}</button>
+  // displayed just like a theme tile (preview box + body + actions), with its own toggle
+  return `<div class="theme-tile sb-tile${editing?' editing':''}${(!it.enabled&&!it.locked)?' off':''}">
+      <div class="tt-prev" style="background:${esc(it.bg||'#EFF6FF')}"><i class="fa-solid ${it.icon||'fa-bell'}" style="color:${esc(it.tc||'#1E40AF')};font-size:24px"></i></div>
+      <div class="tt-body">
+        <div class="tt-name">${esc(it.title||'New banner')}${it.locked?' <span class="tt-def">default</span>':''} <span class="sb-tag">standalone banner</span></div>
+        <div class="tt-badge">No theme · ${cfg.map(esc).join(' · ')}</div>
+        <div class="tt-prio">Rotates in the ticker</div>
       </div>
-      <div class="sb-edit">${editing?sbForm(it):''}</div>
+      <div class="tt-act">
+        ${it.locked?'<span class="tt-lock" title="Default — always on">🔒</span>':`<div class="tg ${it.enabled?'on':''}" title="Enable / disable banner" onclick="sbToggle('${it.id}')"></div>`}
+        <button class="btn ${editing?'btn-p':'btn-s'} btn-ic" title="Edit" onclick="sbEdit('${it.id}')"><i class="fa-solid fa-pen"></i></button>
+      </div>
     </div>
-    <div class="li-act" style="padding-top:16px;">
-      ${it.locked?'<span class="tt-lock" title="Default — always on">🔒</span>':`<div class="tg ${it.enabled?'on':''}" title="Enable / disable" onclick="sbToggle('${it.id}')"></div>`}
-    </div>
-  </div>`;
+    ${editing?`<div class="sb-edit-open">${sbForm(it)}</div>`:''}`;
 }
 function sbForm(it){
   const iconGrid=SB_ICONS.map(ic=>`<div class="ic-opt${it.icon===ic?' on':''}" onclick="sbField('${it.id}','icon','${ic}')"><i class="fa-solid ${ic}"></i></div>`).join('');

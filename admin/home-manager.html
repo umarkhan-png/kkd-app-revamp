@@ -116,6 +116,7 @@
 .hm .sb-ic{font-size:20px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--g50);border:1px solid var(--g200);border-radius:9px;flex-shrink:0;}
 .hm .sb-title{font-size:13.5px;font-weight:700;}
 .hm .sb-cfg{font-size:11.5px;color:var(--g500);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hm .sb-tag{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:#B45309;background:#FEF3C7;border-radius:5px;padding:1px 6px;margin-left:4px;vertical-align:middle;}
 .hm .sb-ic i{font-size:16px;}
 .hm .sb-edit{display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--g200);}
 .hm .li.editing .sb-edit{display:block;}
@@ -815,16 +816,19 @@ theme:()=>{ const T=themeData(); const S=sbData(); return `
     ${themeResolverBox()}
 
     <div class="sdiv">Themes &amp; status banners</div>
-    <div class="row" style="margin:-4px 0 14px"><div class="fg fix"><label>Ticker rotation interval (sec)</label><input type="number" style="width:140px;" value="${S.interval||4}" onchange="sbSet('interval',+this.value)"/></div></div>
+    <div class="row" style="margin:-4px 0 12px"><div class="fg fix"><label>Ticker rotation interval (sec)</label><input type="number" style="width:140px;" value="${S.interval||4}" onchange="sbSet('interval',+this.value)"/></div></div>
+    <p class="hint-p" style="margin:-2px 0 12px">One list — each <b>theme</b> carries its own banner; <b>standalone</b> banners (no theme) show by state / date, like the always-on Order tracking.</p>
 
-    <div class="sub-l">Themes <span class="hint">(each carries its own banner)</span></div>
-    <div class="theme-tiles">${T.themes.map((t,i)=>themeTile(t,i)).join('')}</div>
-    <button class="btn btn-s btn-sm" onclick="themeAdd()" style="margin-top:6px"><i class="fa-solid fa-plus"></i> Add theme</button>
+    <div class="theme-tiles">
+      ${T.themes.map((t,i)=>themeTile(t,i)).join('')}
+      ${S.items.map(sbRow).join('')}
+    </div>
     ${teEdit?`<div style="margin-top:16px">${themeEditor(T.themes.find(x=>x.id===teEdit))}</div>`:''}
 
-    <div class="sub-l" style="margin-top:22px">Standalone banners <span class="hint">(no theme — shown by state / date; e.g. the always-on Order tracking)</span></div>
-    <div id="sbList">${S.items.map(sbRow).join('')}</div>
-    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="sbAddOpen()"><i class="fa-solid fa-plus"></i> Add standalone banner</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+      <button class="btn btn-s btn-sm" onclick="themeAdd()"><i class="fa-solid fa-plus"></i> Add theme</button>
+      <button class="btn btn-s btn-sm" onclick="sbAddOpen()"><i class="fa-solid fa-plus"></i> Add standalone banner</button>
+    </div>
   </div>
 </div>`; },
 
@@ -1304,8 +1308,8 @@ function sbRow(it){
       <div class="sb-sum">
         <div class="sb-ic" style="background:${esc(it.bg||'#EFF6FF')};color:${esc(it.tc||'#1E40AF')};border:0"><i class="fa-solid ${it.icon||'fa-bell'}"></i></div>
         <div style="min-width:0;flex:1">
-          <div class="sb-title">${esc(it.title||'New banner')}${it.locked?' <span class="tt-def">default</span>':''}</div>
-          <div class="sb-cfg">${cfg.map(esc).join('  ·  ')}</div>
+          <div class="sb-title">${esc(it.title||'New banner')}${it.locked?' <span class="tt-def">default</span>':''} <span class="sb-tag">standalone banner</span></div>
+          <div class="sb-cfg">No theme · ${cfg.map(esc).join('  ·  ')}</div>
         </div>
         <button class="btn btn-s btn-sm" onclick="sbEdit('${it.id}')">${editing?'Close':'Edit'}</button>
       </div>

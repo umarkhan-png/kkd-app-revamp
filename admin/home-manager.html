@@ -74,6 +74,14 @@
 .hm input[type=color]{width:44px;height:34px;border:1px solid var(--g200);border-radius:6px;padding:2px;cursor:pointer;}
 .hm .sub-l{font-size:12px;font-weight:700;color:var(--g600,#475569);margin:14px 0 6px;}
 .hm .chip-row{margin-bottom:14px;}
+.hm .sb-sum{display:flex;align-items:center;gap:12px;}
+.hm .sb-ic{font-size:20px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--g50);border:1px solid var(--g200);border-radius:9px;flex-shrink:0;}
+.hm .sb-title{font-size:13.5px;font-weight:700;}
+.hm .sb-cfg{font-size:11.5px;color:var(--g500);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hm .sb-edit{display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--g200);}
+.hm .li.editing .sb-edit{display:block;}
+.hm .cat-ic{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
+.hm .cat-ic img{width:78%;height:78%;object-fit:contain;}
 .hm .ed-toggle{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:700;color:var(--g600,#475569);cursor:pointer;}
 .hm .ed-lock{font-size:12px;font-weight:700;color:var(--g500,#64748B);background:var(--g100,#F1F5F9);padding:6px 11px;border-radius:8px;white-space:nowrap;}
 .hm .sec-hidden{font-size:10px;font-weight:700;color:var(--g500,#64748B);background:var(--g100,#F1F5F9);padding:2px 8px;border-radius:9999px;flex-shrink:0;}
@@ -219,7 +227,7 @@ const DEFAULT_SECS=[
   {id:'header',   ic:'🏠', nm:'Header / Top Bar',     sub:'Logo, greeting, location, wallet, coins, bell', on:true, fixed:true},
   {id:'theme',    ic:'🎨', nm:'Theme',                sub:'Green default + state / date / weather rules', on:true, fixed:true},
   {id:'statusbanner',ic:'📢', nm:'Top Status Banner', sub:'Rotating rain/offer ticker',     on:true},
-  {id:'search',   ic:'🔍', nm:'Search Bar',           sub:'Placeholder, voice, colors',     on:true},
+  {id:'search',   ic:'🔍', nm:'Search Bar',           sub:'Fixed · default + rotating hints', on:true, fixed:true},
   {id:'offer',    ic:'🎁', nm:'Offer Strip',         sub:'Header announcement ticker',     on:true},
   {id:'cats',     ic:'🗂️', nm:'Categories',           sub:'Pesticide, Fertilizer…',         on:true},
   {id:'ordstatus',ic:'📦', nm:'Order Status',          sub:'Sticky active order bar',         on:true},
@@ -673,10 +681,7 @@ theme:()=>{ const T=themeData(); return `
 statusbanner:()=>`
 <div class="card">
   <div class="card-body">
-    ${TG('sb1',true,'Show status banner','Rotating ticker above the search bar')}
-    <div class="row" style="margin-top:12px;">
-      <div class="fg fix"><label>Rotation interval (sec)</label><input type="number" style="width:140px;" value="4"/></div>
-    </div>
+    <div class="row"><div class="fg fix"><label>Rotation interval (sec)</label><input type="number" style="width:140px;" value="4"/></div></div>
     <div class="sdiv">Messages (rotate in order)</div>
     <div id="sbList">
       ${[
@@ -692,11 +697,15 @@ statusbanner:()=>`
 search:()=>`
 <div class="card">
   <div class="card-body">
-    <div class="sdiv">Search placeholder text</div>
+    <div class="info-box"><i class="fa-solid fa-thumbtack"></i><span>The search bar is <b>fixed</b> — always shown and sticky at the top of Home.</span></div>
+    <div class="sdiv">Default text</div>
+    <div class="row"><div class="fg"><label>Default placeholder</label><input type="text" value="Search products…" data-maxlen="42"/></div></div>
+    <div class="sdiv">Rotating hints</div>
+    <div class="row"><div class="fg fix"><label>Rotation interval (sec)</label><input type="number" style="width:140px;" value="3"/></div></div>
     <div id="phList">
       ${['Search Humic, Antivirus…','Search by crop or problem','Try "NPK 19:19:19"'].map(phRow).join('')}
     </div>
-    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addPlaceholder()">+ Add placeholder</button>
+    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addPlaceholder()">+ Add hint</button>
   </div>
 </div>`,
 
@@ -720,10 +729,10 @@ offer:()=>`
           <div class="row" style="margin-bottom:0;">
             <div class="fg fix"><label>Label Color</label><div class="color-r"><input type="color" value="${o.lc}"/><span>${o.lc}</span></div></div>
             <div class="fg fix"><label>BG Color</label><div class="color-r"><input type="color" value="${o.bg}"/></div></div>
-            <div class="fg"><label>Deeplink / URL</label><input type="text" value="${o.link}" placeholder="kkd://sale/christmas"/></div>
+            <div class="fg"><label>Deeplink</label><input type="text" value="${o.link}" placeholder="kkd://sale/christmas"/></div>
           </div>
         </div>
-        <div class="li-act"><button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button></div>
+        <div class="li-act"></div>
       </div>`).join('')}
     </div>
     <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addOffer()">+ Add Offer</button>
@@ -736,19 +745,18 @@ cats:()=>`
   <div class="card-body">
     ${LT()}
     <div id="catList">
-      ${[{e:'🐛',n:'Pesticide'},{e:'🍄',n:'Fungicide'},{e:'🌱',n:'Fertilizer'},{e:'🌿',n:'Herbicide'},{e:'📦',n:'Combo'}].map(c=>`
+      ${[{img:'chakrawarti',c:'#BFE8CB',n:'Pesticide'},{img:'antivirus',c:'#F9CFE0',n:'Fungicide'},{img:'humic',c:'#FCE7AE',n:'Fertilizer'},{img:'triple',c:'#FAD0BC',n:'Herbicide'},{img:'npk',c:'#D2DAF7',n:'Combo'}].map(c=>`
       <div class="li">
         <span class="drag-h">⠿</span>
-        <div class="ep" onclick="promptE(this)">${c.e}</div>
+        <div class="cat-ic" style="background:${c.c}"><img src="../assets/cat/pool/${c.img}.png" alt=""/></div>
         <div class="li-body">
           <div class="row" style="margin-bottom:0;">
             <div class="fg fix"><label>Category</label><div style="font-size:13px;font-weight:700;padding:8px 0">${c.n}</div></div>
-            <div class="fg"><label>Link</label><input type="text" value="/categories?cat=${c.n.toLowerCase()}"/></div>
+            <div class="fg"><label>Deeplink</label><input type="text" value="/categories?cat=${c.n.toLowerCase()}"/></div>
           </div>
         </div>
         <div class="li-act" style="padding-top:16px;">
           <div class="tg on" onclick="this.classList.toggle('on')"></div>
-          <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
         </div>
       </div>`).join('')}
     </div>
@@ -819,8 +827,7 @@ coins:()=>`
         </div>
         <div class="li-act" style="padding-top:16px;">
           <div class="tg on" onclick="this.classList.toggle('on')"></div>
-          <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
-        </div>
+                  </div>
       </div>`).join('')}
     </div>
     <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addTask()">+ Add Task</button>
@@ -873,11 +880,10 @@ banners:()=>`
           <div class="bimg" style="flex:1;" onclick="this.querySelector('input').click()">🖼️ ${b.nm}<input type="file" accept="image/*" style="display:none;"/></div>
           <div class="li-act">
             <div class="tg on" onclick="this.classList.toggle('on')"></div>
-            <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
-          </div>
+                      </div>
         </div>
         <div class="row" style="margin-bottom:8px;">
-          <div class="fg"><label>Deeplink / URL</label><input type="text" value="${b.link}"/></div>
+          <div class="fg"><label>Deeplink</label><input type="text" value="${b.link}"/></div>
         </div>
         <div class="row" style="margin-bottom:8px;">
           <div class="fg fix"><label>Language</label><select class="s"><option>All</option>${LANGS.map(l=>`<option${b.lang===l.l?' selected':''}>${l.l}</option>`).join('')}</select></div>
@@ -965,8 +971,7 @@ featured:()=>`
           <span class="drag-h">⠿</span>
           <strong style="flex:1;font-size:13px;">${col.nm}</strong>
           <div class="tg on" onclick="this.classList.toggle('on')"></div>
-          <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
-        </div>
+                  </div>
         <div class="row" style="margin-bottom:8px;">
           <div class="fg fix"><label>Card BG Color</label><div class="color-r"><input type="color" value="${col.color}"/></div></div>
           <div class="fg"><label>Language</label><select class="s"><option>All</option>${LANGS.map(l=>`<option>${l.l}</option>`).join('')}</select></div>
@@ -1001,8 +1006,7 @@ widgets:()=>`
           </div>
           <div style="display:flex;align-items:center;gap:7px;">
             <div class="tg on" onclick="this.classList.toggle('on')"></div>
-            <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.wi').remove()">🗑️</button>
-          </div>
+                      </div>
         </div>
         <div class="row" style="margin-bottom:10px;">
           <div class="fg"><label>Type</label>
@@ -1046,8 +1050,7 @@ testi:()=>`
         </div>
         <div class="tc-act">
           <div class="tg on" onclick="this.classList.toggle('on')"></div>
-          <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.tc').remove()">🗑️</button>
-        </div>
+                  </div>
       </div>`).join('')}
     </div>
     <button class="btn btn-s btn-sm" onclick="addTesti()">+ Add Testimonial</button>
@@ -1097,7 +1100,7 @@ cartfab:()=>`
     <div class="row">
       <div class="fg fix"><label>BG Color</label><div class="color-r"><input type="color" value="#0F172A"/><span>#0F172A</span></div></div>
       <div class="fg fix"><label>Savings / Accent Color</label><div class="color-r"><input type="color" value="#34D399"/><span>#34D399</span></div></div>
-      <div class="fg"><label>Link</label><input type="text" value="cart.html"/></div>
+      <div class="fg"><label>Deeplink</label><input type="text" value="cart.html"/></div>
     </div>
     ${TG('cf1',true,'Compact on scroll','Shrinks to a centered pill while scrolling')}
   </div>
@@ -1132,37 +1135,53 @@ function sbThemeOpts(selName){ const T=themeData(); return '<option value="">Non
 function sbChip(el,isAll){ const wrap=el.parentElement; const chips=wrap.querySelectorAll('.cchip'); const allChip=chips[0];
   if(isAll){ chips.forEach(c=>c.classList.remove('on')); el.classList.add('on'); }
   else { allChip.classList.remove('on'); el.classList.toggle('on'); if(!wrap.querySelector('.cchip.on')) allChip.classList.add('on'); } }
-function sbVariant(v){ v=v||{}; return `
-  <div class="li">
+function sbVariant(v){ v=v||{};
+  // collapsed row shows every rule/config; "Edit" reveals the full form
+  const states=(v.states&&v.states.indexOf('All')<0)?v.states.join(', '):'All states';
+  const cfg=[states];
+  if(v.start&&v.end) cfg.push(`${v.start} → ${v.end}`);
+  if(v.theme) cfg.push(`Weather: ${v.theme}`);
+  if(v.link) cfg.push(`Deeplink: ${v.link}`);
+  return `
+  <div class="li sb-item">
     <span class="drag-h">⠿</span>
     <div class="li-body">
-      <div class="row" style="margin-bottom:10px;">
-        <div class="fg fix"><label>Icon</label><div class="ep" onclick="promptE(this)">${v.ic||'📢'}</div></div>
-        <div class="fg"><label>Title</label><input type="text" value="${esc(v.bold||'')}" placeholder="e.g. Rain expected"/></div>
+      <div class="sb-sum">
+        <div class="sb-ic">${v.ic||'📢'}</div>
+        <div style="min-width:0;flex:1">
+          <div class="sb-title">${esc(v.bold||'New message')}</div>
+          <div class="sb-cfg">${cfg.map(esc).join('  ·  ')}</div>
+        </div>
+        <button class="btn btn-s btn-sm" onclick="sbToggleEdit(this)">Edit</button>
       </div>
-      <div class="row" style="margin-bottom:10px;">
-        <div class="fg"><label>Subtitle</label><input type="text" value="${esc(v.body||'')}" placeholder="e.g. 8 mm in 24 hrs · Hold spray for today"/></div>
+      <div class="sb-edit">
+        <div class="row">
+          <div class="fg fix"><label>Icon</label><div class="ep" onclick="promptE(this)">${v.ic||'📢'}</div></div>
+          <div class="fg"><label>Title</label><input type="text" value="${esc(v.bold||'')}" placeholder="e.g. Rain expected"/></div>
+        </div>
+        <div class="row"><div class="fg"><label>Subtitle</label><input type="text" value="${esc(v.body||'')}" placeholder="e.g. 8 mm in 24 hrs · Hold spray for today"/></div></div>
+        <div class="row">
+          <div class="fg fix"><label>Text Color</label><div class="color-r"><input type="color" value="${v.tc||'#1E40AF'}"/></div></div>
+          <div class="fg fix"><label>Icon Color</label><div class="color-r"><input type="color" value="${v.iconc||'#2563EB'}"/></div></div>
+          <div class="fg"><label>Deeplink</label><input type="text" value="${esc(v.link||'')}" placeholder="shop.html"/></div>
+        </div>
+        <div class="sub-l">States</div>
+        <div class="chip-row">${sbStateChips(v.states)}</div>
+        <div class="sub-l">Date range <span class="hint">(optional)</span></div>
+        <div class="row">
+          <div class="fg fix"><label>Start date</label><input type="date" value="${v.start||''}"/></div>
+          <div class="fg fix"><label>End date</label><input type="date" value="${v.end||''}"/></div>
+        </div>
+        <div class="sub-l">Weather <span class="hint">(linked from a Theme rule)</span></div>
+        <div class="fg fix" style="max-width:300px;margin-bottom:0"><label>Use weather rule from theme</label><select class="s">${sbThemeOpts(v.theme)}</select></div>
       </div>
-      <div class="row" style="margin-bottom:10px;">
-        <div class="fg fix"><label>Text Color</label><div class="color-r"><input type="color" value="${v.tc||'#1E40AF'}"/></div></div>
-        <div class="fg fix"><label>Icon Color</label><div class="color-r"><input type="color" value="${v.iconc||'#2563EB'}"/></div></div>
-        <div class="fg"><label>Deeplink / URL</label><input type="text" value="${esc(v.link||'')}" placeholder="shop.html"/></div>
-      </div>
-      <div class="sub-l">📍 States</div>
-      <div style="margin-bottom:10px">${sbStateChips(v.states)}</div>
-      <div class="sub-l">🗓 Date range <span class="hint">(optional)</span></div>
-      <div class="row" style="margin-bottom:10px;">
-        <div class="fg fix"><label>Start date</label><input type="date" value="${v.start||''}"/></div>
-        <div class="fg fix"><label>End date</label><input type="date" value="${v.end||''}"/></div>
-      </div>
-      <div class="sub-l">🌦 Weather <span class="hint">(linked from a Theme — set the rule in the Theme section)</span></div>
-      <div class="fg fix" style="max-width:300px;margin-bottom:0"><label>Use weather rule from theme</label><select class="s">${sbThemeOpts(v.theme)}</select></div>
     </div>
     <div class="li-act" style="padding-top:16px;">
       <div class="tg on" onclick="this.classList.toggle('on')"></div>
     </div>
   </div>`;
 }
+function sbToggleEdit(btn){ const li=btn.closest('.li'); const on=li.classList.toggle('editing'); btn.textContent=on?'Close':'Edit'; }
 function addStatusVariant(){ document.getElementById('sbList').insertAdjacentHTML('beforeend', sbVariant({})); }
 
 /* Search bar · rotating placeholder text list */
@@ -1170,7 +1189,7 @@ function phRow(p){ return `
   <div class="li">
     <span class="drag-h">⠿</span>
     <div class="li-body"><div class="row" style="margin-bottom:0;"><div class="fg"><label>Placeholder text</label><input type="text" value="${esc(p||'')}" placeholder="Search products…"/></div></div></div>
-    <div class="li-act" style="padding-top:16px;"><div class="tg on" onclick="this.classList.toggle('on')"></div><button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button></div>
+    <div class="li-act" style="padding-top:16px;"><div class="tg on" onclick="this.classList.toggle('on')"></div></div>
   </div>`; }
 function addPlaceholder(){ document.getElementById('phList').insertAdjacentHTML('beforeend', phRow('')); }
 
@@ -1188,7 +1207,7 @@ function addOffer(){
         <div class="fg"><label>Deeplink</label><input type="text" placeholder="kkd://…"/></div>
       </div>
     </div>
-    <div class="li-act"><button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button></div>
+    <div class="li-act"></div>
   </div>`);}
 
 function addCat(){
@@ -1197,12 +1216,11 @@ function addCat(){
     <span class="drag-h">⠿</span>
     <div class="ep" onclick="promptE(this)">🌿</div>
     <div class="li-body"><div class="row" style="margin-bottom:0;">
-      <div class="fg"><label>Link</label><input type="text" placeholder="/categories?cat=new"/></div>
+      <div class="fg"><label>Deeplink</label><input type="text" placeholder="/categories?cat=new"/></div>
     </div></div>
     <div class="li-act" style="padding-top:16px;">
       <div class="tg on" onclick="this.classList.toggle('on')"></div>
-      <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
-    </div>
+          </div>
   </div>`);}
 
 function addTask(){
@@ -1222,8 +1240,7 @@ function addTask(){
     </div>
     <div class="li-act" style="padding-top:16px;">
       <div class="tg on" onclick="this.classList.toggle('on')"></div>
-      <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
-    </div>
+          </div>
   </div>`);}
 
 function addFP(btn){const p=PRODS.find(p=>!document.getElementById('fpList').innerHTML.includes(p.n));if(!p)return;const c=document.createElement('span');c.className='pchip';c.innerHTML=`🌱 ${p.n} <span class="x" onclick="this.closest('.pchip').remove()">×</span>`;btn.before(c);}
@@ -1236,7 +1253,7 @@ function addBanner(){
     <div style="display:flex;align-items:center;gap:8px;">
       <span class="drag-h">⠿</span>
       <div class="bimg" style="flex:1;" onclick="this.querySelector('input').click()">🖼️ Click to upload banner<input type="file" accept="image/*" style="display:none;"/></div>
-      <div class="li-act"><div class="tg on" onclick="this.classList.toggle('on')"></div><button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button></div>
+      <div class="li-act"><div class="tg on" onclick="this.classList.toggle('on')"></div></div>
     </div>
     <div class="row" style="margin-bottom:8px;">
       <div class="fg"><label>Deeplink</label><input type="text" placeholder="kkd://…"/></div>
@@ -1254,8 +1271,7 @@ function addFColl(){
   <div class="li" style="flex-direction:column;gap:11px;align-items:stretch;margin-bottom:10px;">
     <div style="display:flex;align-items:center;gap:8px;"><span class="drag-h">⠿</span><strong style="flex:1;font-size:13px;">New Collection</strong>
       <div class="tg on" onclick="this.classList.toggle('on')"></div>
-      <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.li').remove()">🗑️</button>
-    </div>
+          </div>
     <div class="row" style="margin-bottom:8px;">
       <div class="fg fix"><label>Card BG Color</label><div class="color-r"><input type="color" value="#1B6B3A"/></div></div>
       <div class="fg"><label>Language</label><select class="s"><option>All</option>${LANGS.map(l=>`<option>${l.l}</option>`).join('')}</select></div>
@@ -1275,8 +1291,7 @@ function addWidget(){
       </div>
       <div style="display:flex;align-items:center;gap:7px;">
         <div class="tg on" onclick="this.classList.toggle('on')"></div>
-        <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.wi').remove()">🗑️</button>
-      </div>
+              </div>
     </div>
     <div class="row" style="margin-bottom:10px;">
       <div class="fg"><label>Type</label>
@@ -1297,8 +1312,7 @@ function addTesti(){
     </div>
     <div class="tc-act">
       <div class="tg on" onclick="this.classList.toggle('on')"></div>
-      <button class="btn btn-d btn-ic btn-sm" onclick="this.closest('.tc').remove()">🗑️</button>
-    </div>
+          </div>
   </div>`);}
 
 // INIT — open the section from #hash (e.g. #theme) or the first one

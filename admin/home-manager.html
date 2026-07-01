@@ -77,6 +77,16 @@
 .hm .wx-inline{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
 .hm .wx-inline input{border:1.5px solid var(--g200);border-radius:8px;height:34px;padding:0 9px;font-size:13px;color:var(--g700,#334155);}
 .hm .wx-u{font-size:12px;color:var(--g500);}
+.hm .apv-note{display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.5;color:var(--green);background:var(--green-lt);border-radius:8px;padding:9px 12px;margin-bottom:10px;}
+.hm .apv-note i{margin-top:2px;flex-shrink:0;}
+.hm .apv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px;}
+.hm .apv{border:2px solid var(--g200);border-radius:10px;overflow:hidden;cursor:pointer;background:#fff;transition:border .15s,box-shadow .15s;}
+.hm .apv:hover{border-color:var(--green);}
+.hm .apv.on{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.12);}
+.hm .apv-img{height:64px;background-size:cover;background-position:center;position:relative;}
+.hm .apv-badge{position:absolute;top:5px;left:5px;background:rgba(255,255,255,.92);color:var(--green);font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;display:flex;align-items:center;gap:3px;}
+.hm .apv-nm{font-size:11.5px;font-weight:600;padding:6px 9px;display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.hm .apv-ck{color:var(--green);}
 .hm .sb-sum{display:flex;align-items:center;gap:12px;}
 .hm .sb-ic{font-size:20px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--g50);border:1px solid var(--g200);border-radius:9px;flex-shrink:0;}
 .hm .sb-title{font-size:13.5px;font-weight:700;}
@@ -393,6 +403,15 @@ function save(msg){AdminShell.saved(msg);}
    the user's state + current weather + date wins. So when Holi (festival) AND rain
    both match, whichever sits higher in the list is what the user sees. */
 const WEATHERS=['clear','rain','cloudy','storm','fog'];   // sky conditions (temperature handled separately)
+// Approved theme images — in production these come from the Design Studio (designer submits → manager approves).
+const APPROVED_BG=[
+  {name:'Monsoon',  img:'../assets/themes/monsoon.jpg'},
+  {name:'Heatwave', img:'../assets/themes/heatwave.jpg'},
+  {name:'Holi',     img:'../assets/themes/holi.jpg'},
+  {name:'Diwali',   img:'../assets/themes/diwali.jpg'},
+  {name:'Harvest',  img:'../assets/themes/harvest.jpg'},
+  {name:'Winter',   img:'../assets/themes/winter.jpg'},
+];
 let teEdit=null;                                   // id of theme being edited (inline)
 let teSim={state:'All States',weather:'rain',temp:30,date:'2026-03-14'};  // resolver simulator
 let teMsg=null;                                    // last upload message {kind,text}
@@ -494,6 +513,7 @@ function tePick(input){
 }
 function teBgRemove(){ const t=editTheme(); if(!t||!t.bg) return; t.bg.image=''; delete t.bg.name; delete t.bg.w; delete t.bg.h; KKD.save(data); teMsg={kind:'ok',text:'Image removed — this theme falls back to its gradient colours.'}; AdminShell.refreshPending(); themeUI(); }
 function teBgSet(k,v){ const t=editTheme(); if(!t) return; t.bg=t.bg||{}; t.bg[k]=v; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
+function teApproved(img,name){ const t=editTheme(); if(!t) return; t.bg=t.bg||{}; t.bg.image=img; t.bg.name=name; t.bg.approved=true; delete t.bg.w; delete t.bg.h; KKD.save(data); teMsg={kind:'ok',text:name+' theme image applied.'}; AdminShell.refreshPending(); themeUI(); }
 
 /* ---- mutations ---- */
 function themeAdd(){
@@ -589,7 +609,15 @@ function themeEditor(t){
 
     ${rulesBlock}
 
-    <div class="sub-l" style="margin-top:20px">Background image / GIF</div>
+    <div class="sub-l" style="margin-top:20px">Theme image</div>
+    <div class="apv-note"><i class="fa-solid fa-circle-check"></i> Pick an <b>approved</b> image. Designers submit in the Design Studio and a manager approves them — only approved images appear here.</div>
+    <div class="apv-grid">
+      ${APPROVED_BG.map(a=>{const on=bg.image===a.img;return `<div class="apv${on?' on':''}" onclick="teApproved('${a.img}','${esc(a.name)}')">
+        <div class="apv-img" style="background-image:url(${a.img})"><span class="apv-badge"><i class="fa-solid fa-circle-check"></i> Approved</span></div>
+        <div class="apv-nm">${esc(a.name)}${on?'<i class="fa-solid fa-circle-check apv-ck"></i>':''}</div>
+      </div>`;}).join('')}
+    </div>
+    <div class="sub-l">Or upload your own <span class="hint">(optional)</span></div>
     <div class="bg-up">
       <div class="bg-prev" style="background:${themeGrad(t)}">${bg.image?`<img src="${bg.image}" alt=""/>`:'No image'}</div>
       <div style="flex:1;min-width:0">
@@ -601,11 +629,10 @@ function themeEditor(t){
         <div class="bg-guide"><i class="fa-solid fa-circle-info"></i>1080 × 600 px · max 2 MB (GIF 4 MB) · PNG, JPG, WebP, GIF</div>
         ${bg.image&&bg.w?`<div class="hint" style="margin-top:7px">Current: ${bg.name?esc(bg.name)+' · ':''}${bg.w}×${bg.h}px</div>`:''}
         ${teMsg?`<div class="bg-msg ${teMsg.kind}">${esc(teMsg.text)}</div>`:''}
-        <div class="row" style="margin-top:12px;margin-bottom:0">
-          <div class="fg fix"><label>Text-protection overlay</label><select class="s" onchange="teBgSet('overlay',this.value)"><option value="none"${selO('none',bg.overlay||'light')}>None</option><option value="light"${selO('light',bg.overlay||'light')}>Light dim</option><option value="medium"${selO('medium',bg.overlay||'light')}>Medium dim</option><option value="strong"${selO('strong',bg.overlay||'light')}>Strong dim</option></select></div>
-        </div>
       </div>
     </div>
+    <div class="sub-l">Text-protection overlay</div>
+    <div class="row" style="margin-bottom:0"><div class="fg fix" style="max-width:220px"><select class="s" onchange="teBgSet('overlay',this.value)"><option value="none"${selO('none',bg.overlay||'light')}>None</option><option value="light"${selO('light',bg.overlay||'light')}>Light dim</option><option value="medium"${selO('medium',bg.overlay||'light')}>Medium dim</option><option value="strong"${selO('strong',bg.overlay||'light')}>Strong dim</option></select></div></div>
   </div>`;
 }
 

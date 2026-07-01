@@ -414,6 +414,8 @@ function themeData(){
     if(w.sky==null){ w.sky='any'; changed=true; }
     if(w.op==null){ w.op='any'; changed=true; }
     if(w.temp==null){ w.temp=40; changed=true; }
+    if(w.when==null){ w.when='live'; changed=true; }   // timeframe: live | nexthours | today | tomorrow
+    if(w.hours==null){ w.hours=6; changed=true; }
     if(tr.start==null) tr.start='';
     if(tr.end==null) tr.end='';
     // condType: infer ONLY for legacy themes (property absent). New themes keep '' = unselected.
@@ -457,6 +459,8 @@ function triggerBadge(t){
     const w=tr.weather||{}; const wp=[];
     if(w.sky&&w.sky!=='any') wp.push(w.sky);
     if(w.op&&w.op!=='any') wp.push(`${w.op==='below'?'≤':'≥'} ${w.temp}°C`);
+    const wl={nexthours:`next ${w.hours||6}h`,today:'today',tomorrow:'tomorrow'}[w.when];
+    if(wl) wp.push(wl);
     parts.push(wp.length?wp.join(' · '):'Any weather');
   } else {
     parts.push('No condition set');
@@ -491,7 +495,7 @@ function teBgSet(k,v){ const t=editTheme(); if(!t) return; t.bg=t.bg||{}; t.bg[k
 /* ---- mutations ---- */
 function themeAdd(){
   const T=themeData(); const id='t'+Date.now().toString(36);
-  T.themes.unshift({ id, name:'New theme', enabled:true, trigger:{states:['All'],condType:'',start:'',end:'',weather:{sky:'any',op:'any',temp:40}}, bg:{image:'',fit:'cover',overlay:'light'}, colors:{a:'#258046',b:'#10B981',c:'#D9A441'}, anim:'none', animCount:8, animSpeed:2 });
+  T.themes.unshift({ id, name:'New theme', enabled:true, trigger:{states:['All'],condType:'',start:'',end:'',weather:{sky:'any',op:'any',temp:40,when:'live',hours:6}}, bg:{image:'',fit:'cover',overlay:'light'}, colors:{a:'#258046',b:'#10B981',c:'#D9A441'}, anim:'none', animCount:8, animSpeed:2 });
   teEdit=id; teMsg=null; KKD.save(data); AdminShell.refreshPending(); themeUI();
 }
 function themeEdit(id){ const t=themeData().themes.find(x=>x.id===id); if(t&&t.isDefault) return; /* green default is not editable */ teEdit=(teEdit===id?null:id); teMsg=null; themeUI(); }
@@ -552,7 +556,14 @@ function themeEditor(t){
     ? `<div class="fg fix"><label>Start date</label><input type="date" value="${tr.start||''}" onchange="themeField('${t.id}','trigger.start',this.value);themeUI()"/></div>
       <div class="fg fix"><label>End date</label><input type="date" value="${tr.end||''}" onchange="themeField('${t.id}','trigger.end',this.value);themeUI()"/></div>`
     : ct==='weather'
-    ? `<div class="fg fix"><label>Sky</label><select class="s" onchange="themeField('${t.id}','trigger.weather.sky',this.value);themeUI()">
+    ? `<div class="fg fix"><label>When</label><select class="s" onchange="themeField('${t.id}','trigger.weather.when',this.value);themeUI()">
+        <option value="live"${selO('live',w.when||'live')}>Live (now)</option>
+        <option value="nexthours"${selO('nexthours',w.when)}>In next hours</option>
+        <option value="today"${selO('today',w.when)}>Later today</option>
+        <option value="tomorrow"${selO('tomorrow',w.when)}>Tomorrow</option>
+      </select></div>
+      ${w.when==='nexthours'?`<div class="fg fix"><label>Hours</label><input type="number" style="width:80px" value="${w.hours!=null?w.hours:6}" onchange="themeField('${t.id}','trigger.weather.hours',+this.value)"/></div>`:''}
+      <div class="fg fix"><label>Sky</label><select class="s" onchange="themeField('${t.id}','trigger.weather.sky',this.value);themeUI()">
         <option value="any"${selO('any',w.sky)}>Any sky</option>
         ${WEATHERS.map(x=>`<option${selO(x,w.sky)}>${x}</option>`).join('')}
       </select></div>

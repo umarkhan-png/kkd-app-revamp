@@ -493,6 +493,9 @@ let customSections = Array.isArray(data.customHomeSections)
       if(!o.deeplink) o.deeplink='home.html?section='+slugify(o.name);
       return o; })
   : [];
+/* Recently Viewed config — 'auto' shows each user's own history; 'custom' shows hand-picked products */
+let recentCfg = Object.assign({source:'auto',title:'',products:[],min:2,bg:'#F0F0FA'}, (data.recentViewed&&typeof data.recentViewed==='object')?data.recentViewed:{});
+recentCfg.products=(recentCfg.products||[]).map(p=> typeof p==='string' ? {name:p,variant:''} : p);
 let SECS;
 function seedSecs(){
   // seed from the reference on first load; otherwise reconcile saved order/visibility against defaults
@@ -1287,18 +1290,36 @@ best:()=>`
 </div>`,
 
 /* 9 ── RECENTLY VIEWED */
-recent:()=>`
+recent:()=>{ const c=recentCfg; const n=(c.products||[]).length;
+  const prods = n ? c.products.map((pr,i)=>`<div class="saleline">
+      <span style="font-size:11px;font-weight:700;color:var(--g400);min-width:16px;text-align:center">${i+1}</span>
+      <div class="saleline-nm" style="flex:1">🛒 ${esc(pr.name)} <span class="saleline-v">${esc(pr.variant||'')}</span></div>
+      <button class="ic-btn" title="Move up" onclick="recentPickMove(${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button>
+      <button class="ic-btn" title="Move down" onclick="recentPickMove(${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
+      <button class="ic-btn del" title="Remove" onclick="recentPickDel(${i})"><i class="fa-solid fa-trash"></i></button>
+    </div>`).join('') : '<p class="hint" style="margin:0">No products picked yet — add a few below.</p>';
+  return `
 <div class="card">
   <div class="card-body">
-    ${TG('rv1',true,'Show Section','Per-user recently viewed products')}
-    <div style="margin-top:14px;"></div>
-    ${LT()}
-    <div class="row">
-      <div class="fg fix"><label>BG Color</label><div class="color-r"><input type="color" value="#F0F0FA"/></div></div>
-      <div class="fg fix"><label>Min items to show</label><input type="number" style="width:90px;" value="2"/></div>
+    <div class="sdiv" style="margin-top:0">What shows in this section</div>
+    <p class="hint-p" style="margin:-2px 0 10px">By default this shows each user's own recently viewed products. Switch it to show a hand-picked set of products instead.</p>
+    <div class="seg">
+      <button class="seg-btn ${c.source==='auto'?'on':''}" onclick="recentSetSource('auto')">👁️ Recently viewed items</button>
+      <button class="seg-btn ${c.source==='custom'?'on':''}" onclick="recentSetSource('custom')">🛒 Show selected products</button>
     </div>
+    ${c.source==='custom'?`
+      <div class="row" style="margin-top:14px"><div class="fg" style="max-width:340px"><label>Section title <span class="hint">(heading shown on the app)</span></label><input type="text" value="${esc(c.title||'')}" data-maxlen="28" onchange="recentSet('title',this.value)" placeholder="e.g. Picked for you"/></div></div>
+      <div class="sdiv">Products <span class="hint" style="font-weight:400">(shown in this order — use ↑ ↓ to sort)</span></div>
+      <div class="saleline-list">${prods}</div>
+      <button class="btn btn-p btn-sm" style="margin-top:10px" onclick="recentPickRender()"><i class="fa-solid fa-plus"></i> Add products</button>
+    `:`
+      <div class="row" style="margin-top:14px;margin-bottom:0">
+        <div class="fg fix"><label>BG Color</label><div class="color-r"><input type="color" value="${esc(c.bg||'#F0F0FA')}" onchange="recentSet('bg',this.value)"/></div></div>
+        <div class="fg fix"><label>Min items to show</label><input type="number" style="width:90px;" value="${esc(String(c.min||2))}" onchange="recentSet('min',this.value)"/></div>
+      </div>
+    `}
   </div>
-</div>`,
+</div>`; },
 
 /* 10 ── BUY AGAIN */
 buyagain:()=>`
@@ -2166,6 +2187,53 @@ function csPickRender(id){ _capScroll(); const ex=document.getElementById('addMo
     <div class="apv-box" style="width:640px"><div class="apv-box-head"><h3>Add products</h3><button class="x-btn" onclick="csPickClose('${id}')"><i class="fa-solid fa-xmark"></i></button></div>
       <div class="apv-box-body">${body}</div>
       <div class="apv-box-foot"><button class="btn btn-p btn-sm" onclick="csPickClose('${id}')"><i class="fa-solid fa-check"></i> Done</button></div>
+    </div></div>`;
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html); _resScroll();
+}
+
+/* ── Recently Viewed — auto (per-user history) OR a hand-picked product set (same picker as Sale) ── */
+function recentSave(){ data.recentViewed=recentCfg; KKD.save(data); }
+function recentUI(){ if(sel==='recent') pick('recent'); }
+function recentSet(k,v){ recentCfg[k]=v; recentSave(); }
+function recentSetSource(s){ recentCfg.source=s; recentSave(); recentUI(); }
+function recentPickRows(){ const c=recentCfg; const ql=(c._q||'').toLowerCase(); const rows=[];
+  PRODS.forEach(p=>{ if(p.n.toLowerCase().indexOf(ql)<0) return;
+    (p.variants||[{v:'Standard'}]).forEach(vr=>{
+      const added=(c.products||[]).some(x=>x.name===p.n&&x.variant===vr.v);
+      rows.push(`<div class="ppick${added?' on':''}">
+        <div style="min-width:0;flex:1"><div class="ppick-nm">🌱 ${esc(p.n)}</div><div class="ppick-sub">${esc(vr.v)}${vr.mrp?` · MRP ₹${vr.mrp}`:''}</div></div>
+        ${added?'<span class="ppick-added"><i class="fa-solid fa-circle-check"></i> Added</span>'
+          :`<button class="btn btn-p btn-xs" onclick="recentPickAdd('${p.n.replace(/'/g,"\\'")}','${vr.v.replace(/'/g,"\\'")}')">Add</button>`}
+      </div>`);
+    });
+  });
+  return rows.length?rows.join(''):'<p class="hint" style="padding:8px 2px">No products match.</p>';
+}
+function recentPickSearch(q){ recentCfg._q=q; const el=document.getElementById('recentPickRows'); if(el)el.innerHTML=recentPickRows(); }
+function recentPickAdd(name,variant){ recentCfg.products=recentCfg.products||[]; if(!recentCfg.products.some(x=>x.name===name&&x.variant===variant)) recentCfg.products.push({name:name,variant:variant}); recentSave(); recentPickRender(); }
+function recentPickDel(i){ recentCfg.products.splice(i,1); recentSave(); (document.getElementById('addModal')?recentPickRender():recentUI()); }
+function recentPickMove(i,dir){ const j=i+dir; if(j<0||j>=recentCfg.products.length)return; const a=recentCfg.products; [a[i],a[j]]=[a[j],a[i]]; recentSave(); (document.getElementById('addModal')?recentPickRender():recentUI()); }
+function recentPickClose(){ const m=document.getElementById('addModal'); if(m)m.remove(); delete recentCfg._q; recentUI(); }
+function recentPickRender(){ _capScroll(); const ex=document.getElementById('addModal'); if(ex)ex.remove(); const c=recentCfg;
+  const n=(c.products||[]).length;
+  const sel = n ? c.products.map((pr,i)=>`<div class="saleline">
+      <span style="font-size:11px;font-weight:700;color:var(--g400);min-width:16px;text-align:center">${i+1}</span>
+      <div class="saleline-nm" style="flex:1">🛒 ${esc(pr.name)} <span class="saleline-v">${esc(pr.variant)}</span></div>
+      <button class="ic-btn" title="Move up" onclick="recentPickMove(${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button>
+      <button class="ic-btn" title="Move down" onclick="recentPickMove(${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
+      <button class="ic-btn del" title="Remove" onclick="recentPickDel(${i})"><i class="fa-solid fa-trash"></i></button>
+    </div>`).join('') : '<p class="hint" style="margin:0 0 8px">No products added yet — search above to add.</p>';
+  const body=`
+    <div class="salepick-box">
+      <div class="row" style="margin-bottom:8px"><div class="fg"><label>Search a product to see its variants</label><input type="text" id="recentPickSearch" value="${esc(c._q||'')}" placeholder="Type a product name…" oninput="recentPickSearch(this.value)"/></div></div>
+      <div id="recentPickRows" class="ppick-list">${recentPickRows()}</div>
+    </div>
+    <div class="sub-l">Selected products <span class="hint">(shown in this order — use ↑ ↓ to sort)</span></div>
+    <div class="saleline-list">${sel}</div>`;
+  const html=`<div id="addModal"><div class="apv-scrim" onclick="recentPickClose()"></div>
+    <div class="apv-box" style="width:640px"><div class="apv-box-head"><h3>Add products</h3><button class="x-btn" onclick="recentPickClose()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-body">${body}</div>
+      <div class="apv-box-foot"><button class="btn btn-p btn-sm" onclick="recentPickClose()"><i class="fa-solid fa-check"></i> Done</button></div>
     </div></div>`;
   document.querySelector('.hm').insertAdjacentHTML('beforeend', html); _resScroll();
 }

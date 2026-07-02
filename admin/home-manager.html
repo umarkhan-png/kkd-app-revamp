@@ -209,6 +209,9 @@
 .hm .langimg-prev img{width:100%;height:100%;object-fit:cover;}
 .hm .langimg-prev span{font-size:8.5px;color:var(--g400);}
 .hm .langimg-l{font-size:11.5px;font-weight:800;color:var(--g600);flex:1;min-width:0;}
+.hm .cropthumb{width:40px;height:40px;border-radius:9px;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;overflow:hidden;}
+.hm .cropthumb.sm{width:30px;height:30px;font-size:15px;border-radius:7px;}
+.hm .cropthumb img{width:100%;height:100%;object-fit:cover;}
 
 /* MISC */
 .hm .sdiv{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--g500);padding:2px 0 11px;}
@@ -557,6 +560,15 @@ let bannerList=[
   { id:'b3', name:'Fertilizer Fest — up to 40% off', link:'categories.html?cat=fertilizer', img:'', imgByLang:{}, cond:'always', eventType:'festival', start:'', end:'', states:['All'], crops:['All'], on:true },
 ];
 let bannerDraft=null, bannerDraftIdx=-1;           // banner open in the create/edit form
+/* Earn Coins — who/when the section shows */
+let coinsCond={ audience:['all'], states:['All'], crops:['All'] };
+const COIN_AUDS=[{k:'all',l:'All users'},{k:'new',l:'New (just onboarded)'},{k:'returning',l:'Returning users'},{k:'inactive',l:'Inactive 30 days'}];
+/* Shop by Crop — crop library + default sequence + per-state sortings */
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+let cropLib=CROPS.map(c=>{ const sp=c.indexOf(' '); return { name:sp>0?c.slice(sp+1):c, emoji:sp>0?c.slice(0,sp):'🌱', img:'', seasons:[] }; });
+let cropDefault=cropLib.map(c=>c.name);
+let cropSortings=[ { id:'so1', states:['MP','Rajasthan'], order:cropLib.map(c=>c.name) } ];
+let cropDraft=null, cropDraftIdx=-1, sortDraft=null, sortDraftIdx=-1;
 let teEdit=null;                                   // id of theme being edited (inline · legacy)
 let teEditId=null;                                 // id of theme being edited in the MODAL (same modal as Add)
 let teLiveId=null;                                 // id of the theme currently "Live" per the preview sim
@@ -1066,6 +1078,15 @@ ordstatus:()=>`
 coins:()=>`
 <div class="card">
   <div class="card-body">
+    <div class="sdiv">Show to</div>
+    <p class="hint-p" style="margin:-2px 0 10px">Choose who sees Earn Coins and where. Great for nudging new or inactive farmers.</p>
+    <div class="sub-l">Audience</div>
+    <div class="chip-row">${COIN_AUDS.map(a=>`<span class="cchip ${coinsCond.audience.indexOf(a.k)>=0?'on':''}" onclick="coinsAudTog('${a.k}')">${a.l}</span>`).join('')}</div>
+    <div class="sub-l">States</div>
+    <div class="chip-row"><span class="cchip ${coinsCond.states.indexOf('All')>=0?'on':''}" onclick="coinsStateAll()">All states</span> ${STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(coinsCond.states.indexOf('All')<0&&coinsCond.states.indexOf(s)>=0)?'on':''}" onclick="coinsStateTog('${s}')">${s}</span>`).join('')}</div>
+    <div class="sub-l">Crops the farmer grows</div>
+    <div class="chip-row"><span class="cchip ${coinsCond.crops.indexOf('All')>=0?'on':''}" onclick="coinsCropAll()">All crops</span> ${CROPS.map((c,i)=>`<span class="cchip ${(coinsCond.crops.indexOf('All')<0&&coinsCond.crops.indexOf(c)>=0)?'on':''}" onclick="coinsCropTog(${i})">${c}</span>`).join('')}</div>
+
     <div class="sdiv">Tasks (shown in drawer)</div>
     <div id="taskList">
       ${[
@@ -1108,16 +1129,20 @@ banners:()=>`
 crops:()=>`
 <div class="card">
   <div class="card-body">
-    ${LT()}
-    ${TG('sbc1',true,'Auto Seasonal Mode','Shows crops in-season for user\'s state based on current month')}
-    <div style="margin-top:14px;" class="sdiv">Manual Config — per State</div>
-    <div class="row"><div class="fg" style="max-width:240px;"><label>Configure State</label>
-      <select class="s" onchange="save('Loaded '+this.value+' config')">
-        ${STATES.filter(s=>s!=='All States').map(s=>`<option>${s}</option>`).join('')}
-      </select>
-    </div></div>
-    <div>${CROPS.map((c,i)=>`<span class="cchip${i<4?' on':''}" onclick="this.classList.toggle('on')">${c}</span>`).join('')}</div>
-    <button class="btn btn-s btn-sm" style="margin-top:10px;">+ Add Custom Crop</button>
+    ${TG('sbc1',true,'Auto seasonal mode','Automatically surfaces in-season crops for the farmer\'s state &amp; month')}
+
+    <div class="sdiv">Crops</div>
+    <div class="entry-list">${cropLib.map((c,i)=>cropRow(c,i)).join('')}</div>
+    <button class="btn btn-p btn-sm" style="margin-top:10px" onclick="cropAdd()"><i class="fa-solid fa-plus"></i> Add crop</button>
+
+    <div class="sdiv">Default sequence</div>
+    <p class="hint-p" style="margin:-2px 0 10px">The order crops appear by default — used when no state-wise sorting matches the farmer.</p>
+    <div class="entry-list">${cropDefault.map((nm,i)=>cropOrderRow(nm,i)).join('')}</div>
+
+    <div class="sdiv">State-wise sorting</div>
+    <p class="hint-p" style="margin:-2px 0 10px">Give chosen states their own crop order. One sorting can cover multiple states.</p>
+    <div class="entry-list">${cropSortings.length?cropSortings.map((s,i)=>sortRow(s,i)).join(''):'<p class="hint-p">No state-wise sortings yet.</p>'}</div>
+    <button class="btn btn-p btn-sm" style="margin-top:10px" onclick="sortAdd()"><i class="fa-solid fa-plus"></i> Add sorting</button>
   </div>
 </div>`,
 
@@ -1623,6 +1648,95 @@ function bannerFormRender(){
 function addFColl(){ listAdd('coll'); }
 function addWidget(){ listAdd('widget'); }
 function addTesti(){ listAdd('testi'); }
+
+/* ── Earn Coins targeting ── */
+function coinsUI(){ if(sel==='coins') pick('coins'); }
+function coinsAudTog(k){ if(k==='all'){ coinsCond.audience=['all']; } else { let a=coinsCond.audience.filter(x=>x!=='all'); a.indexOf(k)>=0?a=a.filter(x=>x!==k):a.push(k); if(!a.length)a=['all']; coinsCond.audience=a; } coinsUI(); }
+function coinsStateAll(){ coinsCond.states=['All']; coinsUI(); }
+function coinsStateTog(st){ let s=coinsCond.states.filter(x=>x!=='All'); s.indexOf(st)>=0?s=s.filter(x=>x!==st):s.push(st); if(!s.length)s=['All']; coinsCond.states=s; coinsUI(); }
+function coinsCropAll(){ coinsCond.crops=['All']; coinsUI(); }
+function coinsCropTog(i){ const cr=CROPS[i]; let s=coinsCond.crops.filter(x=>x!=='All'); s.indexOf(cr)>=0?s=s.filter(x=>x!==cr):s.push(cr); if(!s.length)s=['All']; coinsCond.crops=s; coinsUI(); }
+
+/* ── Shop by Crop — library + default sequence + state-wise sortings ── */
+function cropsUI(){ if(sel==='crops') pick('crops'); }
+function cropFind(nm){ return cropLib.find(x=>x.name===nm)||{name:nm,emoji:'🌱',img:''}; }
+function cropThumb(c,sm){ return `<div class="cropthumb${sm?' sm':''}">${c.img?`<img src="${c.img}" alt=""/>`:esc(c.emoji||'🌱')}</div>`; }
+function cropRow(c,i){ const seas=(c.seasons&&c.seasons.length)?c.seasons.join(', '):'All year';
+  return `<div class="li" style="align-items:center">${cropThumb(c)}
+    <div class="li-body"><div class="li-sum"><span class="nm">${esc(c.name)}</span><span class="meta">📅 ${esc(seas)}</span></div></div>
+    <div class="li-act"><button class="ic-btn" title="Edit" onclick="cropEdit(${i})"><i class="fa-solid fa-pen"></i></button><button class="ic-btn del" title="Delete" onclick="cropDel(${i})"><i class="fa-solid fa-trash"></i></button></div>
+  </div>`; }
+function cropOrderRow(nm,i){ const c=cropFind(nm); const n=cropDefault.length;
+  return `<div class="li" style="align-items:center;padding:8px 11px">
+    <span style="font-size:11px;font-weight:700;color:var(--g400);min-width:18px;text-align:center">${i+1}</span>${cropThumb(c,true)}
+    <div class="li-body"><span class="nm" style="font-size:13px;font-weight:700">${esc(c.name)}</span></div>
+    <div class="li-act"><button class="ic-btn" title="Up" onclick="cropDefMove(${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button><button class="ic-btn" title="Down" onclick="cropDefMove(${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button></div>
+  </div>`; }
+function cropDefMove(i,d){ const j=i+d; if(j<0||j>=cropDefault.length) return; const a=cropDefault; [a[i],a[j]]=[a[j],a[i]]; cropsUI(); }
+function cropDel(i){ const nm=cropLib[i].name; cropLib.splice(i,1); cropDefault=cropDefault.filter(x=>x!==nm); cropSortings.forEach(s=>s.order=s.order.filter(x=>x!==nm)); cropsUI(); }
+function cropAdd(){ cropDraft={name:'',emoji:'🌱',img:'',seasons:[]}; cropDraftIdx=-1; cropModalRender(); }
+function cropEdit(i){ cropDraft=JSON.parse(JSON.stringify(cropLib[i])); cropDraftIdx=i; cropModalRender(); }
+function cropModalSync(){ if(!cropDraft) return; const n=document.getElementById('cropFName'); if(n) cropDraft.name=n.value; }
+function cropModalCancel(){ cropDraft=null; cropDraftIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); }
+function cropModalSave(){ cropModalSync(); const d=cropDraft; if(!d.name) d.name='New crop';
+  if(cropDraftIdx>=0){ const old=cropLib[cropDraftIdx].name; cropLib[cropDraftIdx]=d; if(old!==d.name){ cropDefault=cropDefault.map(x=>x===old?d.name:x); cropSortings.forEach(s=>s.order=s.order.map(x=>x===old?d.name:x)); } }
+  else { cropLib.push(d); cropDefault.push(d.name); cropSortings.forEach(s=>s.order.push(d.name)); }
+  cropDraft=null; cropDraftIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); cropsUI(); }
+function cropFPick(input){ const f=input.files&&input.files[0]; if(!f) return; cropModalSync(); cropDraft.img=URL.createObjectURL(f); cropModalRender(); }
+function cropFRemove(){ cropModalSync(); cropDraft.img=''; cropModalRender(); }
+function cropSeasonTog(m){ cropModalSync(); const s=cropDraft.seasons||[]; const i=s.indexOf(m); i>=0?s.splice(i,1):s.push(m); cropDraft.seasons=s; cropModalRender(); }
+function cropModalRender(){ const ex=document.getElementById('addModal'); if(ex) ex.remove(); const d=cropDraft; if(!d) return;
+  const body=`
+    <div class="sub-l" style="margin-top:0">Crop image &amp; name</div>
+    <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:14px">
+      ${cropThumb(d)}
+      <div style="flex:1;min-width:0">
+        <input type="file" id="cropFImg" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="cropFPick(this)"/>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-s btn-sm" onclick="document.getElementById('cropFImg').click()"><i class="fa-solid fa-upload"></i> ${d.img?'Change image':'Upload image'}</button>${d.img?`<button class="btn btn-d btn-sm" onclick="cropFRemove()"><i class="fa-solid fa-trash"></i> Remove</button>`:''}</div>
+        <div class="bg-guide" style="margin-top:8px"><i class="fa-solid fa-circle-info"></i>Square icon · recommended 160 × 160 px · max 500 KB.</div>
+      </div>
+    </div>
+    <div class="row" style="margin-bottom:0"><div class="fg"><label>Crop name</label><input type="text" id="cropFName" value="${esc(d.name)}" data-maxlen="24" placeholder="e.g. Sugarcane"/></div></div>
+    <div class="sub-l">Seasonal configuration <span class="hint">(months this crop is in season)</span></div>
+    <div class="chip-row">${MONTHS.map(m=>`<span class="cchip ${(d.seasons||[]).indexOf(m)>=0?'on':''}" onclick="cropSeasonTog('${m}')">${m}</span>`).join('')}</div>`;
+  const html=`<div id="addModal"><div class="apv-scrim" onclick="cropModalCancel()"></div>
+    <div class="apv-box"><div class="apv-box-head"><h3>${cropDraftIdx>=0?'Edit crop':'Add crop'}</h3><button class="x-btn" onclick="cropModalCancel()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-body">${body}</div>
+      <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="cropModalCancel()">Cancel</button><button class="btn btn-p btn-sm" onclick="cropModalSave()"><i class="fa-solid fa-check"></i> ${cropDraftIdx>=0?'Save crop':'Add crop'}</button></div>
+    </div></div>`;
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+}
+/* state-wise sorting */
+function sortRow(s,i){ const shown=s.order.slice(0,3).map(nm=>cropFind(nm).name).join(' → ');
+  return `<div class="li" style="align-items:center"><div class="sb-ic sm" style="background:var(--green-lt);color:var(--green)"><i class="fa-solid fa-arrow-down-1-9"></i></div>
+    <div class="li-body"><div class="li-sum"><span class="nm">${esc(s.states.join(', ')||'No states')}</span><span class="meta">🌱 ${s.order.length} crops · ${esc(shown)}${s.order.length>3?' …':''}</span></div></div>
+    <div class="li-act"><button class="ic-btn" title="Edit" onclick="sortEdit(${i})"><i class="fa-solid fa-pen"></i></button><button class="ic-btn del" title="Delete" onclick="sortDel(${i})"><i class="fa-solid fa-trash"></i></button></div>
+  </div>`; }
+function sortDel(i){ cropSortings.splice(i,1); cropsUI(); }
+function sortAdd(){ sortDraft={ id:'so'+Date.now().toString(36), states:[], order:cropLib.map(c=>c.name) }; sortDraftIdx=-1; sortModalRender(); }
+function sortEdit(i){ sortDraft=JSON.parse(JSON.stringify(cropSortings[i])); sortDraftIdx=i; sortModalRender(); }
+function sortModalCancel(){ sortDraft=null; sortDraftIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); }
+function sortModalSave(){ const d=sortDraft; if(!d.states.length){ sortModalCancel(); return; } if(sortDraftIdx>=0) cropSortings[sortDraftIdx]=d; else cropSortings.push(d); sortDraft=null; sortDraftIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); cropsUI(); }
+function sortStateTog(st){ let s=sortDraft.states.slice(); s.indexOf(st)>=0?s=s.filter(x=>x!==st):s.push(st); sortDraft.states=s; sortModalRender(); }
+function sortMove(i,d){ const j=i+d; if(j<0||j>=sortDraft.order.length) return; const a=sortDraft.order; [a[i],a[j]]=[a[j],a[i]]; sortModalRender(); }
+function sortModalRender(){ const ex=document.getElementById('addModal'); if(ex) ex.remove(); const d=sortDraft; if(!d) return;
+  const n=d.order.length;
+  const body=`
+    <div class="sub-l" style="margin-top:0">States for this sorting <span class="hint">(pick one or more)</span></div>
+    <div class="chip-row">${STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${d.states.indexOf(s)>=0?'on':''}" onclick="sortStateTog('${s}')">${s}</span>`).join('')}</div>
+    <div class="sub-l">Crop order for these states</div>
+    <div class="entry-list">${d.order.map((nm,i)=>{ const c=cropFind(nm); return `<div class="li" style="align-items:center;padding:8px 11px">
+      <span style="font-size:11px;font-weight:700;color:var(--g400);min-width:18px;text-align:center">${i+1}</span>${cropThumb(c,true)}
+      <div class="li-body"><span class="nm" style="font-size:13px;font-weight:700">${esc(c.name)}</span></div>
+      <div class="li-act"><button class="ic-btn" onclick="sortMove(${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button><button class="ic-btn" onclick="sortMove(${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button></div>
+    </div>`; }).join('')}</div>`;
+  const html=`<div id="addModal"><div class="apv-scrim" onclick="sortModalCancel()"></div>
+    <div class="apv-box" style="width:620px"><div class="apv-box-head"><h3>${sortDraftIdx>=0?'Edit sorting':'Add state-wise sorting'}</h3><button class="x-btn" onclick="sortModalCancel()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-body">${body}</div>
+      <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="sortModalCancel()">Cancel</button><button class="btn btn-p btn-sm" onclick="sortModalSave()"><i class="fa-solid fa-check"></i> ${sortDraftIdx>=0?'Save sorting':'Add sorting'}</button></div>
+    </div></div>`;
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+}
 
 /* ── SALE section — a list of sales, each edited in ONE form modal ── */
 function saleUI(){ if(sel==='flash') pick('flash'); }

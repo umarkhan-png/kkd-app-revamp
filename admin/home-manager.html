@@ -152,6 +152,7 @@
 .hm .ed-toggle{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:700;color:var(--g600,#475569);cursor:pointer;}
 .hm .ed-lock{font-size:12px;font-weight:700;color:var(--g500,#64748B);background:var(--g100,#F1F5F9);padding:6px 11px;border-radius:8px;white-space:nowrap;}
 .hm .sec-hidden{font-size:10px;font-weight:700;color:var(--g500,#64748B);background:var(--g100,#F1F5F9);padding:2px 8px;border-radius:9999px;flex-shrink:0;}
+.hm .sec-draft{font-size:9.5px;font-weight:800;color:#92400E;background:#FEF3C7;padding:2px 7px;border-radius:9999px;flex-shrink:0;letter-spacing:.02em;}
 .hm .tt-lock{font-size:13px;opacity:.7;width:30px;text-align:center;}
 .hm .hexpick{display:flex;align-items:center;gap:6px;}
 .hm .hexpick .hexin{width:84px;flex:0 0 84px;height:34px;box-sizing:border-box;border:1px solid var(--g200);border-radius:6px;padding:0 8px;font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase;color:var(--g600,#475569);outline:none;}
@@ -481,7 +482,7 @@ let data = KKD.load();
 /* Custom sections the manager builds (Bestseller-style product strips). The name defined
    inside the editor becomes the section heading shown on the app. */
 let customSections = Array.isArray(data.customHomeSections)
-  ? data.customHomeSections.map(c=>{ const o=Object.assign({group:'custom',ic:'⭐',link:'',products:[],on:true},c);
+  ? data.customHomeSections.map(c=>{ const o=Object.assign({group:'custom',ic:'⭐',link:'',products:[],on:true,draft:false},c);
       o.products=(o.products||[]).map(p=> typeof p==='string' ? {name:p,variant:''} : p);   // migrate old string entries
       return o; })
   : [];
@@ -506,7 +507,7 @@ function seedSecs(){
   data.homeSections = normalizeOrder(stored, meta);
   SECS = data.homeSections.map(s=>({...meta[s.id], on:s.on, title:s.title||''}));
   // append the manager's custom sections after the built-ins
-  customSections.forEach(c=>SECS.push({id:c.id, ic:c.ic||'⭐', nm:c.name, sub:'Custom product section', on:c.on!==false, group:'custom', custom:true}));
+  customSections.forEach(c=>SECS.push({id:c.id, ic:c.ic||'⭐', nm:c.name, sub:'Custom product section', on:c.on!==false, group:'custom', custom:true, draft:!!c.draft}));
   KKD.save(data);
 }
 function normalizeOrder(list, meta){
@@ -521,7 +522,7 @@ function normalizeOrder(list, meta){
   return out;
 }
 function persist(){ data.homeSections = SECS.filter(s=>!s.custom).map(s=>({id:s.id,on:s.on,title:s.title||''})); KKD.save(data); }
-function persistCustom(){ data.customHomeSections = customSections.map(c=>({id:c.id,name:c.name,on:c.on!==false,group:'custom',link:c.link||'',products:c.products||[],ic:c.ic||'⭐'})); KKD.save(data); }
+function persistCustom(){ data.customHomeSections = customSections.map(c=>({id:c.id,name:c.name,on:c.on!==false,group:'custom',link:c.link||'',products:c.products||[],ic:c.ic||'⭐',draft:!!c.draft})); KKD.save(data); }
 seedSecs();
 
 let sel=null,dragId=null;
@@ -530,12 +531,16 @@ let sel=null,dragId=null;
 function secItemHTML(s){
   // Header, Theme & Seasons, Ask Expert, Cart Bar are structurally pinned in the app
   // (top of Home / floating), so their placement is locked — not draggable / not a drop target.
-  const drag = s.fixed
+  // Draft custom sections are also not draggable until they're saved.
+  const isDraft = !!s.draft;
+  const drag = (s.fixed||isDraft)
     ? ''
     : `draggable="true" ondragstart="ds(event,'${s.id}')" ondragover="dov(event)" ondrop="dd(event,'${s.id}')" ondragleave="dl(event)" ondragend="de(event)"`;
   const handle = s.fixed
     ? `<span class="drag-h lk" title="Fixed placement — this section can’t be moved" onclick="event.stopPropagation()">🔒</span>`
-    : `<span class="drag-h" title="Drag to reorder" onclick="event.stopPropagation()">⠿</span>`;
+    : (isDraft
+      ? `<span class="drag-h" title="Draft — save the section to enable dragging" onclick="event.stopPropagation()">✎</span>`
+      : `<span class="drag-h" title="Drag to reorder" onclick="event.stopPropagation()">⠿</span>`);
   return `
     <div class="sec-item${sel===s.id?' active':''}${s.on?'':' off'}${s.fixed?' locked':''}" id="si-${s.id}"
       ${drag}
@@ -543,7 +548,7 @@ function secItemHTML(s){
       ${handle}
       <span class="sec-icon">${s.ic}</span>
       <div class="sec-info"><div class="sec-name">${esc(s.title||s.nm)}</div><div class="sec-sub">${esc(s.sub)}</div></div>
-      ${s.on?'':'<span class="sec-hidden">Hidden</span>'}
+      ${isDraft?'<span class="sec-draft">Draft</span>':(s.on?'':'<span class="sec-hidden">Hidden</span>')}
     </div>`;
 }
 function renderList(){
@@ -594,16 +599,23 @@ function edHead(id){
     ? `<span class="ed-lock" title="This section is always on and can’t be hidden">🔒 Always on</span>`
     : `<label class="ed-toggle"><span>Show on Home</span><div class="tg ${s.on?'on':''}" onclick="toggleVis('${id}')"></div></label>`;
   const dispNm = s.title || s.nm;
-  // renaming the app-facing heading — offered on the app content sections (not structural/fixed;
-  // custom sections rename via the name field inside their own editor)
-  const rename = (!locked && !s.custom)
-    ? `<button class="ttl-edit" title="Rename this section on the app" onclick="renameSection('${id}')"><i class="fa-solid fa-pen"></i></button>`
+  // rename via a pencil next to the title — offered on content sections AND custom sections
+  const rename = (!locked)
+    ? `<button class="ttl-edit" title="Rename this section" onclick="renameSection('${id}')"><i class="fa-solid fa-pen"></i></button>`
     : '';
-  const renamed = (s.title && s.title!==s.nm) ? `<span class="ttl-orig">${s.ic} ${s.nm}</span>` : '';
+  // uniform delete (same trash control as the rest of the portal) — custom sections only
+  const del = s.custom
+    ? `<button class="ic-btn del" title="Delete section" onclick="csDelSection('${id}')"><i class="fa-solid fa-trash"></i></button>`
+    : '';
+  // draft custom sections get a Save button; saving takes them out of draft and enables dragging
+  const saveDraft = (s.custom && s.draft)
+    ? `<button class="btn btn-p btn-sm" onclick="csSaveDraft('${id}')"><i class="fa-solid fa-check"></i> Save section</button>`
+    : '';
+  const renamed = (s.title && s.title!==s.nm && !s.custom) ? `<span class="ttl-orig">${s.ic} ${s.nm}</span>` : '';
   return `<div class="flex items-center justify-between" style="margin-bottom:14px;gap:14px">
     <div><h2 style="font-size:18px;font-weight:800;margin:0;display:flex;align-items:center;gap:8px">${s.ic} ${esc(dispNm)}${rename}</h2>${renamed}${s.sub?`<p class="muted" style="margin:2px 0 0;font-size:12.5px">${s.sub}</p>`:''}</div>
     <div style="display:flex;align-items:center;gap:14px;flex-shrink:0">
-      ${ctrl}
+      ${saveDraft}${del}${ctrl}
       <button class="btn btn-s btn-sm" onclick="AdminShell.previewApp('home.html')"><i class="fa-solid fa-mobile-screen-button"></i> Preview in app</button>
     </div>
   </div>`;
@@ -2094,18 +2106,21 @@ function addFC(btn){const p=PRODS[Math.floor(Math.random()*PRODS.length)];const 
 /* ── Section title rename (app-facing heading of a built-in section) ── */
 function renameSection(id){
   const s=SECS.find(x=>x.id===id); if(!s) return;
+  const c=csFind(id);
+  const cur = c ? c.name : (s.title||s.nm);
   amOpen('Rename section', `
-    <div class="row" style="margin-bottom:0"><div class="fg"><label>Section heading (as shown on the app)</label><input type="text" id="am_sectitle" value="${esc(s.title||s.nm)}" data-maxlen="28" placeholder="${esc(s.nm)}"/></div></div>
-    <p class="hint-p" style="margin:8px 0 0">This is the title farmers see above the section on the home screen. Leave blank to fall back to the default (“${esc(s.nm)}”).</p>`,
+    <div class="row" style="margin-bottom:0"><div class="fg"><label>Section heading (as shown on the app)</label><input type="text" id="am_sectitle" value="${esc(cur)}" data-maxlen="28" placeholder="${esc(s.nm)}" autofocus/></div></div>
+    <p class="hint-p" style="margin:8px 0 0">This is the title farmers see above the section on the home screen.</p>`,
     function(){
       const v=(amVal('am_sectitle')||'').trim();
-      s.title = (v && v!==s.nm) ? v : '';
-      persist(); renderList(); pick(id); AdminShell.saved('Section title updated');
+      if(c){ csRename(id, v||c.name); AdminShell.saved('Section renamed'); }         // custom → change the name
+      else { s.title = (v && v!==s.nm) ? v : ''; persist(); renderList(); pick(id); AdminShell.saved('Section title updated'); }
     }, 'Save title');
 }
 
 /* ── Custom sections (Bestseller-style product strips the manager builds) ── */
 function csFind(id){ return customSections.find(c=>c.id===id); }
+function csSaveDraft(id){ const c=csFind(id); if(!c)return; c.draft=false; const s=SECS.find(x=>x.id===id); if(s)s.draft=false; persistCustom(); renderList(); pick(id); AdminShell.saved('Section saved — drag it in the sidebar to place it on Home'); }
 function addCustomSection(){
   // ask ONLY the name — placement is done by dragging the section in the sidebar
   amOpen('Add section', `
@@ -2114,9 +2129,9 @@ function addCustomSection(){
     function(){
       const nm=(amVal('am_csname')||'').trim()||'New section';
       const id='cs'+Date.now().toString(36);
-      const c={id,name:nm,on:true,group:'custom',ic:'⭐',link:'',products:[]};
+      const c={id,name:nm,on:true,group:'custom',ic:'⭐',link:'',products:[],draft:true};   // starts as a draft
       customSections.push(c);
-      SECS.push({id,ic:'⭐',nm:c.name,sub:'Custom product section',on:true,group:'custom',custom:true});
+      SECS.push({id,ic:'⭐',nm:c.name,sub:'Custom product section',on:true,group:'custom',custom:true,draft:true});
       persistCustom(); renderList(); pick(id);   // open the newly created section's editor
     }, 'Add section');
 }
@@ -2225,16 +2240,12 @@ function customEditor(cs){
         <button class="ic-btn del" title="Remove" onclick="csDelProd('${cs.id}',${i})"><i class="fa-solid fa-trash"></i></button>
       </div>`).join('')
     : '<p class="hint" style="margin:0">No products yet — add a few below.</p>';
+  const draftNote = cs.draft
+    ? `<div style="background:#FFFBEB;border:1px solid #FDE68A;color:#92400E;border-radius:9px;padding:10px 12px;font-size:12.5px;line-height:1.5;margin-bottom:14px">✎ This section is a <b>draft</b>. Add its products, then hit <b>Save section</b> (top-right). After saving you can drag it in the sidebar to place it on Home. Rename it any time with the ✏️ next to the title.</div>`
+    : '';
   return `<div class="card"><div class="card-body">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px">
-      <div class="sdiv" style="margin:0">Section heading</div>
-      <button class="btn btn-d btn-sm" title="Delete section" onclick="csDelSection('${cs.id}')"><i class="fa-solid fa-trash"></i> Delete section</button>
-    </div>
-    <p class="hint-p" style="margin:-2px 0 10px">This name shows as the section title on the app home screen.</p>
-    <div class="row"><div class="fg" style="max-width:340px"><label>Section name</label><input type="text" value="${esc(cs.name)}" data-maxlen="28" onchange="csRename('${cs.id}',this.value)" placeholder="e.g. Best Sellers"/></div>
-      <div class="fg"><label>"See all" link <span class="hint">(optional)</span></label><input type="text" value="${esc(cs.link||'')}" onchange="csSetLink('${cs.id}',this.value)" placeholder="shop.html?sort=bestsellers"/></div></div>
-
-    <div class="sdiv">Products <span class="hint" style="font-weight:400">(shown in this order — use ↑ ↓ to sort)</span></div>
+    ${draftNote}
+    <div class="sdiv" style="margin-top:0">Products <span class="hint" style="font-weight:400">(shown in this order — use ↑ ↓ to sort)</span></div>
     <div class="saleline-list">${prods}</div>
     <button class="btn btn-p btn-sm" style="margin-top:10px" onclick="csPickRender('${cs.id}')"><i class="fa-solid fa-plus"></i> Add products</button>
   </div></div>`;

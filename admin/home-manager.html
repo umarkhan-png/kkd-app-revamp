@@ -212,6 +212,15 @@
 .hm .cropthumb{width:40px;height:40px;border-radius:9px;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;overflow:hidden;}
 .hm .cropthumb.sm{width:30px;height:30px;font-size:15px;border-radius:7px;}
 .hm .cropthumb img{width:100%;height:100%;object-fit:cover;}
+/* compact crop grid (2-up) — merges crop library + default order into one tight block */
+.hm .crop-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;}
+.hm .crop-cell{display:flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid var(--g200);border-radius:8px;background:#fff;min-width:0;}
+.hm .crop-cell .ord{font-size:10.5px;font-weight:800;color:var(--g400);min-width:14px;text-align:center;flex-shrink:0;}
+.hm .crop-nm{font-size:12.5px;font-weight:700;color:var(--g800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hm .crop-seas{font-size:10.5px;color:var(--g500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hm .crop-acts{display:flex;gap:2px;flex-shrink:0;}
+.hm .ic-btn.xs{width:24px;height:24px;border-radius:6px;font-size:10px;}
+@media(max-width:1180px){.hm .crop-grid{grid-template-columns:1fr;}}
 .hm .bunch{border:1px solid var(--g200);border-radius:11px;background:#fff;padding:13px;margin-bottom:12px;}
 .hm .bunch.off{opacity:.6;}
 .hm .bunch-head{display:flex;align-items:center;gap:10px;padding-bottom:11px;margin-bottom:11px;border-bottom:1px dashed var(--g200);}
@@ -391,7 +400,7 @@ const DEFAULT_SECS=[
   {id:'coins',    ic:'🪙', nm:'Earn Coins',             sub:'Task screen + drawer',            on:true},
   {id:'flash',    ic:'⚡', nm:'Sale',                   sub:'Scheduled deals + countdown',     on:true},
   {id:'banners',  ic:'🖼️', nm:'Promo Banners',          sub:'Image carousel, state/lang/time', on:true},
-  {id:'crops',    ic:'🌾', nm:'Shop by Crop',           sub:'Auto seasonal + manual per state',on:true},
+  {id:'crops',    ic:'🌾', nm:'Shop by Crop',           sub:'Crop order + per-state sorting',  on:true},
   {id:'best',     ic:'⭐', nm:'Bestsellers',             sub:'Auto weekly top 4 + manual pin',  on:true},
   {id:'recent',   ic:'👁️', nm:'Recently Viewed',        sub:'Per-user browsing history',       on:true},
   {id:'buyagain', ic:'🔄', nm:'Buy Again',              sub:'Quick reorder past purchases',    on:true},
@@ -583,7 +592,6 @@ let coinBunchDraft=null, coinBunchIdx=-1, coinTaskBi=-1, coinTaskTi=-1;
 /* Shop by Crop — crop library + default sequence + per-state sortings */
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 let cropLib=CROPS.map(c=>{ const sp=c.indexOf(' '); return { name:sp>0?c.slice(sp+1):c, emoji:sp>0?c.slice(0,sp):'🌱', img:'', seasons:[] }; });
-let cropDefault=cropLib.map(c=>c.name);
 let cropSortings=[ { id:'so1', states:['MP','Rajasthan'], order:cropLib.map(c=>c.name) } ];
 let cropDraft=null, cropDraftIdx=-1, sortDraft=null, sortDraftIdx=-1;
 let teEdit=null;                                   // id of theme being edited (inline · legacy)
@@ -1129,15 +1137,10 @@ banners:()=>`
 crops:()=>`
 <div class="card">
   <div class="card-body">
-    ${TG('sbc1',true,'Auto seasonal mode','Automatically surfaces in-season crops for the farmer\'s state &amp; month')}
-
-    <div class="sdiv">Crops</div>
-    <div class="entry-list">${cropLib.map((c,i)=>cropRow(c,i)).join('')}</div>
+    <div class="sdiv">Crops &amp; default order</div>
+    <p class="hint-p" style="margin:-2px 0 10px">This is the default crop order. Use ↑ ↓ to arrange. Each crop's in-season months are set on its edit screen.</p>
+    <div class="crop-grid">${cropLib.map((c,i)=>cropRow(c,i)).join('')}</div>
     <button class="btn btn-p btn-sm" style="margin-top:10px" onclick="cropAdd()"><i class="fa-solid fa-plus"></i> Add crop</button>
-
-    <div class="sdiv">Default sequence</div>
-    <p class="hint-p" style="margin:-2px 0 10px">The order crops appear by default — used when no state-wise sorting matches the farmer.</p>
-    <div class="entry-list">${cropDefault.map((nm,i)=>cropOrderRow(nm,i)).join('')}</div>
 
     <div class="sdiv">State-wise sorting</div>
     <p class="hint-p" style="margin:-2px 0 10px">Give chosen states their own crop order. One sorting can cover multiple states.</p>
@@ -1724,26 +1727,26 @@ function coinTaskModal(t){
 function cropsUI(){ if(sel==='crops') pick('crops'); }
 function cropFind(nm){ return cropLib.find(x=>x.name===nm)||{name:nm,emoji:'🌱',img:''}; }
 function cropThumb(c,sm){ return `<div class="cropthumb${sm?' sm':''}">${c.img?`<img src="${c.img}" alt=""/>`:esc(c.emoji||'🌱')}</div>`; }
-function cropRow(c,i){ const seas=(c.seasons&&c.seasons.length)?c.seasons.join(', '):'All year';
-  return `<div class="li" style="align-items:center">${cropThumb(c)}
-    <div class="li-body"><div class="li-sum"><span class="nm">${esc(c.name)}</span><span class="meta">📅 ${esc(seas)}</span></div></div>
-    <div class="li-act"><button class="ic-btn" title="Edit" onclick="cropEdit(${i})"><i class="fa-solid fa-pen"></i></button><button class="ic-btn del" title="Delete" onclick="cropDel(${i})"><i class="fa-solid fa-trash"></i></button></div>
+function cropRow(c,i){ const seas=(c.seasons&&c.seasons.length)?c.seasons.join(', '):'All year'; const n=cropLib.length;
+  return `<div class="crop-cell">
+    <span class="ord">${i+1}</span>${cropThumb(c,true)}
+    <div style="flex:1;min-width:0"><div class="crop-nm">${esc(c.name)}</div><div class="crop-seas">📅 ${esc(seas)}</div></div>
+    <div class="crop-acts">
+      <button class="ic-btn xs" title="Up" onclick="cropDefMove(${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button>
+      <button class="ic-btn xs" title="Down" onclick="cropDefMove(${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
+      <button class="ic-btn xs" title="Edit" onclick="cropEdit(${i})"><i class="fa-solid fa-pen"></i></button>
+      <button class="ic-btn xs del" title="Delete" onclick="cropDel(${i})"><i class="fa-solid fa-trash"></i></button>
+    </div>
   </div>`; }
-function cropOrderRow(nm,i){ const c=cropFind(nm); const n=cropDefault.length;
-  return `<div class="li" style="align-items:center;padding:8px 11px">
-    <span style="font-size:11px;font-weight:700;color:var(--g400);min-width:18px;text-align:center">${i+1}</span>${cropThumb(c,true)}
-    <div class="li-body"><span class="nm" style="font-size:13px;font-weight:700">${esc(c.name)}</span></div>
-    <div class="li-act"><button class="ic-btn" title="Up" onclick="cropDefMove(${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button><button class="ic-btn" title="Down" onclick="cropDefMove(${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button></div>
-  </div>`; }
-function cropDefMove(i,d){ const j=i+d; if(j<0||j>=cropDefault.length) return; const a=cropDefault; [a[i],a[j]]=[a[j],a[i]]; cropsUI(); }
-function cropDel(i){ const nm=cropLib[i].name; cropLib.splice(i,1); cropDefault=cropDefault.filter(x=>x!==nm); cropSortings.forEach(s=>s.order=s.order.filter(x=>x!==nm)); cropsUI(); }
+function cropDefMove(i,d){ const j=i+d; if(j<0||j>=cropLib.length) return; const a=cropLib; [a[i],a[j]]=[a[j],a[i]]; cropsUI(); }
+function cropDel(i){ const nm=cropLib[i].name; cropLib.splice(i,1); cropSortings.forEach(s=>s.order=s.order.filter(x=>x!==nm)); cropsUI(); }
 function cropAdd(){ cropDraft={name:'',emoji:'🌱',img:'',seasons:[]}; cropDraftIdx=-1; cropModalRender(); }
 function cropEdit(i){ cropDraft=JSON.parse(JSON.stringify(cropLib[i])); cropDraftIdx=i; cropModalRender(); }
 function cropModalSync(){ if(!cropDraft) return; const n=document.getElementById('cropFName'); if(n) cropDraft.name=n.value; }
 function cropModalCancel(){ cropDraft=null; cropDraftIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); }
 function cropModalSave(){ cropModalSync(); const d=cropDraft; if(!d.name) d.name='New crop';
-  if(cropDraftIdx>=0){ const old=cropLib[cropDraftIdx].name; cropLib[cropDraftIdx]=d; if(old!==d.name){ cropDefault=cropDefault.map(x=>x===old?d.name:x); cropSortings.forEach(s=>s.order=s.order.map(x=>x===old?d.name:x)); } }
-  else { cropLib.push(d); cropDefault.push(d.name); cropSortings.forEach(s=>s.order.push(d.name)); }
+  if(cropDraftIdx>=0){ const old=cropLib[cropDraftIdx].name; cropLib[cropDraftIdx]=d; if(old!==d.name){ cropSortings.forEach(s=>s.order=s.order.map(x=>x===old?d.name:x)); } }
+  else { cropLib.push(d); cropSortings.forEach(s=>s.order.push(d.name)); }
   cropDraft=null; cropDraftIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); cropsUI(); }
 function cropFPick(input){ const f=input.files&&input.files[0]; if(!f) return; cropModalSync(); cropDraft.img=URL.createObjectURL(f); cropModalRender(); }
 function cropFRemove(){ cropModalSync(); cropDraft.img=''; cropModalRender(); }

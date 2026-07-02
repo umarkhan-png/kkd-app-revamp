@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Widget Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+/* ── Widget Management · scoped under .wm ── */
+.wm{--green:#258046;--green-lt:#ECFDF5;--g50:#F8FAFC;--g100:#F1F5F9;--g200:#E2E8F0;--g300:#CBD5E1;--g400:#94A3B8;--g500:#64748B;--g600:#475569;--g700:#334155;--g800:#1E293B;font-family:'Inter',sans-serif;color:var(--g800);max-width:920px;}
+.wm .intro{background:var(--green-lt);border:1px solid #BBF7D0;border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;gap:12px;align-items:flex-start;}
+.wm .intro i{color:var(--green);font-size:18px;margin-top:1px;}
+.wm .intro h2{margin:0 0 3px;font-size:15px;font-weight:800;}
+.wm .intro p{margin:0;font-size:12.5px;color:var(--g600);line-height:1.5;}
+.wm .wgrid{display:flex;flex-direction:column;gap:9px;}
+.wm .wcard{display:flex;align-items:center;gap:12px;padding:13px 15px;border:1px solid var(--g200);border-radius:11px;background:#fff;box-shadow:0 1px 2px rgba(16,24,40,.04);}
+.wm .wcard.off{opacity:.55;}
+.wm .wemoji{font-size:22px;width:40px;height:40px;border-radius:10px;background:var(--g50);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.wm .wbody{flex:1;min-width:0;}
+.wm .wtitle{font-size:13.5px;font-weight:700;color:var(--g800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wm .wmeta{font-size:11.5px;color:var(--g500);margin-top:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.wm .wtype{background:var(--g100);color:var(--g600);border-radius:20px;padding:2px 9px;font-weight:700;font-size:10.5px;}
+.wm .wact{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.wm .tg{width:38px;height:22px;border-radius:20px;background:var(--g300);position:relative;cursor:pointer;transition:.15s;flex-shrink:0;}
+.wm .tg::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.15s;}
+.wm .tg.on{background:var(--green);}
+.wm .tg.on::after{transform:translateX(16px);}
+.wm .ic-btn{border:1px solid var(--g200);background:#fff;color:var(--g500);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:12px;transition:.12s;}
+.wm .ic-btn:hover{background:var(--g50);color:var(--g700);}
+.wm .ic-btn.del:hover{background:#FEF2F2;border-color:#FECACA;color:#DC2626;}
+.wm .btn{padding:8px 15px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:6px;transition:.12s;}
+.wm .btn-p{background:var(--green);color:#fff;}
+.wm .btn-p:hover{background:#1F7A40;}
+.wm .btn-s{background:#fff;border:1px solid var(--g200);color:var(--g700);}
+.wm .btn-s:hover{background:var(--g50);}
+.wm .btn-add{margin-top:14px;border:1.5px dashed var(--g300);background:#fff;color:var(--green);width:100%;justify-content:center;padding:11px;}
+.wm .btn-add:hover{border-color:var(--green);background:var(--green-lt);}
+/* modal */
+#wmModal{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;}
+#wmModal .scrim{position:absolute;inset:0;background:rgba(15,23,42,.45);}
+#wmModal .box{position:relative;background:#fff;border-radius:16px;width:520px;max-width:92vw;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.28);}
+#wmModal .box-head{padding:16px 20px;border-bottom:1px solid var(--g100);display:flex;align-items:center;justify-content:between;}
+#wmModal .box-head h3{margin:0;font-size:16px;font-weight:800;flex:1;}
+#wmModal .x{border:none;background:var(--g100);width:30px;height:30px;border-radius:8px;cursor:pointer;color:var(--g500);}
+#wmModal .box-body{padding:18px 20px;overflow-y:auto;}
+#wmModal .box-foot{padding:14px 20px;border-top:1px solid var(--g100);display:flex;justify-content:flex-end;gap:8px;}
+.wm .fg{margin-bottom:14px;}
+.wm .fg label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--g500);margin-bottom:6px;}
+.wm .fg input,.wm .fg select{width:100%;border:1.5px solid var(--g200);border-radius:9px;padding:9px 11px;font-size:13px;font-family:inherit;color:var(--g800);outline:none;background:#fff;}
+.wm .fg input:focus,.wm .fg select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
+.wm .emo-grid{display:flex;flex-wrap:wrap;gap:6px;}
+.wm .emo{width:40px;height:40px;border-radius:9px;border:1.5px solid var(--g200);background:#fff;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.12s;}
+.wm .emo:hover{border-color:var(--green);}
+.wm .emo.on{border-color:var(--green);background:var(--green-lt);}
+</style></head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+      <div class="wm">
+        <div class="intro">
+          <i class="fa-solid fa-puzzle-piece"></i>
+          <div>
+            <h2>Engagement widgets</h2>
+            <p>Poll / CTA / rating tiles that appear on the app Home screen. Each is backend-gated and shown to the right audience. Reorder with the arrows; toggle to show or hide on the app.</p>
+          </div>
+        </div>
+        <div class="wgrid" id="wgrid"></div>
+        <button class="btn btn-p btn-add" onclick="wAdd()"><i class="fa-solid fa-plus"></i> Add widget</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+AdminShell.mount({ active:'widgets', title:'Widget Management', crumb:'App Screens', controls:'Engagement widgets on the app Home screen', preview:'home.html' });
+
+const W_TYPES=['Multi Choice','Yes / No','CTA Button','Star Rating','Text Input'];
+const W_EMOJIS=['🌾','🐛','💬','🎁','🚚','⭐','🌱','💧','🪙','📸','📝','🤝','📞','❤️','🔔','🧩','🥕','☀️'];
+const DEFAULT_WIDGETS=[
+  {emoji:'🌾',title:'Which crop do you grow most?',type:'Multi Choice',action:'set_crop',on:true},
+  {emoji:'🐛',title:'Facing any crop problem now?',type:'Multi Choice',action:'crop_problem',on:true},
+  {emoji:'💬',title:'Share your success story with KKD',type:'CTA Button',action:'deeplink:/testimonials/submit',on:true},
+  {emoji:'🎁',title:'Refer a friend, earn ₹50 each',type:'CTA Button',action:'deeplink:/refer',on:true},
+  {emoji:'🚚',title:'Did your last order arrive OK?',type:'Yes / No',action:'delivery_feedback',on:true},
+  {emoji:'⭐',title:'Rate your recent purchase',type:'CTA Button',action:'deeplink:/rate',on:true},
+];
+let data=KKD.load();
+let widgets = Array.isArray(data.homeWidgets)&&data.homeWidgets.length ? data.homeWidgets.map(w=>Object.assign({on:true},w)) : DEFAULT_WIDGETS.slice();
+function persist(){ data.homeWidgets=widgets; KKD.save(data); }
+persist();
+
+let draft=null, draftIdx=-1;
+
+function render(){
+  document.getElementById('wgrid').innerHTML = widgets.map((w,i)=>{
+    const n=widgets.length;
+    return `<div class="wcard${w.on?'':' off'}">
+      <div class="wemoji">${w.emoji||'🧩'}</div>
+      <div class="wbody">
+        <div class="wtitle">${esc(w.title)}</div>
+        <div class="wmeta"><span class="wtype">${esc(w.type)}</span><span><i class="fa-solid fa-link" style="font-size:10px"></i> ${esc(w.action||'—')}</span></div>
+      </div>
+      <div class="wact">
+        <button class="ic-btn" title="Move up" onclick="wMove(${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button>
+        <button class="ic-btn" title="Move down" onclick="wMove(${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
+        <div class="tg ${w.on?'on':''}" title="Show / hide on app" onclick="wToggle(${i})"></div>
+        <button class="ic-btn" title="Edit" onclick="wEdit(${i})"><i class="fa-solid fa-pen"></i></button>
+        <button class="ic-btn del" title="Delete" onclick="wDel(${i})"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('') || '<p style="color:#94A3B8;font-size:13px">No widgets yet — add one below.</p>';
+}
+function wMove(i,d){ const j=i+d; if(j<0||j>=widgets.length) return; const a=widgets; [a[i],a[j]]=[a[j],a[i]]; persist(); render(); }
+function wToggle(i){ widgets[i].on=!widgets[i].on; persist(); render(); AdminShell.saved(widgets[i].title+(widgets[i].on?' shown on app':' hidden on app')); }
+function wDel(i){ widgets.splice(i,1); persist(); render(); AdminShell.saved('Widget removed'); }
+function wAdd(){ draft={emoji:'🧩',title:'',type:'Multi Choice',action:'',on:true}; draftIdx=-1; modal(); }
+function wEdit(i){ draft=Object.assign({},widgets[i]); draftIdx=i; modal(); }
+function mClose(){ const m=document.getElementById('wmModal'); if(m)m.remove(); draft=null; draftIdx=-1; }
+function mSync(){ if(!draft)return; const t=document.getElementById('wf_title'), ty=document.getElementById('wf_type'), a=document.getElementById('wf_action'); if(t)draft.title=t.value; if(ty)draft.type=ty.value; if(a)draft.action=a.value; }
+function wPickEmoji(e){ mSync(); draft.emoji=e; modal(); }
+function mSave(){ mSync(); if(!draft.title) draft.title='New widget'; if(draftIdx>=0) widgets[draftIdx]=draft; else widgets.push(draft); persist(); mClose(); render(); AdminShell.saved('Widget saved'); }
+function modal(){
+  const ex=document.getElementById('wmModal'); if(ex)ex.remove();
+  const d=draft; if(!d) return;
+  const html=`<div id="wmModal"><div class="scrim" onclick="mClose()"></div>
+    <div class="box">
+      <div class="box-head"><h3>${draftIdx>=0?'Edit widget':'Add widget'}</h3><button class="x" onclick="mClose()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="box-body">
+        <div class="fg"><label>Icon</label><div class="emo-grid">${W_EMOJIS.map(e=>`<button class="emo${d.emoji===e?' on':''}" onclick="wPickEmoji('${e}')">${e}</button>`).join('')}</div></div>
+        <div class="fg"><label>Widget title / question</label><input type="text" id="wf_title" value="${esc(d.title)}" placeholder="e.g. Which crop do you grow most?"/></div>
+        <div class="fg"><label>Type</label><select id="wf_type">${W_TYPES.map(t=>`<option${d.type===t?' selected':''}>${t}</option>`).join('')}</select></div>
+        <div class="fg" style="margin-bottom:0"><label>Action / Deeplink</label><input type="text" id="wf_action" value="${esc(d.action)}" placeholder="deeplink:/path or action_name"/></div>
+      </div>
+      <div class="box-foot"><button class="btn btn-s" onclick="mClose()">Cancel</button><button class="btn btn-p" onclick="mSave()"><i class="fa-solid fa-check"></i> ${draftIdx>=0?'Save':'Add widget'}</button></div>
+    </div></div>`;
+  document.querySelector('.wm').insertAdjacentHTML('beforeend', html);
+}
+render();
+</script>
+</body></html>

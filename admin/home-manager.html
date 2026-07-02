@@ -216,6 +216,37 @@
 .hm .saleline-pr b{font-size:13.5px;color:var(--green);}
 .hm .bthumb{width:64px;height:40px;border-radius:7px;flex-shrink:0;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;}
 .hm .bthumb img{width:100%;height:100%;object-fit:cover;}
+/* Marketing-360 approved banner design (mirrors the app slide) · fixed logical size 300×168 */
+.hm .mkbn{width:300px;height:168px;border-radius:14px;padding:14px;box-sizing:border-box;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;font-family:'Inter',sans-serif;box-shadow:0 8px 22px -12px rgba(0,0,0,.4);}
+.hm .mkbn-empty{align-items:center;justify-content:center;background:var(--g100);color:var(--g400);font-size:13px;box-shadow:none;}
+.hm .mkbn-ghost{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:90px;font-weight:900;font-style:italic;line-height:1;pointer-events:none;user-select:none;}
+.hm .mkbn-badge{position:relative;align-self:flex-start;display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:6px;font-size:9.5px;font-weight:700;letter-spacing:.14em;background:rgba(251,191,36,0.16);border:1px solid;}
+.hm .mkbn-head{position:relative;font-size:21px;font-weight:800;line-height:1.05;margin-top:6px;}
+.hm .mkbn-head span{font-weight:800;}
+.hm .mkbn-foot{position:relative;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;}
+.hm .mkbn-sub{font-size:9px;font-weight:700;letter-spacing:.14em;opacity:.85;}
+.hm .mkbn-big{font-size:22px;font-weight:800;margin-top:2px;}
+.hm .mkbn-big span{font-size:11px;font-weight:700;opacity:.8;}
+.hm .mkbn-cta{font-size:11.5px;font-weight:800;padding:8px 14px;border-radius:20px;white-space:nowrap;box-shadow:0 6px 16px -4px rgba(0,0,0,.35);}
+/* list thumbnail = the approved design scaled down */
+.hm .bthumb2{width:118px;height:66px;border-radius:8px;overflow:hidden;flex-shrink:0;background:var(--g100);position:relative;border:1px solid var(--g200);}
+.hm .bthumb2 .mkbn{transform:scale(.393);transform-origin:top left;box-shadow:none;border-radius:0;}
+.hm .bthumb2 .mkbn-empty{transform:none;width:100%;height:100%;font-size:11px;}
+/* banner picker overlay (sits above the banner form) */
+.hm #bnPick{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;}
+.hm .bnpick-grid{display:flex;flex-wrap:wrap;gap:16px;}
+.hm .bnpick-card{cursor:pointer;border-radius:14px;transition:transform .12s;position:relative;}
+.hm .bnpick-card:hover{transform:translateY(-3px);}
+.hm .bnpick-card:hover .mkbn{outline:3px solid var(--green);outline-offset:2px;border-radius:14px;}
+.hm .bnpick-name{font-size:12px;font-weight:700;color:var(--g700);margin-top:8px;text-align:center;max-width:300px;}
+/* per-language banner select tiles */
+.hm .lbn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;}
+.hm .lbn{border:1px solid var(--g200);border-radius:10px;padding:9px;display:flex;flex-direction:column;gap:7px;}
+.hm .lbn-prev{height:56px;border-radius:7px;overflow:hidden;background:var(--g100);position:relative;display:flex;align-items:center;justify-content:center;color:var(--g400);font-size:11px;}
+.hm .lbn-prev .mkbn{transform:scale(.333);transform-origin:top left;position:absolute;top:0;left:calc(50% - 50px);box-shadow:none;border-radius:0;}
+.hm .lbn-head{display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.hm .lbn-l{font-size:12px;font-weight:700;color:var(--g700);}
+.hm .lbn-btns{display:flex;gap:4px;}
 .hm .langimg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;}
 .hm .langimg{display:flex;align-items:center;gap:7px;padding:7px 9px;border:1px solid var(--g200);border-radius:8px;background:#fff;}
 .hm .langimg-prev{width:40px;height:26px;border-radius:5px;background:var(--g100);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;}
@@ -226,14 +257,15 @@
 .hm .cropthumb.sm{width:30px;height:30px;font-size:15px;border-radius:7px;}
 .hm .cropthumb img{width:100%;height:100%;object-fit:cover;}
 /* compact crop grid (2-up) — merges crop library + default order into one tight block */
-.hm .crop-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;}
-.hm .crop-cell{display:flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid var(--g200);border-radius:8px;background:#fff;min-width:0;}
+/* column layout so the serial runs vertically (down column 1, then column 2), not left-to-right */
+.hm .crop-grid{column-count:2;column-gap:7px;}
+.hm .crop-cell{display:flex;align-items:center;gap:8px;padding:7px 9px;border:1px solid var(--g200);border-radius:8px;background:#fff;min-width:0;break-inside:avoid;margin-bottom:7px;}
 .hm .crop-cell .ord{font-size:10.5px;font-weight:800;color:var(--g400);min-width:14px;text-align:center;flex-shrink:0;}
 .hm .crop-nm{font-size:12.5px;font-weight:700;color:var(--g800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .hm .crop-seas{font-size:10.5px;color:var(--g500);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .hm .crop-acts{display:flex;gap:2px;flex-shrink:0;}
 .hm .ic-btn.xs{width:24px;height:24px;border-radius:6px;font-size:10px;}
-@media(max-width:1180px){.hm .crop-grid{grid-template-columns:1fr;}}
+@media(max-width:1180px){.hm .crop-grid{column-count:1;}}
 .hm .bunch{border:1px solid var(--g200);border-radius:11px;background:#fff;padding:13px;margin-bottom:12px;}
 .hm .bunch.off{opacity:.6;}
 .hm .bunch-head{display:flex;align-items:center;gap:10px;padding-bottom:11px;margin-bottom:11px;border-bottom:1px dashed var(--g200);}
@@ -268,10 +300,6 @@
 .hm .padd:hover{border-color:var(--green);color:var(--green);}
 .hm .cchip{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--g200);margin:3px;transition:all .15s;}
 .hm .cchip.on{background:var(--green-lt);border-color:var(--green);color:var(--green);font-weight:600;}
-.hm .cchip.season{border-style:dashed;border-color:var(--green);color:var(--green);font-weight:600;background:#fff;}
-.hm .cchip.season:hover{background:var(--green-lt);}
-.hm .cchip.season.alt{border-color:var(--g300,#CBD5E1);color:var(--g500);}
-.hm .cchip.season.alt:hover{background:var(--g50);}
 .hm .info-box{display:flex;align-items:center;gap:8px;background:var(--green-lt);border-radius:8px;padding:10px 13px;font-size:12.5px;color:var(--green);margin-top:8px;}
 .hm .sch-box{background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:13px;margin-bottom:12px;}
 .hm .sch-box .sl{font-size:11px;font-weight:700;color:var(--g500);margin-bottom:9px;text-transform:uppercase;letter-spacing:.4px;}
@@ -436,20 +464,17 @@ const DEFAULT_SECS=[
   {id:'recent',   ic:'👁️', nm:'Recently Viewed',        sub:'Per-user browsing history',       on:true},
   {id:'buyagain', ic:'🔄', nm:'Buy Again',              sub:'Quick reorder past purchases',    on:true},
   {id:'featured', ic:'🎯', nm:'Featured Products',      sub:'Curated collections by state/lang',on:true},
-  {id:'widgets',  ic:'🧩', nm:'Widgets',                sub:'Crop Q, Refer, Rate…',            on:true},
   {id:'testi',    ic:'🎥', nm:'Testimonials',            sub:'Farmer video section',            on:true},
   {id:'mostsell', ic:'🔥', nm:'Most Selling',            sub:'Auto state-wise trending',        on:true},
   {id:'behavior', ic:'⚙️', nm:'Behavior & Animations',   sub:'Timings & scroll effects',         on:true},
   {id:'expert',   ic:'💬', nm:'Ask Expert',              sub:'Floating agronomist button',       on:true, fixed:true},
   {id:'cartfab',  ic:'🛒', nm:'Cart Bar (floating)',     sub:'Sticky view-cart bar',             on:true, fixed:true},
 ];
-/* Widgets live in their own "Widget management" group in the sidebar — separate from the
-   app-screen sections. Everything else is an app-screen section; custom-built sections
-   (see "Custom sections") get the 'custom' group. */
-DEFAULT_SECS.forEach(s=>{ s.group = (s.id==='widgets') ? 'widget' : 'app'; });
+/* Built-ins are app-screen sections; custom-built sections (see "Custom sections") get the
+   'custom' group. Widget management lives in its own top-level page (widget-manager.html). */
+DEFAULT_SECS.forEach(s=>{ s.group = 'app'; });
 const SEC_GROUPS=[
   {k:'app',    l:'App screen sections'},
-  {k:'widget', l:'Widget management'},
   {k:'custom', l:'Custom sections'},
 ];
 
@@ -640,11 +665,31 @@ let saleList=[{ id:'s1', name:'Mega Monsoon Sale', icon:'fa-bolt', on:true, star
 let saleDraft=null, saleDraftIdx=-1;               // sale currently open in the create/edit form
 /* Promo banners — mirrors the app's home carousel (Mega Krishi Bachat Mela, BOGO Antivirus, Fertilizer Fest) */
 let bannerList=[
-  { id:'b1', name:'Mega Krishi Bachat Mela', link:'shop.html?sale=mela',        img:'', imgByLang:{}, cond:'always', eventType:'festival', start:'', end:'', states:['All'], crops:['All'], on:true },
-  { id:'b2', name:'Buy 1 Get 1 — Antivirus Combo', link:'categories.html?cat=antivirus', img:'', imgByLang:{}, cond:'event', eventType:'festival', start:'2026-06-01', end:'2026-06-15', states:['All'], crops:['🌶️ Chilli','🍅 Tomato'], on:true },
-  { id:'b3', name:'Fertilizer Fest — up to 40% off', link:'categories.html?cat=fertilizer', img:'', imgByLang:{}, cond:'always', eventType:'festival', start:'', end:'', states:['All'], crops:['All'], on:true },
+  { id:'b1', bannerId:'mela', name:'Mega Krishi Bachat Mela', link:'shop.html?sale=mela',        imgByLang:{}, cond:'always', start:'', end:'', states:['All'], crops:['All'], on:true },
+  { id:'b2', bannerId:'bogo', name:'Buy 1 Get 1 — Antivirus Combo', link:'categories.html?cat=antivirus', imgByLang:{}, cond:'event', start:'2026-06-01', end:'2026-06-15', states:['All'], crops:['🌶️ Chilli','🍅 Tomato'], on:true },
+  { id:'b3', bannerId:'fert', name:'Fertilizer Fest — up to 40% off', link:'categories.html?cat=fertilizer', imgByLang:{}, cond:'always', start:'', end:'', states:['All'], crops:['All'], on:true },
 ];
 let bannerDraft=null, bannerDraftIdx=-1;           // banner open in the create/edit form
+/* Marketing-360-approved banner designs — these are the actual KKD banners running on the app
+   Home carousel. Managers SELECT one (no upload); the picker mirrors the live app slide. */
+const MKT360_BANNERS=[
+  { id:'mela', name:'Mega Krishi Bachat Mela', link:'shop.html?sale=mela', tag:'KISAN EXCLUSIVE', badgeIc:'fa-crown', head:'Mega Krishi', hi:'Bachat Mela', sub:'EXTRA DISCOUNT', big:'₹500', suf:'OFF', cta:'SHOP NOW', ghost:'%', bg:'linear-gradient(135deg,#042919 0%,#0E7A4E 60%,#10B981 120%)', fg:'#fff', accent:'#FBBF24', ctaBg:'linear-gradient(135deg,#FBBF24,#F59E0B)', ctaFg:'#0F172A' },
+  { id:'bogo', name:'Buy 1 Get 1 — Antivirus Combo', link:'categories.html?cat=antivirus', tag:'HOT COMBO', badgeIc:'fa-bolt', head:'Buy 1 Get 1', hi:'FREE', sub:'ON ANTIVIRUS COMBO', big:'Chilli · Tomato · Brinjal', suf:'', cta:'GRAB', ghost:'1+1', bg:'linear-gradient(135deg,#1E1B4B 0%,#4338CA 60%,#6366F1 120%)', fg:'#fff', accent:'#FBBF24', ctaBg:'linear-gradient(135deg,#FBBF24,#F59E0B)', ctaFg:'#0F172A' },
+  { id:'fert', name:'Fertilizer Fest — up to 40% off', link:'categories.html?cat=fertilizer', tag:'FERTILIZER FEST', badgeIc:'fa-seedling', head:'Save Big', hi:'on NPK', sub:'UP TO', big:'40%', suf:'OFF', cta:'EXPLORE', ghost:'40', bg:'linear-gradient(135deg,#FFF8E6 0%,#FCD34D 60%,#F59E0B 120%)', fg:'#0F172A', accent:'#7C2D12', ctaBg:'#0F172A', ctaFg:'#FBBF24' },
+];
+function mkFind(id){ return MKT360_BANNERS.find(b=>b.id===id); }
+function mkBanner(m){ if(!m) return '<div class="mkbn mkbn-empty">No banner selected</div>';
+  const ghostC = m.fg==='#fff' ? 'rgba(251,191,36,0.16)' : 'rgba(15,23,42,0.08)';
+  return `<div class="mkbn" style="background:${m.bg};color:${m.fg}">
+    <div class="mkbn-ghost" style="color:${ghostC}">${m.ghost||''}</div>
+    <div class="mkbn-badge" style="color:${m.accent};border-color:${m.accent}"><i class="fa-solid ${m.badgeIc}"></i> ${m.tag}</div>
+    <div class="mkbn-head">${m.head} <span style="color:${m.accent}">${m.hi}</span></div>
+    <div class="mkbn-foot">
+      <div class="mkbn-info"><div class="mkbn-sub">${m.sub}</div><div class="mkbn-big" style="color:${m.accent}">${m.big}${m.suf?` <span>${m.suf}</span>`:''}</div></div>
+      <div class="mkbn-cta" style="background:${m.ctaBg};color:${m.ctaFg}">${m.cta} →</div>
+    </div>
+  </div>`;
+}
 /* Earn Coins — task bunches, each with its own audience/state/crop filter */
 const COIN_AUDS=[{k:'all',l:'All users'},{k:'new',l:'New (just onboarded)'},{k:'returning',l:'Returning users'},{k:'inactive',l:'Inactive 30 days'}];
 const COIN_ACTIONS=['Enable Notifications','Enable Location','Add to Cart','Search Product','Add Crop','Make Purchase','Rate Product','Refer Friend','Custom Deeplink'];
@@ -659,10 +704,7 @@ let coinBunches=[
 ];
 let coinBunchDraft=null, coinBunchIdx=-1, coinTaskBi=-1, coinTaskTi=-1;
 /* Shop by Crop — crop library + default sequence + per-state sortings */
-const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-/* Indian cropping seasons → their months (quick-pick presets; months stay individually editable) */
-const SEASON_MONTHS={ kharif:['Jun','Jul','Aug','Sep','Oct'], rabi:['Nov','Dec','Jan','Feb','Mar'], zaid:['Mar','Apr','May','Jun'] };
-let cropLib=CROPS.map(c=>{ const sp=c.indexOf(' '); return { name:sp>0?c.slice(sp+1):c, emoji:sp>0?c.slice(0,sp):'🌱', img:'', seasons:[] }; });
+let cropLib=CROPS.map(c=>{ const sp=c.indexOf(' '); return { name:sp>0?c.slice(sp+1):c, emoji:sp>0?c.slice(0,sp):'🌱', img:'' }; });
 let cropSortings=[ { id:'so1', states:['MP','Rajasthan'], order:cropLib.map(c=>c.name) } ];
 let cropDraft=null, cropDraftIdx=-1, sortDraft=null, sortDraftIdx=-1;
 let teEdit=null;                                   // id of theme being edited (inline · legacy)
@@ -1196,7 +1238,7 @@ flash:()=>`
 banners:()=>`
 <div class="card">
   <div class="card-body">
-    <p class="hint-p">The home banner carousel — top to bottom is the carousel order (use ↑ ↓ to sort). Each banner can carry a per-language image and show by state, crop and event.</p>
+    <p class="hint-p">These are the banners running on the app Home carousel — top to bottom is the carousel order (use ↑ ↓ to sort). Each banner uses a Marketing-360-approved design (select, no upload), can carry a per-language banner, and shows by state, crop and event.</p>
     <div class="entry-list">
       ${bannerList.length?bannerList.map((b,i)=>bannerSummary(b,i)).join(''):'<p class="hint-p">No banners yet — add one below.</p>'}
     </div>
@@ -1209,7 +1251,7 @@ crops:()=>`
 <div class="card">
   <div class="card-body">
     <div class="sdiv">Crops &amp; default order</div>
-    <p class="hint-p" style="margin:-2px 0 10px">This is the default crop order. Use ↑ ↓ to arrange. Each crop's in-season months are set on its edit screen.</p>
+    <p class="hint-p" style="margin:-2px 0 10px">This is the default crop order (top-to-bottom, then the next column). Use ↑ ↓ to arrange.</p>
     <div class="crop-grid">${cropLib.map((c,i)=>cropRow(c,i)).join('')}</div>
     <button class="btn btn-p btn-sm" style="margin-top:10px" onclick="cropAdd()"><i class="fa-solid fa-plus"></i> Add crop</button>
 
@@ -1627,7 +1669,7 @@ function bannerSummary(b,i){
   const n=bannerList.length;
   return `<div class="li" style="align-items:center">
     <span class="ord" style="min-width:16px;text-align:center;font-size:11px;font-weight:800;color:var(--g400)">${i+1}</span>
-    <div class="bthumb">${b.img?`<img src="${b.img}" alt=""/>`:'🖼️'}</div>
+    <div class="bthumb2">${mkBanner(mkFind(b.bannerId))}</div>
     <div class="li-body"><div class="li-sum">
       <span class="nm">${esc(b.name)}</span>
       <span class="meta"><i class="fa-solid fa-link"></i>${esc(b.link)||'—'} · 🕒 ${esc(bannerCondLabel(b))}</span>
@@ -1645,7 +1687,7 @@ function bannerSummary(b,i){
 function bannerMove(i,d){ const j=i+d; if(j<0||j>=bannerList.length) return; const a=bannerList; [a[i],a[j]]=[a[j],a[i]]; bannerUI(); }
 function bannerToggleIdx(i){ bannerList[i].on=!bannerList[i].on; bannerUI(); }
 function bannerDelIdx(i){ bannerList.splice(i,1); bannerUI(); }
-function bannerBlank(){ return { id:'b'+Date.now().toString(36), name:'', link:'', img:'', imgByLang:{}, cond:'always', eventType:'festival', start:'', end:'', states:['All'], crops:['All'], on:true }; }
+function bannerBlank(){ return { id:'b'+Date.now().toString(36), bannerId:'', name:'', link:'', imgByLang:{}, cond:'always', start:'', end:'', states:['All'], crops:['All'], on:true }; }
 function addBanner(){ bannerDraft=bannerBlank(); bannerDraftIdx=-1; bannerFormRender(); }
 function bannerEditIdx(i){ bannerDraft=JSON.parse(JSON.stringify(bannerList[i])); bannerDraftIdx=i; bannerFormRender(); }
 function bannerFormCancel(){ bannerDraft=null; bannerDraftIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); pick('banners'); }
@@ -1659,9 +1701,23 @@ function bannerFormSync(){ if(!bannerDraft) return; const g=id=>document.getElem
   if(g('bnFEnd')) bannerDraft.end=g('bnFEnd').value;
 }
 function bannerFSet(k,v){ bannerFormSync(); bannerDraft[k]=v; bannerFormRender(); }
-function bannerFPick(input){ const f=input.files&&input.files[0]; if(!f) return; bannerFormSync(); bannerDraft.img=URL.createObjectURL(f); bannerFormRender(); }
-function bannerFRemove(){ bannerFormSync(); bannerDraft.img=''; bannerFormRender(); }
-function bannerFLangPick(code,input){ const f=input.files&&input.files[0]; if(!f) return; bannerFormSync(); bannerDraft.imgByLang=bannerDraft.imgByLang||{}; bannerDraft.imgByLang[code]=URL.createObjectURL(f); bannerFormRender(); }
+/* pick from the Marketing-360 approved library (no upload). langCode=null → the default banner */
+function openBannerPicker(langCode){ bannerFormSync();
+  const ex=document.getElementById('bnPick'); if(ex)ex.remove();
+  const lc=langCode?`'${langCode}'`:'null';
+  const cards=MKT360_BANNERS.map(m=>`<div class="bnpick-card" onclick="bannerSelect('${m.id}',${lc})">${mkBanner(m)}<div class="bnpick-name">${esc(m.name)}</div></div>`).join('');
+  const html=`<div id="bnPick"><div class="apv-scrim" onclick="closeBannerPicker()"></div>
+    <div class="apv-box" style="width:740px"><div class="apv-box-head"><h3>Select an approved banner${langCode?' · '+langCode.toUpperCase():''}</h3><button class="x-btn" onclick="closeBannerPicker()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-body"><p class="hint" style="margin:0 0 14px">These are the KKD banners designed &amp; approved in <b>Marketing 360</b> — tap one to use it${langCode?' for this language':''}.</p><div class="bnpick-grid">${cards}</div></div>
+    </div></div>`;
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+}
+function closeBannerPicker(){ const m=document.getElementById('bnPick'); if(m)m.remove(); }
+function bannerSelect(id,langCode){ bannerFormSync();
+  if(langCode){ bannerDraft.imgByLang=bannerDraft.imgByLang||{}; bannerDraft.imgByLang[langCode]=id; }
+  else { bannerDraft.bannerId=id; const m=mkFind(id); if(m){ if(!bannerDraft.name||MKT360_BANNERS.some(x=>x.name===bannerDraft.name)) bannerDraft.name=m.name; if(!bannerDraft.link||MKT360_BANNERS.some(x=>x.link===bannerDraft.link)) bannerDraft.link=m.link; } }
+  closeBannerPicker(); bannerFormRender();
+}
 function bannerFLangRemove(code){ bannerFormSync(); if(bannerDraft.imgByLang) delete bannerDraft.imgByLang[code]; bannerFormRender(); }
 function bannerFStateAll(){ bannerFormSync(); bannerDraft.states=['All']; bannerFormRender(); }
 function bannerFStateTog(st){ bannerFormSync(); let s=bannerDraft.states.filter(x=>x!=='All'); s.indexOf(st)>=0?s=s.filter(x=>x!==st):s.push(st); if(!s.length)s=['All']; bannerDraft.states=s; bannerFormRender(); }
@@ -1671,30 +1727,29 @@ function bannerFormRender(){
   _capScroll(); const ex=document.getElementById('addModal'); if(ex) ex.remove();
   const d=bannerDraft; if(!d) return;
   const allStates=(d.states||['All']).indexOf('All')>=0, allCrops=(d.crops||['All']).indexOf('All')>=0;
-  const langUploaders=LANGS.map(L=>{ const url=(d.imgByLang||{})[L.c];
-    return `<div class="langimg">
-      <div class="langimg-prev">${url?`<img src="${url}" alt=""/>`:`<span>default</span>`}</div>
-      <div class="langimg-l">${L.l}</div>
-      <input type="file" id="bnLang_${L.c}" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="bannerFLangPick('${L.c}',this)"/>
-      <button class="ic-btn" title="Upload ${L.l}" onclick="document.getElementById('bnLang_${L.c}').click()"><i class="fa-solid fa-upload"></i></button>
-      ${url?`<button class="ic-btn del" title="Remove" onclick="bannerFLangRemove('${L.c}')"><i class="fa-solid fa-xmark"></i></button>`:''}
+  const langUploaders=LANGS.map(L=>{ const bid=(d.imgByLang||{})[L.c]; const lm=mkFind(bid);
+    return `<div class="lbn">
+      <div class="lbn-head"><span class="lbn-l">${L.l}</span><div class="lbn-btns">
+        <button class="ic-btn" title="Select ${L.l} banner" onclick="openBannerPicker('${L.c}')"><i class="fa-solid fa-images"></i></button>
+        ${bid?`<button class="ic-btn del" title="Remove" onclick="bannerFLangRemove('${L.c}')"><i class="fa-solid fa-xmark"></i></button>`:''}
+      </div></div>
+      <div class="lbn-prev">${lm?mkBanner(lm):'<span>uses default</span>'}</div>
     </div>`; }).join('');
   const body=`
     <div class="sub-l" style="margin-top:0">Name &amp; link</div>
     <div class="row"><div class="fg"><label>Banner name</label><input type="text" id="bnFName" value="${esc(d.name)}" data-maxlen="40" placeholder="e.g. Mega Krishi Bachat Mela"/></div></div>
     <div class="row" style="margin-bottom:0"><div class="fg"><label>Deeplink</label><input type="text" id="bnFLink" value="${esc(d.link)}" placeholder="shop.html?sale=…"/></div></div>
 
-    <div class="sub-l" style="margin-top:18px">Banner image</div>
+    <div class="sub-l" style="margin-top:18px">Banner design</div>
     <div class="bg-up">
-      <div class="bg-prev" style="background:${d.img?'#111':'linear-gradient(135deg,#042919,#10B981)'};width:200px;height:88px">${d.img?`<img src="${d.img}" alt=""/>`:'Default image'}</div>
+      <div style="flex-shrink:0">${mkBanner(mkFind(d.bannerId))}</div>
       <div style="flex:1;min-width:0">
-        <input type="file" id="bnFImgFile" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="bannerFPick(this)"/>
-        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-p btn-sm" onclick="document.getElementById('bnFImgFile').click()"><i class="fa-solid fa-upload"></i> Upload default</button>${d.img?`<button class="btn btn-d btn-sm" onclick="bannerFRemove()"><i class="fa-solid fa-trash"></i> Remove</button>`:''}</div>
-        <div class="bg-guide"><i class="fa-solid fa-circle-info"></i>Shown to everyone unless a language image below is set. 1080 × 480 px · max 2 MB.</div>
+        <button class="btn btn-p btn-sm" onclick="openBannerPicker(null)"><i class="fa-solid fa-images"></i> ${d.bannerId?'Change banner':'Select approved banner'}</button>
+        <div class="bg-guide" style="margin-top:8px"><i class="fa-solid fa-circle-info"></i>Banners are designed &amp; approved in <b>Marketing 360</b> — you select one here, no upload. Shown to everyone unless a language banner below overrides it.</div>
       </div>
     </div>
-    <div class="sub-l">Language images <span class="hint">(optional — each falls back to the default)</span></div>
-    <div class="langimg-grid">${langUploaders}</div>
+    <div class="sub-l">Language banners <span class="hint">(optional — each falls back to the default)</span></div>
+    <div class="lbn-grid">${langUploaders}</div>
 
     <div class="sub-l">Show when</div>
     <div class="row" style="margin-bottom:${d.cond==='event'?'12px':'0'}"><div class="fg fix" style="max-width:240px"><select class="s" onchange="bannerFSet('cond',this.value)">
@@ -1808,10 +1863,10 @@ function coinBunchRender(){ _capScroll(); const ex=document.getElementById('addM
 function cropsUI(){ if(sel==='crops') pick('crops'); }
 function cropFind(nm){ return cropLib.find(x=>x.name===nm)||{name:nm,emoji:'🌱',img:''}; }
 function cropThumb(c,sm){ return `<div class="cropthumb${sm?' sm':''}">${c.img?`<img src="${c.img}" alt=""/>`:esc(c.emoji||'🌱')}</div>`; }
-function cropRow(c,i){ const seas=(c.seasons&&c.seasons.length)?c.seasons.join(', '):'All year'; const n=cropLib.length;
+function cropRow(c,i){ const n=cropLib.length;
   return `<div class="crop-cell">
     <span class="ord">${i+1}</span>${cropThumb(c,true)}
-    <div style="flex:1;min-width:0"><div class="crop-nm">${esc(c.name)}</div><div class="crop-seas">📅 ${esc(seas)}</div></div>
+    <div style="flex:1;min-width:0"><div class="crop-nm">${esc(c.name)}</div></div>
     <div class="crop-acts">
       <button class="ic-btn xs" title="Up" onclick="cropDefMove(${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button>
       <button class="ic-btn xs" title="Down" onclick="cropDefMove(${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
@@ -1821,7 +1876,7 @@ function cropRow(c,i){ const seas=(c.seasons&&c.seasons.length)?c.seasons.join('
   </div>`; }
 function cropDefMove(i,d){ const j=i+d; if(j<0||j>=cropLib.length) return; const a=cropLib; [a[i],a[j]]=[a[j],a[i]]; cropsUI(); }
 function cropDel(i){ const nm=cropLib[i].name; cropLib.splice(i,1); cropSortings.forEach(s=>s.order=s.order.filter(x=>x!==nm)); cropsUI(); }
-function cropAdd(){ cropDraft={name:'',emoji:'🌱',img:'',seasons:[]}; cropDraftIdx=-1; cropModalRender(); }
+function cropAdd(){ cropDraft={name:'',emoji:'🌱',img:''}; cropDraftIdx=-1; cropModalRender(); }
 function cropEdit(i){ cropDraft=JSON.parse(JSON.stringify(cropLib[i])); cropDraftIdx=i; cropModalRender(); }
 function cropModalSync(){ if(!cropDraft) return; const n=document.getElementById('cropFName'); if(n) cropDraft.name=n.value; }
 function cropModalCancel(){ cropDraft=null; cropDraftIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); }
@@ -1831,14 +1886,6 @@ function cropModalSave(){ cropModalSync(); const d=cropDraft; if(!d.name) d.name
   cropDraft=null; cropDraftIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); cropsUI(); }
 function cropFPick(input){ const f=input.files&&input.files[0]; if(!f) return; cropModalSync(); cropDraft.img=URL.createObjectURL(f); cropModalRender(); }
 function cropFRemove(){ cropModalSync(); cropDraft.img=''; cropModalRender(); }
-function cropSeasonTog(m){ cropModalSync(); const s=cropDraft.seasons||[]; const i=s.indexOf(m); i>=0?s.splice(i,1):s.push(m); cropDraft.seasons=s; cropModalRender(); }
-function cropSeasonPreset(k){ cropModalSync(); let s=(cropDraft.seasons||[]).slice();
-  if(k==='clear') s=[];
-  else if(k==='all') s=MONTHS.slice();
-  else SEASON_MONTHS[k].forEach(m=>{ if(s.indexOf(m)<0) s.push(m); });   // add (union) so multi-season crops stack
-  cropDraft.seasons=MONTHS.filter(m=>s.indexOf(m)>=0);                    // keep calendar order
-  cropModalRender();
-}
 function cropModalRender(){ const ex=document.getElementById('addModal'); if(ex) ex.remove(); const d=cropDraft; if(!d) return;
   const body=`
     <div class="sub-l" style="margin-top:0">Crop image &amp; name</div>
@@ -1850,17 +1897,7 @@ function cropModalRender(){ const ex=document.getElementById('addModal'); if(ex)
         <div class="bg-guide" style="margin-top:8px"><i class="fa-solid fa-circle-info"></i>Square icon · recommended 160 × 160 px · max 500 KB.</div>
       </div>
     </div>
-    <div class="row" style="margin-bottom:0"><div class="fg"><label>Crop name</label><input type="text" id="cropFName" value="${esc(d.name)}" data-maxlen="24" placeholder="e.g. Sugarcane"/></div></div>
-    <div class="sub-l">Seasonal configuration <span class="hint">(months this crop is in season)</span></div>
-    <p class="hint" style="margin:0 0 8px">Quick-pick a season to fill its months, then fine-tune below.</p>
-    <div class="chip-row" style="margin-bottom:9px">
-      <span class="cchip season" onclick="cropSeasonPreset('kharif')">🌧️ Kharif · Jun–Oct</span>
-      <span class="cchip season" onclick="cropSeasonPreset('rabi')">❄️ Rabi · Nov–Mar</span>
-      <span class="cchip season" onclick="cropSeasonPreset('zaid')">☀️ Zaid · Mar–Jun</span>
-      <span class="cchip season alt" onclick="cropSeasonPreset('all')">All year</span>
-      <span class="cchip season alt" onclick="cropSeasonPreset('clear')">Clear</span>
-    </div>
-    <div class="chip-row">${MONTHS.map(m=>`<span class="cchip ${(d.seasons||[]).indexOf(m)>=0?'on':''}" onclick="cropSeasonTog('${m}')">${m}</span>`).join('')}</div>`;
+    <div class="row" style="margin-bottom:0"><div class="fg"><label>Crop name</label><input type="text" id="cropFName" value="${esc(d.name)}" data-maxlen="24" placeholder="e.g. Sugarcane"/></div></div>`;
   const html=`<div id="addModal"><div class="apv-scrim" onclick="cropModalCancel()"></div>
     <div class="apv-box"><div class="apv-box-head"><h3>${cropDraftIdx>=0?'Edit crop':'Add crop'}</h3><button class="x-btn" onclick="cropModalCancel()"><i class="fa-solid fa-xmark"></i></button></div>
       <div class="apv-box-body">${body}</div>

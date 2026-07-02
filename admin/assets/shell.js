@@ -29,6 +29,7 @@
       { key: 'sc-onboarding', label: 'Onboarding', icon: 'flag-checkered', href: 'onboarding-manager.html' },
       { key: 'sc-account', label: 'Account & Help', icon: 'user', href: 'screen.html?s=account' },
       { key: 'sc-pages', label: 'Static Pages', icon: 'file-lines', href: 'screen.html?s=pages' },
+      { key: 'widgets', label: 'Widget Management', icon: 'puzzle-piece', href: 'widget-manager.html' },
     ]},
     { group: 'Library', items: [
       { key: 'products', label: 'Products', icon: 'flask', href: 'products.html' },

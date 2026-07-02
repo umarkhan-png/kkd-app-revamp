@@ -160,15 +160,16 @@
 .hm select.s{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;}
 
 /* BUTTONS (scoped) */
-.hm .btn{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:5px;height:auto;white-space:nowrap;}
-.hm .btn-p{background:var(--green);color:#fff;}
+.hm .btn{height:38px;padding:0 16px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid transparent;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;line-height:1;}
+.hm .btn i{font-size:12px;}
+.hm .btn-p{background:var(--green);color:#fff;box-shadow:0 6px 16px -8px rgba(37,128,70,.6);}
 .hm .btn-p:hover{background:var(--green-md);}
-.hm .btn-s{background:#fff;color:var(--g700);border:1px solid var(--g200);}
-.hm .btn-s:hover{background:var(--g100);}
-.hm .btn-d{background:#FEE2E2;color:var(--red);border:1px solid #FECACA;}
-.hm .btn-d:hover{background:#FECACA;}
-.hm .btn-sm{padding:4px 9px;font-size:12px;}
-.hm .btn-ic{padding:4px 7px;font-size:13px;}
+.hm .btn-s{background:#fff;color:var(--g700);border-color:var(--g200);}
+.hm .btn-s:hover{background:var(--g100);border-color:var(--g300,#CBD5E1);}
+.hm .btn-d{background:#fff;color:var(--red);border-color:#FCA5A5;}
+.hm .btn-d:hover{background:#FEE2E2;}
+.hm .btn-sm{height:32px;padding:0 13px;font-size:12.5px;border-radius:8px;}
+.hm .btn-ic{width:32px;height:32px;padding:0;}
 
 /* TOGGLE */
 .hm .tr{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--g100);}
@@ -203,7 +204,7 @@
 .hm .ppick-added{font-size:12px;font-weight:700;color:var(--green);display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
 .hm .saleprice-wrap{display:flex;align-items:center;gap:3px;font-size:12.5px;color:var(--g600);}
 .hm .saleprice{width:78px;height:32px;border:1px solid var(--g200);border-radius:7px;padding:0 8px;font-size:12.5px;color:var(--g800);outline:none;}
-.hm .btn-xs{padding:6px 12px;font-size:12px;}
+.hm .btn-xs{height:28px;padding:0 12px;font-size:12px;border-radius:7px;}
 .hm .salepick-box{border:1px solid var(--g200);border-radius:9px;padding:12px;background:var(--g50);margin-top:8px;}
 .hm .salepick-box .ppick{background:#fff;}
 .hm .saleline-list{display:flex;flex-direction:column;gap:6px;margin-bottom:2px;}
@@ -482,13 +483,15 @@ let data = KKD.load();
 /* Custom sections the manager builds (Bestseller-style product strips). The name defined
    inside the editor becomes the section heading shown on the app. */
 let customSections = Array.isArray(data.customHomeSections)
-  ? data.customHomeSections.map(c=>{ const o=Object.assign({group:'custom',ic:'⭐',link:'',products:[],on:true,draft:false},c);
+  ? data.customHomeSections.map(c=>{ const o=Object.assign({group:'custom',ic:'⭐',link:'',products:[],on:true,draft:false,audience:['all'],states:['All'],crops:['All']},c);
       o.products=(o.products||[]).map(p=> typeof p==='string' ? {name:p,variant:''} : p);   // migrate old string entries
       return o; })
   : [];
-/* Recently Viewed config — 'auto' shows each user's own history; 'custom' shows hand-picked products */
-let recentCfg = Object.assign({source:'auto',title:'',products:[],min:2,bg:'#F0F0FA'}, (data.recentViewed&&typeof data.recentViewed==='object')?data.recentViewed:{});
-recentCfg.products=(recentCfg.products||[]).map(p=> typeof p==='string' ? {name:p,variant:''} : p);
+/* Recently Viewed config — always the user's own recently viewed products */
+let recentCfg = Object.assign({min:2,bg:'#F0F0FA'}, (data.recentViewed&&typeof data.recentViewed==='object')?data.recentViewed:{});
+/* Bestsellers config — hand-picked products (same picker as custom sections) + targeting */
+let bsCfg = Object.assign({products:[],audience:['all'],states:['All'],crops:['All']}, (data.bestsellers&&typeof data.bestsellers==='object')?data.bestsellers:{});
+bsCfg.products=(bsCfg.products||[]).map(p=> typeof p==='string' ? {name:p,variant:''} : p);
 let SECS;
 function seedSecs(){
   // seed from the reference on first load; otherwise reconcile saved order/visibility against defaults
@@ -497,32 +500,36 @@ function seedSecs(){
     KKD.save(data);
   }
   const meta = Object.fromEntries(DEFAULT_SECS.map(s=>[s.id,s]));
-  // ordered list from stored order; drop unknowns, append any new defaults missing from store
-  const stored = data.homeSections.filter(s=>meta[s.id]);
+  const isCustom = id => customSections.some(c=>c.id===id);
+  // ordered list from stored order; keep built-ins + known custom ids, append any missing
+  const stored = data.homeSections.filter(s=>meta[s.id]||isCustom(s.id));
   const seen = new Set(stored.map(s=>s.id));
   DEFAULT_SECS.forEach(s=>{ if(!seen.has(s.id)) stored.push({id:s.id,on:s.on}); });
-  // Enforce placement: fixed (locked) sections stay at their canonical slots from DEFAULT_SECS
-  // (top + bottom blocks); non-fixed keep their saved relative order in between. So a non-fixed
-  // section can never sit above or between the locked ones.
+  customSections.forEach(c=>{ if(!seen.has(c.id)) stored.push({id:c.id,on:c.on!==false}); });   // new custom → end of band
+  // Fixed (locked) sections stay at their canonical top/bottom slots; everything else
+  // (built-in content sections AND custom sections) is one draggable band in between.
   data.homeSections = normalizeOrder(stored, meta);
-  SECS = data.homeSections.map(s=>({...meta[s.id], on:s.on, title:s.title||''}));
-  // append the manager's custom sections after the built-ins
-  customSections.forEach(c=>SECS.push({id:c.id, ic:c.ic||'⭐', nm:c.name, sub:'Custom product section', on:c.on!==false, group:'custom', custom:true, draft:!!c.draft}));
+  SECS = data.homeSections.map(s=>{
+    if(meta[s.id]) return {...meta[s.id], on:s.on, title:s.title||''};
+    const c=customSections.find(x=>x.id===s.id);
+    return c ? {id:c.id, ic:c.ic||'⭐', nm:c.name, sub:'Custom product section', on:c.on!==false, custom:true, draft:!!c.draft} : {id:s.id, on:s.on};
+  });
   KKD.save(data);
 }
 function normalizeOrder(list, meta){
-  const nonFixed = list.filter(s=>meta[s.id] && !meta[s.id].fixed);
+  const isFixed = id => !!(meta[id] && meta[id].fixed);
   const byId = Object.fromEntries(list.map(s=>[s.id,s]));
-  const out=[]; let ni=0;
-  DEFAULT_SECS.forEach(d=>{
-    if(d.fixed){ out.push(byId[d.id] || {id:d.id,on:d.on}); }
-    else if(ni<nonFixed.length){ out.push(nonFixed[ni++]); }
-  });
-  while(ni<nonFixed.length) out.push(nonFixed[ni++]); // safety: any leftover non-fixed
-  return out;
+  // canonical leading / trailing fixed blocks from DEFAULT_SECS (header/theme/search … expert/cart)
+  const firstNF = DEFAULT_SECS.findIndex(d=>!d.fixed);
+  let lastNF=-1; DEFAULT_SECS.forEach((d,i)=>{ if(!d.fixed) lastNF=i; });
+  const leading  = DEFAULT_SECS.slice(0, firstNF).map(d=>d.id);
+  const trailing = DEFAULT_SECS.slice(lastNF+1).map(d=>d.id);
+  const band = list.filter(s=>!isFixed(s.id)).map(s=>s.id);     // built-ins + custom, in saved order
+  const ids = [...leading, ...band, ...trailing];
+  return ids.map(id => byId[id] || {id, on:(meta[id]?meta[id].on:true)});
 }
-function persist(){ data.homeSections = SECS.filter(s=>!s.custom).map(s=>({id:s.id,on:s.on,title:s.title||''})); KKD.save(data); }
-function persistCustom(){ data.customHomeSections = customSections.map(c=>({id:c.id,name:c.name,on:c.on!==false,group:'custom',link:c.link||'',products:c.products||[],ic:c.ic||'⭐',draft:!!c.draft})); KKD.save(data); }
+function persist(){ data.homeSections = SECS.map(s=>({id:s.id,on:s.on,title:s.title||''})); KKD.save(data); }
+function persistCustom(){ data.customHomeSections = customSections.map(c=>({id:c.id,name:c.name,on:c.on!==false,group:'custom',link:c.link||'',products:c.products||[],ic:c.ic||'⭐',draft:!!c.draft,audience:c.audience||['all'],states:c.states||['All'],crops:c.crops||['All']})); KKD.save(data); }
 seedSecs();
 
 let sel=null,dragId=null;
@@ -552,17 +559,10 @@ function secItemHTML(s){
     </div>`;
 }
 function renderList(){
-  const html=SEC_GROUPS.map(g=>{
-    const items=SECS.filter(s=>(s.group||'app')===g.k);
-    if(!items.length && g.k!=='custom') return '';
-    const rows=items.map(secItemHTML).join('');
-    const add = g.k==='custom'
-      ? `<button class="sec-add" onclick="addCustomSection()"><i class="fa-solid fa-plus"></i> Add section</button>`
-      : '';
-    const empty = (g.k==='custom' && !items.length) ? `<div class="sec-group-empty">Build a Bestseller-style product strip — you set the heading &amp; products.</div>` : '';
-    return `<div class="sec-group-h">${g.l}</div>${rows}${empty}${add}`;
-  }).join('');
-  document.getElementById('secList').innerHTML=html;
+  // one draggable list: fixed sections locked at top/bottom, everything else (incl. custom) in between
+  const rows=SECS.map(secItemHTML).join('');
+  const add=`<button class="sec-add" onclick="addCustomSection()"><i class="fa-solid fa-plus"></i> Add custom section</button>`;
+  document.getElementById('secList').innerHTML=rows+add;
 }
 
 /* ── DRAG (HTML5 reorder, persisted) ── */
@@ -575,7 +575,6 @@ function dd(e,tid){
   if(!dragId||dragId===tid)return;
   const tgt=SECS.find(s=>s.id===tid); if(tgt&&tgt.fixed)return;   // can't drop onto a fixed-placement section
   const src=SECS.find(s=>s.id===dragId); if(src&&src.fixed)return;
-  if(tgt&&src&&(tgt.group||'app')!==(src.group||'app'))return;    // keep sections within their own group
   const si=SECS.findIndex(s=>s.id===dragId);
   const[it]=SECS.splice(si,1);
   let ti=SECS.findIndex(s=>s.id===tid);
@@ -600,7 +599,8 @@ function edHead(id){
     : `<label class="ed-toggle"><span>Show on Home</span><div class="tg ${s.on?'on':''}" onclick="toggleVis('${id}')"></div></label>`;
   const dispNm = s.title || s.nm;
   // rename via a pencil next to the title — offered on content sections AND custom sections
-  const rename = (!locked)
+  // (Recently Viewed is a fixed, non-renamable heading)
+  const rename = (!locked && id!=='recent')
     ? `<button class="ttl-edit" title="Rename this section" onclick="renameSection('${id}')"><i class="fa-solid fa-pen"></i></button>`
     : '';
   // uniform delete (same trash control as the rest of the portal) — custom sections only
@@ -1277,50 +1277,43 @@ crops:()=>`
   </div>
 </div>`,
 
-/* 8 ── BESTSELLERS */
-best:()=>`
-<div class="card">
-  <div class="card-body">
-    ${LT()}
-    <div class="row">
-      <div class="fg"><label>"See all" Link</label><input type="text" value="/shop?sort=bestsellers"/></div>
-    </div>
-    ${TG('bs1',true,'Auto Weekly Update','Top 4 selling products auto-populate every Monday')}
-    <div class="sdiv" style="margin-top:12px;">Manual Pinned Products (override auto)</div>
-    <div id="bsList">
-      ${newPChip('Humic + Fulvic 98')}${newPChip('Chakrawarti ZC')}${newPAdd('addBS')}
-    </div>
-  </div>
-</div>`,
-
-/* 9 ── RECENTLY VIEWED */
-recent:()=>{ const c=recentCfg; const n=(c.products||[]).length;
+/* 8 ── BESTSELLERS — hand-picked products (same picker/targeting as custom sections) */
+best:()=>{ const c=bsCfg; const n=(c.products||[]).length;
   const prods = n ? c.products.map((pr,i)=>`<div class="saleline">
       <span style="font-size:11px;font-weight:700;color:var(--g400);min-width:16px;text-align:center">${i+1}</span>
-      <div class="saleline-nm" style="flex:1">🛒 ${esc(pr.name)} <span class="saleline-v">${esc(pr.variant||'')}</span></div>
-      <button class="ic-btn" title="Move up" onclick="recentPickMove(${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button>
-      <button class="ic-btn" title="Move down" onclick="recentPickMove(${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
-      <button class="ic-btn del" title="Remove" onclick="recentPickDel(${i})"><i class="fa-solid fa-trash"></i></button>
-    </div>`).join('') : '<p class="hint" style="margin:0">No products picked yet — add a few below.</p>';
+      <div class="saleline-nm" style="flex:1">⭐ ${esc(pr.name)} <span class="saleline-v">${esc(pr.variant||'')}</span></div>
+      <button class="ic-btn" title="Move up" onclick="bsPickMove(${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button>
+      <button class="ic-btn" title="Move down" onclick="bsPickMove(${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
+      <button class="ic-btn del" title="Remove" onclick="bsPickDelInline(${i})"><i class="fa-solid fa-trash"></i></button>
+    </div>`).join('') : '<p class="hint" style="margin:0">No products yet — add a few below.</p>';
+  const aud=c.audience||['all'], states=c.states||['All'], crops=c.crops||['All'];
+  const allAud=aud.indexOf('all')>=0, allStates=states.indexOf('All')>=0, allCrops=crops.indexOf('All')>=0;
   return `
 <div class="card">
   <div class="card-body">
-    <div class="sdiv" style="margin-top:0">What shows in this section</div>
-    <p class="hint-p" style="margin:-2px 0 10px">By default this shows each user's own recently viewed products. Switch it to show a hand-picked set of products instead.</p>
-    <div class="seg">
-      <button class="seg-btn ${c.source==='auto'?'on':''}" onclick="recentSetSource('auto')">👁️ Recently viewed items</button>
-      <button class="seg-btn ${c.source==='custom'?'on':''}" onclick="recentSetSource('custom')">🛒 Show selected products</button>
+    <div class="sdiv" style="margin-top:0">Products <span class="hint" style="font-weight:400">(shown in this order — use ↑ ↓ to sort)</span></div>
+    <div class="saleline-list">${prods}</div>
+    <button class="btn btn-p btn-sm" style="margin-top:10px" onclick="bsPickRender()"><i class="fa-solid fa-plus"></i> Add products</button>
+
+    <div class="sdiv">Show to <span class="hint" style="font-weight:400">(who sees this section)</span></div>
+    <div class="sub-l" style="font-weight:600;margin-top:4px">Audience</div>
+    <div class="chip-row"><span class="cchip ${allAud?'on':''}" onclick="bsAudTog('all')">All users</span> ${COIN_AUDS.filter(a=>a.k!=='all').map(a=>`<span class="cchip ${(!allAud&&aud.indexOf(a.k)>=0)?'on':''}" onclick="bsAudTog('${a.k}')">${a.l}</span>`).join('')}</div>
+    <div class="sub-l" style="font-weight:600">States</div>
+    <div class="chip-row"><span class="cchip ${allStates?'on':''}" onclick="bsStateAll()">All states</span> ${STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!allStates&&states.indexOf(s)>=0)?'on':''}" onclick="bsStateTog('${s}')">${s}</span>`).join('')}</div>
+    <div class="sub-l" style="font-weight:600">Crops the farmer grows</div>
+    <div class="chip-row"><span class="cchip ${allCrops?'on':''}" onclick="bsCropAll()">All crops</span> ${CROPS.map((cr,i)=>`<span class="cchip ${(!allCrops&&crops.indexOf(cr)>=0)?'on':''}" onclick="bsCropTog(${i})">${cr}</span>`).join('')}</div>
+  </div>
+</div>`; },
+
+/* 9 ── RECENTLY VIEWED — always the user's own recently viewed products (no custom option) */
+recent:()=>{ const c=recentCfg; return `
+<div class="card">
+  <div class="card-body">
+    <p class="hint-p" style="margin:0 0 12px">This section automatically shows each user's own recently viewed products.</p>
+    <div class="row" style="margin-bottom:0">
+      <div class="fg fix"><label>BG Color</label><div class="color-r"><input type="color" value="${esc(c.bg||'#F0F0FA')}" onchange="recentSet('bg',this.value)"/></div></div>
+      <div class="fg fix"><label>Min items to show</label><input type="number" style="width:90px;" value="${esc(String(c.min||2))}" onchange="recentSet('min',this.value)"/></div>
     </div>
-    ${c.source==='custom'?`
-      <div class="sub-l">Products <span class="hint" style="font-weight:400">(shown in this order — use ↑ ↓ to sort)</span></div>
-      <div class="saleline-list">${prods}</div>
-      <button class="btn btn-p btn-sm" style="margin-top:10px" onclick="recentPickRender()"><i class="fa-solid fa-plus"></i> Add products</button>
-    `:`
-      <div class="row" style="margin-top:14px;margin-bottom:0">
-        <div class="fg fix"><label>BG Color</label><div class="color-r"><input type="color" value="${esc(c.bg||'#F0F0FA')}" onchange="recentSet('bg',this.value)"/></div></div>
-        <div class="fg fix"><label>Min items to show</label><input type="number" style="width:90px;" value="${esc(String(c.min||2))}" onchange="recentSet('min',this.value)"/></div>
-      </div>
-    `}
   </div>
 </div>`; },
 
@@ -1332,7 +1325,7 @@ buyagain:()=>`
     <div style="margin-top:14px;"></div>
     ${LT()}
     <div class="row">
-      <div class="fg fix"><label>Min Orders to Show</label><input type="number" style="width:90px;" value="1"/></div>
+      <div class="fg fix"><label>Min previous Order's products to Show</label><input type="number" style="width:90px;" value="1"/></div>
     </div>
   </div>
 </div>`,
@@ -2120,7 +2113,7 @@ function renameSection(id){
 
 /* ── Custom sections (Bestseller-style product strips the manager builds) ── */
 function csFind(id){ return customSections.find(c=>c.id===id); }
-function csSaveDraft(id){ const c=csFind(id); if(!c)return; c.draft=false; const s=SECS.find(x=>x.id===id); if(s)s.draft=false; persistCustom(); renderList(); pick(id); AdminShell.saved('Section saved — drag it in the sidebar to place it on Home'); }
+function csSaveDraft(id){ const c=csFind(id); if(!c)return; c.draft=false; const s=SECS.find(x=>x.id===id); if(s)s.draft=false; persistCustom(); persist(); renderList(); pick(id); AdminShell.saved('Section saved — drag it in the sidebar to place it on Home'); }
 function addCustomSection(){
   // ask ONLY the name — placement is done by dragging the section in the sidebar
   amOpen('Add section', `
@@ -2129,17 +2122,17 @@ function addCustomSection(){
     function(){
       const nm=(amVal('am_csname')||'').trim()||'New section';
       const id='cs'+Date.now().toString(36);
-      const c={id,name:nm,on:true,group:'custom',ic:'⭐',link:'',products:[],draft:true};   // starts as a draft
+      const c={id,name:nm,on:true,group:'custom',ic:'⭐',link:'',products:[],draft:true,audience:['all'],states:['All'],crops:['All']};   // starts as a draft
       customSections.push(c);
-      SECS.push({id,ic:'⭐',nm:c.name,sub:'Custom product section',on:true,group:'custom',custom:true,draft:true});
-      persistCustom(); renderList(); pick(id);   // open the newly created section's editor
+      persistCustom(); seedSecs();               // rebuild SECS so the new section lands in the draggable band
+      renderList(); pick(id);                     // open the newly created section's editor
     }, 'Add section');
 }
 function csRename(id,v){ const c=csFind(id); if(!c)return; c.name=(v||'').trim()||'Untitled section'; const s=SECS.find(x=>x.id===id); if(s)s.nm=c.name; persistCustom(); renderList(); pick(id); }
 function csSetLink(id,v){ const c=csFind(id); if(!c)return; c.link=v; persistCustom(); }
 function csDelProd(id,i){ const c=csFind(id); if(!c)return; c.products.splice(i,1); persistCustom(); pick(id); }
 function csMoveProd(id,i,dir){ const c=csFind(id); if(!c)return; const j=i+dir; if(j<0||j>=c.products.length)return; const a=c.products; [a[i],a[j]]=[a[j],a[i]]; persistCustom(); pick(id); }
-function csDelSection(id){ const c=csFind(id); if(!c)return; customSections=customSections.filter(x=>x.id!==id); SECS=SECS.filter(s=>s.id!==id); persistCustom(); const nxt=SECS[0]; sel=null; renderList(); if(nxt)pick(nxt.id); }
+function csDelSection(id){ const c=csFind(id); if(!c)return; customSections=customSections.filter(x=>x.id!==id); SECS=SECS.filter(s=>s.id!==id); persistCustom(); persist(); const nxt=SECS[0]; sel=null; renderList(); if(nxt)pick(nxt.id); }
 /* Product picker — same search-then-variant flow as the Sale form, but no price field */
 function csPickRows(id){ const c=csFind(id); if(!c) return ''; const ql=(c._q||'').toLowerCase(); const rows=[];
   PRODS.forEach(p=>{ if(p.n.toLowerCase().indexOf(ql)<0) return;
@@ -2229,6 +2222,57 @@ function recentPickRender(){ _capScroll(); const ex=document.getElementById('add
     </div></div>`;
   document.querySelector('.hm').insertAdjacentHTML('beforeend', html); _resScroll();
 }
+
+/* ── Bestsellers — hand-picked products (same picker as custom sections) + targeting ── */
+function bsSave(){ data.bestsellers=bsCfg; KKD.save(data); }
+function bsUI(){ if(sel==='best') pick('best'); }
+function bsPickRows(){ const c=bsCfg; const ql=(c._q||'').toLowerCase(); const rows=[];
+  PRODS.forEach(p=>{ if(p.n.toLowerCase().indexOf(ql)<0) return;
+    (p.variants||[{v:'Standard'}]).forEach(vr=>{
+      const added=(c.products||[]).some(x=>x.name===p.n&&x.variant===vr.v);
+      rows.push(`<div class="ppick${added?' on':''}">
+        <div style="min-width:0;flex:1"><div class="ppick-nm">🌱 ${esc(p.n)}</div><div class="ppick-sub">${esc(vr.v)}${vr.mrp?` · MRP ₹${vr.mrp}`:''}</div></div>
+        ${added?'<span class="ppick-added"><i class="fa-solid fa-circle-check"></i> Added</span>'
+          :`<button class="btn btn-p btn-xs" onclick="bsPickAdd('${p.n.replace(/'/g,"\\'")}','${vr.v.replace(/'/g,"\\'")}')">Add</button>`}
+      </div>`);
+    });
+  });
+  return rows.length?rows.join(''):'<p class="hint" style="padding:8px 2px">No products match.</p>';
+}
+function bsPickSearch(q){ bsCfg._q=q; const el=document.getElementById('bsPickRows'); if(el)el.innerHTML=bsPickRows(); }
+function bsPickAdd(name,variant){ bsCfg.products=bsCfg.products||[]; if(!bsCfg.products.some(x=>x.name===name&&x.variant===variant)) bsCfg.products.push({name:name,variant:variant}); bsSave(); bsPickRender(); }
+function bsPickDel(i){ bsCfg.products.splice(i,1); bsSave(); bsPickRender(); }
+function bsPickDelInline(i){ bsCfg.products.splice(i,1); bsSave(); bsUI(); }
+function bsPickMove(i,dir){ const j=i+dir; if(j<0||j>=bsCfg.products.length)return; const a=bsCfg.products; [a[i],a[j]]=[a[j],a[i]]; bsSave(); (document.getElementById('addModal')?bsPickRender():bsUI()); }
+function bsPickClose(){ const m=document.getElementById('addModal'); if(m)m.remove(); delete bsCfg._q; bsUI(); }
+function bsAudTog(k){ if(k==='all'){ bsCfg.audience=['all']; } else { let a=(bsCfg.audience||[]).filter(x=>x!=='all'); a.indexOf(k)>=0?a=a.filter(x=>x!==k):a.push(k); bsCfg.audience=a.length?a:['all']; } bsSave(); bsUI(); }
+function bsStateAll(){ bsCfg.states=['All']; bsSave(); bsUI(); }
+function bsStateTog(st){ let s=(bsCfg.states||[]).filter(x=>x!=='All'); s.indexOf(st)>=0?s=s.filter(x=>x!==st):s.push(st); bsCfg.states=s.length?s:['All']; bsSave(); bsUI(); }
+function bsCropAll(){ bsCfg.crops=['All']; bsSave(); bsUI(); }
+function bsCropTog(i){ const cr=CROPS[i]; let s=(bsCfg.crops||[]).filter(x=>x!=='All'); s.indexOf(cr)>=0?s=s.filter(x=>x!==cr):s.push(cr); bsCfg.crops=s.length?s:['All']; bsSave(); bsUI(); }
+function bsPickRender(){ _capScroll(); const ex=document.getElementById('addModal'); if(ex)ex.remove(); const c=bsCfg;
+  const n=(c.products||[]).length;
+  const sel = n ? c.products.map((pr,i)=>`<div class="saleline">
+      <span style="font-size:11px;font-weight:700;color:var(--g400);min-width:16px;text-align:center">${i+1}</span>
+      <div class="saleline-nm" style="flex:1">⭐ ${esc(pr.name)} <span class="saleline-v">${esc(pr.variant)}</span></div>
+      <button class="ic-btn" title="Move up" onclick="bsPickMove(${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button>
+      <button class="ic-btn" title="Move down" onclick="bsPickMove(${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
+      <button class="ic-btn del" title="Remove" onclick="bsPickDel(${i})"><i class="fa-solid fa-trash"></i></button>
+    </div>`).join('') : '<p class="hint" style="margin:0 0 8px">No products added yet — search above to add.</p>';
+  const body=`
+    <div class="salepick-box">
+      <div class="row" style="margin-bottom:8px"><div class="fg"><label>Search a product to see its variants</label><input type="text" id="bsPickSearch" value="${esc(c._q||'')}" placeholder="Type a product name…" oninput="bsPickSearch(this.value)"/></div></div>
+      <div id="bsPickRows" class="ppick-list">${bsPickRows()}</div>
+    </div>
+    <div class="sub-l">Selected products <span class="hint">(shown in this order — use ↑ ↓ to sort)</span></div>
+    <div class="saleline-list">${sel}</div>`;
+  const html=`<div id="addModal"><div class="apv-scrim" onclick="bsPickClose()"></div>
+    <div class="apv-box" style="width:640px"><div class="apv-box-head"><h3>Add products</h3><button class="x-btn" onclick="bsPickClose()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-body">${body}</div>
+      <div class="apv-box-foot"><button class="btn btn-p btn-sm" onclick="bsPickClose()"><i class="fa-solid fa-check"></i> Done</button></div>
+    </div></div>`;
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html); _resScroll();
+}
 function customEditor(cs){
   const n=cs.products.length;
   const prods = n
@@ -2243,13 +2287,28 @@ function customEditor(cs){
   const draftNote = cs.draft
     ? `<div style="background:#FFFBEB;border:1px solid #FDE68A;color:#92400E;border-radius:9px;padding:10px 12px;font-size:12.5px;line-height:1.5;margin-bottom:14px">✎ This section is a <b>draft</b>. Add its products, then hit <b>Save section</b> (top-right). After saving you can drag it in the sidebar to place it on Home. Rename it any time with the ✏️ next to the title.</div>`
     : '';
+  const aud=cs.audience||['all'], states=cs.states||['All'], crops=cs.crops||['All'];
+  const allAud=aud.indexOf('all')>=0, allStates=states.indexOf('All')>=0, allCrops=crops.indexOf('All')>=0;
   return `<div class="card"><div class="card-body">
     ${draftNote}
     <div class="sdiv" style="margin-top:0">Products <span class="hint" style="font-weight:400">(shown in this order — use ↑ ↓ to sort)</span></div>
     <div class="saleline-list">${prods}</div>
     <button class="btn btn-p btn-sm" style="margin-top:10px" onclick="csPickRender('${cs.id}')"><i class="fa-solid fa-plus"></i> Add products</button>
+
+    <div class="sdiv">Show to <span class="hint" style="font-weight:400">(who sees this section)</span></div>
+    <div class="sub-l" style="font-weight:600;margin-top:4px">Audience</div>
+    <div class="chip-row"><span class="cchip ${allAud?'on':''}" onclick="csAudTog('${cs.id}','all')">All users</span> ${COIN_AUDS.filter(a=>a.k!=='all').map(a=>`<span class="cchip ${(!allAud&&aud.indexOf(a.k)>=0)?'on':''}" onclick="csAudTog('${cs.id}','${a.k}')">${a.l}</span>`).join('')}</div>
+    <div class="sub-l" style="font-weight:600">States</div>
+    <div class="chip-row"><span class="cchip ${allStates?'on':''}" onclick="csStateAll('${cs.id}')">All states</span> ${STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!allStates&&states.indexOf(s)>=0)?'on':''}" onclick="csStateTog('${cs.id}','${s}')">${s}</span>`).join('')}</div>
+    <div class="sub-l" style="font-weight:600">Crops the farmer grows</div>
+    <div class="chip-row"><span class="cchip ${allCrops?'on':''}" onclick="csCropAll('${cs.id}')">All crops</span> ${CROPS.map((cr,i)=>`<span class="cchip ${(!allCrops&&crops.indexOf(cr)>=0)?'on':''}" onclick="csCropTog('${cs.id}',${i})">${cr}</span>`).join('')}</div>
   </div></div>`;
 }
+function csAudTog(id,k){ const c=csFind(id); if(!c)return; if(k==='all'){ c.audience=['all']; } else { let a=(c.audience||[]).filter(x=>x!=='all'); a.indexOf(k)>=0?a=a.filter(x=>x!==k):a.push(k); c.audience=a.length?a:['all']; } persistCustom(); pick(id); }
+function csStateAll(id){ const c=csFind(id); if(!c)return; c.states=['All']; persistCustom(); pick(id); }
+function csStateTog(id,st){ const c=csFind(id); if(!c)return; let s=(c.states||[]).filter(x=>x!=='All'); s.indexOf(st)>=0?s=s.filter(x=>x!==st):s.push(st); c.states=s.length?s:['All']; persistCustom(); pick(id); }
+function csCropAll(id){ const c=csFind(id); if(!c)return; c.crops=['All']; persistCustom(); pick(id); }
+function csCropTog(id,i){ const c=csFind(id); if(!c)return; const cr=CROPS[i]; let s=(c.crops||[]).filter(x=>x!=='All'); s.indexOf(cr)>=0?s=s.filter(x=>x!==cr):s.push(cr); c.crops=s.length?s:['All']; persistCustom(); pick(id); }
 
 // INIT — open the section from #hash (e.g. #theme) or the first one
 renderList();

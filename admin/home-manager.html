@@ -187,6 +187,20 @@
 .hm .ppick.on{border-color:var(--green);background:var(--green-lt);}
 .hm .ppick.on .ppick-nm{color:var(--green);}
 .hm .ppick.on i{color:var(--green);}
+.hm .ppick-sub{font-size:11.5px;color:var(--g500);margin-top:2px;}
+.hm .ppick-added{font-size:12px;font-weight:700;color:var(--green);display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
+.hm .saleprice-wrap{display:flex;align-items:center;gap:3px;font-size:12.5px;color:var(--g600);}
+.hm .saleprice{width:78px;height:32px;border:1px solid var(--g200);border-radius:7px;padding:0 8px;font-size:12.5px;color:var(--g800);outline:none;}
+.hm .btn-xs{padding:6px 12px;font-size:12px;}
+.hm .salepick-box{border:1px solid var(--g200);border-radius:9px;padding:12px;background:var(--g50);margin-top:8px;}
+.hm .salepick-box .ppick{background:#fff;}
+.hm .saleline-list{display:flex;flex-direction:column;gap:6px;margin-bottom:2px;}
+.hm .saleline{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--g200);border-radius:8px;background:#fff;}
+.hm .saleline-nm{flex:1;min-width:0;font-size:13px;font-weight:600;color:var(--g800);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hm .saleline-v{font-weight:500;color:var(--g500);font-size:12px;}
+.hm .saleline-pr{display:flex;align-items:baseline;gap:6px;flex-shrink:0;}
+.hm .saleline-mrp{font-size:11.5px;color:var(--g400);text-decoration:line-through;}
+.hm .saleline-pr b{font-size:13.5px;color:var(--green);}
 
 /* MISC */
 .hm .sdiv{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--g500);padding:2px 0 11px;}
@@ -337,7 +351,16 @@ AdminShell.mount({ active:'sc-home', title:'Home Page Manager', crumb:'App Scree
 // All 12 app languages (screens/language.html) — every per-section language tab now offers the full set
 const LANGS=[{c:'hi',l:'HI'},{c:'en',l:'EN'},{c:'hien',l:'HIN'},{c:'mr',l:'MR'},{c:'gu',l:'GU'},{c:'pa',l:'PA'},{c:'te',l:'TE'},{c:'ta',l:'TA'},{c:'kn',l:'KN'},{c:'ml',l:'ML'},{c:'od',l:'OD'},{c:'bn',l:'BN'}];
 const STATES=['All States','MP','UP','Maharashtra','Gujarat','Rajasthan','Karnataka','AP','Telangana','Punjab','Haryana','Bihar','WB'];
-const PRODS=[{n:'Humic + Fulvic 98'},{n:'Chakrawarti ZC'},{n:'Antivirus'},{n:'NPK 19-19-19'},{n:'Bhumiraja'},{n:'WeedOff'},{n:'Mega Combo'},{n:'Chakraveer'}];
+const PRODS=[
+  {n:'Humic + Fulvic 98', variants:[{v:'250 ml',mrp:299},{v:'500 ml',mrp:499},{v:'1 L',mrp:899}]},
+  {n:'Chakrawarti ZC',    variants:[{v:'100 ml',mrp:349},{v:'250 ml',mrp:749},{v:'500 ml',mrp:1399}]},
+  {n:'Antivirus',         variants:[{v:'100 gm',mrp:399},{v:'250 gm',mrp:899}]},
+  {n:'NPK 19-19-19',      variants:[{v:'1 kg',mrp:249},{v:'5 kg',mrp:1099}]},
+  {n:'Bhumiraja',         variants:[{v:'500 ml',mrp:599},{v:'1 L',mrp:1099}]},
+  {n:'WeedOff',           variants:[{v:'250 ml',mrp:449},{v:'500 ml',mrp:849}]},
+  {n:'Mega Combo',        variants:[{v:'Combo pack',mrp:1499}]},
+  {n:'Chakraveer',        variants:[{v:'250 ml',mrp:699},{v:'500 ml',mrp:1299}]},
+];
 const CROPS=['🍅 Tomato','🌶️ Chilli','🌾 Wheat','🌽 Maize','🧅 Onion','🥔 Potato','🫘 Soybean','🪴 Cotton','🥜 Groundnut','🌾 Paddy','🫑 Capsicum'];
 
 // Reference SECS — used to seed data.homeSections on first load
@@ -517,8 +540,8 @@ const APPROVED_BG=[
   {name:'Harvest',  img:'../assets/themes/harvest.jpg'},
   {name:'Winter',   img:'../assets/themes/winter.jpg'},
 ];
-let saleCfg={ name:'Mega Sale', icon:'fa-bolt', countdown:true, leadValue:2, leadUnit:'hours', autoHide:true, bgImage:'', products:['Chakrawarti ZC','Humic + Fulvic 98'], states:['All'], crops:['All'] };
-let saleProdSel=[];                                // temp selection inside the product-picker modal
+let saleList=[{ id:'s1', name:'Mega Monsoon Sale', icon:'fa-bolt', on:true, start:'2026-06-03T10:00', end:'2026-06-03T14:00', countdown:true, leadValue:2, leadUnit:'hours', bgImage:'', products:[{name:'Chakrawarti ZC',variant:'250 ml',mrp:749,price:599},{name:'Humic + Fulvic 98',variant:'500 ml',mrp:499,price:399}], states:['All'], crops:['All'] }];
+let saleDraft=null, saleDraftIdx=-1;               // sale currently open in the create/edit form
 let teEdit=null;                                   // id of theme being edited (inline · legacy)
 let teEditId=null;                                 // id of theme being edited in the MODAL (same modal as Add)
 let teLiveId=null;                                 // id of the theme currently "Live" per the preview sim
@@ -1043,64 +1066,17 @@ coins:()=>`
   </div>
 </div>`,
 
-/* 5 ── SALE */
-flash:()=>{ const sc=saleCfg;
-  const allStates=(sc.states||['All']).indexOf('All')>=0, allCrops=(sc.crops||['All']).indexOf('All')>=0;
-  const stateChips=STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!allStates&&sc.states.indexOf(s)>=0)?'on':''}" onclick="saleStateTog('${s}')">${s}</span>`).join('');
-  const cropChips=CROPS.map((c,i)=>`<span class="cchip ${(!allCrops&&sc.crops.indexOf(c)>=0)?'on':''}" onclick="saleCropTog(${i})">${c}</span>`).join('');
-  return `
+/* 5 ── SALE (multiple sales · each edited in one form) */
+flash:()=>`
 <div class="card">
   <div class="card-body">
-    <div class="sdiv">Sale name &amp; icon</div>
-    <div class="row"><div class="fg" style="max-width:320px"><label>Sale name</label><input type="text" value="${esc(sc.name)}" data-maxlen="20" onchange="saleSet('name',this.value)"/></div></div>
-    <div class="sub-l">Icon</div>
-    <div class="ic-grid">${SB_ICONS.map(ic=>`<div class="ic-opt${sc.icon===ic?' on':''}" onclick="saleIcon('${ic}')"><i class="fa-solid ${ic}"></i></div>`).join('')}</div>
-
-    <div class="sdiv">Schedule</div>
-    <div class="row">
-      <div class="fg"><label>Start date &amp; time</label><input type="datetime-local" value="2026-06-03T10:00"/></div>
-      <div class="fg"><label>End date &amp; time</label><input type="datetime-local" value="2026-06-03T14:00"/></div>
+    <p class="hint-p">Run one or more sales. Each sale has its own schedule, products &amp; targeting. The first live sale that matches the farmer shows on Home.</p>
+    <div class="entry-list">
+      ${saleList.length?saleList.map((s,i)=>saleSummary(s,i)).join(''):'<p class="hint-p">No sales yet — create one below.</p>'}
     </div>
-    <div class="tr"><div class="tr-l"><div class="tt">Auto-hide when the sale ends</div><div class="td">Removes the section from Home once the end time passes</div></div><div class="tg ${sc.autoHide?'on':''}" onclick="saleToggle('autoHide')"></div></div>
-
-    <div class="sdiv">Countdown timer</div>
-    <div class="tr"><div class="tr-l"><div class="tt">Show countdown timer</div><div class="td">HH:MM:SS ticking down to the end time</div></div><div class="tg ${sc.countdown?'on':''}" onclick="saleToggle('countdown')"></div></div>
-    ${sc.countdown?`<div class="sch-box" style="margin-top:12px">
-      <div class="sl">When should the timer appear?</div>
-      <div class="row" style="margin-bottom:0;align-items:flex-end">
-        <div class="fg fix"><label>Start showing</label><input type="number" min="1" style="width:100px" value="${sc.leadValue}" onchange="saleSet('leadValue',+this.value)"/></div>
-        <div class="fg fix"><label>&nbsp;</label><select class="s" onchange="saleSet('leadUnit',this.value)"><option${sc.leadUnit==='minutes'?' selected':''}>minutes</option><option${sc.leadUnit==='hours'?' selected':''}>hours</option><option${sc.leadUnit==='days'?' selected':''}>days</option></select></div>
-        <div class="fg"><label>&nbsp;</label><div style="padding:9px 0;font-size:12.5px;color:var(--g500)">before the sale begins</div></div>
-      </div>
-    </div>`:''}
-
-    <div class="sdiv">Background image</div>
-    <div class="bg-up">
-      <div class="bg-prev" style="background:${sc.bgImage?'#111':'linear-gradient(135deg,#EA580C,#F59E0B)'}">${sc.bgImage?`<img src="${sc.bgImage}" alt=""/>`:'No image'}</div>
-      <div style="flex:1;min-width:0">
-        <input type="file" id="saleBgFile" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none" onchange="salePick(this)"/>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-p btn-sm" onclick="document.getElementById('saleBgFile').click()"><i class="fa-solid fa-upload"></i> Upload background</button>
-          ${sc.bgImage?`<button class="btn btn-d btn-sm" onclick="saleSet('bgImage','')"><i class="fa-solid fa-trash"></i> Remove</button>`:''}
-        </div>
-        <div class="bg-guide"><i class="fa-solid fa-circle-info"></i>Full-width banner · recommended 1080 × 420 px · max 2 MB.</div>
-      </div>
-    </div>
-
-    <div class="sdiv">Products in the sale</div>
-    <div id="fpList" style="margin-bottom:2px">
-      ${sc.products.length?sc.products.map(saleChip).join(''):'<span class="hint">No products yet.</span> '}
-      <span class="padd" onclick="saleAddProd()">+ Add products</span>
-    </div>
-
-    <div class="sdiv">Show to</div>
-    <p class="hint-p" style="margin:-2px 0 10px">Target the sale by farmer state and the crops they grow. Leave "All" for everyone.</p>
-    <div class="sub-l">States</div>
-    <div class="chip-row"><span class="cchip ${allStates?'on':''}" onclick="saleStateAll()">All states</span> ${stateChips}</div>
-    <div class="sub-l">Crops the farmer grows</div>
-    <div class="chip-row"><span class="cchip ${allCrops?'on':''}" onclick="saleCropAll()">All crops</span> ${cropChips}</div>
+    <button class="btn btn-p btn-sm" style="margin-top:12px" onclick="saleAdd()"><i class="fa-solid fa-plus"></i> Add sale</button>
   </div>
-</div>`; },
+</div>`,
 
 /* 6 ── BANNERS */
 banners:()=>`
@@ -1550,32 +1526,131 @@ function addFColl(){ listAdd('coll'); }
 function addWidget(){ listAdd('widget'); }
 function addTesti(){ listAdd('testi'); }
 
-/* ── SALE section ── */
+/* ── SALE section — a list of sales, each edited in ONE form modal ── */
 function saleUI(){ if(sel==='flash') pick('flash'); }
-function saleSet(k,v){ saleCfg[k]=v; saleUI(); }
-function saleToggle(k){ saleCfg[k]=!saleCfg[k]; saleUI(); }
-function saleIcon(ic){ saleCfg.icon=ic; saleUI(); }
-function salePick(input){ const f=input.files&&input.files[0]; if(!f) return; saleCfg.bgImage=URL.createObjectURL(f); saleUI(); }
-function saleChip(n){ return `<span class="pchip">🌱 ${esc(n)} <span class="x" onclick="saleDelProd('${n.replace(/'/g,"\\'")}')">×</span></span>`; }
-function saleDelProd(n){ saleCfg.products=saleCfg.products.filter(x=>x!==n); saleUI(); }
-function saleStateAll(){ saleCfg.states=['All']; saleUI(); }
-function saleStateTog(st){ let s=saleCfg.states.filter(x=>x!=='All'); s.indexOf(st)>=0?s=s.filter(x=>x!==st):s.push(st); if(!s.length)s=['All']; saleCfg.states=s; saleUI(); }
-function saleCropAll(){ saleCfg.crops=['All']; saleUI(); }
-function saleCropTog(i){ const cr=CROPS[i]; let s=saleCfg.crops.filter(x=>x!=='All'); s.indexOf(cr)>=0?s=s.filter(x=>x!==cr):s.push(cr); if(!s.length)s=['All']; saleCfg.crops=s; saleUI(); }
-/* product picker — searchable multi-select modal */
-function salePpRows(q){ const ql=(q||'').toLowerCase();
-  const list=PRODS.filter(p=>p.n.toLowerCase().indexOf(ql)>=0);
-  if(!list.length) return '<p class="hint" style="padding:8px 2px">No products match “'+esc(q)+'”.</p>';
-  return list.map(p=>{ const on=saleProdSel.indexOf(p.n)>=0;
-    return `<div class="ppick${on?' on':''}" onclick="saleProdTog('${p.n.replace(/'/g,"\\'")}')"><span class="ppick-nm">🌱 ${esc(p.n)}</span><i class="fa-solid ${on?'fa-circle-check':'fa-circle-plus'}"></i></div>`; }).join('');
+function saleDT(s){ return s?s.replace('T',' '):''; }
+function saleSummary(s,i){
+  const dates=(s.start&&s.end)?`${saleDT(s.start)} → ${saleDT(s.end)}`:'No schedule';
+  const st=(s.states||['All']).indexOf('All')>=0?'All states':s.states.join(', ');
+  const cr=(s.crops||['All']).indexOf('All')>=0?'All crops':s.crops.join(', ');
+  return `<div class="li" style="align-items:center">
+    <div class="sb-ic sm" style="background:var(--green-lt);color:var(--green)"><i class="fa-solid ${s.icon||'fa-bolt'}"></i></div>
+    <div class="li-body"><div class="li-sum">
+      <span class="nm">${esc(s.name)}</span>
+      <span class="meta"><i class="fa-regular fa-clock"></i>${esc(dates)} · 🛒 ${s.products.length} product${s.products.length!==1?'s':''}</span>
+      <span class="meta"><i class="fa-solid fa-location-dot"></i>${esc(st)} · 🌱 ${esc(cr)}</span>
+    </div></div>
+    <div class="li-act">
+      <div class="tg ${s.on?'on':''}" title="Enable / disable" onclick="saleToggleIdx(${i})"></div>
+      <button class="ic-btn" title="Edit" onclick="saleEditIdx(${i})"><i class="fa-solid fa-pen"></i></button>
+      <button class="ic-btn del" title="Delete" onclick="saleDelIdx(${i})"><i class="fa-solid fa-trash"></i></button>
+    </div>
+  </div>`;
 }
-function saleProdTog(n){ const i=saleProdSel.indexOf(n); i>=0?saleProdSel.splice(i,1):saleProdSel.push(n); const q=(document.getElementById('saleSearch')||{}).value||''; const el=document.getElementById('salePpList'); if(el) el.innerHTML=salePpRows(q); }
-function saleProdSearch(q){ const el=document.getElementById('salePpList'); if(el) el.innerHTML=salePpRows(q); }
-function saleAddProd(){ saleProdSel=saleCfg.products.slice();
-  amOpen('Add products to the sale',
-    `<div class="row" style="margin-bottom:10px"><div class="fg"><label>Search products</label><input type="text" id="saleSearch" placeholder="Type a product name…" oninput="saleProdSearch(this.value)"/></div></div>
-     <div id="salePpList" class="ppick-list">${salePpRows('')}</div>`,
-    function(){ saleCfg.products=saleProdSel.slice(); saleUI(); }, 'Done'); }
+function saleToggleIdx(i){ saleList[i].on=!saleList[i].on; saleUI(); }
+function saleDelIdx(i){ saleList.splice(i,1); saleUI(); }
+function saleBlank(){ return { id:'s'+Date.now().toString(36), name:'', icon:'fa-bolt', on:true, start:'', end:'', countdown:true, leadValue:2, leadUnit:'hours', bgImage:'', products:[], states:['All'], crops:['All'], _q:'' }; }
+function saleAdd(){ saleDraft=saleBlank(); saleDraftIdx=-1; saleFormRender(); }
+function saleEditIdx(i){ saleDraft=JSON.parse(JSON.stringify(saleList[i])); saleDraft._q=''; saleDraftIdx=i; saleFormRender(); }
+function saleFormCancel(){ saleDraft=null; saleDraftIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); pick('flash'); }
+function saleFormSave(){ saleFormSync(); const d=saleDraft; if(!d.name) d.name='Untitled sale'; delete d._q;
+  if(saleDraftIdx>=0) saleList[saleDraftIdx]=d; else saleList.unshift(d);
+  saleDraft=null; saleDraftIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); pick('flash'); }
+/* read live free-text inputs into the draft before any re-render */
+function saleFormSync(){ if(!saleDraft) return;
+  const g=id=>document.getElementById(id);
+  if(g('saleFName')) saleDraft.name=g('saleFName').value;
+  if(g('saleFStart')) saleDraft.start=g('saleFStart').value;
+  if(g('saleFEnd')) saleDraft.end=g('saleFEnd').value;
+  if(g('saleFLead')) saleDraft.leadValue=+g('saleFLead').value||1;
+  if(g('saleFSearch')) saleDraft._q=g('saleFSearch').value;
+}
+function saleFIcon(ic){ saleFormSync(); saleDraft.icon=ic; saleFormRender(); }
+function saleFToggle(k){ saleFormSync(); saleDraft[k]=!saleDraft[k]; saleFormRender(); }
+function saleFSet(k,v){ if(saleDraft) saleDraft[k]=v; }
+function saleFPick(input){ const f=input.files&&input.files[0]; if(!f) return; saleFormSync(); saleDraft.bgImage=URL.createObjectURL(f); saleFormRender(); }
+function saleFRemoveBg(){ saleFormSync(); saleDraft.bgImage=''; saleFormRender(); }
+function saleFStateAll(){ saleFormSync(); saleDraft.states=['All']; saleFormRender(); }
+function saleFStateTog(st){ saleFormSync(); let s=saleDraft.states.filter(x=>x!=='All'); s.indexOf(st)>=0?s=s.filter(x=>x!==st):s.push(st); if(!s.length)s=['All']; saleDraft.states=s; saleFormRender(); }
+function saleFCropAll(){ saleFormSync(); saleDraft.crops=['All']; saleFormRender(); }
+function saleFCropTog(i){ saleFormSync(); const cr=CROPS[i]; let s=saleDraft.crops.filter(x=>x!=='All'); s.indexOf(cr)>=0?s=s.filter(x=>x!==cr):s.push(cr); if(!s.length)s=['All']; saleDraft.crops=s; saleFormRender(); }
+/* products + variants + pricing (inline in the form) */
+function saleFLines(){ if(!saleDraft.products.length) return '<p class="hint" style="margin:0 0 8px">No products added yet — search below to add variants.</p>';
+  return saleDraft.products.map((pr,idx)=>`<div class="saleline">
+    <div class="saleline-nm">🌱 ${esc(pr.name)} <span class="saleline-v">${esc(pr.variant)}</span></div>
+    <div class="saleline-pr"><span class="saleline-mrp">₹${pr.mrp}</span> <b>₹${pr.price}</b></div>
+    <button class="ic-btn del" title="Remove" onclick="saleFDelProd(${idx})"><i class="fa-solid fa-trash"></i></button>
+  </div>`).join('');
+}
+function saleFDelProd(i){ saleFormSync(); saleDraft.products.splice(i,1); saleFormRender(); }
+function saleFProdRows(q){ const ql=(q||'').toLowerCase(); const rows=[];
+  PRODS.forEach(p=>{ if(p.n.toLowerCase().indexOf(ql)<0) return;
+    (p.variants||[{v:'Standard',mrp:0}]).forEach(vr=>{
+      const added=saleDraft.products.some(x=>x.name===p.n&&x.variant===vr.v);
+      rows.push(`<div class="ppick${added?' on':''}">
+        <div style="min-width:0;flex:1"><div class="ppick-nm">🌱 ${esc(p.n)}</div><div class="ppick-sub">${esc(vr.v)} · MRP ₹${vr.mrp}</div></div>
+        ${added?'<span class="ppick-added"><i class="fa-solid fa-circle-check"></i> Added</span>'
+          :`<div class="saleprice-wrap">₹<input type="number" class="saleprice" value="${vr.mrp}" placeholder="${vr.mrp}"/></div>
+            <button class="btn btn-p btn-xs" onclick="saleFAdd('${p.n.replace(/'/g,"\\'")}','${vr.v.replace(/'/g,"\\'")}',${vr.mrp},this)">Add</button>`}
+      </div>`);
+    });
+  });
+  return rows.length?rows.join(''):'<p class="hint" style="padding:8px 2px">No products match.</p>';
+}
+function saleFProdSearch(q){ if(saleDraft) saleDraft._q=q; const el=document.getElementById('saleFProds'); if(el) el.innerHTML=saleFProdRows(q); }
+function saleFAdd(pn,v,mrp,btn){ const row=btn.closest('.ppick'); const pi=row?row.querySelector('.saleprice'):null; const price=Math.max(0,+(pi&&pi.value)||mrp);
+  saleFormSync(); saleDraft.products.push({name:pn,variant:v,mrp:mrp,price:price}); saleFormRender(); }
+function saleFormRender(){
+  const ex=document.getElementById('addModal'); if(ex) ex.remove();
+  const d=saleDraft; if(!d) return;
+  const allStates=(d.states||['All']).indexOf('All')>=0, allCrops=(d.crops||['All']).indexOf('All')>=0;
+  const body=`
+    <div class="sub-l" style="margin-top:0">Name &amp; icon</div>
+    <div class="row"><div class="fg" style="max-width:340px"><label>Sale name</label><input type="text" id="saleFName" value="${esc(d.name)}" data-maxlen="24" placeholder="e.g. Mega Monsoon Sale"/></div></div>
+    <div class="ic-grid">${SB_ICONS.map(ic=>`<div class="ic-opt${d.icon===ic?' on':''}" onclick="saleFIcon('${ic}')"><i class="fa-solid ${ic}"></i></div>`).join('')}</div>
+
+    <div class="sub-l" style="margin-top:18px">Schedule</div>
+    <div class="row"><div class="fg"><label>Start date &amp; time</label><input type="datetime-local" id="saleFStart" value="${d.start}"/></div><div class="fg"><label>End date &amp; time</label><input type="datetime-local" id="saleFEnd" value="${d.end}"/></div></div>
+
+    <div class="sub-l">Countdown timer</div>
+    <div class="tr"><div class="tr-l"><div class="tt">Show countdown to sale end</div><div class="td">HH:MM:SS ticking down to the end time</div></div><div class="tg ${d.countdown?'on':''}" onclick="saleFToggle('countdown')"></div></div>
+    ${d.countdown?`<div class="row" style="margin:12px 0 0;align-items:flex-end">
+      <div class="fg fix"><label>Start showing</label><input type="number" id="saleFLead" min="1" style="width:100px" value="${d.leadValue}"/></div>
+      <div class="fg fix"><label>&nbsp;</label><select class="s" onchange="saleFSet('leadUnit',this.value)"><option${d.leadUnit==='minutes'?' selected':''}>minutes</option><option${d.leadUnit==='hours'?' selected':''}>hours</option><option${d.leadUnit==='days'?' selected':''}>days</option></select></div>
+      <div class="fg"><label>&nbsp;</label><div style="padding:9px 0;font-size:12.5px;color:var(--g500)">before the sale ends</div></div>
+    </div>`:''}
+
+    <div class="sub-l">Background image</div>
+    <div class="bg-up">
+      <div class="bg-prev" style="background:${d.bgImage?'#111':'linear-gradient(135deg,#EA580C,#F59E0B)'}">${d.bgImage?`<img src="${d.bgImage}" alt=""/>`:'No image'}</div>
+      <div style="flex:1;min-width:0">
+        <input type="file" id="saleFBgFile" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none" onchange="saleFPick(this)"/>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-p btn-sm" onclick="document.getElementById('saleFBgFile').click()"><i class="fa-solid fa-upload"></i> Upload background</button>${d.bgImage?`<button class="btn btn-d btn-sm" onclick="saleFRemoveBg()"><i class="fa-solid fa-trash"></i> Remove</button>`:''}</div>
+        <div class="bg-guide"><i class="fa-solid fa-circle-info"></i>Full-width banner · recommended 1080 × 420 px · max 2 MB.</div>
+      </div>
+    </div>
+
+    <div class="sub-l">Products &amp; pricing</div>
+    <div id="saleFLines" class="saleline-list">${saleFLines()}</div>
+    <div class="salepick-box">
+      <div class="row" style="margin-bottom:8px"><div class="fg"><label>Search a product to see its variants</label><input type="text" id="saleFSearch" value="${esc(d._q||'')}" placeholder="Type a product name…" oninput="saleFProdSearch(this.value)"/></div></div>
+      <div id="saleFProds" class="ppick-list">${saleFProdRows(d._q||'')}</div>
+    </div>
+
+    <div class="sub-l">Show to</div>
+    <p class="hint" style="margin:0 0 8px">Target by farmer state and the crops they grow. Leave "All" for everyone.</p>
+    <div class="sub-l" style="font-weight:600;margin-top:4px">States</div>
+    <div class="chip-row"><span class="cchip ${allStates?'on':''}" onclick="saleFStateAll()">All states</span> ${STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!allStates&&d.states.indexOf(s)>=0)?'on':''}" onclick="saleFStateTog('${s}')">${s}</span>`).join('')}</div>
+    <div class="sub-l" style="font-weight:600">Crops the farmer grows</div>
+    <div class="chip-row"><span class="cchip ${allCrops?'on':''}" onclick="saleFCropAll()">All crops</span> ${CROPS.map((c,i)=>`<span class="cchip ${(!allCrops&&d.crops.indexOf(c)>=0)?'on':''}" onclick="saleFCropTog(${i})">${c}</span>`).join('')}</div>`;
+  const html=`<div id="addModal"><div class="apv-scrim" onclick="saleFormCancel()"></div>
+    <div class="apv-box" style="width:760px">
+      <div class="apv-box-head"><h3>${saleDraftIdx>=0?'Edit sale':'Create sale'}</h3><button class="x-btn" onclick="saleFormCancel()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-body">${body}</div>
+      <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="saleFormCancel()">Cancel</button><button class="btn btn-p btn-sm" onclick="saleFormSave()"><i class="fa-solid fa-check"></i> ${saleDraftIdx>=0?'Save sale':'Create sale'}</button></div>
+    </div></div>`;
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+}
 function addBS(btn){const p=PRODS.find(p=>!document.getElementById('bsList').innerHTML.includes(p.n));if(!p)return;const c=document.createElement('span');c.className='pchip';c.innerHTML=`⭐ ${p.n} <span class="x" onclick="this.closest('.pchip').remove()">×</span>`;btn.before(c);}
 function addFC(btn){const p=PRODS[Math.floor(Math.random()*PRODS.length)];const c=document.createElement('span');c.className='pchip';c.innerHTML=`🌱 ${p.n} <span class="x" onclick="this.closest('.pchip').remove()">×</span>`;btn.before(c);}
 

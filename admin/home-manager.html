@@ -48,8 +48,12 @@
 .hm .ttl-edit:hover{background:var(--green-lt);color:var(--green);}
 .hm .ttl-orig{display:inline-block;margin-top:3px;font-size:11.5px;color:var(--g400);}
 .hm .ttl-orig::before{content:'default: ';}
-/* product checkbox picker (custom sections) */
-.hm .cspick input{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex-shrink:0;}
+/* auto-generated section deeplink row (custom sections) */
+.hm .cs-link{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--g50,#F8FAFC);border:1px solid var(--g200);border-radius:9px;padding:10px 12px;margin-top:12px;}
+.hm .cs-link-l{font-size:12px;font-weight:700;color:var(--g600);}
+.hm .cs-link-l i{color:var(--green);margin-right:5px;}
+.hm .cs-link-r{display:flex;align-items:center;gap:8px;}
+.hm .cs-link-r code{font-size:12px;font-weight:700;color:var(--green);background:var(--green-lt);border:1px solid #BBF7D0;border-radius:6px;padding:4px 9px;font-family:ui-monospace,Menlo,Consolas,monospace;}
 
 /* RIGHT PANEL */
 .hm .rp{flex:1;min-width:0;}
@@ -482,8 +486,12 @@ const SEC_GROUPS=[
 let data = KKD.load();
 /* Custom sections the manager builds (Bestseller-style product strips). The name defined
    inside the editor becomes the section heading shown on the app. */
+function slugify(s){ return (s||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'') || 'section'; }
 let customSections = Array.isArray(data.customHomeSections)
-  ? data.customHomeSections.map(c=>Object.assign({group:'custom',ic:'⭐',link:'',products:[],on:true},c))
+  ? data.customHomeSections.map(c=>{ const o=Object.assign({group:'custom',ic:'⭐',link:'',products:[],on:true,after:'top'},c);
+      o.products=(o.products||[]).map(p=> typeof p==='string' ? {name:p,variant:''} : p);   // migrate old string entries
+      if(!o.deeplink) o.deeplink='home.html?section='+slugify(o.name);
+      return o; })
   : [];
 let SECS;
 function seedSecs(){
@@ -503,7 +511,7 @@ function seedSecs(){
   data.homeSections = normalizeOrder(stored, meta);
   SECS = data.homeSections.map(s=>({...meta[s.id], on:s.on, title:s.title||''}));
   // append the manager's custom sections after the built-ins
-  customSections.forEach(c=>SECS.push({id:c.id, ic:c.ic||'⭐', nm:c.name, sub:'Custom product section', on:c.on!==false, group:'custom', custom:true}));
+  customSections.forEach(c=>SECS.push({id:c.id, ic:c.ic||'⭐', nm:c.name, sub:'Custom product section', on:c.on!==false, group:'custom', custom:true, after:c.after||'top'}));
   KKD.save(data);
 }
 function normalizeOrder(list, meta){
@@ -518,7 +526,7 @@ function normalizeOrder(list, meta){
   return out;
 }
 function persist(){ data.homeSections = SECS.filter(s=>!s.custom).map(s=>({id:s.id,on:s.on,title:s.title||''})); KKD.save(data); }
-function persistCustom(){ data.customHomeSections = customSections.map(c=>({id:c.id,name:c.name,on:c.on!==false,group:'custom',link:c.link||'',products:c.products||[],ic:c.ic||'⭐'})); KKD.save(data); }
+function persistCustom(){ data.customHomeSections = customSections.map(c=>({id:c.id,name:c.name,on:c.on!==false,group:'custom',link:c.link||'',products:c.products||[],ic:c.ic||'⭐',after:c.after||'top',deeplink:c.deeplink||('home.html?section='+slugify(c.name))})); KKD.save(data); }
 seedSecs();
 
 let sel=null,dragId=null;
@@ -539,7 +547,7 @@ function secItemHTML(s){
       onclick="pick('${s.id}')">
       ${handle}
       <span class="sec-icon">${s.ic}</span>
-      <div class="sec-info"><div class="sec-name">${esc(s.title||s.nm)}</div><div class="sec-sub">${s.sub}</div></div>
+      <div class="sec-info"><div class="sec-name">${esc(s.title||s.nm)}</div><div class="sec-sub">${esc(s.custom?csPlaceLabel(s.after):s.sub)}</div></div>
       ${s.on?'':'<span class="sec-hidden">Hidden</span>'}
     </div>`;
 }
@@ -2086,36 +2094,90 @@ function renameSection(id){
 
 /* ── Custom sections (Bestseller-style product strips the manager builds) ── */
 function csFind(id){ return customSections.find(c=>c.id===id); }
-function addCustomSection(){
-  const id='cs'+Date.now().toString(36);
-  const c={id,name:'New section',on:true,group:'custom',ic:'⭐',link:'',products:[]};
-  customSections.push(c);
-  SECS.push({id,ic:'⭐',nm:c.name,sub:'Custom product section',on:true,group:'custom',custom:true});
-  persistCustom(); renderList(); pick(id);
+/* placement = which built-in Home section this custom section sits after ('top' = above everything) */
+function csPlaceOpts(cur){
+  const apps=SECS.filter(s=>(s.group||'app')==='app' && !s.fixed);   // content sections only (skip fixed/floating)
+  let o=`<option value="top"${(!cur||cur==='top')?' selected':''}>Top of Home</option>`;
+  apps.forEach(s=>{ o+=`<option value="${s.id}"${cur===s.id?' selected':''}>After “${esc(s.title||s.nm)}”</option>`; });
+  return o;
 }
-function csRename(id,v){ const c=csFind(id); if(!c)return; c.name=(v||'').trim()||'Untitled section'; const s=SECS.find(x=>x.id===id); if(s)s.nm=c.name; persistCustom(); renderList(); pick(id); }
+function csPlaceLabel(after){ if(!after||after==='top') return 'Placed at top of Home'; const t=SECS.find(s=>s.id===after); return t?('After ‘'+(t.title||t.nm)+'’'):'Custom product section'; }
+function addCustomSection(){
+  const apps=SECS.filter(s=>(s.group||'app')==='app' && !s.fixed);
+  const defAfter = apps.length ? apps[apps.length-1].id : 'top';
+  // ask the name first (+ where it goes), THEN create the section and open its editor
+  amOpen('Add section', `
+    <div class="row"><div class="fg"><label>Section name <span class="hint">(shown as the heading on the app)</span></label><input type="text" id="am_csname" data-maxlen="28" placeholder="e.g. Best Sellers" autofocus/></div></div>
+    <div class="row" style="margin-bottom:0"><div class="fg"><label>Placement on Home</label><select class="s" id="am_csafter">${csPlaceOpts(defAfter)}</select></div></div>
+    <p class="hint-p" style="margin:9px 0 0">You can change the name, products and placement any time.</p>`,
+    function(){
+      const nm=(amVal('am_csname')||'').trim()||'New section';
+      const after=amVal('am_csafter')||'top';
+      const id='cs'+Date.now().toString(36);
+      const c={id,name:nm,on:true,group:'custom',ic:'⭐',link:'',products:[],after:after,deeplink:'home.html?section='+slugify(nm)};
+      customSections.push(c);
+      SECS.push({id,ic:'⭐',nm:c.name,sub:'Custom product section',on:true,group:'custom',custom:true,after:after});
+      persistCustom(); renderList(); pick(id);
+    }, 'Add section');
+}
+function csSetAfter(id,v){ const c=csFind(id); if(!c)return; c.after=v; const s=SECS.find(x=>x.id===id); if(s)s.after=v; persistCustom(); renderList(); }
+function csRename(id,v){ const c=csFind(id); if(!c)return; c.name=(v||'').trim()||'Untitled section'; c.deeplink='home.html?section='+slugify(c.name); const s=SECS.find(x=>x.id===id); if(s)s.nm=c.name; persistCustom(); renderList(); pick(id); }
+function csCopyLink(id){ const c=csFind(id); if(!c)return; try{ navigator.clipboard.writeText(c.deeplink); }catch(e){} AdminShell.saved('Deeplink copied'); }
 function csSetLink(id,v){ const c=csFind(id); if(!c)return; c.link=v; persistCustom(); }
-function csDelProd(id,nm){ const c=csFind(id); if(!c)return; c.products=c.products.filter(x=>x!==nm); persistCustom(); pick(id); }
+function csDelProd(id,i){ const c=csFind(id); if(!c)return; c.products.splice(i,1); persistCustom(); pick(id); }
 function csMoveProd(id,i,dir){ const c=csFind(id); if(!c)return; const j=i+dir; if(j<0||j>=c.products.length)return; const a=c.products; [a[i],a[j]]=[a[j],a[i]]; persistCustom(); pick(id); }
 function csDelSection(id){ const c=csFind(id); if(!c)return; customSections=customSections.filter(x=>x.id!==id); SECS=SECS.filter(s=>s.id!==id); persistCustom(); const nxt=SECS[0]; sel=null; renderList(); if(nxt)pick(nxt.id); }
-function csAddProducts(id){ const c=csFind(id); if(!c)return;
-  const rows=PRODS.map(p=>{ const on=c.products.indexOf(p.n)>=0; return `<label class="ppick cspick${on?' on':''}"><span class="ppick-nm">🌱 ${esc(p.n)}</span><input type="checkbox" data-pn="${esc(p.n)}" ${on?'checked':''} onchange="this.closest('.ppick').classList.toggle('on',this.checked)"/></label>`; }).join('');
-  amOpen('Add products', `<p class="hint-p" style="margin:0 0 10px">Pick the products that appear in this section.</p><div class="ppick-list">${rows}</div>`, function(){
-    const picked=[...document.querySelectorAll('#addModal input[type=checkbox]')].filter(x=>x.checked).map(x=>x.getAttribute('data-pn'));
-    // keep already-chosen order, append newly-ticked at the end
-    const keep=c.products.filter(n=>picked.indexOf(n)>=0);
-    picked.forEach(n=>{ if(keep.indexOf(n)<0) keep.push(n); });
-    c.products=keep; persistCustom(); pick(id);
-  }, 'Done');
+/* Product picker — same search-then-variant flow as the Sale form, but no price field */
+function csPickRows(id){ const c=csFind(id); if(!c) return ''; const ql=(c._q||'').toLowerCase(); const rows=[];
+  PRODS.forEach(p=>{ if(p.n.toLowerCase().indexOf(ql)<0) return;
+    (p.variants||[{v:'Standard'}]).forEach(vr=>{
+      const added=(c.products||[]).some(x=>x.name===p.n&&x.variant===vr.v);
+      rows.push(`<div class="ppick${added?' on':''}">
+        <div style="min-width:0;flex:1"><div class="ppick-nm">🌱 ${esc(p.n)}</div><div class="ppick-sub">${esc(vr.v)}${vr.mrp?` · MRP ₹${vr.mrp}`:''}</div></div>
+        ${added?'<span class="ppick-added"><i class="fa-solid fa-circle-check"></i> Added</span>'
+          :`<button class="btn btn-p btn-xs" onclick="csPickAdd('${id}','${p.n.replace(/'/g,"\\'")}','${vr.v.replace(/'/g,"\\'")}')">Add</button>`}
+      </div>`);
+    });
+  });
+  return rows.length?rows.join(''):'<p class="hint" style="padding:8px 2px">No products match.</p>';
+}
+function csPickSearch(id,q){ const c=csFind(id); if(c)c._q=q; const el=document.getElementById('csPickRows'); if(el)el.innerHTML=csPickRows(id); }
+function csPickAdd(id,name,variant){ const c=csFind(id); if(!c)return; c.products=c.products||[]; if(!c.products.some(x=>x.name===name&&x.variant===variant)) c.products.push({name:name,variant:variant}); persistCustom(); csPickRender(id); }
+function csPickDel(id,i){ const c=csFind(id); if(!c)return; c.products.splice(i,1); persistCustom(); csPickRender(id); }
+function csPickMove(id,i,dir){ const c=csFind(id); if(!c)return; const j=i+dir; if(j<0||j>=c.products.length)return; const a=c.products; [a[i],a[j]]=[a[j],a[i]]; persistCustom(); csPickRender(id); }
+function csPickClose(id){ const m=document.getElementById('addModal'); if(m)m.remove(); const c=csFind(id); if(c) delete c._q; pick(id); }
+function csPickRender(id){ _capScroll(); const ex=document.getElementById('addModal'); if(ex)ex.remove(); const c=csFind(id); if(!c)return;
+  const n=(c.products||[]).length;
+  const sel = n ? c.products.map((pr,i)=>`<div class="saleline">
+      <span style="font-size:11px;font-weight:700;color:var(--g400);min-width:16px;text-align:center">${i+1}</span>
+      <div class="saleline-nm" style="flex:1">⭐ ${esc(pr.name)} <span class="saleline-v">${esc(pr.variant)}</span></div>
+      <button class="ic-btn" title="Move up" onclick="csPickMove('${id}',${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button>
+      <button class="ic-btn" title="Move down" onclick="csPickMove('${id}',${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
+      <button class="ic-btn del" title="Remove" onclick="csPickDel('${id}',${i})"><i class="fa-solid fa-trash"></i></button>
+    </div>`).join('') : '<p class="hint" style="margin:0 0 8px">No products added yet — search above to add.</p>';
+  const body=`
+    <div class="salepick-box">
+      <div class="row" style="margin-bottom:8px"><div class="fg"><label>Search a product to see its variants</label><input type="text" id="csPickSearch" value="${esc(c._q||'')}" placeholder="Type a product name…" oninput="csPickSearch('${id}',this.value)"/></div></div>
+      <div id="csPickRows" class="ppick-list">${csPickRows(id)}</div>
+    </div>
+    <div class="sub-l">Selected products <span class="hint">(shown in this order — use ↑ ↓ to sort)</span></div>
+    <div class="saleline-list">${sel}</div>`;
+  const html=`<div id="addModal"><div class="apv-scrim" onclick="csPickClose('${id}')"></div>
+    <div class="apv-box" style="width:640px"><div class="apv-box-head"><h3>Add products</h3><button class="x-btn" onclick="csPickClose('${id}')"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-body">${body}</div>
+      <div class="apv-box-foot"><button class="btn btn-p btn-sm" onclick="csPickClose('${id}')"><i class="fa-solid fa-check"></i> Done</button></div>
+    </div></div>`;
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html); _resScroll();
 }
 function customEditor(cs){
-  const prods = cs.products.length
-    ? cs.products.map((nm,i)=>`<div class="saleline">
+  const n=cs.products.length;
+  const prods = n
+    ? cs.products.map((pr,i)=>`<div class="saleline">
         <span style="font-size:11px;font-weight:700;color:var(--g400);min-width:16px;text-align:center">${i+1}</span>
-        <div class="saleline-nm" style="flex:1">⭐ ${esc(nm)}</div>
+        <div class="saleline-nm" style="flex:1">⭐ ${esc(pr.name)} <span class="saleline-v">${esc(pr.variant||'')}</span></div>
         <button class="ic-btn" title="Move up" onclick="csMoveProd('${cs.id}',${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button>
-        <button class="ic-btn" title="Move down" onclick="csMoveProd('${cs.id}',${i},1)" ${i===cs.products.length-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
-        <button class="ic-btn del" title="Remove" onclick="csDelProd('${cs.id}','${nm.replace(/'/g,"\\'")}')"><i class="fa-solid fa-trash"></i></button>
+        <button class="ic-btn" title="Move down" onclick="csMoveProd('${cs.id}',${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
+        <button class="ic-btn del" title="Remove" onclick="csDelProd('${cs.id}',${i})"><i class="fa-solid fa-trash"></i></button>
       </div>`).join('')
     : '<p class="hint" style="margin:0">No products yet — add a few below.</p>';
   return `<div class="card"><div class="card-body">
@@ -2123,10 +2185,16 @@ function customEditor(cs){
     <p class="hint-p" style="margin:-2px 0 10px">This name shows as the section title on the app home screen.</p>
     <div class="row"><div class="fg" style="max-width:340px"><label>Section name</label><input type="text" value="${esc(cs.name)}" data-maxlen="28" onchange="csRename('${cs.id}',this.value)" placeholder="e.g. Best Sellers"/></div>
       <div class="fg"><label>"See all" link <span class="hint">(optional)</span></label><input type="text" value="${esc(cs.link||'')}" onchange="csSetLink('${cs.id}',this.value)" placeholder="shop.html?sort=bestsellers"/></div></div>
+    <div class="cs-link"><div class="cs-link-l"><i class="fa-solid fa-link"></i> Section deeplink <span class="hint">— auto-generated · use it in campaigns / notifications to open this section</span></div>
+      <div class="cs-link-r"><code>${esc(cs.deeplink||('home.html?section='+slugify(cs.name)))}</code><button class="ic-btn" title="Copy" onclick="csCopyLink('${cs.id}')"><i class="fa-solid fa-copy"></i></button></div></div>
+
+    <div class="sdiv">Placement on Home</div>
+    <p class="hint-p" style="margin:-2px 0 10px">Where this section appears in the Home order. Drag in the sidebar to reorder against other custom sections.</p>
+    <div class="row" style="margin-bottom:0"><div class="fg" style="max-width:340px"><label>Show this section</label><select class="s" onchange="csSetAfter('${cs.id}',this.value)">${csPlaceOpts(cs.after)}</select></div></div>
 
     <div class="sdiv">Products <span class="hint" style="font-weight:400">(shown in this order — use ↑ ↓ to sort)</span></div>
     <div class="saleline-list">${prods}</div>
-    <button class="btn btn-p btn-sm" style="margin-top:10px" onclick="csAddProducts('${cs.id}')"><i class="fa-solid fa-plus"></i> Add products</button>
+    <button class="btn btn-p btn-sm" style="margin-top:10px" onclick="csPickRender('${cs.id}')"><i class="fa-solid fa-plus"></i> Add products</button>
 
     <div class="sdiv">Danger zone</div>
     <button class="btn btn-d btn-sm" onclick="csDelSection('${cs.id}')"><i class="fa-solid fa-trash"></i> Delete this section</button>

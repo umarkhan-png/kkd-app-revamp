@@ -201,6 +201,14 @@
 .hm .saleline-pr{display:flex;align-items:baseline;gap:6px;flex-shrink:0;}
 .hm .saleline-mrp{font-size:11.5px;color:var(--g400);text-decoration:line-through;}
 .hm .saleline-pr b{font-size:13.5px;color:var(--green);}
+.hm .bthumb{width:64px;height:40px;border-radius:7px;flex-shrink:0;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;}
+.hm .bthumb img{width:100%;height:100%;object-fit:cover;}
+.hm .langimg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;}
+.hm .langimg{display:flex;align-items:center;gap:7px;padding:7px 9px;border:1px solid var(--g200);border-radius:8px;background:#fff;}
+.hm .langimg-prev{width:40px;height:26px;border-radius:5px;background:var(--g100);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.hm .langimg-prev img{width:100%;height:100%;object-fit:cover;}
+.hm .langimg-prev span{font-size:8.5px;color:var(--g400);}
+.hm .langimg-l{font-size:11.5px;font-weight:800;color:var(--g600);flex:1;min-width:0;}
 
 /* MISC */
 .hm .sdiv{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--g500);padding:2px 0 11px;}
@@ -542,6 +550,13 @@ const APPROVED_BG=[
 ];
 let saleList=[{ id:'s1', name:'Mega Monsoon Sale', icon:'fa-bolt', on:true, start:'2026-06-03T10:00', end:'2026-06-03T14:00', countdown:true, leadValue:2, leadUnit:'hours', bgImage:'', products:[{name:'Chakrawarti ZC',variant:'250 ml',mrp:749,price:599},{name:'Humic + Fulvic 98',variant:'500 ml',mrp:499,price:399}], states:['All'], crops:['All'] }];
 let saleDraft=null, saleDraftIdx=-1;               // sale currently open in the create/edit form
+/* Promo banners — mirrors the app's home carousel (Mega Krishi Bachat Mela, BOGO Antivirus, Fertilizer Fest) */
+let bannerList=[
+  { id:'b1', name:'Mega Krishi Bachat Mela', link:'shop.html?sale=mela',        img:'', imgByLang:{}, cond:'always', eventType:'festival', start:'', end:'', states:['All'], crops:['All'], on:true },
+  { id:'b2', name:'Buy 1 Get 1 — Antivirus Combo', link:'categories.html?cat=antivirus', img:'', imgByLang:{}, cond:'event', eventType:'festival', start:'2026-06-01', end:'2026-06-15', states:['All'], crops:['🌶️ Chilli','🍅 Tomato'], on:true },
+  { id:'b3', name:'Fertilizer Fest — up to 40% off', link:'categories.html?cat=fertilizer', img:'', imgByLang:{}, cond:'always', eventType:'festival', start:'', end:'', states:['All'], crops:['All'], on:true },
+];
+let bannerDraft=null, bannerDraftIdx=-1;           // banner open in the create/edit form
 let teEdit=null;                                   // id of theme being edited (inline · legacy)
 let teEditId=null;                                 // id of theme being edited in the MODAL (same modal as Add)
 let teLiveId=null;                                 // id of the theme currently "Live" per the preview sim
@@ -690,7 +705,6 @@ function teApvOpen(){
     <div class="apv-box">
       <div class="apv-box-head"><h3>Approved theme images</h3><button class="x-btn" onclick="teApvClose()"><i class="fa-solid fa-xmark"></i></button></div>
       <div class="apv-box-body">
-        <p class="hint" style="margin:0 0 14px">Tap an image to apply it to “${esc(t.name)}”. A <b style="color:var(--green)">Live</b> tag means the image is already showing in the app.</p>
         <div class="apv-grid apv-grid-modal">${tiles}</div>
       </div>
     </div></div>`;
@@ -1078,18 +1092,15 @@ flash:()=>`
   </div>
 </div>`,
 
-/* 6 ── BANNERS */
+/* 6 ── PROMO BANNERS (each edited in one form — per-language image, state + crop + event targeting) */
 banners:()=>`
 <div class="card">
   <div class="card-body">
-    <div data-img-hint="banner" style="margin-bottom:10px"></div>
-    <div id="bnList">
-      ${[
-        {nm:'Mega Krishi Bachat Mela',link:'/shop?sale=mela',states:'All States',lang:'All',start:'2026-06-01',end:'2026-06-30'},
-        {nm:'Hot Combo BOGO',link:'/shop?filter=combo',states:'MP, UP',lang:'HI',start:'2026-06-01',end:'2026-06-30'},
-      ].map(b=>LISTS.banner.row({name:b.nm,link:b.link,lang:b.lang,states:b.states,start:b.start,end:b.end,_on:true})).join('')}
+    <p class="hint-p">The home banner carousel. Each banner can carry a per-language image and show by state, crop and event.</p>
+    <div class="entry-list">
+      ${bannerList.length?bannerList.map((b,i)=>bannerSummary(b,i)).join(''):'<p class="hint-p">No banners yet — add one below.</p>'}
     </div>
-    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addBanner()">+ Add Banner</button>
+    <button class="btn btn-p btn-sm" style="margin-top:12px" onclick="addBanner()"><i class="fa-solid fa-plus"></i> Add banner</button>
   </div>
 </div>`,
 
@@ -1467,20 +1478,6 @@ const LISTS={
       <div class="ep" onclick="promptE(this)" style="font-size:18px">${d.emoji||'✅'}</div>
       <div class="li-body"><div class="li-sum"><span class="nm">${esc(d.task)}</span><span class="meta">🪙 ${esc(String(d.coins))} coins · ${esc(d.action)}</span></div></div>${liAct('task',d)}</div>` },
 
-  banner:{ listId:'bnList', title:'promo banner',
-    def:()=>({name:'',link:'',lang:'All',states:'All States',start:'',end:''}),
-    fields:d=>`<div class="bimg" style="width:100%;margin-bottom:12px" onclick="this.querySelector('input').click()">🖼️ ${d.name?esc(d.name):'Click to upload banner'}<input type="file" accept="image/*" style="display:none"/></div>
-      <div class="row"><div class="fg"><label>Banner name</label><input type="text" id="am_name" value="${esc(d.name)}" placeholder="e.g. Mega Sale"/></div></div>
-      <div class="row"><div class="fg"><label>Deeplink</label><input type="text" id="am_link" value="${esc(d.link)}" placeholder="/shop?sale=…"/></div></div>
-      <div class="row"><div class="fg fix"><label>Language</label><select class="s" id="am_lang"><option>All</option>${LANGS.map(l=>`<option${d.lang===l.l?' selected':''}>${l.l}</option>`).join('')}</select></div>
-        <div class="fg"><label>Target states</label><input type="text" id="am_states" value="${esc(d.states)}" placeholder="All States or MP, UP"/></div></div>
-      <div class="row" style="margin-bottom:0"><div class="fg"><label>Start</label><input type="date" id="am_start" value="${esc(d.start)}"/></div><div class="fg"><label>End</label><input type="date" id="am_end" value="${esc(d.end)}"/></div></div>`,
-    collect:d=>({name:amVal('am_name')||'New banner',link:amVal('am_link'),lang:amVal('am_lang')||'All',states:amVal('am_states')||'All States',start:amVal('am_start'),end:amVal('am_end')}),
-    row:d=>`<div class="li" style="flex-direction:column;gap:11px;align-items:stretch" ${liTag('banner',d)}>
-      <div style="display:flex;align-items:center;gap:8px"><span class="drag-h">⠿</span>
-        <div class="bimg" style="flex:1" onclick="this.querySelector('input').click()">🖼️ ${esc(d.name)}<input type="file" accept="image/*" style="display:none"/></div>${liAct('banner',d)}</div>
-      <div class="li-sum"><span class="meta"><i class="fa-solid fa-link"></i>${esc(d.link)||'—'}</span><span class="meta">🌐 ${esc(d.lang)} · 📍 ${esc(d.states)}</span></div></div>` },
-
   coll:{ listId:'fcList', title:'collection',
     def:()=>({name:'',color:'#1B6B3A',lang:'All',prods:'',states:'All States'}),
     fields:d=>`<div class="row"><div class="fg"><label>Collection name</label><input type="text" id="am_name" value="${esc(d.name)}" placeholder="e.g. Monsoon picks"/></div></div>
@@ -1521,7 +1518,108 @@ const LISTS={
 function addPlaceholder(){ listAdd('ph'); }
 function addCat(){ listAdd('cat'); }
 function addTask(){ listAdd('task'); }
-function addBanner(){ listAdd('banner'); }
+/* ── PROMO BANNERS — list + one form each (per-language image, state/crop/event targeting) ── */
+function bannerUI(){ if(sel==='banners') pick('banners'); }
+function bannerCondLabel(b){ if(b.cond==='event'){ const et={festival:'Festival',launch:'New launch',season:'Season start',custom:'Custom dates'}[b.eventType]||'Event'; return `${et}${b.start&&b.end?` · ${b.start}→${b.end}`:''}`; } return 'Always on'; }
+function bannerSummary(b,i){
+  const st=(b.states||['All']).indexOf('All')>=0?'All states':b.states.join(', ');
+  const cr=(b.crops||['All']).indexOf('All')>=0?'All crops':b.crops.join(', ');
+  const nLang=Object.keys(b.imgByLang||{}).filter(k=>b.imgByLang[k]).length;
+  return `<div class="li" style="align-items:center">
+    <div class="bthumb">${b.img?`<img src="${b.img}" alt=""/>`:'🖼️'}</div>
+    <div class="li-body"><div class="li-sum">
+      <span class="nm">${esc(b.name)}</span>
+      <span class="meta"><i class="fa-solid fa-link"></i>${esc(b.link)||'—'} · 🕒 ${esc(bannerCondLabel(b))}</span>
+      <span class="meta"><i class="fa-solid fa-location-dot"></i>${esc(st)} · 🌱 ${esc(cr)}${nLang?` · 🌐 ${nLang} language image${nLang!==1?'s':''}`:''}</span>
+    </div></div>
+    <div class="li-act">
+      <div class="tg ${b.on?'on':''}" title="Enable / disable" onclick="bannerToggleIdx(${i})"></div>
+      <button class="ic-btn" title="Edit" onclick="bannerEditIdx(${i})"><i class="fa-solid fa-pen"></i></button>
+      <button class="ic-btn del" title="Delete" onclick="bannerDelIdx(${i})"><i class="fa-solid fa-trash"></i></button>
+    </div>
+  </div>`;
+}
+function bannerToggleIdx(i){ bannerList[i].on=!bannerList[i].on; bannerUI(); }
+function bannerDelIdx(i){ bannerList.splice(i,1); bannerUI(); }
+function bannerBlank(){ return { id:'b'+Date.now().toString(36), name:'', link:'', img:'', imgByLang:{}, cond:'always', eventType:'festival', start:'', end:'', states:['All'], crops:['All'], on:true }; }
+function addBanner(){ bannerDraft=bannerBlank(); bannerDraftIdx=-1; bannerFormRender(); }
+function bannerEditIdx(i){ bannerDraft=JSON.parse(JSON.stringify(bannerList[i])); bannerDraftIdx=i; bannerFormRender(); }
+function bannerFormCancel(){ bannerDraft=null; bannerDraftIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); pick('banners'); }
+function bannerFormSave(){ bannerFormSync(); const d=bannerDraft; if(!d.name) d.name='Untitled banner';
+  if(bannerDraftIdx>=0) bannerList[bannerDraftIdx]=d; else bannerList.unshift(d);
+  bannerDraft=null; bannerDraftIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); pick('banners'); }
+function bannerFormSync(){ if(!bannerDraft) return; const g=id=>document.getElementById(id);
+  if(g('bnFName')) bannerDraft.name=g('bnFName').value;
+  if(g('bnFLink')) bannerDraft.link=g('bnFLink').value;
+  if(g('bnFStart')) bannerDraft.start=g('bnFStart').value;
+  if(g('bnFEnd')) bannerDraft.end=g('bnFEnd').value;
+}
+function bannerFSet(k,v){ bannerFormSync(); bannerDraft[k]=v; bannerFormRender(); }
+function bannerFPick(input){ const f=input.files&&input.files[0]; if(!f) return; bannerFormSync(); bannerDraft.img=URL.createObjectURL(f); bannerFormRender(); }
+function bannerFRemove(){ bannerFormSync(); bannerDraft.img=''; bannerFormRender(); }
+function bannerFLangPick(code,input){ const f=input.files&&input.files[0]; if(!f) return; bannerFormSync(); bannerDraft.imgByLang=bannerDraft.imgByLang||{}; bannerDraft.imgByLang[code]=URL.createObjectURL(f); bannerFormRender(); }
+function bannerFLangRemove(code){ bannerFormSync(); if(bannerDraft.imgByLang) delete bannerDraft.imgByLang[code]; bannerFormRender(); }
+function bannerFStateAll(){ bannerFormSync(); bannerDraft.states=['All']; bannerFormRender(); }
+function bannerFStateTog(st){ bannerFormSync(); let s=bannerDraft.states.filter(x=>x!=='All'); s.indexOf(st)>=0?s=s.filter(x=>x!==st):s.push(st); if(!s.length)s=['All']; bannerDraft.states=s; bannerFormRender(); }
+function bannerFCropAll(){ bannerFormSync(); bannerDraft.crops=['All']; bannerFormRender(); }
+function bannerFCropTog(i){ bannerFormSync(); const cr=CROPS[i]; let s=bannerDraft.crops.filter(x=>x!=='All'); s.indexOf(cr)>=0?s=s.filter(x=>x!==cr):s.push(cr); if(!s.length)s=['All']; bannerDraft.crops=s; bannerFormRender(); }
+function bannerFormRender(){
+  const ex=document.getElementById('addModal'); if(ex) ex.remove();
+  const d=bannerDraft; if(!d) return;
+  const allStates=(d.states||['All']).indexOf('All')>=0, allCrops=(d.crops||['All']).indexOf('All')>=0;
+  const langUploaders=LANGS.map(L=>{ const url=(d.imgByLang||{})[L.c];
+    return `<div class="langimg">
+      <div class="langimg-prev">${url?`<img src="${url}" alt=""/>`:`<span>default</span>`}</div>
+      <div class="langimg-l">${L.l}</div>
+      <input type="file" id="bnLang_${L.c}" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="bannerFLangPick('${L.c}',this)"/>
+      <button class="ic-btn" title="Upload ${L.l}" onclick="document.getElementById('bnLang_${L.c}').click()"><i class="fa-solid fa-upload"></i></button>
+      ${url?`<button class="ic-btn del" title="Remove" onclick="bannerFLangRemove('${L.c}')"><i class="fa-solid fa-xmark"></i></button>`:''}
+    </div>`; }).join('');
+  const body=`
+    <div class="sub-l" style="margin-top:0">Name &amp; link</div>
+    <div class="row"><div class="fg"><label>Banner name</label><input type="text" id="bnFName" value="${esc(d.name)}" data-maxlen="40" placeholder="e.g. Mega Krishi Bachat Mela"/></div></div>
+    <div class="row" style="margin-bottom:0"><div class="fg"><label>Deeplink</label><input type="text" id="bnFLink" value="${esc(d.link)}" placeholder="shop.html?sale=…"/></div></div>
+
+    <div class="sub-l" style="margin-top:18px">Banner image</div>
+    <div class="bg-up">
+      <div class="bg-prev" style="background:${d.img?'#111':'linear-gradient(135deg,#042919,#10B981)'};width:200px;height:88px">${d.img?`<img src="${d.img}" alt=""/>`:'Default image'}</div>
+      <div style="flex:1;min-width:0">
+        <input type="file" id="bnFImgFile" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="bannerFPick(this)"/>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-p btn-sm" onclick="document.getElementById('bnFImgFile').click()"><i class="fa-solid fa-upload"></i> Upload default</button>${d.img?`<button class="btn btn-d btn-sm" onclick="bannerFRemove()"><i class="fa-solid fa-trash"></i> Remove</button>`:''}</div>
+        <div class="bg-guide"><i class="fa-solid fa-circle-info"></i>Shown to everyone unless a language image below is set. 1080 × 480 px · max 2 MB.</div>
+      </div>
+    </div>
+    <div class="sub-l">Language images <span class="hint">(optional — each falls back to the default)</span></div>
+    <div class="langimg-grid">${langUploaders}</div>
+
+    <div class="sub-l">Show when</div>
+    <div class="row" style="margin-bottom:${d.cond==='event'?'12px':'0'}"><div class="fg fix" style="max-width:240px"><select class="s" onchange="bannerFSet('cond',this.value)">
+      <option value="always"${d.cond==='always'?' selected':''}>Always on</option>
+      <option value="event"${d.cond==='event'?' selected':''}>During an event</option>
+    </select></div></div>
+    ${d.cond==='event'?`<div class="row"><div class="fg fix" style="max-width:240px"><label>Event</label><select class="s" onchange="bannerFSet('eventType',this.value)">
+        <option value="festival"${d.eventType==='festival'?' selected':''}>Festival sale</option>
+        <option value="launch"${d.eventType==='launch'?' selected':''}>New product launch</option>
+        <option value="season"${d.eventType==='season'?' selected':''}>Season start</option>
+        <option value="custom"${d.eventType==='custom'?' selected':''}>Custom date range</option>
+      </select></div>
+      <div class="fg"><label>Start</label><input type="date" id="bnFStart" value="${esc(d.start)}"/></div>
+      <div class="fg"><label>End</label><input type="date" id="bnFEnd" value="${esc(d.end)}"/></div></div>`:''}
+
+    <div class="sub-l">Show to</div>
+    <p class="hint" style="margin:0 0 8px">Target by farmer state and the crops they grow. Leave "All" for everyone.</p>
+    <div class="sub-l" style="font-weight:600;margin-top:4px">States</div>
+    <div class="chip-row"><span class="cchip ${allStates?'on':''}" onclick="bannerFStateAll()">All states</span> ${STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!allStates&&d.states.indexOf(s)>=0)?'on':''}" onclick="bannerFStateTog('${s}')">${s}</span>`).join('')}</div>
+    <div class="sub-l" style="font-weight:600">Crops the farmer grows</div>
+    <div class="chip-row"><span class="cchip ${allCrops?'on':''}" onclick="bannerFCropAll()">All crops</span> ${CROPS.map((c,i)=>`<span class="cchip ${(!allCrops&&d.crops.indexOf(c)>=0)?'on':''}" onclick="bannerFCropTog(${i})">${c}</span>`).join('')}</div>`;
+  const html=`<div id="addModal"><div class="apv-scrim" onclick="bannerFormCancel()"></div>
+    <div class="apv-box" style="width:760px">
+      <div class="apv-box-head"><h3>${bannerDraftIdx>=0?'Edit banner':'Add banner'}</h3><button class="x-btn" onclick="bannerFormCancel()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-body">${body}</div>
+      <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="bannerFormCancel()">Cancel</button><button class="btn btn-p btn-sm" onclick="bannerFormSave()"><i class="fa-solid fa-check"></i> ${bannerDraftIdx>=0?'Save banner':'Add banner'}</button></div>
+    </div></div>`;
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+}
 function addFColl(){ listAdd('coll'); }
 function addWidget(){ listAdd('widget'); }
 function addTesti(){ listAdd('testi'); }

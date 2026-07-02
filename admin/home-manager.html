@@ -212,6 +212,13 @@
 .hm .cropthumb{width:40px;height:40px;border-radius:9px;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;overflow:hidden;}
 .hm .cropthumb.sm{width:30px;height:30px;font-size:15px;border-radius:7px;}
 .hm .cropthumb img{width:100%;height:100%;object-fit:cover;}
+.hm .bunch{border:1px solid var(--g200);border-radius:11px;background:#fff;padding:13px;margin-bottom:12px;}
+.hm .bunch.off{opacity:.6;}
+.hm .bunch-head{display:flex;align-items:center;gap:10px;padding-bottom:11px;margin-bottom:11px;border-bottom:1px dashed var(--g200);}
+.hm .bunch-nm{font-size:14px;font-weight:800;color:var(--g800);}
+.hm .bunch-cond{font-size:11.5px;color:var(--g500);margin-top:3px;display:flex;align-items:center;gap:5px;}
+.hm .bunch-cond i{color:var(--green);}
+.hm .bunch-tasks{display:flex;flex-direction:column;gap:7px;margin-bottom:9px;}
 
 /* MISC */
 .hm .sdiv{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--g500);padding:2px 0 11px;}
@@ -560,9 +567,19 @@ let bannerList=[
   { id:'b3', name:'Fertilizer Fest — up to 40% off', link:'categories.html?cat=fertilizer', img:'', imgByLang:{}, cond:'always', eventType:'festival', start:'', end:'', states:['All'], crops:['All'], on:true },
 ];
 let bannerDraft=null, bannerDraftIdx=-1;           // banner open in the create/edit form
-/* Earn Coins — who/when the section shows */
-let coinsCond={ audience:['all'], states:['All'], crops:['All'] };
+/* Earn Coins — task bunches, each with its own audience/state/crop filter */
 const COIN_AUDS=[{k:'all',l:'All users'},{k:'new',l:'New (just onboarded)'},{k:'returning',l:'Returning users'},{k:'inactive',l:'Inactive 30 days'}];
+const COIN_ACTIONS=['Enable Notifications','Enable Location','Add to Cart','Search Product','Add Crop','Make Purchase','Rate Product','Refer Friend','Custom Deeplink'];
+let coinBunches=[
+  { id:'cb1', name:'New farmer onboarding', on:true, audience:['new'], states:['All'], crops:['All'], tasks:[
+    {emoji:'🔔',task:'Allow notifications',coins:10,action:'Enable Notifications',on:true},
+    {emoji:'📍',task:'Allow location',coins:10,action:'Enable Location',on:true},
+    {emoji:'🌾',task:'Add crop',coins:50,action:'Add Crop',on:true} ] },
+  { id:'cb2', name:'Everyday engagement', on:true, audience:['all'], states:['All'], crops:['All'], tasks:[
+    {emoji:'🛒',task:'Add to cart',coins:15,action:'Add to Cart',on:true},
+    {emoji:'🔍',task:'Search product',coins:10,action:'Search Product',on:true} ] },
+];
+let coinBunchDraft=null, coinBunchIdx=-1, coinTaskBi=-1, coinTaskTi=-1;
 /* Shop by Crop — crop library + default sequence + per-state sortings */
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 let cropLib=CROPS.map(c=>{ const sp=c.indexOf(' '); return { name:sp>0?c.slice(sp+1):c, emoji:sp>0?c.slice(0,sp):'🌱', img:'', seasons:[] }; });
@@ -720,7 +737,7 @@ function teApvOpen(){
         <div class="apv-grid apv-grid-modal">${tiles}</div>
       </div>
     </div></div>`;
-  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html); _resScroll();
 }
 function teApvClose(){ const m=document.getElementById('apvModal'); if(m) m.remove(); }
 
@@ -731,7 +748,7 @@ function themeAdd(){
   teEdit=null; teMsg=null; teModalId=themeDraftObj.id; themeModalRender();
 }
 function themeModalRender(){
-  const ex=document.getElementById('addModal'); if(ex) ex.remove();
+  _capScroll(); const ex=document.getElementById('addModal'); if(ex) ex.remove();
   const t=(themeDraftObj&&themeDraftObj.id===teModalId)?themeDraftObj:null; if(!t) return;
   const html=`<div id="addModal"><div class="apv-scrim" onclick="themeModalCancel()"></div>
     <div class="apv-box" style="width:740px">
@@ -739,14 +756,14 @@ function themeModalRender(){
       <div class="apv-box-body">${themeEditor(t,true)}</div>
       <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="themeModalCancel()">Cancel</button><button class="btn btn-p btn-sm" onclick="themeModalSave()"><i class="fa-solid fa-check"></i> Add to list</button></div>
     </div></div>`;
-  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html); _resScroll();
 }
 function themeModalSave(){ if(themeDraftObj){ themeData().themes.unshift(themeDraftObj); KKD.save(data); AdminShell.refreshPending(); } themeDraftObj=null; teModalId=null; const m=document.getElementById('addModal'); if(m)m.remove(); pick('theme'); }
 function themeModalCancel(){ themeDraftObj=null; teModalId=null; const m=document.getElementById('addModal'); if(m)m.remove(); pick('theme'); }
 function themeEdit(id){ const t=themeData().themes.find(x=>x.id===id); if(!t||t.isDefault) return; /* green default is not editable */ teEdit=null; teEditId=id; teMsg=null; themeEditModalRender(); }
 function themeEditModalRender(){
   const t=themeData().themes.find(x=>x.id===teEditId); if(!t){ teEditId=null; return; }
-  const ex=document.getElementById('addModal'); if(ex) ex.remove();
+  _capScroll(); const ex=document.getElementById('addModal'); if(ex) ex.remove();
   const ttl=t.bannerOnly?(t.banner&&t.banner.title||'banner'):t.name;
   const html=`<div id="addModal"><div class="apv-scrim" onclick="themeEditClose()"></div>
     <div class="apv-box" style="width:740px">
@@ -754,7 +771,7 @@ function themeEditModalRender(){
       <div class="apv-box-body">${themeEditor(t,true)}</div>
       <div class="apv-box-foot"><button class="btn btn-p btn-sm" onclick="themeEditClose()"><i class="fa-solid fa-check"></i> Done</button></div>
     </div></div>`;
-  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html); _resScroll();
 }
 function themeEditClose(){ teEditId=null; teMsg=null; const m=document.getElementById('addModal'); if(m)m.remove(); pick('theme'); }
 function themeMove(i,d){ const T=themeData(); const j=i+d; if(j<0||j>=T.themes.length) return; if(T.themes[i].isDefault||T.themes[j].isDefault) return; const a=T.themes; [a[i],a[j]]=[a[j],a[i]]; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
@@ -1074,30 +1091,13 @@ ordstatus:()=>`
   </div>
 </div>`,
 
-/* 4 ── EARN COINS */
+/* 4 ── EARN COINS (task bunches — each bunch has its own audience/state/crop filter) */
 coins:()=>`
 <div class="card">
   <div class="card-body">
-    <div class="sdiv">Show to</div>
-    <p class="hint-p" style="margin:-2px 0 10px">Choose who sees Earn Coins and where. Great for nudging new or inactive farmers.</p>
-    <div class="sub-l">Audience</div>
-    <div class="chip-row">${COIN_AUDS.map(a=>`<span class="cchip ${coinsCond.audience.indexOf(a.k)>=0?'on':''}" onclick="coinsAudTog('${a.k}')">${a.l}</span>`).join('')}</div>
-    <div class="sub-l">States</div>
-    <div class="chip-row"><span class="cchip ${coinsCond.states.indexOf('All')>=0?'on':''}" onclick="coinsStateAll()">All states</span> ${STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(coinsCond.states.indexOf('All')<0&&coinsCond.states.indexOf(s)>=0)?'on':''}" onclick="coinsStateTog('${s}')">${s}</span>`).join('')}</div>
-    <div class="sub-l">Crops the farmer grows</div>
-    <div class="chip-row"><span class="cchip ${coinsCond.crops.indexOf('All')>=0?'on':''}" onclick="coinsCropAll()">All crops</span> ${CROPS.map((c,i)=>`<span class="cchip ${(coinsCond.crops.indexOf('All')<0&&coinsCond.crops.indexOf(c)>=0)?'on':''}" onclick="coinsCropTog(${i})">${c}</span>`).join('')}</div>
-
-    <div class="sdiv">Tasks (shown in drawer)</div>
-    <div id="taskList">
-      ${[
-        {e:'🔔',t:'Allow notifications',c:10,a:'Enable Notifications'},
-        {e:'📍',t:'Allow location',c:10,a:'Enable Location'},
-        {e:'🛒',t:'Add to cart',c:15,a:'Add to Cart'},
-        {e:'🔍',t:'Search product',c:10,a:'Search Product'},
-        {e:'🌾',t:'Add crop',c:50,a:'Add Crop'},
-      ].map(t=>LISTS.task.row({emoji:t.e,task:t.t,coins:t.c,action:t.a,_on:true})).join('')}
-    </div>
-    <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addTask()">+ Add Task</button>
+    <p class="hint-p">Group tasks into bunches. Each bunch shows only to the audience, states &amp; crops you set for it — so you can nudge new farmers one way and everyone else another.</p>
+    ${coinBunches.map((b,i)=>coinBunchCard(b,i)).join('')}
+    <button class="btn btn-p btn-sm" style="margin-top:4px" onclick="coinBunchAdd()"><i class="fa-solid fa-plus"></i> Add task bunch</button>
   </div>
 </div>`,
 
@@ -1340,7 +1340,7 @@ function sbDraftStateTog(st){ if(!sbDraft)return; let s=(sbDraft.states||[]).fil
 function sbModalClose(rerender){ const m=document.getElementById('addModal'); if(m)m.remove(); sbDraft=null; if(rerender) sbUI(); }
 function sbDraftSave(){ if(!sbDraft)return; sbData().items.push(sbDraft); KKD.save(data); AdminShell.refreshPending(); sbDraft=null; sbModalClose(true); }
 function sbModalRender(){
-  const ex=document.getElementById('addModal'); if(ex) ex.remove();
+  _capScroll(); const ex=document.getElementById('addModal'); if(ex) ex.remove();
   const it=sbDraft; if(!it) return;
   const iconGrid=SB_ICONS.map(ic=>`<div class="ic-opt${it.icon===ic?' on':''}" onclick="sbDraftIcon('${ic}')"><i class="fa-solid ${ic}"></i></div>`).join('');
   const states=it.states||['All']; const all=states.indexOf('All')>=0;
@@ -1368,7 +1368,7 @@ function sbModalRender(){
       </div>
       <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="sbModalClose(false)">Cancel</button><button class="btn btn-p btn-sm" onclick="sbDraftSave()"><i class="fa-solid fa-check"></i> Add banner</button></div>
     </div></div>`;
-  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html); _resScroll();
 }
 function sbToggle(id){ const it=sbFind(id); if(!it||it.locked)return; it.enabled=!it.enabled; KKD.save(data); AdminShell.refreshPending(); sbUI(); }
 function sbRemove(id){ const S=sbData(); const it=sbFind(id); if(!it||it.locked)return; S.items=S.items.filter(x=>x.id!==id); if(sbEditId===id)sbEditId=null; KKD.save(data); AdminShell.refreshPending(); sbUI(); }
@@ -1545,7 +1545,7 @@ function addCat(){ listAdd('cat'); }
 function addTask(){ listAdd('task'); }
 /* ── PROMO BANNERS — list + one form each (per-language image, state/crop/event targeting) ── */
 function bannerUI(){ if(sel==='banners') pick('banners'); }
-function bannerCondLabel(b){ if(b.cond==='event'){ const et={festival:'Festival',launch:'New launch',season:'Season start',custom:'Custom dates'}[b.eventType]||'Event'; return `${et}${b.start&&b.end?` · ${b.start}→${b.end}`:''}`; } return 'Always on'; }
+function bannerCondLabel(b){ if(b.cond==='event'){ return `Event${b.start&&b.end?` · ${b.start}→${b.end}`:''}`; } return 'Always on'; }
 function bannerSummary(b,i){
   const st=(b.states||['All']).indexOf('All')>=0?'All states':b.states.join(', ');
   const cr=(b.crops||['All']).indexOf('All')>=0?'All crops':b.crops.join(', ');
@@ -1589,7 +1589,7 @@ function bannerFStateTog(st){ bannerFormSync(); let s=bannerDraft.states.filter(
 function bannerFCropAll(){ bannerFormSync(); bannerDraft.crops=['All']; bannerFormRender(); }
 function bannerFCropTog(i){ bannerFormSync(); const cr=CROPS[i]; let s=bannerDraft.crops.filter(x=>x!=='All'); s.indexOf(cr)>=0?s=s.filter(x=>x!==cr):s.push(cr); if(!s.length)s=['All']; bannerDraft.crops=s; bannerFormRender(); }
 function bannerFormRender(){
-  const ex=document.getElementById('addModal'); if(ex) ex.remove();
+  _capScroll(); const ex=document.getElementById('addModal'); if(ex) ex.remove();
   const d=bannerDraft; if(!d) return;
   const allStates=(d.states||['All']).indexOf('All')>=0, allCrops=(d.crops||['All']).indexOf('All')>=0;
   const langUploaders=LANGS.map(L=>{ const url=(d.imgByLang||{})[L.c];
@@ -1622,12 +1622,7 @@ function bannerFormRender(){
       <option value="always"${d.cond==='always'?' selected':''}>Always on</option>
       <option value="event"${d.cond==='event'?' selected':''}>During an event</option>
     </select></div></div>
-    ${d.cond==='event'?`<div class="row"><div class="fg fix" style="max-width:240px"><label>Event</label><select class="s" onchange="bannerFSet('eventType',this.value)">
-        <option value="festival"${d.eventType==='festival'?' selected':''}>Festival sale</option>
-        <option value="launch"${d.eventType==='launch'?' selected':''}>New product launch</option>
-        <option value="season"${d.eventType==='season'?' selected':''}>Season start</option>
-        <option value="custom"${d.eventType==='custom'?' selected':''}>Custom date range</option>
-      </select></div>
+    ${d.cond==='event'?`<div class="row">
       <div class="fg"><label>Start</label><input type="date" id="bnFStart" value="${esc(d.start)}"/></div>
       <div class="fg"><label>End</label><input type="date" id="bnFEnd" value="${esc(d.end)}"/></div></div>`:''}
 
@@ -1643,19 +1638,87 @@ function bannerFormRender(){
       <div class="apv-box-body">${body}</div>
       <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="bannerFormCancel()">Cancel</button><button class="btn btn-p btn-sm" onclick="bannerFormSave()"><i class="fa-solid fa-check"></i> ${bannerDraftIdx>=0?'Save banner':'Add banner'}</button></div>
     </div></div>`;
-  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html); _resScroll();
 }
 function addFColl(){ listAdd('coll'); }
 function addWidget(){ listAdd('widget'); }
 function addTesti(){ listAdd('testi'); }
 
-/* ── Earn Coins targeting ── */
+/* keep the modal body scroll position across a full re-render (chip toggles etc.) */
+let _lastModalScroll=0;
+function _capScroll(){ const b=document.querySelector('#addModal .apv-box-body'); _lastModalScroll=b?b.scrollTop:0; }
+function _resScroll(){ const b=document.querySelector('#addModal .apv-box-body'); if(b) b.scrollTop=_lastModalScroll; }
+
+/* ── Earn Coins — task bunches with per-bunch targeting ── */
 function coinsUI(){ if(sel==='coins') pick('coins'); }
-function coinsAudTog(k){ if(k==='all'){ coinsCond.audience=['all']; } else { let a=coinsCond.audience.filter(x=>x!=='all'); a.indexOf(k)>=0?a=a.filter(x=>x!==k):a.push(k); if(!a.length)a=['all']; coinsCond.audience=a; } coinsUI(); }
-function coinsStateAll(){ coinsCond.states=['All']; coinsUI(); }
-function coinsStateTog(st){ let s=coinsCond.states.filter(x=>x!=='All'); s.indexOf(st)>=0?s=s.filter(x=>x!==st):s.push(st); if(!s.length)s=['All']; coinsCond.states=s; coinsUI(); }
-function coinsCropAll(){ coinsCond.crops=['All']; coinsUI(); }
-function coinsCropTog(i){ const cr=CROPS[i]; let s=coinsCond.crops.filter(x=>x!=='All'); s.indexOf(cr)>=0?s=s.filter(x=>x!==cr):s.push(cr); if(!s.length)s=['All']; coinsCond.crops=s; coinsUI(); }
+function coinCondSum(b){
+  const aud=b.audience.indexOf('all')>=0?'All users':b.audience.map(k=>(COIN_AUDS.find(a=>a.k===k)||{l:k}).l).join(', ');
+  const st=b.states.indexOf('All')>=0?'All states':b.states.join(', ');
+  const cr=b.crops.indexOf('All')>=0?'All crops':b.crops.join(', ');
+  return `${aud} · ${st} · ${cr}`;
+}
+function coinTaskRow(bi,ti,t){ return `<div class="li" style="align-items:center">
+    <div class="ep" style="font-size:18px">${t.emoji||'✅'}</div>
+    <div class="li-body"><div class="li-sum"><span class="nm">${esc(t.task)}</span><span class="meta">🪙 ${esc(String(t.coins))} coins · ${esc(t.action)}</span></div></div>
+    <div class="li-act"><div class="tg ${t.on!==false?'on':''}" title="Enable / disable" onclick="coinTaskToggle(${bi},${ti})"></div>
+      <button class="ic-btn" title="Edit" onclick="coinTaskEdit(${bi},${ti})"><i class="fa-solid fa-pen"></i></button>
+      <button class="ic-btn del" title="Delete" onclick="coinTaskDel(${bi},${ti})"><i class="fa-solid fa-trash"></i></button></div>
+  </div>`; }
+function coinBunchCard(b,i){ return `<div class="bunch${b.on?'':' off'}">
+    <div class="bunch-head">
+      <div style="min-width:0;flex:1"><div class="bunch-nm">${esc(b.name)}</div><div class="bunch-cond"><i class="fa-solid fa-filter"></i> ${esc(coinCondSum(b))}</div></div>
+      <div class="li-act"><div class="tg ${b.on?'on':''}" title="Enable / disable bunch" onclick="coinBunchToggle(${i})"></div>
+        <button class="ic-btn" title="Edit conditions" onclick="coinBunchEdit(${i})"><i class="fa-solid fa-pen"></i></button>
+        <button class="ic-btn del" title="Delete bunch" onclick="coinBunchDel(${i})"><i class="fa-solid fa-trash"></i></button></div>
+    </div>
+    <div class="bunch-tasks">${b.tasks.length?b.tasks.map((t,ti)=>coinTaskRow(i,ti,t)).join(''):'<p class="hint" style="margin:2px 0 8px">No tasks in this bunch yet.</p>'}</div>
+    <button class="btn btn-s btn-sm" onclick="coinTaskAdd(${i})"><i class="fa-solid fa-plus"></i> Add task</button>
+  </div>`; }
+function coinBunchToggle(i){ coinBunches[i].on=!coinBunches[i].on; coinsUI(); }
+function coinBunchDel(i){ coinBunches.splice(i,1); coinsUI(); }
+function coinTaskToggle(bi,ti){ const t=coinBunches[bi].tasks[ti]; t.on=(t.on===false); coinsUI(); }
+function coinTaskDel(bi,ti){ coinBunches[bi].tasks.splice(ti,1); coinsUI(); }
+/* bunch conditions modal (asked when creating a bunch) */
+function coinBunchAdd(){ coinBunchDraft={ id:'cb'+Date.now().toString(36), name:'', on:true, audience:['all'], states:['All'], crops:['All'], tasks:[] }; coinBunchIdx=-1; coinBunchRender(); }
+function coinBunchEdit(i){ coinBunchDraft=JSON.parse(JSON.stringify(coinBunches[i])); coinBunchIdx=i; coinBunchRender(); }
+function coinBunchCancel(){ coinBunchDraft=null; coinBunchIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); }
+function coinBunchSync(){ const n=document.getElementById('cbName'); if(n&&coinBunchDraft) coinBunchDraft.name=n.value; }
+function coinBunchSave(){ coinBunchSync(); const d=coinBunchDraft; if(!d.name) d.name='Task bunch';
+  if(coinBunchIdx>=0) coinBunches[coinBunchIdx]=d; else coinBunches.push(d);
+  coinBunchDraft=null; coinBunchIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); coinsUI(); }
+function cbAudTog(k){ coinBunchSync(); const d=coinBunchDraft; if(k==='all'){ d.audience=['all']; } else { let a=d.audience.filter(x=>x!=='all'); a.indexOf(k)>=0?a=a.filter(x=>x!==k):a.push(k); if(!a.length)a=['all']; d.audience=a; } coinBunchRender(); }
+function cbStateAll(){ coinBunchSync(); coinBunchDraft.states=['All']; coinBunchRender(); }
+function cbStateTog(st){ coinBunchSync(); let s=coinBunchDraft.states.filter(x=>x!=='All'); s.indexOf(st)>=0?s=s.filter(x=>x!==st):s.push(st); if(!s.length)s=['All']; coinBunchDraft.states=s; coinBunchRender(); }
+function cbCropAll(){ coinBunchSync(); coinBunchDraft.crops=['All']; coinBunchRender(); }
+function cbCropTog(i){ coinBunchSync(); const cr=CROPS[i]; let s=coinBunchDraft.crops.filter(x=>x!=='All'); s.indexOf(cr)>=0?s=s.filter(x=>x!==cr):s.push(cr); if(!s.length)s=['All']; coinBunchDraft.crops=s; coinBunchRender(); }
+function coinBunchRender(){ const ex=document.getElementById('addModal'); if(ex) ex.remove(); const d=coinBunchDraft; if(!d) return;
+  const allS=d.states.indexOf('All')>=0, allC=d.crops.indexOf('All')>=0;
+  const body=`
+    <div class="row"><div class="fg"><label>Bunch name</label><input type="text" id="cbName" value="${esc(d.name)}" data-maxlen="30" placeholder="e.g. New farmer onboarding"/></div></div>
+    <div class="sub-l">Audience</div>
+    <div class="chip-row">${COIN_AUDS.map(a=>`<span class="cchip ${d.audience.indexOf(a.k)>=0?'on':''}" onclick="cbAudTog('${a.k}')">${a.l}</span>`).join('')}</div>
+    <div class="sub-l">States</div>
+    <div class="chip-row"><span class="cchip ${allS?'on':''}" onclick="cbStateAll()">All states</span> ${STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!allS&&d.states.indexOf(s)>=0)?'on':''}" onclick="cbStateTog('${s}')">${s}</span>`).join('')}</div>
+    <div class="sub-l">Crops the farmer grows</div>
+    <div class="chip-row"><span class="cchip ${allC?'on':''}" onclick="cbCropAll()">All crops</span> ${CROPS.map((c,i)=>`<span class="cchip ${(!allC&&d.crops.indexOf(c)>=0)?'on':''}" onclick="cbCropTog(${i})">${c}</span>`).join('')}</div>`;
+  const html=`<div id="addModal"><div class="apv-scrim" onclick="coinBunchCancel()"></div>
+    <div class="apv-box"><div class="apv-box-head"><h3>${coinBunchIdx>=0?'Edit task bunch':'New task bunch'}</h3><button class="x-btn" onclick="coinBunchCancel()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-body">${body}</div>
+      <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="coinBunchCancel()">Cancel</button><button class="btn btn-p btn-sm" onclick="coinBunchSave()"><i class="fa-solid fa-check"></i> ${coinBunchIdx>=0?'Save bunch':'Create bunch'}</button></div>
+    </div></div>`;
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html); _resScroll();
+}
+/* task modal (add/edit a task inside a bunch) */
+function coinTaskAdd(bi){ coinTaskBi=bi; coinTaskTi=-1; coinTaskModal({emoji:'✅',task:'',coins:10,action:'Enable Notifications',on:true}); }
+function coinTaskEdit(bi,ti){ coinTaskBi=bi; coinTaskTi=ti; coinTaskModal(JSON.parse(JSON.stringify(coinBunches[bi].tasks[ti]))); }
+function coinTaskModal(t){
+  amOpen(coinTaskTi>=0?'Edit task':'Add task',
+    `<div class="row"><div class="fg"><label>Task label</label><input type="text" id="ct_task" value="${esc(t.task)}" placeholder="e.g. Allow notifications"/></div></div>
+     <div class="row" style="margin-bottom:0"><div class="fg fix"><label>Coins</label><input type="number" id="ct_coins" style="width:100px" value="${esc(String(t.coins))}"/></div>
+       <div class="fg"><label>Action type</label><select class="s" id="ct_action">${COIN_ACTIONS.map(a=>`<option${t.action===a?' selected':''}>${a}</option>`).join('')}</select></div></div>`,
+    function(){ const nt={emoji:t.emoji||'✅',task:amVal('ct_task')||'New task',coins:amVal('ct_coins')||'10',action:amVal('ct_action'),on:t.on!==false};
+      if(coinTaskTi>=0) coinBunches[coinTaskBi].tasks[coinTaskTi]=nt; else coinBunches[coinTaskBi].tasks.push(nt); coinsUI(); },
+    coinTaskTi>=0?'Save':'Add'); }
 
 /* ── Shop by Crop — library + default sequence + state-wise sortings ── */
 function cropsUI(){ if(sel==='crops') pick('crops'); }
@@ -1704,7 +1767,7 @@ function cropModalRender(){ const ex=document.getElementById('addModal'); if(ex)
       <div class="apv-box-body">${body}</div>
       <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="cropModalCancel()">Cancel</button><button class="btn btn-p btn-sm" onclick="cropModalSave()"><i class="fa-solid fa-check"></i> ${cropDraftIdx>=0?'Save crop':'Add crop'}</button></div>
     </div></div>`;
-  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html); _resScroll();
 }
 /* state-wise sorting */
 function sortRow(s,i){ const shown=s.order.slice(0,3).map(nm=>cropFind(nm).name).join(' → ');
@@ -1735,7 +1798,7 @@ function sortModalRender(){ const ex=document.getElementById('addModal'); if(ex)
       <div class="apv-box-body">${body}</div>
       <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="sortModalCancel()">Cancel</button><button class="btn btn-p btn-sm" onclick="sortModalSave()"><i class="fa-solid fa-check"></i> ${sortDraftIdx>=0?'Save sorting':'Add sorting'}</button></div>
     </div></div>`;
-  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html); _resScroll();
 }
 
 /* ── SALE section — a list of sales, each edited in ONE form modal ── */
@@ -1788,13 +1851,18 @@ function saleFCropAll(){ saleFormSync(); saleDraft.crops=['All']; saleFormRender
 function saleFCropTog(i){ saleFormSync(); const cr=CROPS[i]; let s=saleDraft.crops.filter(x=>x!=='All'); s.indexOf(cr)>=0?s=s.filter(x=>x!==cr):s.push(cr); if(!s.length)s=['All']; saleDraft.crops=s; saleFormRender(); }
 /* products + variants + pricing (inline in the form) */
 function saleFLines(){ if(!saleDraft.products.length) return '<p class="hint" style="margin:0 0 8px">No products added yet — search below to add variants.</p>';
+  const n=saleDraft.products.length;
   return saleDraft.products.map((pr,idx)=>`<div class="saleline">
+    <span style="font-size:11px;font-weight:700;color:var(--g400);min-width:16px;text-align:center">${idx+1}</span>
     <div class="saleline-nm">🌱 ${esc(pr.name)} <span class="saleline-v">${esc(pr.variant)}</span></div>
     <div class="saleline-pr"><span class="saleline-mrp">₹${pr.mrp}</span> <b>₹${pr.price}</b></div>
+    <button class="ic-btn" title="Move up" onclick="saleFMoveProd(${idx},-1)" ${idx===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button>
+    <button class="ic-btn" title="Move down" onclick="saleFMoveProd(${idx},1)" ${idx===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
     <button class="ic-btn del" title="Remove" onclick="saleFDelProd(${idx})"><i class="fa-solid fa-trash"></i></button>
   </div>`).join('');
 }
 function saleFDelProd(i){ saleFormSync(); saleDraft.products.splice(i,1); saleFormRender(); }
+function saleFMoveProd(i,d){ const j=i+d; if(j<0||j>=saleDraft.products.length) return; saleFormSync(); const a=saleDraft.products; [a[i],a[j]]=[a[j],a[i]]; saleFormRender(); }
 function saleFProdRows(q){ const ql=(q||'').toLowerCase(); const rows=[];
   PRODS.forEach(p=>{ if(p.n.toLowerCase().indexOf(ql)<0) return;
     (p.variants||[{v:'Standard',mrp:0}]).forEach(vr=>{
@@ -1813,7 +1881,7 @@ function saleFProdSearch(q){ if(saleDraft) saleDraft._q=q; const el=document.get
 function saleFAdd(pn,v,mrp,btn){ const row=btn.closest('.ppick'); const pi=row?row.querySelector('.saleprice'):null; const price=Math.max(0,+(pi&&pi.value)||mrp);
   saleFormSync(); saleDraft.products.push({name:pn,variant:v,mrp:mrp,price:price}); saleFormRender(); }
 function saleFormRender(){
-  const ex=document.getElementById('addModal'); if(ex) ex.remove();
+  _capScroll(); const ex=document.getElementById('addModal'); if(ex) ex.remove();
   const d=saleDraft; if(!d) return;
   const allStates=(d.states||['All']).indexOf('All')>=0, allCrops=(d.crops||['All']).indexOf('All')>=0;
   const body=`
@@ -1843,11 +1911,12 @@ function saleFormRender(){
     </div>
 
     <div class="sub-l">Products &amp; pricing</div>
-    <div id="saleFLines" class="saleline-list">${saleFLines()}</div>
     <div class="salepick-box">
       <div class="row" style="margin-bottom:8px"><div class="fg"><label>Search a product to see its variants</label><input type="text" id="saleFSearch" value="${esc(d._q||'')}" placeholder="Type a product name…" oninput="saleFProdSearch(this.value)"/></div></div>
       <div id="saleFProds" class="ppick-list">${saleFProdRows(d._q||'')}</div>
     </div>
+    <div class="sub-l">Selected products <span class="hint">(shown in this order — use ↑ ↓ to sort)</span></div>
+    <div id="saleFLines" class="saleline-list">${saleFLines()}</div>
 
     <div class="sub-l">Show to</div>
     <p class="hint" style="margin:0 0 8px">Target by farmer state and the crops they grow. Leave "All" for everyone.</p>
@@ -1861,7 +1930,7 @@ function saleFormRender(){
       <div class="apv-box-body">${body}</div>
       <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="saleFormCancel()">Cancel</button><button class="btn btn-p btn-sm" onclick="saleFormSave()"><i class="fa-solid fa-check"></i> ${saleDraftIdx>=0?'Save sale':'Create sale'}</button></div>
     </div></div>`;
-  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html); _resScroll();
 }
 function addBS(btn){const p=PRODS.find(p=>!document.getElementById('bsList').innerHTML.includes(p.n));if(!p)return;const c=document.createElement('span');c.className='pchip';c.innerHTML=`⭐ ${p.n} <span class="x" onclick="this.closest('.pchip').remove()">×</span>`;btn.before(c);}
 function addFC(btn){const p=PRODS[Math.floor(Math.random()*PRODS.length)];const c=document.createElement('span');c.className='pchip';c.innerHTML=`🌱 ${p.n} <span class="x" onclick="this.closest('.pchip').remove()">×</span>`;btn.before(c);}

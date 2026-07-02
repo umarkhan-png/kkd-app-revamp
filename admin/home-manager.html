@@ -268,6 +268,10 @@
 .hm .padd:hover{border-color:var(--green);color:var(--green);}
 .hm .cchip{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--g200);margin:3px;transition:all .15s;}
 .hm .cchip.on{background:var(--green-lt);border-color:var(--green);color:var(--green);font-weight:600;}
+.hm .cchip.season{border-style:dashed;border-color:var(--green);color:var(--green);font-weight:600;background:#fff;}
+.hm .cchip.season:hover{background:var(--green-lt);}
+.hm .cchip.season.alt{border-color:var(--g300,#CBD5E1);color:var(--g500);}
+.hm .cchip.season.alt:hover{background:var(--g50);}
 .hm .info-box{display:flex;align-items:center;gap:8px;background:var(--green-lt);border-radius:8px;padding:10px 13px;font-size:12.5px;color:var(--green);margin-top:8px;}
 .hm .sch-box{background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:13px;margin-bottom:12px;}
 .hm .sch-box .sl{font-size:11px;font-weight:700;color:var(--g500);margin-bottom:9px;text-transform:uppercase;letter-spacing:.4px;}
@@ -656,6 +660,8 @@ let coinBunches=[
 let coinBunchDraft=null, coinBunchIdx=-1, coinTaskBi=-1, coinTaskTi=-1;
 /* Shop by Crop — crop library + default sequence + per-state sortings */
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+/* Indian cropping seasons → their months (quick-pick presets; months stay individually editable) */
+const SEASON_MONTHS={ kharif:['Jun','Jul','Aug','Sep','Oct'], rabi:['Nov','Dec','Jan','Feb','Mar'], zaid:['Mar','Apr','May','Jun'] };
 let cropLib=CROPS.map(c=>{ const sp=c.indexOf(' '); return { name:sp>0?c.slice(sp+1):c, emoji:sp>0?c.slice(0,sp):'🌱', img:'', seasons:[] }; });
 let cropSortings=[ { id:'so1', states:['MP','Rajasthan'], order:cropLib.map(c=>c.name) } ];
 let cropDraft=null, cropDraftIdx=-1, sortDraft=null, sortDraftIdx=-1;
@@ -1826,6 +1832,13 @@ function cropModalSave(){ cropModalSync(); const d=cropDraft; if(!d.name) d.name
 function cropFPick(input){ const f=input.files&&input.files[0]; if(!f) return; cropModalSync(); cropDraft.img=URL.createObjectURL(f); cropModalRender(); }
 function cropFRemove(){ cropModalSync(); cropDraft.img=''; cropModalRender(); }
 function cropSeasonTog(m){ cropModalSync(); const s=cropDraft.seasons||[]; const i=s.indexOf(m); i>=0?s.splice(i,1):s.push(m); cropDraft.seasons=s; cropModalRender(); }
+function cropSeasonPreset(k){ cropModalSync(); let s=(cropDraft.seasons||[]).slice();
+  if(k==='clear') s=[];
+  else if(k==='all') s=MONTHS.slice();
+  else SEASON_MONTHS[k].forEach(m=>{ if(s.indexOf(m)<0) s.push(m); });   // add (union) so multi-season crops stack
+  cropDraft.seasons=MONTHS.filter(m=>s.indexOf(m)>=0);                    // keep calendar order
+  cropModalRender();
+}
 function cropModalRender(){ const ex=document.getElementById('addModal'); if(ex) ex.remove(); const d=cropDraft; if(!d) return;
   const body=`
     <div class="sub-l" style="margin-top:0">Crop image &amp; name</div>
@@ -1839,6 +1852,14 @@ function cropModalRender(){ const ex=document.getElementById('addModal'); if(ex)
     </div>
     <div class="row" style="margin-bottom:0"><div class="fg"><label>Crop name</label><input type="text" id="cropFName" value="${esc(d.name)}" data-maxlen="24" placeholder="e.g. Sugarcane"/></div></div>
     <div class="sub-l">Seasonal configuration <span class="hint">(months this crop is in season)</span></div>
+    <p class="hint" style="margin:0 0 8px">Quick-pick a season to fill its months, then fine-tune below.</p>
+    <div class="chip-row" style="margin-bottom:9px">
+      <span class="cchip season" onclick="cropSeasonPreset('kharif')">🌧️ Kharif · Jun–Oct</span>
+      <span class="cchip season" onclick="cropSeasonPreset('rabi')">❄️ Rabi · Nov–Mar</span>
+      <span class="cchip season" onclick="cropSeasonPreset('zaid')">☀️ Zaid · Mar–Jun</span>
+      <span class="cchip season alt" onclick="cropSeasonPreset('all')">All year</span>
+      <span class="cchip season alt" onclick="cropSeasonPreset('clear')">Clear</span>
+    </div>
     <div class="chip-row">${MONTHS.map(m=>`<span class="cchip ${(d.seasons||[]).indexOf(m)>=0?'on':''}" onclick="cropSeasonTog('${m}')">${m}</span>`).join('')}</div>`;
   const html=`<div id="addModal"><div class="apv-scrim" onclick="cropModalCancel()"></div>
     <div class="apv-box"><div class="apv-box-head"><h3>${cropDraftIdx>=0?'Edit crop':'Add crop'}</h3><button class="x-btn" onclick="cropModalCancel()"><i class="fa-solid fa-xmark"></i></button></div>

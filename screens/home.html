@@ -624,15 +624,27 @@
         <!-- Header: emerald deal pill + appealing 3-box countdown clock — wrapped in its own px-4 so the wrapper itself can be full-bleed (no horizontal padding) and the scroll container below can reach the right viewport edge naturally -->
         <div class="relative flex items-center justify-between mb-3 px-4">
           <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-[12px] font-semibold tracking-[0.12em] text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%);box-shadow:0 4px 10px -2px rgba(5,150,105,0.5)">⚡ FLASH DEALS</span>
-          <!-- Countdown clock: 4 separate dark tiles for D : H : M : S with amber digits + glow -->
-          <div class="flex items-center gap-1">
-            <span class="px-1.5 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerD" style="background:#0F172A;color:#FBBF24;min-width:30px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">01</span>
-            <span class="text-[14px] font-semibold" style="color:#0F172A">:</span>
-            <span class="px-1.5 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerH" style="background:#0F172A;color:#FBBF24;min-width:30px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">02</span>
-            <span class="text-[14px] font-semibold" style="color:#0F172A">:</span>
-            <span class="px-1.5 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerM" style="background:#0F172A;color:#FBBF24;min-width:30px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">14</span>
-            <span class="text-[14px] font-semibold" style="color:#0F172A">:</span>
-            <span class="px-1.5 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerS" style="background:#0F172A;color:#FBBF24;min-width:30px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">38</span>
+          <!-- Countdown clock: 4 dark tiles for D : H : M : S each labelled underneath so the day/hr/min/sec is clear -->
+          <div class="flex items-start gap-1">
+            <div class="flex flex-col items-center gap-0.5">
+              <span class="px-1.5 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerD" style="background:#0F172A;color:#FBBF24;min-width:30px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">01</span>
+              <span class="text-[8px] font-bold uppercase tracking-wide" style="color:#7C2D12">Days</span>
+            </div>
+            <span class="text-[14px] font-semibold" style="color:#0F172A;padding-top:6px">:</span>
+            <div class="flex flex-col items-center gap-0.5">
+              <span class="px-1.5 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerH" style="background:#0F172A;color:#FBBF24;min-width:30px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">02</span>
+              <span class="text-[8px] font-bold uppercase tracking-wide" style="color:#7C2D12">Hrs</span>
+            </div>
+            <span class="text-[14px] font-semibold" style="color:#0F172A;padding-top:6px">:</span>
+            <div class="flex flex-col items-center gap-0.5">
+              <span class="px-1.5 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerM" style="background:#0F172A;color:#FBBF24;min-width:30px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">14</span>
+              <span class="text-[8px] font-bold uppercase tracking-wide" style="color:#7C2D12">Min</span>
+            </div>
+            <span class="text-[14px] font-semibold" style="color:#0F172A;padding-top:6px">:</span>
+            <div class="flex flex-col items-center gap-0.5">
+              <span class="px-1.5 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerS" style="background:#0F172A;color:#FBBF24;min-width:30px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">38</span>
+              <span class="text-[8px] font-bold uppercase tracking-wide" style="color:#7C2D12">Sec</span>
+            </div>
           </div>
         </div>
 
@@ -740,13 +752,15 @@
               </div>
             </div>
 
-            <!-- View all deals · trailing card at the end of the carousel -->
-            <a href="shop.html?sale=flash" class="nu flex-shrink-0 rounded-xl overflow-hidden relative flex flex-col items-center justify-center gap-2.5 px-3" style="width:100px;border:1.5px dashed #A7F3D0;background:#ECFDF5;text-decoration:none;margin-right:16px">
-              <div class="w-11 h-11 rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%);box-shadow:0 6px 14px -4px rgba(5,150,105,0.5)"><i class="fa-solid fa-arrow-right text-white text-[16px]"></i></div>
-              <span class="text-[12.5px] font-semibold text-center leading-tight" style="color:#258046">View all<br>deals</span>
-            </a>
 
           </div>
+        </div>
+
+        <!-- View all deals · transparent CTA at the bottom of the flash section -->
+        <div class="px-4 mt-3 relative">
+          <a href="shop.html?sale=flash" class="nu flex items-center justify-center gap-2 w-full h-11 rounded-xl text-[13.5px] font-semibold" style="background:rgba(255,255,255,0.16);border:1.5px solid rgba(255,255,255,0.75);color:#FFFFFF;text-decoration:none">
+            View all deals <i class="fa-solid fa-arrow-right text-[11px]"></i>
+          </a>
         </div>
       </div>
     </section>

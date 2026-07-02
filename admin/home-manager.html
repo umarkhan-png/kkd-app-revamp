@@ -492,6 +492,20 @@ let recentCfg = Object.assign({min:2,bg:'#F0F0FA'}, (data.recentViewed&&typeof d
 /* Bestsellers config — hand-picked products (same picker as custom sections) + targeting */
 let bsCfg = Object.assign({products:[],audience:['all'],states:['All'],crops:['All']}, (data.bestsellers&&typeof data.bestsellers==='object')?data.bestsellers:{});
 bsCfg.products=(bsCfg.products||[]).map(p=> typeof p==='string' ? {name:p,variant:''} : p);
+/* Testimonials — the video library lives on its own page (testimonials-manager.html).
+   Here we only set per-testimonial rules (which user sees which approved testimonial). */
+if(!Array.isArray(data.testimonials)){ data.testimonials=[
+  {id:'t1',name:'Ramesh Patel',crop:'Tomato',loc:'Indore',url:'',status:'approved',rule:{audience:['all'],states:['All'],crops:['All']}},
+  {id:'t2',name:'Mohan Verma',crop:'Cotton',loc:'Khandwa',url:'',status:'approved',rule:{audience:['all'],states:['All'],crops:['All']}},
+  {id:'t3',name:'Sita Devi',crop:'Onion',loc:'Nashik',url:'',status:'pending',rule:{audience:['all'],states:['All'],crops:['All']}},
+]; KKD.save(data); }
+function trFind(id){ return (data.testimonials||[]).find(t=>t.id===id); }
+function trSave(){ KKD.save(data); }
+function trAudTog(id,k){ const t=trFind(id); if(!t)return; const r=t.rule; if(k==='all'){r.audience=['all'];}else{let a=(r.audience||[]).filter(x=>x!=='all');a.indexOf(k)>=0?a=a.filter(x=>x!==k):a.push(k);r.audience=a.length?a:['all'];} trSave(); pick('testi'); }
+function trStateAll(id){ const t=trFind(id); if(!t)return; t.rule.states=['All']; trSave(); pick('testi'); }
+function trStateTog(id,st){ const t=trFind(id); if(!t)return; let s=(t.rule.states||[]).filter(x=>x!=='All'); s.indexOf(st)>=0?s=s.filter(x=>x!==st):s.push(st); t.rule.states=s.length?s:['All']; trSave(); pick('testi'); }
+function trCropAll(id){ const t=trFind(id); if(!t)return; t.rule.crops=['All']; trSave(); pick('testi'); }
+function trCropTog(id,i){ const t=trFind(id); if(!t)return; const cr=CROPS[i]; let s=(t.rule.crops||[]).filter(x=>x!=='All'); s.indexOf(cr)>=0?s=s.filter(x=>x!==cr):s.push(cr); t.rule.crops=s.length?s:['All']; trSave(); pick('testi'); }
 let SECS;
 function seedSecs(){
   // seed from the reference on first load; otherwise reconcile saved order/visibility against defaults
@@ -1336,11 +1350,11 @@ featured:()=>`
   <div class="card-body">
     <div id="fcList">
       ${[
-        {nm:'Insecticide Showcase',color:'#1B6B3A',prods:'Chakrawarti ZC, Chakraveer',states:'All States'},
-        {nm:'Fertilizer Fest',color:'#7C3AED',prods:'Humic + Fulvic 98, NPK 19-19-19',states:'MP, UP'},
-      ].map(col=>LISTS.coll.row({name:col.nm,color:col.color,lang:'All',prods:col.prods,states:col.states,_on:true})).join('')}
+        {nm:'Chakrawarti ZC',color:'#1B6B3A',prods:'Chakrawarti ZC, Chakraveer',states:'All States',sub:'Kills sucking pests',crop:'Cotton',btn:'Shop now',aud:'All users'},
+        {nm:'Humic + Fulvic 98',color:'#7C3AED',prods:'Humic + Fulvic 98, NPK 19-19-19',states:'MP, UP',sub:'Stronger roots, greener leaves',crop:'Wheat',btn:'Grab deal',aud:'Returning users'},
+      ].map(col=>LISTS.coll.row({name:col.nm,color:col.color,prods:col.prods,states:col.states,subtitle:col.sub,crop:col.crop,btn:col.btn,audience:col.aud,_on:true})).join('')}
     </div>
-    <button class="btn btn-s btn-sm" onclick="addFColl()">+ Add Collection</button>
+    <button class="btn btn-s btn-sm" onclick="addFColl()">+ Add Featured Product</button>
   </div>
 </div>`,
 
@@ -1362,38 +1376,36 @@ widgets:()=>`
   </div>
 </div>`,
 
-/* 13 ── TESTIMONIALS */
-testi:()=>`
-<div class="card">
-  <div class="card-body">
-    ${TG('tm1',true,'Show Section','Farmer video testimonials on home page')}
-    <div style="margin-top:14px;"></div>
-    ${LT()}
-    <div data-img-hint="video" style="margin-bottom:6px"></div>
-    <div class="sdiv">Testimonials</div>
-    <div id="tmList">
-      ${[
-        {f:'Ramesh Patel',cr:'Tomato',loc:'Indore',url:''},
-        {f:'Mohan Verma',cr:'Cotton',loc:'Khandwa',url:''},
-      ].map(t=>LISTS.testi.row({name:t.f,crop:t.cr,loc:t.loc,url:t.url,_on:true})).join('')}
-    </div>
-    <button class="btn btn-s btn-sm" onclick="addTesti()">+ Add Testimonial</button>
-  </div>
-</div>`,
+/* 13 ── TESTIMONIALS — only per-testimonial rules; the video library is its own page */
+testi:()=>{ const list=(data.testimonials||[]).filter(t=>t.status==='approved');
+  const intro=`<div class="card"><div class="card-body"><p class="hint-p" style="margin:0">Farmer testimonial videos are added &amp; approved in the <b>Testimonials</b> library (left sidebar). Below, set which users see each approved testimonial on Home.</p></div></div>`;
+  if(!list.length) return intro+`<div class="card"><div class="card-body"><p class="hint" style="margin:0">No approved testimonials yet — approve some in the Testimonials library.</p></div></div>`;
+  const cards=list.map(t=>{ const r=t.rule||{audience:['all'],states:['All'],crops:['All']};
+    const allA=r.audience.indexOf('all')>=0, allS=r.states.indexOf('All')>=0, allC=r.crops.indexOf('All')>=0;
+    return `<div class="card"><div class="card-head"><h3>🎥 ${esc(t.name)}${t.crop||t.loc?` · ${esc([t.crop,t.loc].filter(Boolean).join(' · '))}`:''}</h3></div><div class="card-body">
+      <div class="sub-l" style="margin-top:0;font-weight:600">Audience</div>
+      <div class="chip-row"><span class="cchip ${allA?'on':''}" onclick="trAudTog('${t.id}','all')">All users</span> ${COIN_AUDS.filter(a=>a.k!=='all').map(a=>`<span class="cchip ${(!allA&&r.audience.indexOf(a.k)>=0)?'on':''}" onclick="trAudTog('${t.id}','${a.k}')">${a.l}</span>`).join('')}</div>
+      <div class="sub-l" style="font-weight:600">States</div>
+      <div class="chip-row"><span class="cchip ${allS?'on':''}" onclick="trStateAll('${t.id}')">All states</span> ${STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!allS&&r.states.indexOf(s)>=0)?'on':''}" onclick="trStateTog('${t.id}','${s}')">${s}</span>`).join('')}</div>
+      <div class="sub-l" style="font-weight:600">Crops the farmer grows</div>
+      <div class="chip-row"><span class="cchip ${allC?'on':''}" onclick="trCropAll('${t.id}')">All crops</span> ${CROPS.map((cr,i)=>`<span class="cchip ${(!allC&&r.crops.indexOf(cr)>=0)?'on':''}" onclick="trCropTog('${t.id}',${i})">${cr}</span>`).join('')}</div>
+    </div></div>`;
+  }).join('');
+  return intro+cards;
+},
 
 /* 14 ── MOST SELLING */
-mostsell:()=>`
+mostsell:()=>{ const w=(data.mostSelling&&data.mostSelling.window)||'week';
+  const OPTS=[['today','Today'],['yesterday','Yesterday'],['week','This week'],['month','This month'],['last7','Last 7 days'],['alltime','All time']];
+  return `
 <div class="card">
   <div class="card-body">
-    ${TG('ms1',true,'Show Section','Auto-personalizes based on user\'s state')}
-    <div style="margin-top:14px;"></div>
-    ${LT()}
-    <div class="row">
-      <div class="fg fix"><label>Products to Show</label><input type="number" style="width:90px;" value="4"/></div>
-    </div>
-    <div class="info-box">ℹ️ Products auto-populate from weekly order data per state. No manual selection needed.</div>
+    <p class="hint-p" style="margin:0 0 12px">Auto-personalizes per user's state — products auto-populate from order data. Choose which window the "X bought" count on the app uses.</p>
+    <div class="row" style="margin-bottom:0"><div class="fg" style="max-width:300px"><label>Bought count shown on app</label>
+      <select class="s" onchange="mostSet('window',this.value)">${OPTS.map(o=>`<option value="${o[0]}"${w===o[0]?' selected':''}>${o[1]} bought</option>`).join('')}</select>
+    </div></div>
   </div>
-</div>`,
+</div>`; },
 
 /* 15 ── ASK EXPERT */
 expert:()=>`
@@ -1644,19 +1656,23 @@ const LISTS={
       <div class="ep" onclick="promptE(this)" style="font-size:18px">${d.emoji||'✅'}</div>
       <div class="li-body"><div class="li-sum"><span class="nm">${esc(d.task)}</span><span class="meta">🪙 ${esc(String(d.coins))} coins · ${esc(d.action)}</span></div></div>${liAct('task',d)}</div>` },
 
-  coll:{ listId:'fcList', title:'collection',
-    def:()=>({name:'',color:'#1B6B3A',lang:'All',prods:'',states:'All States'}),
-    fields:d=>`<div class="row"><div class="fg"><label>Collection name</label><input type="text" id="am_name" value="${esc(d.name)}" placeholder="e.g. Monsoon picks"/></div></div>
-      <div class="row"><div class="fg fix"><label>Card BG color</label><div class="color-r"><input type="color" id="am_color" value="${d.color||'#1B6B3A'}"/></div></div>
-        <div class="fg"><label>Language</label><select class="s" id="am_lang"><option>All</option>${LANGS.map(l=>`<option${d.lang===l.l?' selected':''}>${l.l}</option>`).join('')}</select></div></div>
-      <div class="row"><div class="fg"><label>Products</label><input type="text" id="am_prods" value="${esc(d.prods)}" placeholder="Comma separated"/></div></div>
-      <div class="row" style="margin-bottom:0"><div class="fg"><label>Target states</label><input type="text" id="am_states" value="${esc(d.states)}" placeholder="All States or MP, UP"/></div></div>`,
-    collect:d=>({name:amVal('am_name')||'New collection',color:amVal('am_color')||'#1B6B3A',lang:amVal('am_lang')||'All',prods:amVal('am_prods'),states:amVal('am_states')||'All States'}),
+  coll:{ listId:'fcList', title:'featured product',
+    def:()=>({name:'',color:'#1B6B3A',prods:'',states:'All States',audience:'All users',subtitle:'',crop:'',btn:'Shop now'}),
+    fields:d=>`<div class="row"><div class="fg"><label>Card title</label><input type="text" id="am_name" value="${esc(d.name)}" placeholder="e.g. Chakrawarti ZC"/></div>
+        <div class="fg fix"><label>Card BG color</label><div class="color-r"><input type="color" id="am_color" value="${d.color||'#1B6B3A'}"/></div></div></div>
+      <div class="row"><div class="fg"><label>Sub-text under the card</label><input type="text" id="am_subtitle" value="${esc(d.subtitle||'')}" placeholder="e.g. Kills sucking pest"/></div>
+        <div class="fg"><label>Crop name</label><input type="text" id="am_crop" value="${esc(d.crop||'')}" placeholder="e.g. Cotton"/></div></div>
+      <div class="row"><div class="fg"><label>Button text</label><input type="text" id="am_btn" value="${esc(d.btn||'Shop now')}" placeholder="e.g. Shop now"/></div>
+        <div class="fg"><label>Products</label><input type="text" id="am_prods" value="${esc(d.prods)}" placeholder="Comma separated"/></div></div>
+      <div class="sub-l">Conditions <span class="hint">(who sees this)</span></div>
+      <div class="row" style="margin-bottom:0"><div class="fg"><label>Audience</label><select class="s" id="am_aud">${['All users','New (just onboarded)','Returning users','Inactive 30 days'].map(a=>`<option${d.audience===a?' selected':''}>${a}</option>`).join('')}</select></div>
+        <div class="fg"><label>Target states</label><input type="text" id="am_states" value="${esc(d.states)}" placeholder="All States or MP, UP"/></div></div>`,
+    collect:d=>({name:amVal('am_name')||'New featured product',color:amVal('am_color')||'#1B6B3A',prods:amVal('am_prods'),states:amVal('am_states')||'All States',audience:amVal('am_aud')||'All users',subtitle:amVal('am_subtitle'),crop:amVal('am_crop'),btn:amVal('am_btn')||'Shop now'}),
     row:d=>`<div class="li" style="flex-direction:column;gap:11px;align-items:stretch" ${liTag('coll',d)}>
       <div style="display:flex;align-items:center;gap:8px"><span class="drag-h">⠿</span>
         <span class="cat-ic" style="background:${d.color||'#1B6B3A'};width:22px;height:22px;border-radius:5px"></span>
-        <strong style="flex:1;font-size:13px">${esc(d.name)}</strong>${liAct('coll',d)}</div>
-      <div class="li-sum"><span class="meta">🌱 ${esc(d.prods)||'—'}</span><span class="meta">🌐 ${esc(d.lang)} · 📍 ${esc(d.states)}</span></div></div>` },
+        <strong style="flex:1;font-size:13px">${esc(d.name)}${d.subtitle?` <span style="font-weight:500;color:var(--g500)">· ${esc(d.subtitle)}</span>`:''}</strong>${liAct('coll',d)}</div>
+      <div class="li-sum"><span class="meta">🌱 ${esc(d.prods)||'—'}${d.crop?' · 🌿 '+esc(d.crop):''} · 🔘 ${esc(d.btn||'Shop now')}</span><span class="meta">👥 ${esc(d.audience||'All users')} · 📍 ${esc(d.states)}</span></div></div>` },
 
   widget:{ listId:'wList', title:'widget',
     def:()=>({emoji:'🆕',title:'',type:'Multi Choice',action:''}),
@@ -2224,6 +2240,7 @@ function recentPickRender(){ _capScroll(); const ex=document.getElementById('add
 }
 
 /* ── Bestsellers — hand-picked products (same picker as custom sections) + targeting ── */
+function mostSet(k,v){ data.mostSelling=data.mostSelling||{}; data.mostSelling[k]=v; KKD.save(data); }
 function bsSave(){ data.bestsellers=bsCfg; KKD.save(data); }
 function bsUI(){ if(sel==='best') pick('best'); }
 function bsPickRows(){ const c=bsCfg; const ql=(c._q||'').toLowerCase(); const rows=[];

@@ -35,6 +35,7 @@
       { key: 'products', label: 'Products', icon: 'flask', href: 'products.html' },
       { key: 'categories', label: 'Categories', icon: 'shapes', href: 'categories.html' },
       { key: 'crops', label: 'Crops', icon: 'wheat-awn', href: 'crops.html' },
+      { key: 'testimonials', label: 'Testimonials', icon: 'video', href: 'testimonials-manager.html' },
       { key: 'media', label: 'Media', icon: 'photo-film', href: 'media.html' },
     ]},
     { group: 'Tools', items: [

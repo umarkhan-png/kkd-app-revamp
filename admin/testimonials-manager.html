@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Testimonials</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+.tm{--green:#258046;--green-lt:#ECFDF5;--g50:#F8FAFC;--g100:#F1F5F9;--g200:#E2E8F0;--g300:#CBD5E1;--g400:#94A3B8;--g500:#64748B;--g600:#475569;--g700:#334155;--g800:#1E293B;font-family:'Inter',sans-serif;color:var(--g800);max-width:1000px;}
+.tm .intro{background:var(--green-lt);border:1px solid #BBF7D0;border-radius:12px;padding:14px 16px;margin-bottom:18px;display:flex;gap:12px;align-items:flex-start;}
+.tm .intro i{color:var(--green);font-size:18px;margin-top:1px;}
+.tm .intro h2{margin:0 0 3px;font-size:15px;font-weight:800;}
+.tm .intro p{margin:0;font-size:12.5px;color:var(--g600);line-height:1.5;}
+.tm .sec-h{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:800;color:var(--g700);margin:6px 0 12px;text-transform:uppercase;letter-spacing:.04em;}
+.tm .sec-h .count{background:var(--g100);color:var(--g500);border-radius:20px;padding:2px 9px;font-size:11px;}
+.tm .sec-h.pend .count{background:#FEF3C7;color:#92400E;}
+.tm .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:26px;}
+.tm .tc{border:1px solid var(--g200);border-radius:12px;background:#fff;overflow:hidden;box-shadow:0 1px 2px rgba(16,24,40,.04);}
+.tm .tc-vid{height:150px;background:linear-gradient(135deg,#0F172A,#334155);display:flex;align-items:center;justify-content:center;position:relative;color:#fff;}
+.tm .tc-vid img{width:100%;height:100%;object-fit:cover;}
+.tm .tc-play{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.9);color:#0F172A;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.tm .tc-badge{position:absolute;top:9px;left:9px;font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.03em;}
+.tm .tc-badge.pending{background:#FEF3C7;color:#92400E;}
+.tm .tc-badge.approved{background:#DCFCE7;color:#166534;}
+.tm .tc-b{padding:12px 14px;}
+.tm .tc-name{font-size:14px;font-weight:800;}
+.tm .tc-meta{font-size:12px;color:var(--g500);margin-top:2px;}
+.tm .tc-url{font-size:11px;color:var(--g400);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tm .tc-acts{display:flex;gap:7px;padding:10px 14px;border-top:1px solid var(--g100);}
+.tm .btn{height:34px;padding:0 13px;border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:.12s;white-space:nowrap;}
+.tm .btn-p{background:var(--green);color:#fff;}.tm .btn-p:hover{background:#1F7A40;}
+.tm .btn-s{background:#fff;border-color:var(--g200);color:var(--g700);}.tm .btn-s:hover{background:var(--g50);}
+.tm .btn-d{background:#fff;border-color:#FCA5A5;color:#DC2626;}.tm .btn-d:hover{background:#FEF2F2;}
+.tm .btn.flex1{flex:1;}
+.tm .add-btn{height:40px;border:1.5px dashed var(--g300);background:#fff;color:var(--green);border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;padding:0 18px;}
+.tm .add-btn:hover{border-color:var(--green);background:var(--green-lt);}
+/* modal */
+#tmModal{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;}
+#tmModal .scrim{position:absolute;inset:0;background:rgba(15,23,42,.45);}
+#tmModal .box{position:relative;background:#fff;border-radius:16px;width:480px;max-width:92vw;box-shadow:0 24px 60px rgba(0,0,0,.28);}
+#tmModal .bh{padding:16px 20px;border-bottom:1px solid var(--g100);display:flex;align-items:center;}
+#tmModal .bh h3{margin:0;font-size:16px;font-weight:800;flex:1;}
+#tmModal .x{border:none;background:var(--g100);width:30px;height:30px;border-radius:8px;cursor:pointer;color:var(--g500);}
+#tmModal .bb{padding:18px 20px;}
+#tmModal .bf{padding:14px 20px;border-top:1px solid var(--g100);display:flex;justify-content:flex-end;gap:8px;}
+.tm .fg{margin-bottom:13px;}
+.tm .fg label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--g500);margin-bottom:6px;}
+.tm .fg input{width:100%;border:1.5px solid var(--g200);border-radius:9px;padding:9px 11px;font-size:13px;font-family:inherit;color:var(--g800);outline:none;}
+.tm .fg input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
+.tm .frow{display:flex;gap:10px;}.tm .frow .fg{flex:1;}
+</style></head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+      <div class="tm">
+        <div class="intro">
+          <i class="fa-solid fa-video"></i>
+          <div>
+            <h2>Farmer testimonials</h2>
+            <p>Farmer video testimonials land here as submissions. Edit the details and <b>approve</b> to add them to the library. Approved testimonials can then be targeted (which user sees which) from the Home → Testimonials section.</p>
+          </div>
+        </div>
+        <div class="sec-h pend">Incoming submissions <span class="count" id="cPend">0</span></div>
+        <div class="grid" id="gPend"></div>
+        <div class="sec-h">Approved library <span class="count" id="cApp">0</span></div>
+        <div class="grid" id="gApp"></div>
+        <button class="add-btn" onclick="tAdd()"><i class="fa-solid fa-plus"></i> Add testimonial</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+AdminShell.mount({ active:'testimonials', title:'Testimonials', crumb:'Library', controls:'Farmer video testimonials shown on the app Home', preview:'home.html' });
+
+let data=KKD.load();
+if(!Array.isArray(data.testimonials)){ data.testimonials=[
+  {id:'t1',name:'Ramesh Patel',crop:'Tomato',loc:'Indore',url:'',status:'approved',rule:{audience:['all'],states:['All'],crops:['All']}},
+  {id:'t2',name:'Mohan Verma',crop:'Cotton',loc:'Khandwa',url:'',status:'approved',rule:{audience:['all'],states:['All'],crops:['All']}},
+  {id:'t3',name:'Sita Devi',crop:'Onion',loc:'Nashik',url:'',status:'pending',rule:{audience:['all'],states:['All'],crops:['All']}},
+]; KKD.save(data); }
+function persist(){ KKD.save(data); }
+function find(id){ return data.testimonials.find(t=>t.id===id); }
+
+function card(t){
+  const play=t.url?`<i class="fa-solid fa-play"></i>`:`<i class="fa-solid fa-video"></i>`;
+  const acts = t.status==='pending'
+    ? `<button class="btn btn-s flex1" onclick="tEdit('${t.id}')"><i class="fa-solid fa-pen"></i> Edit</button>
+       <button class="btn btn-p flex1" onclick="tApprove('${t.id}')"><i class="fa-solid fa-check"></i> Approve</button>
+       <button class="btn btn-d" title="Delete" onclick="tDel('${t.id}')"><i class="fa-solid fa-trash"></i></button>`
+    : `<button class="btn btn-s flex1" onclick="tEdit('${t.id}')"><i class="fa-solid fa-pen"></i> Edit</button>
+       <button class="btn btn-s flex1" onclick="tUnpublish('${t.id}')"><i class="fa-solid fa-rotate-left"></i> Unpublish</button>
+       <button class="btn btn-d" title="Delete" onclick="tDel('${t.id}')"><i class="fa-solid fa-trash"></i></button>`;
+  return `<div class="tc">
+    <div class="tc-vid">${t.url&&/\.(jpg|jpeg|png|webp)$/i.test(t.url)?`<img src="${esc(t.url)}">`:`<div class="tc-play">${play}</div>`}<span class="tc-badge ${t.status}">${t.status}</span></div>
+    <div class="tc-b"><div class="tc-name">${esc(t.name)}</div><div class="tc-meta">${esc([t.crop,t.loc].filter(Boolean).join(' · ')||'—')}</div><div class="tc-url"><i class="fa-solid fa-link" style="font-size:10px"></i> ${esc(t.url||'No video URL yet')}</div></div>
+    <div class="tc-acts">${acts}</div>
+  </div>`;
+}
+function render(){
+  const pend=data.testimonials.filter(t=>t.status==='pending');
+  const app=data.testimonials.filter(t=>t.status==='approved');
+  document.getElementById('gPend').innerHTML = pend.map(card).join('') || '<p style="color:#94A3B8;font-size:13px">No pending submissions.</p>';
+  document.getElementById('gApp').innerHTML = app.map(card).join('') || '<p style="color:#94A3B8;font-size:13px">No approved testimonials yet.</p>';
+  document.getElementById('cPend').textContent=pend.length;
+  document.getElementById('cApp').textContent=app.length;
+}
+function tApprove(id){ const t=find(id); if(!t)return; t.status='approved'; persist(); render(); AdminShell.saved('Testimonial approved — added to the library'); }
+function tUnpublish(id){ const t=find(id); if(!t)return; t.status='pending'; persist(); render(); AdminShell.saved('Testimonial moved back to submissions'); }
+function tDel(id){ data.testimonials=data.testimonials.filter(t=>t.id!==id); persist(); render(); AdminShell.saved('Testimonial removed'); }
+
+let draft=null;
+function tAdd(){ draft={id:'t'+Date.now().toString(36),name:'',crop:'',loc:'',url:'',status:'pending',rule:{audience:['all'],states:['All'],crops:['All']},_new:true}; modal(); }
+function tEdit(id){ const t=find(id); if(!t)return; draft=Object.assign({},t); modal(); }
+function mClose(){ const m=document.getElementById('tmModal'); if(m)m.remove(); draft=null; }
+function mSave(){ if(!draft)return; const g=id=>document.getElementById(id).value;
+  draft.name=g('tf_name')||'Farmer'; draft.crop=g('tf_crop'); draft.loc=g('tf_loc'); draft.url=g('tf_url');
+  if(draft._new){ delete draft._new; data.testimonials.push(draft); }
+  else { const t=find(draft.id); Object.assign(t,{name:draft.name,crop:draft.crop,loc:draft.loc,url:draft.url}); }
+  persist(); mClose(); render(); AdminShell.saved('Testimonial saved');
+}
+function modal(){ const d=draft; const ex=document.getElementById('tmModal'); if(ex)ex.remove();
+  const html=`<div id="tmModal"><div class="scrim" onclick="mClose()"></div>
+    <div class="box"><div class="bh"><h3>${d._new?'Add testimonial':'Edit testimonial'}</h3><button class="x" onclick="mClose()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="bb">
+        <div class="fg"><label>Farmer name</label><input id="tf_name" value="${esc(d.name)}" placeholder="e.g. Ramesh Patel"/></div>
+        <div class="frow"><div class="fg"><label>Crop</label><input id="tf_crop" value="${esc(d.crop)}" placeholder="e.g. Tomato"/></div>
+          <div class="fg"><label>Location</label><input id="tf_loc" value="${esc(d.loc)}" placeholder="e.g. Indore"/></div></div>
+        <div class="fg" style="margin-bottom:0"><label>Video URL</label><input id="tf_url" value="${esc(d.url)}" placeholder="https://… (YouTube / MP4 / image)"/></div>
+      </div>
+      <div class="bf"><button class="btn btn-s" onclick="mClose()">Cancel</button><button class="btn btn-p" onclick="mSave()"><i class="fa-solid fa-check"></i> Save</button></div>
+    </div></div>`;
+  document.querySelector('.tm').insertAdjacentHTML('beforeend', html);
+}
+render();
+</script>
+</body></html>

@@ -129,6 +129,15 @@
 .hm .cat-ic img.b{height:66%;max-width:42%;margin-right:-7px;z-index:1;}
 .hm .cat-ic img.f{height:84%;max-width:66%;position:relative;z-index:2;}
 .hm .cat-ic i{font-size:15px;color:#64748B;align-self:center;}
+/* app-accurate category tile (colour card + product cut-outs + label baked in — one image) */
+.hm .catile{width:78px;height:70px;border-radius:11px;background:var(--c,#EEF2F7);display:flex;flex-direction:column;align-items:center;padding:6px 3px 0;box-shadow:0 4px 11px -6px rgba(15,23,42,.3);flex-shrink:0;overflow:hidden;}
+.hm .catile-pw{width:100%;height:38px;display:flex;align-items:flex-end;justify-content:center;}
+.hm .catile-pw img{object-fit:contain;object-position:bottom;filter:drop-shadow(0 2px 2px rgba(0,0,0,.16));}
+.hm .catile-pw img.b{height:74%;max-width:42%;margin-right:-7px;z-index:1;}
+.hm .catile-pw img.f{height:98%;max-width:66%;position:relative;z-index:2;}
+.hm .catile-lb{font-size:9.5px;font-weight:800;color:#1F2937;margin-top:2px;line-height:1.1;text-align:center;}
+.hm .catile.catile-img{padding:0;}
+.hm .catile.catile-img img{width:100%;height:100%;object-fit:cover;}
 .hm .ed-toggle{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:700;color:var(--g600,#475569);cursor:pointer;}
 .hm .ed-lock{font-size:12px;font-weight:700;color:var(--g500,#64748B);background:var(--g100,#F1F5F9);padding:6px 11px;border-radius:8px;white-space:nowrap;}
 .hm .sec-hidden{font-size:10px;font-weight:700;color:var(--g500,#64748B);background:var(--g100,#F1F5F9);padding:2px 8px;border-radius:9999px;flex-shrink:0;}
@@ -244,6 +253,13 @@
 .hm .tt-body{flex:1;min-width:0;}
 .hm .tt-name{font-size:13.5px;font-weight:700;}
 .hm .tt-def{font-size:10px;font-weight:700;color:var(--blue);background:#DBEAFE;border-radius:6px;padding:1px 6px;margin-left:5px;vertical-align:middle;}
+.hm .te-result{margin-top:12px;background:#fff;border:1px solid var(--green);border-radius:9px;padding:12px 14px;}
+.hm .te-result-hd{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--green);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.hm .te-result-row{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--g800);padding:5px 0;}
+.hm .te-result-row+.te-result-row{border-top:1px dashed var(--g200);}
+.hm .te-rl{font-size:11.5px;font-weight:700;color:var(--g500);min-width:74px;}
+.hm .te-prev{width:44px;height:30px;border-radius:6px;flex-shrink:0;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;}
+.hm .te-prev img{width:100%;height:100%;object-fit:cover;}
 .hm .tt-live{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;color:var(--green);background:var(--green-lt);border-radius:20px;padding:1px 8px;margin-left:5px;vertical-align:middle;}
 .hm .tt-live .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.18);}
 .hm .tt-badge{font-size:11.5px;color:var(--g600);margin-top:3px;}
@@ -493,8 +509,10 @@ const APPROVED_BG=[
   {name:'Harvest',  img:'../assets/themes/harvest.jpg'},
   {name:'Winter',   img:'../assets/themes/winter.jpg'},
 ];
-let teEdit=null;                                   // id of theme being edited (inline)
+let teEdit=null;                                   // id of theme being edited (inline · legacy)
+let teEditId=null;                                 // id of theme being edited in the MODAL (same modal as Add)
 let teLiveId=null;                                 // id of the theme currently "Live" per the preview sim
+let teShowResult=false;                            // preview CTA — reveal which theme/banner wins
 let teModalId=null;                                // id of the draft theme being added in the Add-theme modal
 let themeDraftObj=null;                             // the draft theme — kept in memory ONLY until "Add theme" is saved
 let teSim={state:'All States',weather:'rain',temp:30,date:'2026-03-14'};  // resolver simulator
@@ -556,8 +574,8 @@ function themeData(){
   if(changed) KKD.save(data);
   return T;
 }
-function editTheme(){ if(themeDraftObj&&themeDraftObj.id===teModalId) return themeDraftObj; return themeData().themes.find(t=>t.id===teEdit); }
-function themeUI(){ if(teModalId){ themeModalRender(); return; } if(sel==='theme') pick('theme'); }
+function editTheme(){ if(themeDraftObj&&themeDraftObj.id===teModalId) return themeDraftObj; return themeData().themes.find(t=>t.id===(teEditId||teEdit)); }
+function themeUI(){ if(teModalId){ themeModalRender(); return; } if(teEditId){ themeEditModalRender(); return; } if(sel==='theme') pick('theme'); }
 function ruleMatches(t,state,weather,temp,date){
   if(t.bannerOnly) return false;                     // banner-only entries aren't themes
   if(!t.enabled || t.isDefault) return false;        // default is fallback only — never auto-wins
@@ -666,7 +684,20 @@ function themeModalRender(){
 }
 function themeModalSave(){ if(themeDraftObj){ themeData().themes.unshift(themeDraftObj); KKD.save(data); AdminShell.refreshPending(); } themeDraftObj=null; teModalId=null; const m=document.getElementById('addModal'); if(m)m.remove(); pick('theme'); }
 function themeModalCancel(){ themeDraftObj=null; teModalId=null; const m=document.getElementById('addModal'); if(m)m.remove(); pick('theme'); }
-function themeEdit(id){ const t=themeData().themes.find(x=>x.id===id); if(t&&t.isDefault) return; /* green default is not editable */ teEdit=(teEdit===id?null:id); teMsg=null; themeUI(); }
+function themeEdit(id){ const t=themeData().themes.find(x=>x.id===id); if(!t||t.isDefault) return; /* green default is not editable */ teEdit=null; teEditId=id; teMsg=null; themeEditModalRender(); }
+function themeEditModalRender(){
+  const t=themeData().themes.find(x=>x.id===teEditId); if(!t){ teEditId=null; return; }
+  const ex=document.getElementById('addModal'); if(ex) ex.remove();
+  const ttl=t.bannerOnly?(t.banner&&t.banner.title||'banner'):t.name;
+  const html=`<div id="addModal"><div class="apv-scrim" onclick="themeEditClose()"></div>
+    <div class="apv-box" style="width:740px">
+      <div class="apv-box-head"><h3>Edit ${esc(ttl)}</h3><button class="x-btn" onclick="themeEditClose()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-body">${themeEditor(t,true)}</div>
+      <div class="apv-box-foot"><button class="btn btn-p btn-sm" onclick="themeEditClose()"><i class="fa-solid fa-check"></i> Done</button></div>
+    </div></div>`;
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+}
+function themeEditClose(){ teEditId=null; teMsg=null; const m=document.getElementById('addModal'); if(m)m.remove(); pick('theme'); }
 function themeMove(i,d){ const T=themeData(); const j=i+d; if(j<0||j>=T.themes.length) return; if(T.themes[i].isDefault||T.themes[j].isDefault) return; const a=T.themes; [a[i],a[j]]=[a[j],a[i]]; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeToggle(id){ const t=themeData().themes.find(x=>x.id===id); if(!t||t.isDefault)return; t.enabled=!t.enabled; KKD.save(data); AdminShell.refreshPending(); themeUI(); }
 function themeBanToggle(id){ const t=(themeDraftObj&&themeDraftObj.id===id)?themeDraftObj:themeData().themes.find(x=>x.id===id); if(!t||t.isDefault||t.locked)return; t.banner=t.banner||{enabled:false,icon:'fa-bell',title:'',sub:'',bg:'#EFF6FF',tc:'#1E40AF',link:'',states:['All'],start:'',end:''}; t.banner.enabled=!t.banner.enabled; if(t!==themeDraftObj){ KKD.save(data); AdminShell.refreshPending(); } themeUI(); }
@@ -688,19 +719,36 @@ function themeToggleScope(id,st){ const t=themeData().themes.find(x=>x.id===id);
 function themeSim(k,v){ teSim[k]=v; themeUI(); }
 
 /* ---- views ---- */
+function themeCheckResult(){ teShowResult=true; themeUI(); }
 function themeResolverBox(){
   const win=resolveTheme(teSim.state,teSim.weather,teSim.temp,teSim.date);
-  teLiveId=win?win.id:null;   // the tile carrying this id gets the "Live" badge
+  teLiveId=win?win.id:null;
   const stOpts=['All States'].concat(STATES.filter(s=>s!=='All States')).map(s=>`<option${s===teSim.state?' selected':''}>${s}</option>`).join('');
   const wOpts=WEATHERS.map(w=>`<option${w===teSim.weather?' selected':''}>${w}</option>`).join('');
+  // which banner shows: winning theme's own banner (if on), else the always-on locked order banner
+  const T=themeData();
+  const bn=(win&&win.banner&&win.banner.enabled)?win.banner:null;
+  const lockBn=T.themes.find(t=>t.id==='order'&&t.banner&&t.banner.enabled);
+  const bnShow=bn||(lockBn?lockBn.banner:null);
+  const resultHTML = teShowResult ? `
+    <div class="te-result">
+      <div class="te-result-hd"><i class="fa-solid fa-circle-play"></i> Result for these conditions</div>
+      <div class="te-result-row"><span class="te-rl">🎨 Theme</span>
+        <span class="te-prev" style="background:${win?themeGrad(win):'#ccc'}">${(win&&win.bg&&win.bg.image)?`<img src="${win.bg.image}" alt=""/>`:''}</span>
+        <b>${win?esc(win.name):'—'}</b>${win&&win.isDefault?' <span class="tt-def">default fallback</span>':''}</div>
+      <div class="te-result-row"><span class="te-rl">📢 Banner</span>
+        ${bnShow?`<span class="sb-ic sm" style="background:${esc(bnShow.bg||'#EFF6FF')};color:${esc(bnShow.tc||'#1E40AF')}"><i class="fa-solid ${bnShow.icon||'fa-bell'}"></i></span> <b>${esc(bnShow.title||'Status banner')}</b>`:'<span class="hint">— none —</span>'}</div>
+    </div>` : '';
   return `<div class="sch-box">
-    <div class="sl">Preview — set the conditions to see which theme goes <b style="color:var(--green)">Live</b> below</div>
-    <div class="row" style="margin-bottom:0">
+    <div class="sl">Preview — set the conditions, then check which theme &amp; banner go <b style="color:var(--green)">Live</b></div>
+    <div class="row" style="margin-bottom:12px">
       <div class="fg fix"><label>State</label><select class="s" onchange="themeSim('state',this.value)">${stOpts}</select></div>
       <div class="fg fix"><label>Sky</label><select class="s" onchange="themeSim('weather',this.value)">${wOpts}</select></div>
       <div class="fg fix"><label>Temp °C</label><input type="number" style="width:90px" value="${teSim.temp}" onchange="themeSim('temp',+this.value)"/></div>
       <div class="fg fix"><label>Date</label><input type="date" value="${teSim.date}" onchange="themeSim('date',this.value)"/></div>
     </div>
+    <button class="btn btn-p btn-sm" onclick="themeCheckResult()"><i class="fa-solid fa-wand-magic-sparkles"></i> ${teShowResult?'Refresh result':'Check which goes live'}</button>
+    ${resultHTML}
   </div>`;
 }
 /* one entry = a THEME half + a STATUS-BANNER half, each with its own toggle */
@@ -736,8 +784,8 @@ function entryRow(t,i){
       <div class="entry-col"><div class="eh-lbl">📢 Status banner</div>${bannerHalf}</div>
     </div>
     <div class="entry-foot">
-      ${isDef?'':`<button class="btn btn-s btn-sm" onclick="themeEdit('${t.id}')"><i class="fa-solid fa-pen"></i> Edit</button>`}
-      ${canDel?`<button class="btn btn-d btn-sm" onclick="themeRemove('${t.id}')"><i class="fa-solid fa-trash"></i> Delete</button>`:''}
+      ${isDef?'':`<button class="ic-btn" title="Edit" onclick="themeEdit('${t.id}')"><i class="fa-solid fa-pen"></i></button>`}
+      ${canDel?`<button class="ic-btn del" title="Delete" onclick="themeRemove('${t.id}')"><i class="fa-solid fa-trash"></i></button>`:''}
     </div>
   </div>`;
 }
@@ -920,7 +968,6 @@ theme:()=>{ const T=themeData(); return `
     <div class="entry-list">
       ${T.themes.map((t,i)=>entryRow(t,i)).join('')}
     </div>
-    ${teEdit?`<div style="margin-top:14px">${themeEditor(T.themes.find(x=>x.id===teEdit))}</div>`:''}
 
     <button class="btn btn-p btn-sm" style="margin-top:12px" onclick="themeAdd()"><i class="fa-solid fa-plus"></i> Add theme &amp; banner</button>
   </div>
@@ -951,7 +998,7 @@ cats:()=>`
         {n:'Fertilizer',c:'#FCE7AE',b:'npk',f:'humic'},
         {n:'Herbicide',c:'#FAD0BC',b:'bhumiraja',f:'triple'},
         {n:'Combo',c:'#D2DAF7',b:'npk',f:'chakrawarti'},
-      ].map(c=>LISTS.cat.row({name:c.n,link:'/categories?cat='+c.n.toLowerCase(),color:c.c,b:c.b,f:c.f,_on:true})).join('')}
+      ].map(c=>LISTS.cat.row({label:c.n,link:'/categories?cat='+c.n.toLowerCase(),color:c.c,b:c.b,f:c.f,_on:true})).join('')}
     </div>
     <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addCat()">+ Add Category</button>
   </div>
@@ -961,7 +1008,8 @@ cats:()=>`
 ordstatus:()=>`
 <div class="card">
   <div class="card-body">
-    <div class="row" style="margin-bottom:0">
+    ${TG('osbg',true,'Show tile background','Turn the coloured tile background on or off — off = plain / transparent')}
+    <div class="row" style="margin:14px 0 0">
       <div class="fg fix"><label>Tile background color</label><div class="color-r"><input type="color" value="#F0F7F2"/><span>#F0F7F2</span></div></div>
     </div>
   </div>
@@ -1342,7 +1390,7 @@ function listDel(btn){ btn.closest('.li,.wi,.tc').remove(); }
 function listEdit(btn){ const r=btn.closest('.li,.wi,.tc'); listModal(r.dataset.lk, r); }
 function listAdd(key){ listModal(key, null); }
 function listModal(key, rowEl){
-  const cfg=LISTS[key];
+  const cfg=LISTS[key]; window._amCatImg=undefined;
   const d = rowEl ? Object.assign({}, cfg.def(), JSON.parse(rowEl.dataset.d)) : cfg.def();
   const on = rowEl ? rowEl.querySelector('.tg').classList.contains('on') : true;
   amOpen((rowEl?'Edit ':'Add ')+cfg.title, cfg.fields(d), function(){
@@ -1358,6 +1406,16 @@ function liAct(key,d){ return `<div class="li-act"><div class="tg ${d._on===fals
   <button class="ic-btn del" onclick="listDel(this)" title="Delete"><i class="fa-solid fa-trash"></i></button></div>`; }
 function liTag(key,d){ return `data-lk="${key}" data-d='${encD(d)}'`; }
 
+/* category tile = one image (label + product art + background baked in) */
+function catTile(d){
+  if(d.img) return `<div class="catile catile-img"><img src="${d.img}" alt=""/></div>`;
+  return `<div class="catile" style="--c:${d.color||'#EEF2F7'}">
+    <div class="catile-pw">${d.b?`<img class="b" src="../assets/cat/pool/${d.b}.png" alt=""/>`:''}${d.f?`<img class="f" src="../assets/cat/pool/${d.f}.png" alt=""/>`:''}</div>
+    <div class="catile-lb">${esc(d.label||'')}</div>
+  </div>`;
+}
+function amCatPick(input){ const f=input.files&&input.files[0]; if(!f) return; const url=URL.createObjectURL(f); window._amCatImg=url; const p=document.getElementById('am_catprev'); if(p) p.innerHTML=`<div class="catile catile-img"><img src="${url}" alt=""/></div>`; }
+
 const LISTS={
   ph:{ listId:'phList', title:'search hint',
     def:()=>({text:''}),
@@ -1367,14 +1425,22 @@ const LISTS={
       <div class="li-body"><div class="li-sum"><span class="nm">${esc(d.text||'Search hint')}</span></div></div>${liAct('ph',d)}</div>` },
 
   cat:{ listId:'catList', title:'category',
-    def:()=>({name:'',link:'',color:'#EEF2F7',b:'',f:''}),
-    fields:d=>`<div class="row"><div class="fg"><label>Category name</label><input type="text" id="am_name" value="${esc(d.name)}" placeholder="e.g. Organic"/></div></div>
-      <div class="row"><div class="fg fix"><label>Card color</label><div class="color-r"><input type="color" id="am_color" value="${d.color||'#BFE8CB'}"/></div></div></div>
+    def:()=>({label:'Category',link:'',color:'#EEF2F7',b:'',f:'',img:''}),
+    // the whole tile (label + product art + background) is ONE image — the manager only swaps the image + sets where it links
+    fields:d=>`<div class="sub-l" style="margin:0 0 8px">Category tile image <span class="hint">— the text, product art &amp; background are all part of this one image</span></div>
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:14px">
+        <span id="am_catprev">${catTile(d)}</span>
+        <div style="flex:1;min-width:0">
+          <input type="file" id="am_imgfile" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="amCatPick(this)"/>
+          <button class="btn btn-s btn-sm" onclick="document.getElementById('am_imgfile').click()"><i class="fa-solid fa-upload"></i> Change image</button>
+          <div class="bg-guide" style="margin-top:8px"><i class="fa-solid fa-circle-info"></i>Square tile · recommended 240 × 240 px · max 1 MB.</div>
+        </div>
+      </div>
       <div class="row" style="margin-bottom:0"><div class="fg"><label>Deeplink</label><input type="text" id="am_link" value="${esc(d.link)}" placeholder="/categories?cat=new"/></div></div>`,
-    collect:d=>({name:amVal('am_name')||'New category',link:amVal('am_link')||'/categories?cat=new',color:amVal('am_color')||d.color,b:d.b,f:d.f}),
-    row:d=>`<div class="li" ${liTag('cat',d)}><span class="drag-h">⠿</span>
-      <div class="cat-ic" style="background:${d.color||'#EEF2F7'}">${d.f?`${d.b?`<img class="b" src="../assets/cat/pool/${d.b}.png" alt=""/>`:''}<img class="f" src="../assets/cat/pool/${d.f}.png" alt=""/>`:`<i class="fa-solid fa-shapes"></i>`}</div>
-      <div class="li-body"><div class="li-sum"><span class="nm">${esc(d.name)}</span><span class="meta"><i class="fa-solid fa-link"></i>${esc(d.link)}</span></div></div>${liAct('cat',d)}</div>` },
+    collect:d=>({label:d.label,color:d.color,b:d.b,f:d.f,img:(window._amCatImg!==undefined?window._amCatImg:d.img),link:amVal('am_link')||'/categories?cat=new'}),
+    row:d=>`<div class="li" ${liTag('cat',d)} style="align-items:center"><span class="drag-h">⠿</span>
+      ${catTile(d)}
+      <div class="li-body"><div class="li-sum"><span class="nm">${esc(d.label)}</span><span class="meta"><i class="fa-solid fa-link"></i>${esc(d.link)}</span></div></div>${liAct('cat',d)}</div>` },
 
   task:{ listId:'taskList', title:'earn-coins task',
     def:()=>({emoji:'✅',task:'',coins:10,action:'Enable Notifications'}),

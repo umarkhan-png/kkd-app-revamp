@@ -57,7 +57,11 @@
 .hm .btn-d:hover{background:#FECACA;}
 .hm .btn-sm{padding:5px 10px;font-size:12px;}
 .hm .btn-ic{padding:5px 8px;font-size:13px;}
-.hm .btn-ic.del:hover:not([disabled]){background:#FEE2E2;color:var(--red);border-color:#FECACA;}
+/* shared icon button — identical to Home Page Manager for a consistent delete control across the portal */
+.hm .ic-btn{width:30px;height:30px;border:1px solid var(--g200);border-radius:7px;background:#fff;color:var(--g500);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+.hm .ic-btn:hover{background:var(--g50);color:var(--g800);}
+.hm .ic-btn.del:hover:not([disabled]){background:#FEE2E2;color:var(--red);border-color:#FECACA;}
+.hm .ic-btn[disabled]{opacity:.35;cursor:default;}
 .hm .tr{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--g100);}
 .hm .tr:last-child{border-bottom:none;}
 .hm .tr-l .tt{font-size:13px;font-weight:600;}
@@ -75,7 +79,7 @@
 /* image field */
 .hm .imgbox{width:62px;height:62px;border-radius:8px;border:1px solid var(--g200);background:var(--g50);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--g400);flex-shrink:0;overflow:hidden;}
 .hm .imgbox img{max-width:100%;max-height:100%;object-fit:contain;}
-.hm .factic{width:38px;height:38px;border-radius:8px;background:var(--green-lt);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.hm .factic{width:34px;height:34px;border-radius:8px;background:transparent;color:var(--g700);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
 .hm .cchip{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--g200);margin:3px 3px 3px 0;transition:all .15s;color:var(--g600);}
 .hm .cchip.on{background:var(--green-lt);border-color:var(--green);color:var(--green);font-weight:600;}
 .hm .sdiv{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--g400);padding:6px 0 8px;}
@@ -88,10 +92,13 @@
 .hm .ro-row .k{color:var(--g500);font-weight:600;}
 .hm .ro-row .v{color:var(--g800);font-weight:600;}
 .hm .warn-box{background:#FFFBEB;color:var(--amber);border:1px solid #FDE68A;border-radius:8px;padding:9px 12px;font-size:12px;margin-top:10px;display:flex;gap:7px;align-items:flex-start;}
-.hm .icon-grid{display:flex;flex-wrap:wrap;gap:6px;}
-.hm .icpick{width:38px;height:38px;border-radius:9px;border:1.5px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--g500);cursor:pointer;transition:all .12s;background:#fff;}
-.hm .icpick:hover{border-color:var(--g400);color:var(--g700);}
-.hm .icpick.on{background:var(--green-lt);border-color:var(--green);color:var(--green);}
+/* icon picker — global (also used inside the body-level #iconModal, which is outside .hm) */
+.icon-grid{display:flex;flex-wrap:wrap;gap:9px;}
+.icpick{position:relative;width:46px;height:46px;border-radius:11px;border:1.5px solid var(--g200,#E2E8F0);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--g600,#475569);cursor:pointer;transition:all .12s;background:#fff;}
+.icpick:hover{border-color:var(--green,#258046);color:var(--green,#258046);background:var(--green-lt,#EAF6EE);transform:translateY(-1px);box-shadow:0 4px 10px -5px rgba(15,23,42,.3);}
+.icpick.on{background:var(--green,#258046);border-color:var(--green,#258046);color:#fff;box-shadow:0 4px 10px -5px rgba(37,128,70,.6);}
+.icpick.on::after{content:"\f00c";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;top:-6px;right:-6px;width:17px;height:17px;border-radius:50%;background:var(--green,#258046);color:#fff;font-size:8px;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}
+#iconModal .drawer-body{padding:16px 18px 20px;}
 .hm .splash-nest{margin-top:14px;padding:14px 16px;border:1px solid var(--g200);border-left:3px solid var(--green);border-radius:10px;background:var(--g50);}
 .hm .splash-nest .sdiv:first-child{padding-top:0;}
 .hm .up-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:8px 10px;border:1px solid var(--g200);border-radius:9px;background:#fff;}
@@ -285,7 +292,7 @@ const EDITORS = {
           <button class="btn btn-s btn-ic" title="Move up" onclick="langMove(${i},-1)" ${i===0?'disabled style="opacity:.35"':''}><i class="fa-solid fa-arrow-up"></i></button>
           <button class="btn btn-s btn-ic" title="Move down" onclick="langMove(${i},1)" ${i===n-1?'disabled style="opacity:.35"':''}><i class="fa-solid fa-arrow-down"></i></button>
           <div class="tg ${L.on?'on':''}" title="${L.on?'Shown in the picker':'Hidden from the picker'}" onclick="setPath('languages.${i}.on',${!L.on});commit('Language '+(${!L.on}?'enabled':'disabled'));rerender()"></div>
-          <button class="btn btn-s btn-ic del" title="Delete language" onclick="delLang(${i})" ${n<=1?'disabled style="opacity:.35"':''}><i class="fa-solid fa-trash"></i></button>
+          <button class="ic-btn del" title="Delete language" onclick="delLang(${i})" ${n<=1?'disabled':''}><i class="fa-solid fa-trash"></i></button>
         </div>
       </div>`).join('');
     return head(meta('language')) +
@@ -317,7 +324,7 @@ const EDITORS = {
           ${tField('otp.facts.'+i+'.text','Message')}
         </div>
         <div class="li-act" style="align-items:center;gap:6px"><div class="tg ${on?'on':''}" title="${on?'Shown in the strip':'Hidden'}" onclick="setPath('otp.facts.${i}.on',${!on});commit();rerender()"></div>
-          <button class="btn btn-s btn-ic del" title="Delete message" onclick="delFact(${i})"><i class="fa-solid fa-trash"></i></button></div>
+          <button class="ic-btn del" title="Delete message" onclick="delFact(${i})"><i class="fa-solid fa-trash"></i></button></div>
       </div>`;}).join('');
     return head(meta('otp')) +
       card('Resend',

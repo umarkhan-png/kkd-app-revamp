@@ -466,8 +466,7 @@ const DEFAULT_SECS=[
   {id:'featured', ic:'🎯', nm:'Featured Products',      sub:'Curated collections by state/lang',on:true},
   {id:'testi',    ic:'🎥', nm:'Testimonials',            sub:'Farmer video section',            on:true},
   {id:'mostsell', ic:'🔥', nm:'Most Selling',            sub:'Auto state-wise trending',        on:true},
-  {id:'behavior', ic:'⚙️', nm:'Behavior & Animations',   sub:'Timings & scroll effects',         on:true},
-  {id:'expert',   ic:'💬', nm:'Ask Expert',              sub:'Floating agronomist button',       on:true, fixed:true},
+  {id:'expert',   ic:'💬', nm:'Ask Expert',              sub:'Floating agronomist button',       on:true, fixed:true, hideable:true},
   {id:'cartfab',  ic:'🛒', nm:'Cart Bar (floating)',     sub:'Sticky view-cart bar',             on:true, fixed:true},
 ];
 /* Built-ins are app-screen sections; custom-built sections (see "Custom sections") get the
@@ -599,22 +598,22 @@ function dd(e,tid){
   SECS.splice(ti,0,it);dragId=null;
   persist();renderList();AdminShell.saved('Section order updated');
 }
-function toggleVis(id){const s=SECS.find(s=>s.id===id);if(!s)return;const meta=Object.fromEntries(DEFAULT_SECS.map(d=>[d.id,d]));if(meta[id]&&meta[id].fixed)return;/* locked sections can't be hidden */ s.on=!s.on;const c=csFind(id);if(c){c.on=s.on;persistCustom();}else persist();if(sel===id)pick(id);else renderList();AdminShell.saved((s.title||s.nm)+(s.on?' shown on app':' hidden on app'));}
+function toggleVis(id){const s=SECS.find(s=>s.id===id);if(!s)return;const meta=Object.fromEntries(DEFAULT_SECS.map(d=>[d.id,d]));const m=meta[id]||{};if(m.fixed&&!m.hideable)return;/* always-on sections can't be hidden (hideable fixed ones can) */ s.on=!s.on;const c=csFind(id);if(c){c.on=s.on;persistCustom();}else persist();if(sel===id)pick(id);else renderList();AdminShell.saved((s.title||s.nm)+(s.on?' shown on app':' hidden on app'));}
 
 /* ── SELECT ── */
 // onboarding-style editor header: big section title + Preview-in-app (no per-card Save buttons)
 function edHead(id){
   const s=SECS.find(x=>x.id===id)||{ic:'🏠',nm:''};
   const meta=Object.fromEntries(DEFAULT_SECS.map(d=>[d.id,d]));
-  const locked=meta[id]&&meta[id].fixed;
-  // Enable/disable lives INSIDE the editor. Locked sections are always on and can't be hidden.
-  const ctrl = locked
+  const m=meta[id]||{};
+  const alwaysOn = m.fixed && !m.hideable;   // fixed + not hideable → always on; hideable fixed can be toggled off
+  // Enable/disable lives INSIDE the editor. Always-on sections can't be hidden.
+  const ctrl = alwaysOn
     ? `<span class="ed-lock" title="This section is always on and can’t be hidden">🔒 Always on</span>`
     : `<label class="ed-toggle"><span>Show on Home</span><div class="tg ${s.on?'on':''}" onclick="toggleVis('${id}')"></div></label>`;
   const dispNm = s.title || s.nm;
-  // rename via a pencil next to the title — offered on content sections AND custom sections
-  // (Recently Viewed is a fixed, non-renamable heading)
-  const rename = (!locked && id!=='recent')
+  // rename via a pencil next to the title — content + custom sections only (not fixed-placement / Recently Viewed)
+  const rename = (!m.fixed && id!=='recent')
     ? `<button class="ttl-edit" title="Rename this section" onclick="renameSection('${id}')"><i class="fa-solid fa-pen"></i></button>`
     : '';
   // uniform delete (same trash control as the rest of the portal) — custom sections only
@@ -1227,6 +1226,8 @@ cats:()=>`
       ].map(c=>LISTS.cat.row({label:c.n,link:'/categories?cat='+c.n.toLowerCase(),color:c.c,b:c.b,f:c.f,_on:true})).join('')}
     </div>
     <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addCat()">+ Add Category</button>
+    <div class="sdiv">Behaviour</div>
+    ${TG('bh1',true,'Categories shrink on scroll','Category row compacts as the page scrolls')}
   </div>
 </div>`,
 
@@ -1272,6 +1273,8 @@ banners:()=>`
       ${bannerList.length?bannerList.map((b,i)=>bannerSummary(b,i)).join(''):'<p class="hint-p">No banners yet — add one below.</p>'}
     </div>
     <button class="btn btn-p btn-sm" style="margin-top:12px" onclick="addBanner()"><i class="fa-solid fa-plus"></i> Add banner</button>
+    <div class="sdiv">Timing</div>
+    <div class="row" style="margin-bottom:0"><div class="fg fix"><label>Banner rotation (sec)</label><input type="number" step="0.1" style="width:170px;" value="4"/></div></div>
   </div>
 </div>`,
 
@@ -1443,22 +1446,6 @@ cartfab:()=>`
 </div>`,
 
 /* 17 ── BEHAVIOR & ANIMATIONS */
-behavior:()=>`
-<div class="card">
-  <div class="card-body">
-    <div class="sdiv">Timings</div>
-    <div class="row">
-      <div class="fg fix"><label>Greeting rotation (sec)</label><input type="number" step="0.1" style="width:150px;" value="5"/></div>
-      <div class="fg fix"><label>Status banner rotation (sec)</label><input type="number" step="0.1" style="width:170px;" value="4"/></div>
-      <div class="fg fix"><label>FAB pulse (sec)</label><input type="number" step="0.1" style="width:130px;" value="2.8"/></div>
-    </div>
-    <div class="sdiv">Scroll Effects</div>
-    ${TG('bh1',true,'Categories shrink on scroll','Category row compacts as the page scrolls')}
-    ${TG('bh2',true,'Ask-Expert lifts above cart bar','FAB moves up so it clears the cart bar')}
-    ${TG('bh3',true,'Ask-Expert expands at end of page','FAB returns to full pill near the page bottom')}
-  </div>
-</div>`,
-
 };/* end EDITORS */
 
 /* ── ADD FUNCTIONS ── */

@@ -129,15 +129,15 @@
 .hm .cat-ic img.b{height:66%;max-width:42%;margin-right:-7px;z-index:1;}
 .hm .cat-ic img.f{height:84%;max-width:66%;position:relative;z-index:2;}
 .hm .cat-ic i{font-size:15px;color:#64748B;align-self:center;}
-/* app-accurate category tile (colour card + product cut-outs + label baked in — one image) */
-.hm .catile{width:78px;height:70px;border-radius:11px;background:var(--c,#EEF2F7);display:flex;flex-direction:column;align-items:center;padding:6px 3px 0;box-shadow:0 4px 11px -6px rgba(15,23,42,.3);flex-shrink:0;overflow:hidden;}
-.hm .catile-pw{width:100%;height:38px;display:flex;align-items:flex-end;justify-content:center;}
-.hm .catile-pw img{object-fit:contain;object-position:bottom;filter:drop-shadow(0 2px 2px rgba(0,0,0,.16));}
-.hm .catile-pw img.b{height:74%;max-width:42%;margin-right:-7px;z-index:1;}
-.hm .catile-pw img.f{height:98%;max-width:66%;position:relative;z-index:2;}
-.hm .catile-lb{font-size:9.5px;font-weight:800;color:#1F2937;margin-top:2px;line-height:1.1;text-align:center;}
-.hm .catile.catile-img{padding:0;}
-.hm .catile.catile-img img{width:100%;height:100%;object-fit:cover;}
+/* category tile — lifted verbatim from the app (screens/home.html .cat2-card), so admin == app exactly */
+.hm .cat2-card{width:66px;height:100px;border-radius:12px;background:var(--c,#EEF2F7);display:flex;flex-direction:column;align-items:center;padding:9px 4px 0;box-shadow:0 5px 13px -7px rgba(15,23,42,.28);flex-shrink:0;}
+.hm .cat2-pw{width:100%;height:56px;display:flex;align-items:flex-end;justify-content:center;}
+.hm .cat2-pw img{object-fit:contain;object-position:bottom;filter:drop-shadow(0 3px 3px rgba(0,0,0,.16));}
+.hm .cat2-pw img.b{height:44px;max-width:42%;margin-right:-10px;z-index:1;}
+.hm .cat2-pw img.f{height:56px;max-width:66%;position:relative;z-index:2;}
+.hm .cat2-lb{flex:1;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800;color:#27313F;letter-spacing:-.02em;padding-bottom:7px;text-align:center;line-height:1;}
+.hm .cat2-card.is-img{padding:0;overflow:hidden;}
+.hm .cat2-card.is-img img{width:100%;height:100%;object-fit:cover;border-radius:12px;}
 .hm .ed-toggle{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:700;color:var(--g600,#475569);cursor:pointer;}
 .hm .ed-lock{font-size:12px;font-weight:700;color:var(--g500,#64748B);background:var(--g100,#F1F5F9);padding:6px 11px;border-radius:8px;white-space:nowrap;}
 .hm .sec-hidden{font-size:10px;font-weight:700;color:var(--g500,#64748B);background:var(--g100,#F1F5F9);padding:2px 8px;border-radius:9999px;flex-shrink:0;}
@@ -1406,15 +1406,15 @@ function liAct(key,d){ return `<div class="li-act"><div class="tg ${d._on===fals
   <button class="ic-btn del" onclick="listDel(this)" title="Delete"><i class="fa-solid fa-trash"></i></button></div>`; }
 function liTag(key,d){ return `data-lk="${key}" data-d='${encD(d)}'`; }
 
-/* category tile = one image (label + product art + background baked in) */
+/* category tile = one image (label + product art + background baked in) — markup lifted verbatim from the app */
 function catTile(d){
-  if(d.img) return `<div class="catile catile-img"><img src="${d.img}" alt=""/></div>`;
-  return `<div class="catile" style="--c:${d.color||'#EEF2F7'}">
-    <div class="catile-pw">${d.b?`<img class="b" src="../assets/cat/pool/${d.b}.png" alt=""/>`:''}${d.f?`<img class="f" src="../assets/cat/pool/${d.f}.png" alt=""/>`:''}</div>
-    <div class="catile-lb">${esc(d.label||'')}</div>
+  if(d.img) return `<div class="cat2-card is-img"><img src="${d.img}" alt=""/></div>`;
+  return `<div class="cat2-card" style="--c:${d.color||'#EEF2F7'}">
+    <div class="cat2-pw">${d.b?`<img class="b" src="../assets/cat/pool/${d.b}.png" alt=""/>`:''}${d.f?`<img class="f" src="../assets/cat/pool/${d.f}.png" alt=""/>`:''}</div>
+    <div class="cat2-lb">${esc(d.label||'')}</div>
   </div>`;
 }
-function amCatPick(input){ const f=input.files&&input.files[0]; if(!f) return; const url=URL.createObjectURL(f); window._amCatImg=url; const p=document.getElementById('am_catprev'); if(p) p.innerHTML=`<div class="catile catile-img"><img src="${url}" alt=""/></div>`; }
+function amCatPick(input){ const f=input.files&&input.files[0]; if(!f) return; const url=URL.createObjectURL(f); window._amCatImg=url; const p=document.getElementById('am_catprev'); if(p) p.innerHTML=`<div class="cat2-card is-img"><img src="${url}" alt=""/></div>`; }
 
 const LISTS={
   ph:{ listId:'phList', title:'search hint',

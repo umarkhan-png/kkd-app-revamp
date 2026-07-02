@@ -624,13 +624,15 @@
         <!-- Header: emerald deal pill + appealing 3-box countdown clock — wrapped in its own px-4 so the wrapper itself can be full-bleed (no horizontal padding) and the scroll container below can reach the right viewport edge naturally -->
         <div class="relative flex items-center justify-between mb-3 px-4">
           <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-[12px] font-semibold tracking-[0.12em] text-white" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%);box-shadow:0 4px 10px -2px rgba(5,150,105,0.5)">⚡ FLASH DEALS</span>
-          <!-- Countdown clock: 3 separate dark tiles for H : M : S with amber digits + glow -->
+          <!-- Countdown clock: 4 separate dark tiles for D : H : M : S with amber digits + glow -->
           <div class="flex items-center gap-1">
-            <span class="px-2 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerH" style="background:#0F172A;color:#FBBF24;min-width:34px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">02</span>
+            <span class="px-1.5 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerD" style="background:#0F172A;color:#FBBF24;min-width:30px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">01</span>
             <span class="text-[14px] font-semibold" style="color:#0F172A">:</span>
-            <span class="px-2 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerM" style="background:#0F172A;color:#FBBF24;min-width:34px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">14</span>
+            <span class="px-1.5 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerH" style="background:#0F172A;color:#FBBF24;min-width:30px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">02</span>
             <span class="text-[14px] font-semibold" style="color:#0F172A">:</span>
-            <span class="px-2 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerS" style="background:#0F172A;color:#FBBF24;min-width:34px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">38</span>
+            <span class="px-1.5 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerM" style="background:#0F172A;color:#FBBF24;min-width:30px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">14</span>
+            <span class="text-[14px] font-semibold" style="color:#0F172A">:</span>
+            <span class="px-1.5 py-1.5 rounded-md tnum text-[14px] font-semibold leading-none" id="flashTimerS" style="background:#0F172A;color:#FBBF24;min-width:30px;text-align:center;box-shadow:0 3px 8px rgba(15,23,42,0.4);text-shadow:0 0 6px rgba(251,191,36,0.5)">38</span>
           </div>
         </div>
 
@@ -737,6 +739,12 @@
                 </div>
               </div>
             </div>
+
+            <!-- View all deals · trailing card at the end of the carousel -->
+            <a href="shop.html?sale=flash" class="nu flex-shrink-0 rounded-xl overflow-hidden relative flex flex-col items-center justify-center gap-2.5 px-3" style="width:100px;border:1.5px dashed #A7F3D0;background:#ECFDF5;text-decoration:none;margin-right:16px">
+              <div class="w-11 h-11 rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%);box-shadow:0 6px 14px -4px rgba(5,150,105,0.5)"><i class="fa-solid fa-arrow-right text-white text-[16px]"></i></div>
+              <span class="text-[12.5px] font-semibold text-center leading-tight" style="color:#258046">View all<br>deals</span>
+            </a>
 
           </div>
         </div>
@@ -2687,18 +2695,20 @@
       ['touchend','mouseup'].forEach(evt   => scroller.addEventListener(evt, () => setTimeout(startAuto, 1500)));
     })();
 
-    // ⚡ Live countdown — populates the 3-box flash timer (H : M : S)
+    // ⚡ Live countdown — populates the 4-box flash timer (D : H : M : S)
     (function startCountdown(){
+      const dEl = document.getElementById('flashTimerD');
       const hEl = document.getElementById('flashTimerH');
       const mEl = document.getElementById('flashTimerM');
       const sEl = document.getElementById('flashTimerS');
-      if (!hEl || !mEl || !sEl) return;
-      const initial = 2*3600 + 14*60 + 38;
+      if (!dEl || !hEl || !mEl || !sEl) return;
+      const initial = 1*86400 + 2*3600 + 14*60 + 38;
       let end = Date.now() + initial * 1000;
       function tick(){
         let diff = end - Date.now();
         if (diff <= 0) { end = Date.now() + initial * 1000; diff = end - Date.now(); }
-        hEl.textContent = String(Math.floor(diff/3600000)).padStart(2,'0');
+        dEl.textContent = String(Math.floor(diff/86400000)).padStart(2,'0');
+        hEl.textContent = String(Math.floor(diff/3600000) % 24).padStart(2,'0');
         mEl.textContent = String(Math.floor(diff/60000) % 60).padStart(2,'0');
         sEl.textContent = String(Math.floor(diff/1000) % 60).padStart(2,'0');
       }

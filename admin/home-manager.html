@@ -227,7 +227,21 @@
 .hm .bunch-nm{font-size:14px;font-weight:800;color:var(--g800);}
 .hm .bunch-cond{font-size:11.5px;color:var(--g500);margin-top:3px;display:flex;align-items:center;gap:5px;}
 .hm .bunch-cond i{color:var(--green);}
-.hm .bunch-tasks{display:flex;flex-direction:column;gap:7px;margin-bottom:9px;}
+.hm .bunch-tasks{display:flex;flex-wrap:wrap;align-items:center;}
+.hm .task-chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--g700);background:var(--g50);border:1px solid var(--g200);border-radius:20px;padding:3px 10px;margin:0 6px 6px 0;}
+.hm .task-chip.off{opacity:.5;text-decoration:line-through;}
+.hm .task-chip b{color:var(--green);font-weight:700;}
+.hm .ctask-list{display:flex;flex-direction:column;gap:7px;margin-bottom:4px;}
+.hm .ctask{display:grid;grid-template-columns:38px 1fr 58px 150px auto auto;align-items:center;gap:7px;}
+.hm .ctask-ic{width:38px;height:38px;border:1px solid var(--g200);border-radius:8px;background:var(--g50);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.hm .ctask-ic:hover{border-color:var(--green);}
+.hm .ctask-lbl{min-width:0;}
+.hm .ctask-coins{min-width:0;text-align:center;}
+.hm .ctask-act{min-width:0;}
+.hm .emo-grid{display:flex;flex-wrap:wrap;gap:5px;padding:9px;margin:1px 0 3px;border:1px dashed var(--g300);border-radius:9px;background:var(--g50);}
+.hm .emopick{width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:18px;border-radius:8px;border:1.5px solid transparent;cursor:pointer;transition:all .12s;}
+.hm .emopick:hover{background:#fff;border-color:var(--g300);}
+.hm .emopick.on{background:var(--green-lt);border-color:var(--green);}
 
 /* MISC */
 .hm .sdiv{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--g500);padding:2px 0 11px;}
@@ -1125,7 +1139,7 @@ flash:()=>`
 banners:()=>`
 <div class="card">
   <div class="card-body">
-    <p class="hint-p">The home banner carousel. Each banner can carry a per-language image and show by state, crop and event.</p>
+    <p class="hint-p">The home banner carousel — top to bottom is the carousel order (use ↑ ↓ to sort). Each banner can carry a per-language image and show by state, crop and event.</p>
     <div class="entry-list">
       ${bannerList.length?bannerList.map((b,i)=>bannerSummary(b,i)).join(''):'<p class="hint-p">No banners yet — add one below.</p>'}
     </div>
@@ -1553,7 +1567,9 @@ function bannerSummary(b,i){
   const st=(b.states||['All']).indexOf('All')>=0?'All states':b.states.join(', ');
   const cr=(b.crops||['All']).indexOf('All')>=0?'All crops':b.crops.join(', ');
   const nLang=Object.keys(b.imgByLang||{}).filter(k=>b.imgByLang[k]).length;
+  const n=bannerList.length;
   return `<div class="li" style="align-items:center">
+    <span class="ord" style="min-width:16px;text-align:center;font-size:11px;font-weight:800;color:var(--g400)">${i+1}</span>
     <div class="bthumb">${b.img?`<img src="${b.img}" alt=""/>`:'🖼️'}</div>
     <div class="li-body"><div class="li-sum">
       <span class="nm">${esc(b.name)}</span>
@@ -1561,12 +1577,15 @@ function bannerSummary(b,i){
       <span class="meta"><i class="fa-solid fa-location-dot"></i>${esc(st)} · 🌱 ${esc(cr)}${nLang?` · 🌐 ${nLang} language image${nLang!==1?'s':''}`:''}</span>
     </div></div>
     <div class="li-act">
+      <button class="ic-btn" title="Move up" onclick="bannerMove(${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button>
+      <button class="ic-btn" title="Move down" onclick="bannerMove(${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
       <div class="tg ${b.on?'on':''}" title="Enable / disable" onclick="bannerToggleIdx(${i})"></div>
       <button class="ic-btn" title="Edit" onclick="bannerEditIdx(${i})"><i class="fa-solid fa-pen"></i></button>
       <button class="ic-btn del" title="Delete" onclick="bannerDelIdx(${i})"><i class="fa-solid fa-trash"></i></button>
     </div>
   </div>`;
 }
+function bannerMove(i,d){ const j=i+d; if(j<0||j>=bannerList.length) return; const a=bannerList; [a[i],a[j]]=[a[j],a[i]]; bannerUI(); }
 function bannerToggleIdx(i){ bannerList[i].on=!bannerList[i].on; bannerUI(); }
 function bannerDelIdx(i){ bannerList.splice(i,1); bannerUI(); }
 function bannerBlank(){ return { id:'b'+Date.now().toString(36), name:'', link:'', img:'', imgByLang:{}, cond:'always', eventType:'festival', start:'', end:'', states:['All'], crops:['All'], on:true }; }
@@ -1652,7 +1671,8 @@ let _lastModalScroll=0;
 function _capScroll(){ const b=document.querySelector('#addModal .apv-box-body'); _lastModalScroll=b?b.scrollTop:0; }
 function _resScroll(){ const b=document.querySelector('#addModal .apv-box-body'); if(b) b.scrollTop=_lastModalScroll; }
 
-/* ── Earn Coins — task bunches with per-bunch targeting ── */
+/* ── Earn Coins — task bunches; name, targeting AND tasks all built in one flow ── */
+const TASK_ICONS=['✅','🔔','📍','🛒','🔍','🌾','🌱','💧','🐛','💰','🪙','⭐','🎁','📸','📝','🤝','📞','🚚','🧾','🏆','❤️'];
 function coinsUI(){ if(sel==='coins') pick('coins'); }
 function coinCondSum(b){
   const aud=b.audience.indexOf('all')>=0?'All users':b.audience.map(k=>(COIN_AUDS.find(a=>a.k===k)||{l:k}).l).join(', ');
@@ -1660,33 +1680,28 @@ function coinCondSum(b){
   const cr=b.crops.indexOf('All')>=0?'All crops':b.crops.join(', ');
   return `${aud} · ${st} · ${cr}`;
 }
-function coinTaskRow(bi,ti,t){ return `<div class="li" style="align-items:center">
-    <div class="ep" style="font-size:18px">${t.emoji||'✅'}</div>
-    <div class="li-body"><div class="li-sum"><span class="nm">${esc(t.task)}</span><span class="meta">🪙 ${esc(String(t.coins))} coins · ${esc(t.action)}</span></div></div>
-    <div class="li-act"><div class="tg ${t.on!==false?'on':''}" title="Enable / disable" onclick="coinTaskToggle(${bi},${ti})"></div>
-      <button class="ic-btn" title="Edit" onclick="coinTaskEdit(${bi},${ti})"><i class="fa-solid fa-pen"></i></button>
-      <button class="ic-btn del" title="Delete" onclick="coinTaskDel(${bi},${ti})"><i class="fa-solid fa-trash"></i></button></div>
-  </div>`; }
 function coinBunchCard(b,i){ return `<div class="bunch${b.on?'':' off'}">
     <div class="bunch-head">
       <div style="min-width:0;flex:1"><div class="bunch-nm">${esc(b.name)}</div><div class="bunch-cond"><i class="fa-solid fa-filter"></i> ${esc(coinCondSum(b))}</div></div>
       <div class="li-act"><div class="tg ${b.on?'on':''}" title="Enable / disable bunch" onclick="coinBunchToggle(${i})"></div>
-        <button class="ic-btn" title="Edit conditions" onclick="coinBunchEdit(${i})"><i class="fa-solid fa-pen"></i></button>
+        <button class="ic-btn" title="Edit bunch & tasks" onclick="coinBunchEdit(${i})"><i class="fa-solid fa-pen"></i></button>
         <button class="ic-btn del" title="Delete bunch" onclick="coinBunchDel(${i})"><i class="fa-solid fa-trash"></i></button></div>
     </div>
-    <div class="bunch-tasks">${b.tasks.length?b.tasks.map((t,ti)=>coinTaskRow(i,ti,t)).join(''):'<p class="hint" style="margin:2px 0 8px">No tasks in this bunch yet.</p>'}</div>
-    <button class="btn btn-s btn-sm" onclick="coinTaskAdd(${i})"><i class="fa-solid fa-plus"></i> Add task</button>
+    <div class="bunch-tasks">${b.tasks.length?b.tasks.map(t=>`<span class="task-chip${t.on===false?' off':''}">${t.emoji||'✅'} ${esc(t.task)} <b>🪙${esc(String(t.coins))}</b></span>`).join(''):'<span class="hint">No tasks yet</span>'}</div>
   </div>`; }
 function coinBunchToggle(i){ coinBunches[i].on=!coinBunches[i].on; coinsUI(); }
 function coinBunchDel(i){ coinBunches.splice(i,1); coinsUI(); }
-function coinTaskToggle(bi,ti){ const t=coinBunches[bi].tasks[ti]; t.on=(t.on===false); coinsUI(); }
-function coinTaskDel(bi,ti){ coinBunches[bi].tasks.splice(ti,1); coinsUI(); }
-/* bunch conditions modal (asked when creating a bunch) */
-function coinBunchAdd(){ coinBunchDraft={ id:'cb'+Date.now().toString(36), name:'', on:true, audience:['all'], states:['All'], crops:['All'], tasks:[] }; coinBunchIdx=-1; coinBunchRender(); }
-function coinBunchEdit(i){ coinBunchDraft=JSON.parse(JSON.stringify(coinBunches[i])); coinBunchIdx=i; coinBunchRender(); }
+/* one modal builds the whole bunch: name + targeting + its tasks (with icon picker) */
+function coinBunchAdd(){ coinBunchDraft={ id:'cb'+Date.now().toString(36), name:'', on:true, audience:['all'], states:['All'], crops:['All'], tasks:[], _iconOpen:-1 }; coinBunchIdx=-1; coinBunchRender(); }
+function coinBunchEdit(i){ coinBunchDraft=JSON.parse(JSON.stringify(coinBunches[i])); coinBunchDraft._iconOpen=-1; coinBunchIdx=i; coinBunchRender(); }
 function coinBunchCancel(){ coinBunchDraft=null; coinBunchIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); }
-function coinBunchSync(){ const n=document.getElementById('cbName'); if(n&&coinBunchDraft) coinBunchDraft.name=n.value; }
-function coinBunchSave(){ coinBunchSync(); const d=coinBunchDraft; if(!d.name) d.name='Task bunch';
+function coinBunchSync(){ const d=coinBunchDraft; if(!d) return;
+  const n=document.getElementById('cbName'); if(n) d.name=n.value;
+  d.tasks.forEach((t,ti)=>{ const l=document.getElementById('cbt_task_'+ti); if(l) t.task=l.value;
+    const c=document.getElementById('cbt_coins_'+ti); if(c) t.coins=c.value;
+    const a=document.getElementById('cbt_action_'+ti); if(a) t.action=a.value; });
+}
+function coinBunchSave(){ coinBunchSync(); const d=coinBunchDraft; if(!d.name) d.name='Task bunch'; delete d._iconOpen;
   if(coinBunchIdx>=0) coinBunches[coinBunchIdx]=d; else coinBunches.push(d);
   coinBunchDraft=null; coinBunchIdx=-1; const m=document.getElementById('addModal'); if(m)m.remove(); coinsUI(); }
 function cbAudTog(k){ coinBunchSync(); const d=coinBunchDraft; if(k==='all'){ d.audience=['all']; } else { let a=d.audience.filter(x=>x!=='all'); a.indexOf(k)>=0?a=a.filter(x=>x!==k):a.push(k); if(!a.length)a=['all']; d.audience=a; } coinBunchRender(); }
@@ -1694,34 +1709,43 @@ function cbStateAll(){ coinBunchSync(); coinBunchDraft.states=['All']; coinBunch
 function cbStateTog(st){ coinBunchSync(); let s=coinBunchDraft.states.filter(x=>x!=='All'); s.indexOf(st)>=0?s=s.filter(x=>x!==st):s.push(st); if(!s.length)s=['All']; coinBunchDraft.states=s; coinBunchRender(); }
 function cbCropAll(){ coinBunchSync(); coinBunchDraft.crops=['All']; coinBunchRender(); }
 function cbCropTog(i){ coinBunchSync(); const cr=CROPS[i]; let s=coinBunchDraft.crops.filter(x=>x!=='All'); s.indexOf(cr)>=0?s=s.filter(x=>x!==cr):s.push(cr); if(!s.length)s=['All']; coinBunchDraft.crops=s; coinBunchRender(); }
-function coinBunchRender(){ const ex=document.getElementById('addModal'); if(ex) ex.remove(); const d=coinBunchDraft; if(!d) return;
+/* tasks — inline in the bunch modal */
+function cbAddTask(){ coinBunchSync(); coinBunchDraft.tasks.push({emoji:'✅',task:'',coins:10,action:COIN_ACTIONS[0],on:true}); coinBunchDraft._iconOpen=-1; coinBunchRender(); }
+function cbDelTask(ti){ coinBunchSync(); coinBunchDraft.tasks.splice(ti,1); coinBunchDraft._iconOpen=-1; coinBunchRender(); }
+function cbTaskToggle(ti){ coinBunchSync(); const t=coinBunchDraft.tasks[ti]; t.on=(t.on===false); coinBunchRender(); }
+function cbIconToggle(ti){ coinBunchSync(); coinBunchDraft._iconOpen=(coinBunchDraft._iconOpen===ti?-1:ti); coinBunchRender(); }
+function cbSetIcon(ti,e){ coinBunchSync(); coinBunchDraft.tasks[ti].emoji=e; coinBunchDraft._iconOpen=-1; coinBunchRender(); }
+function cbTaskRows(d){ if(!d.tasks.length) return '<p class="hint" style="margin:2px 0 10px">No tasks yet — add the first one below.</p>';
+  return d.tasks.map((t,ti)=>`<div class="ctask">
+      <button class="ctask-ic" title="Change icon" onclick="cbIconToggle(${ti})">${t.emoji||'✅'}</button>
+      <input type="text" id="cbt_task_${ti}" class="ctask-lbl" value="${esc(t.task)}" placeholder="Task label"/>
+      <input type="number" id="cbt_coins_${ti}" class="ctask-coins" value="${esc(String(t.coins))}" title="Coins"/>
+      <select class="s ctask-act" id="cbt_action_${ti}">${COIN_ACTIONS.map(a=>`<option${t.action===a?' selected':''}>${a}</option>`).join('')}</select>
+      <div class="tg tg-mini ${t.on!==false?'on':''}" title="Enable / disable" onclick="cbTaskToggle(${ti})"></div>
+      <button class="ic-btn del" title="Remove task" onclick="cbDelTask(${ti})"><i class="fa-solid fa-trash"></i></button>
+    </div>${d._iconOpen===ti?`<div class="emo-grid">${TASK_ICONS.map(e=>`<span class="emopick ${t.emoji===e?'on':''}" onclick="cbSetIcon(${ti},'${e}')">${e}</span>`).join('')}</div>`:''}`).join('');
+}
+function coinBunchRender(){ _capScroll(); const ex=document.getElementById('addModal'); if(ex) ex.remove(); const d=coinBunchDraft; if(!d) return;
   const allS=d.states.indexOf('All')>=0, allC=d.crops.indexOf('All')>=0;
   const body=`
     <div class="row"><div class="fg"><label>Bunch name</label><input type="text" id="cbName" value="${esc(d.name)}" data-maxlen="30" placeholder="e.g. New farmer onboarding"/></div></div>
-    <div class="sub-l">Audience</div>
+    <div class="sub-l">Show this bunch to</div>
+    <div class="sub-l" style="font-weight:600;margin-top:2px">Audience</div>
     <div class="chip-row">${COIN_AUDS.map(a=>`<span class="cchip ${d.audience.indexOf(a.k)>=0?'on':''}" onclick="cbAudTog('${a.k}')">${a.l}</span>`).join('')}</div>
-    <div class="sub-l">States</div>
+    <div class="sub-l" style="font-weight:600">States</div>
     <div class="chip-row"><span class="cchip ${allS?'on':''}" onclick="cbStateAll()">All states</span> ${STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!allS&&d.states.indexOf(s)>=0)?'on':''}" onclick="cbStateTog('${s}')">${s}</span>`).join('')}</div>
-    <div class="sub-l">Crops the farmer grows</div>
-    <div class="chip-row"><span class="cchip ${allC?'on':''}" onclick="cbCropAll()">All crops</span> ${CROPS.map((c,i)=>`<span class="cchip ${(!allC&&d.crops.indexOf(c)>=0)?'on':''}" onclick="cbCropTog(${i})">${c}</span>`).join('')}</div>`;
+    <div class="sub-l" style="font-weight:600">Crops the farmer grows</div>
+    <div class="chip-row"><span class="cchip ${allC?'on':''}" onclick="cbCropAll()">All crops</span> ${CROPS.map((c,i)=>`<span class="cchip ${(!allC&&d.crops.indexOf(c)>=0)?'on':''}" onclick="cbCropTog(${i})">${c}</span>`).join('')}</div>
+    <div class="sub-l">Tasks in this bunch</div>
+    <div class="ctask-list">${cbTaskRows(d)}</div>
+    <button class="btn btn-s btn-sm" style="margin-top:2px" onclick="cbAddTask()"><i class="fa-solid fa-plus"></i> Add task</button>`;
   const html=`<div id="addModal"><div class="apv-scrim" onclick="coinBunchCancel()"></div>
-    <div class="apv-box"><div class="apv-box-head"><h3>${coinBunchIdx>=0?'Edit task bunch':'New task bunch'}</h3><button class="x-btn" onclick="coinBunchCancel()"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="apv-box" style="width:680px"><div class="apv-box-head"><h3>${coinBunchIdx>=0?'Edit task bunch':'New task bunch'}</h3><button class="x-btn" onclick="coinBunchCancel()"><i class="fa-solid fa-xmark"></i></button></div>
       <div class="apv-box-body">${body}</div>
       <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="coinBunchCancel()">Cancel</button><button class="btn btn-p btn-sm" onclick="coinBunchSave()"><i class="fa-solid fa-check"></i> ${coinBunchIdx>=0?'Save bunch':'Create bunch'}</button></div>
     </div></div>`;
   document.querySelector('.hm').insertAdjacentHTML('beforeend', html); _resScroll();
 }
-/* task modal (add/edit a task inside a bunch) */
-function coinTaskAdd(bi){ coinTaskBi=bi; coinTaskTi=-1; coinTaskModal({emoji:'✅',task:'',coins:10,action:'Enable Notifications',on:true}); }
-function coinTaskEdit(bi,ti){ coinTaskBi=bi; coinTaskTi=ti; coinTaskModal(JSON.parse(JSON.stringify(coinBunches[bi].tasks[ti]))); }
-function coinTaskModal(t){
-  amOpen(coinTaskTi>=0?'Edit task':'Add task',
-    `<div class="row"><div class="fg"><label>Task label</label><input type="text" id="ct_task" value="${esc(t.task)}" placeholder="e.g. Allow notifications"/></div></div>
-     <div class="row" style="margin-bottom:0"><div class="fg fix"><label>Coins</label><input type="number" id="ct_coins" style="width:100px" value="${esc(String(t.coins))}"/></div>
-       <div class="fg"><label>Action type</label><select class="s" id="ct_action">${COIN_ACTIONS.map(a=>`<option${t.action===a?' selected':''}>${a}</option>`).join('')}</select></div></div>`,
-    function(){ const nt={emoji:t.emoji||'✅',task:amVal('ct_task')||'New task',coins:amVal('ct_coins')||'10',action:amVal('ct_action'),on:t.on!==false};
-      if(coinTaskTi>=0) coinBunches[coinTaskBi].tasks[coinTaskTi]=nt; else coinBunches[coinTaskBi].tasks.push(nt); coinsUI(); },
-    coinTaskTi>=0?'Save':'Add'); }
 
 /* ── Shop by Crop — library + default sequence + state-wise sortings ── */
 function cropsUI(){ if(sel==='crops') pick('crops'); }

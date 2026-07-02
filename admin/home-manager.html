@@ -124,8 +124,11 @@
 .hm .ic-opt{height:40px;border:1.5px solid var(--g200);border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--g600);font-size:15px;transition:border .15s,background .15s,color .15s;}
 .hm .ic-opt:hover{border-color:var(--green);color:var(--green);}
 .hm .ic-opt.on{border-color:var(--green);background:var(--green-lt);color:var(--green);}
-.hm .cat-ic{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
-.hm .cat-ic img{width:78%;height:78%;object-fit:contain;}
+.hm .cat-ic{width:50px;height:44px;border-radius:10px;display:flex;align-items:flex-end;justify-content:center;flex-shrink:0;overflow:hidden;}
+.hm .cat-ic img{object-fit:contain;object-position:bottom;filter:drop-shadow(0 2px 2px rgba(0,0,0,.16));}
+.hm .cat-ic img.b{height:66%;max-width:42%;margin-right:-7px;z-index:1;}
+.hm .cat-ic img.f{height:84%;max-width:66%;position:relative;z-index:2;}
+.hm .cat-ic i{font-size:15px;color:#64748B;align-self:center;}
 .hm .ed-toggle{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:700;color:var(--g600,#475569);cursor:pointer;}
 .hm .ed-lock{font-size:12px;font-weight:700;color:var(--g500,#64748B);background:var(--g100,#F1F5F9);padding:6px 11px;border-radius:8px;white-space:nowrap;}
 .hm .sec-hidden{font-size:10px;font-weight:700;color:var(--g500,#64748B);background:var(--g100,#F1F5F9);padding:2px 8px;border-radius:9999px;flex-shrink:0;}
@@ -159,7 +162,14 @@
 /* LIST ITEM */
 .hm .li{display:flex;align-items:flex-start;gap:8px;padding:11px;border:1px solid var(--g200);border-radius:8px;margin-bottom:7px;background:#fff;}
 .hm .li-body{flex:1;min-width:0;}
-.hm .li-act{display:flex;gap:4px;flex-shrink:0;}
+.hm .li-act{display:flex;gap:4px;flex-shrink:0;align-items:center;}
+.hm .li-sum{display:flex;flex-direction:column;gap:3px;padding:2px 0;}
+.hm .li-sum .nm{font-size:13px;font-weight:700;color:var(--g800);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hm .li-sum .meta{font-size:11.5px;color:var(--g500);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hm .li-sum .meta i{color:var(--g400);width:11px;text-align:center;margin-right:2px;}
+.hm .ic-btn{width:30px;height:30px;border:1px solid var(--g200);border-radius:7px;background:#fff;color:var(--g500);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.hm .ic-btn:hover{background:var(--g50);color:var(--g800);}
+.hm .ic-btn.del:hover{background:#FEE2E2;color:var(--red);border-color:#FECACA;}
 
 /* MISC */
 .hm .sdiv{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--g500);padding:2px 0 11px;}
@@ -702,7 +712,7 @@ function entryRow(t,i){
     : `<div class="eh-top">
         <div class="tt-prev sm" style="background:${themeGrad(t)}">${(t.bg&&t.bg.image)?`<img src="${t.bg.image}" alt=""/>`:''}</div>
         <div style="min-width:0;flex:1">
-          <div class="eh-name">${esc(t.name)}${isDef?' <span class="tt-def">default</span>':''}${t.id===teLiveId?' <span class="tt-live"><span class="dot"></span> Live</span>':''}</div>
+          <div class="eh-name">${esc(t.name)}${isDef?' <span class="tt-def">default</span>':''}</div>
           <div class="eh-sub">${triggerBadge(t)}</div>
         </div>
         ${isDef?'<span class="tt-lock" title="Always on">🔒</span>':`<div class="tg tg-mini ${t.enabled?'on':''}" title="Enable / disable theme" onclick="themeToggle('${t.id}')"></div>`}
@@ -923,7 +933,7 @@ search:()=>`
     <div class="sdiv">Rotating hints</div>
     <div class="row"><div class="fg fix"><label>Rotation interval (sec)</label><input type="number" style="width:140px;" value="3"/></div></div>
     <div id="phList">
-      ${['Search Humic, Antivirus…','Search by crop or problem','Try "NPK 19:19:19"'].map(phRow).join('')}
+      ${['Search Humic, Antivirus…','Search by crop or problem','Try "NPK 19:19:19"'].map(t=>LISTS.ph.row({text:t,_on:true})).join('')}
     </div>
     <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addPlaceholder()">+ Add hint</button>
   </div>
@@ -935,20 +945,13 @@ cats:()=>`
   <div class="card-body">
     ${LT()}
     <div id="catList">
-      ${[{img:'chakrawarti',c:'#BFE8CB',n:'Pesticide'},{img:'antivirus',c:'#F9CFE0',n:'Fungicide'},{img:'humic',c:'#FCE7AE',n:'Fertilizer'},{img:'triple',c:'#FAD0BC',n:'Herbicide'},{img:'npk',c:'#D2DAF7',n:'Combo'}].map(c=>`
-      <div class="li">
-        <span class="drag-h">⠿</span>
-        <div class="cat-ic" style="background:${c.c}"><img src="../assets/cat/pool/${c.img}.png" alt=""/></div>
-        <div class="li-body">
-          <div class="row" style="margin-bottom:0;">
-            <div class="fg fix"><label>Category</label><div style="font-size:13px;font-weight:700;padding:8px 0">${c.n}</div></div>
-            <div class="fg"><label>Deeplink</label><input type="text" value="/categories?cat=${c.n.toLowerCase()}"/></div>
-          </div>
-        </div>
-        <div class="li-act" style="padding-top:16px;">
-          <div class="tg on" onclick="this.classList.toggle('on')"></div>
-        </div>
-      </div>`).join('')}
+      ${[
+        {n:'Pesticide',c:'#BFE8CB',b:'chakraveer',f:'chakrawarti'},
+        {n:'Fungicide',c:'#F9CFE0',b:'bhannat',f:'antivirus'},
+        {n:'Fertilizer',c:'#FCE7AE',b:'npk',f:'humic'},
+        {n:'Herbicide',c:'#FAD0BC',b:'bhumiraja',f:'triple'},
+        {n:'Combo',c:'#D2DAF7',b:'npk',f:'chakrawarti'},
+      ].map(c=>LISTS.cat.row({name:c.n,link:'/categories?cat='+c.n.toLowerCase(),color:c.c,b:c.b,f:c.f,_on:true})).join('')}
     </div>
     <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addCat()">+ Add Category</button>
   </div>
@@ -958,23 +961,9 @@ cats:()=>`
 ordstatus:()=>`
 <div class="card">
   <div class="card-body">
-    ${TG('os1',true,'Show Order Status Bar','Sticky bar with live order status above categories')}
-    ${TG('os2',true,'Show Full Expanded Card','Full tracking card visible when user scrolls to top')}
-    <div style="margin-top:14px;" class="sdiv">Position</div>
-    <div class="row"><div class="fg" style="max-width:260px;"><label>Show After</label>
-      <select class="s"><option>Categories</option><option>Offer Strip</option><option>Search Bar</option></select>
-    </div></div>
-    <div class="sdiv">Order Details</div>
-    <div class="row">
-      <div class="fg fix"><label>Status Color</label><div class="color-r"><input type="color" value="#258046"/><span>#258046</span></div></div>
+    <div class="row" style="margin-bottom:0">
+      <div class="fg fix"><label>Tile background color</label><div class="color-r"><input type="color" value="#F0F7F2"/><span>#F0F7F2</span></div></div>
     </div>
-    <div class="sdiv">Progress Stages</div>
-    <div class="row">
-      <div class="fg fix"><label>Active Stage Color</label><div class="color-r"><input type="color" value="#258046"/><span>#258046</span></div></div>
-    </div>
-    ${TG('os3',true,'Show pagination dots','Carousel position dots below the card')}
-    ${TG('os4',false,'Multi-order carousel','Swipe between multiple active orders')}
-    ${TG('os5',true,'Show product thumbnails','Item images inside the order card')}
   </div>
 </div>`,
 
@@ -985,40 +974,12 @@ coins:()=>`
     <div class="sdiv">Tasks (shown in drawer)</div>
     <div id="taskList">
       ${[
-        {e:'🔔',t:'Allow notifications',c:10,a:'enable_notifications'},
-        {e:'📍',t:'Allow location',c:10,a:'enable_location'},
-        {e:'🛒',t:'Add to cart',c:15,a:'add_to_cart'},
-        {e:'🔍',t:'Search product',c:10,a:'search'},
-        {e:'🌾',t:'Add crop',c:50,a:'add_crop'},
-      ].map(t=>`
-      <div class="li">
-        <span class="drag-h">⠿</span>
-        <div class="ep" onclick="promptE(this)" style="font-size:18px;">${t.e}</div>
-        <div class="li-body">
-          <div class="row" style="margin-bottom:8px;">
-            <div class="fg"><label>Task</label><div style="font-size:13px;font-weight:700;padding:8px 0">${t.t}</div></div>
-            <div class="fg fix"><label>Coins</label><input type="number" style="width:80px;" value="${t.c}"/></div>
-          </div>
-          <div class="row" style="margin-bottom:0;">
-            <div class="fg"><label>Action Type</label>
-              <select class="s">
-                <option value="enable_notifications"${t.a==='enable_notifications'?' selected':''}>Enable Notifications</option>
-                <option value="enable_location"${t.a==='enable_location'?' selected':''}>Enable Location</option>
-                <option value="add_to_cart"${t.a==='add_to_cart'?' selected':''}>Add to Cart</option>
-                <option value="search"${t.a==='search'?' selected':''}>Search Product</option>
-                <option value="add_crop"${t.a==='add_crop'?' selected':''}>Add Crop</option>
-                <option value="make_purchase">Make Purchase</option>
-                <option value="rate_product">Rate Product</option>
-                <option value="refer_friend">Refer Friend</option>
-                <option value="deeplink">Custom Deeplink</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="li-act" style="padding-top:16px;">
-          <div class="tg on" onclick="this.classList.toggle('on')"></div>
-                  </div>
-      </div>`).join('')}
+        {e:'🔔',t:'Allow notifications',c:10,a:'Enable Notifications'},
+        {e:'📍',t:'Allow location',c:10,a:'Enable Location'},
+        {e:'🛒',t:'Add to cart',c:15,a:'Add to Cart'},
+        {e:'🔍',t:'Search product',c:10,a:'Search Product'},
+        {e:'🌾',t:'Add crop',c:50,a:'Add Crop'},
+      ].map(t=>LISTS.task.row({emoji:t.e,task:t.t,coins:t.c,action:t.a,_on:true})).join('')}
     </div>
     <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addTask()">+ Add Task</button>
   </div>
@@ -1061,27 +1022,9 @@ banners:()=>`
     <div data-img-hint="banner" style="margin-bottom:10px"></div>
     <div id="bnList">
       ${[
-        {nm:'Mega Krishi Bachat Mela',link:'/shop?sale=mela',states:['All States'],lang:'All'},
-        {nm:'Hot Combo BOGO',link:'/shop?filter=combo',states:['MP','UP'],lang:'HI'},
-      ].map(b=>`
-      <div class="li" style="flex-direction:column;gap:11px;align-items:stretch;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span class="drag-h">⠿</span>
-          <div class="bimg" style="flex:1;" onclick="this.querySelector('input').click()">🖼️ ${b.nm}<input type="file" accept="image/*" style="display:none;"/></div>
-          <div class="li-act">
-            <div class="tg on" onclick="this.classList.toggle('on')"></div>
-                      </div>
-        </div>
-        <div class="row" style="margin-bottom:8px;">
-          <div class="fg"><label>Deeplink</label><input type="text" value="${b.link}"/></div>
-        </div>
-        <div class="row" style="margin-bottom:8px;">
-          <div class="fg fix"><label>Language</label><select class="s"><option>All</option>${LANGS.map(l=>`<option${b.lang===l.l?' selected':''}>${l.l}</option>`).join('')}</select></div>
-          <div class="fg"><label>Start</label><input type="datetime-local" value="2026-06-01T00:00"/></div>
-          <div class="fg"><label>End</label><input type="datetime-local" value="2026-06-30T23:59"/></div>
-        </div>
-        <div><label>Target States</label>${SP(b.states)}</div>
-      </div>`).join('')}
+        {nm:'Mega Krishi Bachat Mela',link:'/shop?sale=mela',states:'All States',lang:'All',start:'2026-06-01',end:'2026-06-30'},
+        {nm:'Hot Combo BOGO',link:'/shop?filter=combo',states:'MP, UP',lang:'HI',start:'2026-06-01',end:'2026-06-30'},
+      ].map(b=>LISTS.banner.row({name:b.nm,link:b.link,lang:b.lang,states:b.states,start:b.start,end:b.end,_on:true})).join('')}
     </div>
     <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="addBanner()">+ Add Banner</button>
   </div>
@@ -1153,22 +1096,9 @@ featured:()=>`
   <div class="card-body">
     <div id="fcList">
       ${[
-        {nm:'Insecticide Showcase',color:'#1B6B3A',prods:['Chakrawarti ZC','Chakraveer'],states:['All States']},
-        {nm:'Fertilizer Fest',color:'#7C3AED',prods:['Humic + Fulvic 98','NPK 19-19-19'],states:['MP','UP']},
-      ].map(col=>`
-      <div class="li" style="flex-direction:column;gap:11px;align-items:stretch;margin-bottom:10px;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span class="drag-h">⠿</span>
-          <strong style="flex:1;font-size:13px;">${col.nm}</strong>
-          <div class="tg on" onclick="this.classList.toggle('on')"></div>
-                  </div>
-        <div class="row" style="margin-bottom:8px;">
-          <div class="fg fix"><label>Card BG Color</label><div class="color-r"><input type="color" value="${col.color}"/></div></div>
-          <div class="fg"><label>Language</label><select class="s"><option>All</option>${LANGS.map(l=>`<option>${l.l}</option>`).join('')}</select></div>
-        </div>
-        <div><label>Products</label><div style="margin-top:5px;">${col.prods.map(p=>newPChip(p)).join('')}${newPAdd('addFC')}</div></div>
-        <div><label>Target States</label>${SP(col.states)}</div>
-      </div>`).join('')}
+        {nm:'Insecticide Showcase',color:'#1B6B3A',prods:'Chakrawarti ZC, Chakraveer',states:'All States'},
+        {nm:'Fertilizer Fest',color:'#7C3AED',prods:'Humic + Fulvic 98, NPK 19-19-19',states:'MP, UP'},
+      ].map(col=>LISTS.coll.row({name:col.nm,color:col.color,lang:'All',prods:col.prods,states:col.states,_on:true})).join('')}
     </div>
     <button class="btn btn-s btn-sm" onclick="addFColl()">+ Add Collection</button>
   </div>
@@ -1180,37 +1110,13 @@ widgets:()=>`
   <div class="card-body">
     <div id="wList">
       ${[
-        {e:'🌾',t:'Which crop do you grow most?',c:'+15 coins',type:'multi_choice',opts:'Wheat,Cotton,Tomato,Other',act:'set_crop'},
-        {e:'🐛',t:'Facing any crop problem now?',c:'+15 coins',type:'multi_choice',opts:'Pest,Disease,Weeds,Nutrition',act:'crop_problem'},
-        {e:'💬',t:'Share your success story with KKD',c:'+30 coins',type:'cta',cta:'Share testimonial',act:'deeplink:/testimonials/submit'},
-        {e:'🎁',t:'Refer a friend, earn ₹50 each',c:'₹50',type:'cta',cta:'Invite a friend',act:'deeplink:/refer'},
-        {e:'🚚',t:'Did your last order arrive OK?',c:'+10 coins',type:'yes_no',opts:'Yes,No',act:'delivery_feedback'},
-        {e:'⭐',t:'Rate your recent purchase',c:'+25 coins',type:'cta',cta:'Rate & review',act:'deeplink:/rate'},
-      ].map(w=>`
-      <div class="wi">
-        <div class="wi-head">
-          <div style="display:flex;align-items:center;gap:7px;min-width:0;">
-            <span style="cursor:grab;color:var(--g300);font-size:17px;">⠿</span>
-            <div class="ep" onclick="promptE(this)" style="font-size:18px;">${w.e}</div>
-            <span class="wi-title">${w.t}</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:7px;">
-            <div class="tg on" onclick="this.classList.toggle('on')"></div>
-                      </div>
-        </div>
-        <div class="row" style="margin-bottom:10px;">
-          <div class="fg"><label>Type</label>
-            <select class="s">
-              <option value="multi_choice"${w.type==='multi_choice'?' selected':''}>Multi Choice</option>
-              <option value="yes_no"${w.type==='yes_no'?' selected':''}>Yes / No</option>
-              <option value="cta"${w.type==='cta'?' selected':''}>CTA Button</option>
-              <option value="rating">Star Rating</option>
-              <option value="input">Text Input</option>
-            </select>
-          </div>
-        </div>
-        <div class="fg"><label>Action / Deeplink</label><input type="text" value="${w.act}"/></div>
-      </div>`).join('')}
+        {e:'🌾',t:'Which crop do you grow most?',type:'Multi Choice',act:'set_crop'},
+        {e:'🐛',t:'Facing any crop problem now?',type:'Multi Choice',act:'crop_problem'},
+        {e:'💬',t:'Share your success story with KKD',type:'CTA Button',act:'deeplink:/testimonials/submit'},
+        {e:'🎁',t:'Refer a friend, earn ₹50 each',type:'CTA Button',act:'deeplink:/refer'},
+        {e:'🚚',t:'Did your last order arrive OK?',type:'Yes / No',act:'delivery_feedback'},
+        {e:'⭐',t:'Rate your recent purchase',type:'CTA Button',act:'deeplink:/rate'},
+      ].map(w=>LISTS.widget.row({emoji:w.e,title:w.t,type:w.type,action:w.act,_on:true})).join('')}
     </div>
     <button class="btn btn-s btn-sm" onclick="addWidget()">+ Add New Widget</button>
   </div>
@@ -1227,21 +1133,9 @@ testi:()=>`
     <div class="sdiv">Testimonials</div>
     <div id="tmList">
       ${[
-        {f:'Ramesh Patel',cr:'Tomato',loc:'Indore',cap:'"Tomato result in 15 days"'},
-        {f:'Mohan Verma',cr:'Cotton',loc:'Khandwa',cap:'"Yield up by 20%"'},
-      ].map(t=>`
-      <div class="tc">
-        <div class="tc-thumb" onclick="this.querySelector('input').click()">▶️<input type="file" accept="video/*" style="display:none;"/></div>
-        <div class="tc-body">
-          <div class="row" style="margin-bottom:0;">
-            <div class="fg"><label>Testimonial</label><div style="font-size:13px;font-weight:700;padding:8px 0">${t.f} · ${t.cr} · ${t.loc}</div></div>
-            <div class="fg"><label>Video URL (YouTube/Drive)</label><input type="text" placeholder="https://…"/></div>
-          </div>
-        </div>
-        <div class="tc-act">
-          <div class="tg on" onclick="this.classList.toggle('on')"></div>
-                  </div>
-      </div>`).join('')}
+        {f:'Ramesh Patel',cr:'Tomato',loc:'Indore',url:''},
+        {f:'Mohan Verma',cr:'Cotton',loc:'Khandwa',url:''},
+      ].map(t=>LISTS.testi.row({name:t.f,crop:t.cr,loc:t.loc,url:t.url,_on:true})).join('')}
     </div>
     <button class="btn btn-s btn-sm" onclick="addTesti()">+ Add Testimonial</button>
   </div>
@@ -1426,92 +1320,134 @@ function sbForm(it){
   `;
 }
 
-/* Search bar · rotating placeholder text list */
-function phRow(p){ return `
-  <div class="li">
-    <span class="drag-h">⠿</span>
-    <div class="li-body"><div class="row" style="margin-bottom:0;"><div class="fg"><label>Placeholder text</label><input type="text" value="${esc(p||'')}" placeholder="Search products…"/></div></div></div>
-    <div class="li-act" style="padding-top:16px;"><div class="tg on" onclick="this.classList.toggle('on')"></div></div>
-  </div>`; }
 /* generic Add modal — every "Add" opens a modal (fill details → Add); no inline bottom row */
 function amClose(){ const m=document.getElementById('addModal'); if(m) m.remove(); }
 function amVal(id){ const el=document.getElementById(id); return el?el.value:''; }
-function amOpen(title, bodyHTML, saveFn){
+function amOpen(title, bodyHTML, saveFn, saveLabel){
   amClose();
+  const lbl=saveLabel||'Add';
   const html=`<div id="addModal"><div class="apv-scrim" onclick="amClose()"></div>
     <div class="apv-box">
       <div class="apv-box-head"><h3>${title}</h3><button class="x-btn" onclick="amClose()"><i class="fa-solid fa-xmark"></i></button></div>
       <div class="apv-box-body">${bodyHTML}</div>
-      <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="amClose()">Cancel</button><button class="btn btn-p btn-sm" id="amSave"><i class="fa-solid fa-check"></i> Add</button></div>
+      <div class="apv-box-foot"><button class="btn btn-s btn-sm" onclick="amClose()">Cancel</button><button class="btn btn-p btn-sm" id="amSave"><i class="fa-solid fa-check"></i> ${lbl}</button></div>
     </div></div>`;
   document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
   document.getElementById('amSave').onclick=function(){ if(saveFn()!==false) amClose(); };
 }
-function addPlaceholder(){ amOpen('Add search hint',
-  `<div class="row" style="margin-bottom:0"><div class="fg"><label>Placeholder text</label><input type="text" id="am_v" placeholder="Search products…"/></div></div>`,
-  function(){ document.getElementById('phList').insertAdjacentHTML('beforeend', phRow(amVal('am_v'))); }); }
 
-function addCat(){ amOpen('Add category',
-  `<div class="row"><div class="fg"><label>Category name</label><input type="text" id="am_n" placeholder="e.g. Organic"/></div></div>
-   <div class="row" style="margin-bottom:0"><div class="fg"><label>Deeplink</label><input type="text" id="am_l" placeholder="/categories?cat=new"/></div></div>`,
-  function(){ const n=esc(amVal('am_n')||'New category'), l=esc(amVal('am_l')||'/categories?cat=new');
-    document.getElementById('catList').insertAdjacentHTML('beforeend',
-     `<div class="li"><span class="drag-h">⠿</span><div class="cat-ic" style="background:#EEF2F7"><i class="fa-solid fa-shapes" style="font-size:15px;color:#64748B"></i></div>
-      <div class="li-body"><div class="row" style="margin-bottom:0"><div class="fg fix"><label>Category</label><div style="font-size:13px;font-weight:700;padding:8px 0">${n}</div></div><div class="fg"><label>Deeplink</label><input type="text" value="${l}"/></div></div></div>
-      <div class="li-act" style="padding-top:16px"><div class="tg on" onclick="this.classList.toggle('on')"></div></div></div>`); }); }
+/* ===== Unified list framework: Add + Edit open the SAME modal; every row has Edit + Delete ===== */
+function encD(d){ return JSON.stringify(d).replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function listDel(btn){ btn.closest('.li,.wi,.tc').remove(); }
+function listEdit(btn){ const r=btn.closest('.li,.wi,.tc'); listModal(r.dataset.lk, r); }
+function listAdd(key){ listModal(key, null); }
+function listModal(key, rowEl){
+  const cfg=LISTS[key];
+  const d = rowEl ? Object.assign({}, cfg.def(), JSON.parse(rowEl.dataset.d)) : cfg.def();
+  const on = rowEl ? rowEl.querySelector('.tg').classList.contains('on') : true;
+  amOpen((rowEl?'Edit ':'Add ')+cfg.title, cfg.fields(d), function(){
+    const nd = cfg.collect(d); nd._on = on;
+    const html = cfg.row(nd);
+    if(rowEl){ rowEl.insertAdjacentHTML('beforebegin', html); rowEl.remove(); }
+    else document.getElementById(cfg.listId).insertAdjacentHTML('beforeend', html);
+  }, rowEl?'Save':'Add');
+}
+/* shared row action cluster (toggle + edit + delete) */
+function liAct(key,d){ return `<div class="li-act"><div class="tg ${d._on===false?'':'on'}" onclick="this.classList.toggle('on')"></div>
+  <button class="ic-btn" onclick="listEdit(this)" title="Edit"><i class="fa-solid fa-pen"></i></button>
+  <button class="ic-btn del" onclick="listDel(this)" title="Delete"><i class="fa-solid fa-trash"></i></button></div>`; }
+function liTag(key,d){ return `data-lk="${key}" data-d='${encD(d)}'`; }
 
-function addTask(){ const acts=['Enable Notifications','Enable Location','Add to Cart','Search Product','Add Crop','Make Purchase','Rate Product','Refer Friend','Custom Deeplink']; amOpen('Add earn-coins task',
-  `<div class="row"><div class="fg fix"><label>Coins</label><input type="number" id="am_c" style="width:100px" value="10"/></div>
-   <div class="fg"><label>Action type</label><select class="s" id="am_a">${acts.map(a=>`<option>${a}</option>`).join('')}</select></div></div>`,
-  function(){ const c=esc(amVal('am_c')||'10'), a=esc(amVal('am_a')||acts[0]);
-    document.getElementById('taskList').insertAdjacentHTML('beforeend',
-     `<div class="li"><span class="drag-h">⠿</span><div class="ep" onclick="promptE(this)" style="font-size:18px">✅</div>
-      <div class="li-body"><div class="row" style="margin-bottom:8px"><div class="fg fix"><label>Coins</label><input type="number" style="width:80px" value="${c}"/></div></div>
-      <div class="row" style="margin-bottom:0"><div class="fg"><label>Action Type</label><select class="s"><option>${a}</option></select></div></div></div>
-      <div class="li-act" style="padding-top:16px"><div class="tg on" onclick="this.classList.toggle('on')"></div></div></div>`); }); }
+const LISTS={
+  ph:{ listId:'phList', title:'search hint',
+    def:()=>({text:''}),
+    fields:d=>`<div class="row" style="margin-bottom:0"><div class="fg"><label>Placeholder text</label><input type="text" id="am_text" value="${esc(d.text)}" placeholder="Search products…"/></div></div>`,
+    collect:d=>({text:amVal('am_text')}),
+    row:d=>`<div class="li" ${liTag('ph',d)}><span class="drag-h">⠿</span>
+      <div class="li-body"><div class="li-sum"><span class="nm">${esc(d.text||'Search hint')}</span></div></div>${liAct('ph',d)}</div>` },
+
+  cat:{ listId:'catList', title:'category',
+    def:()=>({name:'',link:'',color:'#EEF2F7',b:'',f:''}),
+    fields:d=>`<div class="row"><div class="fg"><label>Category name</label><input type="text" id="am_name" value="${esc(d.name)}" placeholder="e.g. Organic"/></div></div>
+      <div class="row"><div class="fg fix"><label>Card color</label><div class="color-r"><input type="color" id="am_color" value="${d.color||'#BFE8CB'}"/></div></div></div>
+      <div class="row" style="margin-bottom:0"><div class="fg"><label>Deeplink</label><input type="text" id="am_link" value="${esc(d.link)}" placeholder="/categories?cat=new"/></div></div>`,
+    collect:d=>({name:amVal('am_name')||'New category',link:amVal('am_link')||'/categories?cat=new',color:amVal('am_color')||d.color,b:d.b,f:d.f}),
+    row:d=>`<div class="li" ${liTag('cat',d)}><span class="drag-h">⠿</span>
+      <div class="cat-ic" style="background:${d.color||'#EEF2F7'}">${d.f?`${d.b?`<img class="b" src="../assets/cat/pool/${d.b}.png" alt=""/>`:''}<img class="f" src="../assets/cat/pool/${d.f}.png" alt=""/>`:`<i class="fa-solid fa-shapes"></i>`}</div>
+      <div class="li-body"><div class="li-sum"><span class="nm">${esc(d.name)}</span><span class="meta"><i class="fa-solid fa-link"></i>${esc(d.link)}</span></div></div>${liAct('cat',d)}</div>` },
+
+  task:{ listId:'taskList', title:'earn-coins task',
+    def:()=>({emoji:'✅',task:'',coins:10,action:'Enable Notifications'}),
+    fields:d=>`<div class="row"><div class="fg"><label>Task label</label><input type="text" id="am_task" value="${esc(d.task)}" placeholder="e.g. Allow notifications"/></div></div>
+      <div class="row" style="margin-bottom:0"><div class="fg fix"><label>Coins</label><input type="number" id="am_coins" style="width:100px" value="${esc(String(d.coins))}"/></div>
+      <div class="fg"><label>Action type</label><select class="s" id="am_action">${['Enable Notifications','Enable Location','Add to Cart','Search Product','Add Crop','Make Purchase','Rate Product','Refer Friend','Custom Deeplink'].map(a=>`<option${d.action===a?' selected':''}>${a}</option>`).join('')}</select></div></div>`,
+    collect:d=>({emoji:d.emoji||'✅',task:amVal('am_task')||'New task',coins:amVal('am_coins')||'10',action:amVal('am_action')}),
+    row:d=>`<div class="li" ${liTag('task',d)}><span class="drag-h">⠿</span>
+      <div class="ep" onclick="promptE(this)" style="font-size:18px">${d.emoji||'✅'}</div>
+      <div class="li-body"><div class="li-sum"><span class="nm">${esc(d.task)}</span><span class="meta">🪙 ${esc(String(d.coins))} coins · ${esc(d.action)}</span></div></div>${liAct('task',d)}</div>` },
+
+  banner:{ listId:'bnList', title:'promo banner',
+    def:()=>({name:'',link:'',lang:'All',states:'All States',start:'',end:''}),
+    fields:d=>`<div class="bimg" style="width:100%;margin-bottom:12px" onclick="this.querySelector('input').click()">🖼️ ${d.name?esc(d.name):'Click to upload banner'}<input type="file" accept="image/*" style="display:none"/></div>
+      <div class="row"><div class="fg"><label>Banner name</label><input type="text" id="am_name" value="${esc(d.name)}" placeholder="e.g. Mega Sale"/></div></div>
+      <div class="row"><div class="fg"><label>Deeplink</label><input type="text" id="am_link" value="${esc(d.link)}" placeholder="/shop?sale=…"/></div></div>
+      <div class="row"><div class="fg fix"><label>Language</label><select class="s" id="am_lang"><option>All</option>${LANGS.map(l=>`<option${d.lang===l.l?' selected':''}>${l.l}</option>`).join('')}</select></div>
+        <div class="fg"><label>Target states</label><input type="text" id="am_states" value="${esc(d.states)}" placeholder="All States or MP, UP"/></div></div>
+      <div class="row" style="margin-bottom:0"><div class="fg"><label>Start</label><input type="date" id="am_start" value="${esc(d.start)}"/></div><div class="fg"><label>End</label><input type="date" id="am_end" value="${esc(d.end)}"/></div></div>`,
+    collect:d=>({name:amVal('am_name')||'New banner',link:amVal('am_link'),lang:amVal('am_lang')||'All',states:amVal('am_states')||'All States',start:amVal('am_start'),end:amVal('am_end')}),
+    row:d=>`<div class="li" style="flex-direction:column;gap:11px;align-items:stretch" ${liTag('banner',d)}>
+      <div style="display:flex;align-items:center;gap:8px"><span class="drag-h">⠿</span>
+        <div class="bimg" style="flex:1" onclick="this.querySelector('input').click()">🖼️ ${esc(d.name)}<input type="file" accept="image/*" style="display:none"/></div>${liAct('banner',d)}</div>
+      <div class="li-sum"><span class="meta"><i class="fa-solid fa-link"></i>${esc(d.link)||'—'}</span><span class="meta">🌐 ${esc(d.lang)} · 📍 ${esc(d.states)}</span></div></div>` },
+
+  coll:{ listId:'fcList', title:'collection',
+    def:()=>({name:'',color:'#1B6B3A',lang:'All',prods:'',states:'All States'}),
+    fields:d=>`<div class="row"><div class="fg"><label>Collection name</label><input type="text" id="am_name" value="${esc(d.name)}" placeholder="e.g. Monsoon picks"/></div></div>
+      <div class="row"><div class="fg fix"><label>Card BG color</label><div class="color-r"><input type="color" id="am_color" value="${d.color||'#1B6B3A'}"/></div></div>
+        <div class="fg"><label>Language</label><select class="s" id="am_lang"><option>All</option>${LANGS.map(l=>`<option${d.lang===l.l?' selected':''}>${l.l}</option>`).join('')}</select></div></div>
+      <div class="row"><div class="fg"><label>Products</label><input type="text" id="am_prods" value="${esc(d.prods)}" placeholder="Comma separated"/></div></div>
+      <div class="row" style="margin-bottom:0"><div class="fg"><label>Target states</label><input type="text" id="am_states" value="${esc(d.states)}" placeholder="All States or MP, UP"/></div></div>`,
+    collect:d=>({name:amVal('am_name')||'New collection',color:amVal('am_color')||'#1B6B3A',lang:amVal('am_lang')||'All',prods:amVal('am_prods'),states:amVal('am_states')||'All States'}),
+    row:d=>`<div class="li" style="flex-direction:column;gap:11px;align-items:stretch" ${liTag('coll',d)}>
+      <div style="display:flex;align-items:center;gap:8px"><span class="drag-h">⠿</span>
+        <span class="cat-ic" style="background:${d.color||'#1B6B3A'};width:22px;height:22px;border-radius:5px"></span>
+        <strong style="flex:1;font-size:13px">${esc(d.name)}</strong>${liAct('coll',d)}</div>
+      <div class="li-sum"><span class="meta">🌱 ${esc(d.prods)||'—'}</span><span class="meta">🌐 ${esc(d.lang)} · 📍 ${esc(d.states)}</span></div></div>` },
+
+  widget:{ listId:'wList', title:'widget',
+    def:()=>({emoji:'🆕',title:'',type:'Multi Choice',action:''}),
+    fields:d=>`<div class="row"><div class="fg"><label>Widget title</label><input type="text" id="am_title" value="${esc(d.title)}" placeholder="e.g. Crop quiz"/></div></div>
+      <div class="row"><div class="fg"><label>Type</label><select class="s" id="am_type">${['Multi Choice','Yes / No','CTA Button','Star Rating','Text Input'].map(t=>`<option${d.type===t?' selected':''}>${t}</option>`).join('')}</select></div></div>
+      <div class="row" style="margin-bottom:0"><div class="fg"><label>Action / Deeplink</label><input type="text" id="am_action" value="${esc(d.action)}" placeholder="deeplink:/path or action_name"/></div></div>`,
+    collect:d=>({emoji:d.emoji||'🆕',title:amVal('am_title')||'New widget',type:amVal('am_type')||'Multi Choice',action:amVal('am_action')}),
+    row:d=>`<div class="wi" ${liTag('widget',d)}><div class="wi-head">
+        <div style="display:flex;align-items:center;gap:7px;min-width:0"><span style="cursor:grab;color:var(--g300);font-size:17px">⠿</span><div class="ep" onclick="promptE(this)" style="font-size:18px">${d.emoji||'🆕'}</div><span class="wi-title">${esc(d.title)}</span></div>
+        ${liAct('widget',d)}</div>
+      <div class="li-sum"><span class="meta">🧩 ${esc(d.type)} · <i class="fa-solid fa-link"></i>${esc(d.action)||'—'}</span></div></div>` },
+
+  testi:{ listId:'tmList', title:'testimonial',
+    def:()=>({name:'',crop:'',loc:'',url:''}),
+    fields:d=>`<div class="row"><div class="fg"><label>Farmer name</label><input type="text" id="am_name" value="${esc(d.name)}" placeholder="e.g. Ramesh Patel"/></div></div>
+      <div class="row"><div class="fg"><label>Crop</label><input type="text" id="am_crop" value="${esc(d.crop)}" placeholder="e.g. Tomato"/></div>
+        <div class="fg"><label>Location</label><input type="text" id="am_loc" value="${esc(d.loc)}" placeholder="e.g. Indore"/></div></div>
+      <div class="row" style="margin-bottom:0"><div class="fg"><label>Video URL</label><input type="text" id="am_url" value="${esc(d.url)}" placeholder="https://youtube.com/…"/></div></div>`,
+    collect:d=>({name:amVal('am_name')||'Farmer',crop:amVal('am_crop'),loc:amVal('am_loc'),url:amVal('am_url')}),
+    row:d=>`<div class="tc" ${liTag('testi',d)}><div class="tc-thumb" onclick="this.querySelector('input').click()">▶️<input type="file" accept="video/*" style="display:none"/></div>
+      <div class="tc-body"><div class="li-sum"><span class="nm">${esc(d.name)}${d.crop?' · '+esc(d.crop):''}${d.loc?' · '+esc(d.loc):''}</span><span class="meta"><i class="fa-solid fa-link"></i>${esc(d.url)||'No video URL'}</span></div></div>
+      ${liAct('testi',d)}</div>` }
+};
+/* Add buttons → open the shared modal (same modal Edit uses) */
+function addPlaceholder(){ listAdd('ph'); }
+function addCat(){ listAdd('cat'); }
+function addTask(){ listAdd('task'); }
+function addBanner(){ listAdd('banner'); }
+function addFColl(){ listAdd('coll'); }
+function addWidget(){ listAdd('widget'); }
+function addTesti(){ listAdd('testi'); }
 
 function addFP(btn){const p=PRODS.find(p=>!document.getElementById('fpList').innerHTML.includes(p.n));if(!p)return;const c=document.createElement('span');c.className='pchip';c.innerHTML=`🌱 ${p.n} <span class="x" onclick="this.closest('.pchip').remove()">×</span>`;btn.before(c);}
 function addBS(btn){const p=PRODS.find(p=>!document.getElementById('bsList').innerHTML.includes(p.n));if(!p)return;const c=document.createElement('span');c.className='pchip';c.innerHTML=`⭐ ${p.n} <span class="x" onclick="this.closest('.pchip').remove()">×</span>`;btn.before(c);}
 function addFC(btn){const p=PRODS[Math.floor(Math.random()*PRODS.length)];const c=document.createElement('span');c.className='pchip';c.innerHTML=`🌱 ${p.n} <span class="x" onclick="this.closest('.pchip').remove()">×</span>`;btn.before(c);}
-
-function addBanner(){ amOpen('Add promo banner',
-  `<div class="bimg" style="width:100%;margin-bottom:12px" onclick="this.querySelector('input').click()">🖼️ Click to upload banner<input type="file" accept="image/*" style="display:none"/></div>
-   <div class="row"><div class="fg"><label>Deeplink</label><input type="text" id="am_l" placeholder="kkd://…"/></div></div>
-   <div class="row"><div class="fg fix"><label>Language</label><select class="s" id="am_lang"><option>All</option>${LANGS.map(l=>`<option>${l.l}</option>`).join('')}</select></div>
-     <div class="fg"><label>Start</label><input type="datetime-local"/></div><div class="fg"><label>End</label><input type="datetime-local"/></div></div>
-   <div><label>Target states</label>${SP(['All States'])}</div>`,
-  function(){ const l=esc(amVal('am_l')), lang=esc(amVal('am_lang')||'All');
-    document.getElementById('bnList').insertAdjacentHTML('beforeend',
-     `<div class="li" style="flex-direction:column;gap:11px;align-items:stretch"><div style="display:flex;align-items:center;gap:8px"><span class="drag-h">⠿</span><div class="bimg" style="flex:1" onclick="this.querySelector('input').click()">🖼️ Banner uploaded<input type="file" accept="image/*" style="display:none"/></div><div class="li-act"><div class="tg on" onclick="this.classList.toggle('on')"></div></div></div>
-      <div class="row" style="margin-bottom:0"><div class="fg"><label>Deeplink</label><input type="text" value="${l}"/></div><div class="fg fix"><label>Language</label><select class="s"><option>${lang}</option></select></div></div></div>`); }); }
-
-function addFColl(){ amOpen('Add collection',
-  `<div class="row"><div class="fg"><label>Collection name</label><input type="text" id="am_n" placeholder="e.g. Monsoon picks"/></div></div>
-   <div class="row" style="margin-bottom:0"><div class="fg fix"><label>Card BG color</label><div class="color-r"><input type="color" id="am_bg" value="#1B6B3A"/></div></div>
-     <div class="fg"><label>Language</label><select class="s" id="am_lang"><option>All</option>${LANGS.map(l=>`<option>${l.l}</option>`).join('')}</select></div></div>`,
-  function(){ const n=esc(amVal('am_n')||'New Collection'), bg=esc(amVal('am_bg')||'#1B6B3A');
-    document.getElementById('fcList').insertAdjacentHTML('beforeend',
-     `<div class="li" style="flex-direction:column;gap:11px;align-items:stretch;margin-bottom:10px"><div style="display:flex;align-items:center;gap:8px"><span class="drag-h">⠿</span><strong style="flex:1;font-size:13px">${n}</strong><div class="tg on" onclick="this.classList.toggle('on')"></div></div>
-      <div class="row" style="margin-bottom:8px"><div class="fg fix"><label>Card BG Color</label><div class="color-r"><input type="color" value="${bg}"/></div></div></div>
-      <div><label>Products</label><div style="margin-top:5px">${newPAdd('addFC')}</div></div></div>`); }); }
-
-function addWidget(){ const types=['Multi Choice','Yes / No','CTA Button','Star Rating','Text Input']; amOpen('Add widget',
-  `<div class="row"><div class="fg"><label>Widget title</label><input type="text" id="am_n" placeholder="e.g. Crop quiz"/></div></div>
-   <div class="row"><div class="fg"><label>Type</label><select class="s" id="am_t">${types.map(t=>`<option>${t}</option>`).join('')}</select></div></div>
-   <div class="row" style="margin-bottom:0"><div class="fg"><label>Action / Deeplink</label><input type="text" id="am_l" placeholder="deeplink:/path or action_name"/></div></div>`,
-  function(){ const n=esc(amVal('am_n')||'New Widget'), t=esc(amVal('am_t')||types[0]), l=esc(amVal('am_l'));
-    document.getElementById('wList').insertAdjacentHTML('beforeend',
-     `<div class="wi"><div class="wi-head"><div style="display:flex;align-items:center;gap:7px;min-width:0"><span style="cursor:grab;color:var(--g300);font-size:17px">⠿</span><div class="ep" onclick="promptE(this)" style="font-size:18px">🆕</div><span class="wi-title">${n}</span></div><div style="display:flex;align-items:center;gap:7px"><div class="tg on" onclick="this.classList.toggle('on')"></div></div></div>
-      <div class="row" style="margin-bottom:10px"><div class="fg"><label>Type</label><select class="s"><option>${t}</option></select></div></div>
-      <div class="fg"><label>Action / Deeplink</label><input type="text" value="${l}" placeholder="deeplink:/path or action_name"/></div></div>`); }); }
-
-function addTesti(){ amOpen('Add testimonial',
-  `<div class="row" style="margin-bottom:0"><div class="fg"><label>Video URL</label><input type="text" id="am_l" placeholder="https://youtube.com/…"/></div></div>`,
-  function(){ const l=esc(amVal('am_l'));
-    document.getElementById('tmList').insertAdjacentHTML('beforeend',
-     `<div class="tc"><div class="tc-thumb" onclick="this.querySelector('input').click()">▶️<input type="file" accept="video/*" style="display:none"/></div>
-      <div class="tc-body"><div class="row" style="margin-bottom:0"><div class="fg"><label>Video URL</label><input type="text" value="${l}" placeholder="https://youtube.com/…"/></div></div></div>
-      <div class="tc-act"><div class="tg on" onclick="this.classList.toggle('on')"></div></div></div>`); }); }
 
 // INIT — open the section from #hash (e.g. #theme) or the first one
 renderList();

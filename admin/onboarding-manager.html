@@ -57,6 +57,7 @@
 .hm .btn-d:hover{background:#FECACA;}
 .hm .btn-sm{padding:5px 10px;font-size:12px;}
 .hm .btn-ic{padding:5px 8px;font-size:13px;}
+.hm .btn-ic.del:hover:not([disabled]){background:#FEE2E2;color:var(--red);border-color:#FECACA;}
 .hm .tr{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--g100);}
 .hm .tr:last-child{border-bottom:none;}
 .hm .tr-l .tt{font-size:13px;font-weight:600;}
@@ -284,6 +285,7 @@ const EDITORS = {
           <button class="btn btn-s btn-ic" title="Move up" onclick="langMove(${i},-1)" ${i===0?'disabled style="opacity:.35"':''}><i class="fa-solid fa-arrow-up"></i></button>
           <button class="btn btn-s btn-ic" title="Move down" onclick="langMove(${i},1)" ${i===n-1?'disabled style="opacity:.35"':''}><i class="fa-solid fa-arrow-down"></i></button>
           <div class="tg ${L.on?'on':''}" title="${L.on?'Shown in the picker':'Hidden from the picker'}" onclick="setPath('languages.${i}.on',${!L.on});commit('Language '+(${!L.on}?'enabled':'disabled'));rerender()"></div>
+          <button class="btn btn-s btn-ic del" title="Delete language" onclick="delLang(${i})" ${n<=1?'disabled style="opacity:.35"':''}><i class="fa-solid fa-trash"></i></button>
         </div>
       </div>`).join('');
     return head(meta('language')) +
@@ -314,7 +316,8 @@ const EDITORS = {
         <div class="li-body">
           ${tField('otp.facts.'+i+'.text','Message')}
         </div>
-        <div class="li-act"><div class="tg ${on?'on':''}" title="${on?'Shown in the strip':'Hidden'}" onclick="setPath('otp.facts.${i}.on',${!on});commit();rerender()"></div></div>
+        <div class="li-act" style="align-items:center;gap:6px"><div class="tg ${on?'on':''}" title="${on?'Shown in the strip':'Hidden'}" onclick="setPath('otp.facts.${i}.on',${!on});commit();rerender()"></div>
+          <button class="btn btn-s btn-ic del" title="Delete message" onclick="delFact(${i})"><i class="fa-solid fa-trash"></i></button></div>
       </div>`;}).join('');
     return head(meta('otp')) +
       card('Resend',
@@ -365,6 +368,8 @@ function langDrop(e,i){ e.preventDefault(); if(langDragI==null||langDragI===i) r
 function langDragEnd(e){ langDragI=null; }
 
 function addFact(){ O.otp.facts.push({ icon:'circle-info', text:{ en:'New message' }, on:true }); commit('Message added'); rerender(); }
+function delFact(i){ O.otp.facts.splice(i,1); commit('Message removed'); rerender(); }
+function delLang(i){ if(O.languages.length<=1) return; O.languages.splice(i,1); commit('Language removed'); rerender(); }
 
 /* ---------- Welcome: name on/off, shown linked to the greeting headline ---------- */
 function nameToggle(base){

@@ -300,6 +300,25 @@
 .hm .padd:hover{border-color:var(--green);color:var(--green);}
 .hm .cchip{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--g200);margin:3px;transition:all .15s;}
 .hm .cchip.on{background:var(--green-lt);border-color:var(--green);color:var(--green);font-weight:600;}
+.hm .cchip.sug{border-color:var(--green);color:var(--green);background:#fff;}
+.hm .cchip.sug.on{background:var(--green-lt);}
+/* compact testimonial rule cards */
+.hm .tr-list{display:flex;flex-direction:column;gap:9px;}
+.hm .tr-card{border:1px solid var(--g200);border-radius:12px;background:#fff;overflow:hidden;}
+.hm .tr-card.off{opacity:.55;}
+.hm .tr-sum{list-style:none;display:flex;align-items:center;gap:12px;padding:10px 13px;cursor:pointer;}
+.hm .tr-sum::-webkit-details-marker{display:none;}
+.hm .tr-play{flex:none;width:38px;height:38px;border-radius:10px;border:none;background:#111827;color:#fff;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding-left:2px;}
+.hm .tr-play:hover{background:var(--green);}
+.hm .tr-meta{flex:1;min-width:0;}
+.hm .tr-name{font-size:13.5px;font-weight:700;color:var(--g800,#1e293b);}
+.hm .tr-loc{font-weight:500;color:var(--g500);font-size:12.5px;}
+.hm .tr-rule{font-size:11.5px;color:var(--g500);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hm .tr-caret{color:var(--g400,#94a3b8);font-size:12px;transition:transform .2s;flex:none;}
+.hm details.tr-card[open] .tr-caret{transform:rotate(180deg);}
+.hm .tr-body{padding:2px 13px 12px;border-top:1px solid var(--g100);}
+.hm .tr-video{width:100%;aspect-ratio:9/16;max-height:56vh;border-radius:10px;background:#000;display:block;margin:0 auto;border:0;}
+.hm .tr-noplay{padding:38px 20px;text-align:center;color:#94a3b8;font-size:13px;line-height:1.6;}
 .hm .info-box{display:flex;align-items:center;gap:8px;background:var(--green-lt);border-radius:8px;padding:10px 13px;font-size:12.5px;color:var(--green);margin-top:8px;}
 .hm .sch-box{background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:13px;margin-bottom:12px;}
 .hm .sch-box .sl{font-size:11px;font-weight:700;color:var(--g500);margin-bottom:9px;text-transform:uppercase;letter-spacing:.4px;}
@@ -505,6 +524,22 @@ function trStateAll(id){ const t=trFind(id); if(!t)return; t.rule.states=['All']
 function trStateTog(id,st){ const t=trFind(id); if(!t)return; let s=(t.rule.states||[]).filter(x=>x!=='All'); s.indexOf(st)>=0?s=s.filter(x=>x!==st):s.push(st); t.rule.states=s.length?s:['All']; trSave(); pick('testi'); }
 function trCropAll(id){ const t=trFind(id); if(!t)return; t.rule.crops=['All']; trSave(); pick('testi'); }
 function trCropTog(id,i){ const t=trFind(id); if(!t)return; const cr=CROPS[i]; let s=(t.rule.crops||[]).filter(x=>x!=='All'); s.indexOf(cr)>=0?s=s.filter(x=>x!==cr):s.push(cr); t.rule.crops=s.length?s:['All']; trSave(); pick('testi'); }
+var trOpen={};   // which testimonial cards are expanded (preserved across re-render)
+function trDetails(id,isOpen){ if(isOpen) trOpen[id]=true; else delete trOpen[id]; }
+function trTog(id){ const t=trFind(id); if(!t)return; t.on = (t.on===false); trSave(); pick('testi'); }
+function trPlay(id){ const t=trFind(id); if(!t)return; const url=(t.url||'').trim();
+  let media;
+  if(!url){ media='<div class="tr-noplay">No video uploaded yet — add the video in the <b>Testimonials</b> library.</div>'; }
+  else if(/youtu\.?be/.test(url)){ const m=url.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{6,})/); media=`<iframe class="tr-video" src="https://www.youtube.com/embed/${m?m[1]:''}?autoplay=1" allow="autoplay" allowfullscreen frameborder="0"></iframe>`; }
+  else { media=`<video class="tr-video" src="${esc(url)}" controls autoplay></video>`; }
+  amClose();
+  const html=`<div id="addModal"><div class="apv-scrim" onclick="amClose()"></div>
+    <div class="apv-box" style="max-width:400px">
+      <div class="apv-box-head"><h3>🎥 ${esc(t.name)}${t.crop?` · ${esc(t.crop)}`:''}</h3><button class="x-btn" onclick="amClose()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="apv-box-body" style="padding:14px">${media}</div>
+    </div></div>`;
+  document.querySelector('.hm').insertAdjacentHTML('beforeend', html);
+}
 let SECS;
 function seedSecs(){
   // seed from the reference on first load; otherwise reconcile saved order/visibility against defaults
@@ -1381,32 +1416,54 @@ widgets:()=>`
 
 /* 13 ── TESTIMONIALS — only per-testimonial rules; the video library is its own page */
 testi:()=>{ const list=(data.testimonials||[]).filter(t=>t.status==='approved');
-  const intro=`<div class="card"><div class="card-body"><p class="hint-p" style="margin:0">Farmer testimonial videos are added &amp; approved in the <b>Testimonials</b> library (left sidebar). Below, set which users see each approved testimonial on Home.</p></div></div>`;
+  const intro=`<div class="card"><div class="card-body"><p class="hint-p" style="margin:0">Farmer testimonial videos are added &amp; approved in the <b>Testimonials</b> library (left sidebar). Below, ▶ preview each approved video, turn it on/off, and set which users see it on Home.</p></div></div>`;
   if(!list.length) return intro+`<div class="card"><div class="card-body"><p class="hint" style="margin:0">No approved testimonials yet — approve some in the Testimonials library.</p></div></div>`;
   const cards=list.map(t=>{ const r=t.rule||{audience:['all'],states:['All'],crops:['All']};
+    const on=t.on!==false;
     const allA=r.audience.indexOf('all')>=0, allS=r.states.indexOf('All')>=0, allC=r.crops.indexOf('All')>=0;
-    return `<div class="card"><div class="card-head"><h3>🎥 ${esc(t.name)}${t.crop||t.loc?` · ${esc([t.crop,t.loc].filter(Boolean).join(' · '))}`:''}</h3></div><div class="card-body">
-      <div class="sub-l" style="margin-top:0;font-weight:600">Audience</div>
-      <div class="chip-row"><span class="cchip ${allA?'on':''}" onclick="trAudTog('${t.id}','all')">All users</span> ${COIN_AUDS.filter(a=>a.k!=='all').map(a=>`<span class="cchip ${(!allA&&r.audience.indexOf(a.k)>=0)?'on':''}" onclick="trAudTog('${t.id}','${a.k}')">${a.l}</span>`).join('')}</div>
-      <div class="sub-l" style="font-weight:600">States</div>
-      <div class="chip-row"><span class="cchip ${allS?'on':''}" onclick="trStateAll('${t.id}')">All states</span> ${STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!allS&&r.states.indexOf(s)>=0)?'on':''}" onclick="trStateTog('${t.id}','${s}')">${s}</span>`).join('')}</div>
-      <div class="sub-l" style="font-weight:600">Crops the farmer grows</div>
-      <div class="chip-row"><span class="cchip ${allC?'on':''}" onclick="trCropAll('${t.id}')">All crops</span> ${CROPS.map((cr,i)=>`<span class="cchip ${(!allC&&r.crops.indexOf(cr)>=0)?'on':''}" onclick="trCropTog('${t.id}',${i})">${cr}</span>`).join('')}</div>
-    </div></div>`;
+    const sum=[ allA?'All users':r.audience.map(k=>{const a=COIN_AUDS.find(x=>x.k===k);return a?a.l:k;}).join(', '),
+               allS?'All states':r.states.join(', '),
+               allC?'All crops':r.crops.join(', ') ].join('  ·  ');
+    // the crop tied to this testimonial (chosen at approval) surfaces as a one-tap suggestion
+    const sugIdx = t.crop ? CROPS.findIndex(c=>c.toLowerCase().indexOf(String(t.crop).toLowerCase())>=0) : -1;
+    const sugCrop = sugIdx>=0 ? CROPS[sugIdx] : '';
+    const sug = sugIdx>=0 ? `<span class="cchip sug ${(!allC&&r.crops.indexOf(sugCrop)>=0)?'on':''}" onclick="trCropTog('${t.id}',${sugIdx})">⭐ ${esc(sugCrop)} <span style="opacity:.65">· from video</span></span>` : '';
+    const others = CROPS.map((cr,i)=> i===sugIdx?'':`<span class="cchip ${(!allC&&r.crops.indexOf(cr)>=0)?'on':''}" onclick="trCropTog('${t.id}',${i})">${cr}</span>`).join('');
+    return `<details class="tr-card${on?'':' off'}"${trOpen[t.id]?' open':''} ontoggle="trDetails('${t.id}',this.open)">
+      <summary class="tr-sum">
+        <button class="tr-play" onclick="event.preventDefault();event.stopPropagation();trPlay('${t.id}')" title="Play video">▶</button>
+        <div class="tr-meta"><div class="tr-name">${esc(t.name)}${t.crop||t.loc?`<span class="tr-loc"> · ${esc([t.crop,t.loc].filter(Boolean).join(' · '))}</span>`:''}</div><div class="tr-rule">${esc(sum)}</div></div>
+        <div class="tg${on?' on':''}" onclick="event.preventDefault();event.stopPropagation();trTog('${t.id}')" title="Show this testimonial on Home"></div>
+        <i class="fa-solid fa-chevron-down tr-caret"></i>
+      </summary>
+      <div class="tr-body">
+        <div class="sub-l" style="margin-top:2px">Audience</div>
+        <div class="chip-row"><span class="cchip ${allA?'on':''}" onclick="trAudTog('${t.id}','all')">All users</span> ${COIN_AUDS.filter(a=>a.k!=='all').map(a=>`<span class="cchip ${(!allA&&r.audience.indexOf(a.k)>=0)?'on':''}" onclick="trAudTog('${t.id}','${a.k}')">${a.l}</span>`).join('')}</div>
+        <div class="sub-l">States</div>
+        <div class="chip-row"><span class="cchip ${allS?'on':''}" onclick="trStateAll('${t.id}')">All states</span> ${STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!allS&&r.states.indexOf(s)>=0)?'on':''}" onclick="trStateTog('${t.id}','${s}')">${s}</span>`).join('')}</div>
+        <div class="sub-l">Crops the farmer grows</div>
+        <div class="chip-row"><span class="cchip ${allC?'on':''}" onclick="trCropAll('${t.id}')">All crops</span> ${sug} ${others}</div>
+      </div>
+    </details>`;
   }).join('');
-  return intro+cards;
+  return intro+`<div class="tr-list">${cards}</div>`;
 },
 
 /* 14 ── MOST SELLING */
 mostsell:()=>{ const w=(data.mostSelling&&data.mostSelling.window)||'week';
+  const sc=(data.mostSelling&&data.mostSelling.scope)||'state';
   const OPTS=[['today','Today'],['yesterday','Yesterday'],['week','This week'],['month','This month'],['last7','Last 7 days'],['alltime','All time']];
+  const SCOPE=[['state','State-wide'],['city','City-wide']];
   return `
 <div class="card">
   <div class="card-body">
-    <p class="hint-p" style="margin:0 0 12px">Auto-personalizes per user's state — products auto-populate from order data. Choose which window the "X bought" count on the app uses.</p>
-    <div class="row" style="margin-bottom:0"><div class="fg" style="max-width:300px"><label>Bought count shown on app</label>
-      <select class="s" onchange="mostSet('window',this.value)">${OPTS.map(o=>`<option value="${o[0]}"${w===o[0]?' selected':''}>${o[1]} bought</option>`).join('')}</select>
-    </div></div>
+    <p class="hint-p" style="margin:0 0 12px">Products auto-populate from order data. Choose the time window <b>and</b> whether the "X bought" count is counted across the user's state or just their city.</p>
+    <div class="row" style="margin-bottom:0;gap:14px;flex-wrap:wrap">
+      <div class="fg" style="max-width:260px"><label>Bought count window</label>
+        <select class="s" onchange="mostSet('window',this.value)">${OPTS.map(o=>`<option value="${o[0]}"${w===o[0]?' selected':''}>${o[1]} bought</option>`).join('')}</select></div>
+      <div class="fg" style="max-width:260px"><label>Count region</label>
+        <select class="s" onchange="mostSet('scope',this.value)">${SCOPE.map(o=>`<option value="${o[0]}"${sc===o[0]?' selected':''}>${o[1]} count</option>`).join('')}</select></div>
+    </div>
   </div>
 </div>`; },
 

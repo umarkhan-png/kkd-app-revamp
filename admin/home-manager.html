@@ -300,6 +300,11 @@
 .hm .padd:hover{border-color:var(--green);color:var(--green);}
 .hm .cchip{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--g200);margin:3px;transition:all .15s;}
 .hm .cchip.on{background:var(--green-lt);border-color:var(--green);color:var(--green);font-weight:600;}
+.hm .fc-sw-row{display:flex;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+.hm .fc-sw{position:relative;flex:1;min-width:96px;height:52px;border-radius:10px;border:2px solid transparent;cursor:pointer;display:flex;align-items:flex-end;justify-content:flex-start;padding:7px 9px;transition:all .15s;}
+.hm .fc-sw span{color:#fff;font-size:11.5px;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.35);}
+.hm .fc-sw.on{border-color:#111827;box-shadow:0 0 0 3px rgba(17,24,39,.12);}
+.hm .fc-sw.on::after{content:'✓';position:absolute;top:6px;right:8px;color:#fff;font-size:13px;font-weight:800;}
 .hm .cchip.sug{border-color:var(--green);color:var(--green);background:#fff;}
 .hm .cchip.sug.on{background:var(--green-lt);}
 /* compact testimonial rule cards */
@@ -1388,9 +1393,9 @@ featured:()=>`
   <div class="card-body">
     <div id="fcList">
       ${[
-        {nm:'Chakrawarti ZC',color:'#1B6B3A',prods:'Chakrawarti ZC, Chakraveer',states:'All States',sub:'Kills sucking pests',crop:'Cotton',btn:'Shop now',aud:'All users'},
-        {nm:'Humic + Fulvic 98',color:'#7C3AED',prods:'Humic + Fulvic 98, NPK 19-19-19',states:'MP, UP',sub:'Stronger roots, greener leaves',crop:'Wheat',btn:'Grab deal',aud:'Returning users'},
-      ].map(col=>LISTS.coll.row({name:col.nm,color:col.color,prods:col.prods,states:col.states,subtitle:col.sub,crop:col.crop,btn:col.btn,audience:col.aud,_on:true})).join('')}
+        {products:[{name:'Chakrawarti ZC',variant:'250 ml'},{name:'Chakraveer',variant:'250 ml'}],color:'#1B6B3A',states:['All States'],crops:['🪴 Cotton'],subtitle:'Kills sucking pests',btn:'Shop now',audience:'All users'},
+        {products:[{name:'Humic + Fulvic 98',variant:'500 g'}],color:'#1E5AA8',states:['MP','UP'],crops:['🌾 Wheat'],subtitle:'Stronger roots, greener leaves',btn:'Grab deal',audience:'Returning users'},
+      ].map(col=>LISTS.coll.row(Object.assign({_on:true},col))).join('')}
     </div>
     <button class="btn btn-s btn-sm" onclick="addFColl()">+ Add Featured Product</button>
   </div>
@@ -1471,8 +1476,6 @@ mostsell:()=>{ const w=(data.mostSelling&&data.mostSelling.window)||'week';
 expert:()=>`
 <div class="card">
   <div class="card-body">
-    ${TG('ae1',true,'Show Floating Button','Agronomist bubble on home page')}
-    <div style="margin-top:14px;"></div>
     <div class="row" style="align-items:flex-end;">
       <div class="fg fix"><label>Expert Photo</label>
         <div class="tc-thumb" onclick="this.querySelector('input').click()" style="width:60px;height:60px;font-size:11px;color:var(--g400);text-align:center;">👤<input type="file" accept="image/*" style="display:none;"/></div>
@@ -1664,6 +1667,33 @@ function catTile(d){
 }
 function amCatPick(input){ const f=input.files&&input.files[0]; if(!f) return; const url=URL.createObjectURL(f); window._amCatImg=url; const p=document.getElementById('am_catprev'); if(p) p.innerHTML=`<div class="cat2-card is-img"><img src="${url}" alt=""/></div>`; }
 
+/* ── Featured Product modal: inline product search-select + preset colours + state/crop chips ── */
+function fcProdRows(){ const ql=(window._fcQ||'').toLowerCase(); const sel=window._fcSel||[]; const rows=[];
+  PRODS.forEach(p=>{ if(p.n.toLowerCase().indexOf(ql)<0) return;
+    (p.variants||[{v:'Standard'}]).forEach(vr=>{ const added=sel.some(x=>x.name===p.n&&x.variant===vr.v);
+      rows.push(`<div class="ppick${added?' on':''}"><div style="min-width:0;flex:1"><div class="ppick-nm">🌱 ${esc(p.n)}</div><div class="ppick-sub">${esc(vr.v)}${vr.mrp?` · MRP ₹${vr.mrp}`:''}</div></div>${added?'<span class="ppick-added"><i class="fa-solid fa-circle-check"></i> Added</span>':`<button class="btn btn-p btn-xs" onclick="fcAdd('${p.n.replace(/'/g,"\\'")}','${vr.v.replace(/'/g,"\\'")}')">Add</button>`}</div>`);
+    });
+  });
+  return rows.length?rows.join(''):'<p class="hint" style="padding:8px 2px">No products match.</p>';
+}
+function fcSelHTML(){ const sel=window._fcSel||[]; if(!sel.length) return '<p class="hint" style="margin:0">No products selected — search above to add.</p>';
+  return sel.map((pr,i)=>`<div class="saleline"><div class="saleline-nm" style="flex:1">⭐ ${esc(pr.name)} <span class="saleline-v">${esc(pr.variant)}</span></div><button class="ic-btn del" title="Remove" onclick="fcDel(${i})"><i class="fa-solid fa-trash"></i></button></div>`).join('');
+}
+function fcSearch(q){ window._fcQ=q; const el=document.getElementById('am_presults'); if(el)el.innerHTML=fcProdRows(); }
+function fcAdd(name,variant){ window._fcSel=window._fcSel||[]; if(!window._fcSel.some(x=>x.name===name&&x.variant===variant)) window._fcSel.push({name:name,variant:variant}); fcReSel(); }
+function fcDel(i){ (window._fcSel||[]).splice(i,1); fcReSel(); }
+function fcReSel(){ const r=document.getElementById('am_presults'); if(r)r.innerHTML=fcProdRows(); const s=document.getElementById('am_pselected'); if(s)s.innerHTML=fcSelHTML(); }
+function fcSwatch(color){ const inp=document.getElementById('am_color'); if(inp)inp.value=color; document.querySelectorAll('#am_swatches .fc-sw').forEach(b=>b.classList.toggle('on', b.dataset.c.toLowerCase()===color.toLowerCase())); }
+function fcStatesHTML(){ const sel=window._fcStates||['All States']; const all=sel.indexOf('All States')>=0;
+  return `<span class="cchip ${all?'on':''}" onclick="fcStateAll()">All states</span> `+STATES.filter(s=>s!=='All States').map(s=>`<span class="cchip ${(!all&&sel.indexOf(s)>=0)?'on':''}" onclick="fcStateTog('${s}')">${s}</span>`).join(''); }
+function fcCropsHTML(){ const sel=window._fcCrops||['All']; const all=sel.indexOf('All')>=0;
+  return `<span class="cchip ${all?'on':''}" onclick="fcCropAll()">All crops</span> `+CROPS.map((cr,i)=>`<span class="cchip ${(!all&&sel.indexOf(cr)>=0)?'on':''}" onclick="fcCropTog(${i})">${esc(cr)}</span>`).join(''); }
+function fcStateAll(){ window._fcStates=['All States']; fcReCond(); }
+function fcStateTog(st){ let s=(window._fcStates||[]).filter(x=>x!=='All States'); s.indexOf(st)>=0?s=s.filter(x=>x!==st):s.push(st); window._fcStates=s.length?s:['All States']; fcReCond(); }
+function fcCropAll(){ window._fcCrops=['All']; fcReCond(); }
+function fcCropTog(i){ const cr=CROPS[i]; let s=(window._fcCrops||[]).filter(x=>x!=='All'); s.indexOf(cr)>=0?s=s.filter(x=>x!==cr):s.push(cr); window._fcCrops=s.length?s:['All']; fcReCond(); }
+function fcReCond(){ const st=document.getElementById('am_states_chips'); if(st)st.innerHTML=fcStatesHTML(); const cr=document.getElementById('am_crops_chips'); if(cr)cr.innerHTML=fcCropsHTML(); }
+
 const LISTS={
   ph:{ listId:'phList', title:'search hint',
     def:()=>({text:''}),
@@ -1701,22 +1731,47 @@ const LISTS={
       <div class="li-body"><div class="li-sum"><span class="nm">${esc(d.task)}</span><span class="meta">🪙 ${esc(String(d.coins))} coins · ${esc(d.action)}</span></div></div>${liAct('task',d)}</div>` },
 
   coll:{ listId:'fcList', title:'featured product',
-    def:()=>({name:'',color:'#1B6B3A',prods:'',states:'All States',audience:'All users',subtitle:'',crop:'',btn:'Shop now'}),
-    fields:d=>`<div class="row"><div class="fg"><label>Card title</label><input type="text" id="am_name" value="${esc(d.name)}" placeholder="e.g. Chakrawarti ZC"/></div>
-        <div class="fg fix"><label>Card BG color</label><div class="color-r"><input type="color" id="am_color" value="${d.color||'#1B6B3A'}"/></div></div></div>
+    def:()=>({products:[],color:'#1B6B3A',states:['All States'],crops:['All'],audience:'All users',subtitle:'',btn:'Shop now'}),
+    fields:d=>{
+      window._fcSel=(d.products&&d.products.length)?d.products.slice():(d.prods?String(d.prods).split(',').map(s=>({name:s.trim(),variant:'Standard'})).filter(x=>x.name):[]);
+      window._fcQ='';
+      window._fcStates=Array.isArray(d.states)?d.states.slice():(d.states?String(d.states).split(',').map(s=>s.trim()).filter(Boolean):['All States']); if(!window._fcStates.length)window._fcStates=['All States'];
+      window._fcCrops=Array.isArray(d.crops)?d.crops.slice():['All'];
+      if(!Array.isArray(d.crops)&&d.crop){ const ix=CROPS.findIndex(c=>c.toLowerCase().indexOf(String(d.crop).toLowerCase())>=0); if(ix>=0)window._fcCrops=[CROPS[ix]]; }
+      if(!window._fcCrops.length)window._fcCrops=['All'];
+      const color=d.color||'#1B6B3A';
+      const SW=[['#1B6B3A','Green'],['#1E5AA8','Blue'],['#0E3B26','Dark green']];
+      return `<div class="sub-l" style="margin-top:0">Products <span class="hint">(search &amp; select — the card shows these)</span></div>
+      <div class="salepick-box" style="margin-bottom:6px">
+        <div class="row" style="margin-bottom:8px"><div class="fg"><input type="text" id="am_psearch" placeholder="Type a product name…" oninput="fcSearch(this.value)"/></div></div>
+        <div id="am_presults" class="ppick-list">${fcProdRows()}</div>
+      </div>
+      <div id="am_pselected" class="saleline-list" style="margin-bottom:14px">${fcSelHTML()}</div>
       <div class="row"><div class="fg"><label>Sub-text under the card</label><input type="text" id="am_subtitle" value="${esc(d.subtitle||'')}" placeholder="e.g. Kills sucking pest"/></div>
-        <div class="fg"><label>Crop name</label><input type="text" id="am_crop" value="${esc(d.crop||'')}" placeholder="e.g. Cotton"/></div></div>
-      <div class="row"><div class="fg"><label>Button text</label><input type="text" id="am_btn" value="${esc(d.btn||'Shop now')}" placeholder="e.g. Shop now"/></div>
-        <div class="fg"><label>Products</label><input type="text" id="am_prods" value="${esc(d.prods)}" placeholder="Comma separated"/></div></div>
+        <div class="fg"><label>Button text</label><input type="text" id="am_btn" value="${esc(d.btn||'Shop now')}" placeholder="e.g. Shop now"/></div></div>
+      <div class="sub-l">Card background</div>
+      <input type="hidden" id="am_color" value="${color}"/>
+      <div id="am_swatches" class="fc-sw-row">${SW.map(c=>`<button type="button" class="fc-sw${color.toLowerCase()===c[0].toLowerCase()?' on':''}" data-c="${c[0]}" style="background:${c[0]}" onclick="fcSwatch('${c[0]}')"><span>${c[1]}</span></button>`).join('')}</div>
       <div class="sub-l">Conditions <span class="hint">(who sees this)</span></div>
-      <div class="row" style="margin-bottom:0"><div class="fg"><label>Audience</label><select class="s" id="am_aud">${['All users','New (just onboarded)','Returning users','Inactive 30 days'].map(a=>`<option${d.audience===a?' selected':''}>${a}</option>`).join('')}</select></div>
-        <div class="fg"><label>Target states</label><input type="text" id="am_states" value="${esc(d.states)}" placeholder="All States or MP, UP"/></div></div>`,
-    collect:d=>({name:amVal('am_name')||'New featured product',color:amVal('am_color')||'#1B6B3A',prods:amVal('am_prods'),states:amVal('am_states')||'All States',audience:amVal('am_aud')||'All users',subtitle:amVal('am_subtitle'),crop:amVal('am_crop'),btn:amVal('am_btn')||'Shop now'}),
-    row:d=>`<div class="li" style="flex-direction:column;gap:11px;align-items:stretch" ${liTag('coll',d)}>
+      <div class="row"><div class="fg"><label>Audience</label><select class="s" id="am_aud">${['All users','New (just onboarded)','Returning users','Inactive 30 days'].map(a=>`<option${d.audience===a?' selected':''}>${a}</option>`).join('')}</select></div></div>
+      <div class="sub-l" style="font-weight:600">Target states</div>
+      <div id="am_states_chips" class="chip-row">${fcStatesHTML()}</div>
+      <div class="sub-l" style="font-weight:600">Target crops</div>
+      <div id="am_crops_chips" class="chip-row">${fcCropsHTML()}</div>`;
+    },
+    collect:d=>({products:(window._fcSel||[]).slice(),color:amVal('am_color')||'#1B6B3A',states:(window._fcStates||['All States']).slice(),crops:(window._fcCrops||['All']).slice(),audience:amVal('am_aud')||'All users',subtitle:amVal('am_subtitle'),btn:amVal('am_btn')||'Shop now'}),
+    row:d=>{
+      const prods=(d.products&&d.products.length)?d.products:(d.prods?String(d.prods).split(',').map(s=>({name:s.trim()})).filter(x=>x.name):[]);
+      const names=prods.length?prods.map(p=>p.name).join(', '):'—';
+      const title=prods.length?prods[0].name:(d.name||'Featured product');
+      const stTxt=Array.isArray(d.states)?(d.states.indexOf('All States')>=0?'All states':d.states.join(', ')):(d.states||'All states');
+      const crTxt=Array.isArray(d.crops)?(d.crops.indexOf('All')>=0?'All crops':d.crops.map(c=>c.replace(/^\S+\s*/,'')).join(', ')):(d.crop||'All crops');
+      return `<div class="li" style="flex-direction:column;gap:11px;align-items:stretch" ${liTag('coll',d)}>
       <div style="display:flex;align-items:center;gap:8px"><span class="drag-h">⠿</span>
         <span class="cat-ic" style="background:${d.color||'#1B6B3A'};width:22px;height:22px;border-radius:5px"></span>
-        <strong style="flex:1;font-size:13px">${esc(d.name)}${d.subtitle?` <span style="font-weight:500;color:var(--g500)">· ${esc(d.subtitle)}</span>`:''}</strong>${liAct('coll',d)}</div>
-      <div class="li-sum"><span class="meta">🌱 ${esc(d.prods)||'—'}${d.crop?' · 🌿 '+esc(d.crop):''} · 🔘 ${esc(d.btn||'Shop now')}</span><span class="meta">👥 ${esc(d.audience||'All users')} · 📍 ${esc(d.states)}</span></div></div>` },
+        <strong style="flex:1;font-size:13px">${esc(title)}${d.subtitle?` <span style="font-weight:500;color:var(--g500)">· ${esc(d.subtitle)}</span>`:''}</strong>${liAct('coll',d)}</div>
+      <div class="li-sum"><span class="meta">🌱 ${esc(names)} · 🔘 ${esc(d.btn||'Shop now')}</span><span class="meta">👥 ${esc(d.audience||'All users')} · 📍 ${esc(stTxt)} · 🌿 ${esc(crTxt)}</span></div></div>`;
+    } },
 
   widget:{ listId:'wList', title:'widget',
     def:()=>({emoji:'🆕',title:'',type:'Multi Choice',action:''}),

@@ -1673,7 +1673,7 @@ function amCatPick(input){ const f=input.files&&input.files[0]; if(!f) return; c
 /* ── Featured Product modal: inline product search-select + preset colours + state/crop chips ── */
 function fcTechOf(name){ const p=PRODS.find(x=>x.n===name); return p?(p.tech||''):''; }
 function fcProdRows(){ const ql=(window._fcQ||'').trim().toLowerCase();
-  if(!ql) return '<p class="hint" style="padding:8px 2px">Start typing to search products…</p>';
+  if(!ql) return '';
   const rows=[];
   PRODS.forEach(p=>{ if(p.n.toLowerCase().indexOf(ql)<0) return;
     (p.variants||[{v:'Standard'}]).forEach(vr=>{

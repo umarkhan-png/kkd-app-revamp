@@ -1393,8 +1393,8 @@ featured:()=>`
   <div class="card-body">
     <div id="fcList">
       ${[
-        {products:[{name:'Chakrawarti ZC',variant:'250 ml'},{name:'Chakraveer',variant:'250 ml'}],color:'#1B6B3A',states:['All States'],crops:['🪴 Cotton'],subtitle:'Kills sucking pests',btn:'Shop now',audience:'All users'},
-        {products:[{name:'Humic + Fulvic 98',variant:'500 g'}],color:'#1E5AA8',states:['MP','UP'],crops:['🌾 Wheat'],subtitle:'Stronger roots, greener leaves',btn:'Grab deal',audience:'Returning users'},
+        {products:[{name:'Chakrawarti ZC',variant:'250 ml'}],color:'#1B6B3A',states:['All States'],crops:['🪴 Cotton'],subtitle:'Kills sucking pests',tech:'Chloran. + Lambda-Cy.',btn:'Shop now',audience:'All users'},
+        {products:[{name:'Humic + Fulvic 98',variant:'500 g'}],color:'#1E5AA8',states:['MP','UP'],crops:['🌾 Wheat'],subtitle:'Stronger roots, greener leaves',tech:'Humic 12% + Fulvic 8%',btn:'Grab deal',audience:'Returning users'},
       ].map(col=>LISTS.coll.row(Object.assign({_on:true},col))).join('')}
     </div>
     <button class="btn btn-s btn-sm" onclick="addFColl()">+ Add Featured Product</button>
@@ -1486,7 +1486,10 @@ expert:()=>`
     <div class="row">
       <div class="fg"><label>Deeplink / Action</label><input type="text" value="help.html"/></div>
     </div>
-    ${TG('ae2',true,'Show video badge','Red camera icon on the button')}
+    ${TG('ae2',true,'Show icon','Show an icon on the floating button')}
+    <div class="sub-l">Button icon</div>
+    <div class="ic-grid">${['fa-comment-dots','fa-headset','fa-user-doctor','fa-phone','fa-robot','fa-video','fa-seedling','fa-leaf'].map((ic,i)=>`<div class="ic-opt${i===0?' on':''}" onclick="expertIcon(this)"><i class="fa-solid ${ic}"></i></div>`).join('')}</div>
+    <div style="margin-top:14px;"></div>
     ${TG('ae3',true,'Compact on scroll','Shrinks to a tight pill while scrolling')}
     ${TG('ae4',true,'Pulse animation','Soft attention pulse on the button')}
   </div>
@@ -1676,11 +1679,11 @@ function fcProdRows(){ const ql=(window._fcQ||'').toLowerCase(); const sel=windo
   });
   return rows.length?rows.join(''):'<p class="hint" style="padding:8px 2px">No products match.</p>';
 }
-function fcSelHTML(){ const sel=window._fcSel||[]; if(!sel.length) return '<p class="hint" style="margin:0">No products selected — search above to add.</p>';
+function fcSelHTML(){ const sel=window._fcSel||[]; if(!sel.length) return '<p class="hint" style="margin:0">No product selected — search above to pick one.</p>';
   return sel.map((pr,i)=>`<div class="saleline"><div class="saleline-nm" style="flex:1">⭐ ${esc(pr.name)} <span class="saleline-v">${esc(pr.variant)}</span></div><button class="ic-btn del" title="Remove" onclick="fcDel(${i})"><i class="fa-solid fa-trash"></i></button></div>`).join('');
 }
 function fcSearch(q){ window._fcQ=q; const el=document.getElementById('am_presults'); if(el)el.innerHTML=fcProdRows(); }
-function fcAdd(name,variant){ window._fcSel=window._fcSel||[]; if(!window._fcSel.some(x=>x.name===name&&x.variant===variant)) window._fcSel.push({name:name,variant:variant}); fcReSel(); }
+function fcAdd(name,variant){ window._fcSel=[{name:name,variant:variant}]; fcReSel(); }
 function fcDel(i){ (window._fcSel||[]).splice(i,1); fcReSel(); }
 function fcReSel(){ const r=document.getElementById('am_presults'); if(r)r.innerHTML=fcProdRows(); const s=document.getElementById('am_pselected'); if(s)s.innerHTML=fcSelHTML(); }
 function fcSwatch(color){ const inp=document.getElementById('am_color'); if(inp)inp.value=color; document.querySelectorAll('#am_swatches .fc-sw').forEach(b=>b.classList.toggle('on', b.dataset.c.toLowerCase()===color.toLowerCase())); }
@@ -1693,6 +1696,7 @@ function fcStateTog(st){ let s=(window._fcStates||[]).filter(x=>x!=='All States'
 function fcCropAll(){ window._fcCrops=['All']; fcReCond(); }
 function fcCropTog(i){ const cr=CROPS[i]; let s=(window._fcCrops||[]).filter(x=>x!=='All'); s.indexOf(cr)>=0?s=s.filter(x=>x!==cr):s.push(cr); window._fcCrops=s.length?s:['All']; fcReCond(); }
 function fcReCond(){ const st=document.getElementById('am_states_chips'); if(st)st.innerHTML=fcStatesHTML(); const cr=document.getElementById('am_crops_chips'); if(cr)cr.innerHTML=fcCropsHTML(); }
+function expertIcon(el){ el.parentNode.querySelectorAll('.ic-opt').forEach(x=>x.classList.remove('on')); el.classList.add('on'); }
 
 const LISTS={
   ph:{ listId:'phList', title:'search hint',
@@ -1731,9 +1735,9 @@ const LISTS={
       <div class="li-body"><div class="li-sum"><span class="nm">${esc(d.task)}</span><span class="meta">🪙 ${esc(String(d.coins))} coins · ${esc(d.action)}</span></div></div>${liAct('task',d)}</div>` },
 
   coll:{ listId:'fcList', title:'featured product',
-    def:()=>({products:[],color:'#1B6B3A',states:['All States'],crops:['All'],audience:'All users',subtitle:'',btn:'Shop now'}),
+    def:()=>({products:[],color:'#1B6B3A',states:['All States'],crops:['All'],audience:'All users',subtitle:'',tech:'',btn:'Shop now'}),
     fields:d=>{
-      window._fcSel=(d.products&&d.products.length)?d.products.slice():(d.prods?String(d.prods).split(',').map(s=>({name:s.trim(),variant:'Standard'})).filter(x=>x.name):[]);
+      window._fcSel=(d.products&&d.products.length)?[d.products[0]]:(d.prods?String(d.prods).split(',').map(s=>({name:s.trim(),variant:'Standard'})).filter(x=>x.name).slice(0,1):[]);
       window._fcQ='';
       window._fcStates=Array.isArray(d.states)?d.states.slice():(d.states?String(d.states).split(',').map(s=>s.trim()).filter(Boolean):['All States']); if(!window._fcStates.length)window._fcStates=['All States'];
       window._fcCrops=Array.isArray(d.crops)?d.crops.slice():['All'];
@@ -1741,14 +1745,15 @@ const LISTS={
       if(!window._fcCrops.length)window._fcCrops=['All'];
       const color=d.color||'#1B6B3A';
       const SW=[['#1B6B3A','Green'],['#1E5AA8','Blue'],['#0E3B26','Dark green']];
-      return `<div class="sub-l" style="margin-top:0">Products <span class="hint">(search &amp; select — the card shows these)</span></div>
+      return `<div class="sub-l" style="margin-top:0">Product <span class="hint">(search &amp; select one — the card shows this product)</span></div>
       <div class="salepick-box" style="margin-bottom:6px">
         <div class="row" style="margin-bottom:8px"><div class="fg"><input type="text" id="am_psearch" placeholder="Type a product name…" oninput="fcSearch(this.value)"/></div></div>
         <div id="am_presults" class="ppick-list">${fcProdRows()}</div>
       </div>
       <div id="am_pselected" class="saleline-list" style="margin-bottom:14px">${fcSelHTML()}</div>
-      <div class="row"><div class="fg"><label>Sub-text under the card</label><input type="text" id="am_subtitle" value="${esc(d.subtitle||'')}" placeholder="e.g. Kills sucking pest"/></div>
-        <div class="fg"><label>Button text</label><input type="text" id="am_btn" value="${esc(d.btn||'Shop now')}" placeholder="e.g. Shop now"/></div></div>
+      <div class="row"><div class="fg"><label>Technical name <span class="hint">(under product name)</span></label><input type="text" id="am_tech" value="${esc(d.tech||'')}" placeholder="e.g. Chloran. + Lambda-Cy."/></div>
+        <div class="fg"><label>Sub-text under the card</label><input type="text" id="am_subtitle" value="${esc(d.subtitle||'')}" placeholder="e.g. Kills sucking pest"/></div></div>
+      <div class="row"><div class="fg"><label>Button text</label><input type="text" id="am_btn" value="${esc(d.btn||'Shop now')}" placeholder="e.g. Shop now"/></div></div>
       <div class="sub-l">Card background</div>
       <input type="hidden" id="am_color" value="${color}"/>
       <div id="am_swatches" class="fc-sw-row">${SW.map(c=>`<button type="button" class="fc-sw${color.toLowerCase()===c[0].toLowerCase()?' on':''}" data-c="${c[0]}" style="background:${c[0]}" onclick="fcSwatch('${c[0]}')"><span>${c[1]}</span></button>`).join('')}</div>
@@ -1759,10 +1764,9 @@ const LISTS={
       <div class="sub-l" style="font-weight:600">Target crops</div>
       <div id="am_crops_chips" class="chip-row">${fcCropsHTML()}</div>`;
     },
-    collect:d=>({products:(window._fcSel||[]).slice(),color:amVal('am_color')||'#1B6B3A',states:(window._fcStates||['All States']).slice(),crops:(window._fcCrops||['All']).slice(),audience:amVal('am_aud')||'All users',subtitle:amVal('am_subtitle'),btn:amVal('am_btn')||'Shop now'}),
+    collect:d=>({products:(window._fcSel||[]).slice(0,1),color:amVal('am_color')||'#1B6B3A',states:(window._fcStates||['All States']).slice(),crops:(window._fcCrops||['All']).slice(),audience:amVal('am_aud')||'All users',subtitle:amVal('am_subtitle'),tech:amVal('am_tech'),btn:amVal('am_btn')||'Shop now'}),
     row:d=>{
       const prods=(d.products&&d.products.length)?d.products:(d.prods?String(d.prods).split(',').map(s=>({name:s.trim()})).filter(x=>x.name):[]);
-      const names=prods.length?prods.map(p=>p.name).join(', '):'—';
       const title=prods.length?prods[0].name:(d.name||'Featured product');
       const stTxt=Array.isArray(d.states)?(d.states.indexOf('All States')>=0?'All states':d.states.join(', ')):(d.states||'All states');
       const crTxt=Array.isArray(d.crops)?(d.crops.indexOf('All')>=0?'All crops':d.crops.map(c=>c.replace(/^\S+\s*/,'')).join(', ')):(d.crop||'All crops');
@@ -1770,7 +1774,7 @@ const LISTS={
       <div style="display:flex;align-items:center;gap:8px"><span class="drag-h">⠿</span>
         <span class="cat-ic" style="background:${d.color||'#1B6B3A'};width:22px;height:22px;border-radius:5px"></span>
         <strong style="flex:1;font-size:13px">${esc(title)}${d.subtitle?` <span style="font-weight:500;color:var(--g500)">· ${esc(d.subtitle)}</span>`:''}</strong>${liAct('coll',d)}</div>
-      <div class="li-sum"><span class="meta">🌱 ${esc(names)} · 🔘 ${esc(d.btn||'Shop now')}</span><span class="meta">👥 ${esc(d.audience||'All users')} · 📍 ${esc(stTxt)} · 🌿 ${esc(crTxt)}</span></div></div>`;
+      <div class="li-sum"><span class="meta">🌱 ${esc(title)}${d.tech?' · 🧪 '+esc(d.tech):''} · 🔘 ${esc(d.btn||'Shop now')}</span><span class="meta">👥 ${esc(d.audience||'All users')} · 📍 ${esc(stTxt)} · 🌿 ${esc(crTxt)}</span></div></div>`;
     } },
 
   widget:{ listId:'wList', title:'widget',

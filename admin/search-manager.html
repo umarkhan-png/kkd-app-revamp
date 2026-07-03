@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Search Screen</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+/* ── Search Screen manager · scoped under .sm ── */
+.sm{--green:#258046;--green-lt:#ECFDF5;--g50:#F8FAFC;--g100:#F1F5F9;--g200:#E2E8F0;--g300:#CBD5E1;--g400:#94A3B8;--g500:#64748B;--g600:#475569;--g700:#334155;--g800:#1E293B;font-family:'Inter',sans-serif;color:var(--g800);max-width:820px;}
+.sm .sm-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px;}
+.sm .sm-head h2{font-size:21px;font-weight:800;margin:0 0 3px;}
+.sm .sm-head p{margin:0;font-size:13.5px;color:var(--g500);}
+.sm .prev-btn{flex-shrink:0;border:1px solid var(--g200);background:#fff;color:var(--g700);padding:9px 15px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.12s;}
+.sm .prev-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-lt);}
+.sm .intro{background:var(--green-lt);border:1px solid #BBF7D0;border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;gap:12px;align-items:flex-start;}
+.sm .intro i{color:var(--green);font-size:18px;margin-top:1px;}
+.sm .intro h3{margin:0 0 3px;font-size:14.5px;font-weight:800;}
+.sm .intro p{margin:0;font-size:12.5px;color:var(--g600);line-height:1.5;}
+.sm .sgrid{display:flex;flex-direction:column;gap:10px;}
+.sm .scard{display:flex;align-items:center;gap:14px;padding:15px 16px;border:1px solid var(--g200);border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(16,24,40,.04);transition:.12s;}
+.sm .scard.off{opacity:.55;}
+.sm .sicon{font-size:17px;width:44px;height:44px;border-radius:11px;background:var(--green-lt);color:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sm .sbody{flex:1;min-width:0;}
+.sm .stitle{font-size:14px;font-weight:700;color:var(--g800);}
+.sm .sdesc{font-size:12px;color:var(--g500);margin-top:2px;line-height:1.45;}
+.sm .stag{font-size:11px;font-weight:700;color:var(--g400);margin-right:10px;}
+.sm .tg{width:40px;height:23px;border-radius:20px;background:var(--g300);position:relative;cursor:pointer;transition:.15s;flex-shrink:0;}
+.sm .tg::after{content:'';position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:50%;background:#fff;transition:.15s;box-shadow:0 1px 2px rgba(0,0,0,.15);}
+.sm .tg.on{background:var(--green);}
+.sm .tg.on::after{transform:translateX(17px);}
+</style></head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+      <div class="sm">
+        <div class="sm-head">
+          <div>
+            <h2>Search screen</h2>
+            <p>Turn each search-screen section on or off. That's it — everything else is automatic.</p>
+          </div>
+          <button class="prev-btn" onclick="AdminShell.previewApp('search.html')"><i class="fa-solid fa-mobile-screen-button"></i> Preview</button>
+        </div>
+        <div class="intro">
+          <i class="fa-solid fa-circle-info"></i>
+          <div>
+            <h3>Section visibility</h3>
+            <p>These are the blocks the farmer sees on the idle search screen. Toggle any of them to show or hide it in the app.</p>
+          </div>
+        </div>
+        <div class="sgrid" id="sgrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+AdminShell.mount({ active:'sc-search', title:'Search screen', crumb:'App Screens', controls:'The Search screen sections', preview:'search.html' });
+
+// The four idle-search sections on the app search screen.
+const SECTIONS=[
+  {key:'recent',         icon:'clock-rotate-left', title:'Recent searches',        desc:"The farmer's last search terms, shown as removable chips."},
+  {key:'recentlyViewed', icon:'eye',               title:'Recently viewed',        desc:'Horizontal strip of products the farmer recently opened.'},
+  {key:'trending',       icon:'arrow-trend-up',    title:'Trending in your area',  desc:'State / region-wise trending search terms.'},
+  {key:'askExpert',      icon:'user-doctor',       title:'Ask an expert',          desc:'Full-width Ask-Expert tile on the search screen.'},
+];
+
+let data=KKD.load();
+const cfg = data.searchConfig = data.searchConfig || {};
+cfg.sections = Object.assign({recent:true,recentlyViewed:true,trending:true,askExpert:true}, cfg.sections||{});
+function persist(){ data.searchConfig=cfg; KKD.save(data); }
+persist();
+
+function render(){
+  document.getElementById('sgrid').innerHTML = SECTIONS.map(s=>{
+    const on = cfg.sections[s.key]!==false;
+    return `<div class="scard${on?'':' off'}">
+      <div class="sicon"><i class="fa-solid fa-${s.icon}"></i></div>
+      <div class="sbody">
+        <div class="stitle">${esc(s.title)}</div>
+        <div class="sdesc">${esc(s.desc)}</div>
+      </div>
+      <span class="stag">${on?'Shown':'Hidden'}</span>
+      <div class="tg ${on?'on':''}" title="Show / hide on the search screen" onclick="sToggle('${s.key}')"></div>
+    </div>`;
+  }).join('');
+}
+function sToggle(key){
+  cfg.sections[key] = cfg.sections[key]===false;
+  persist(); render();
+  const sec = SECTIONS.find(x=>x.key===key);
+  AdminShell.saved(sec.title + (cfg.sections[key]?' shown on search' : ' hidden on search'));
+}
+render();
+</script>
+</body></html>

@@ -19,7 +19,7 @@
     ]},
     { group: 'App Screens', items: [
       { key: 'sc-home', label: 'Home', icon: 'house', href: 'home-manager.html' },
-      { key: 'sc-search', label: 'Search', icon: 'magnifying-glass', href: 'screen.html?s=search' },
+      { key: 'sc-search', label: 'Search', icon: 'magnifying-glass', href: 'search-manager.html' },
       { key: 'sc-shop', label: 'Shop & Category', icon: 'store', href: 'screen.html?s=shop' },
       { key: 'sc-pdp', label: 'Product Page', icon: 'box-open', href: 'screen.html?s=pdp' },
       { key: 'sc-cart', label: 'Cart & Checkout', icon: 'cart-shopping', href: 'screen.html?s=cart' },

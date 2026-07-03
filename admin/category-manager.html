@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="assets/admin.css">
 <style>
-/* ── Category manager · banner only · scoped under .cm ── */
+/* ── Category manager · banners only · scoped under .cm ── */
 .cm{--green:#258046;--green-lt:#ECFDF5;--g50:#F8FAFC;--g100:#F1F5F9;--g200:#E2E8F0;--g300:#CBD5E1;--g400:#94A3B8;--g500:#64748B;--g600:#475569;--g700:#334155;--g800:#1E293B;font-family:'Inter',sans-serif;color:var(--g800);max-width:860px;}
 .cm .cm-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;}
 .cm .cm-head h2{font-size:21px;font-weight:800;margin:0 0 3px;}
@@ -22,17 +22,35 @@
 .cm .sub-l:first-child{margin-top:0;}
 .cm .hint{font-size:11.5px;color:var(--g400);font-weight:500;}
 .cm .hint-p{font-size:12.5px;color:var(--g500);margin:0 0 12px;line-height:1.5;}
-.cm .tr{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0;}
-.cm .tr .tt{font-size:13px;font-weight:700;}
-.cm .tr .td{font-size:11.5px;color:var(--g500);margin-top:2px;}
 .cm .tg{width:40px;height:23px;border-radius:20px;background:var(--g300);position:relative;cursor:pointer;transition:.15s;flex-shrink:0;}
 .cm .tg::after{content:'';position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:50%;background:#fff;transition:.15s;box-shadow:0 1px 2px rgba(0,0,0,.15);}
 .cm .tg.on{background:var(--green);}
 .cm .tg.on::after{transform:translateX(17px);}
 .cm .btn{height:36px;padding:0 15px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:6px;transition:.12s;}
 .cm .btn-p{background:var(--green);color:#fff;}
+.cm .btn-s{background:#fff;border:1px solid var(--g200);color:var(--g700);}
+.cm .btn-s:hover{background:var(--g50);}
+.cm .btn-add{margin-top:6px;border:1.5px dashed var(--g300);background:#fff;color:var(--green);width:100%;justify-content:center;padding:11px;height:auto;}
+.cm .btn-add:hover{border-color:var(--green);background:var(--green-lt);}
+.cm .ic-btn{border:1px solid var(--g200);background:#fff;color:var(--g500);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:12px;transition:.12s;}
+.cm .ic-btn:hover{background:var(--g50);color:var(--g700);}
+.cm .ic-btn.del:hover{background:#FEF2F2;border-color:#FECACA;color:#DC2626;}
 .cm .info-box{display:flex;align-items:flex-start;gap:8px;background:var(--green-lt);border:1px solid #BBF7D0;border-radius:9px;padding:11px 13px;font-size:12.5px;color:var(--g700);line-height:1.5;margin-top:12px;}
 .cm .info-box i{color:var(--green);margin-top:2px;}
+.cm .cchip{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--g200);margin:3px;transition:all .15s;}
+.cm .cchip.on{background:var(--green-lt);border-color:var(--green);color:var(--green);font-weight:600;}
+/* banner sub-cards */
+.cm .bcard{border:1px solid var(--g200);border-radius:12px;margin-bottom:10px;overflow:hidden;}
+.cm .bcard.off{opacity:.55;}
+.cm .bhead{display:flex;align-items:center;gap:12px;padding:11px 12px;}
+.cm .bmini{width:120px;height:52px;border-radius:8px;flex-shrink:0;color:#fff;display:flex;flex-direction:column;justify-content:center;padding:0 10px;box-shadow:0 6px 14px -8px rgba(0,0,0,.4);overflow:hidden;}
+.cm .bmini-eye{font-size:7.5px;font-weight:700;letter-spacing:.1em;opacity:.9;text-transform:uppercase;}
+.cm .bmini-head{font-size:12px;font-weight:800;line-height:1.1;}
+.cm .binfo{flex:1;min-width:0;}
+.cm .btitle{font-size:13px;font-weight:700;}
+.cm .bsum{font-size:11.5px;color:var(--g500);margin-top:2px;}
+.cm .bact{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.cm .bbody{border-top:1px solid var(--g100);background:var(--g50);padding:14px;}
 /* category promo banner (matches the app's category cross-sell promo) */
 .cm .cpromo{position:relative;overflow:hidden;border-radius:12px;padding:13px 16px;height:96px;display:flex;align-items:center;color:#fff;box-shadow:0 8px 22px -12px rgba(0,0,0,.4);width:300px;box-sizing:border-box;}
 .cm .cpromo-copy{position:relative;z-index:2;max-width:70%;}
@@ -42,11 +60,11 @@
 .cm .cpromo-img{position:absolute;right:6px;bottom:-4px;height:96px;object-fit:contain;filter:drop-shadow(0 8px 14px rgba(0,0,0,.45));z-index:1;}
 .cm .bn-wrap{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;}
 /* 2-column placement grid */
-.cm .gwrap{border:1px solid var(--g200);border-radius:12px;padding:12px;background:var(--g50);max-width:340px;}
+.cm .gwrap{border:1px solid var(--g200);border-radius:12px;padding:12px;background:#fff;max-width:340px;}
 .cm .cgrid{display:flex;flex-direction:column;gap:7px;}
 .cm .grow{display:grid;grid-template-columns:1fr 1fr;gap:7px;cursor:pointer;border-radius:8px;padding:3px;border:2px dashed transparent;transition:.1s;}
-.cm .grow:hover{border-color:var(--green);background:#fff;}
-.cm .gcell{height:26px;border-radius:6px;background:#fff;border:1px solid var(--g200);}
+.cm .grow:hover{border-color:var(--green);background:var(--g50);}
+.cm .gcell{height:26px;border-radius:6px;background:var(--g50);border:1px solid var(--g200);}
 .cm .gbanner{border-radius:8px;overflow:hidden;height:40px;display:flex;align-items:center;padding:0 12px;color:#fff;font-size:11.5px;font-weight:800;box-shadow:0 6px 16px -8px rgba(0,0,0,.4);}
 /* modal */
 #cmModal{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;}
@@ -71,15 +89,18 @@
         <div class="cm-head">
           <div>
             <h2>Category</h2>
-            <p>Manage the promo banner shown on the category screen.</p>
+            <p>Manage the promo banners shown on the category screen.</p>
           </div>
           <button class="prev-btn" onclick="AdminShell.previewApp('categories.html')"><i class="fa-solid fa-mobile-screen-button"></i> Preview</button>
         </div>
 
         <div class="card">
           <div class="card-head"><span class="ci"><i class="fa-solid fa-image"></i></span>
-            <div><h3>Category banner</h3><p>A promo banner woven into the product grid</p></div></div>
-          <div class="card-body" id="bannerBody"></div>
+            <div><h3>Category banners</h3><p>Add one or more promo banners · set placement &amp; who sees each</p></div></div>
+          <div class="card-body">
+            <div id="bannersBody"></div>
+            <button class="btn btn-add" onclick="bannerAdd()"><i class="fa-solid fa-plus"></i> Add banner</button>
+          </div>
         </div>
       </div>
     </div>
@@ -89,10 +110,13 @@
 <script src="assets/data.js"></script>
 <script src="assets/shell.js"></script>
 <script>
-AdminShell.mount({ active:'sc-category', title:'Category', crumb:'App Screens', controls:'Category screen banner', preview:'categories.html' });
+AdminShell.mount({ active:'sc-category', title:'Category', crumb:'App Screens', controls:'Category screen banners', preview:'categories.html' });
 
 let data = KKD.load();
 const PROMO_GRADS=['linear-gradient(135deg,#258046 0%,#16643A 100%)','linear-gradient(135deg,#0E7490 0%,#0B4A5E 100%)','linear-gradient(135deg,#2563EB 0%,#1E40AF 100%)','linear-gradient(135deg,#059669 0%,#03543F 100%)','linear-gradient(135deg,#0D9488 0%,#0B5E57 100%)'];
+const STATES=['MP','UP','Maharashtra','Gujarat','Rajasthan','Karnataka','AP','Telangana','Punjab','Haryana','Bihar','WB'];
+const CROPS=['🍅 Tomato','🌶️ Chilli','🌾 Wheat','🌽 Maize','🧅 Onion','🥔 Potato','🫘 Soybean','🪴 Cotton','🥜 Groundnut','🌾 Paddy','🫑 Capsicum'];
+const AUDS=[{k:'all',l:'All users'},{k:'new',l:'New (just onboarded)'},{k:'returning',l:'Returning users'},{k:'inactive',l:'Inactive 30 days'}];
 
 data.categories = Array.isArray(data.categories) ? data.categories : [];
 data.products   = Array.isArray(data.products) ? data.products : [];
@@ -100,8 +124,22 @@ let cats = data.categories.slice().sort((a,b)=>(a.order||0)-(b.order||0));
 cats.forEach((c,i)=>{ c._grad = PROMO_GRADS[i%PROMO_GRADS.length]; });
 
 const cfg = data.categoryConfig = data.categoryConfig || {};
-cfg.banner = Object.assign({on:true,promoCat:(cats[0]&&cats[0].key)||'',afterRow:2}, cfg.banner||{});
-if(!cats.some(c=>c.key===cfg.banner.promoCat)) cfg.banner.promoCat = (cats[0]&&cats[0].key)||'';
+/* migrate single-banner config → list; seed one banner if empty */
+if(!Array.isArray(cfg.banners)){
+  const old = cfg.banner;
+  cfg.banners = old ? [normBanner(old)] : [ newBanner() ];
+  delete cfg.banner;
+}
+cfg.banners = cfg.banners.map(normBanner);
+function firstCat(){ return (cats[0]&&cats[0].key)||''; }
+function newBanner(){ return {promoCat:firstCat(),afterRow:2,on:true,audience:['all'],states:['All'],crops:['All']}; }
+function normBanner(b){ b=Object.assign(newBanner(), b||{});
+  if(!cats.some(c=>c.key===b.promoCat)) b.promoCat=firstCat();
+  if(!Array.isArray(b.audience)||!b.audience.length) b.audience=['all'];
+  if(!Array.isArray(b.states)||!b.states.length) b.states=['All'];
+  if(!Array.isArray(b.crops)||!b.crops.length) b.crops=['All'];
+  return b;
+}
 function persist(){ data.categoryConfig=cfg; KKD.save(data); }
 persist();
 
@@ -117,35 +155,79 @@ function catPromo(c){ if(!c) return '<div class="cpromo" style="background:#E2E8
     ${img?`<img class="cpromo-img" src="${img}" alt=""/>`:''}</div>`;
 }
 
-function renderBanner(){
-  const on=cfg.banner.on!==false; const c=catBy(cfg.banner.promoCat);
-  document.getElementById('bannerBody').innerHTML=`
-    <div class="tr" style="padding-top:0"><div><div class="tt">Show category banner</div><div class="td">These are the same cross-sell banners the category page already shows</div></div>
-      <div class="tg ${on?'on':''}" onclick="bannerTog()"></div></div>
-    <div style="${on?'':'opacity:.45;pointer-events:none'}">
-      <div class="sub-l">Selected banner</div>
-      <div class="bn-wrap"><div>${catPromo(c)}</div>
-        <div><button class="btn btn-p" onclick="openBannerPicker()"><i class="fa-solid fa-images"></i> Choose banner</button>
-          <p class="hint" style="margin:10px 0 0;max-width:250px">Pick which category this promo pushes farmers to.</p></div></div>
-      <div class="sub-l">Banner placement <span class="hint">— tap a row to drop the banner after it</span></div>
-      <div class="gwrap"><div class="cgrid" id="placeGrid"></div></div>
-      <div class="info-box"><i class="fa-solid fa-circle-info"></i><div>The product grid is <b>2 across</b>. A full-width banner can only sit <b>between rows</b> (after an even number of cards) — pick the row above and the banner drops in after it.</div></div>
-    </div>`;
-  renderGrid();
+/* ── banner list ── */
+let bnOpen=0;
+function condSummary(b){
+  const a=b.audience.indexOf('all')>=0?'All users':b.audience.map(k=>{const x=AUDS.find(y=>y.k===k);return x?x.l:k;}).join(', ');
+  const s=b.states.indexOf('All')>=0?'All states':b.states.join(', ');
+  const cr=b.crops.indexOf('All')>=0?'All crops':b.crops.map(c=>c.replace(/^\S+\s*/,'')).join(', ');
+  return a+' · '+s+' · '+cr;
 }
-function renderGrid(){
-  const N=cfg.banner.afterRow||2; const c=catBy(cfg.banner.promoCat);
+function renderBanners(){
+  const list=cfg.banners;
+  document.getElementById('bannersBody').innerHTML = list.map((b,idx)=>{
+    const c=catBy(b.promoCat); const on=b.on!==false; const open=idx===bnOpen;
+    const head=`<div class="bhead">
+      <div class="bmini" style="background:${c?c._grad:'#258046'}"><div class="bmini-eye">${c?'Category promo':''}</div><div class="bmini-head">${c?('Explore '+esc(c.name)):'No banner'}</div></div>
+      <div class="binfo"><div class="btitle">Banner ${idx+1} · after row ${b.afterRow}</div><div class="bsum">${esc(condSummary(b))}</div></div>
+      <div class="bact">
+        <div class="tg ${on?'on':''}" title="Show / hide this banner" onclick="bannerTog(${idx})"></div>
+        <button class="ic-btn" title="${open?'Collapse':'Edit'}" onclick="bnToggle(${idx})"><i class="fa-solid fa-${open?'chevron-up':'pen'}"></i></button>
+        <button class="ic-btn del" title="Remove banner" onclick="bannerDel(${idx})"><i class="fa-solid fa-trash"></i></button>
+      </div></div>`;
+    if(!open) return `<div class="bcard${on?'':' off'}">${head}</div>`;
+    return `<div class="bcard${on?'':' off'}">${head}
+      <div class="bbody">
+        <div class="sub-l" style="margin-top:0">Banner creative</div>
+        <div class="bn-wrap"><div>${catPromo(c)}</div>
+          <div><button class="btn btn-p" onclick="openBannerPicker(${idx})"><i class="fa-solid fa-images"></i> Choose banner</button>
+            <p class="hint" style="margin:10px 0 0;max-width:250px">Pick which category this promo pushes farmers to.</p></div></div>
+        <div class="sub-l">Placement <span class="hint">— tap a row to drop the banner after it</span></div>
+        <div class="gwrap"><div class="cgrid" id="placeGrid-${idx}"></div></div>
+        <div class="info-box"><i class="fa-solid fa-circle-info"></i><div>The product grid is <b>2 across</b>. A full-width banner can only sit <b>between rows</b> (after an even number of cards).</div></div>
+        <div class="sub-l">Show to <span class="hint">(conditions — who sees this banner)</span></div>
+        <div style="font-size:11px;font-weight:700;color:var(--g500);margin-bottom:4px">AUDIENCE</div>
+        <div>${audienceChips(idx,b)}</div>
+        <div style="font-size:11px;font-weight:700;color:var(--g500);margin:10px 0 4px">STATES</div>
+        <div>${stateChips(idx,b)}</div>
+        <div style="font-size:11px;font-weight:700;color:var(--g500);margin:10px 0 4px">CROPS</div>
+        <div>${cropChips(idx,b)}</div>
+      </div></div>`;
+  }).join('') || '<p class="hint" style="padding:6px 2px 12px">No banners yet — add one below.</p>';
+  cfg.banners.forEach((b,idx)=>{ if(idx===bnOpen) renderGrid(idx); });
+}
+function audienceChips(idx,b){ const all=b.audience.indexOf('all')>=0;
+  return `<span class="cchip ${all?'on':''}" onclick="bnAudTog(${idx},'all')">All users</span> `+AUDS.filter(a=>a.k!=='all').map(a=>`<span class="cchip ${(!all&&b.audience.indexOf(a.k)>=0)?'on':''}" onclick="bnAudTog(${idx},'${a.k}')">${a.l}</span>`).join(''); }
+function stateChips(idx,b){ const all=b.states.indexOf('All')>=0;
+  return `<span class="cchip ${all?'on':''}" onclick="bnStateAll(${idx})">All states</span> `+STATES.map(s=>`<span class="cchip ${(!all&&b.states.indexOf(s)>=0)?'on':''}" onclick="bnStateTog(${idx},'${s}')">${s}</span>`).join(''); }
+function cropChips(idx,b){ const all=b.crops.indexOf('All')>=0;
+  return `<span class="cchip ${all?'on':''}" onclick="bnCropAll(${idx})">All crops</span> `+CROPS.map((cr,i)=>`<span class="cchip ${(!all&&b.crops.indexOf(cr)>=0)?'on':''}" onclick="bnCropTog(${idx},${i})">${esc(cr)}</span>`).join(''); }
+function renderGrid(idx){
+  const b=cfg.banners[idx]; if(!b) return; const N=b.afterRow||2; const c=catBy(b.promoCat);
   let html='';
   for(let r=1;r<=16;r++){
-    html += `<div class="grow${N===r?' sel':''}" title="Place banner after row ${r}" onclick="setRow(${r})"><div class="gcell"></div><div class="gcell"></div></div>`;
+    html += `<div class="grow${N===r?' sel':''}" title="Place banner after row ${r}" onclick="setRow(${idx},${r})"><div class="gcell"></div><div class="gcell"></div></div>`;
     if(r===N){ html += `<div class="gbanner" style="background:${c?c._grad:'#258046'}"><i class="fa-solid fa-bullhorn" style="margin-right:7px"></i> ${c?('Explore '+esc(c.name)):'Banner'} · after row ${r}</div>`; }
   }
-  const g=document.getElementById('placeGrid'); if(g) g.innerHTML=html;
+  const g=document.getElementById('placeGrid-'+idx); if(g) g.innerHTML=html;
 }
-function setRow(r){ cfg.banner.afterRow=r; persist(); renderGrid(); }
-function bannerTog(){ cfg.banner.on=cfg.banner.on===false; persist(); renderBanner(); }
-function openBannerPicker(){
-  const cards=cats.map(c=>`<div class="bnpick-card${cfg.banner.promoCat===c.key?' sel':''}" onclick="bannerPick('${c.key}')">${catPromo(c)}</div>`).join('');
+
+/* actions */
+function bnToggle(idx){ bnOpen = (bnOpen===idx)?-1:idx; renderBanners(); }
+function bannerAdd(){ cfg.banners.push(newBanner()); bnOpen=cfg.banners.length-1; persist(); renderBanners(); AdminShell.saved('Banner added'); }
+function bannerDel(idx){ cfg.banners.splice(idx,1); if(bnOpen>=cfg.banners.length) bnOpen=cfg.banners.length-1; persist(); renderBanners(); AdminShell.saved('Banner removed'); }
+function bannerTog(idx){ cfg.banners[idx].on=cfg.banners[idx].on===false; persist(); renderBanners(); }
+function setRow(idx,r){ cfg.banners[idx].afterRow=r; persist(); renderGrid(idx); renderBanners(); }
+function bnAudTog(idx,k){ const b=cfg.banners[idx]; if(k==='all'){b.audience=['all'];}else{let a=b.audience.filter(x=>x!=='all'); a.indexOf(k)>=0?a=a.filter(x=>x!==k):a.push(k); b.audience=a.length?a:['all'];} persist(); renderBanners(); }
+function bnStateAll(idx){ cfg.banners[idx].states=['All']; persist(); renderBanners(); }
+function bnStateTog(idx,s){ const b=cfg.banners[idx]; let a=b.states.filter(x=>x!=='All'); a.indexOf(s)>=0?a=a.filter(x=>x!==s):a.push(s); b.states=a.length?a:['All']; persist(); renderBanners(); }
+function bnCropAll(idx){ cfg.banners[idx].crops=['All']; persist(); renderBanners(); }
+function bnCropTog(idx,i){ const b=cfg.banners[idx]; const cr=CROPS[i]; let a=b.crops.filter(x=>x!=='All'); a.indexOf(cr)>=0?a=a.filter(x=>x!==cr):a.push(cr); b.crops=a.length?a:['All']; persist(); renderBanners(); }
+
+/* banner creative picker */
+function openBannerPicker(idx){
+  const cur=cfg.banners[idx].promoCat;
+  const cards=cats.map(c=>`<div class="bnpick-card${cur===c.key?' sel':''}" onclick="bannerPick(${idx},'${c.key}')">${catPromo(c)}</div>`).join('');
   const ex=document.getElementById('cmModal'); if(ex)ex.remove();
   const html=`<div id="cmModal"><div class="scrim" onclick="closeModal()"></div>
     <div class="box"><div class="box-head"><h3>Category banners</h3><button class="x" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
@@ -153,9 +235,9 @@ function openBannerPicker(){
         <div class="bnpick-grid">${cards}</div></div></div></div>`;
   document.querySelector('.cm').insertAdjacentHTML('beforeend', html);
 }
-function bannerPick(key){ cfg.banner.promoCat=key; persist(); closeModal(); renderBanner(); AdminShell.saved('Category banner updated'); }
+function bannerPick(idx,key){ cfg.banners[idx].promoCat=key; persist(); closeModal(); renderBanners(); AdminShell.saved('Category banner updated'); }
 function closeModal(){ const m=document.getElementById('cmModal'); if(m)m.remove(); }
 
-renderBanner();
+renderBanners();
 </script>
 </body></html>

@@ -21,7 +21,7 @@
       { key: 'sc-home', label: 'Home', icon: 'house', href: 'home-manager.html' },
       { key: 'sc-search', label: 'Search', icon: 'magnifying-glass', href: 'search-manager.html' },
       { key: 'sc-products', label: 'Product', icon: 'store', href: 'screen.html?s=products' },
-      { key: 'sc-category', label: 'Category', icon: 'shapes', href: 'screen.html?s=category' },
+      { key: 'sc-category', label: 'Category', icon: 'shapes', href: 'category-manager.html' },
       { key: 'sc-pdp', label: 'Product Detail Page', icon: 'box-open', href: 'pdp-manager.html' },
       { key: 'sc-cart', label: 'Cart & Checkout', icon: 'cart-shopping', href: 'screen.html?s=cart' },
       { key: 'sc-orders', label: 'Orders & Tracking', icon: 'truck', href: 'screen.html?s=orders' },

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Category</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+/* ── Category manager · scoped under .cm ── */
+.cm{--green:#258046;--green-lt:#ECFDF5;--g50:#F8FAFC;--g100:#F1F5F9;--g200:#E2E8F0;--g300:#CBD5E1;--g400:#94A3B8;--g500:#64748B;--g600:#475569;--g700:#334155;--g800:#1E293B;font-family:'Inter',sans-serif;color:var(--g800);max-width:880px;}
+.cm .cm-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;}
+.cm .cm-head h2{font-size:21px;font-weight:800;margin:0 0 3px;}
+.cm .cm-head p{margin:0;font-size:13.5px;color:var(--g500);}
+.cm .prev-btn{flex-shrink:0;border:1px solid var(--g200);background:#fff;color:var(--g700);padding:9px 15px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.12s;}
+.cm .prev-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-lt);}
+.cm .card{background:#fff;border:1px solid var(--g200);border-radius:14px;box-shadow:0 1px 2px rgba(16,24,40,.04);margin-bottom:16px;overflow:hidden;}
+.cm .card-head{padding:14px 18px;border-bottom:1px solid var(--g100);display:flex;align-items:center;gap:10px;}
+.cm .card-head .ci{width:34px;height:34px;border-radius:9px;background:var(--green-lt);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.cm .card-head h3{margin:0;font-size:14.5px;font-weight:800;}
+.cm .card-head p{margin:1px 0 0;font-size:11.5px;color:var(--g400);}
+.cm .card-body{padding:16px 18px;}
+.cm .sub-l{font-size:12px;font-weight:700;color:var(--g600);margin:16px 0 8px;}
+.cm .sub-l:first-child{margin-top:0;}
+.cm .hint{font-size:11.5px;color:var(--g400);font-weight:500;}
+.cm .hint-p{font-size:12.5px;color:var(--g500);margin:0 0 12px;line-height:1.5;}
+/* category rows */
+.cm .clist{display:flex;flex-direction:column;gap:8px;}
+.cm .crow{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--g200);border-radius:11px;background:#fff;}
+.cm .crow.off{opacity:.5;}
+.cm .cchip-img{width:38px;height:38px;border-radius:9px;flex-shrink:0;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;}
+.cm .cbody{flex:1;min-width:0;}
+.cm .cname{font-size:13.5px;font-weight:700;}
+.cm .cmeta{font-size:11.5px;color:var(--g500);margin-top:1px;}
+.cm .cact{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.cm .ic-btn{border:1px solid var(--g200);background:#fff;color:var(--g500);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:11px;transition:.12s;}
+.cm .ic-btn:hover{background:var(--g50);color:var(--g700);}
+.cm .ic-btn:disabled{opacity:.35;cursor:default;}
+/* toggle */
+.cm .tg{width:40px;height:23px;border-radius:20px;background:var(--g300);position:relative;cursor:pointer;transition:.15s;flex-shrink:0;}
+.cm .tg::after{content:'';position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:50%;background:#fff;transition:.15s;box-shadow:0 1px 2px rgba(0,0,0,.15);}
+.cm .tg.on{background:var(--green);}
+.cm .tg.on::after{transform:translateX(17px);}
+.cm .tr{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0;border-top:1px solid var(--g100);}
+.cm .tr:first-child{border-top:none;}
+.cm .tr .tt{font-size:13px;font-weight:700;}
+.cm .tr .td{font-size:11.5px;color:var(--g500);margin-top:2px;}
+.cm .fg label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--g500);margin-bottom:6px;}
+.cm .fg select{border:1.5px solid var(--g200);border-radius:9px;padding:9px 11px;font-size:13px;font-family:inherit;color:var(--g800);outline:none;background:#fff;min-width:220px;}
+.cm .fg select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
+.cm .info-box{display:flex;align-items:flex-start;gap:8px;background:var(--green-lt);border:1px solid #BBF7D0;border-radius:9px;padding:11px 13px;font-size:12.5px;color:var(--g700);line-height:1.5;margin-top:12px;}
+.cm .info-box i{color:var(--green);margin-top:2px;}
+.cm .btn{height:36px;padding:0 15px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:6px;transition:.12s;}
+.cm .btn-p{background:var(--green);color:#fff;}
+.cm .btn-s{background:#fff;border:1px solid var(--g200);color:var(--g700);}
+.cm .btn-s:hover{background:var(--g50);}
+/* approved banner card (same visual language as Home promo banners) */
+.cm .mkbn{width:300px;height:168px;border-radius:14px;padding:14px;box-sizing:border-box;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 22px -12px rgba(0,0,0,.4);}
+.cm .mkbn-empty{align-items:center;justify-content:center;background:var(--g100);color:var(--g400);font-size:13px;box-shadow:none;}
+.cm .mkbn-ghost{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:90px;font-weight:900;font-style:italic;line-height:1;pointer-events:none;user-select:none;}
+.cm .mkbn-badge{position:relative;align-self:flex-start;display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:6px;font-size:9.5px;font-weight:700;letter-spacing:.14em;background:rgba(251,191,36,0.16);border:1px solid;}
+.cm .mkbn-head{position:relative;font-size:21px;font-weight:800;line-height:1.05;margin-top:6px;}
+.cm .mkbn-foot{position:relative;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;}
+.cm .mkbn-sub{font-size:9px;font-weight:700;letter-spacing:.14em;opacity:.85;}
+.cm .mkbn-big{font-size:22px;font-weight:800;margin-top:2px;}
+.cm .mkbn-big span{font-size:11px;font-weight:700;opacity:.8;}
+.cm .mkbn-cta{font-size:11.5px;font-weight:800;padding:8px 14px;border-radius:20px;white-space:nowrap;box-shadow:0 6px 16px -4px rgba(0,0,0,.35);}
+.cm .bn-wrap{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;}
+/* modal */
+#cmModal{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;}
+#cmModal .scrim{position:absolute;inset:0;background:rgba(15,23,42,.5);}
+#cmModal .box{position:relative;background:#fff;border-radius:16px;width:720px;max-width:94vw;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.28);}
+#cmModal .box-head{padding:16px 20px;border-bottom:1px solid var(--g100);display:flex;align-items:center;gap:10px;}
+#cmModal .box-head h3{margin:0;font-size:16px;font-weight:800;flex:1;}
+#cmModal .x{border:none;background:var(--g100);width:30px;height:30px;border-radius:8px;cursor:pointer;color:var(--g500);}
+#cmModal .box-body{padding:18px 20px;overflow-y:auto;}
+.cm .bnpick-grid{display:flex;flex-wrap:wrap;gap:16px;}
+.cm .bnpick-card{cursor:pointer;border-radius:14px;transition:transform .12s;}
+.cm .bnpick-card:hover{transform:translateY(-3px);}
+.cm .bnpick-card:hover .mkbn{outline:3px solid var(--green);outline-offset:2px;border-radius:14px;}
+.cm .bnpick-card.sel .mkbn{outline:3px solid var(--green);outline-offset:2px;border-radius:14px;}
+.cm .bnpick-name{font-size:12px;font-weight:700;color:var(--g700);margin-top:8px;text-align:center;max-width:300px;}
+</style></head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+      <div class="cm">
+        <div class="cm-head">
+          <div>
+            <h2>Category</h2>
+            <p>Everything on the category screen — categories, filters and the top banner — configured right here.</p>
+          </div>
+          <button class="prev-btn" onclick="AdminShell.previewApp('categories.html')"><i class="fa-solid fa-mobile-screen-button"></i> Preview</button>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="ci"><i class="fa-solid fa-shapes"></i></span>
+            <div><h3>Categories &amp; filters</h3><p>Which categories show, in what order, and which filters farmers can use</p></div></div>
+          <div class="card-body">
+            <div class="sub-l">Categories <span class="hint">— drag order via arrows · toggle to show / hide</span></div>
+            <div class="clist" id="clist"></div>
+            <div class="sub-l">Filters shown on the category screen</div>
+            <div id="filters"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="ci"><i class="fa-solid fa-image"></i></span>
+            <div><h3>Category top banner</h3><p>A Marketing-360-approved banner placed inside the product grid</p></div></div>
+          <div class="card-body" id="bannerBody"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+AdminShell.mount({ active:'sc-category', title:'Category', crumb:'App Screens', controls:'Category screen — categories, filters and banner', preview:'categories.html' });
+
+let data = KKD.load();
+
+/* categories come from the shared catalogue */
+data.categories = Array.isArray(data.categories) ? data.categories : [];
+let cats = data.categories.slice().sort((a,b)=>(a.order||0)-(b.order||0));
+
+/* config: filters + banner */
+const cfg = data.categoryConfig = data.categoryConfig || {};
+cfg.filters = Object.assign({price:true,pack:true,crop:true,brand:false,rating:true,stock:true}, cfg.filters||{});
+cfg.banner  = Object.assign({on:true,bannerId:'fert',afterCards:4}, cfg.banner||{});
+function persist(){ data.categories = cats; data.categoryConfig = cfg; KKD.save(data); }
+persist();
+
+/* approved Marketing-360 banners (same set as Home promo banners) */
+const MKT360_BANNERS=[
+  { id:'mela', name:'Mega Krishi Bachat Mela', tag:'KISAN EXCLUSIVE', badgeIc:'fa-crown', head:'Mega Krishi', hi:'Bachat Mela', sub:'EXTRA DISCOUNT', big:'₹500', suf:'OFF', cta:'SHOP NOW', ghost:'%', bg:'linear-gradient(135deg,#042919 0%,#0E7A4E 60%,#10B981 120%)', fg:'#fff', accent:'#FBBF24', ctaBg:'linear-gradient(135deg,#FBBF24,#F59E0B)', ctaFg:'#0F172A' },
+  { id:'bogo', name:'Buy 1 Get 1 — Antivirus Combo', tag:'HOT COMBO', badgeIc:'fa-bolt', head:'Buy 1 Get 1', hi:'FREE', sub:'ON ANTIVIRUS COMBO', big:'Chilli · Tomato · Brinjal', suf:'', cta:'GRAB', ghost:'1+1', bg:'linear-gradient(135deg,#1E1B4B 0%,#4338CA 60%,#6366F1 120%)', fg:'#fff', accent:'#FBBF24', ctaBg:'linear-gradient(135deg,#FBBF24,#F59E0B)', ctaFg:'#0F172A' },
+  { id:'fert', name:'Fertilizer Fest — up to 40% off', tag:'FERTILIZER FEST', badgeIc:'fa-seedling', head:'Save Big', hi:'on NPK', sub:'UP TO', big:'40%', suf:'OFF', cta:'EXPLORE', ghost:'40', bg:'linear-gradient(135deg,#FFF8E6 0%,#FCD34D 60%,#F59E0B 120%)', fg:'#0F172A', accent:'#7C2D12', ctaBg:'#0F172A', ctaFg:'#FBBF24' },
+];
+function mkFind(id){ return MKT360_BANNERS.find(b=>b.id===id); }
+function mkBanner(m){ if(!m) return '<div class="mkbn mkbn-empty">No banner selected</div>';
+  const ghostC = m.fg==='#fff' ? 'rgba(251,191,36,0.16)' : 'rgba(15,23,42,0.08)';
+  return `<div class="mkbn" style="background:${m.bg};color:${m.fg}">
+    <div class="mkbn-ghost" style="color:${ghostC}">${m.ghost||''}</div>
+    <div class="mkbn-badge" style="color:${m.accent};border-color:${m.accent}"><i class="fa-solid ${m.badgeIc}"></i> ${m.tag}</div>
+    <div class="mkbn-head">${m.head} <span style="color:${m.accent}">${m.hi}</span></div>
+    <div class="mkbn-foot"><div class="mkbn-info"><div class="mkbn-sub">${m.sub}</div><div class="mkbn-big" style="color:${m.accent}">${m.big}${m.suf?` <span>${m.suf}</span>`:''}</div></div>
+      <div class="mkbn-cta" style="background:${m.ctaBg};color:${m.ctaFg}">${m.cta} →</div></div>
+  </div>`;
+}
+
+/* ── categories ── */
+function renderCats(){
+  document.getElementById('clist').innerHTML = cats.map((c,i)=>{
+    const n=cats.length; const on=c.active!==false;
+    const chip = c.img ? `<div class="cchip-img" style="background-image:url('${c.img}')"></div>` : `<div class="cchip-img" style="background:${c.color||'#CBD5E1'}"><i class="fa-solid fa-shapes"></i></div>`;
+    return `<div class="crow${on?'':' off'}">${chip}
+      <div class="cbody"><div class="cname">${esc(c.name)}</div><div class="cmeta">${c.products||0} products</div></div>
+      <div class="cact">
+        <button class="ic-btn" title="Move up" onclick="catMove(${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button>
+        <button class="ic-btn" title="Move down" onclick="catMove(${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
+        <div class="tg ${on?'on':''}" title="Show / hide on the category screen" onclick="catTog(${i})"></div>
+      </div></div>`;
+  }).join('');
+}
+function catMove(i,dir){ const j=i+dir; if(j<0||j>=cats.length)return; const a=cats; [a[i],a[j]]=[a[j],a[i]]; a.forEach((c,k)=>c.order=k+1); persist(); renderCats(); }
+function catTog(i){ cats[i].active=cats[i].active===false; persist(); renderCats(); AdminShell.saved(cats[i].name+(cats[i].active!==false?' shown':' hidden')); }
+
+/* ── filters ── */
+const FILTERS=[
+  {k:'price', t:'Price range', d:'Slider to filter by price'},
+  {k:'pack',  t:'Pack size',   d:'250 ml / 500 ml / 1 L …'},
+  {k:'crop',  t:'Crop',        d:'Filter by the crop it is used on'},
+  {k:'brand', t:'Brand',       d:'Filter by manufacturer / brand'},
+  {k:'rating',t:'Rating',      d:'4★ &amp; up, 3★ &amp; up …'},
+  {k:'stock', t:'In stock only',d:'Hide out-of-stock products'},
+];
+function renderFilters(){
+  document.getElementById('filters').innerHTML = FILTERS.map(f=>{
+    const on=cfg.filters[f.k]!==false;
+    return `<div class="tr"><div><div class="tt">${f.t}</div><div class="td">${f.d}</div></div>
+      <div class="tg ${on?'on':''}" onclick="filterTog('${f.k}')"></div></div>`;
+  }).join('');
+}
+function filterTog(k){ cfg.filters[k]=cfg.filters[k]===false; persist(); renderFilters(); }
+
+/* ── banner ── */
+function renderBanner(){
+  const on=cfg.banner.on!==false; const m=mkFind(cfg.banner.bannerId);
+  const N=cfg.banner.afterCards||4;
+  const opts=[2,4,6,8,10].map(v=>`<option value="${v}"${N===v?' selected':''}>After every ${v} product cards</option>`).join('');
+  document.getElementById('bannerBody').innerHTML=`
+    <div class="tr" style="border-top:none;padding-top:0"><div><div class="tt">Show category banner</div><div class="td">A promo banner woven into the product grid</div></div>
+      <div class="tg ${on?'on':''}" onclick="bannerTog()"></div></div>
+    <div style="${on?'':'opacity:.45;pointer-events:none'}">
+      <div class="sub-l">Selected banner</div>
+      <div class="bn-wrap">
+        <div>${mkBanner(m)}</div>
+        <div>
+          <button class="btn btn-p" onclick="openBannerPicker()"><i class="fa-solid fa-images"></i> Select from approved banners</button>
+          <p class="hint" style="margin:10px 0 0;max-width:260px">Only Marketing-360-approved KKD banners can be used — tap to choose.</p>
+        </div>
+      </div>
+      <div class="sub-l">Banner position</div>
+      <div class="fg" style="max-width:320px"><label>Insert banner in the grid</label>
+        <select onchange="bannerAfter(this.value)">${opts}</select></div>
+      <div class="info-box"><i class="fa-solid fa-circle-info"></i><div>The grid is 2 products per row, so a banner can only sit at an <b>even</b> card position — it always drops in <b>after a full row of products</b> (after every 2, 4, 6 … cards) so the layout never breaks.</div></div>
+    </div>`;
+}
+function bannerTog(){ cfg.banner.on=cfg.banner.on===false; persist(); renderBanner(); }
+function bannerAfter(v){ let n=parseInt(v,10)||4; if(n%2!==0) n=n+1; cfg.banner.afterCards=n; persist(); renderBanner(); }
+
+/* approved-banner picker modal */
+function openBannerPicker(){
+  const cards=MKT360_BANNERS.map(m=>`<div class="bnpick-card${cfg.banner.bannerId===m.id?' sel':''}" onclick="bannerPick('${m.id}')">${mkBanner(m)}<div class="bnpick-name">${esc(m.name)}</div></div>`).join('');
+  const html=`<div id="cmModal"><div class="scrim" onclick="closeBannerPicker()"></div>
+    <div class="box"><div class="box-head"><h3>Approved banners</h3><button class="x" onclick="closeBannerPicker()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="box-body"><p class="hint-p">These are the KKD banners designed &amp; approved in <b>Marketing 360</b> — tap one to use it on the category screen.</p>
+        <div class="bnpick-grid">${cards}</div></div>
+    </div></div>`;
+  document.querySelector('.cm').insertAdjacentHTML('beforeend', html);
+}
+function closeBannerPicker(){ const m=document.getElementById('cmModal'); if(m)m.remove(); }
+function bannerPick(id){ cfg.banner.bannerId=id; persist(); closeBannerPicker(); renderBanner(); AdminShell.saved('Category banner updated'); }
+
+renderCats(); renderFilters(); renderBanner();
+</script>
+</body></html>

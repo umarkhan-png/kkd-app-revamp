@@ -20,8 +20,9 @@
     { group: 'App Screens', items: [
       { key: 'sc-home', label: 'Home', icon: 'house', href: 'home-manager.html' },
       { key: 'sc-search', label: 'Search', icon: 'magnifying-glass', href: 'search-manager.html' },
-      { key: 'sc-shop', label: 'Shop & Category', icon: 'store', href: 'screen.html?s=shop' },
-      { key: 'sc-pdp', label: 'Product Page', icon: 'box-open', href: 'screen.html?s=pdp' },
+      { key: 'sc-products', label: 'Product Listing', icon: 'store', href: 'screen.html?s=products' },
+      { key: 'sc-category', label: 'Category', icon: 'shapes', href: 'screen.html?s=category' },
+      { key: 'sc-pdp', label: 'Product Detail Page', icon: 'box-open', href: 'screen.html?s=pdp' },
       { key: 'sc-cart', label: 'Cart & Checkout', icon: 'cart-shopping', href: 'screen.html?s=cart' },
       { key: 'sc-orders', label: 'Orders & Tracking', icon: 'truck', href: 'screen.html?s=orders' },
       { key: 'sc-mycrop', label: 'My Crop', icon: 'seedling', href: 'screen.html?s=mycrop' },

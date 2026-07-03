@@ -652,8 +652,8 @@ function edHead(id){
     ? `<span class="ed-lock" title="This section is always on and can’t be hidden">🔒 Always on</span>`
     : `<label class="ed-toggle"><span>Show on Home</span><div class="tg ${s.on?'on':''}" onclick="toggleVis('${id}')"></div></label>`;
   const dispNm = s.title || s.nm;
-  // rename via a pencil next to the title — content + custom sections only (not fixed-placement / Recently Viewed)
-  const rename = (!m.fixed && id!=='recent')
+  // rename via a pencil next to the title — content + custom sections + Ask Expert (not Recently Viewed / other fixed frames)
+  const rename = ((!m.fixed || id==='expert') && id!=='recent')
     ? `<button class="ttl-edit" title="Rename this section" onclick="renameSection('${id}')"><i class="fa-solid fa-pen"></i></button>`
     : '';
   // uniform delete (same trash control as the rest of the portal) — custom sections only

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Blocked Users</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+.bu{--green:#258046;--green-lt:#ECFDF5;--red:#DC2626;--red-lt:#FEF2F2;--g50:#F8FAFC;--g100:#F1F5F9;--g200:#E2E8F0;--g300:#CBD5E1;--g400:#94A3B8;--g500:#64748B;--g600:#475569;--g700:#334155;--g800:#1E293B;font-family:'Inter',sans-serif;color:var(--g800);max-width:760px;}
+.bu .intro{background:var(--red-lt);border:1px solid #FECACA;border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;gap:12px;align-items:flex-start;}
+.bu .intro i{color:var(--red);font-size:18px;margin-top:1px;}
+.bu .intro h2{margin:0 0 3px;font-size:15px;font-weight:800;}
+.bu .intro p{margin:0;font-size:12.5px;color:var(--g600);line-height:1.5;}
+.bu .card{background:#fff;border:1px solid var(--g200);border-radius:14px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:16px 18px;margin-bottom:16px;}
+.bu .add{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+.bu .add input{flex:1;min-width:150px;border:1.5px solid var(--g200);border-radius:9px;padding:10px 12px;font-size:13.5px;font-family:inherit;outline:none;}
+.bu .add input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
+.bu .btn{height:40px;padding:0 16px;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:6px;transition:.12s;}
+.bu .btn-p{background:var(--red);color:#fff;}
+.bu .btn-p:hover{background:#B91C1C;}
+.bu .btn-s{background:#fff;border:1px solid var(--g200);color:var(--g700);height:32px;padding:0 12px;font-size:12.5px;}
+.bu .btn-s:hover{background:var(--g50);}
+.bu .sec-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--g500);margin:0 0 10px;}
+.bu .row{display:flex;align-items:center;gap:12px;padding:11px 12px;border:1px solid var(--g200);border-radius:11px;margin-bottom:8px;}
+.bu .av{width:38px;height:38px;border-radius:50%;background:var(--red-lt);color:var(--red);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.bu .body{flex:1;min-width:0;}
+.bu .nm{font-size:13.5px;font-weight:700;}
+.bu .sub{font-size:12px;color:var(--g500);margin-top:1px;}
+.bu .empty{font-size:13px;color:var(--g400);padding:6px 2px;}
+</style></head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+      <div class="bu">
+        <div class="intro">
+          <i class="fa-solid fa-user-slash"></i>
+          <div>
+            <h2>Blocked users</h2>
+            <p>Users blocked here can't place orders on the app. Block by phone number or user ID — add a name to remember who they are.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="sec-title">Block a user</div>
+          <div class="add">
+            <input id="buName" placeholder="Name (optional)"/>
+            <input id="buPhone" placeholder="Phone number or user ID"/>
+            <button class="btn btn-p" onclick="blockAdd()"><i class="fa-solid fa-ban"></i> Block user</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="sec-title">Blocked list · <span id="buCount">0</span></div>
+          <div id="buList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+AdminShell.mount({ active:'blocked-users', title:'Blocked Users', crumb:'Tools', controls:'Users blocked from ordering on the app' });
+
+let data = KKD.load();
+data.blockedUsers = Array.isArray(data.blockedUsers) ? data.blockedUsers : [];
+
+function render(){
+  const list=data.blockedUsers;
+  document.getElementById('buCount').textContent = list.length;
+  document.getElementById('buList').innerHTML = list.length ? list.map((u,i)=>`
+    <div class="row"><div class="av"><i class="fa-solid fa-user-slash"></i></div>
+      <div class="body"><div class="nm">${esc(u.name||'Blocked user')}</div><div class="sub">${esc(u.phone||'')}</div></div>
+      <button class="btn btn-s" onclick="blockDel(${i})"><i class="fa-solid fa-unlock"></i> Unblock</button></div>`).join('')
+    : '<p class="empty">No users blocked yet.</p>';
+}
+function blockAdd(){ const nm=document.getElementById('buName'), ph=document.getElementById('buPhone');
+  const phone=(ph.value||'').trim(); if(!phone){ ph.focus(); return; }
+  data.blockedUsers.push({name:(nm.value||'').trim(), phone:phone}); KKD.save(data);
+  nm.value=''; ph.value=''; render(); AdminShell.saved('User blocked');
+}
+function blockDel(i){ data.blockedUsers.splice(i,1); KKD.save(data); render(); AdminShell.saved('User unblocked'); }
+render();
+</script>
+</body></html>

@@ -42,6 +42,7 @@
     { group: 'Tools', items: [
       { key: 'translations', label: 'Translations', icon: 'language', href: 'translations.html' },
       { key: 'config', label: 'App Config & States', icon: 'sliders', href: 'config.html' },
+      { key: 'blocked-users', label: 'Blocked Users', icon: 'user-slash', href: 'block-users.html' },
       { key: 'deeplinks', label: 'App Links', icon: 'link', href: 'deeplinks.html' },
       { key: 'publish', label: 'Publish & Versions', icon: 'rocket', href: 'publish.html' },
       { key: 'settings', label: 'Settings', icon: 'gear', href: 'settings.html' },

@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="assets/admin.css">
 <style>
 /* ── Category manager · scoped under .cm ── */
-.cm{--green:#258046;--green-lt:#ECFDF5;--red:#DC2626;--red-lt:#FEF2F2;--g50:#F8FAFC;--g100:#F1F5F9;--g200:#E2E8F0;--g300:#CBD5E1;--g400:#94A3B8;--g500:#64748B;--g600:#475569;--g700:#334155;--g800:#1E293B;font-family:'Inter',sans-serif;color:var(--g800);max-width:880px;}
+.cm{--green:#258046;--green-lt:#ECFDF5;--red:#DC2626;--red-lt:#FEF2F2;--g50:#F8FAFC;--g100:#F1F5F9;--g200:#E2E8F0;--g300:#CBD5E1;--g400:#94A3B8;--g500:#64748B;--g600:#475569;--g700:#334155;--g800:#1E293B;font-family:'Inter',sans-serif;color:var(--g800);max-width:860px;}
 .cm .cm-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;}
 .cm .cm-head h2{font-size:21px;font-weight:800;margin:0 0 3px;}
 .cm .cm-head p{margin:0;font-size:13.5px;color:var(--g500);}
@@ -22,26 +22,15 @@
 .cm .sub-l:first-child{margin-top:0;}
 .cm .hint{font-size:11.5px;color:var(--g400);font-weight:500;}
 .cm .hint-p{font-size:12.5px;color:var(--g500);margin:0 0 12px;line-height:1.5;}
-/* category groups */
-.cm .cgroup{border:1px solid var(--g200);border-radius:11px;margin-bottom:8px;overflow:hidden;}
-.cm .crow{display:flex;align-items:center;gap:12px;padding:10px 12px;background:#fff;}
-.cm .cgroup.off .crow{opacity:.5;}
+/* category rows */
+.cm .clist{display:flex;flex-direction:column;gap:8px;}
+.cm .crow{display:flex;align-items:center;gap:12px;padding:11px 12px;border:1px solid var(--g200);border-radius:11px;background:#fff;transition:.12s;}
+.cm .crow:hover{border-color:var(--green);box-shadow:0 4px 12px -8px rgba(37,128,70,.5);}
 .cm .cchip-img{width:38px;height:38px;border-radius:9px;flex-shrink:0;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;}
 .cm .cbody{flex:1;min-width:0;cursor:pointer;}
 .cm .cname{font-size:13.5px;font-weight:700;}
 .cm .cmeta{font-size:11.5px;color:var(--g500);margin-top:1px;}
 .cm .cact{display:flex;align-items:center;gap:6px;flex-shrink:0;}
-.cm .caret{color:var(--g400);font-size:12px;transition:transform .18s;cursor:pointer;width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;}
-.cm .caret:hover{background:var(--g100);}
-.cm .cgroup.open .caret{transform:rotate(180deg);}
-.cm .cproducts{border-top:1px solid var(--g100);background:var(--g50);padding:6px 10px;}
-.cm .prow{display:flex;align-items:center;gap:10px;padding:9px 8px;border-bottom:1px dashed var(--g200);}
-.cm .prow:last-child{border-bottom:none;}
-.cm .prow.off{opacity:.5;}
-.cm .pbody{flex:1;min-width:0;}
-.cm .pname{font-size:12.5px;font-weight:700;}
-.cm .pmeta{font-size:11px;color:var(--g500);margin-top:1px;}
-.cm .pmeta .restr{color:var(--red);font-weight:600;}
 .cm .ic-btn{border:1px solid var(--g200);background:#fff;color:var(--g500);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:11px;transition:.12s;}
 .cm .ic-btn:hover{background:var(--g50);color:var(--g700);}
 .cm .ic-btn:disabled{opacity:.35;cursor:default;}
@@ -59,8 +48,6 @@
 .cm .tr .tt{font-size:13px;font-weight:700;}
 .cm .tr .td{font-size:11.5px;color:var(--g500);margin-top:2px;}
 .cm .fg label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--g500);margin-bottom:6px;}
-.cm .fg input,.cm .fg select{border:1.5px solid var(--g200);border-radius:9px;padding:9px 11px;font-size:13px;font-family:inherit;color:var(--g800);outline:none;background:#fff;width:100%;}
-.cm .fg input:focus,.cm .fg select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
 .cm .btn{height:36px;padding:0 15px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:6px;transition:.12s;}
 .cm .btn-xs{height:28px;padding:0 10px;font-size:12px;}
 .cm .btn-p{background:var(--green);color:#fff;}
@@ -73,46 +60,51 @@
 .cm .pinchip i:hover{color:var(--red);}
 .cm .info-box{display:flex;align-items:flex-start;gap:8px;background:var(--green-lt);border:1px solid #BBF7D0;border-radius:9px;padding:11px 13px;font-size:12.5px;color:var(--g700);line-height:1.5;margin-top:12px;}
 .cm .info-box i{color:var(--green);margin-top:2px;}
-/* blocked users */
-.cm .bu-add{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
-.cm .bu-add input{flex:1;min-width:150px;border:1.5px solid var(--g200);border-radius:9px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none;}
-.cm .bu-add input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
-.cm .bu-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--g200);border-radius:10px;margin-bottom:7px;}
-.cm .bu-av{width:34px;height:34px;border-radius:50%;background:var(--red-lt);color:var(--red);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
-.cm .bu-body{flex:1;min-width:0;}
-.cm .bu-name{font-size:13px;font-weight:700;}
-.cm .bu-sub{font-size:11.5px;color:var(--g500);}
-/* approved banner card */
-.cm .mkbn{width:300px;height:168px;border-radius:14px;padding:14px;box-sizing:border-box;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 22px -12px rgba(0,0,0,.4);}
-.cm .mkbn-empty{align-items:center;justify-content:center;background:var(--g100);color:var(--g400);font-size:13px;box-shadow:none;}
-.cm .mkbn-ghost{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:90px;font-weight:900;font-style:italic;line-height:1;pointer-events:none;user-select:none;}
-.cm .mkbn-badge{position:relative;align-self:flex-start;display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:6px;font-size:9.5px;font-weight:700;letter-spacing:.14em;background:rgba(251,191,36,0.16);border:1px solid;}
-.cm .mkbn-head{position:relative;font-size:21px;font-weight:800;line-height:1.05;margin-top:6px;}
-.cm .mkbn-foot{position:relative;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;}
-.cm .mkbn-sub{font-size:9px;font-weight:700;letter-spacing:.14em;opacity:.85;}
-.cm .mkbn-big{font-size:22px;font-weight:800;margin-top:2px;}
-.cm .mkbn-big span{font-size:11px;font-weight:700;opacity:.8;}
-.cm .mkbn-cta{font-size:11.5px;font-weight:800;padding:8px 14px;border-radius:20px;white-space:nowrap;box-shadow:0 6px 16px -4px rgba(0,0,0,.35);}
+/* category promo banner (matches the app's category cross-sell promo) */
+.cm .cpromo{position:relative;overflow:hidden;border-radius:12px;padding:13px 16px;height:96px;display:flex;align-items:center;color:#fff;box-shadow:0 8px 22px -12px rgba(0,0,0,.4);width:300px;box-sizing:border-box;}
+.cm .cpromo-copy{position:relative;z-index:2;max-width:70%;}
+.cm .cpromo-eye{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.88;}
+.cm .cpromo-head{font-size:18px;font-weight:800;margin-top:2px;line-height:1.1;}
+.cm .cpromo-cta{font-size:11px;font-weight:700;margin-top:7px;opacity:.95;}
+.cm .cpromo-img{position:absolute;right:6px;bottom:-4px;height:96px;object-fit:contain;filter:drop-shadow(0 8px 14px rgba(0,0,0,.45));z-index:1;}
 .cm .bn-wrap{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;}
+/* 2-column placement grid */
+.cm .gwrap{border:1px solid var(--g200);border-radius:12px;padding:12px;background:var(--g50);max-width:340px;}
+.cm .cgrid{display:flex;flex-direction:column;gap:7px;}
+.cm .grow{display:grid;grid-template-columns:1fr 1fr;gap:7px;cursor:pointer;border-radius:8px;padding:3px;border:2px dashed transparent;transition:.1s;}
+.cm .grow:hover{border-color:var(--green);background:#fff;}
+.cm .gcell{height:26px;border-radius:6px;background:#fff;border:1px solid var(--g200);}
+.cm .gbanner{border-radius:8px;overflow:hidden;height:40px;display:flex;align-items:center;padding:0 12px;color:#fff;font-size:11.5px;font-weight:800;box-shadow:0 6px 16px -8px rgba(0,0,0,.4);}
+.cm .grow-lbl{font-size:9.5px;font-weight:700;color:var(--g400);text-align:center;margin-top:-3px;}
 /* modal */
 #cmModal{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;}
 #cmModal .scrim{position:absolute;inset:0;background:rgba(15,23,42,.5);}
-#cmModal .box{position:relative;background:#fff;border-radius:16px;width:560px;max-width:94vw;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.28);}
-#cmModal .box.wide{width:720px;}
+#cmModal .box{position:relative;background:#fff;border-radius:16px;width:600px;max-width:94vw;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.28);}
+#cmModal .box.wide{width:760px;}
 #cmModal .box-head{padding:16px 20px;border-bottom:1px solid var(--g100);display:flex;align-items:center;gap:10px;}
 #cmModal .box-head h3{margin:0;font-size:16px;font-weight:800;flex:1;}
 #cmModal .box-head .hsub{font-size:11.5px;color:var(--g500);font-weight:500;}
 #cmModal .x{border:none;background:var(--g100);width:30px;height:30px;border-radius:8px;cursor:pointer;color:var(--g500);}
-#cmModal .box-body{padding:18px 20px;overflow-y:auto;}
-#cmModal .box-foot{padding:14px 20px;border-top:1px solid var(--g100);display:flex;justify-content:flex-end;gap:8px;}
-.cm .bnpick-grid{display:flex;flex-wrap:wrap;gap:16px;}
-.cm .bnpick-card{cursor:pointer;border-radius:14px;transition:transform .12s;}
-.cm .bnpick-card:hover{transform:translateY(-3px);}
-.cm .bnpick-card:hover .mkbn,.cm .bnpick-card.sel .mkbn{outline:3px solid var(--green);outline-offset:2px;border-radius:14px;}
-.cm .bnpick-name{font-size:12px;font-weight:700;color:var(--g700);margin-top:8px;text-align:center;max-width:300px;}
+#cmModal .box-body{padding:16px 20px;overflow-y:auto;}
+.cm .pm-search{position:relative;margin-bottom:12px;}
+.cm .pm-search input{width:100%;border:1.5px solid var(--g200);border-radius:10px;padding:10px 12px 10px 36px;font-size:13.5px;font-family:inherit;outline:none;box-sizing:border-box;}
+.cm .pm-search input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
+.cm .pm-search i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--g400);font-size:13px;}
+.cm .pmrow{border:1px solid var(--g200);border-radius:11px;margin-bottom:8px;overflow:hidden;}
+.cm .pmrow.off{opacity:.55;}
+.cm .pmhead{display:flex;align-items:center;gap:10px;padding:10px 12px;}
+.cm .pbody{flex:1;min-width:0;}
+.cm .pname{font-size:13px;font-weight:700;}
+.cm .pmeta{font-size:11px;color:var(--g500);margin-top:1px;}
+.cm .pmeta .restr{color:var(--red);font-weight:600;}
+.cm .avpanel{border-top:1px dashed var(--g200);background:var(--g50);padding:10px 12px;}
 .cm .pin-add{display:flex;gap:8px;margin-bottom:8px;}
-.cm .pin-add input{flex:1;border:1.5px solid var(--g200);border-radius:9px;padding:9px 11px;font-size:13px;outline:none;}
+.cm .pin-add input{flex:1;border:1.5px solid var(--g200);border-radius:9px;padding:8px 11px;font-size:13px;outline:none;}
 .cm .pin-add input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
+.cm .bnpick-grid{display:flex;flex-wrap:wrap;gap:14px;}
+.cm .bnpick-card{cursor:pointer;transition:transform .12s;}
+.cm .bnpick-card:hover{transform:translateY(-3px);}
+.cm .bnpick-card:hover .cpromo,.cm .bnpick-card.sel .cpromo{outline:3px solid var(--green);outline-offset:2px;}
 </style></head>
 <body>
 <div class="admin">
@@ -124,17 +116,15 @@
         <div class="cm-head">
           <div>
             <h2>Category</h2>
-            <p>Categories, the products in each, the filter, the top banner and blocked users — all here.</p>
+            <p>Categories, the products in each, the filter and the category banner.</p>
           </div>
           <button class="prev-btn" onclick="AdminShell.previewApp('categories.html')"><i class="fa-solid fa-mobile-screen-button"></i> Preview</button>
         </div>
 
         <div class="card">
           <div class="card-head"><span class="ci"><i class="fa-solid fa-shapes"></i></span>
-            <div><h3>Categories &amp; products</h3><p>Tap a category to see its products · disable a product globally or by state / pincode</p></div></div>
-          <div class="card-body">
-            <div id="clist"></div>
-          </div>
+            <div><h3>Categories &amp; products</h3><p>Reorder with the arrows · open a category to search &amp; manage its products</p></div></div>
+          <div class="card-body"><div class="clist" id="clist"></div></div>
         </div>
 
         <div class="card">
@@ -145,21 +135,8 @@
 
         <div class="card">
           <div class="card-head"><span class="ci"><i class="fa-solid fa-image"></i></span>
-            <div><h3>Category top banner</h3><p>A Marketing-360-approved banner placed inside the product grid</p></div></div>
+            <div><h3>Category banner</h3><p>A promo banner woven into the product grid</p></div></div>
           <div class="card-body" id="bannerBody"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-head"><span class="ci" style="background:var(--red-lt);color:var(--red)"><i class="fa-solid fa-user-slash"></i></span>
-            <div><h3>Blocked users</h3><p>Stop a specific user from ordering on the app</p></div></div>
-          <div class="card-body">
-            <div class="bu-add">
-              <input id="buName" placeholder="Name (optional)"/>
-              <input id="buPhone" placeholder="Phone number or user ID"/>
-              <button class="btn btn-p" onclick="blockAdd()"><i class="fa-solid fa-ban"></i> Block user</button>
-            </div>
-            <div id="buList"></div>
-          </div>
         </div>
       </div>
     </div>
@@ -169,103 +146,118 @@
 <script src="assets/data.js"></script>
 <script src="assets/shell.js"></script>
 <script>
-AdminShell.mount({ active:'sc-category', title:'Category', crumb:'App Screens', controls:'Category screen — categories, products, filter, banner, blocked users', preview:'categories.html' });
+AdminShell.mount({ active:'sc-category', title:'Category', crumb:'App Screens', controls:'Category screen — categories, products, filter, banner', preview:'categories.html' });
 
 let data = KKD.load();
 const STATES=['MP','UP','Maharashtra','Gujarat','Rajasthan','Karnataka','AP','Telangana','Punjab','Haryana','Bihar','WB'];
+const PROMO_GRADS=['linear-gradient(135deg,#258046 0%,#16643A 100%)','linear-gradient(135deg,#0E7490 0%,#0B4A5E 100%)','linear-gradient(135deg,#2563EB 0%,#1E40AF 100%)','linear-gradient(135deg,#059669 0%,#03543F 100%)','linear-gradient(135deg,#0D9488 0%,#0B5E57 100%)'];
+/* subcategories per category (mirrors the app's category screen · 'all' is a virtual view, excluded) */
+const SUBCATS={
+  pesticide:[{key:'bio',icon:'🐞',label:'Bio Insecticides'},{key:'chem',icon:'🧪',label:'Chemical Insecticides'},{key:'organic',icon:'🌿',label:'Organic Insecticides'},{key:'pest',icon:'🦗',label:'Organic Pest Control'}],
+  fungicide:[{key:'bio',icon:'🍃',label:'Bio Fungicide'},{key:'chem',icon:'🧴',label:'Chemical Fungicide'},{key:'chemins',icon:'🧪',label:'Chemical Insecticides'}],
+  fertilizer:[{key:'bio',icon:'🌿',label:'Bio Fertilizer'},{key:'chemins',icon:'🧪',label:'Chemical Insecticides'},{key:'hydro',icon:'💧',label:'Hydroponic Nutrients'},{key:'manure',icon:'🟫',label:'Manures & Soil'},{key:'micro',icon:'⚛️',label:'Micronutrient Fertilizer'},{key:'npk',icon:'🧫',label:'NPK Fertilizer'},{key:'organic',icon:'🍃',label:'Organic Fertilizer'},{key:'other',icon:'📦',label:'Other Fertilizer'},{key:'pgr',icon:'📈',label:'Plant Growth Regulator'}],
+  herbicide:[{key:'herb',icon:'🌾',label:'Herbicides'}],
+  combo:[{key:'crop',icon:'🌾',label:'Crop Combo'},{key:'stage',icon:'📅',label:'Stage Combo'},{key:'saver',icon:'💰',label:'Value Pack'}],
+};
+function subsOf(key){ return SUBCATS[key]||[]; }
 
 data.categories = Array.isArray(data.categories) ? data.categories : [];
 data.products   = Array.isArray(data.products) ? data.products : [];
-data.blockedUsers = Array.isArray(data.blockedUsers) ? data.blockedUsers : [];
 let cats = data.categories.slice().sort((a,b)=>(a.order||0)-(b.order||0));
+cats.forEach((c,i)=>{ c._grad = PROMO_GRADS[i%PROMO_GRADS.length]; });
 
 const cfg = data.categoryConfig = data.categoryConfig || {};
-cfg.filterOn  = cfg.filterOn!==false;
-cfg.banner    = Object.assign({on:true,bannerId:'fert',afterCards:4}, cfg.banner||{});
-cfg.avail     = cfg.avail || {};   // { [productId]: { off:bool, states:[disabled], pincodes:[disabled] } }
+cfg.filterOn = cfg.filterOn!==false;
+cfg.banner   = Object.assign({on:true,promoCat:(cats[0]&&cats[0].key)||'',afterRow:2}, cfg.banner||{});
+if(!cats.some(c=>c.key===cfg.banner.promoCat)) cfg.banner.promoCat = (cats[0]&&cats[0].key)||'';
+cfg.avail    = cfg.avail || {};
 function persist(){ data.categories=cats; data.categoryConfig=cfg; KKD.save(data); }
 persist();
 function avOf(pid){ if(!cfg.avail[pid]) cfg.avail[pid]={off:false,states:[],pincodes:[]}; return cfg.avail[pid]; }
+function prodsOf(key){ return data.products.filter(p=>p.cat===key); }
+function catImg(c){ if(c.img) return c.img; const p=prodsOf(c.key)[0]; return p&&p.img?p.img:''; }
 
-/* approved Marketing-360 banners */
-const MKT360_BANNERS=[
-  { id:'mela', name:'Mega Krishi Bachat Mela', tag:'KISAN EXCLUSIVE', badgeIc:'fa-crown', head:'Mega Krishi', hi:'Bachat Mela', sub:'EXTRA DISCOUNT', big:'₹500', suf:'OFF', cta:'SHOP NOW', ghost:'%', bg:'linear-gradient(135deg,#042919 0%,#0E7A4E 60%,#10B981 120%)', fg:'#fff', accent:'#FBBF24', ctaBg:'linear-gradient(135deg,#FBBF24,#F59E0B)', ctaFg:'#0F172A' },
-  { id:'bogo', name:'Buy 1 Get 1 — Antivirus Combo', tag:'HOT COMBO', badgeIc:'fa-bolt', head:'Buy 1 Get 1', hi:'FREE', sub:'ON ANTIVIRUS COMBO', big:'Chilli · Tomato · Brinjal', suf:'', cta:'GRAB', ghost:'1+1', bg:'linear-gradient(135deg,#1E1B4B 0%,#4338CA 60%,#6366F1 120%)', fg:'#fff', accent:'#FBBF24', ctaBg:'linear-gradient(135deg,#FBBF24,#F59E0B)', ctaFg:'#0F172A' },
-  { id:'fert', name:'Fertilizer Fest — up to 40% off', tag:'FERTILIZER FEST', badgeIc:'fa-seedling', head:'Save Big', hi:'on NPK', sub:'UP TO', big:'40%', suf:'OFF', cta:'EXPLORE', ghost:'40', bg:'linear-gradient(135deg,#FFF8E6 0%,#FCD34D 60%,#F59E0B 120%)', fg:'#0F172A', accent:'#7C2D12', ctaBg:'#0F172A', ctaFg:'#FBBF24' },
-];
-function mkFind(id){ return MKT360_BANNERS.find(b=>b.id===id); }
-function mkBanner(m){ if(!m) return '<div class="mkbn mkbn-empty">No banner selected</div>';
-  const ghostC = m.fg==='#fff' ? 'rgba(251,191,36,0.16)' : 'rgba(15,23,42,0.08)';
-  return `<div class="mkbn" style="background:${m.bg};color:${m.fg}">
-    <div class="mkbn-ghost" style="color:${ghostC}">${m.ghost||''}</div>
-    <div class="mkbn-badge" style="color:${m.accent};border-color:${m.accent}"><i class="fa-solid ${m.badgeIc}"></i> ${m.tag}</div>
-    <div class="mkbn-head">${m.head} <span style="color:${m.accent}">${m.hi}</span></div>
-    <div class="mkbn-foot"><div class="mkbn-info"><div class="mkbn-sub">${m.sub}</div><div class="mkbn-big" style="color:${m.accent}">${m.big}${m.suf?` <span>${m.suf}</span>`:''}</div></div>
-      <div class="mkbn-cta" style="background:${m.ctaBg};color:${m.ctaFg}">${m.cta} →</div></div></div>`;
+/* ── category promo banner (matches the app category cross-sell promo) ── */
+function catBy(key){ return cats.find(c=>c.key===key)||cats[0]; }
+function catPromo(c){ if(!c) return '<div class="cpromo" style="background:#E2E8F0;color:#94A3B8;box-shadow:none;justify-content:center">No banner</div>';
+  const img=catImg(c); const off=maxOff(c.key);
+  return `<div class="cpromo" style="background:${c._grad}">
+    <div class="cpromo-copy"><div class="cpromo-eye">${off>0?('Up to '+off+'% off'):'Shop by category'}</div>
+      <div class="cpromo-head">Explore ${esc(c.name)}</div><div class="cpromo-cta">Shop now →</div></div>
+    ${img?`<img class="cpromo-img" src="${img}" alt=""/>`:''}
+  </div>`;
 }
+function maxOff(key){ let m=0; prodsOf(key).forEach(p=>{ if(p.mrp&&p.price){ const o=Math.round((p.mrp-p.price)/p.mrp*100); if(o>m)m=o; } }); return m; }
 
-/* ── categories + products ── */
-const catOpen={};
-function prodsOf(c){ return data.products.filter(p=>p.cat===c.key); }
-function availSummary(pid){ const a=avOf(pid); if(a.off) return '<span class="restr">Disabled everywhere</span>';
-  const parts=[]; if(a.states.length) parts.push(a.states.length+' state'+(a.states.length>1?'s':'')); if(a.pincodes.length) parts.push(a.pincodes.length+' pincode'+(a.pincodes.length>1?'s':''));
-  return parts.length?`<span class="restr">Disabled in ${parts.join(' · ')}</span>`:'Available everywhere';
-}
+/* ── categories list ── */
 function renderCats(){
   document.getElementById('clist').innerHTML = cats.map((c,i)=>{
-    const n=cats.length; const on=c.active!==false; const open=!!catOpen[c.key];
-    const chip = c.img ? `<div class="cchip-img" style="background-image:url('${c.img}')"></div>` : `<div class="cchip-img" style="background:${c.color||'#CBD5E1'}"><i class="fa-solid fa-shapes"></i></div>`;
-    const prods=prodsOf(c);
-    const plist = open ? `<div class="cproducts">${prods.length?prods.map(p=>{
-        const a=avOf(p.id); const pOn=!a.off;
-        return `<div class="prow${pOn?'':' off'}">
-          <div class="pbody"><div class="pname">${esc(p.name)}</div><div class="pmeta">${esc(p.sku||'')} · ${availSummary(p.id)}</div></div>
-          <button class="btn btn-s btn-xs" onclick="openAvail('${p.id}')"><i class="fa-solid fa-location-dot"></i> Availability</button>
-          <div class="tg sm ${pOn?'on':''}" title="Enable / disable product" onclick="prodTog('${p.id}')"></div>
-        </div>`;
-      }).join(''):'<p class="hint" style="padding:8px">No products in this category yet.</p>'}</div>` : '';
-    return `<div class="cgroup${on?'':' off'}${open?' open':''}">
-      <div class="crow">${chip}
-        <div class="cbody" onclick="catToggleOpen('${c.key}')"><div class="cname">${esc(c.name)}</div><div class="cmeta">${prods.length} products</div></div>
-        <div class="cact">
-          <button class="ic-btn" title="Move up" onclick="catMove(${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button>
-          <button class="ic-btn" title="Move down" onclick="catMove(${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
-          <div class="tg ${on?'on':''}" title="Show / hide category" onclick="catTog(${i})"></div>
-          <span class="caret" onclick="catToggleOpen('${c.key}')"><i class="fa-solid fa-chevron-down"></i></span>
-        </div></div>
-      ${plist}</div>`;
+    const n=cats.length; const chip = catImg(c) ? `<div class="cchip-img" style="background-image:url('${catImg(c)}')"></div>` : `<div class="cchip-img" style="background:${c.color||'#CBD5E1'}"><i class="fa-solid fa-shapes"></i></div>`;
+    const cnt=prodsOf(c.key).length; const sc=subsOf(c.key).length;
+    return `<div class="crow">${chip}
+      <div class="cbody" onclick="openManage('${c.key}')"><div class="cname">${esc(c.name)}</div><div class="cmeta">${cnt} product${cnt===1?'':'s'} · ${sc} subcategor${sc===1?'y':'ies'} · tap to manage</div></div>
+      <div class="cact">
+        <button class="ic-btn" title="Move up" onclick="catMove(${i},-1)" ${i===0?'disabled':''}><i class="fa-solid fa-arrow-up"></i></button>
+        <button class="ic-btn" title="Move down" onclick="catMove(${i},1)" ${i===n-1?'disabled':''}><i class="fa-solid fa-arrow-down"></i></button>
+        <button class="btn btn-s btn-xs" onclick="openManage('${c.key}')"><i class="fa-solid fa-sliders"></i> Manage</button>
+      </div></div>`;
   }).join('');
 }
-function catToggleOpen(key){ catOpen[key]=!catOpen[key]; renderCats(); }
 function catMove(i,dir){ const j=i+dir; if(j<0||j>=cats.length)return; const a=cats; [a[i],a[j]]=[a[j],a[i]]; a.forEach((c,k)=>c.order=k+1); persist(); renderCats(); }
-function catTog(i){ cats[i].active=cats[i].active===false; persist(); renderCats(); AdminShell.saved(cats[i].name+(cats[i].active!==false?' shown':' hidden')); }
-function prodTog(pid){ const a=avOf(pid); a.off=!a.off; persist(); renderCats(); }
 
-/* ── product availability modal (state-wise + pincode-wise) ── */
-let avPid=null;
-function openAvail(pid){ avPid=pid; renderAvail(); }
-function renderAvail(){ const p=data.products.find(x=>x.id===avPid); if(!p) return; const a=avOf(avPid);
-  const stChips=STATES.map(s=>`<span class="cchip ${a.states.indexOf(s)>=0?'on':''}" onclick="avStateTog('${s}')">${s}</span>`).join('');
-  const pins=a.pincodes.length?a.pincodes.map(pc=>`<span class="pinchip">${esc(pc)} <i class="fa-solid fa-xmark" onclick="avPinDel('${esc(pc)}')"></i></span>`).join(''):'<span class="hint">No pincodes blocked — the product is available in all pincodes.</span>';
+/* ── manage modal: category availability + subcategories + products ──
+   availability applies to any entity by id:  product='p3'  category='cat:pesticide'  subcategory='sub:pesticide:bio' */
+let avExpand={};
+function availSummary(id){ const a=avOf(id); if(a.off) return '<span class="restr">Disabled everywhere</span>';
+  const parts=[]; if(a.states.length) parts.push(a.states.length+' state'+(a.states.length>1?'s':'')); if(a.pincodes.length) parts.push(a.pincodes.length+' pincode'+(a.pincodes.length>1?'s':''));
+  return parts.length?`<span class="restr">Disabled in ${parts.join(' · ')}</span>`:'Available everywhere'; }
+function avPanel(id){ const a=avOf(id);
+  return `<div class="avpanel">
+    <div class="sub-l" style="margin-top:0">Disable in states <span class="hint">(tap to block · red = blocked)</span></div>
+    <div>${STATES.map(s=>`<span class="cchip ${a.states.indexOf(s)>=0?'on':''}" onclick="avStateTog('${id}','${s}')">${s}</span>`).join('')}</div>
+    <div class="sub-l">Disable in pincodes</div>
+    <div class="pin-add"><input type="text" inputmode="numeric" placeholder="Enter a 6-digit pincode" onkeydown="if(event.key==='Enter'){avPinAdd('${id}',this);}"/><button class="btn btn-p btn-xs" onclick="avPinAdd('${id}',this.previousElementSibling)"><i class="fa-solid fa-plus"></i> Add</button></div>
+    <div>${a.pincodes.length?a.pincodes.map(pc=>`<span class="pinchip">${esc(pc)} <i class="fa-solid fa-xmark" onclick="avPinDel('${id}','${esc(pc)}')"></i></span>`).join(''):'<span class="hint">All pincodes allowed.</span>'}</div>
+  </div>`;
+}
+function avRow(id,title,meta){ const a=avOf(id); const on=!a.off; const exp=!!avExpand[id];
+  return `<div class="pmrow${on?'':' off'}"><div class="pmhead">
+    <div class="pbody"><div class="pname">${esc(title)}</div><div class="pmeta">${meta?esc(meta)+' · ':''}${availSummary(id)}</div></div>
+    <button class="btn btn-s btn-xs" onclick="avToggleExp('${id}')"><i class="fa-solid fa-location-dot"></i> Availability</button>
+    <div class="tg sm ${on?'on':''}" title="Enable / disable" onclick="entTog('${id}')"></div></div>${exp?avPanel(id):''}</div>`;
+}
+function pmListHTML(){
+  const q=(window._pmQ||'').toLowerCase().trim();
+  let list=prodsOf(window._pmCat);
+  if(q) list=list.filter(p=>(p.name||'').toLowerCase().indexOf(q)>=0 || (p.sku||'').toLowerCase().indexOf(q)>=0);
+  if(!list.length) return '<p class="hint" style="padding:12px 4px">No products match.</p>';
+  return list.map(p=>avRow(p.id, p.name, p.sku||'')).join('');
+}
+function manageBodyHTML(){
+  const key=window._pmCat; const c=catBy(key); const subs=subsOf(key);
+  return `<div class="sub-l" style="margin-top:0">This category</div>
+    ${avRow('cat:'+key, c.name, 'Whole category')}
+    <div class="sub-l">Subcategories <span class="hint">— ${subs.length} inside ${esc(c.name)}</span></div>
+    ${subs.length?subs.map(s=>avRow('sub:'+key+':'+s.key, s.icon+' '+s.label, 'Subcategory')).join(''):'<p class="hint" style="padding:4px">No subcategories.</p>'}
+    <div class="sub-l">Products</div>
+    <div class="pm-search"><i class="fa-solid fa-magnifying-glass"></i><input id="pmSearch" type="text" value="${esc(window._pmQ||'')}" placeholder="Search products by name or SKU…" oninput="pmSearch(this.value)"/></div>
+    <div id="pmList">${pmListHTML()}</div>`;
+}
+function openManage(key){ window._pmCat=key; window._pmQ=''; avExpand={};
+  const c=catBy(key);
   const ex=document.getElementById('cmModal'); if(ex)ex.remove();
   const html=`<div id="cmModal"><div class="scrim" onclick="closeModal()"></div>
-    <div class="box"><div class="box-head"><div style="flex:1"><h3>Availability · ${esc(p.name)}</h3><div class="hsub">Turn the product off in specific states or pincodes</div></div><button class="x" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
-      <div class="box-body">
-        <div class="tr" style="border-top:none;padding-top:0"><div><div class="tt">Product enabled</div><div class="td">Off = hidden everywhere, regardless of the rules below</div></div><div class="tg ${a.off?'':'on'}" onclick="avOffTog()"></div></div>
-        <div class="sub-l">Disable in states <span class="hint">(tap to block · red = blocked)</span></div>
-        <div>${stChips}</div>
-        <div class="sub-l">Disable in pincodes</div>
-        <div class="pin-add"><input id="avPin" type="text" inputmode="numeric" placeholder="Enter a 6-digit pincode" onkeydown="if(event.key==='Enter'){avPinAdd();}"/><button class="btn btn-p" onclick="avPinAdd()"><i class="fa-solid fa-plus"></i> Add</button></div>
-        <div>${pins}</div>
-      </div>
-      <div class="box-foot"><button class="btn btn-p" onclick="closeModal()"><i class="fa-solid fa-check"></i> Done</button></div>
-    </div></div>`;
+    <div class="box"><div class="box-head"><div style="flex:1"><h3>Manage · ${esc(c.name)}</h3><div class="hsub">Disable this category, a subcategory or a product — globally or by state / pincode</div></div><button class="x" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="box-body" id="cmBody">${manageBodyHTML()}</div></div></div>`;
   document.querySelector('.cm').insertAdjacentHTML('beforeend', html);
 }
-function avStateTog(s){ const a=avOf(avPid); const i=a.states.indexOf(s); if(i>=0)a.states.splice(i,1); else a.states.push(s); persist(); renderAvail(); renderCats(); }
-function avOffTog(){ const a=avOf(avPid); a.off=!a.off; persist(); renderAvail(); renderCats(); }
-function avPinAdd(){ const el=document.getElementById('avPin'); if(!el)return; const v=(el.value||'').trim(); if(!v)return; const a=avOf(avPid); if(a.pincodes.indexOf(v)<0)a.pincodes.push(v); el.value=''; persist(); renderAvail(); renderCats(); }
-function avPinDel(pc){ const a=avOf(avPid); const i=a.pincodes.indexOf(pc); if(i>=0)a.pincodes.splice(i,1); persist(); renderAvail(); renderCats(); }
+function refreshBody(){ const el=document.getElementById('cmBody'); if(el)el.innerHTML=manageBodyHTML(); }
+function pmSearch(q){ window._pmQ=q; const el=document.getElementById('pmList'); if(el)el.innerHTML=pmListHTML(); }
+function avToggleExp(id){ avExpand[id]=!avExpand[id]; refreshBody(); }
+function entTog(id){ const a=avOf(id); a.off=!a.off; persist(); refreshBody(); }
+function avStateTog(id,s){ const a=avOf(id); const i=a.states.indexOf(s); if(i>=0)a.states.splice(i,1); else a.states.push(s); persist(); refreshBody(); }
+function avPinAdd(id,el){ if(!el)return; const v=(el.value||'').trim(); if(!v)return; const a=avOf(id); if(a.pincodes.indexOf(v)<0)a.pincodes.push(v); persist(); refreshBody(); }
+function avPinDel(id,pc){ const a=avOf(id); const i=a.pincodes.indexOf(pc); if(i>=0)a.pincodes.splice(i,1); persist(); refreshBody(); }
 function closeModal(){ const m=document.getElementById('cmModal'); if(m)m.remove(); }
 
 /* ── filter (single on/off) ── */
@@ -278,51 +270,43 @@ function filterTog(){ cfg.filterOn=!cfg.filterOn; persist(); renderFilter(); Adm
 
 /* ── banner ── */
 function renderBanner(){
-  const on=cfg.banner.on!==false; const m=mkFind(cfg.banner.bannerId); const N=cfg.banner.afterCards||4;
-  const opts=[2,4,6,8,10].map(v=>`<option value="${v}"${N===v?' selected':''}>After every ${v} product cards</option>`).join('');
+  const on=cfg.banner.on!==false; const c=catBy(cfg.banner.promoCat);
   document.getElementById('bannerBody').innerHTML=`
-    <div class="tr" style="border-top:none;padding-top:0"><div><div class="tt">Show category banner</div><div class="td">A promo banner woven into the product grid</div></div>
+    <div class="tr" style="border-top:none;padding-top:0"><div><div class="tt">Show category banner</div><div class="td">These are the same cross-sell banners the category page already shows</div></div>
       <div class="tg ${on?'on':''}" onclick="bannerTog()"></div></div>
     <div style="${on?'':'opacity:.45;pointer-events:none'}">
       <div class="sub-l">Selected banner</div>
-      <div class="bn-wrap"><div>${mkBanner(m)}</div>
-        <div><button class="btn btn-p" onclick="openBannerPicker()"><i class="fa-solid fa-images"></i> Select from approved banners</button>
-          <p class="hint" style="margin:10px 0 0;max-width:260px">Only Marketing-360-approved KKD banners can be used — tap to choose.</p></div></div>
-      <div class="sub-l">Banner position</div>
-      <div class="fg" style="max-width:320px"><label>Insert banner in the grid</label>
-        <select onchange="bannerAfter(this.value)">${opts}</select></div>
-      <div class="info-box"><i class="fa-solid fa-circle-info"></i><div>The grid is 2 products per row, so a banner can only sit at an <b>even</b> card position — it always drops in <b>after a full row of products</b> (after every 2, 4, 6 … cards) so the layout never breaks.</div></div>
+      <div class="bn-wrap"><div>${catPromo(c)}</div>
+        <div><button class="btn btn-p" onclick="openBannerPicker()"><i class="fa-solid fa-images"></i> Choose banner</button>
+          <p class="hint" style="margin:10px 0 0;max-width:250px">Pick which category this promo pushes farmers to.</p></div></div>
+      <div class="sub-l">Banner placement <span class="hint">— tap a row to drop the banner after it</span></div>
+      <div class="gwrap"><div class="cgrid" id="placeGrid"></div></div>
+      <div class="info-box"><i class="fa-solid fa-circle-info"></i><div>The product grid is <b>2 across</b>. A full-width banner can only sit <b>between rows</b> (after an even number of cards) — pick the row above and the banner drops in after it.</div></div>
     </div>`;
+  renderGrid();
 }
+function renderGrid(){
+  const N=cfg.banner.afterRow||2; const c=catBy(cfg.banner.promoCat);
+  let html='';
+  for(let r=1;r<=16;r++){
+    html += `<div class="grow${N===r?' sel':''}" title="Place banner after row ${r}" onclick="setRow(${r})"><div class="gcell"></div><div class="gcell"></div></div>`;
+    if(r===N){ html += `<div class="gbanner" style="background:${c?c._grad:'#258046'}"><i class="fa-solid fa-bullhorn" style="margin-right:7px"></i> ${c?('Explore '+esc(c.name)):'Banner'} · after row ${r}</div>`; }
+  }
+  const g=document.getElementById('placeGrid'); if(g) g.innerHTML=html;
+}
+function setRow(r){ cfg.banner.afterRow=r; persist(); renderGrid(); }
 function bannerTog(){ cfg.banner.on=cfg.banner.on===false; persist(); renderBanner(); }
-function bannerAfter(v){ let n=parseInt(v,10)||4; if(n%2!==0)n=n+1; cfg.banner.afterCards=n; persist(); renderBanner(); }
 function openBannerPicker(){
-  const cards=MKT360_BANNERS.map(m=>`<div class="bnpick-card${cfg.banner.bannerId===m.id?' sel':''}" onclick="bannerPick('${m.id}')">${mkBanner(m)}<div class="bnpick-name">${esc(m.name)}</div></div>`).join('');
+  const cards=cats.map(c=>`<div class="bnpick-card${cfg.banner.promoCat===c.key?' sel':''}" onclick="bannerPick('${c.key}')">${catPromo(c)}</div>`).join('');
   const ex=document.getElementById('cmModal'); if(ex)ex.remove();
   const html=`<div id="cmModal"><div class="scrim" onclick="closeModal()"></div>
-    <div class="box wide"><div class="box-head"><h3>Approved banners</h3><button class="x" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
-      <div class="box-body"><p class="hint-p">These are the KKD banners designed &amp; approved in <b>Marketing 360</b> — tap one to use it on the category screen.</p>
+    <div class="box wide"><div class="box-head"><h3>Category banners</h3><button class="x" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="box-body"><p class="hint-p">These are the cross-sell promo banners the category page runs — tap one to feature it.</p>
         <div class="bnpick-grid">${cards}</div></div></div></div>`;
   document.querySelector('.cm').insertAdjacentHTML('beforeend', html);
 }
-function bannerPick(id){ cfg.banner.bannerId=id; persist(); closeModal(); renderBanner(); AdminShell.saved('Category banner updated'); }
+function bannerPick(key){ cfg.banner.promoCat=key; persist(); closeModal(); renderBanner(); AdminShell.saved('Category banner updated'); }
 
-/* ── blocked users ── */
-function renderBlocked(){
-  const list=data.blockedUsers;
-  document.getElementById('buList').innerHTML = list.length ? list.map((u,i)=>`
-    <div class="bu-row"><div class="bu-av"><i class="fa-solid fa-user-slash"></i></div>
-      <div class="bu-body"><div class="bu-name">${esc(u.name||'Blocked user')}</div><div class="bu-sub">${esc(u.phone||'')}</div></div>
-      <button class="btn btn-s btn-xs" onclick="blockDel(${i})"><i class="fa-solid fa-unlock"></i> Unblock</button></div>`).join('')
-    : '<p class="hint">No users blocked. Add a phone number or user ID above to block someone.</p>';
-}
-function blockAdd(){ const nm=document.getElementById('buName'), ph=document.getElementById('buPhone');
-  const phone=(ph.value||'').trim(); if(!phone){ ph.focus(); return; }
-  data.blockedUsers.push({name:(nm.value||'').trim(), phone:phone}); KKD.save(data);
-  nm.value=''; ph.value=''; renderBlocked(); AdminShell.saved('User blocked');
-}
-function blockDel(i){ data.blockedUsers.splice(i,1); KKD.save(data); renderBlocked(); AdminShell.saved('User unblocked'); }
-
-renderCats(); renderFilter(); renderBanner(); renderBlocked();
+renderCats(); renderFilter(); renderBanner();
 </script>
 </body></html>

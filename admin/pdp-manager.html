@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KKD Admin · Product Detail Page</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+<style>
+/* ── Product Detail Page manager · scoped under .pm ── */
+.pm{--green:#258046;--green-lt:#ECFDF5;--g50:#F8FAFC;--g100:#F1F5F9;--g200:#E2E8F0;--g300:#CBD5E1;--g400:#94A3B8;--g500:#64748B;--g600:#475569;--g700:#334155;--g800:#1E293B;font-family:'Inter',sans-serif;color:var(--g800);max-width:880px;}
+.pm .pm-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;}
+.pm .pm-head h2{font-size:21px;font-weight:800;margin:0 0 3px;}
+.pm .pm-head p{margin:0;font-size:13.5px;color:var(--g500);}
+.pm .prev-btn{flex-shrink:0;border:1px solid var(--g200);background:#fff;color:var(--g700);padding:9px 15px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.12s;}
+.pm .prev-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-lt);}
+.pm .card{background:#fff;border:1px solid var(--g200);border-radius:14px;box-shadow:0 1px 2px rgba(16,24,40,.04);margin-bottom:16px;overflow:hidden;}
+.pm .card-body{padding:16px 18px;}
+.pm .list-head{padding:13px 18px;border-bottom:1px solid var(--g100);}
+.pm .list-head h3{margin:0;font-size:13.5px;font-weight:800;}
+.pm .list-head p{margin:2px 0 0;font-size:11.5px;color:var(--g400);}
+.pm .slist{padding:8px;}
+.pm .sec-item{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:10px;cursor:pointer;transition:background .12s;border:1px solid transparent;}
+.pm .sec-item:hover{background:var(--g50);}
+.pm .sec-item.active{background:var(--green-lt);border-color:#BBF7D0;}
+.pm .sec-item.off{opacity:.5;}
+.pm .sec-item.locked{background:linear-gradient(0deg,var(--g50),var(--g50));}
+.pm .drag-h{color:var(--g300);font-size:15px;cursor:grab;flex-shrink:0;width:16px;text-align:center;}
+.pm .drag-h.lk{cursor:default;}
+.pm .sec-icon{font-size:18px;width:26px;text-align:center;flex-shrink:0;}
+.pm .sec-info{flex:1;min-width:0;}
+.pm .sec-name{font-size:13.5px;font-weight:700;color:var(--g800);}
+.pm .sec-sub{font-size:11.5px;color:var(--g500);margin-top:1px;}
+.pm .sec-hidden{font-size:10.5px;font-weight:700;color:var(--g400);background:var(--g100);border-radius:20px;padding:2px 9px;flex-shrink:0;}
+.pm .sec-item.dragover{border-color:var(--green);background:var(--green-lt);}
+.pm .ed-toggle{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:700;color:var(--g600);cursor:pointer;}
+.pm .ed-lock{font-size:12px;font-weight:700;color:var(--g400);}
+.pm .tg{width:40px;height:23px;border-radius:20px;background:var(--g300);position:relative;cursor:pointer;transition:.15s;flex-shrink:0;}
+.pm .tg::after{content:'';position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:50%;background:#fff;transition:.15s;box-shadow:0 1px 2px rgba(0,0,0,.15);}
+.pm .tg.on{background:var(--green);}
+.pm .tg.on::after{transform:translateX(17px);}
+.pm .tr{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0;border-top:1px solid var(--g100);}
+.pm .tr:first-child{border-top:none;}
+.pm .tr .tt{font-size:13px;font-weight:700;color:var(--g800);}
+.pm .tr .td{font-size:11.5px;color:var(--g500);margin-top:2px;}
+.pm .sub-l{font-size:12px;font-weight:700;color:var(--g600);margin:15px 0 6px;}
+.pm .sub-l:first-child{margin-top:0;}
+.pm .hint{font-size:11.5px;color:var(--g400);font-weight:500;}
+.pm .hint-p{font-size:12.5px;color:var(--g500);margin:0 0 12px;line-height:1.5;}
+.pm .row{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+.pm .fg{flex:1;min-width:0;}
+.pm .fg.fix{flex:none;}
+.pm .fg label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--g500);margin-bottom:6px;}
+.pm .fg input,.pm .fg select,.pm .fg textarea{width:100%;border:1.5px solid var(--g200);border-radius:9px;padding:9px 11px;font-size:13px;font-family:inherit;color:var(--g800);outline:none;background:#fff;}
+.pm .fg input:focus,.pm .fg select:focus,.pm .fg textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(37,128,70,.08);}
+.pm .cchip{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--g200);margin:3px;transition:all .15s;}
+.pm .cchip.on{background:var(--green-lt);border-color:var(--green);color:var(--green);font-weight:600;}
+.pm .chip-row{margin-bottom:8px;}
+.pm .info-box{display:flex;align-items:flex-start;gap:8px;background:var(--green-lt);border:1px solid #BBF7D0;border-radius:9px;padding:11px 13px;font-size:12.5px;color:var(--g700);line-height:1.5;}
+.pm .info-box i{color:var(--green);margin-top:2px;}
+.pm .btn{height:36px;padding:0 15px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:6px;transition:.12s;}
+.pm .btn-p{background:var(--green);color:#fff;}
+.pm .btn-s{background:#fff;border:1px solid var(--g200);color:var(--g700);}
+.pm .btn-s:hover{background:var(--g50);}
+.pm .ttl-edit{border:none;background:var(--g100);color:var(--g500);width:26px;height:26px;border-radius:7px;cursor:pointer;font-size:11px;flex-shrink:0;transition:all .12s;}
+.pm .ttl-edit:hover{background:var(--green-lt);color:var(--green);}
+.pm .ed-h{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px;}
+.pm .ed-h h2{font-size:18px;font-weight:800;margin:0;display:flex;align-items:center;gap:8px;}
+.pm .ed-h .muted{margin:2px 0 0;font-size:12.5px;color:var(--g500);}
+</style></head>
+<body>
+<div class="admin">
+  <aside class="sidebar" id="side"></aside>
+  <div class="main">
+    <header class="topbar" id="top"></header>
+    <div class="work">
+      <div class="pm">
+        <div class="pm-head">
+          <div>
+            <h2>Product Detail Page</h2>
+            <p>Reorder, show/hide and edit every block on the product page — just like the Home manager.</p>
+          </div>
+          <button class="prev-btn" onclick="AdminShell.previewApp('pdp.html')"><i class="fa-solid fa-mobile-screen-button"></i> Preview</button>
+        </div>
+        <div class="card">
+          <div class="list-head"><h3>Page blocks</h3><p>⠿ drag to reorder · click to edit · 🔒 fixed blocks can't be moved</p></div>
+          <div class="slist" id="secList"></div>
+        </div>
+        <div id="edArea"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/shell.js"></script>
+<script>
+AdminShell.mount({ active:'sc-pdp', title:'Product Detail Page', crumb:'App Screens', controls:'The product detail page blocks', preview:'pdp.html' });
+
+let data = KKD.load();
+
+/* Sections in their real on-screen order. fixed = structurally pinned (top gallery/title/price, bottom cart bar). */
+const DEFAULT_SECS=[
+  {id:'gallery',   ic:'🖼️', nm:'Image Gallery',        sub:'Product photos + video',                fixed:true},
+  {id:'title',     ic:'🏷️', nm:'Title & Category',      sub:'Name, technical name, category badge',   fixed:true},
+  {id:'price',     ic:'💰', nm:'Price & ADD',           sub:'MRP, effective price, ADD button',       fixed:true},
+  {id:'packs',     ic:'📦', nm:'Pack Sizes',            sub:'Variant grid + all-sizes sheet',         on:true},
+  {id:'social',    ic:'👥', nm:'Farmer Social Proof',   sub:'Avatar stack + "N bought"',              on:true, hideable:true},
+  {id:'trust',     ic:'🛡️', nm:'Trust Badges',          sub:'Return / COD / Assured',                 on:true, hideable:true},
+  {id:'delivery',  ic:'🚚', nm:'Delivery',              sub:'Estimated date + dispatch + address',    on:true, hideable:true},
+  {id:'cropwidget',ic:'🌾', nm:'Crop Widget',           sub:'"Which crop do you grow?" poll',         on:true, hideable:true},
+  {id:'howto',     ic:'🎬', nm:'How to Use',            sub:'Video + Technical / Dose / Disease tabs', on:true, hideable:true},
+  {id:'desc',      ic:'📄', nm:'Product Description',    sub:'Long description',                       on:true, hideable:true},
+  {id:'testi',     ic:'🎥', nm:'Farmer Testimonials',   sub:'Approved video testimonials',            on:true, hideable:true},
+  {id:'reviews',   ic:'⭐', nm:'Ratings & Reviews',     sub:'Reviews + customer photos',              on:true, hideable:true},
+  {id:'faq',       ic:'❓', nm:'FAQ',                    sub:'Common questions',                       on:true, hideable:true},
+  {id:'expert',    ic:'💬', nm:'Ask Expert',            sub:'Agronomist help banner',                 on:true, hideable:true},
+  {id:'certs',     ic:'📜', nm:'Certifications',         sub:'Quality / trust badges',                 on:true, hideable:true},
+  {id:'cartbar',   ic:'🛒', nm:'Cart Bar (floating)',   sub:'Sticky add-to-cart',                     fixed:true},
+];
+const META = Object.fromEntries(DEFAULT_SECS.map(d=>[d.id,d]));
+
+let SECS;
+function normalizeOrder(list){
+  const firstNF = DEFAULT_SECS.findIndex(d=>!d.fixed);
+  const lastNF  = DEFAULT_SECS.length-1 - [...DEFAULT_SECS].reverse().findIndex(d=>!d.fixed);
+  const leading  = DEFAULT_SECS.slice(0,firstNF).map(d=>d.id);
+  const trailing = DEFAULT_SECS.slice(lastNF+1).map(d=>d.id);
+  const band = list.map(s=>s.id).filter(id=>!(META[id]&&META[id].fixed));
+  const byId = Object.fromEntries(list.map(s=>[s.id,s]));
+  return [...leading,...band,...trailing].map(id=>byId[id]||{id,on:true,title:''});
+}
+function seed(){
+  let stored = Array.isArray(data.pdpSections)?data.pdpSections.filter(s=>META[s.id]):[];
+  const seen = new Set(stored.map(s=>s.id));
+  DEFAULT_SECS.forEach(d=>{ if(!seen.has(d.id)) stored.push({id:d.id,on:d.on!==false,title:''}); });
+  stored = normalizeOrder(stored);
+  SECS = stored.map(s=>Object.assign({}, META[s.id], {on:s.on!==false, title:s.title||''}));
+  persist();
+}
+function persist(){ data.pdpSections = SECS.map(s=>({id:s.id,on:s.on,title:s.title||''})); KKD.save(data); }
+
+/* ── list ── */
+let sel='packs';
+function secItemHTML(s){
+  const drag = s.fixed ? '' : `draggable="true" ondragstart="ds(event,'${s.id}')" ondragover="dov(event)" ondrop="dd(event,'${s.id}')" ondragleave="dl(event)" ondragend="de(event)"`;
+  const handle = s.fixed
+    ? `<span class="drag-h lk" title="Fixed placement" onclick="event.stopPropagation()">🔒</span>`
+    : `<span class="drag-h" title="Drag to reorder" onclick="event.stopPropagation()">⠿</span>`;
+  return `<div class="sec-item${sel===s.id?' active':''}${s.on?'':' off'}${s.fixed?' locked':''}" id="si-${s.id}" ${drag} onclick="pick('${s.id}')">
+    ${handle}<span class="sec-icon">${s.ic}</span>
+    <div class="sec-info"><div class="sec-name">${esc(s.title||s.nm)}</div><div class="sec-sub">${esc(s.sub)}</div></div>
+    ${s.on?'':'<span class="sec-hidden">Hidden</span>'}
+  </div>`;
+}
+function renderList(){ document.getElementById('secList').innerHTML = SECS.map(secItemHTML).join(''); }
+
+/* ── drag ── */
+let dragId=null;
+function ds(e,id){ dragId=id; e.dataTransfer.effectAllowed='move'; }
+function dov(e){ e.preventDefault(); const it=e.target.closest('.sec-item'); if(it&&!it.classList.contains('locked')) it.classList.add('dragover'); }
+function dl(e){ const it=e.target.closest('.sec-item'); if(it) it.classList.remove('dragover'); }
+function de(e){ document.querySelectorAll('.sec-item.dragover').forEach(x=>x.classList.remove('dragover')); }
+function dd(e,tgtId){ e.preventDefault(); de();
+  if(!dragId||dragId===tgtId) return;
+  if(META[dragId].fixed||META[tgtId].fixed) return;   // fixed blocks stay put
+  const from=SECS.findIndex(s=>s.id===dragId), to=SECS.findIndex(s=>s.id===tgtId);
+  const [m]=SECS.splice(from,1); SECS.splice(to,0,m);
+  persist(); renderList();
+}
+
+/* ── visibility + rename ── */
+function toggleVis(id){ const m=META[id]||{}; if(m.fixed&&!m.hideable) return; const s=SECS.find(x=>x.id===id); s.on=!s.on; persist(); renderList(); pick(id); AdminShell.saved((s.title||s.nm)+(s.on?' shown':' hidden')+' on product page'); }
+function renameSection(id){ const s=SECS.find(x=>x.id===id); const cur=s.title||s.nm;
+  const v=prompt('Section heading shown on the product page:', cur); if(v===null) return;
+  s.title = (v.trim()&&v.trim()!==s.nm)?v.trim():''; persist(); renderList(); pick(id); AdminShell.saved('Heading updated');
+}
+
+/* ── editor header ── */
+function edHead(id){
+  const s=SECS.find(x=>x.id===id)||{}; const m=META[id]||{};
+  const alwaysOn = m.fixed && !m.hideable;
+  const ctrl = alwaysOn
+    ? `<span class="ed-lock" title="Structurally pinned — always on">🔒 Always on</span>`
+    : `<label class="ed-toggle"><span>Show on page</span><div class="tg ${s.on?'on':''}" onclick="toggleVis('${id}')"></div></label>`;
+  const rename = (!m.fixed || id==='expert' || id==='title')
+    ? `<button class="ttl-edit" title="Rename this block" onclick="renameSection('${id}')"><i class="fa-solid fa-pen"></i></button>` : '';
+  return `<div class="ed-h">
+    <div><h2>${s.ic} ${esc(s.title||s.nm)}${rename}</h2>${s.sub?`<p class="muted">${esc(s.sub)}</p>`:''}</div>
+    <div style="display:flex;align-items:center;gap:14px;flex-shrink:0">${ctrl}
+      <button class="btn btn-s" onclick="AdminShell.previewApp('pdp.html')"><i class="fa-solid fa-mobile-screen-button"></i> Preview</button>
+    </div></div>`;
+}
+function TG(label,desc,on){ return `<div class="tr"><div><div class="tt">${label}</div>${desc?`<div class="td">${desc}</div>`:''}</div><div class="tg${on?' on':''}" onclick="this.classList.toggle('on')"></div></div>`; }
+function card(inner){ return `<div class="card"><div class="card-body">${inner}</div></div>`; }
+
+/* ── per-block editors ── */
+const EDITORS={
+  gallery:()=>card(`<p class="hint-p">Photos &amp; the hero video come from the product in the <b>Products</b> library. Tune how the gallery behaves here.</p>
+    ${TG('Autoplay hero video','Muted loop when the page opens',true)}
+    ${TG('Show image dots','Pagination dots under the gallery',true)}
+    ${TG('Pinch to zoom','Let farmers zoom product photos',true)}`),
+  title:()=>card(`<p class="hint-p">Name &amp; technical name are pulled from the product. Control the badge here.</p>
+    ${TG('Show category badge','e.g. "Fertilizer" chip beside the name',true)}
+    ${TG('Show technical name','Composition line under the product name',true)}`),
+  price:()=>card(`<div class="row"><div class="fg"><label>ADD button text</label><input type="text" value="ADD"/></div>
+      <div class="fg"><label>Out-of-stock label</label><input type="text" value="Notify me"/></div></div>
+    ${TG('Show MRP strike-through','Crossed original price when discounted',true)}
+    ${TG('Wallet + Coins effective price','"…or buy at ₹X" line under the price',true)}
+    ${TG('"How you pay" breakdown sheet','Opens from the effective-price line',true)}`),
+  packs:()=>card(`<p class="hint-p">Pack sizes come from the product's variants. Choose how many tiles show before the "more sizes" sheet.</p>
+    <div class="row"><div class="fg fix"><label>Tiles before "more"</label><input type="number" style="width:110px" value="7"/></div>
+      <div class="fg"><label>Default selected pack</label><select><option>Smallest</option><option selected>Most popular</option><option>Largest</option></select></div></div>
+    ${TG('Show "more sizes" tile','8th tile opens the all-sizes sheet',true)}`),
+  social:()=>card(`<div class="row"><div class="fg"><label>Proof line</label><input type="text" value="12,400+ farmers bought this"/></div></div>
+    ${TG('Show avatar stack','Overlapping farmer avatars',true)}
+    ${TG('Show buyer count','"N bought" number',true)}`),
+  trust:()=>card(`<div class="sub-l">Badges shown</div>
+    ${TG('7-Day Return','Return window badge',true)}
+    ${TG('Cash on Delivery','COD availability',true)}
+    ${TG('Katyayani Assured','Genuine-product guarantee',true)}
+    ${TG('Tap for details','Open the trust bottom-sheet on tap',true)}`),
+  delivery:()=>card(`<div class="row"><div class="fg fix"><label>Free delivery over ₹</label><input type="number" style="width:120px" value="499"/></div>
+      <div class="fg"><label>Dispatch copy</label><input type="text" value="Dispatched in 24 hrs"/></div></div>
+    ${TG('Show estimated delivery date','Per-pincode EDD',true)}
+    ${TG('Address-change row','Let farmers switch delivery address',true)}`),
+  cropwidget:()=>card(`<div class="row"><div class="fg"><label>Question</label><input type="text" value="Which crop do you grow most?"/></div></div>
+    <p class="hint-p" style="margin:0">Same engagement widget as the Home screen — answers personalize recommendations.</p>`),
+  howto:()=>card(`<div class="row"><div class="fg"><label>How-to video URL</label><input type="text" placeholder="https://youtube.com/…"/></div></div>
+    <div class="sub-l">Tabs shown</div>
+    ${TG('Technical','Composition &amp; mode of action',true)}
+    ${TG('Dose','Dosage per acre / per pump',true)}
+    ${TG('Disease','Target pests &amp; diseases',true)}`),
+  desc:()=>card(`<div class="row"><div class="fg"><label>Product description</label><textarea rows="5" placeholder="Long-form product description…"></textarea></div></div>
+    <p class="hint hint-p" style="margin:0">Pulled from the product by default — override here for this page.</p>`),
+  testi:()=>card(`<div class="info-box"><i class="fa-solid fa-circle-info"></i><div>Testimonial videos are approved in the <b>Testimonials</b> library and targeted from the Home <b>Testimonials</b> section. This block shows the approved ones relevant to this product's crop.</div></div>
+    <div style="margin-top:12px"></div>
+    ${TG('Autoplay first testimonial','Muted preview loop',true)}`),
+  reviews:()=>card(`<div class="row"><div class="fg fix"><label>Min rating to show</label><select style="width:130px"><option>All</option><option selected>3★ &amp; up</option><option>4★ &amp; up</option></select></div>
+      <div class="fg fix"><label>Reviews per "View more"</label><input type="number" style="width:120px" value="3"/></div></div>
+    ${TG('Customer photos & videos','Farmer-uploaded media strip',true)}
+    ${TG('Crop-wise review filter','Filter reviews by crop used on',true)}
+    ${TG('Ratings summary bars','5→1 star distribution',true)}`),
+  faq:()=>card(`<p class="hint-p">Frequently asked questions shown near the bottom of the page.</p>
+    <div class="info-box"><i class="fa-solid fa-circle-info"></i><div>FAQ entries are managed per product. This toggle controls whether the FAQ block appears on the page.</div></div>`),
+  expert:()=>card(`<div class="row"><div class="fg"><label>Banner heading</label><input type="text" value="Talk to a Krishi expert"/></div></div>
+    <div class="row"><div class="fg"><label>Sub-text</label><input type="text" value="Free advice on dose, mixing &amp; timing"/></div>
+      <div class="fg"><label>Deeplink / action</label><input type="text" value="help.html"/></div></div>
+    ${TG('Show expert photo','Agronomist avatar on the banner',true)}`),
+  certs:()=>card(`<div class="sub-l">Certifications shown</div>
+    ${TG('ISO certified','',true)}
+    ${TG('GMP compliant','',true)}
+    ${TG('Lab tested','Batch quality tested',true)}
+    <p class="hint hint-p" style="margin-top:10px">Muted grey badges near the page footer — build trust without competing with the CTA.</p>`),
+  cartbar:()=>card(`<div class="row"><div class="fg fix"><label>Bar background</label><input type="color" value="#0F172A" style="width:64px;padding:4px"/></div>
+      <div class="fg fix"><label>Savings accent</label><input type="color" value="#34D399" style="width:64px;padding:4px"/></div>
+      <div class="fg"><label>Button text</label><input type="text" value="Add to cart"/></div></div>
+    ${TG('Show savings pill','"You save ₹X" on the bar',true)}`),
+};
+
+function pick(id){ sel=id; renderList();
+  const ed = EDITORS[id] ? EDITORS[id]() : card('<p class="hint-p" style="margin:0">No editable options for this block.</p>');
+  document.getElementById('edArea').innerHTML = edHead(id)+ed;
+}
+
+seed(); renderList(); pick(sel);
+</script>
+</body></html>

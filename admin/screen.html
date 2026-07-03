@@ -24,19 +24,12 @@
           <h2 id="scTitle" style="font-size:21px;font-weight:800;margin:0 0 3px"></h2>
           <p id="scSub" class="muted" style="margin:0;font-size:13.5px"></p>
         </div>
-        <button class="btn btn-soft" id="scOpen"><i class="fa-solid fa-mobile-screen-button"></i> Open live preview</button>
+        <button class="btn btn-soft" id="scOpen"><i class="fa-solid fa-mobile-screen-button"></i> Preview</button>
       </div>
 
-      <div class="screen-grid">
-        <div>
-          <p class="section-title">What's on this screen <span style="color:var(--slate-400);font-weight:600;text-transform:none;letter-spacing:0">· tap a block to edit it</span></p>
-          <div id="blocks"></div>
-        </div>
-        <div>
-          <p class="section-title">Live preview</p>
-          <div class="phone"><div class="phone-screen"><iframe id="scFrame"></iframe></div></div>
-          <div class="muted" style="font-size:11.5px;margin-top:10px"><i class="fa-solid fa-bolt" style="color:var(--green)"></i> Edits you save appear here.</div>
-        </div>
+      <div>
+        <p class="section-title">What's on this screen <span style="color:var(--slate-400);font-weight:600;text-transform:none;letter-spacing:0">· tap a block to edit it</span></p>
+        <div id="blocks"></div>
       </div>
     </div>
   </div>
@@ -175,8 +168,7 @@
       <i class="fa-solid fa-angle-right arrow"></i>
     </a>`).join('');
 
-  // preview: Home uses the content-driven live preview; other screens load the real app screen
-  document.getElementById('scFrame').src = s === 'home' ? 'live-preview.html' : ('../screens/' + cfg.file);
+  // preview opens on click only (no always-on column)
   document.getElementById('scOpen').onclick = ()=> AdminShell.previewApp(s === 'home' ? 'home.html' : cfg.file);
 </script>
 </body></html>

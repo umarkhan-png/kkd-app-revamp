@@ -28,7 +28,7 @@
       </div>
 
       <div>
-        <p class="section-title">What's on this screen <span style="color:var(--slate-400);font-weight:600;text-transform:none;letter-spacing:0">· tap a block to edit it</span></p>
+        <p class="section-title" id="blocksTitle">What's on this screen <span style="color:var(--slate-400);font-weight:600;text-transform:none;letter-spacing:0">· tap a block to edit it</span></p>
         <div id="blocks"></div>
       </div>
     </div>
@@ -64,12 +64,11 @@
         {ic:'ic-amber', icon:'square-poll-vertical', title:'Engagement poll', href:'polls.html', sum:d=>`${G(d,'polls').filter(p=>p.active).length} active poll(s)`},
         {ic:'ic-slate', icon:'file-lines', title:'Empty-state copy', href:'app-text.html', sum:d=>`No-result message`},
       ]},
-    products: { label:'Product Listing', file:'shop.html', icon:'store',
-      controls:'Product listing screen — the catalogue of products',
-      sub:'The product listing / browse screen.',
-      blocks:[
-        {ic:'ic-green', icon:'flask', title:'Products', href:'products.html', sum:d=>`${G(d,'products').filter(p=>p.active).length} live products`},
-      ]},
+    products: { label:'Product', file:'shop.html', icon:'store',
+      controls:'Product screen — driven by the Home page sections',
+      sub:'The product screen.',
+      blocks:[],
+      note:'Nothing to edit here. The products shown on this screen are already defined on the <b>Home</b> page — in <b>Most Selling</b>, <b>Bestsellers</b>, <b>Featured Products</b> and the other Home sections. Manage them from the Home manager.'},
     category: { label:'Category', file:'categories.html', icon:'shapes',
       controls:'Category screen — categories, filters and the category top banner',
       sub:'The category browse, filter & banner experience.',
@@ -161,12 +160,21 @@
   document.getElementById('scSub').textContent = cfg.sub;
 
   const d = KKD.load();
-  document.getElementById('blocks').innerHTML = cfg.blocks.map(b=>`
-    <a class="block" href="${b.href}">
-      <span class="iconbox ${b.ic}"><i class="fa-solid fa-${b.icon}"></i></span>
-      <div><div style="font-weight:700;font-size:14px">${b.title}</div><div class="cell-sub">${b.sum(d)}</div></div>
-      <i class="fa-solid fa-angle-right arrow"></i>
-    </a>`).join('');
+  if(!cfg.blocks.length && cfg.note){
+    document.getElementById('blocksTitle').style.display = 'none';
+    document.getElementById('blocks').innerHTML =
+      `<div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:18px 20px">
+         <span class="iconbox ic-green" style="flex-shrink:0"><i class="fa-solid fa-circle-info"></i></span>
+         <div style="font-size:13.5px;line-height:1.55;color:var(--slate-600)">${cfg.note}</div>
+       </div>`;
+  } else {
+    document.getElementById('blocks').innerHTML = cfg.blocks.map(b=>`
+      <a class="block" href="${b.href}">
+        <span class="iconbox ${b.ic}"><i class="fa-solid fa-${b.icon}"></i></span>
+        <div><div style="font-weight:700;font-size:14px">${b.title}</div><div class="cell-sub">${b.sum(d)}</div></div>
+        <i class="fa-solid fa-angle-right arrow"></i>
+      </a>`).join('');
+  }
 
   // preview opens on click only (no always-on column)
   document.getElementById('scOpen').onclick = ()=> AdminShell.previewApp(s === 'home' ? 'home.html' : cfg.file);

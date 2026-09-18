@@ -21,6 +21,34 @@
   .perm-bullet { display:flex; align-items:center; gap:12px; padding:14px; background:#FFFFFF; border:1px solid #E5E7EB; border-radius:14px; box-shadow:0 1px 3px rgba(15,23,42,0.04); }
   .perm-ic { width:40px; height:40px; border-radius:10px; background:#ECFDF5; color:#258046; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:17px; }
   .perm-label { font-size:13.5px; font-weight:700; color:#0F172A; line-height:1.25; }
+  /* ON-06 · retry / settings notice · same card family as .perm-bullet, amber accent (not a flat banner) */
+  .retry-notice { display:flex; align-items:flex-start; gap:12px; padding:14px; background:#FFFFFF; border:1px solid #FDE9C8; border-radius:14px; box-shadow:0 4px 14px -4px rgba(217,119,6,0.18); }
+  .retry-ic { width:40px; height:40px; border-radius:10px; background:#FEF3E0; color:#B45309; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:17px; }
+  .retry-text-title { font-size:13px; font-weight:700; color:#0F172A; line-height:1.3; }
+  .retry-text-body { font-size:12px; font-weight:500; color:#78716C; line-height:1.45; margin-top:2px; }
+  /* Settings-required · numbered how-to */
+  .step-card { background:#FFFFFF; border:1px solid #E5E7EB; border-radius:14px; box-shadow:0 1px 3px rgba(15,23,42,0.04); padding:6px 14px; }
+  .step-row { display:flex; align-items:center; gap:12px; padding:9px 0; }
+  .step-row + .step-row { border-top:1px dashed #E5E7EB; }
+  .step-num { width:26px; height:26px; border-radius:50%; background:#ECFDF5; color:#258046; font-size:12.5px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .step-label { font-size:13px; font-weight:600; color:#0F172A; }
+  .step-arrow { color:#CBD5E1; font-size:11px; margin-left:auto; }
+  /* Secondary escape hatch · text link below the primary CTA · never on the first ask */
+  .manual-link { display:flex; align-items:center; justify-content:center; gap:6px; width:100%; background:none; border:none; padding:12px 0 2px; font-size:13px; font-weight:700; color:#475569; cursor:pointer; }
+  .manual-link i { font-size:11px; color:#94A3B8; }
+  #toast { position:fixed; left:50%; bottom:130px; transform:translate(-50%,12px); opacity:0; pointer-events:none; transition:all .35s cubic-bezier(.22,1,.36,1); background:#0F172A; color:#fff; font-size:12.5px; font-weight:600; padding:11px 18px; border-radius:12px; display:flex; align-items:center; gap:8px; box-shadow:0 10px 24px -8px rgba(15,23,42,0.45); white-space:nowrap; z-index:60; }
+  #toast.show { opacity:1; transform:translate(-50%,0); }
+  /* Phone's own location-permission dialog (simulated for the prototype) */
+  .os-bd { position:fixed; inset:0; background:rgba(15,23,42,0.5); display:none; align-items:flex-end; justify-content:center; padding:0 12px 28px; z-index:70; }
+  .os-bd.open { display:flex; }
+  .os-dlg { width:100%; max-width:360px; background:#F1F5F4; border-radius:26px; padding:22px 18px 14px; text-align:center; animation:osUp .28s cubic-bezier(.22,1,.36,1); }
+  @keyframes osUp { from { transform:translateY(24px); opacity:0; } to { transform:none; opacity:1; } }
+  .os-ic { width:34px; height:34px; margin:0 auto 10px; color:#258046; }
+  .os-t { font-size:15px; font-weight:600; color:#1F2937; line-height:1.35; padding:0 6px; }
+  .os-t b { font-weight:700; }
+  .os-opt { display:block; width:100%; margin-top:8px; height:46px; border-radius:23px; border:0; background:#DCEBE3; color:#14532D; font-size:14px; font-weight:600; cursor:pointer; }
+  .os-opt:first-of-type { margin-top:18px; }
+  [hidden] { display:none !important; }
 </style>
 </head>
 <body class="min-h-screen pb-32 relative">
@@ -55,12 +83,12 @@
 
   <!-- Heading · 'Share your exact location' so it ties to the precise-pin imagery · 'Why' intro under it -->
   <div class="px-6 mt-3 text-center">
-    <h1 class="text-[24px] font-extrabold leading-tight text-[#0F172A]">Share your exact location</h1>
-    <p class="text-[13px] mt-1.5" style="color:#64748B">We use your location to:</p>
+    <h1 id="locHead" class="text-[24px] font-extrabold leading-tight text-[#0F172A]">Share your exact location</h1>
+    <p id="locSub" class="text-[13px] mt-1.5" style="color:#64748B">We use your location to:</p>
   </div>
 
   <!-- Why · 3 reason bullets · each starts with the action, so the user sees WHY we need it -->
-  <div class="px-6 mt-5 space-y-2.5">
+  <div class="px-6 mt-5 space-y-2.5" id="whyList">
     <div class="perm-bullet">
       <div class="perm-ic"><i class="fa-solid fa-truck-fast"></i></div>
       <div class="perm-label">Deliver to your exact village</div>
@@ -75,13 +103,113 @@
     </div>
   </div>
 
+  <!-- ON-06 retry state · shown after the phone's dialog was denied once -->
+  <div class="px-6 mt-4" id="retryCard" hidden>
+    <div class="retry-notice">
+      <div class="retry-ic"><i class="fa-solid fa-location-dot"></i></div>
+      <div>
+        <div class="retry-text-title">You said "Don't Allow" last time</div>
+        <div class="retry-text-body">Location is required to show you delivery times and offers for your area — please allow to continue.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ON-06 settings-required state · the phone won't show its dialog again -->
+  <div id="settingsBlock" hidden>
+    <div class="px-6 mt-4">
+      <div class="retry-notice">
+        <div class="retry-ic"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div>
+          <div class="retry-text-title">Location is off for KKD</div>
+          <div class="retry-text-body">We need it to show delivery times, local offers &amp; weather alerts for your area.</div>
+        </div>
+      </div>
+    </div>
+    <div class="px-6 mt-4">
+      <p class="text-[11.5px] font-bold uppercase tracking-wide mb-2 px-1" style="color:#94A3B8">How to turn it on</p>
+      <div class="step-card">
+        <div class="step-row"><div class="step-num">1</div><div class="step-label">Open phone Settings</div><i class="fa-solid fa-chevron-right step-arrow"></i></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-label">Tap Apps</div><i class="fa-solid fa-chevron-right step-arrow"></i></div>
+        <div class="step-row"><div class="step-num">3</div><div class="step-label">Find &amp; tap KKD</div><i class="fa-solid fa-chevron-right step-arrow"></i></div>
+        <div class="step-row"><div class="step-num">4</div><div class="step-label">Tap Permissions</div><i class="fa-solid fa-chevron-right step-arrow"></i></div>
+        <div class="step-row"><div class="step-num">5</div><div class="step-label">Tap Location</div><i class="fa-solid fa-chevron-right step-arrow"></i></div>
+        <div class="step-row"><div class="step-num">6</div><div class="step-label">Select Allow</div></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Sticky CTA · single Allow Location · design-system primary -->
   <div class="fixed bottom-0 left-0 right-0 px-6 py-4" style="background:#F8F8F8;border-top:0">
-    <button onclick="location.href='locating.html'" class="w-full h-[52px] rounded-[12px] bg-[#258046] text-white text-[15px] font-semibold flex items-center justify-center gap-2" style="box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+    <button id="allowBtn" class="w-full h-[52px] rounded-[12px] bg-[#258046] text-white text-[15px] font-semibold flex items-center justify-center gap-2" style="box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="3"/></svg>
       Allow Location
     </button>
+    <button id="settingsBtn" hidden class="w-full h-[52px] rounded-[12px] bg-[#258046] text-white text-[15px] font-semibold flex items-center justify-center gap-2" style="box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+      <i class="fa-solid fa-gear text-[16px]"></i>
+      <span id="settingsBtnLabel">Open Settings</span>
+    </button>
+    <button id="manualLink" hidden onclick="location.href='location-manual.html'" class="manual-link">
+      Enter your pincode instead <i class="fa-solid fa-chevron-right"></i>
+    </button>
   </div>
+
+  <div id="toast"><i class="fa-solid fa-circle-check" style="color:#34D399"></i><span>Opening phone Settings&hellip;</span></div>
+
+  <!-- Phone's own location dialog · simulated so the Allow / Don't allow paths can be tried in the prototype -->
+  <div class="os-bd" id="osBd">
+    <div class="os-dlg" role="dialog" aria-label="Location permission">
+      <svg class="os-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="3"/></svg>
+      <div class="os-t">Allow <b>KKD</b> to access this device's location?</div>
+      <button class="os-opt" data-os="allow">While using the app</button>
+      <button class="os-opt" data-os="allow">Only this time</button>
+      <button class="os-opt" data-os="deny">Don't allow</button>
+    </div>
+  </div>
+
+  <script>
+    // ON-06 location gate · 3 states on this screen
+    //   ask      → first time: bullets + Allow Location (no pincode link, protects GPS opt-in)
+    //   retry    → phone dialog denied once: + "You said Don't Allow" card + "Enter your pincode instead" link
+    //   settings → denied again, phone won't ask again: Settings how-to + Open Settings + pincode link
+    // Denials are kept for the session so Back from the pincode screen lands on the same state.
+    // Demo: ?state=retry | ?state=settings opens a state directly.
+    (function(){
+      const KEY = 'kkd.locDenied';
+      const qs = new URLSearchParams(location.search).get('state');
+      let denied = 0;
+      try { denied = parseInt(sessionStorage.getItem(KEY) || '0', 10) || 0; } catch (e) {}
+      if (qs === 'retry') denied = 1;
+      if (qs === 'settings') denied = 2;
+      if (qs === 'ask') denied = 0;
+      const $ = id => document.getElementById(id);
+      function save(){ try { sessionStorage.setItem(KEY, String(denied)); } catch (e) {} }
+      function render(){
+        const st = denied >= 2 ? 'settings' : denied === 1 ? 'retry' : 'ask';
+        $('retryCard').hidden = st !== 'retry';
+        $('settingsBlock').hidden = st !== 'settings';
+        $('whyList').hidden = st === 'settings';
+        $('allowBtn').hidden = st === 'settings';
+        $('settingsBtn').hidden = st !== 'settings';
+        $('manualLink').hidden = st === 'ask';
+        $('locHead').textContent = st === 'settings' ? 'Turn on location in Settings' : 'Share your exact location';
+        $('locHead').style.fontSize = st === 'settings' ? '22px' : '';
+        $('locSub').textContent = st === 'settings' ? "Your phone won't ask again — please turn it on yourself, just this once" : 'We use your location to:';
+      }
+      const os = $('osBd');
+      $('allowBtn').addEventListener('click', () => os.classList.add('open'));
+      os.querySelectorAll('[data-os]').forEach(b => b.addEventListener('click', () => {
+        os.classList.remove('open');
+        if (b.dataset.os === 'allow') { try { sessionStorage.removeItem(KEY); } catch (e) {} location.href = 'locating.html'; return; }
+        denied = Math.min(2, denied + 1); save(); render(); window.scrollTo(0, 0);
+      }));
+      $('settingsBtn').addEventListener('click', () => {
+        const toast = $('toast'), label = $('settingsBtnLabel');
+        toast.classList.add('show'); label.textContent = 'Opening…';
+        setTimeout(() => { toast.classList.remove('show'); label.textContent = 'Open Settings'; }, 2600);
+      });
+      render();
+    })();
+  </script>
 
   <script src="../assets/weight-ladder.js"></script>
 </body>

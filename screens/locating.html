@@ -31,6 +31,13 @@
   body.found .status-found  { opacity: 1; pointer-events: auto; }
   .status-found { opacity: 0; pointer-events: none; transition: opacity .55s ease .15s; }
 
+  /* ON-06 · GPS couldn't pin the farmer down (timeout / no pincode) → offer the pincode screen, no error dialog */
+  .status-timeout { opacity:0; pointer-events:none; transition:opacity .45s ease; }
+  body.timeout .status-detect { opacity:0; pointer-events:none; }
+  body.timeout .status-timeout { opacity:1; pointer-events:auto; }
+  body.timeout .ring-pulse { opacity:0; }
+  .to-btn { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; height:52px; border-radius:12px; border:0; background:#258046; color:#fff; font-size:15px; font-weight:600; box-shadow:0 8px 20px -6px rgba(5,150,105,0.45); cursor:pointer; }
+  .to-link { display:flex; align-items:center; justify-content:center; gap:6px; width:100%; background:none; border:0; padding:12px 0 2px; font-size:13px; font-weight:700; color:#475569; cursor:pointer; }
   @keyframes dotPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(.8); } }
 </style>
 </head>
@@ -73,21 +80,49 @@
     <div class="status-line status-found absolute left-0 right-0">
       <div class="text-[13px] font-semibold tracking-[0.14em] uppercase" style="color:#258046">Location detected</div>
       <div class="text-[24px] font-extrabold leading-tight mt-1" style="color:#0F172A" id="villageName">Mahidpur</div>
-      <div class="text-[13px] mt-1" style="color:#64748B">Ujjain, Madhya Pradesh · 456440</div>
+      <div class="text-[13px] mt-1" style="color:#64748B" id="placeLine">Ujjain, Madhya Pradesh · 456440</div>
       <div class="inline-flex items-center gap-1.5 mt-4 text-[11.5px] font-semibold" style="color:#64748B">
         <span class="w-2 h-2 rounded-full" style="background:#10B981;animation:dotPulse 1.4s ease-in-out infinite"></span>
         Taking you home…
       </div>
     </div>
+    <div class="status-line status-timeout absolute left-0 right-0 px-6">
+      <div class="text-[20px] font-extrabold leading-tight" style="color:#0F172A">Having trouble finding you exactly</div>
+      <div class="text-[13px] mt-1.5" style="color:#64748B">Enter your pincode instead — it's quick</div>
+      <div class="mt-5">
+        <button class="to-btn" onclick="location.href='location-manual.html'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h.01M11 9h.01M15 9h.01M7 13h.01M11 13h.01M15 13h.01M7 17h6"/></svg>
+          Enter your pincode
+        </button>
+        <button class="to-link" onclick="location.href='locating.html'">Try GPS again</button>
+      </div>
+    </div>
   </div>
 
   <script>
+    // ON-06 · ?manual=1 → pincode typed on location-manual.html: skip the GPS animation, show "Location detected" with the typed value, then home
+    //         ?timeout=1 → GPS took too long / found no pincode: offer the pincode screen (no error dialog)
+    const Q = new URLSearchParams(location.search);
+    if (Q.get('manual') === '1') {
+      let v = '', pin = '';
+      try { v = localStorage.getItem('kkd.village') || ''; pin = localStorage.getItem('kkd.pincode') || ''; } catch (e) {}
+      document.getElementById('villageName').textContent = v || ('Pincode ' + pin);
+      document.getElementById('placeLine').textContent = pin ? 'Pincode · ' + pin : '';
+      document.body.classList.add('found');
+      setTimeout(() => { window.location.href = 'home.html'; }, 2600);
+    } else if (Q.get('timeout') === '1') {
+      setTimeout(() => document.body.classList.add('timeout'), 3500);
+    } else {
+      runGps();
+    }
+    function runGps(){
     // Auto-flip from detecting → found after ~2.4s · in real app this fires on a successful geolocation callback · auto-routes home with a soft 'Taking you home…' line
     setTimeout(() => {
       document.body.classList.add('found');
       try { localStorage.setItem('kkd.village', 'Mahidpur'); localStorage.setItem('kkd.district', 'Ujjain'); } catch (e) {}
     }, 2400);
     setTimeout(() => { window.location.href = 'home.html'; }, 5500);
+    }
   </script>
   <script src="../assets/weight-ladder.js"></script>
 </body>

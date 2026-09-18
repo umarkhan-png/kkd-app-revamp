@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>KKD · Enter Pincode</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  * { font-family: 'Poppins', system-ui, sans-serif; -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { min-height: 100vh; background: #F8F8F8; color: #0F172A; }
+  @keyframes pinDrop { 0% { transform: translateY(-22px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+  .pin-hero { animation: pinDrop .9s cubic-bezier(.22,1,.36,1) .15s both; }
+  @keyframes ringPulse { 0% { transform: scale(.65); opacity: .35; } 100% { transform: scale(1.55); opacity: 0; } }
+  .ring { animation: ringPulse 3.2s cubic-bezier(.22,1,.36,1) infinite; border-radius: 50%; }
+  .ring.r2 { animation-delay: 1.6s; }
+
+  /* Field family — matches ON-05 name-input construction exactly */
+  .field-block { padding: 0 24px; margin-top: 16px; }
+  .field-label-row { display:flex; align-items:baseline; gap:6px; margin-bottom:6px; padding: 0 2px; }
+  .field-label { font-size: 12.5px; font-weight: 700; color:#475569; }
+  .req-star { color:#DC2626; font-weight:800; font-size: 13px; }
+  .req-helper { font-size: 11px; color:#94A3B8; font-weight:600; }
+  .opt-helper { font-size: 11px; color:#CBD5E1; font-weight:600; }
+
+  .field-input { display:flex; align-items:center; gap:12px; height:58px; padding: 0 16px; border-radius:12px; background:#FFFFFF; border:1px solid #E5E7EB; box-shadow:0 1px 3px rgba(15,23,42,0.04); transition: border-color .15s ease, box-shadow .15s ease; }
+  .field-input.focused { border-color:#258046; box-shadow:0 0 0 3px rgba(4,120,87,0.10); }
+  .field-input.error { border-color:#FCA5A5; background:#FFFBFB; box-shadow:none; }
+  .field-input input { flex:1; border:none; outline:none; background:transparent; font-size:18px; font-weight:700; color:#0F172A; font-family:'Poppins', system-ui, sans-serif; }
+  #pinInput { letter-spacing: 5px; }
+  .field-input input::placeholder { color:#CBD5E1; font-weight:600; letter-spacing:normal; }
+  .icon-svg { flex-shrink:0; }
+
+  .inline-error { display:flex; align-items:flex-start; gap:6px; margin-top:7px; padding: 0 2px; min-height: 0; }
+  .inline-error i { font-size: 11px; color:#DC2626; margin-top:2px; }
+  .inline-error span { font-size: 12px; font-weight:600; color:#DC2626; line-height:1.4; }
+
+  /* Reassurance card — same card+icon-chip+depth family as .perm-bullet/.retry-notice, emerald accent (positive, not a problem) */
+  .reassure-card { display:flex; align-items:flex-start; gap:12px; padding:14px; background:#FFFFFF; border:1px solid #D1FAE5; border-radius:14px; box-shadow:0 4px 14px -4px rgba(16,185,129,0.16); }
+  .reassure-ic { width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg,#258046 0%,#10B981 100%); color:#FFFFFF; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:16px; box-shadow:0 6px 14px -6px rgba(4,120,87,0.5); }
+  .reassure-title { font-size:13px; font-weight:700; color:#0F172A; line-height:1.3; }
+  .reassure-body { font-size:12px; font-weight:500; color:#78716C; line-height:1.45; margin-top:2px; }
+</style>
+</head>
+<body class="pb-32 relative">
+
+  <!-- Status bar -->
+  <div class="flex items-center justify-between px-6 pt-3 text-[11px] font-semibold text-[#0F172A]">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg>
+    </div>
+  </div>
+
+  <!-- Back -->
+  <div class="px-6 pt-4">
+    <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center bg-white" style="border:1px solid #E5E7EB;box-shadow:0 1px 3px rgba(15,23,42,0.04)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+  </div>
+
+  <!-- Hero -->
+  <div class="px-6 mt-4">
+    <div class="relative mx-auto pin-hero flex items-center justify-center" style="width:152px;height:152px">
+      <span class="absolute ring" style="inset:0;background:rgba(16,185,129,0.18)"></span>
+      <span class="absolute ring r2" style="inset:0;background:rgba(16,185,129,0.12)"></span>
+      <div class="relative w-[100px] h-[100px] rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#258046 0%,#10B981 100%);box-shadow:0 18px 32px -10px rgba(4,120,87,0.4)">
+        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h.01M11 9h.01M15 9h.01M7 13h.01M11 13h.01M15 13h.01M7 17h6"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Heading -->
+  <div class="px-6 mt-3 text-center">
+    <h1 class="text-[22px] font-extrabold leading-tight text-[#0F172A]">Enter your pincode</h1>
+    <p class="text-[13px] mt-1.5 px-2" style="color:#64748B">We'll use this to show delivery, pricing &amp; offers for your area</p>
+  </div>
+
+  <!-- Pincode field -->
+  <div class="field-block" style="margin-top:20px;">
+    <div class="field-label-row">
+      <span class="field-label">Pincode</span><span class="req-star">*</span><span class="req-helper">required</span>
+    </div>
+    <div class="field-input" id="pinWrap">
+      <svg class="icon-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="3"/></svg>
+      <input type="text" id="pinInput" inputmode="numeric" maxlength="6" placeholder="6-digit pincode" autofocus />
+    </div>
+    <div class="inline-error" id="pinError" style="display:none;">
+      <i class="fa-solid fa-circle-exclamation"></i><span id="pinErrorMsg"></span>
+    </div>
+  </div>
+
+  <!-- Village / locality field -->
+  <div class="field-block">
+    <div class="field-label-row">
+      <span class="field-label">Village / Locality</span><span class="opt-helper">optional</span>
+    </div>
+    <div class="field-input" id="villageWrap">
+      <svg class="icon-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
+      <input type="text" id="villageInput" placeholder="e.g. Rampura (helps us serve you better)" />
+    </div>
+  </div>
+
+  <!-- Reassurance — real depth+icon+motif, not flat text on a tint -->
+  <div class="px-6 mt-5">
+    <div class="reassure-card">
+      <div class="reassure-ic"><i class="fa-solid fa-shield-heart"></i></div>
+      <div>
+        <div class="reassure-title">Full service either way</div>
+        <div class="reassure-body">You'll still get delivery updates, local prices &amp; weather alerts for your area — a pincode is all we need.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky CTA -->
+  <div class="fixed bottom-0 left-0 right-0 px-6 py-4" style="background:#F8F8F8;border-top:0">
+    <button id="continueBtn" onclick="handleContinue()" class="w-full h-[52px] rounded-[12px] bg-[#258046] text-white text-[15px] font-semibold flex items-center justify-center gap-2" style="box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+      Continue
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+
+  <script>
+    (function () {
+      var pinInput = document.getElementById('pinInput');
+      var pinWrap = document.getElementById('pinWrap');
+      var pinError = document.getElementById('pinError');
+      var pinErrorMsg = document.getElementById('pinErrorMsg');
+      var villageWrap = document.getElementById('villageWrap');
+      var villageInput = document.getElementById('villageInput');
+
+      function clearError() {
+        pinWrap.classList.remove('error');
+        pinError.style.display = 'none';
+      }
+
+      function showError(msg) {
+        pinWrap.classList.remove('focused');
+        pinWrap.classList.add('error');
+        pinErrorMsg.textContent = msg;
+        pinError.style.display = 'flex';
+      }
+
+      function validatePin() {
+        var raw = pinInput.value.trim();
+        if (raw.length === 0) {
+          showError('Please enter a 6-digit pincode');
+          return false;
+        }
+        if (!/^[0-9]+$/.test(raw)) {
+          showError('Pincode must be 6 digits');
+          return false;
+        }
+        if (raw.length < 6) {
+          showError('Please enter a 6-digit pincode');
+          return false;
+        }
+        if (raw.length > 6) {
+          showError('Pincode must be 6 digits');
+          return false;
+        }
+        clearError();
+        return true;
+      }
+
+      pinInput.addEventListener('focus', function () {
+        if (!pinWrap.classList.contains('error')) pinWrap.classList.add('focused');
+      });
+      pinInput.addEventListener('blur', function () {
+        pinWrap.classList.remove('focused');
+      });
+      pinInput.addEventListener('input', function () {
+        // live-clear the error the moment the farmer starts fixing it
+        if (pinWrap.classList.contains('error')) clearError();
+      });
+
+      villageInput.addEventListener('focus', function () { villageWrap.classList.add('focused'); });
+      villageInput.addEventListener('blur', function () { villageWrap.classList.remove('focused'); });
+
+      window.handleContinue = function () {
+        var ok = validatePin();
+        if (!ok) {
+          pinInput.focus();
+          return;
+        }
+        // Valid — save the typed location and go to the "Location detected" state (GPS animation skipped) → home
+        var pin = pinInput.value.trim(), village = villageInput.value.trim();
+        try {
+          localStorage.setItem('kkd.pincode', pin);
+          localStorage.setItem('kkd.village', village || ('Pincode ' + pin));
+          localStorage.setItem('kkd.locSource', 'manual');
+          sessionStorage.removeItem('kkd.locDenied');
+        } catch (e) {}
+        location.href = 'locating.html?manual=1';
+      };
+    })();
+  </script>
+
+  <script src="../assets/weight-ladder.js"></script>
+</body>
+</html>

@@ -702,6 +702,7 @@
 
     // Reserve a 2nd line for a card's name ONLY when another card in the SAME row wraps to 2 lines (per-row, not all)
     function equalizeNames(){
+      const list = document.getElementById('productList');
       const names = Array.from(list.querySelectorAll('.pname'));
       names.forEach(n => { n.style.minHeight = ''; });   // reset
       const rows = {};

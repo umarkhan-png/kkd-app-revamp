@@ -1484,8 +1484,8 @@
         rateOkTimer = setTimeout(() => rateOk.classList.remove('show'), 2200);
       }
 
-      // Per-product rating · tapping a star opens the SAME Rate & Review modal as the home Buy-again flow.
-      // Coins are earned for the REVIEW (+10) / TESTIMONIAL (+25) on submit — not for the stars. Attachment lives in the modal.
+      // Per-product rating · tapping a star opens the SAME Rate form as the Orders page (assets/rate.js).
+      // The page stars fill ONLY when the rating is submitted in the modal; closing the modal leaves them empty.
       document.querySelectorAll('[data-rating-group]').forEach(group => {
         const stars  = group.querySelectorAll('.star-btn');
         const status = group.querySelector('[data-rate-status]');
@@ -1495,6 +1495,10 @@
         const imgEl  = row ? row.querySelector('.prod-img img') : null;
         const name   = nameEl ? nameEl.textContent.trim() : 'product';
         const img    = imgEl ? imgEl.getAttribute('src') : '';
+        const sizeEl = row ? row.querySelector('.prod-size') : null;
+        const size   = sizeEl ? sizeEl.textContent.trim() : '';
+        const oidEl  = document.getElementById('orderIdLabel');
+        const order  = oidEl ? oidEl.textContent.trim() : '';
         if (wrap) wrap.style.display = 'none';   // review now lives inside the modal
         let rated = false;
         function fill(v){ stars.forEach(x => x.classList.toggle('on', parseInt(x.getAttribute('data-val'), 10) <= v)); }
@@ -1502,9 +1506,8 @@
           s.addEventListener('click', () => {
             if (rated) return;
             const v = parseInt(s.getAttribute('data-val'), 10);
-            fill(v);
             if (!window.kkdRate) return;
-            window.kkdRate({ name: name, img: img, rating: v, onSubmit: function(coins, r){
+            window.kkdRate({ name: name, img: img, size: size, order: order, rating: v, onSubmit: function(coins, r){
               rated = true; fill(r);
               if (status){ status.textContent = 'Rated · thanks for the review!'; status.style.color = '#258046'; }
               var chip = group.querySelector('.rate-coin-chip'); if (chip) chip.style.display = 'none';   // earned — hide the +10 badge

@@ -279,8 +279,8 @@
   </div>
 
   <!-- Payment method · 3 rows · Pay Now (5% off, recommended) · Partial (with %-pills + breakdown when active) · Cash on Delivery · each row shows the amount inline -->
-  <div class="sec-title">Payment method</div>
-  <div class="pay-card">
+  <div class="sec-title" id="paySecTitle">Payment method</div>
+  <div class="pay-card" id="paySec">
     <!-- Pay Now · payment icon column dropped · RECOMMENDED chip sits inline next to the name -->
     <label class="pay active" data-pay="paynow">
       <span class="pay-head">
@@ -359,7 +359,7 @@
       <div class="bill-row"><span class="lbl">Coupon (WELCOME100)</span><span class="val green tnum">&minus; &#8377;100</span></div>
       <div class="bill-row" id="prepaidBillRow"><span class="lbl" style="color:#258046;font-weight:700">Prepaid extra off</span><span class="val green tnum" id="prepaidBillAmt">&minus; &#8377;95</span></div>
       <div class="bill-row" id="coinBillRow"><span class="lbl"><i class="fa-solid fa-coins text-[11px]" style="color:#94A3B8"></i> Krishi Coins</span><span class="val tnum" id="coinBillAmt">&minus; &#8377;190</span></div>
-      <div class="bill-row"><span class="lbl"><i class="fa-solid fa-wallet text-[10px]" style="color:#94A3B8"></i> Wallet</span><span class="val tnum">&minus; &#8377;540</span></div>
+      <div class="bill-row"><span class="lbl"><i class="fa-solid fa-wallet text-[10px]" style="color:#94A3B8"></i> Wallet</span><span class="val tnum" id="walBillAmt">&minus; &#8377;540</span></div>
       <div class="bill-row"><span class="lbl">Delivery</span><span class="val green">FREE</span></div>
       <div class="bill-total">
         <span class="lbl">Total to pay</span>
@@ -524,7 +524,10 @@
 
     const COIN_REDEEM = 190;   // capped Krishi Coins redemption (1 coin = ₹1) · now auto-applied (toggle section removed) and shown as a bill line
     let coinsRedeem = COIN_REDEEM;
-    const WALLET_BALANCE = 540;   // money wallet · MANDATORY auto-apply (capped to the order)
+    // ?zero=1 · demo: wallet balance big enough that coupon + coins + wallet cover the whole bill (₹0 to pay)
+    const ZERO_DEMO = new URLSearchParams(location.search).get('zero') === '1';
+    const WALLET_BALANCE = ZERO_DEMO ? 2500 : 540;   // money wallet · MANDATORY auto-apply (capped to the order)
+    let ZERO_BILL = false;   // true when coupon + coins + wallet make the bill ₹0 → no payment step
     let walletApplied = 0;
 
     function updateBill(method, pct){
@@ -535,6 +538,11 @@
       const ctaAmt = document.getElementById('ctaAmt');
       const coinRow = document.getElementById('coinBillRow');
       let off = 0, total = SUBTOTAL, showOff = false;
+      // ₹0 bill · coupon + coins + wallet cover everything → hide the Payment method section (no Pay Now / Partial / COD)
+      ZERO_BILL = SUBTOTAL - coinsRedeem - WALLET_BALANCE <= 0;
+      document.getElementById('paySecTitle').style.display = ZERO_BILL ? 'none' : '';
+      document.getElementById('paySec').style.display = ZERO_BILL ? 'none' : '';
+      if (ZERO_BILL) method = 'wallet';
       if (method === 'paynow') { off = Math.round(SUBTOTAL * 0.05); total = SUBTOTAL - off; showOff = true; }
       else if (method === 'partial') {
         // Prepaid percent of subtotal · NO instant discount in partial mode (only 2% coins on prepaid)
@@ -555,6 +563,8 @@
       if (coinRow) coinRow.style.display = coinsRedeem > 0 ? 'flex' : 'none';
       const walRemain = document.getElementById('walRemain');
       if (walRemain) walRemain.textContent = fmt(WALLET_BALANCE - walletApplied);
+      const walBill = document.getElementById('walBillAmt');
+      if (walBill) walBill.textContent = '− ' + fmt(walletApplied);
       billTotal.textContent = fmt(total);
       ctaAmt.textContent = fmt(total);
     }
@@ -631,6 +641,16 @@
         sub.innerHTML = sub.dataset.orig; sub.style.color = ''; sub.style.fontWeight = ''; sub.style.marginTop = '';
       }
     }
+
+    // ₹0 bill · Place order places the order directly (no payment step, no merge sheet)
+    (function(){
+      const b = document.getElementById('placeOrderBtn');
+      if (b) b.addEventListener('click', function(e){
+        if (!ZERO_BILL || MERGE || b.disabled) return;
+        e.preventDefault(); e.stopImmediatePropagation();
+        location.href = 'order-success.html?mode=wallet';
+      }, true);
+    })();
 
     // Initial paint
     updatePartialSplit(currentPct);

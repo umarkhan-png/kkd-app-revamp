@@ -167,7 +167,7 @@
       <div class="thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/Chakrawarti_2.webp" class="img-blend" alt=""/></div>
       <div class="thumb"><img src="https://katyayanikrishidirect.com/cdn/shop/files/NPK_19-19-19_Front.webp" class="img-blend" alt=""/></div>
       <div class="thumb-summary">
-        <div class="a">3 items · ₹1,805</div>
+        <div class="a" id="sumAmt">3 items · ₹1,805</div>
         <div class="b">Humic, Chakrawarti, NPK</div>
       </div>
     </div>
@@ -347,7 +347,12 @@
       const payStatus = document.getElementById('payStatus');
       const codStrip = document.getElementById('codStrip');
       const codAmt = document.getElementById('codStripAmt');
-      if (mode === 'cod') {
+      if (mode === 'wallet') {
+        // ₹0 bill · coupon + coins + wallet covered everything · nothing to pay, no COD
+        methodLbl && (methodLbl.textContent = 'Paid via Wallet + Coins');
+        methodAmt && (methodAmt.textContent = '₹0');
+        const sa = document.getElementById('sumAmt'); if (sa) sa.textContent = '3 items · ₹0';
+      } else if (mode === 'cod') {
         methodLbl && (methodLbl.textContent = 'Cash on Delivery');
         methodAmt && (methodAmt.textContent = '₹1,900');
         if (payStatus) { payStatus.style.background = '#FEF3C7'; payStatus.style.borderColor = '#FDE68A'; payStatus.style.color = '#B45309'; payStatus.innerHTML = '<i class="fa-solid fa-clock text-[9px]"></i> Pay on delivery'; }

@@ -4,45 +4,27 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-  html,body{margin:0;padding:0}
-  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:96px}
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased;box-sizing:border-box}
+  html,body{margin:0;padding:0;width:390px;overflow-x:hidden}
+  body{min-height:844px;background:#F8F8F8;color:#0F172A;padding-bottom:28px}
   .tnum{font-variant-numeric:tabular-nums}
   .card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
   .sec-title{margin:18px 16px 10px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
-  /* Hero · emerald gradient · expert/agronomist-style banner with confetti dots + glowing coin · drives the "share & earn" mood */
+  .sec-title small{display:block;margin-top:2px;font-size:10px;font-weight:600;text-transform:none;letter-spacing:0;color:#94A3B8}
+
+  /* Hero */
   .hero{margin:8px 16px 0;border-radius:18px;padding:22px 18px 24px;color:#FFFFFF;background:linear-gradient(135deg,#258046 0%,#258046 50%,#10B981 100%);position:relative;overflow:hidden;box-shadow:0 10px 28px -10px rgba(4,120,87,0.55)}
   .hero::before{content:"";position:absolute;top:-40px;right:-30px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,0.32) 0%,transparent 65%);pointer-events:none}
   .hero::after{content:"";position:absolute;bottom:-50px;left:-20px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.18) 0%,transparent 70%);pointer-events:none}
-  .hero-illu{position:absolute;right:8px;bottom:8px;width:108px;height:108px;opacity:.92;pointer-events:none}
-  /* Code box · dashed-outline emerald-tint band, big tracked code + copy pill */
+  .hero-illu{position:absolute;right:8px;bottom:8px;width:100px;height:100px;opacity:.92;pointer-events:none}
+
+  /* Code box */
   .code-row{display:flex;align-items:center;gap:10px;padding:14px;border:1.5px dashed #BBF7D0;background:#ECFDF5;border-radius:14px;margin:0 16px}
   .code-row .lab{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#258046;line-height:1}
   .code-row .cd{font-size:22px;font-weight:900;letter-spacing:0.14em;color:#0F172A;margin-top:6px}
   .copy-btn{flex-shrink:0;width:40px;height:40px;border-radius:10px;background:#FFFFFF;border:1px solid #BBF7D0;color:#258046;display:flex;align-items:center;justify-content:center;font-size:15px}
-  /* Dual-reward chips · clarifies "you get / friend gets" right under the hero */
-  .reward-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 16px 0}
-  .rcard{display:flex;align-items:center;gap:10px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:12px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
-  .rcard .ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
-  .rcard .ic.coin{background:#FEF3C7}
-  .rcard .ic.gift{background:#ECFDF5}
-  .rcard .rn{font-size:16px;font-weight:900;color:#0F172A;line-height:1}
-  .rcard .rl{font-size:10.5px;font-weight:700;color:#94A3B8;margin-top:3px}
-  /* Milestone bonus · gamified progress to a lump-sum bonus */
-  .mile{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
-  .mile-head{display:flex;align-items:center;justify-content:space-between}
-  .mile-head .a{font-size:13.5px;font-weight:800;color:#0F172A}
-  .mile-head .b{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:900;color:#B45309;background:#FEF3C7;border:1px solid #FCD34D;padding:3px 9px;border-radius:9999px}
-  .mile-bar{height:10px;border-radius:9999px;background:#F1F5F9;margin-top:11px;overflow:hidden;position:relative}
-  .mile-fill{height:100%;border-radius:9999px;background:linear-gradient(90deg,#10B981,#258046)}
-  .mile-dots{display:flex;justify-content:space-between;margin-top:8px}
-  .mile-dot{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9.5px;font-weight:700;color:#94A3B8}
-  .mile-dot .d{width:14px;height:14px;border-radius:50%;background:#E5E7EB;display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff}
-  .mile-dot.on .d{background:#258046}
-  .mile-dot.on{color:#258046}
-  .mile-sub{font-size:11.5px;color:#64748B;margin-top:10px}
-  .mile-sub b{color:#258046}
-  /* Stats · 2-col card row · big number + thin sub-label · emerald accent on icon */
+
+  /* Stats row */
   .stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px}
   .stat-card{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
   .stat-ic{width:32px;height:32px;border-radius:9px;background:#ECFDF5;color:#258046;display:flex;align-items:center;justify-content:center;font-size:13px}
@@ -52,35 +34,86 @@
   .stat-pair > div{flex:1}
   .stat-num{font-size:20px;font-weight:900;color:#0F172A}
   .stat-sub{font-size:10.5px;font-weight:700;color:#94A3B8;margin-top:2px}
-  /* How-it-works · numbered emerald circles, white card */
+
+  /* Reward structure card */
+  .rules{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .rule-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #F1F5F9}
+  .rule-row:last-child{border-bottom:0}
+  .rule-ic{width:30px;height:30px;border-radius:9px;background:#FEF3C7;color:#B45309;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+  .rule-txt{font-size:12.5px;line-height:1.4;color:#0F172A}
+  .rule-txt b{color:#258046;font-weight:800}
+
+  /* Monthly cap */
+  .cap-card{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .cap-head{display:flex;align-items:center;justify-content:space-between}
+  .cap-head .a{font-size:13.5px;font-weight:800;color:#0F172A}
+  .cap-head .b{font-size:13px;font-weight:900;color:#258046}
+  .cap-bar{height:10px;border-radius:9999px;background:#F1F5F9;margin-top:11px;overflow:hidden}
+  .cap-fill{height:100%;border-radius:9999px;background:linear-gradient(90deg,#10B981,#258046)}
+  .cap-sub{font-size:11px;color:#64748B;margin-top:8px}
+
+  /* Milestone ladder */
+  .mile{margin:0 16px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(15,23,42,0.04)}
+  .mile-head{display:flex;align-items:center;justify-content:space-between}
+  .mile-head .a{font-size:13.5px;font-weight:800;color:#0F172A}
+  .mile-head .b{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:900;color:#B45309;background:#FEF3C7;border:1px solid #FCD34D;padding:3px 9px;border-radius:9999px}
+  .mile-bar{height:10px;border-radius:9999px;background:#F1F5F9;margin-top:14px;overflow:hidden;position:relative}
+  .mile-fill{height:100%;border-radius:9999px;background:linear-gradient(90deg,#10B981,#258046)}
+  .mile-stops{display:flex;justify-content:space-between;margin-top:8px;position:relative}
+  .mile-stop{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#94A3B8;flex:1}
+  .mile-stop .d{width:20px;height:20px;border-radius:50%;background:#E5E7EB;display:flex;align-items:center;justify-content:center;font-size:8px;color:#fff;border:2px solid #F8F8F8}
+  .mile-stop.on .d{background:#258046}
+  .mile-stop.on{color:#258046}
+  .mile-stop .amt{font-size:9px;font-weight:700;color:#B45309}
+  .mile-sub{font-size:11.5px;color:#64748B;margin-top:12px}
+  .mile-sub b{color:#258046}
+
+  /* How it works */
   .step{display:flex;align-items:flex-start;gap:12px;padding:14px;border-bottom:1px solid #F1F5F9}
   .step:last-child{border-bottom:0}
   .step-num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#258046,#10B981);color:#FFFFFF;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 10px -2px rgba(4,120,87,0.45)}
   .step-title{font-size:13.5px;font-weight:700;color:#0F172A;line-height:1.3}
   .step-sub{font-size:11.5px;color:#64748B;margin-top:2px;line-height:1.35}
-  /* Leaderboard · emerald gradient card · podium top 3 + ranked rows */
+
+  /* Coin redemption note */
+  .note{margin:0 16px;display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:14px;background:#FFFBEB;border:1px solid #FDE68A}
+  .note .ic{width:26px;height:26px;border-radius:8px;background:#FCD34D;color:#7C2D12;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+  .note .t{font-size:11.5px;line-height:1.4;color:#78350F}
+
+  /* Leaderboard */
   .board{margin:0 16px;border-radius:18px;padding:16px 12px 12px;background:linear-gradient(180deg,#065F46 0%,#258046 60%,#258046 100%);color:#FFFFFF;box-shadow:0 10px 26px -10px rgba(4,120,87,0.5)}
-  .board-title{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px;padding:0 4px}
+  .board-title{font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:space-between;padding:0 4px}
+  .board-title .l{display:flex;align-items:center;gap:8px}
   .board-title .ic{width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:13px;color:#FBBF24}
-  .podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-top:18px;padding:0 4px}
-  .podium .slot{display:flex;flex-direction:column;align-items:center;flex:1;text-align:center}
-  .podium .av{width:58px;height:58px;border-radius:50%;background:#FFFFFF;color:#258046;font-weight:900;font-size:22px;display:flex;align-items:center;justify-content:center;border:3px solid #FBBF24;box-shadow:0 8px 18px -4px rgba(0,0,0,0.35)}
-  .podium .rk{margin-top:-12px;width:24px;height:24px;border-radius:50%;background:#FBBF24;color:#0F172A;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid #FFFFFF;z-index:2}
-  .podium .nm{font-size:12px;font-weight:800;margin-top:6px}
-  .podium .pt{font-size:11px;font-weight:700;color:rgba(255,255,255,0.78);margin-top:2px}
+  .board-title .by{font-size:9.5px;font-weight:700;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.05em}
+  .podium{display:flex;align-items:flex-end;justify-content:center;gap:6px;margin-top:18px;padding:0 4px}
+  .podium .slot{display:flex;flex-direction:column;align-items:center;flex:1;text-align:center;min-width:0}
+  .podium .av{width:54px;height:54px;border-radius:50%;background:#FFFFFF;color:#258046;font-weight:900;font-size:20px;display:flex;align-items:center;justify-content:center;border:3px solid #FBBF24;box-shadow:0 8px 18px -4px rgba(0,0,0,0.35)}
+  .podium .rk{margin-top:-12px;width:22px;height:22px;border-radius:50%;background:#FBBF24;color:#0F172A;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid #FFFFFF;z-index:2}
+  .podium .nm{font-size:11px;font-weight:800;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .podium .dt{font-size:9px;font-weight:600;color:rgba(255,255,255,0.65);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .podium .pt{font-size:10.5px;font-weight:700;color:#FCD34D;margin-top:2px}
   .podium .bar{margin-top:8px;width:100%;border-radius:12px 12px 0 0;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);border-bottom:0}
-  .podium .one .av{width:66px;height:66px;font-size:24px;border-color:#FCD34D}
-  .podium .one .bar{height:74px;background:rgba(251,191,36,0.22);border-color:rgba(251,191,36,0.4)}
-  .podium .two .bar{height:54px}
-  .podium .three .bar{height:42px}
-  /* Ranked list rows (4+) · white card with avatar circle, name, count + rank chip */
-  .rank-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #F1F5F9}
+  .podium .one .av{width:62px;height:62px;font-size:22px;border-color:#FCD34D}
+  .podium .one .bar{height:66px;background:rgba(251,191,36,0.22);border-color:rgba(251,191,36,0.4)}
+  .podium .two .bar{height:48px}
+  .podium .three .bar{height:38px}
+
+  .rank-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid #F1F5F9}
   .rank-row:last-child{border-bottom:0}
-  .rank-row .rk-num{width:24px;text-align:center;font-size:12px;font-weight:800;color:#64748B}
+  .rank-row .rk-num{width:22px;text-align:center;font-size:12px;font-weight:800;color:#64748B;flex-shrink:0}
   .rank-row .av-sm{width:32px;height:32px;border-radius:50%;background:#ECFDF5;color:#258046;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .rank-row .nm{flex:1;font-size:13px;font-weight:700;color:#0F172A;text-transform:capitalize}
-  .rank-row .ct{font-size:12.5px;font-weight:800;color:#0F172A;tnum:1}
+  .rank-row .info{flex:1;min-width:0}
+  .rank-row .nm{font-size:12.5px;font-weight:700;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rank-row .dt{font-size:10.5px;color:#94A3B8;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rank-row .ct{font-size:12.5px;font-weight:800;color:#0F172A;flex-shrink:0}
   .rank-row .ic-ppl{font-size:10px;color:#258046;margin-left:4px}
+  .cap-card.reached{border-color:#FDE68A;background:#FFFBEB}
+  .cap-head .b.reached-amt{color:#B45309}
+  .cap-badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:900;color:#92400E;background:#FEF3C7;border:1px solid #FCD34D;padding:3px 9px;border-radius:9999px;margin-top:2px}
+  .cap-fill.reached{background:repeating-linear-gradient(135deg,#D97706,#D97706 6px,#FBBF24 6px,#FBBF24 12px)}
+  .cap-sub.reached{color:#92400E;font-weight:600}
+  .cap-sub.reached b{color:#7C2D12}
 </style></head>
 <body>
 
@@ -93,7 +126,7 @@
     </div>
   </div>
 
-  <!-- Top bar · plain white app-bar (matches the rest of the design system) -->
+  <!-- Top bar -->
   <div class="px-4 pt-4 pb-3 flex items-center gap-3" style="background:#F8F8F8">
     <button onclick="history.back()" class="w-10 h-10 rounded-full flex items-center justify-center bg-white" style="border:1px solid #E5E7EB;box-shadow:0 1px 3px rgba(15,23,42,0.04)">
       <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
@@ -101,22 +134,19 @@
     <h1 class="flex-1 text-[20px] font-extrabold leading-tight text-[#0F172A]">Refer &amp; earn</h1>
   </div>
 
-  <!-- Hero · emerald gradient banner · headline + subline + inline illustration of phone+coins -->
+  <!-- Hero -->
   <div class="hero">
-    <div class="relative" style="max-width:62%">
-      <div class="text-[11px] font-semibold uppercase tracking-[0.16em]" style="color:#FCD34D">Share &amp; earn</div>
-      <div class="text-[22px] font-extrabold leading-tight mt-1.5">Earn 60 coins per friend</div>
-      <div class="text-[12.5px] mt-1.5" style="color:rgba(255,255,255,0.85)">They get ₹100 off their first order. You both win.</div>
+    <div class="relative" style="max-width:64%">
+      <div class="text-[11px] font-semibold uppercase tracking-[0.16em]" style="color:#FCD34D">Katyayani Krishi Parivar</div>
+      <div class="text-[21px] font-extrabold leading-tight mt-1.5">Bring farmers, earn coins for life</div>
+      <div class="text-[12px] mt-1.5" style="color:rgba(255,255,255,0.85)">₹100 when their first order is delivered, then ₹30 on every order after.</div>
     </div>
-    <!-- Inline SVG illustration · phone + coin stack + sparkle -->
     <svg class="hero-illu" viewBox="0 0 120 120" fill="none">
       <ellipse cx="60" cy="105" rx="46" ry="6" fill="rgba(0,0,0,0.18)"/>
-      <!-- Coin stack -->
       <ellipse cx="38" cy="92" rx="22" ry="6" fill="#FBBF24" stroke="#B45309" stroke-width="1.5"/>
       <ellipse cx="38" cy="82" rx="22" ry="6" fill="#FCD34D" stroke="#B45309" stroke-width="1.5"/>
       <ellipse cx="38" cy="72" rx="22" ry="6" fill="#FBBF24" stroke="#B45309" stroke-width="1.5"/>
       <text x="38" y="76" font-size="9" font-weight="800" text-anchor="middle" fill="#7C2D12">₹</text>
-      <!-- Phone -->
       <rect x="64" y="20" width="44" height="74" rx="9" fill="#FFFFFF" stroke="#258046" stroke-width="2"/>
       <rect x="68" y="26" width="36" height="58" rx="4" fill="#ECFDF5"/>
       <circle cx="86" cy="35" r="6" fill="#258046"/>
@@ -125,19 +155,12 @@
       <rect x="72" y="53" width="20" height="3" rx="1.5" fill="#A7F3D0"/>
       <rect x="72" y="64" width="28" height="9" rx="3" fill="#258046"/>
       <text x="86" y="71" font-size="6" font-weight="800" text-anchor="middle" fill="#FFFFFF">SHARE</text>
-      <!-- Sparkles -->
       <path d="M22 30l3 6 6 3-6 3-3 6-3-6-6-3 6-3z" fill="#FCD34D" opacity=".9"/>
       <path d="M105 14l1.5 3 3 1.5-3 1.5L105 23l-1.5-3-3-1.5 3-1.5z" fill="#FFFFFF" opacity=".9"/>
     </svg>
   </div>
 
-  <!-- Dual reward · clarifies both sides of the deal -->
-  <div class="reward-2">
-    <div class="rcard"><span class="ic coin">🪙</span><div><div class="rn tnum">60 coins</div><div class="rl">YOU EARN</div></div></div>
-    <div class="rcard"><span class="ic gift">🎁</span><div><div class="rn tnum">₹100 off</div><div class="rl">FRIEND GETS</div></div></div>
-  </div>
-
-  <!-- Referral code · dashed emerald-tint band · copy = icon-only button -->
+  <!-- Referral code -->
   <div class="sec-title">Your code</div>
   <div class="code-row">
     <div class="flex-1 leading-tight">
@@ -146,36 +169,20 @@
     </div>
     <button class="copy-btn" id="copyBtn" aria-label="Copy code"><i class="fa-solid fa-copy"></i></button>
   </div>
-  <!-- Share row · primary Share + WhatsApp shortcut -->
   <div class="mt-3 px-4 flex gap-2">
-    <button id="shareBtn" class="flex-1 h-[48px] rounded-[12px] text-white text-[14.5px] font-semibold flex items-center justify-center gap-2" style="background:#258046;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
-      <i class="fa-solid fa-share-nodes text-[13px]"></i> Share &amp; earn
+    <button id="waBtn" class="flex-1 h-[48px] rounded-[12px] text-white text-[14px] font-semibold flex items-center justify-center gap-2" style="background:#25D366;box-shadow:0 8px 20px -6px rgba(37,211,102,0.4)">
+      <i class="fa-brands fa-whatsapp text-[16px]"></i> Share on WhatsApp
     </button>
-    <button class="w-[48px] h-[48px] rounded-[12px] flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB;color:#25D366;box-shadow:0 1px 3px rgba(15,23,42,0.04)" aria-label="Share on WhatsApp">
-      <i class="fa-brands fa-whatsapp text-[20px]"></i>
+    <button id="smsBtn" class="w-[48px] h-[48px] rounded-[12px] flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB;color:#2563EB;box-shadow:0 1px 3px rgba(15,23,42,0.04)" aria-label="Share by SMS">
+      <i class="fa-solid fa-comment-sms text-[18px]"></i>
+    </button>
+    <button id="shareBtn" class="w-[48px] h-[48px] rounded-[12px] flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB;color:#258046;box-shadow:0 1px 3px rgba(15,23,42,0.04)" aria-label="Copy link">
+      <i class="fa-solid fa-link text-[16px]"></i>
     </button>
   </div>
 
-  <!-- Milestone bonus · gamified progress to a ₹500 lump-sum on the 5th referral -->
-  <div class="sec-title">Milestone bonus</div>
-  <div class="mile">
-    <div class="mile-head">
-      <div class="a">Refer 5 friends</div>
-      <div class="b"><i class="fa-solid fa-sack-dollar text-[10px]"></i> +₹500 bonus</div>
-    </div>
-    <div class="mile-bar"><div class="mile-fill" style="width:60%"></div></div>
-    <div class="mile-dots">
-      <div class="mile-dot on"><span class="d"><i class="fa-solid fa-check"></i></span>1</div>
-      <div class="mile-dot on"><span class="d"><i class="fa-solid fa-check"></i></span>2</div>
-      <div class="mile-dot on"><span class="d"><i class="fa-solid fa-check"></i></span>3</div>
-      <div class="mile-dot"><span class="d"></span>4</div>
-      <div class="mile-dot"><span class="d"></span>5</div>
-    </div>
-    <div class="mile-sub">Just <b>2 more referrals</b> to unlock your <b>₹500</b> bonus 🎉</div>
-  </div>
-
-  <!-- Stats · 2-card row · drops the orange tiles, uses the design-system white card + emerald accent -->
-  <div class="sec-title">Your progress</div>
+  <!-- Stats -->
+  <div class="sec-title" style="margin-top:20px">Your progress</div>
   <div class="stats-row">
     <div class="stat-card">
       <div class="stat-head">
@@ -188,7 +195,7 @@
           <div class="stat-sub">Successful</div>
         </div>
         <div>
-          <div class="stat-num tnum" style="color:#B45309">1</div>
+          <div class="stat-num tnum" style="color:#B45309">2</div>
           <div class="stat-sub">Pending</div>
         </div>
       </div>
@@ -200,15 +207,64 @@
       </div>
       <div class="stat-pair">
         <div>
-          <div class="stat-num tnum">180</div>
+          <div class="stat-num tnum" id="earnMonth">180</div>
           <div class="stat-sub">This month</div>
         </div>
         <div>
-          <div class="stat-num tnum">540</div>
+          <div class="stat-num tnum" id="earnLife">540</div>
           <div class="stat-sub">Lifetime</div>
         </div>
       </div>
     </div>
+  </div>
+  <div class="px-4 mt-2 text-[10.5px]" style="color:#94A3B8">Pending = signed up but yet to place a qualifying order. Only successful referrals count for rewards and rank.</div>
+
+  <!-- Reward structure -->
+  <div class="sec-title" style="margin-top:20px">How you earn</div>
+  <div class="rules">
+    <div class="rule-row">
+      <div class="rule-ic"><i class="fa-solid fa-seedling"></i></div>
+      <div class="rule-txt"><b>₹100 coins</b> when your friend's first prepaid order above ₹1,500 is delivered</div>
+    </div>
+    <div class="rule-row">
+      <div class="rule-ic"><i class="fa-solid fa-rotate"></i></div>
+      <div class="rule-txt"><b>₹30 coins</b> for every order they place after that — for as long as they keep ordering</div>
+    </div>
+    <div class="rule-row">
+      <div class="rule-ic"><i class="fa-solid fa-gauge-high"></i></div>
+      <div class="rule-txt">Up to <b>₹300 a month</b> from referral earnings, plus milestone bonuses on top</div>
+    </div>
+  </div>
+
+  <!-- Monthly cap -->
+  <div class="sec-title">This month's earnings</div>
+  <div class="cap-card" id="capCard">
+    <div class="cap-head">
+      <div>
+        <div class="a">Monthly earnings</div>
+        <div class="cap-badge" id="capBadge" style="display:none"><i class="fa-solid fa-lock text-[9px]"></i> Limit reached</div>
+      </div>
+      <div class="b tnum" id="capAmt">₹180 / ₹300</div>
+    </div>
+    <div class="cap-bar"><div class="cap-fill" id="capFill" style="width:60%"></div></div>
+    <div class="cap-sub" id="capSub">₹120 more available this month before the cap resets on the 1st.</div>
+  </div>
+
+  <!-- Milestone ladder -->
+  <div class="sec-title">Milestone bonus</div>
+  <div class="mile">
+    <div class="mile-head">
+      <div class="a">Lifetime referral milestones</div>
+      <div class="b"><i class="fa-solid fa-sack-dollar text-[10px]"></i> Next: +₹500</div>
+    </div>
+    <div class="mile-bar"><div class="mile-fill" style="width:60%"></div></div>
+    <div class="mile-stops">
+      <div class="mile-stop on"><span class="d"><i class="fa-solid fa-check"></i></span>5<span class="amt">₹500</span></div>
+      <div class="mile-stop"><span class="d"></span>10<span class="amt">₹1,000</span></div>
+      <div class="mile-stop"><span class="d"></span>20<span class="amt">₹2,000</span></div>
+      <div class="mile-stop"><span class="d"></span>50<span class="amt">₹5,000</span></div>
+    </div>
+    <div class="mile-sub">You're at <b>3 successful referrals</b>. Just <b>2 more</b> to unlock the <b>₹500</b> milestone bonus 🎉</div>
   </div>
 
   <!-- How it works -->
@@ -224,73 +280,107 @@
     <div class="step">
       <div class="step-num">2</div>
       <div>
-        <div class="step-title">Friend signs up &amp; places first order</div>
-        <div class="step-sub">They use your code at checkout — ₹100 off instantly</div>
+        <div class="step-title">Friend signs up with your code</div>
+        <div class="step-sub">This shows as a "pending" referral until they order</div>
       </div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
       <div>
-        <div class="step-title">You both earn rewards</div>
-        <div class="step-sub">60 coins credited to your wallet within 24 hours</div>
+        <div class="step-title">They place a qualifying first order</div>
+        <div class="step-sub">Prepaid order above ₹1,500 — becomes "successful" once delivered</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div>
+        <div class="step-title">You earn coins in your wallet</div>
+        <div class="step-sub">₹100 on their first order, ₹30 on every order after, up to ₹300/month</div>
       </div>
     </div>
   </div>
 
-  <!-- Leaderboard · podium top 3 inside the emerald board + ranked list of 7 farmers below in a clean white card -->
-  <div class="sec-title">Leaderboard · This month</div>
+  <!-- Redemption note -->
+  <div class="sec-title">Using your coins</div>
+  <div class="note">
+    <div class="ic"><i class="fa-solid fa-circle-info"></i></div>
+    <div class="t">1 Krishi Coin = ₹1. Redeem up to <b>20%</b> of your order subtotal (delivery charges excluded) at checkout.</div>
+  </div>
+
+  <!-- Leaderboard -->
+  <div class="sec-title" style="margin-top:20px">Leaderboard · This month</div>
   <div class="board">
     <div class="board-title">
-      <span class="ic"><i class="fa-solid fa-trophy"></i></span>
-      <span>Top referrers</span>
+      <div class="l"><span class="ic"><i class="fa-solid fa-trophy"></i></span><span>Top referrers</span></div>
+      <span class="by">By successful referrals</span>
     </div>
     <div class="podium">
       <div class="slot two">
         <div class="av">S</div>
         <div class="rk">2</div>
-        <div class="nm">Sumit</div>
-        <div class="pt tnum">1,611</div>
+        <div class="nm">Sumit Yadav</div>
+        <div class="dt">Sitapur</div>
+        <div class="pt tnum">14 referrals</div>
         <div class="bar"></div>
       </div>
       <div class="slot one">
         <div class="av">M</div>
         <div class="rk" style="background:#FCD34D">1</div>
-        <div class="nm">Mithun</div>
-        <div class="pt tnum">2,211</div>
+        <div class="nm">Mithun Singh</div>
+        <div class="dt">Barabanki</div>
+        <div class="pt tnum">19 referrals</div>
         <div class="bar"></div>
       </div>
       <div class="slot three">
         <div class="av">R</div>
         <div class="rk" style="background:#FDBA74">3</div>
-        <div class="nm">Ravindra</div>
-        <div class="pt tnum">1,414</div>
+        <div class="nm">Ravindra Pal</div>
+        <div class="dt">Hardoi</div>
+        <div class="pt tnum">11 referrals</div>
         <div class="bar"></div>
       </div>
     </div>
   </div>
 
   <div class="card mt-3" style="margin-top:12px">
-    <div class="rank-row"><div class="rk-num tnum">4</div><div class="av-sm">S</div><div class="nm">sorabh</div><div class="ct tnum">1,181 <i class="fa-solid fa-user-plus ic-ppl"></i></div></div>
-    <div class="rank-row"><div class="rk-num tnum">5</div><div class="av-sm">A</div><div class="nm">ashish shakya</div><div class="ct tnum">1,175 <i class="fa-solid fa-user-plus ic-ppl"></i></div></div>
-    <div class="rank-row"><div class="rk-num tnum">6</div><div class="av-sm">S</div><div class="nm">shyam prajapati</div><div class="ct tnum">1,145 <i class="fa-solid fa-user-plus ic-ppl"></i></div></div>
-    <div class="rank-row"><div class="rk-num tnum">7</div><div class="av-sm">R</div><div class="nm">R Ravindra reddy</div><div class="ct tnum">1,066 <i class="fa-solid fa-user-plus ic-ppl"></i></div></div>
-    <div class="rank-row"><div class="rk-num tnum">8</div><div class="av-sm">D</div><div class="nm">ddcvvbb</div><div class="ct tnum">1,030 <i class="fa-solid fa-user-plus ic-ppl"></i></div></div>
-    <div class="rank-row"><div class="rk-num tnum">9</div><div class="av-sm">R</div><div class="nm">rohit</div><div class="ct tnum">995 <i class="fa-solid fa-user-plus ic-ppl"></i></div></div>
-    <div class="rank-row"><div class="rk-num tnum">10</div><div class="av-sm">N</div><div class="nm">niteshwar tiwari</div><div class="ct tnum">984 <i class="fa-solid fa-user-plus ic-ppl"></i></div></div>
+    <div class="rank-row">
+      <div class="rk-num tnum">4</div><div class="av-sm">S</div>
+      <div class="info"><div class="nm">Sorabh Tiwari</div><div class="dt">Lakhimpur Kheri</div></div>
+      <div class="ct tnum">9 <i class="fa-solid fa-user-plus ic-ppl"></i></div>
+    </div>
+    <div class="rank-row">
+      <div class="rk-num tnum">5</div><div class="av-sm">A</div>
+      <div class="info"><div class="nm">Ashish Shakya</div><div class="dt">Shahjahanpur</div></div>
+      <div class="ct tnum">8 <i class="fa-solid fa-user-plus ic-ppl"></i></div>
+    </div>
+    <div class="rank-row">
+      <div class="rk-num tnum">6</div><div class="av-sm">S</div>
+      <div class="info"><div class="nm">Shyam Prajapati</div><div class="dt">Barabanki</div></div>
+      <div class="ct tnum">7 <i class="fa-solid fa-user-plus ic-ppl"></i></div>
+    </div>
+    <div class="rank-row">
+      <div class="rk-num tnum">7</div><div class="av-sm">R</div>
+      <div class="info"><div class="nm">Ramesh Kumar</div><div class="dt">Barabanki</div></div>
+      <div class="ct tnum">6 <i class="fa-solid fa-user-plus ic-ppl"></i></div>
+    </div>
+    <div class="rank-row">
+      <div class="rk-num tnum">8</div><div class="av-sm">R</div>
+      <div class="info"><div class="nm">Rohit Verma</div><div class="dt">Sitapur</div></div>
+      <div class="ct tnum">5 <i class="fa-solid fa-user-plus ic-ppl"></i></div>
+    </div>
   </div>
 
-  <!-- Your rank · sticky-feel callout so the user always sees where they stand · sits below the list, not as a sticky bottom CTA -->
+  <!-- Your rank -->
   <div class="card mt-3" style="margin-top:12px;background:#ECFDF5;border-color:#A7F3D0">
     <div class="rank-row" style="border-bottom:0">
       <div class="rk-num tnum" style="color:#258046">24</div>
       <div class="av-sm" style="background:#258046;color:#FFFFFF">Y</div>
-      <div class="nm" style="color:#258046">You</div>
+      <div class="info"><div class="nm" style="color:#258046">You</div><div class="dt">Unnao</div></div>
       <div class="ct tnum" style="color:#258046">3 <i class="fa-solid fa-user-plus ic-ppl"></i></div>
     </div>
   </div>
 
   <script>
-    // Copy code · uses navigator.clipboard, falls back to execCommand
     (function(){
       const btn = document.getElementById('copyBtn');
       const code = document.getElementById('refCode');
@@ -299,9 +389,7 @@
         const text = code.textContent.trim();
         try {
           if (navigator.clipboard) { await navigator.clipboard.writeText(text); }
-          else {
-            const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t);
-          }
+          else { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t); }
           const old = btn.innerHTML;
           btn.innerHTML = '<i class="fa-solid fa-check"></i>';
           setTimeout(() => { btn.innerHTML = old; }, 1400);
@@ -309,18 +397,43 @@
       });
     })();
 
-    // Share via Web Share API · falls back silently when unsupported
+    // Monthly ₹300 cap reached (demo: refer.html?cap=1) · amber capped card · milestones still pay in full
+    (function(){
+      if (new URLSearchParams(location.search).get('cap') !== '1') return;
+      document.getElementById('earnMonth').textContent = '300';
+      document.getElementById('earnLife').textContent = '660';
+      document.getElementById('capCard').classList.add('reached');
+      document.getElementById('capBadge').style.display = '';
+      const amt = document.getElementById('capAmt'); amt.textContent = '₹300 / ₹300'; amt.classList.add('reached-amt');
+      const fill = document.getElementById('capFill'); fill.style.width = '100%'; fill.classList.add('reached');
+      const sub = document.getElementById('capSub'); sub.classList.add('reached');
+      sub.innerHTML = "You've reached this month's referral bonus limit — new rewards resume next month. <b>Milestone bonuses still pay in full</b>, even at the cap.";
+    })();
+
+    const shareText = 'Use my code KRIYUMT on Katyayani Krishi Direct — download the app: https://kkd.app';
+
+    (function(){
+      const btn = document.getElementById('waBtn');
+      btn.addEventListener('click', () => { window.open('https://wa.me/?text=' + encodeURIComponent(shareText), '_blank'); });
+    })();
+    (function(){
+      const btn = document.getElementById('smsBtn');
+      btn.addEventListener('click', () => { window.open('sms:?body=' + encodeURIComponent(shareText), '_blank'); });
+    })();
     (function(){
       const btn = document.getElementById('shareBtn');
-      if (!btn) return;
       btn.addEventListener('click', async () => {
-        const text = 'Use my code KRIYUMT on Katyayani Krishi Direct and get ₹100 off your first order. Download: https://kkd.app';
-        if (navigator.share) {
-          try { await navigator.share({ title: 'Katyayani Krishi Direct', text }); } catch (e) {}
-        }
+        try {
+          if (navigator.share) { await navigator.share({ title: 'Katyayani Krishi Direct', text: shareText }); }
+          else if (navigator.clipboard) {
+            await navigator.clipboard.writeText(shareText);
+            const old = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+            setTimeout(() => { btn.innerHTML = old; }, 1400);
+          }
+        } catch (e) {}
       });
     })();
   </script>
-
   <script src="../assets/weight-ladder.js"></script>
 </body></html>

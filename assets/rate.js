@@ -40,13 +40,13 @@
     '.kr-crop-chk{position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:9999px;background:#258046;color:#fff;display:none;align-items:center;justify-content:center;font-size:9px}' +
     '.kr-crop-tile.on .kr-crop-chk{display:flex}' +
     /* Home "Shop by Crop" inline tile picker (replaces the old select-crop trigger) */
-    '.kr-sbc{margin-top:14px;background:#ECFDF5;border:1px solid #BBF7D0;border-radius:14px;padding:12px 0}' +
-    '.kr-sbc-h{font-size:13.5px;font-weight:800;color:#0F172A;padding:0 14px 9px}' +
+    '.kr-sbc{margin-top:16px;background:#ECFDF5;border:1px solid #BBF7D0;border-radius:12px;padding:10px 0}' +
+    '.kr-sbc-h{font-size:12.5px;font-weight:800;color:#0F172A;padding:0 12px 8px}' +
     '.kr-sbc-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}' +
     '.kr-sbc-scroll::-webkit-scrollbar{display:none}' +
-    '.kr-crop-picker{display:flex;gap:8px;padding:2px 14px;min-width:max-content}' +
+    '.kr-crop-picker{display:flex;gap:8px;padding:2px 12px;min-width:max-content}' +
     /* tile width tracks the viewport so ~3.9 show (4th ~10% cut) — stays narrow on phones, wider on large screens */
-    '.kr-crop-picker > button{flex:0 0 auto;width:calc((100vw - 78px) / 3.9)}';
+    '.kr-crop-picker > button{flex:0 0 auto;width:calc((100vw - 74px) / 3.9)}';
 
   var MARKUP = '' +
     '<div class="kr-backdrop" style="position:absolute;inset:0;background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>' +
@@ -55,7 +55,7 @@
         '<div style="margin:0 auto 12px;width:40px;height:4px;border-radius:9999px;background:#E2E8F0"></div>' +
         '<div style="display:flex;align-items:center;gap:12px">' +
           '<div style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#F8FAFC;border:1px solid #E5E7EB;padding:5px"><img class="kr-img" src="" style="max-height:100%;object-fit:contain"/></div>' +
-          '<div style="flex:1;min-width:0;line-height:1.25"><div style="font-size:15px;font-weight:800;color:#0F172A">Rate <span class="kr-name">product</span></div><div style="font-size:11.5px;color:#64748B">Share your experience with other farmers</div></div>' +
+          '<div style="flex:1;min-width:0;line-height:1.25"><div style="font-size:15px;font-weight:600;color:#0F172A">Rate <span class="kr-name">product</span></div><div style="font-size:11.5px;color:#64748B">Share your experience with other farmers</div></div>' +
           '<button class="kr-close" style="width:36px;height:36px;border-radius:50%;background:#F1F5F9;border:0;cursor:pointer"><i class="fa-solid fa-xmark" style="font-size:13px;color:#475569"></i></button>' +
         '</div>' +
       '</div>' +
@@ -65,12 +65,12 @@
         '</div>' +
         '<div class="kr-review-h">Write a review <span><i class="fa-solid fa-coins"></i> +10 coins</span></div>' +
         '<textarea class="kr-review" placeholder="Write a quick review — how did it work on your crop?"></textarea>' +
-        '<label class="kr-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input class="kr-media" type="file" accept="image/*,video/*" capture="environment" multiple style="display:none"/></label>' +
-        '<div class="kr-attach-info"><i class="fa-solid fa-paperclip"></i> <span></span></div>' +
         '<div class="kr-sbc">' +
           '<div class="kr-sbc-h">Select crop</div>' +
           '<div class="kr-sbc-scroll"><div class="kr-crop-picker"></div></div>' +
         '</div>' +
+        '<label class="kr-attach"><i class="fa-solid fa-camera"></i> Add photo / video<input class="kr-media" type="file" accept="image/*,video/*" capture="environment" multiple style="display:none"/></label>' +
+        '<div class="kr-attach-info"><i class="fa-solid fa-paperclip"></i> <span></span></div>' +
         '<div class="kr-testi">' +
           '<div class="kr-testi-h"><i class="fa-solid fa-bullhorn" style="color:#258046"></i> Share a testimonial <span><i class="fa-solid fa-coins"></i> +25 coins</span></div>' +
           '<div class="kr-testi-sub">Upload a short photo or video to help other farmers</div>' +
@@ -78,7 +78,7 @@
         '</div>' +
       '</div>' +
       '<div style="flex-shrink:0;padding:8px 20px;border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px)">' +
-        '<button class="kr-submit" disabled style="width:100%;height:50px;border-radius:12px;color:#fff;font-size:14.5px;font-weight:800;background:#258046;border:0;opacity:.55;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45);cursor:pointer">Submit review</button>' +
+        '<button class="kr-submit" disabled style="width:100%;height:50px;border-radius:12px;color:#fff;font-size:14.5px;font-weight:600;background:#258046;border:0;opacity:.55;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45);cursor:pointer">Submit review</button>' +
       '</div>' +
     '</div>';
 

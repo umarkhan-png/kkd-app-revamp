@@ -14,6 +14,19 @@
   body { min-height: 100vh; background:#F8F8F8; color:#0F172A; }
   .name-input { transition: border-color .15s ease, box-shadow .15s ease; }
   .name-input:focus-within { border-color:#258046; box-shadow:0 0 0 3px rgba(4,120,87,0.10); }
+  .name-input:focus-within .name-ic { stroke:#258046; }
+  .field-label-row { display:flex; align-items:baseline; gap:6px; margin-bottom:6px; padding:0 2px; }
+  .field-label { font-size:12.5px; font-weight:700; color:#475569; }
+  .req-star { color:#DC2626; font-weight:800; font-size:13px; }
+  .req-helper { font-size:11px; color:#94A3B8; font-weight:600; }
+  .opt-helper { font-size:11px; color:#CBD5E1; font-weight:600; }
+  .name-input.error, .name-input.error:focus-within { border-color:#FCA5A5 !important; background:#FFFBFB !important; box-shadow:none !important; }
+  .name-input.error .name-ic { stroke:#F87171; }
+  .name-input.error input { color:#DC2626; }
+  .inline-error { display:none; align-items:flex-start; gap:6px; margin-top:7px; padding:0 2px; }
+  .inline-error.show { display:flex; }
+  .inline-error i { font-size:11px; color:#DC2626; margin-top:2px; }
+  .inline-error span { font-size:12px; font-weight:600; color:#DC2626; line-height:1.4; }
   /* Back + Language pills · white card style with hairline E5E7EB border + soft shadow (matches the rest of the design system) */
   .back-btn { width:40px; height:40px; border-radius:50%; background:#FFFFFF; border:1px solid #E5E7EB; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 1px 3px rgba(15,23,42,0.04); }
   .back-btn i { font-size:14px; color:#0F172A; }
@@ -46,43 +59,89 @@
   </div>
 
   <!-- Heading · subtitle dropped per spec -->
-  <div class="px-6 mt-10">
+  <div class="px-6" style="margin-top:34px">
     <h1 class="text-[26px] font-extrabold leading-tight text-[#0F172A]">What's your name?</h1>
   </div>
 
-  <!-- Inputs · First Name + Last Name -->
-  <div class="px-6 mt-8 space-y-3">
-    <div class="name-input flex items-center gap-3 h-[58px] px-4 rounded-[12px] bg-white" style="box-shadow:0 1px 3px rgba(15,23,42,0.04);border:1px solid #E5E7EB">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 5-7 8-7s7 2 8 7"/></svg>
-      <input id="firstName" type="text" placeholder="First name" autocomplete="given-name" class="flex-1 outline-none text-[18px] font-bold bg-transparent placeholder:font-medium placeholder:text-[#CBD5E1]"/>
+  <!-- Inputs · ON-05 Variant C (without the live preview) · labelled fields · First name required, Last name optional · English letters only -->
+  <div class="px-6" style="margin-top:14px">
+    <div class="field-label-row"><span class="field-label">First name</span><span class="req-star">*</span><span class="req-helper">required</span></div>
+    <div class="name-input flex items-center gap-3 h-[58px] px-4 rounded-[12px] bg-white" id="firstBox" style="box-shadow:0 1px 3px rgba(15,23,42,0.04);border:1px solid #E5E7EB">
+      <svg class="name-ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 5-7 8-7s7 2 8 7"/></svg>
+      <input id="firstName" type="text" lang="en" placeholder="e.g. Ramesh" autocomplete="given-name" autocapitalize="words" spellcheck="false" maxlength="30" class="flex-1 outline-none text-[18px] font-bold bg-transparent placeholder:font-semibold placeholder:text-[#CBD5E1]"/>
     </div>
-    <div class="name-input flex items-center gap-3 h-[58px] px-4 rounded-[12px] bg-white" style="box-shadow:0 1px 3px rgba(15,23,42,0.04);border:1px solid #E5E7EB">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 5-7 8-7s7 2 8 7"/></svg>
-      <input id="lastName" type="text" placeholder="Last name" autocomplete="family-name" class="flex-1 outline-none text-[18px] font-bold bg-transparent placeholder:font-medium placeholder:text-[#CBD5E1]"/>
+    <div class="inline-error" id="firstErr"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+  </div>
+  <div class="px-6" style="margin-top:14px">
+    <div class="field-label-row"><span class="field-label">Last name</span><span class="opt-helper">optional</span></div>
+    <div class="name-input flex items-center gap-3 h-[58px] px-4 rounded-[12px] bg-white" id="lastBox" style="box-shadow:0 1px 3px rgba(15,23,42,0.04);border:1px solid #E5E7EB">
+      <svg class="name-ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 5-7 8-7s7 2 8 7"/></svg>
+      <input id="lastName" type="text" lang="en" placeholder="e.g. Patil" autocomplete="family-name" autocapitalize="words" spellcheck="false" maxlength="30" class="flex-1 outline-none text-[18px] font-bold bg-transparent placeholder:font-semibold placeholder:text-[#CBD5E1]"/>
     </div>
+    <div class="inline-error" id="lastErr"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
   </div>
 
-  <!-- Sticky CTA · lifts above the keyboard via visualViewport -->
+  <!-- Sticky CTA · always enabled, validates on tap · lifts above the keyboard via visualViewport -->
   <div id="stickyCta" class="fixed bottom-0 left-0 right-0 px-6 py-4" style="background:#F8F8F8;border-top:0;transition:transform .15s ease;will-change:transform">
-    <button id="cta" onclick="location.href='welcome-aboard.html'" class="w-full h-[52px] rounded-[12px] text-white text-[15px] font-semibold flex items-center justify-center gap-2" style="background:#258046;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
+    <button id="cta" class="w-full h-[52px] rounded-[12px] text-white text-[15px] font-semibold flex items-center justify-center gap-2" style="background:#258046;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)">
       Continue
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
     </button>
   </div>
 
   <script>
-    // Persist names so later screens / settings can greet the farmer · also restores field state on back-nav
+    // Name rules · English letters (A–Z) + spaces only
+    //  - any other script (Hindi, Telugu, …) is stripped as it is typed, with an "English only" message
+    //  - numbers / symbols stay visible but show the "no numbers or symbols" error (ON-05 invalid state)
+    //  - empty first name → "Please enter your first name." on Continue (ON-05 empty state)
     const f = document.getElementById('firstName');
     const l = document.getElementById('lastName');
+    const MSG = {
+      empty:  'Please enter your first name.',
+      script: 'Please type your name in English (A–Z) only.',
+      invalid:"Names can't contain numbers or symbols."
+    };
+    const NON_EN = /[^\x00-\x7F]/;                 // any non-English character (Hindi, Telugu, accents…)
+    const NON_EN_ALL = /[^\x00-\x7F]/g;
+    const VALID = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+    function setErr(input, msg){
+      const box = input.closest('.name-input');
+      const err = document.getElementById(input.id === 'firstName' ? 'firstErr' : 'lastErr');
+      box.classList.toggle('error', !!msg);
+      err.classList.toggle('show', !!msg);
+      err.querySelector('span').textContent = msg || '';
+    }
+    function check(input, required){
+      const v = input.value.trim();
+      if (!v) return required ? MSG.empty : '';
+      if (!VALID.test(v)) return MSG.invalid;
+      return '';
+    }
+    [f, l].forEach(function(input){
+      input.addEventListener('input', function(){
+        if (NON_EN.test(input.value)) {
+          input.value = input.value.replace(NON_EN_ALL, '');
+          setErr(input, MSG.script);
+          return;
+        }
+        const v = input.value.trim();
+        setErr(input, v && !VALID.test(v) ? MSG.invalid : '');
+      });
+    });
     try {
-      f.value = localStorage.getItem('kkd.firstName') || '';
-      l.value = localStorage.getItem('kkd.lastName')  || '';
+      f.value = (localStorage.getItem('kkd.firstName') || '').replace(NON_EN_ALL, '');
+      l.value = (localStorage.getItem('kkd.lastName')  || '').replace(NON_EN_ALL, '');
     } catch (e) {}
     document.getElementById('cta').addEventListener('click', () => {
+      const e1 = check(f, true), e2 = check(l, false);
+      setErr(f, e1); setErr(l, e2);
+      if (e1) { f.focus(); return; }
+      if (e2) { l.focus(); return; }
       try {
         localStorage.setItem('kkd.firstName', f.value.trim());
         localStorage.setItem('kkd.lastName',  l.value.trim());
       } catch (e) {}
+      location.href = 'welcome-aboard.html';
     });
 
     // Reflect saved language in the chip

@@ -168,6 +168,10 @@
   .xsell-thresh .pill{margin-left:auto;flex-shrink:0;font-size:9.5px;font-weight:900;background:#FBBF24;color:#0F172A;padding:3px 8px;border-radius:9999px;letter-spacing:0.06em}
   .xsell-thresh .bar-wrap{position:relative;height:8px;margin-top:10px;background:#FFFFFF;border-radius:9999px;border:1px solid #A7F3D0;overflow:hidden}
   .xsell-thresh .fill{height:100%;background:linear-gradient(90deg,#10B981 0%,#258046 100%);border-radius:9999px;transition:width .4s ease}
+  /* Unlocked state · goal crossed → solid green icon, success copy, "SAVED" pill, full bar */
+  .xsell-thresh.done{background:linear-gradient(135deg,#DCFCE7 0%,#ECFDF5 100%);border-color:#86EFAC}
+  .xsell-thresh.done .ic{background:#258046;color:#FFFFFF}
+  .xsell-thresh.done .pill{background:#258046;color:#FFFFFF}
 
   /* Special-deal xsell card · CLEANED UP · drops the diagonal ribbon + the gradient bg in favour of a clean white card with hairline border · a single SAVE chip sits at the top-right · the eye lands on the image + name + price · primary ADD pill on the right */
   .xsell-card{position:relative;border:1px solid #E5E7EB;border-radius:14px;background:#FFFFFF;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(15,23,42,0.04);overflow:hidden}
@@ -531,14 +535,14 @@
 
     <div class="px-5 pb-2 overflow-y-auto" style="flex:1">
       <!-- Threshold strip · static (no stripes/truck animation) · in-cart/goal labels dropped -->
-      <div class="xsell-thresh">
+      <div class="xsell-thresh" id="fdStrip">
         <div class="head">
-          <span class="ic"><i class="fa-solid fa-truck-fast text-[14px]"></i></span>
-          <div class="copy">Add <span class="hl tnum">₹300</span> more for <span class="hl">FREE</span> delivery</div>
-          <span class="pill">SAVE ₹49</span>
+          <span class="ic"><i class="fa-solid fa-truck-fast text-[14px]" id="fdIc"></i></span>
+          <div class="copy" id="fdCopy">Add <span class="hl tnum">₹300</span> more for <span class="hl">FREE</span> delivery</div>
+          <span class="pill" id="fdPill">SAVE ₹49</span>
         </div>
         <div class="bar-wrap">
-          <div class="fill" style="width:78%"></div>
+          <div class="fill" id="fdFill" style="width:78%"></div>
         </div>
       </div>
 
@@ -801,6 +805,23 @@
       bd.addEventListener('click', close);
       goBt.addEventListener('click',   () => { window.location.href = 'checkout.html'; });
       const cartList = document.getElementById('cartList');
+      // Free-delivery strip · ₹300 short at 78% · each add reduces the gap; once crossed → unlocked state
+      let fdLeft = 300;
+      function updateFreeDelivery(added){
+        fdLeft = Math.max(0, fdLeft - added);
+        const strip = document.getElementById('fdStrip');
+        const fill = document.getElementById('fdFill');
+        if (fdLeft > 0) {
+          document.getElementById('fdCopy').innerHTML = 'Add <span class="hl tnum">₹' + fdLeft + '</span> more for <span class="hl">FREE</span> delivery';
+          fill.style.width = (78 + (300 - fdLeft) / 300 * 22) + '%';
+          return;
+        }
+        strip.classList.add('done');
+        fill.style.width = '100%';
+        document.getElementById('fdIc').className = 'fa-solid fa-circle-check text-[15px]';
+        document.getElementById('fdCopy').innerHTML = 'Yay! You got <span class="hl">FREE</span> delivery on this order';
+        document.getElementById('fdPill').textContent = '₹49 SAVED';
+      }
       document.querySelectorAll('.xsell-add').forEach(b => {
         b.addEventListener('click', () => {
           if (b.classList.contains('added')) return;
@@ -831,6 +852,7 @@
           wireTrash(item.querySelector('.trash-btn'));
           // Feedback 3 · sticky total + count update, the sheet summary, and a toast confirms
           cartTotal += parseInt(d.price, 10);
+          updateFreeDelivery(parseInt(d.price, 10));
           updateSticky();
           if (window.syncXsellSummary) window.syncXsellSummary();
           showToast(d.name);

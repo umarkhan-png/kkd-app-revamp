@@ -259,7 +259,11 @@
   /* Legacy .cat-tile / .cat-circle scrolled rules removed · current scrolled state is defined further below for .cat2-tile (colour-pill strip) */
 
   /* ===== Reference-style category tiles · colour card + product image + Hindi(primary)/English ===== */
-  .cat2-tile{ flex:1; min-width:0; text-decoration:none; display:block; }
+  .cat2-tile{ flex:0 0 calc((100vw - 64px) / 5); min-width:0; text-decoration:none; display:block; }
+  /* More categories than fit · row scrolls sideways · tile size unchanged (same width the 5-up row had) so the
+     first 5 look exactly as before and the 6th peeks in at the right edge as a scroll hint */
+  .sticky-cats > .cat-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; overscroll-behavior-x:contain; }
+  .sticky-cats > .cat-scroll::-webkit-scrollbar{ display:none; }
   .cat2-card{ width:100%; height:100px; border-radius:12px; background:var(--c); display:flex; flex-direction:column; align-items:center; padding:9px 4px 0; box-shadow:0 5px 13px -7px rgba(15,23,42,.28); transition:transform .15s ease; }
   .cat2-tile:active .cat2-card{ transform:scale(.97); }
   /* Clean cut-out products (baked grey contact-shadows stripped) sized by height with a width safety-cap and
@@ -388,7 +392,7 @@
 
   <!-- CATEGORIES — colour-washed product tiles with Hindi (primary) + English label, like the existing KKD app -->
   <div class="sticky-cats cat-row pt-2 pb-3">
-    <div class="flex gap-2 px-4">
+    <div class="cat-scroll flex gap-2 px-4">
       <a href="categories.html?cat=pesticide" class="cat2-tile nu">
         <div class="cat2-card" style="--c:#BFE8CB">
           <div class="cat2-pw"><img class="b" src="../assets/cat/pool/chakraveer.png" alt=""/><img class="f" src="../assets/cat/pool/chakrawarti.png" alt=""/></div>
@@ -411,6 +415,36 @@
         <div class="cat2-card" style="--c:#FAD0BC">
           <div class="cat2-pw"><img class="b" src="../assets/cat/pool/bhumiraja.png" alt=""/><img class="f" src="../assets/cat/pool/triple.png" alt=""/></div>
           <div class="cat2-lb">Herbicide</div>
+        </div>
+      </a>
+      <a href="categories.html?cat=plantgrowth" class="cat2-tile nu">
+        <div class="cat2-card" style="--c:#CDEFD9">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/humic.png" alt=""/><img class="f" src="../assets/cat/pool/npk.png" alt=""/></div>
+          <div class="cat2-lb">Plant Growth</div>
+        </div>
+      </a>
+      <a href="categories.html?cat=household" class="cat2-tile nu">
+        <div class="cat2-card" style="--c:#E3D9F7">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/chakraveer.png" alt=""/><img class="f" src="../assets/cat/pool/triple.png" alt=""/></div>
+          <div class="cat2-lb">Household Pest</div>
+        </div>
+      </a>
+      <a href="categories.html?cat=traps" class="cat2-tile nu">
+        <div class="cat2-card" style="--c:#FDE2C4">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/bhannat.png" alt=""/><img class="f" src="../assets/cat/pool/antivirus.png" alt=""/></div>
+          <div class="cat2-lb">Traps &amp; Repellents</div>
+        </div>
+      </a>
+      <a href="categories.html?cat=lab" class="cat2-tile nu">
+        <div class="cat2-card" style="--c:#D6ECF5">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/npk.png" alt=""/><img class="f" src="../assets/cat/pool/bhumiraja.png" alt=""/></div>
+          <div class="cat2-lb">Lab &amp; Technical</div>
+        </div>
+      </a>
+      <a href="categories.html?cat=adjuvant" class="cat2-tile nu">
+        <div class="cat2-card" style="--c:#F4E3C9">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/triple.png" alt=""/><img class="f" src="../assets/cat/pool/humic.png" alt=""/></div>
+          <div class="cat2-lb">Adjuvant</div>
         </div>
       </a>
       <a href="categories.html?cat=combo" class="cat2-tile nu">

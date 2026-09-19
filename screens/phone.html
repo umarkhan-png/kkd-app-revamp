@@ -186,9 +186,12 @@
   <!-- Input · pure white, no slate border · soft shadow for elevation, emerald focus ring -->
   <div class="px-6 mt-5">
     <div class="num-input flex items-center gap-3 h-[58px] px-4 rounded-[12px] bg-white" style="box-shadow:0 1px 3px rgba(15,23,42,0.04);border:1px solid #E5E7EB">
-      <span class="text-[17px] font-bold text-[#0F172A]">+91</span>
+      <button type="button" id="ccBtn" class="flex items-center gap-1 flex-shrink-0" style="background:transparent;border:0;padding:0;cursor:pointer" aria-label="Change country code">
+        <span id="ccDial" class="text-[17px] font-bold text-[#0F172A]">+91</span>
+        <i class="fa-solid fa-chevron-down text-[10px]" style="color:#94A3B8"></i>
+      </button>
       <span class="w-px h-7" style="background:#F1F5F9"></span>
-      <input id="mobInput" type="tel" maxlength="10" placeholder="Mobile number" class="flex-1 min-w-0 outline-none text-[17px] font-bold tnum bg-transparent placeholder:font-medium placeholder:text-[#94A3B8]"/>
+      <input id="mobInput" type="tel" maxlength="16" placeholder="Mobile number" class="flex-1 min-w-0 outline-none text-[17px] font-bold tnum bg-transparent placeholder:font-medium placeholder:text-[#94A3B8]"/>
     </div>
   </div>
 
@@ -201,6 +204,30 @@
       <input id="referCode" type="text" placeholder="Enter referral code" class="flex-1 outline-none text-[14px] font-semibold bg-transparent placeholder:text-[#94A3B8] placeholder:font-medium" style="text-transform:uppercase;letter-spacing:0.06em"/>
       <button id="referApply" class="text-[12px] font-semibold flex-shrink-0" style="color:#258046">Apply</button>
     </div>
+  </div>
+
+  <!-- Country-code sheet · India by default · picking another country (or typing/pasting +977… / 00971…) marks the number as foreign → ON-04 foreign-number screen -->
+  <style>
+    .cc-bd{position:fixed;inset:0;background:rgba(15,23,42,.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:80}
+    .cc-bd.open{opacity:1;pointer-events:auto}
+    .cc-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,.18);transform:translateY(calc(100% + 60px));transition:transform .3s cubic-bezier(.32,.72,0,1);z-index:81;max-height:72vh;display:flex;flex-direction:column}
+    .cc-sheet.open{transform:translateY(0)}
+    .cc-row{display:flex;align-items:center;gap:12px;width:100%;padding:13px 20px;background:#fff;border:0;border-bottom:1px solid #F1F5F9;text-align:left;cursor:pointer;font-family:inherit}
+    .cc-row .fl{font-size:22px;line-height:1}
+    .cc-row .nm{flex:1;font-size:14px;font-weight:600;color:#0F172A}
+    .cc-row .dl{font-size:13.5px;font-weight:700;color:#64748B}
+    .cc-row.on .nm,.cc-row.on .dl{color:#258046}
+    .cc-row .ck{color:#258046;font-size:13px;visibility:hidden}
+    .cc-row.on .ck{visibility:visible}
+  </style>
+  <div id="ccBd" class="cc-bd"></div>
+  <div id="ccSheet" class="cc-sheet" role="dialog" aria-label="Country code">
+    <div style="width:40px;height:4px;border-radius:9999px;background:#E2E8F0;margin:10px auto 4px;flex-shrink:0"></div>
+    <div class="flex items-center justify-between px-5 pt-2 pb-3" style="flex-shrink:0">
+      <div class="text-[17px] font-bold text-[#0F172A]">Select country code</div>
+      <button id="ccClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div id="ccList" style="overflow-y:auto;flex:1;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 10px)"></div>
   </div>
 
   <!-- Custom polished checkbox -->
@@ -277,13 +304,64 @@
       });
     })();
 
+    // Country code (ON-04 foreign number) · +91 by default · other countries via the sheet or by typing/pasting +<code> / 00<code>
+    const COUNTRIES = [
+        { c:'IN', dial:'91', name:'India', flag:'🇮🇳', max:10 },
+        { c:'NP', dial:'977', name:'Nepal', flag:'🇳🇵', max:10 },
+        { c:'BD', dial:'880', name:'Bangladesh', flag:'🇧🇩', max:10 },
+        { c:'AE', dial:'971', name:'United Arab Emirates', flag:'🇦🇪', max:9 },
+        { c:'SA', dial:'966', name:'Saudi Arabia', flag:'🇸🇦', max:9 },
+        { c:'QA', dial:'974', name:'Qatar', flag:'🇶🇦', max:8 },
+        { c:'OM', dial:'968', name:'Oman', flag:'🇴🇲', max:8 },
+        { c:'KW', dial:'965', name:'Kuwait', flag:'🇰🇼', max:8 },
+        { c:'LK', dial:'94', name:'Sri Lanka', flag:'🇱🇰', max:9 },
+        { c:'BT', dial:'975', name:'Bhutan', flag:'🇧🇹', max:8 },
+        { c:'US', dial:'1', name:'United States', flag:'🇺🇸', max:10 },
+        { c:'GB', dial:'44', name:'United Kingdom', flag:'🇬🇧', max:10 }
+    ];
+    let cc = COUNTRIES[0];
+    (function(){
+      const btn = document.getElementById('ccBtn'), dial = document.getElementById('ccDial');
+      const bd = document.getElementById('ccBd'), sh = document.getElementById('ccSheet'), list = document.getElementById('ccList');
+      const mob = document.getElementById('mobInput');
+      function setCC(c){ cc = c; dial.textContent = '+' + c.dial; }
+      function render(){
+        list.innerHTML = COUNTRIES.map(c => '<button type="button" class="cc-row' + (c.c === cc.c ? ' on' : '') + '" data-cc="' + c.c + '"><img class="fl" src="https://flagcdn.com/w40/' + c.c.toLowerCase() + '.png" alt="" style="width:26px;height:18px;flex-shrink:0;object-fit:contain"/><span class="nm">' + c.name + '</span><span class="dl">+' + c.dial + '</span><i class="fa-solid fa-check ck"></i></button>').join('');
+        list.querySelectorAll('[data-cc]').forEach(r => r.addEventListener('click', () => { setCC(COUNTRIES.find(c => c.c === r.dataset.cc)); close(); mob.focus(); }));
+      }
+      function open(){ render(); bd.classList.add('open'); sh.classList.add('open'); }
+      function close(){ bd.classList.remove('open'); sh.classList.remove('open'); }
+      btn.addEventListener('click', open); bd.addEventListener('click', close); document.getElementById('ccClose').addEventListener('click', close);
+      // Typed / pasted international format → pick the country from the prefix, keep only the local digits
+      mob.addEventListener('input', () => {
+        let v = mob.value.replace(/[^\d+]/g, '');
+        const m = v.match(/^(?:\+|00)(\d+)/);
+        if (m) {
+          const hit = COUNTRIES.slice().sort((a, b) => b.dial.length - a.dial.length).find(c => m[1].indexOf(c.dial) === 0);
+          if (hit) { setCC(hit); v = m[1].slice(hit.dial.length); } else v = m[1];
+        }
+        mob.value = v.replace(/\D/g, '').slice(0, cc.max);
+      });
+      // Coming back via "Change number" on the foreign-number screen · keep the number + country
+      try {
+        const back = JSON.parse(localStorage.getItem('kkd.foreignNumber') || 'null');
+        if (back && new URLSearchParams(location.search).get('change') === '1') { const c = COUNTRIES.find(x => x.c === back.c); if (c) setCC(c); mob.value = back.num || ''; }
+      } catch (e) {}
+    })();
+
     // Send OTP · persist the mobile number so OTP can route by prefix (12345... = returning user, 1234... = new user)
+    // · a non-Indian number never gets an OTP → ON-04 foreign-number screen (we don't deliver there yet)
     (function(){
       const btn = document.getElementById('sendOtpBtn');
       const mob = document.getElementById('mobInput');
       if (!btn || !mob) return;
       btn.addEventListener('click', () => {
         const v = (mob.value || '').replace(/\D/g,'').trim();
+        if (cc.c !== 'IN') {
+          try { localStorage.setItem('kkd.foreignNumber', JSON.stringify({ c: cc.c, dial: cc.dial, name: cc.name, num: v })); } catch (e) {}
+          window.location.href = 'foreign-number.html';
+          return;
+        }
         try { localStorage.setItem('kkd.mobile', v); } catch (e) {}
         window.location.href = 'otp.html';
       });

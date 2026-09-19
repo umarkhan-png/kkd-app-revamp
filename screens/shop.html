@@ -120,8 +120,9 @@
         <button class="filter-pill" id="catBtn"><i class="fa-solid fa-layer-group text-[10px]"></i> Category <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
         <button class="filter-pill" id="cropBtn"><i class="fa-solid fa-seedling text-[10px]"></i> Crop <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
         <button class="filter-pill" id="tagsBtn"><i class="fa-solid fa-tags text-[10px]"></i> Tags <i class="fa-solid fa-chevron-down text-[8px]"></i><span class="dot"></span></button>
-        <div id="chipRow" class="flex items-center gap-2"></div>
       </div>
+      <!-- Selected filters (e.g. crops) · removable pills on their own line so they're always visible -->
+      <div id="chipRow" class="flex items-center gap-2 px-4 pb-2.5 scroll-x" style="display:none"></div>
     </div>
   </div>
 
@@ -165,7 +166,8 @@
       { n:'Humic Gold',       t:'Soil + root tonic',      s:'1 L',    p:430, m:560, r:4.5, cat:'fertilizer', sub:'bio',      best:false, crops:'all', tags:['bought','new'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Humic_1.jpg' },
       { n:'Anti-Fungus Pro',  t:'Systemic fungicide',     s:'250 ml', p:360, m:470, r:4.3, cat:'fungicide',  sub:'chemical', best:false, crops:['tomato','chilli','potato','grapes'], tags:['new'], img:'https://katyayanikrishidirect.com/cdn/shop/files/Bhumiraja_2_1.webp' }
     ];
-    const cropLabel = k => k.charAt(0).toUpperCase() + k.slice(1);
+    // Crop names come from the DB crop list in FILTER_SECTIONS (e.g. 'bengal-gram' → 'Bengal Gram')
+    const cropLabel = k => { const sec = FILTER_SECTIONS.find(s => s.key === 'crop'); const o = sec && sec.opts.find(x => x.val === k); return o ? o.label : k.charAt(0).toUpperCase() + k.slice(1); };
     const CATS = { pesticide:'Pesticide', fungicide:'Fungicide', fertilizer:'Fertilizer', herbicide:'Herbicide', combo:'Combo' };
     const SUBS = { bio:'Bio', chemical:'Chemical', npk:'NPK', organic:'Organic', herb:'Herbicide', combo:'Combo' };
     const TAGS = { recent:'Recently viewed', bestseller:'Bestseller', bought:'Previously bought', mostselling:'Most selling in Indore', new:'New launched' };
@@ -179,11 +181,33 @@
         { val:'herbicide',  label:'Herbicide',  icon:'fa-wheat-awn',    color:'#CA8A04', bg:'#FEF3C7' },
         { val:'combo',      label:'Combo',      icon:'fa-box',          color:'#2563EB', bg:'#DBEAFE' }
       ] },
+      // Crop list = CRM DB crops_v2 (25 active crops) with the DB images (assets/crops/db)
       { key:'crop', label:'Crop', title:'Crop', multi:true, opts:[
-        { val:'tomato', label:'Tomato', emoji:'🍅', bg:'#FEE2E2' }, { val:'chilli', label:'Chilli', emoji:'🌶', bg:'#FFEDD5' },
-        { val:'wheat', label:'Wheat', emoji:'🌾', bg:'#FEF3C7' }, { val:'maize', label:'Maize', emoji:'🌽', bg:'#FEF9C3' },
-        { val:'onion', label:'Onion', emoji:'🧅', bg:'#FCE7F3' }, { val:'potato', label:'Potato', emoji:'🥔', bg:'#FEF3C7' },
-        { val:'cotton', label:'Cotton', emoji:'☁️', bg:'#F1F5F9' }, { val:'paddy', label:'Paddy', emoji:'🌾', bg:'#FEF3C7' }, { val:'sugarcane', label:'Sugarcane', emoji:'🎋', bg:'#DCFCE7' }
+        { val:'tomato', label:'Tomato', img:'../assets/crops/db/tomato.webp', bg:'#FEE2E2' },
+        { val:'bengal-gram', label:'Bengal Gram', img:'../assets/crops/db/bengal-gram.webp', bg:'#FEF3C7' },
+        { val:'black-gram', label:'Black Gram', img:'../assets/crops/db/black-gram.webp', bg:'#E5E7EB' },
+        { val:'brinjal', label:'Brinjal', img:'../assets/crops/db/brinjal.webp', bg:'#EDE9FE' },
+        { val:'cabbage', label:'Cabbage', img:'../assets/crops/db/cabbage.webp', bg:'#DCFCE7' },
+        { val:'cardamom', label:'Cardamom', img:'../assets/crops/db/cardamom.webp', bg:'#D1FAE5' },
+        { val:'cauliflower', label:'Cauliflower', img:'../assets/crops/db/cauliflower.webp', bg:'#FEF3C7' },
+        { val:'cotton', label:'Cotton', img:'../assets/crops/db/cotton.webp', bg:'#F1F5F9' },
+        { val:'garlic', label:'Garlic', img:'../assets/crops/db/garlic.webp', bg:'#F5F5F4' },
+        { val:'ginger', label:'Ginger', img:'../assets/crops/db/ginger.webp', bg:'#FEF3C7' },
+        { val:'green-gram', label:'Green Gram', img:'../assets/crops/db/green-gram.webp', bg:'#DCFCE7' },
+        { val:'jasmine', label:'Jasmine', img:'../assets/crops/db/jasmine.webp', bg:'#F0FDF4' },
+        { val:'maize', label:'Maize', img:'../assets/crops/db/maize.webp', bg:'#FEF9C3' },
+        { val:'marigold', label:'Marigold', img:'../assets/crops/db/marigold.webp', bg:'#FFEDD5' },
+        { val:'watermelon', label:'Watermelon', img:'../assets/crops/db/watermelon.webp', bg:'#FECACA' },
+        { val:'mustard', label:'Mustard', img:'../assets/crops/db/mustard.webp', bg:'#FEF9C3' },
+        { val:'okra', label:'Okra', img:'../assets/crops/db/okra.webp', bg:'#DCFCE7' },
+        { val:'onion', label:'Onion', img:'../assets/crops/db/onion.webp', bg:'#FCE7F3' },
+        { val:'paddy', label:'Paddy', img:'../assets/crops/db/paddy.webp', bg:'#FEF3C7' },
+        { val:'potato', label:'Potato', img:'../assets/crops/db/potato.webp', bg:'#FEF3C7' },
+        { val:'red-gram', label:'Red Gram', img:'../assets/crops/db/red-gram.webp', bg:'#FFEDD5' },
+        { val:'soyabean', label:'Soyabean', img:'../assets/crops/db/soyabean.webp', bg:'#DCFCE7' },
+        { val:'sugarcane', label:'Sugarcane', img:'../assets/crops/db/sugarcane.webp', bg:'#DCFCE7' },
+        { val:'turmeric', label:'Turmeric', img:'../assets/crops/db/turmeric.webp', bg:'#FEF3C7' },
+        { val:'wheat', label:'Wheat', img:'../assets/crops/db/wheat.webp', bg:'#FEF3C7' }
       ] },
       { key:'tags', label:'Tags', title:'Browse by', multi:true, opts:[
         { val:'bestseller',  label:'Bestseller',        icon:'fa-crown',             color:'#CA8A04', bg:'#FEF3C7' },
@@ -254,7 +278,7 @@
       if (section === 'tags') return TAGS[val] || val;
       if (section === 'category') return CATS[val] || val;
       if (section === 'sub') return SUBS[val] || val;
-      if (section === 'crop') return '🌱 ' + cropLabel(val);
+      if (section === 'crop') { const sec = FILTER_SECTIONS.find(s => s.key === 'crop'); const o = sec && sec.opts.find(x => x.val === val); return (o && o.img ? '<img src="' + o.img + '" alt="" style="width:20px;height:20px;border-radius:50%;object-fit:cover;margin-left:-5px"/>' : '🌱 ') + cropLabel(val); }
       return val;
     }
     function anyFilter(){ return filters.tags.size || filters.category.size || filters.sub.size || filters.crop.size || filters.rating || filters.price || filters.discount; }
@@ -265,6 +289,7 @@
       if (filters.price) chips.push({ id:'price', label:'₹' + filters.price.min + '–₹' + filters.price.max });
       if (filters.discount) chips.push({ id:'discount', label:filters.discount + '% off+' });
       const row = document.getElementById('chipRow');
+      row.style.display = chips.length ? 'flex' : 'none';
       row.innerHTML = chips.map(c => '<span class="achip">' + c.label + '<button class="achip-close" data-rm="' + c.id + '"><i class="fa-solid fa-xmark"></i></button></span>').join('');
       row.querySelectorAll('[data-rm]').forEach(b => b.addEventListener('click', () => {
         const id = b.dataset.rm, i = id.indexOf(':');
@@ -300,7 +325,9 @@
       if (section.kind === 'slider') { renderPriceSlider(pane, section); return; }
       const state = filters[section.key];
       const isOn = (val) => section.multi ? state.has(val) : state === val;
-      const ic = (o) => o.emoji
+      const ic = (o) => o.img
+        ? '<div class="fopt-ic" style="background:' + o.bg + ';overflow:hidden;padding:0"><img src="' + o.img + '" alt="" style="width:100%;height:100%;object-fit:cover"/></div>'
+        : o.emoji
         ? '<div class="fopt-ic" style="background:' + o.bg + ';font-size:20px">' + o.emoji + '</div>'
         : '<div class="fopt-ic" style="background:' + o.bg + '"><i class="fa-solid ' + o.icon + '" style="color:' + o.color + '"></i></div>';
       pane.innerHTML = '<div class="fpane-title">' + section.title + '</div>'

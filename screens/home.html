@@ -2561,7 +2561,7 @@
   <!-- All-crops bottom-sheet modal — opens when "More" chip in Shop-by-Crop is tapped · 3-col grid of every crop in CROP_META · each tile toggles the corresponding crop selection in the inline picker · close via backdrop tap, X button, or Done button -->
   <div id="cropSheet" class="fixed inset-0 z-[90]" style="display:none">
     <div id="cropSheetBackdrop" class="absolute inset-0" style="background:rgba(15,23,42,0.55);opacity:0;transition:opacity .25s ease"></div>
-    <div id="cropSheetPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="max-height:78vh;transform:translateY(calc(100% + 60px));transition:transform .3s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
+    <div id="cropSheetPanel" class="absolute left-0 right-0 bottom-0 bg-white rounded-t-3xl flex flex-col" style="height:78vh;max-height:78vh;transform:translateY(calc(100% + 60px));transition:transform .3s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 32px rgba(0,0,0,0.18)">
       <div class="flex-shrink-0 pt-2.5 pb-2 px-5">
         <div class="mx-auto w-10 h-1 rounded-full mb-3" style="background:#E2E8F0"></div>
         <div class="flex items-center justify-between">
@@ -2574,7 +2574,14 @@
           </button>
         </div>
       </div>
-      <div id="cropSheetGrid" class="grid grid-cols-3 gap-2.5 px-5 py-3 overflow-y-auto" style="flex:1"></div>
+      <div class="flex-shrink-0 px-5 pt-1">
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-[13px]" style="color:#94A3B8"></i>
+          <input id="cropSheetSearch" type="text" placeholder="Search crops" autocomplete="off" class="w-full h-11 pl-10 pr-10 rounded-xl text-[14px] font-medium outline-none" style="background:#F1F5F9;border:1px solid #E2E8F0;color:#0F172A"/>
+          <button id="cropSheetSearchX" type="button" aria-label="Clear" class="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full items-center justify-center" style="display:none;background:#E2E8F0;border:0"><i class="fa-solid fa-xmark text-[11px]" style="color:#475569"></i></button>
+        </div>
+      </div>
+      <div id="cropSheetGrid" class="grid grid-cols-3 gap-2.5 px-5 py-3 overflow-y-auto content-start" style="flex:1"></div>
       <div class="flex-shrink-0 px-5 py-3" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)">
         <button id="cropSheetDone" class="w-full h-12 rounded-xl text-white text-[14px] font-semibold" style="background:#258046">Done</button>
       </div>
@@ -3208,33 +3215,34 @@
 
     // Shop-by-Crop inline picker — every crop in CROP_META is a chip · multi-select · ✓ tick badge · "More" chip at end · bigger crisp photos (w=200&q=85, 56x56 circle) · stateful CTA that visually changes when crops are selected so the affordance is obvious
     (function(){
-      // Local crop photos cropped from a single curated reference image · 24 JPGs at assets/crops/<key>.jpg (240x240 center-crop) · no CDN / proxy dependency, always loads
-      const CROP_IMG = '../assets/crops/';
+      // Crop master list = CRM DB crops_v2 (all 25 active crops, DB order) · images are the DB's image_url files, saved locally at assets/crops/db/<slug>.webp
+      const CROP_IMG = '../assets/crops/db/';
       const CROP_META = {
-        tomato:        { label:'Tomato',        emoji:'🍅', bg:'#FEE2E2', img: CROP_IMG + 'tomato.jpg' },
-        chilli:        { label:'Chilli',        emoji:'🌶', bg:'#FFEDD5', img: CROP_IMG + 'chilli.jpg' },
-        wheat:         { label:'Wheat',         emoji:'🌾', bg:'#FEF3C7', img: CROP_IMG + 'wheat.jpg' },
-        maize:         { label:'Maize',         emoji:'🌽', bg:'#FEF9C3', img: CROP_IMG + 'maize.jpg' },
-        onion:         { label:'Onion',         emoji:'🧅', bg:'#FCE7F3', img: CROP_IMG + 'onion.jpg' },
-        potato:        { label:'Potato',        emoji:'🥔', bg:'#FEF3C7', img: CROP_IMG + 'potato.jpg' },
-        sugarcane:     { label:'Sugarcane',     emoji:'🎋', bg:'#DCFCE7', img: CROP_IMG + 'sugarcane.jpg' },
-        banana:        { label:'Banana',        emoji:'🍌', bg:'#FEF9C3', img: CROP_IMG + 'banana.jpg' },
-        mango:         { label:'Mango',         emoji:'🥭', bg:'#FED7AA', img: CROP_IMG + 'mango.jpg' },
-        grapes:        { label:'Grapes',        emoji:'🍇', bg:'#F3E8FF', img: CROP_IMG + 'grapes.jpg' },
-        orange:        { label:'Orange',        emoji:'🍊', bg:'#FFEDD5', img: CROP_IMG + 'orange.jpg' },
-        watermelon:    { label:'Watermelon',    emoji:'🍉', bg:'#FECACA', img: CROP_IMG + 'watermelon.jpg' },
-        papaya:        { label:'Papaya',        emoji:'🥭', bg:'#FED7AA', img: CROP_IMG + 'papaya.jpg' },
-        pomegranate:   { label:'Pomegranate',   emoji:'🍎', bg:'#FEE2E2', img: CROP_IMG + 'pomegranate.jpg' },
-        brinjal:       { label:'Brinjal',       emoji:'🍆', bg:'#EDE9FE', img: CROP_IMG + 'brinjal.jpg' },
-        cauliflower:   { label:'Cauliflower',   emoji:'🥦', bg:'#FEF3C7', img: CROP_IMG + 'cauliflower.jpg' },
-        cabbage:       { label:'Cabbage',       emoji:'🥬', bg:'#DCFCE7', img: CROP_IMG + 'cabbage.jpg' },
-        okra:          { label:'Okra',          emoji:'🌿', bg:'#DCFCE7', img: CROP_IMG + 'okra.jpg' },
-        garlic:        { label:'Garlic',        emoji:'🧄', bg:'#F5F5F4', img: CROP_IMG + 'garlic.jpg' },
-        cumin:         { label:'Cumin',         emoji:'🌱', bg:'#FEF3C7', img: CROP_IMG + 'cumin.jpg' },
-        cardamom:      { label:'Cardamom',      emoji:'🌿', bg:'#D1FAE5', img: CROP_IMG + 'cardamom.jpg' },
-        chickpea:      { label:'Chickpea',      emoji:'🫘', bg:'#FEF3C7', img: CROP_IMG + 'chickpea.jpg' },
-        soyabean:      { label:'Soyabean',      emoji:'🫘', bg:'#DCFCE7', img: CROP_IMG + 'soyabean.jpg' },
-        blackgram:     { label:'Black Gram',    emoji:'🫘', bg:'#E5E7EB', img: CROP_IMG + 'blackgram.jpg' },
+        'tomato': { label:'Tomato', emoji:'🍅', bg:'#FEE2E2', img: CROP_IMG + 'tomato.webp' },
+        'bengal-gram': { label:'Bengal Gram', emoji:'🫘', bg:'#FEF3C7', img: CROP_IMG + 'bengal-gram.webp' },
+        'black-gram': { label:'Black Gram', emoji:'🫘', bg:'#E5E7EB', img: CROP_IMG + 'black-gram.webp' },
+        'brinjal': { label:'Brinjal', emoji:'🍆', bg:'#EDE9FE', img: CROP_IMG + 'brinjal.webp' },
+        'cabbage': { label:'Cabbage', emoji:'🥬', bg:'#DCFCE7', img: CROP_IMG + 'cabbage.webp' },
+        'cardamom': { label:'Cardamom', emoji:'🌿', bg:'#D1FAE5', img: CROP_IMG + 'cardamom.webp' },
+        'cauliflower': { label:'Cauliflower', emoji:'🥦', bg:'#FEF3C7', img: CROP_IMG + 'cauliflower.webp' },
+        'cotton': { label:'Cotton', emoji:'☁️', bg:'#F1F5F9', img: CROP_IMG + 'cotton.webp' },
+        'garlic': { label:'Garlic', emoji:'🧄', bg:'#F5F5F4', img: CROP_IMG + 'garlic.webp' },
+        'ginger': { label:'Ginger', emoji:'🫚', bg:'#FEF3C7', img: CROP_IMG + 'ginger.webp' },
+        'green-gram': { label:'Green Gram', emoji:'🫘', bg:'#DCFCE7', img: CROP_IMG + 'green-gram.webp' },
+        'jasmine': { label:'Jasmine', emoji:'🌼', bg:'#F0FDF4', img: CROP_IMG + 'jasmine.webp' },
+        'maize': { label:'Maize', emoji:'🌽', bg:'#FEF9C3', img: CROP_IMG + 'maize.webp' },
+        'marigold': { label:'Marigold', emoji:'🌼', bg:'#FFEDD5', img: CROP_IMG + 'marigold.webp' },
+        'watermelon': { label:'Watermelon', emoji:'🍉', bg:'#FECACA', img: CROP_IMG + 'watermelon.webp' },
+        'mustard': { label:'Mustard', emoji:'🌼', bg:'#FEF9C3', img: CROP_IMG + 'mustard.webp' },
+        'okra': { label:'Okra', emoji:'🌿', bg:'#DCFCE7', img: CROP_IMG + 'okra.webp' },
+        'onion': { label:'Onion', emoji:'🧅', bg:'#FCE7F3', img: CROP_IMG + 'onion.webp' },
+        'paddy': { label:'Paddy', emoji:'🌾', bg:'#FEF3C7', img: CROP_IMG + 'paddy.webp' },
+        'potato': { label:'Potato', emoji:'🥔', bg:'#FEF3C7', img: CROP_IMG + 'potato.webp' },
+        'red-gram': { label:'Red Gram', emoji:'🫘', bg:'#FFEDD5', img: CROP_IMG + 'red-gram.webp' },
+        'soyabean': { label:'Soyabean', emoji:'🫘', bg:'#DCFCE7', img: CROP_IMG + 'soyabean.webp' },
+        'sugarcane': { label:'Sugarcane', emoji:'🎋', bg:'#DCFCE7', img: CROP_IMG + 'sugarcane.webp' },
+        'turmeric': { label:'Turmeric', emoji:'🫚', bg:'#FEF3C7', img: CROP_IMG + 'turmeric.webp' },
+        'wheat': { label:'Wheat', emoji:'🌾', bg:'#FEF3C7', img: CROP_IMG + 'wheat.webp' },
       };
 
       const picker   = document.getElementById('cropInlinePicker');
@@ -3517,7 +3525,13 @@
 
       function renderSheet(){
         if (!sheetGrid) return;
-        sheetGrid.innerHTML = Object.keys(CROP_META).map(function(key){
+        const q = sheetSearch ? sheetSearch.value.trim().toLowerCase() : '';
+        const keys = Object.keys(CROP_META).filter(function(k){ return !q || CROP_META[k].label.toLowerCase().indexOf(q) >= 0; });
+        if (!keys.length) {
+          sheetGrid.innerHTML = '<div class="col-span-3 text-center py-10" style="color:#94A3B8"><i class="fa-solid fa-seedling text-[24px] block mb-2"></i><div class="text-[13px] font-semibold">No crop found for "' + q.replace(/</g, '&lt;') + '"</div></div>';
+          return;
+        }
+        sheetGrid.innerHTML = keys.map(function(key){
           const m = CROP_META[key];
           const sel = selected.has(key);
           const borderColor = sel ? '#258046' : '#E5E7EB';
@@ -3548,8 +3562,18 @@
         });
       }
 
+      // Search inside the All Crops sheet · filters the grid by crop name as you type
+      const sheetSearch  = document.getElementById('cropSheetSearch');
+      const sheetSearchX = document.getElementById('cropSheetSearchX');
+      if (sheetSearch) sheetSearch.addEventListener('input', function(){
+        if (sheetSearchX) sheetSearchX.style.display = sheetSearch.value ? 'flex' : 'none';
+        renderSheet();
+      });
+      if (sheetSearchX) sheetSearchX.addEventListener('click', function(){ sheetSearch.value = ''; sheetSearchX.style.display = 'none'; renderSheet(); sheetSearch.focus(); });
+
       function openSheet(){
         if (!sheet) return;
+        if (sheetSearch) { sheetSearch.value = ''; if (sheetSearchX) sheetSearchX.style.display = 'none'; }
         renderSheet();
         sheet.style.display = 'block';
         requestAnimationFrame(function(){

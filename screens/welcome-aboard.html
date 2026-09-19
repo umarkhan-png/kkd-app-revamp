@@ -30,6 +30,17 @@
   .name{margin-top:6px;font-size:34px;font-weight:900;letter-spacing:-0.02em;background:linear-gradient(135deg,#FCD34D,#FFFFFF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;opacity:0;animation:up .55s ease-out 1.2s forwards}
   .subline{margin-top:14px;font-size:14px;color:rgba(255,255,255,0.85);line-height:1.5;max-width:300px;opacity:0;animation:up .55s ease-out 1.35s forwards}
   @keyframes up{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+  /* Referred farmer (joined with a referral code) · ₹50 Krishi Coins welcome card (ON-04 / REF-01) */
+  .subline .ref-name{color:#FCD34D;font-weight:800}
+  .coin-card{margin-top:20px;display:none;align-items:center;gap:12px;padding:14px 18px;border-radius:16px;background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.32);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;animation:up .55s ease-out 1.5s forwards}
+  body.referred .coin-card{display:inline-flex}
+  body.referred .join-strip{margin-top:16px}
+  .coin-icon{width:44px;height:44px;border-radius:50%;background:#FCD34D;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 6px 14px -4px rgba(0,0,0,0.35)}
+  .coin-icon i{font-size:20px;color:#78350F}
+  .coin-text{text-align:left}
+  .coin-amt{font-size:19px;font-weight:900;color:#FCD34D;letter-spacing:-0.01em}
+  .coin-lbl{font-size:11.5px;color:rgba(255,255,255,0.9);font-weight:700;margin-top:1px}
+  .coin-valid{font-size:10.5px;color:rgba(255,255,255,0.65);font-weight:600;margin-top:3px}
 
   /* Confetti rain · light · pure emerald + gold pieces · 14 strips falling at staggered speeds */
   .confetti{position:absolute;width:8px;height:14px;border-radius:2px;top:-20px;opacity:0;animation:cfall 3.2s ease-out forwards}
@@ -72,7 +83,16 @@
     <div class="eyebrow">Welcome aboard</div>
     <div class="headline">Namaste,</div>
     <div class="name" id="userName">Farmer!</div>
-    <div class="subline">You've joined the Katyayani family. Let's grow together.</div>
+    <div class="subline" id="welcomeSub">You've joined the Katyayani family. Let's grow together.</div>
+    <!-- Referred farmer only · ₹50 Krishi Coins on first login via a referral code -->
+    <div><div class="coin-card" id="refCoins">
+      <div class="coin-icon"><i class="fa-solid fa-coins"></i></div>
+      <div class="coin-text">
+        <div class="coin-amt">₹50 Krishi Coins</div>
+        <div class="coin-lbl">Added for joining via referral</div>
+        <div class="coin-valid"><i class="fa-regular fa-clock"></i> Valid for 30 days</div>
+      </div>
+    </div></div>
     <!-- Social-proof user count · replaces the Continue CTA · shows the user the size of the community they just joined -->
     <div class="join-strip">
       <div class="join-avs">
@@ -95,8 +115,21 @@
       try { fn = (localStorage.getItem('kkd.firstName') || '').trim(); } catch (e) {}
       el.textContent = (fn ? fn : 'Farmer') + '!';
     })();
-    // Auto-route to the allow-notifications bottom sheet next (skippable) · welcome stays on screen ~4.5s
-    setTimeout(() => { if (!document.hidden) window.location.href = 'notifications-allow-sheet.html'; }, 4500);
+    // Referral welcome · farmer signed up with a referral code (saved on phone.html as kkd.referCode) → name the
+    // referrer + show the ₹50 Krishi Coins card · demo: welcome-aboard.html?ref=1 · referrer name comes from the code lookup (sample below)
+    let referred = false;
+    (function(){
+      let code = '';
+      try { code = (localStorage.getItem('kkd.referCode') || '').trim(); } catch (e) {}
+      if (!code && new URLSearchParams(location.search).get('ref') !== '1') return;
+      referred = true;
+      const referrer = 'Suresh Patil';
+      document.body.classList.add('referred');
+      document.getElementById('welcomeSub').innerHTML = "You've joined the Katyayani family through <b class=\"ref-name\">" + referrer + " ji's</b> invite. Let's grow together.";
+      try { localStorage.setItem('kkd.welcomeCoins', '50'); } catch (e) {}
+    })();
+    // Auto-route to the allow-notifications bottom sheet next (skippable) · welcome stays on screen ~4.5s (~6s when the coin card shows)
+    setTimeout(() => { if (!document.hidden) window.location.href = 'notifications-allow-sheet.html'; }, referred ? 6000 : 4500);
   </script>
   <script src="../assets/weight-ladder.js"></script>
 </body></html>

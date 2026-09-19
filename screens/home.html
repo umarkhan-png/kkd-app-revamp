@@ -260,19 +260,20 @@
   /* Legacy .cat-tile / .cat-circle scrolled rules removed · current scrolled state is defined further below for .cat2-tile (colour-pill strip) */
 
   /* ===== Reference-style category tiles · colour card + product image + Hindi(primary)/English ===== */
-  .cat2-tile{ flex:0 0 calc((100vw - 64px) / 5); min-width:0; text-decoration:none; display:block; }
+  /* ~4.4 tiles visible · 4 full + the 5th peeking (~40%) as the scroll hint · 10px gaps */
+  .cat2-tile{ flex:0 0 calc((100vw - 72px) / 4.4); min-width:0; text-decoration:none; display:block; }
   /* More categories than fit · row scrolls sideways · tile size unchanged (same width the 5-up row had) so the
      first 5 look exactly as before and the 6th peeks in at the right edge as a scroll hint */
   .sticky-cats > .cat-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; overscroll-behavior-x:contain; }
   .sticky-cats > .cat-scroll::-webkit-scrollbar{ display:none; }
   .cat2-card{width:100%;display:flex;flex-direction:column;align-items:center;background:transparent;padding:0;border-radius:0;box-shadow:none;transition:transform .15s ease}
   /* Image box · category colour + product image only (label sits below it, no background) */
-  .cat2-pw{width:100%;height:64px;border-radius:12px;background:var(--c);display:flex;align-items:flex-end;justify-content:center;flex-shrink:0;padding:8px 4px 4px;box-sizing:border-box;overflow:hidden;box-shadow:0 5px 13px -7px rgba(15,23,42,.28);transition:box-shadow .2s ease}
+  .cat2-pw{width:100%;height:72px;border-radius:14px;background:var(--c);display:flex;align-items:flex-end;justify-content:center;flex-shrink:0;padding:9px 6px 5px;box-sizing:border-box;overflow:hidden;box-shadow:0 5px 13px -7px rgba(15,23,42,.28);transition:box-shadow .2s ease}
   .cat2-pw img{object-fit:contain;object-position:bottom;filter:drop-shadow(0 3px 3px rgba(0,0,0,.16))}
-  .cat2-pw img.b{height:40px;max-width:42%;margin-right:-10px;z-index:1}
-  .cat2-pw img.f{height:52px;max-width:66%;position:relative;z-index:2}
+  .cat2-pw img.b{height:44px;max-width:42%;margin-right:-10px;z-index:1}
+  .cat2-pw img.f{height:58px;max-width:64%;position:relative;z-index:2}
   /* Name below the box · plain text, room for 2 lines so every tile lines up */
-  .cat2-lb{width:100%;min-height:27px;margin-top:6px;display:flex;align-items:flex-start;justify-content:center;font-size:11.5px;font-weight:800;color:#27313F;letter-spacing:-.02em;padding:0 2px;text-align:center;line-height:1.15;background:transparent}
+  .cat2-lb{width:100%;min-height:30px;margin-top:8px;display:flex;align-items:flex-start;justify-content:center;font-size:12px;font-weight:700;color:#27313F;letter-spacing:0;padding:0 1px;text-align:center;line-height:1.25;background:transparent}
   .cat2-tile:active .cat2-card{ transform:scale(.97); }
   /* Clean cut-out products (baked grey contact-shadows stripped) sized by height with a width safety-cap and
      a single bottom baseline, so wide pouches and skinny bottles share a footprint, overlap stays consistent
@@ -396,7 +397,7 @@
 
   <!-- CATEGORIES — colour-washed product tiles with Hindi (primary) + English label, like the existing KKD app -->
   <div class="sticky-cats cat-row pt-2 pb-3">
-    <div class="cat-scroll flex gap-2 px-4">
+    <div class="cat-scroll flex gap-2.5 px-4">
       <a href="categories.html?cat=pesticide" class="cat2-tile nu">
         <div class="cat2-card" style="--c:#BFE8CB">
           <div class="cat2-pw"><img class="b" src="../assets/cat/pool/chakraveer.png" alt=""/><img class="f" src="../assets/cat/pool/chakrawarti.png" alt=""/></div>

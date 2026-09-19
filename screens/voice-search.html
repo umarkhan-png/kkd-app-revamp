@@ -84,7 +84,8 @@ body{background:#0B0F14;color:#fff;display:flex;flex-direction:column}
     var iv = setInterval(function(){
       if (i < c.words.length) { committed.push(c.words[i++]); paint(); return; }
       clearInterval(iv);
-      setTimeout(function(){ location.href = c.go; }, 900);
+      // replace (not push) · Back from the outcome goes to where the mic was tapped, never back into this auto-routing screen
+      setTimeout(function(){ location.replace(c.go); }, 900);
     }, 550);
   }, 400);
 })();

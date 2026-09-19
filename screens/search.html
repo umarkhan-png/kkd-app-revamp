@@ -430,7 +430,8 @@
     document.getElementById('micType').addEventListener('click', () => { bd.classList.remove('show'); q.focus(); });
     bd.addEventListener('click', e => { if (e.target === bd) bd.classList.remove('show'); });
     // Mic tapped on another screen (home / shop search bar) → same rule: ask once, then listen
-    if (new URLSearchParams(location.search).get('mic') === '1') trig && trig.click();
+    // strip ?mic=1 first so Back to this page never re-opens the mic (no voice ↔ search loop)
+    if (new URLSearchParams(location.search).get('mic') === '1') { history.replaceState(null, '', location.pathname); trig && trig.click(); }
   })();
 
   // ?q= (e.g. from voice search) · open straight on the results for that query

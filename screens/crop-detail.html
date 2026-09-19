@@ -125,7 +125,9 @@
   .pick-apply{flex-shrink:0;margin:14px 16px 4px;height:52px;border-radius:12px;background:#258046;color:#fff;border:0;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
   .pick-apply:active{transform:scale(.99)}
   .pick-apply:disabled{opacity:.5;cursor:not-allowed}
-</style></head>
+</style>
+<script src="../assets/crops-db.js"></script>
+</head>
 <body>
 
   <div class="flex items-center justify-between px-4 pt-3 text-[11px] font-semibold">
@@ -203,32 +205,7 @@
     };
     // Full crop catalog · identical to the homepage "All Crops" sheet (assets/crops/<key>.jpg) so the Add-crop modal matches it 1:1
     const CROP_IMG = '../assets/crops/';
-    const CROP_META = {
-      tomato:{label:'Tomato',emoji:'🍅',bg:'#FEE2E2',img:CROP_IMG+'tomato.jpg'},
-      chilli:{label:'Chilli',emoji:'🌶',bg:'#FFEDD5',img:CROP_IMG+'chilli.jpg'},
-      wheat:{label:'Wheat',emoji:'🌾',bg:'#FEF3C7',img:CROP_IMG+'wheat.jpg'},
-      maize:{label:'Maize',emoji:'🌽',bg:'#FEF9C3',img:CROP_IMG+'maize.jpg'},
-      onion:{label:'Onion',emoji:'🧅',bg:'#FCE7F3',img:CROP_IMG+'onion.jpg'},
-      potato:{label:'Potato',emoji:'🥔',bg:'#FEF3C7',img:CROP_IMG+'potato.jpg'},
-      sugarcane:{label:'Sugarcane',emoji:'🎋',bg:'#DCFCE7',img:CROP_IMG+'sugarcane.jpg'},
-      banana:{label:'Banana',emoji:'🍌',bg:'#FEF9C3',img:CROP_IMG+'banana.jpg'},
-      mango:{label:'Mango',emoji:'🥭',bg:'#FED7AA',img:CROP_IMG+'mango.jpg'},
-      grapes:{label:'Grapes',emoji:'🍇',bg:'#F3E8FF',img:CROP_IMG+'grapes.jpg'},
-      orange:{label:'Orange',emoji:'🍊',bg:'#FFEDD5',img:CROP_IMG+'orange.jpg'},
-      watermelon:{label:'Watermelon',emoji:'🍉',bg:'#FECACA',img:CROP_IMG+'watermelon.jpg'},
-      papaya:{label:'Papaya',emoji:'🥭',bg:'#FED7AA',img:CROP_IMG+'papaya.jpg'},
-      pomegranate:{label:'Pomegranate',emoji:'🍎',bg:'#FEE2E2',img:CROP_IMG+'pomegranate.jpg'},
-      brinjal:{label:'Brinjal',emoji:'🍆',bg:'#EDE9FE',img:CROP_IMG+'brinjal.jpg'},
-      cauliflower:{label:'Cauliflower',emoji:'🥦',bg:'#FEF3C7',img:CROP_IMG+'cauliflower.jpg'},
-      cabbage:{label:'Cabbage',emoji:'🥬',bg:'#DCFCE7',img:CROP_IMG+'cabbage.jpg'},
-      okra:{label:'Okra',emoji:'🌿',bg:'#DCFCE7',img:CROP_IMG+'okra.jpg'},
-      garlic:{label:'Garlic',emoji:'🧄',bg:'#F5F5F4',img:CROP_IMG+'garlic.jpg'},
-      cumin:{label:'Cumin',emoji:'🌱',bg:'#FEF3C7',img:CROP_IMG+'cumin.jpg'},
-      cardamom:{label:'Cardamom',emoji:'🌿',bg:'#D1FAE5',img:CROP_IMG+'cardamom.jpg'},
-      chickpea:{label:'Chickpea',emoji:'🫘',bg:'#FEF3C7',img:CROP_IMG+'chickpea.jpg'},
-      soyabean:{label:'Soyabean',emoji:'🫘',bg:'#DCFCE7',img:CROP_IMG+'soyabean.jpg'},
-      blackgram:{label:'Black Gram',emoji:'🫘',bg:'#E5E7EB',img:CROP_IMG+'blackgram.jpg'}
-    };
+    const CROP_META = window.kkdCropMeta();   // DB crop list (assets/crops-db.js)
     function cropFallback(img, emoji, size){ img.outerHTML = '<div class="w-full h-full flex items-center justify-center" style="font-size:'+(size||32)+'px;line-height:1">'+emoji+'</div>'; }
     function cropImg(k, cls){
       const c = IMG[k];

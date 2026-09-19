@@ -124,21 +124,7 @@
     '</div>';
   // EXACT same crop catalog + local images as the homepage "All Crops" modal
   var CROP_IMG = '../assets/crops/';
-  var CROP_META = {
-    tomato:{label:'Tomato',emoji:'🍅',bg:'#FEE2E2'}, chilli:{label:'Chilli',emoji:'🌶',bg:'#FFEDD5'},
-    wheat:{label:'Wheat',emoji:'🌾',bg:'#FEF3C7'}, maize:{label:'Maize',emoji:'🌽',bg:'#FEF9C3'},
-    onion:{label:'Onion',emoji:'🧅',bg:'#FCE7F3'}, potato:{label:'Potato',emoji:'🥔',bg:'#FEF3C7'},
-    sugarcane:{label:'Sugarcane',emoji:'🎋',bg:'#DCFCE7'}, banana:{label:'Banana',emoji:'🍌',bg:'#FEF9C3'},
-    mango:{label:'Mango',emoji:'🥭',bg:'#FED7AA'}, grapes:{label:'Grapes',emoji:'🍇',bg:'#F3E8FF'},
-    orange:{label:'Orange',emoji:'🍊',bg:'#FFEDD5'}, watermelon:{label:'Watermelon',emoji:'🍉',bg:'#FECACA'},
-    papaya:{label:'Papaya',emoji:'🥭',bg:'#FED7AA'}, pomegranate:{label:'Pomegranate',emoji:'🍎',bg:'#FEE2E2'},
-    brinjal:{label:'Brinjal',emoji:'🍆',bg:'#EDE9FE'}, cauliflower:{label:'Cauliflower',emoji:'🥦',bg:'#FEF3C7'},
-    cabbage:{label:'Cabbage',emoji:'🥬',bg:'#DCFCE7'}, okra:{label:'Okra',emoji:'🌿',bg:'#DCFCE7'},
-    garlic:{label:'Garlic',emoji:'🧄',bg:'#F5F5F4'}, cumin:{label:'Cumin',emoji:'🌱',bg:'#FEF3C7'},
-    cardamom:{label:'Cardamom',emoji:'🌿',bg:'#D1FAE5'}, chickpea:{label:'Chickpea',emoji:'🫘',bg:'#FEF3C7'},
-    soyabean:{label:'Soyabean',emoji:'🫘',bg:'#DCFCE7'}, blackgram:{label:'Black Gram',emoji:'🫘',bg:'#E5E7EB'}
-  };
-  Object.keys(CROP_META).forEach(function (k) { CROP_META[k].img = CROP_IMG + k + '.jpg'; });
+  var CROP_META = window.kkdCropMeta();   // DB crop list (assets/crops-db.js)
   var CROPMAP = CROP_META;
   if (!window.cropFallback) { window.cropFallback = function (img, emoji, size) { img.outerHTML = '<div class="w-full h-full flex items-center justify-center" style="font-size:' + (size || 32) + 'px;line-height:1">' + emoji + '</div>'; }; }
 

@@ -145,7 +145,9 @@
   .rate-ok-title{font-size:16px;font-weight:900;color:#0F172A;margin-top:14px}
   .rate-ok-sub{font-size:12.5px;color:#64748B;margin-top:4px;line-height:1.35}
   .rate-ok-sub b{color:#B45309}
-</style></head>
+</style>
+<script src="../assets/crops-db.js"></script>
+</head>
 <body>
 
   <!-- System status -->
@@ -611,21 +613,7 @@
   (function(){
     // EXACT same crop catalog + local images + 120px card tiles as the shared rate.js "All Crops" sheet (order-details flow)
     const CROP_IMG = '../assets/crops/';
-    const CROP_META = {
-      tomato:{label:'Tomato',emoji:'🍅',bg:'#FEE2E2'}, chilli:{label:'Chilli',emoji:'🌶',bg:'#FFEDD5'},
-      wheat:{label:'Wheat',emoji:'🌾',bg:'#FEF3C7'}, maize:{label:'Maize',emoji:'🌽',bg:'#FEF9C3'},
-      onion:{label:'Onion',emoji:'🧅',bg:'#FCE7F3'}, potato:{label:'Potato',emoji:'🥔',bg:'#FEF3C7'},
-      sugarcane:{label:'Sugarcane',emoji:'🎋',bg:'#DCFCE7'}, banana:{label:'Banana',emoji:'🍌',bg:'#FEF9C3'},
-      mango:{label:'Mango',emoji:'🥭',bg:'#FED7AA'}, grapes:{label:'Grapes',emoji:'🍇',bg:'#F3E8FF'},
-      orange:{label:'Orange',emoji:'🍊',bg:'#FFEDD5'}, watermelon:{label:'Watermelon',emoji:'🍉',bg:'#FECACA'},
-      papaya:{label:'Papaya',emoji:'🥭',bg:'#FED7AA'}, pomegranate:{label:'Pomegranate',emoji:'🍎',bg:'#FEE2E2'},
-      brinjal:{label:'Brinjal',emoji:'🍆',bg:'#EDE9FE'}, cauliflower:{label:'Cauliflower',emoji:'🥦',bg:'#FEF3C7'},
-      cabbage:{label:'Cabbage',emoji:'🥬',bg:'#DCFCE7'}, okra:{label:'Okra',emoji:'🌿',bg:'#DCFCE7'},
-      garlic:{label:'Garlic',emoji:'🧄',bg:'#F5F5F4'}, cumin:{label:'Cumin',emoji:'🌱',bg:'#FEF3C7'},
-      cardamom:{label:'Cardamom',emoji:'🌿',bg:'#D1FAE5'}, chickpea:{label:'Chickpea',emoji:'🫘',bg:'#FEF3C7'},
-      soyabean:{label:'Soyabean',emoji:'🫘',bg:'#DCFCE7'}, blackgram:{label:'Black Gram',emoji:'🫘',bg:'#E5E7EB'}
-    };
-    Object.keys(CROP_META).forEach(function (k) { CROP_META[k].img = CROP_IMG + k + '.jpg'; });
+    const CROP_META = window.kkdCropMeta();   // DB crop list (assets/crops-db.js)
     const META = CROP_META;
     if (!window.cropFallback) { window.cropFallback = function (img, emoji, size) { img.outerHTML = '<div class="w-full h-full flex items-center justify-center" style="font-size:' + (size || 32) + 'px;line-height:1">' + emoji + '</div>'; }; }
     const bd = document.getElementById('croppBd'), sheet = document.getElementById('croppSheet'), grid = document.getElementById('croppGrid'), applyBtn = document.getElementById('croppApply');

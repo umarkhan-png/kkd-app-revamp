@@ -5,6 +5,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="../assets/celebrate.js"></script>
 <script src="../assets/verify.js"></script>
+<script src="../assets/crops-db.js"></script>
 <script src="../assets/rate.js"></script>
 <link rel="stylesheet" href="../assets/modify-order.css">
 <style>
@@ -1595,22 +1596,7 @@
   </div>
   <script>
   (function(){
-    const CROPS = [
-      {k:'tomato',label:'Tomato',emoji:'🍅'},{k:'chilli',label:'Chilli',emoji:'🌶'},
-      {k:'wheat',label:'Wheat',emoji:'🌾'},{k:'maize',label:'Maize',emoji:'🌽'},
-      {k:'onion',label:'Onion',emoji:'🧅'},{k:'potato',label:'Potato',emoji:'🥔'},
-      {k:'sugarcane',label:'Sugarcane',emoji:'🎋'},{k:'banana',label:'Banana',emoji:'🍌'},
-      {k:'mango',label:'Mango',emoji:'🥭'},{k:'grapes',label:'Grapes',emoji:'🍇'},
-      {k:'orange',label:'Orange',emoji:'🍊'},{k:'watermelon',label:'Watermelon',emoji:'🍉'},
-      {k:'papaya',label:'Papaya',emoji:'🥭'},{k:'pomegranate',label:'Pomegranate',emoji:'🍎'},
-      {k:'brinjal',label:'Brinjal',emoji:'🍆'},{k:'cauliflower',label:'Cauliflower',emoji:'🥦'},
-      {k:'cabbage',label:'Cabbage',emoji:'🥬'},{k:'okra',label:'Okra',emoji:'🌿'},
-      {k:'garlic',label:'Garlic',emoji:'🧄'},{k:'cumin',label:'Cumin',emoji:'🌱'},
-      {k:'cardamom',label:'Cardamom',emoji:'🌿'},{k:'chickpea',label:'Chickpea',emoji:'🫘'},
-      {k:'soyabean',label:'Soyabean',emoji:'🫘'},{k:'blackgram',label:'Black Gram',emoji:'🫘'}
-    ];
-    const CROP_BG = {tomato:'#FEE2E2',chilli:'#FFEDD5',wheat:'#FEF3C7',maize:'#FEF9C3',onion:'#FCE7F3',potato:'#FEF3C7',sugarcane:'#DCFCE7',banana:'#FEF9C3',mango:'#FED7AA',grapes:'#F3E8FF',orange:'#FFEDD5',watermelon:'#FECACA',papaya:'#FED7AA',pomegranate:'#FEE2E2',brinjal:'#EDE9FE',cauliflower:'#FEF3C7',cabbage:'#DCFCE7',okra:'#DCFCE7',garlic:'#F5F5F4',cumin:'#FEF3C7',cardamom:'#D1FAE5',chickpea:'#FEF3C7',soyabean:'#DCFCE7',blackgram:'#E5E7EB'};
-    CROPS.forEach(c => { c.bg = CROP_BG[c.k] || '#F1F5F9'; c.img = '../assets/crops/' + c.k + '.jpg'; });
+    const CROPS = window.KKD_CROPS.map(c => Object.assign({}, c));   // DB crop list (assets/crops-db.js)
     const META = {}; CROPS.forEach(c => META[c.k] = c);
     if (!window.cropFallback) { window.cropFallback = function (img, emoji, size) { img.outerHTML = '<div class="w-full h-full flex items-center justify-center" style="font-size:' + (size || 32) + 'px;line-height:1">' + emoji + '</div>'; }; }
     const bd = document.getElementById('croppBd'), sheet = document.getElementById('croppSheet'), grid = document.getElementById('croppGrid'), applyBtn = document.getElementById('croppApply');

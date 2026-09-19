@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="../assets/celebrate.js"></script>
+<script src="../assets/crops-db.js"></script>
 <script src="../assets/rate.js"></script>
 <script src="../assets/verify.js"></script>
 <script src="../assets/appstate.js"></script>
@@ -2575,7 +2576,7 @@
           </button>
         </div>
       </div>
-      <div class="flex-shrink-0 px-5 pt-1">
+      <div class="flex-shrink-0 px-5 pt-1 pb-3" style="border-bottom:1px solid #F1F5F9">
         <div class="relative">
           <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-[13px]" style="color:#94A3B8"></i>
           <input id="cropSheetSearch" type="text" placeholder="Search crops" autocomplete="off" class="w-full h-11 pl-10 pr-10 rounded-xl text-[14px] font-medium outline-none" style="background:#F1F5F9;border:1px solid #E2E8F0;color:#0F172A"/>
@@ -4230,23 +4231,8 @@
   </div>
   <script>
   (function(){
-    // EXACT same crop catalog + local images + 120px card tiles as the shared rate.js "All Crops" sheet (order-details flow)
-    const CROP_IMG = '../assets/crops/';
-    const CROP_META = {
-      tomato:{label:'Tomato',emoji:'🍅',bg:'#FEE2E2'}, chilli:{label:'Chilli',emoji:'🌶',bg:'#FFEDD5'},
-      wheat:{label:'Wheat',emoji:'🌾',bg:'#FEF3C7'}, maize:{label:'Maize',emoji:'🌽',bg:'#FEF9C3'},
-      onion:{label:'Onion',emoji:'🧅',bg:'#FCE7F3'}, potato:{label:'Potato',emoji:'🥔',bg:'#FEF3C7'},
-      sugarcane:{label:'Sugarcane',emoji:'🎋',bg:'#DCFCE7'}, banana:{label:'Banana',emoji:'🍌',bg:'#FEF9C3'},
-      mango:{label:'Mango',emoji:'🥭',bg:'#FED7AA'}, grapes:{label:'Grapes',emoji:'🍇',bg:'#F3E8FF'},
-      orange:{label:'Orange',emoji:'🍊',bg:'#FFEDD5'}, watermelon:{label:'Watermelon',emoji:'🍉',bg:'#FECACA'},
-      papaya:{label:'Papaya',emoji:'🥭',bg:'#FED7AA'}, pomegranate:{label:'Pomegranate',emoji:'🍎',bg:'#FEE2E2'},
-      brinjal:{label:'Brinjal',emoji:'🍆',bg:'#EDE9FE'}, cauliflower:{label:'Cauliflower',emoji:'🥦',bg:'#FEF3C7'},
-      cabbage:{label:'Cabbage',emoji:'🥬',bg:'#DCFCE7'}, okra:{label:'Okra',emoji:'🌿',bg:'#DCFCE7'},
-      garlic:{label:'Garlic',emoji:'🧄',bg:'#F5F5F4'}, cumin:{label:'Cumin',emoji:'🌱',bg:'#FEF3C7'},
-      cardamom:{label:'Cardamom',emoji:'🌿',bg:'#D1FAE5'}, chickpea:{label:'Chickpea',emoji:'🫘',bg:'#FEF3C7'},
-      soyabean:{label:'Soyabean',emoji:'🫘',bg:'#DCFCE7'}, blackgram:{label:'Black Gram',emoji:'🫘',bg:'#E5E7EB'}
-    };
-    Object.keys(CROP_META).forEach(function (k) { CROP_META[k].img = CROP_IMG + k + '.jpg'; });
+    // Same DB crop list as every other "All Crops" picker (assets/crops-db.js)
+    const CROP_META = window.kkdCropMeta();
     const META = CROP_META;
     if (!window.cropFallback) { window.cropFallback = function (img, emoji, size) { img.outerHTML = '<div class="w-full h-full flex items-center justify-center" style="font-size:' + (size || 32) + 'px;line-height:1">' + emoji + '</div>'; }; }
     const bd = document.getElementById('croppBd'), sheet = document.getElementById('croppSheet'), grid = document.getElementById('croppGrid'), applyBtn = document.getElementById('croppApply');

@@ -49,6 +49,14 @@
   .os-opt { display:block; width:100%; margin-top:8px; height:46px; border-radius:23px; border:0; background:#DCEBE3; color:#14532D; font-size:14px; font-weight:600; cursor:pointer; }
   .os-opt:first-of-type { margin-top:18px; }
   [hidden] { display:none !important; }
+  /* Retry / Settings states carry an extra card (+ steps) · compact the hero + rows so everything fits on one screen above the CTA (no scroll) */
+  body.compact .pin-hero { width:128px !important; height:128px !important; }
+  body.compact .pin-hero > div { width:88px !important; height:88px !important; }
+  body.compact .pin-hero svg { width:44px; height:44px; }
+  body.compact .hero-wrap { margin-top:4px; }
+  body.compact #whyList .perm-bullet { padding:11px 14px; }
+  body.compact .step-row { padding:7px 0; }
+  body.compact .retry-notice { padding:12px 14px; }
 </style>
 </head>
 <body class="min-h-screen pb-32 relative">
@@ -71,7 +79,7 @@
   </div>
 
   <!-- Hero · gentle pin drop · soft emerald wave rings (lighter alpha, slower pulse, no aggressive saturation) -->
-  <div class="px-6 mt-4">
+  <div class="px-6 mt-4 hero-wrap">
     <div class="relative mx-auto pin-hero flex items-center justify-center" style="width:172px;height:172px">
       <span class="absolute ring" style="inset:0;background:rgba(16,185,129,0.18)"></span>
       <span class="absolute ring r2" style="inset:0;background:rgba(16,185,129,0.12)"></span>
@@ -185,6 +193,7 @@
       function save(){ try { sessionStorage.setItem(KEY, String(denied)); } catch (e) {} }
       function render(){
         const st = denied >= 2 ? 'settings' : denied === 1 ? 'retry' : 'ask';
+        document.body.classList.toggle('compact', st !== 'ask');
         $('retryCard').hidden = st !== 'retry';
         $('settingsBlock').hidden = st !== 'settings';
         $('whyList').hidden = st === 'settings';

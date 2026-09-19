@@ -16,15 +16,18 @@
   .scroll-x{scrollbar-width:none}
 
   /* Top main-cat tiles · home-page parity · COLOUR-WASHED CARDS with product cut-outs + label (cat2 family), matching home.html · selected state ringed in emerald */
-  .cat2-tile{flex:1;min-width:0;background:transparent;border:0;padding:0;text-decoration:none;display:block;cursor:pointer}
+  .cat2-tile{flex:0 0 calc((100vw - 64px) / 5);min-width:0;background:transparent;border:0;padding:0;text-decoration:none;display:block;cursor:pointer}
+  /* More categories than fit · the row scrolls sideways (same tile size as the old 5-up row, next tile peeks in) · same as home */
+  .cat-row-inner{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+  .cat-row-inner::-webkit-scrollbar{display:none}
   .cat2-card{width:100%;height:100px;border-radius:12px;background:var(--c);display:flex;flex-direction:column;align-items:center;padding:9px 4px 0;box-shadow:0 5px 13px -7px rgba(15,23,42,.28);transition:transform .15s ease, box-shadow .2s ease}
   .cat2-tile:active .cat2-card{transform:scale(.97)}
   .cat2-tile[aria-pressed="true"] .cat2-card{box-shadow:0 0 0 2.5px #258046, 0 8px 18px -6px rgba(5,150,105,.4)}
-  .cat2-pw{width:100%;height:56px;display:flex;align-items:flex-end;justify-content:center}
+  .cat2-pw{width:100%;height:52px;display:flex;align-items:flex-end;justify-content:center;flex-shrink:0}
   .cat2-pw img{object-fit:contain;object-position:bottom;filter:drop-shadow(0 3px 3px rgba(0,0,0,.16))}
-  .cat2-pw img.b{height:44px;max-width:42%;margin-right:-10px;z-index:1}
-  .cat2-pw img.f{height:56px;max-width:66%;position:relative;z-index:2}
-  .cat2-lb{flex:1;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800;color:#27313F;letter-spacing:-.02em;padding-bottom:7px;text-align:center;line-height:1}
+  .cat2-pw img.b{height:41px;max-width:42%;margin-right:-10px;z-index:1}
+  .cat2-pw img.f{height:52px;max-width:66%;position:relative;z-index:2}
+  .cat2-lb{flex:1;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;color:#27313F;letter-spacing:-.02em;padding:3px 3px 6px;text-align:center;line-height:1.15}
   .cat2-tile[aria-pressed="true"] .cat2-lb{color:#0F172A}
 
   /* Legacy circle-tile styles · retained for any leftover refs but no longer rendered */
@@ -115,12 +118,12 @@
   .stk-filter{background:#FFFFFF;border-bottom:1px solid #ECECEC;flex-shrink:0}
   /* Compact category row on product scroll · cat2 tiles collapse to colour-pill text strip (same behaviour as home.html body.scrolled) */
   .stk-main .cat-row-inner{transition:padding .3s ease, gap .3s ease}
-  .stk-main.compact .cat-row-inner{padding:6px 12px;gap:6px;justify-content:space-around;overflow-x:hidden}
-  .stk-main.compact .cat2-tile{flex:1}
-  .stk-main.compact .cat2-card{height:auto;padding:7px 4px;border-radius:999px;box-shadow:0 2px 6px -3px rgba(15,23,42,.22)}
+  .stk-main.compact .cat-row-inner{padding:6px 12px;gap:6px;justify-content:flex-start;overflow-x:auto}
+  .stk-main.compact .cat2-tile{flex:0 0 auto}
+  .stk-main.compact .cat2-card{height:auto;padding:7px 14px;border-radius:999px;box-shadow:0 2px 6px -3px rgba(15,23,42,.22)}
   .stk-main.compact .cat2-tile[aria-pressed="true"] .cat2-card{box-shadow:0 0 0 2px #258046, 0 2px 6px -3px rgba(5,150,105,.35)}
   .stk-main.compact .cat2-pw{display:none}
-  .stk-main.compact .cat2-lb{font-size:11.5px;padding:0;line-height:1.1;flex:none}
+  .stk-main.compact .cat2-lb{font-size:11.5px;padding:0;line-height:1.1;flex:none;white-space:nowrap}
 
   /* Two-column body · flex:1 of the viewport-height column · each pane scrolls independently */
   .cat-body{flex:1;display:flex;min-height:0}
@@ -220,7 +223,7 @@
     </a>
   </div>
 
-  <!-- TOP: Main 5 categories · home-page parity · colour-washed cat2 cards -->
+  <!-- TOP: Main categories · home-page parity (same 10 tiles, same order) · colour-washed cat2 cards · row scrolls sideways -->
   <div class="stk-main">
     <div class="flex gap-2 px-4 py-3 cat-row-inner">
       <button data-cat="pesticide" aria-pressed="true" class="cat2-tile">
@@ -245,6 +248,36 @@
         <div class="cat2-card" style="--c:#FAD0BC">
           <div class="cat2-pw"><img class="b" src="../assets/cat/pool/bhumiraja.png" alt=""/><img class="f" src="../assets/cat/pool/triple.png" alt=""/></div>
           <div class="cat2-lb">Herbicide</div>
+        </div>
+      </button>
+      <button data-cat="plantgrowth" aria-pressed="false" class="cat2-tile">
+        <div class="cat2-card" style="--c:#CDEFD9">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/humic.png" alt=""/><img class="f" src="../assets/cat/pool/npk.png" alt=""/></div>
+          <div class="cat2-lb">Plant Growth</div>
+        </div>
+      </button>
+      <button data-cat="household" aria-pressed="false" class="cat2-tile">
+        <div class="cat2-card" style="--c:#E3D9F7">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/chakraveer.png" alt=""/><img class="f" src="../assets/cat/pool/triple.png" alt=""/></div>
+          <div class="cat2-lb">Household Pest</div>
+        </div>
+      </button>
+      <button data-cat="traps" aria-pressed="false" class="cat2-tile">
+        <div class="cat2-card" style="--c:#FDE2C4">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/bhannat.png" alt=""/><img class="f" src="../assets/cat/pool/antivirus.png" alt=""/></div>
+          <div class="cat2-lb">Traps &amp; Repellents</div>
+        </div>
+      </button>
+      <button data-cat="lab" aria-pressed="false" class="cat2-tile">
+        <div class="cat2-card" style="--c:#D6ECF5">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/npk.png" alt=""/><img class="f" src="../assets/cat/pool/bhumiraja.png" alt=""/></div>
+          <div class="cat2-lb">Lab &amp; Technical</div>
+        </div>
+      </button>
+      <button data-cat="adjuvant" aria-pressed="false" class="cat2-tile">
+        <div class="cat2-card" style="--c:#F4E3C9">
+          <div class="cat2-pw"><img class="b" src="../assets/cat/pool/triple.png" alt=""/><img class="f" src="../assets/cat/pool/humic.png" alt=""/></div>
+          <div class="cat2-lb">Adjuvant</div>
         </div>
       </button>
       <button data-cat="combo" aria-pressed="false" class="cat2-tile">
@@ -392,6 +425,48 @@
           { key:'herb', icon:'🌾', bg:'#FEF3C7', label:'Herbicides' }
         ]
       },
+      // DI-03 categories (Sagar) · subcategory names from the finalised taxonomy
+      plantgrowth: {
+        label: 'Plant Growth',
+        subs: [
+          { key:'all', icon:'🌱', bg:'#DCFCE7', label:'All' },
+          { key:'pgr', icon:'📈', bg:'#FFEDD5', label:'Plant Growth Regulators' },
+          { key:'bio', icon:'🌿', bg:'#D1FAE5', label:'Biostimulants' }
+        ]
+      },
+      household: {
+        label: 'Household Pest',
+        subs: [
+          { key:'all',    icon:'🏠', bg:'#EDE9FE', label:'All' },
+          { key:'mosq',   icon:'🦟', bg:'#E0E7FF', label:'Mosquito & Fly' },
+          { key:'insect', icon:'🪳', bg:'#FEF3C7', label:'Household Insect' },
+          { key:'wood',   icon:'🪵', bg:'#FDE68A', label:'Wood & Termite' }
+        ]
+      },
+      traps: {
+        label: 'Traps & Repellents',
+        subs: [
+          { key:'all',    icon:'🪤', bg:'#FFEDD5', label:'All' },
+          { key:'lures',  icon:'🦋', bg:'#FCE7F3', label:'Pheromone Lures' },
+          { key:'repel',  icon:'🐍', bg:'#DCFCE7', label:'Animal & Bird Repellents' },
+          { key:'sticky', icon:'🟨', bg:'#FEF9C3', label:'Sticky Traps' }
+        ]
+      },
+      lab: {
+        label: 'Lab & Technical',
+        subs: [
+          { key:'all',     icon:'🧪', bg:'#DBEAFE', label:'All' },
+          { key:'reagent', icon:'⚗️', bg:'#E0E7FF', label:'Lab Reagents' },
+          { key:'tech',    icon:'🔬', bg:'#CFFAFE', label:'Technical-Grade Actives' }
+        ]
+      },
+      // Single-subcategory category · the rail shows one row named like the category (never "All" + "Adjuvant")
+      adjuvant: {
+        label: 'Adjuvant',
+        subs: [
+          { key:'all', icon:'💧', bg:'#CFFAFE', label:'Adjuvant' }
+        ]
+      },
       combo: {
         label: 'Combo',
         subs: [
@@ -445,6 +520,18 @@
       { cat:'herbicide',  subs:['herb'],          name:'WeedClear-S',      sub:'2,4-D Amine 58%',        size:'500 ml', target:'broadleaf weed',     price:298, mrp:399, img:'../assets/Chakrawarti_nobg.png' },
       { cat:'herbicide',  subs:['herb'],          name:'Pre-Lock 40',      sub:'Pendimethalin 30%',      size:'1 L',    target:'weed at root',       price:412, mrp:560, img:'../assets/Chakrawarti_nobg.png' },
       { cat:'herbicide',  subs:['herb'],          name:'Atrazine-50',      sub:'Atrazine 50% WP',        size:'500 g',  target:'maize selective',    price:285, mrp:385, img:'../assets/Chakrawarti_nobg.png' },
+
+      // Real Katyayani SKUs from the CRM product master (products_v2) for the new DI-03 categories
+      { cat:'plantgrowth', subs:['pgr'],   name:'FAST',              sub:'Paclobutrazol 23% SC',        size:'1 L',    target:'flowering · fruit set',  price:1437, mrp:5890, img:'https://cdn.shopify.com/s/files/1/0762/3639/0696/files/Fast_b59a6a6f-acdb-4594-b227-cdd13a043f6f.webp?v=1765532846' },
+      { cat:'plantgrowth', subs:['pgr'],   name:'Nutritious',        sub:'Triacontanol 0.1% EW',        size:'150 ml', target:'growth · yield',         price:303,  mrp:545,  img:'https://cdn.shopify.com/s/files/1/0762/3639/0696/files/Katyayani_Nutritious_PGR_krishi_seva_kendra.webp?v=1728298082' },
+      { cat:'plantgrowth', subs:['bio'],   name:'Seaweed Extract',   sub:'Ascophyllum nodosum 95%',     size:'250 g',  target:'stress · vigour',        price:435,  mrp:698,  img:'https://cdn.shopify.com/s/files/1/0762/3639/0696/files/witeplasticbottle250gm_31ddee9e-3f7d-4539-be97-eff522c990bd_1.webp?v=1717573777' },
+      { cat:'household',   subs:['wood'],  name:'Chloro CS',         sub:'Chlorpyrifos 20% CS',         size:'50 ml',  target:'termite',                price:226,  mrp:0,    img:'https://cdn.shopify.com/s/files/1/0762/3639/0696/files/Chloro-CS_f52e6f36-59be-4204-a893-4c8af213db49.webp?v=1752903648' },
+      { cat:'household',   subs:['wood'],  name:'IMIDA',             sub:'Imidacloprid 30.5% SC',       size:'100 ml', target:'termite · wood borer',   price:280,  mrp:462,  img:'https://katyayanikrishidirect.com/cdn/shop/files/IMIDA_4.webp?v=1759814910&width=713' },
+      { cat:'traps',       subs:['lures'], name:'Fruit Fly Lure',    sub:'Bactrocera correcta · zonata · dorsalis', size:'1 pc', target:'fruit fly',  price:1250, mrp:2480, img:'https://cdn.shopify.com/s/files/1/0762/3639/0696/files/FRUIT_FLY_LURE_Krishi_seva_kendra.webp?v=1727691058' },
+      { cat:'traps',       subs:['lures'], name:'Brinjal FSB Lure',  sub:'Leucinodes orbonalis',        size:'1 pc',   target:'fruit & shoot borer',    price:457,  mrp:526,  img:'https://cdn.shopify.com/s/files/1/0762/3639/0696/files/Eggplant_Fruit_Shoot_Borer_Lure_11zon_3_11zon.webp?v=1727690943' },
+      { cat:'traps',       subs:['repel'], name:'Snake Repellent',   sub:'Naphthalene 40% + Sulphur 30%', size:'900 g', target:'snakes',               price:694,  mrp:2499, img:'https://cdn.shopify.com/s/files/1/0762/3639/0696/files/i_Snake_Shield_Non_Toxic_Snake_Repellent.webp?v=1727684187' },
+      { cat:'traps',       subs:['repel'], name:'Pigeon Repellent',  sub:'Bird repellent gel',          size:'100 ml', target:'pigeons · birds',        price:379,  mrp:799,  img:'https://cdn.shopify.com/s/files/1/0762/3639/0696/files/piegon-repellent-3d-5_11zon_13_11zon.webp?v=1727937734' },
+      { cat:'adjuvant',    subs:['all'],   name:'Catalyser',         sub:'Silicon 50% super spreader',  size:'250 ml', target:'spray spread · stick',   price:310,  mrp:815,  img:'https://cdn.shopify.com/s/files/1/0762/3639/0696/files/5427824_2.webp?v=1757505380' },
 
       { cat:'combo',      subs:['crop'],          name:'Tomato Combo',     sub:'Spray + feed',           size:'3-pack', target:'Tomato kit',         price:849,  mrp:1180, img:'../assets/AntiVirus_nobg.png' },
       { cat:'combo',      subs:['crop'],          name:'Chilli Combo',     sub:'Spray + feed',           size:'3-pack', target:'Chilli kit',         price:799,  mrp:1100, img:'../assets/AntiVirus_nobg.png' },
@@ -529,10 +616,22 @@
     });
 
     // Main-cat tile clicks · resets product scroll back to top + refreshes quick-filter counts since they're scoped to the active cat/sub
+    // Keep the selected category tile fully in view inside the scrolling row (DI-03: selected tile never sits off-screen)
+    function revealCatTile(btn, smooth){
+      const row = btn && btn.closest('.cat-row-inner');
+      if (!row) return;
+      const r = btn.getBoundingClientRect(), rr = row.getBoundingClientRect();
+      const pad = 16;
+      let dx = 0;
+      if (r.left < rr.left + pad) dx = r.left - rr.left - pad;
+      else if (r.right > rr.right - pad) dx = r.right - rr.right + pad;
+      if (dx) row.scrollBy({ left: dx, behavior: smooth ? 'smooth' : 'auto' });
+    }
     document.querySelectorAll('[data-cat]').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed','false'));
         btn.setAttribute('aria-pressed','true');
+        revealCatTile(btn, true);
         activeCat = btn.dataset.cat;
         activeSub = 'all';
         recentView = false;   // browsing a category exits the recently-viewed view
@@ -663,7 +762,7 @@
         const v0 = hasVariants ? p.variants[0] : null;
         const priceCell = hasVariants
           ? '<div class="pprice-row"><span class="pprice tnum">₹'+v0.price+'</span>'+(v0.mrp?'<span class="pmrp tnum">₹'+v0.mrp+'</span>':'')+(v0.off?'<span class="poff">'+v0.off+'% off</span>':'')+'</div>'
-          : '<div class="pprice-row"><span class="pprice tnum">₹'+p.price+'</span><span class="pmrp tnum">₹'+p.mrp+'</span>'+(off>0?'<span class="poff">'+off+'% off</span>':'')+'</div>';
+          : '<div class="pprice-row"><span class="pprice tnum">₹'+p.price+'</span>'+(p.mrp?'<span class="pmrp tnum">₹'+p.mrp+'</span>':'')+(off>0?'<span class="poff">'+off+'% off</span>':'')+'</div>';
         return '<a href="pdp.html" class="pcard" data-card="'+id+'"'
           + (hasVariants ? ' data-variant-card data-product-name="'+p.name+'" data-product-tech="'+p.sub+'" data-product-img="'+p.img+'" data-variants=\''+JSON.stringify(p.variants).replace(/'/g,'&#39;')+'\'' : '')
           + '>'
@@ -999,6 +1098,7 @@
     if (qp.get('cat') && CATS[qp.get('cat')]) {
       activeCat = qp.get('cat');
       document.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === activeCat ? 'true' : 'false'));
+      revealCatTile(document.querySelector('.cat-row-inner [data-cat="' + activeCat + '"]'), false);
     }
     if (qp.get('view') === 'recent') { recentView = true; }
 

@@ -31,7 +31,7 @@
     { k:'turmeric', label:'Turmeric', emoji:'🫚', bg:'#FEF3C7' },
     { k:'wheat', label:'Wheat', emoji:'🌾', bg:'#FEF3C7' }
   ];
-  LIST.forEach(function (c) { c.img = IMG + c.k + '.webp'; });
+  LIST.forEach(function (c) { c.img = IMG + c.k + '.webp?v=2'; });   // v=2 · cleaned photos (no neighbouring-crop strips)
   window.KKD_CROPS = LIST;
   window.kkdCropMeta = function () {
     var m = {};

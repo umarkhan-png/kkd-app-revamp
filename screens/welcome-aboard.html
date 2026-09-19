@@ -128,8 +128,8 @@
       document.getElementById('welcomeSub').innerHTML = "You've joined the Katyayani family through <b class=\"ref-name\">" + referrer + " ji's</b> invite. Let's grow together.";
       try { localStorage.setItem('kkd.welcomeCoins', '50'); } catch (e) {}
     })();
-    // Auto-route to the allow-notifications bottom sheet next (skippable) · welcome stays on screen ~4.5s (~6s when the coin card shows)
-    setTimeout(() => { if (!document.hidden) window.location.href = 'notifications-allow-sheet.html'; }, referred ? 6000 : 4500);
+    // Auto-route to the ON-06 location gate next (permissions → locating → notifications → home) · welcome stays ~4.5s (~6s with the coin card)
+    setTimeout(() => { if (!document.hidden) window.location.href = 'permissions.html'; }, referred ? 6000 : 4500);
   </script>
   <script src="../assets/weight-ladder.js"></script>
 </body></html>

@@ -100,6 +100,7 @@
   </div>
 
   <script>
+    // After a location is on file → notifications ask (skippable) → home
     // ON-06 · ?manual=1 → pincode typed on location-manual.html: skip the GPS animation, show "Location detected" with the typed value, then home
     //         ?timeout=1 → GPS took too long / found no pincode: offer the pincode screen (no error dialog)
     const Q = new URLSearchParams(location.search);
@@ -109,7 +110,7 @@
       document.getElementById('villageName').textContent = v || ('Pincode ' + pin);
       document.getElementById('placeLine').textContent = pin ? 'Pincode · ' + pin : '';
       document.body.classList.add('found');
-      setTimeout(() => { window.location.href = 'home.html'; }, 2600);
+      setTimeout(() => { window.location.href = 'notifications-allow-sheet.html'; }, 2600);
     } else if (Q.get('timeout') === '1') {
       setTimeout(() => document.body.classList.add('timeout'), 3500);
     } else {
@@ -121,7 +122,7 @@
       document.body.classList.add('found');
       try { localStorage.setItem('kkd.village', 'Mahidpur'); localStorage.setItem('kkd.district', 'Ujjain'); } catch (e) {}
     }, 2400);
-    setTimeout(() => { window.location.href = 'home.html'; }, 5500);
+    setTimeout(() => { window.location.href = 'notifications-allow-sheet.html'; }, 5500);
     }
   </script>
   <script src="../assets/weight-ladder.js"></script>

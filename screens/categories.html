@@ -20,15 +20,17 @@
   /* More categories than fit · the row scrolls sideways (same tile size as the old 5-up row, next tile peeks in) · same as home */
   .cat-row-inner{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
   .cat-row-inner::-webkit-scrollbar{display:none}
-  .cat2-card{width:100%;height:100px;border-radius:12px;background:var(--c);display:flex;flex-direction:column;align-items:center;padding:9px 4px 0;box-shadow:0 5px 13px -7px rgba(15,23,42,.28);transition:transform .15s ease, box-shadow .2s ease}
-  .cat2-tile:active .cat2-card{transform:scale(.97)}
-  .cat2-tile[aria-pressed="true"] .cat2-card{box-shadow:0 0 0 2.5px #258046, 0 8px 18px -6px rgba(5,150,105,.4)}
-  .cat2-pw{width:100%;height:52px;display:flex;align-items:flex-end;justify-content:center;flex-shrink:0}
+  .cat2-card{width:100%;display:flex;flex-direction:column;align-items:center;background:transparent;padding:0;border-radius:0;box-shadow:none;transition:transform .15s ease}
+  /* Image box · category colour + product image only (label sits below it, no background) */
+  .cat2-pw{width:100%;height:64px;border-radius:12px;background:var(--c);display:flex;align-items:flex-end;justify-content:center;flex-shrink:0;padding:8px 4px 4px;box-sizing:border-box;overflow:hidden;box-shadow:0 5px 13px -7px rgba(15,23,42,.28);transition:box-shadow .2s ease}
   .cat2-pw img{object-fit:contain;object-position:bottom;filter:drop-shadow(0 3px 3px rgba(0,0,0,.16))}
-  .cat2-pw img.b{height:41px;max-width:42%;margin-right:-10px;z-index:1}
+  .cat2-pw img.b{height:40px;max-width:42%;margin-right:-10px;z-index:1}
   .cat2-pw img.f{height:52px;max-width:66%;position:relative;z-index:2}
-  .cat2-lb{flex:1;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;color:#27313F;letter-spacing:-.02em;padding:3px 3px 6px;text-align:center;line-height:1.15}
-  .cat2-tile[aria-pressed="true"] .cat2-lb{color:#0F172A}
+  /* Name below the box · plain text, room for 2 lines so every tile lines up */
+  .cat2-lb{width:100%;min-height:27px;margin-top:6px;display:flex;align-items:flex-start;justify-content:center;font-size:11.5px;font-weight:800;color:#27313F;letter-spacing:-.02em;padding:0 2px;text-align:center;line-height:1.15;background:transparent}
+  .cat2-tile:active .cat2-card{transform:scale(.97)}
+  .cat2-tile[aria-pressed="true"] .cat2-pw{box-shadow:0 0 0 2.5px #258046, 0 8px 18px -6px rgba(5,150,105,.4)}
+  .cat2-tile[aria-pressed="true"] .cat2-lb{color:#258046}
 
   /* Legacy circle-tile styles · retained for any leftover refs but no longer rendered */
   .cat-tile{transition:transform .15s ease}
@@ -120,10 +122,10 @@
   .stk-main .cat-row-inner{transition:padding .3s ease, gap .3s ease}
   .stk-main.compact .cat-row-inner{padding:6px 12px;gap:6px;justify-content:flex-start;overflow-x:auto}
   .stk-main.compact .cat2-tile{flex:0 0 auto}
-  .stk-main.compact .cat2-card{height:auto;padding:7px 14px;border-radius:999px;box-shadow:0 2px 6px -3px rgba(15,23,42,.22)}
+  .stk-main.compact .cat2-card{height:auto;padding:7px 14px;border-radius:999px;background:var(--c);box-shadow:0 2px 6px -3px rgba(15,23,42,.22)}
   .stk-main.compact .cat2-tile[aria-pressed="true"] .cat2-card{box-shadow:0 0 0 2px #258046, 0 2px 6px -3px rgba(5,150,105,.35)}
   .stk-main.compact .cat2-pw{display:none}
-  .stk-main.compact .cat2-lb{font-size:11.5px;padding:0;line-height:1.1;flex:none;white-space:nowrap}
+  .stk-main.compact .cat2-lb{font-size:11.5px;padding:0;line-height:1.1;flex:none;white-space:nowrap;margin:0;min-height:0}
 
   /* Two-column body · flex:1 of the viewport-height column · each pane scrolls independently */
   .cat-body{flex:1;display:flex;min-height:0}

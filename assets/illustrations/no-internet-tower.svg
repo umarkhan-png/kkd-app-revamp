@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <defs>
+    <radialGradient id="base" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#C5EAD1"/><stop offset=".55" stop-color="#A7DCB6"/><stop offset="1" stop-color="#93D1A6"/></radialGradient>
+    <radialGradient id="hl" cx="32%" cy="30%" r="34%"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="b1" cx="70%" cy="64%" r="46%"><stop offset="0" stop-color="#057850" stop-opacity=".22"/><stop offset="1" stop-color="#057850" stop-opacity="0"/></radialGradient>
+    <radialGradient id="b2" cx="24%" cy="74%" r="44%"><stop offset="0" stop-color="#10B981" stop-opacity=".28"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/></radialGradient>
+    <radialGradient id="hill" cx="50%" cy="120%" r="80%"><stop offset="0" stop-color="#047857" stop-opacity=".2"/><stop offset=".7" stop-color="#047857" stop-opacity="0"/></radialGradient>
+    <radialGradient id="badge" cx="36%" cy="32%" r="70%"><stop offset="0" stop-color="#FDBA74"/><stop offset=".45" stop-color="#FB923C"/><stop offset="1" stop-color="#F97316"/></radialGradient>
+    <clipPath id="disc"><circle cx="112" cy="128" r="104"/></clipPath>
+    <filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="2.5" flood-opacity=".15"/></filter>
+    <filter id="bsh" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#F97316" flood-opacity=".5"/></filter>
+  </defs>
+  <g clip-path="url(#disc)">
+    <circle cx="112" cy="128" r="104" fill="url(#base)"/>
+    <circle cx="112" cy="128" r="104" fill="url(#b2)"/>
+    <circle cx="112" cy="128" r="104" fill="url(#b1)"/>
+    <circle cx="112" cy="128" r="104" fill="url(#hl)"/>
+    <rect x="8" y="128" width="208" height="104" fill="url(#hill)"/>
+    <g transform="translate(37 53) scale(.75)" fill="none" filter="url(#sh)">
+      <g stroke="#3B3A36" stroke-width="3.4" stroke-linecap="round"><path d="M120 60 a15 15 0 0 1 0 22"/><path d="M129 52 a27 27 0 0 1 0 38"/><path d="M80 60 a15 15 0 0 0 0 22"/><path d="M71 52 a27 27 0 0 0 0 38"/></g>
+      <line x1="100" y1="58" x2="100" y2="76" stroke="#3B3A36" stroke-width="4.2" stroke-linecap="round"/>
+      <circle cx="100" cy="55" r="4.4" fill="#3B3A36"/>
+      <g stroke="#3B3A36" stroke-width="2.6" stroke-linecap="round"><path d="M88 76 L116 94 M112 76 L84 94"/><path d="M84 94 L121 116 M116 94 L79 116"/><path d="M79 116 L127 141 M121 116 L73 141"/><path d="M73 141 L134 172 M127 141 L66 172"/></g>
+      <g stroke="#3B3A36" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M88 76 L66 172"/><path d="M112 76 L134 172"/><path d="M84 94 H116"/><path d="M79 116 H121"/><path d="M73 141 H127"/><path d="M66 172 H134"/><path d="M66 172 L60 181"/><path d="M134 172 L140 181"/></g>
+    </g>
+  </g>
+  <circle cx="191" cy="61" r="36" fill="#fff"/>
+  <circle cx="191" cy="61" r="31" fill="url(#badge)" filter="url(#bsh)"/>
+  <rect x="187.5" y="42" width="7" height="25" rx="3.5" fill="#fff"/>
+  <circle cx="191" cy="76" r="4" fill="#fff"/>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+  <style>
+    .dash{transform-origin:80px 80px;transform-box:view-box;animation:spin 14s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#258046"/><stop offset="1" stop-color="#10B981"/></linearGradient>
+    <filter id="s" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="14" stdDeviation="10" flood-opacity=".35"/></filter>
+  </defs>
+  <circle cx="80" cy="80" r="80" fill="url(#bg)"/>
+  <circle class="dash" cx="80" cy="80" r="58" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2" stroke-dasharray="6 5"/>
+  <g>
+    <circle cx="80" cy="80" r="53" fill="#fff" fill-opacity=".18"/>
+    <circle cx="80" cy="80" r="46" fill="#fff" filter="url(#s)"/>
+    <g fill="#258046">
+      <ellipse cx="72" cy="90" rx="17" ry="6"/><rect x="55" y="78" width="34" height="12"/><ellipse cx="72" cy="78" rx="17" ry="6" fill="#34A865"/>
+      <ellipse cx="90" cy="74" rx="15" ry="5.5"/><rect x="75" y="60" width="30" height="14"/><ellipse cx="90" cy="60" rx="15" ry="5.5" fill="#34A865"/>
+    </g>
+  </g>
+</svg>

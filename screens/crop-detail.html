@@ -93,11 +93,26 @@
   .prod-price .add{display:inline-flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800;color:#FFFFFF;background:#258046;padding:8px 18px;border-radius:9px;cursor:pointer;box-shadow:0 4px 10px -4px rgba(5,150,105,0.5)}
 
   /* Empty state */
-  .empty{margin:24px 16px 0;background:#FFFFFF;border:1px dashed #A7F3D0;border-radius:16px;padding:30px 20px;text-align:center}
-  .empty .ic{width:64px;height:64px;border-radius:18px;margin:0 auto 14px;background:#ECFDF5;color:#258046;display:flex;align-items:center;justify-content:center;font-size:28px}
-  .empty h2{font-size:17px;font-weight:900;color:#0F172A}
-  .empty p{font-size:12.5px;color:#64748B;margin-top:5px;line-height:1.5}
-  .empty .cta{margin-top:16px;height:48px;width:100%;border-radius:12px;background:#258046;color:#FFFFFF;border:0;font-size:14px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+  /* Empty state · no crop selected · crop-photo fan + CTA + popular-crop quick picks */
+  .empty{padding:44px 24px 0;text-align:center}
+  .empty .fan{position:relative;width:176px;height:112px;margin:0 auto 22px}
+  .empty .fan .fc{position:absolute;top:8px;width:84px;height:84px;border-radius:50%;overflow:hidden;border:3px solid #FFFFFF;box-shadow:0 8px 18px -6px rgba(15,23,42,0.28);display:flex;align-items:center;justify-content:center;font-size:34px;background:#ECFDF5}
+  .empty .fan .fc img{width:100%;height:100%;object-fit:cover}
+  .empty .fan .fc.l{left:0;transform:rotate(-8deg)}
+  .empty .fan .fc.r{right:0;transform:rotate(8deg)}
+  .empty .fan .fc.m{left:40px;top:0;width:96px;height:96px;z-index:2}
+  .empty .fan .plus{position:absolute;right:26px;bottom:0;z-index:3;width:36px;height:36px;border-radius:50%;background:#258046;border:3px solid #FFFFFF;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 4px 10px -2px rgba(5,150,105,0.5)}
+  .empty h2{font-size:22px;font-weight:800;color:#0F172A;line-height:1.2}
+  .empty p{font-size:13px;color:#64748B;margin:8px auto 0;line-height:1.55;max-width:280px}
+  .empty .cta{margin-top:22px;height:52px;width:100%;max-width:300px;border-radius:12px;background:#258046;color:#FFFFFF;border:0;font-size:15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;box-shadow:0 8px 20px -6px rgba(5,150,105,0.45)}
+  .empty .cta:active{transform:scale(.99)}
+  .empty .quick-h{margin-top:28px;font-size:11.5px;font-weight:800;color:#64748B;text-transform:uppercase;letter-spacing:0.06em}
+  .empty .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+  .empty .qk{background:#FFFFFF;border:1.5px solid #E5E7EB;border-radius:12px;overflow:hidden;padding:0;cursor:pointer;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+  .empty .qk:active{transform:scale(.97)}
+  .empty .qk .qi{height:64px;display:flex;align-items:center;justify-content:center;font-size:28px;overflow:hidden}
+  .empty .qk .qi img{width:100%;height:100%;object-fit:cover;display:block}
+  .empty .qk span{font-size:11.5px;font-weight:600;color:#0F172A;padding:7px 2px;line-height:1}
 
   /* Ask Expert banner (matches the home/PDP expert element) */
   .expert-banner{display:flex;align-items:center;gap:12px;margin:16px 16px 0;padding:12px 14px;border-radius:16px;text-decoration:none;color:#FFFFFF;background:linear-gradient(145deg,#10B981,#065F46);box-shadow:0 8px 22px -6px rgba(16,185,129,0.55),inset 0 1px 0 rgba(255,255,255,0.18)}
@@ -147,10 +162,12 @@
   <div class="crop-chips" id="cropChips"></div>
 
   <div class="empty" id="cropEmpty" style="display:none">
-    <div class="ic"><i class="fa-solid fa-seedling"></i></div>
-    <h2>Add your first crop</h2>
-    <p>Pick the crops you grow to see their growth stages, common problems, and the exact products to use.</p>
-    <button class="cta" id="emptyAdd"><i class="fa-solid fa-plus text-[12px]"></i> Add a crop</button>
+    <div class="fan" id="emptyFan"></div>
+    <h2>No crop selected</h2>
+    <p>Select the crops you grow to see their growth stages, common problems and the right products.</p>
+    <button class="cta" id="emptyAdd"><i class="fa-solid fa-plus text-[13px]"></i> Select your crops</button>
+    <div class="quick-h">Or pick a popular crop</div>
+    <div class="quick" id="emptyQuick"></div>
   </div>
 
   <div id="cropContent">
@@ -270,6 +287,8 @@
     };
 
     let userCrops = ['cotton','wheat'];
+    // Demo · crop-detail.html?empty=1 opens with no crop selected (empty state)
+    if (new URLSearchParams(location.search).get('empty') === '1') userCrops = [];
     let active = userCrops[0] || null;
 
     const chipsEl = document.getElementById('cropChips');
@@ -410,6 +429,22 @@
     document.getElementById('addClose').addEventListener('click', closeAdd);
     addBd.addEventListener('click', closeAdd);
     document.getElementById('emptyAdd').addEventListener('click', openAdd);
+
+    // Empty state · crop-photo fan + popular-crop quick picks (one tap adds the crop and opens its guide)
+    (function(){
+      const fanKeys = ['wheat','tomato','cotton'].filter(k => CROP_META[k]);
+      const pos = ['l','m','r'];
+      document.getElementById('emptyFan').innerHTML = fanKeys.map((k, i) =>
+        '<span class="fc ' + pos[i] + '" style="background:' + CROP_META[k].bg + '"><img src="' + CROP_META[k].img + '" alt="" onerror="this.parentNode.textContent=\'' + CROP_META[k].emoji + '\'"/></span>').join('')
+        + '<span class="plus"><i class="fa-solid fa-plus"></i></span>';
+      const quick = document.getElementById('emptyQuick');
+      quick.innerHTML = ['tomato','cotton','wheat','paddy'].filter(k => CROP_META[k]).map(k =>
+        '<button type="button" class="qk" data-k="' + k + '"><span class="qi" style="background:' + CROP_META[k].bg + ';padding:0"><img src="' + CROP_META[k].img + '" alt="" onerror="this.parentNode.textContent=\'' + CROP_META[k].emoji + '\'"/></span><span>' + CROP_META[k].label + '</span></button>').join('');
+      quick.querySelectorAll('.qk').forEach(b => b.addEventListener('click', () => {
+        userCrops = [b.dataset.k]; active = b.dataset.k;
+        renderChips(); renderCrop(); window.scrollTo(0, 0);
+      }));
+    })();
 
     renderChips(); renderCrop();
   </script>

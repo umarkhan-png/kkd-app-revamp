@@ -535,13 +535,14 @@
 
   <!-- Unboxing video · standalone card (moved out of the help sheet) · records proof via device camera -->
   <div class="sec-title hide-pending">Order proof</div>
-  <label class="card hide-pending" style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer">
-    <div class="w-10 h-10 rounded-[11px] flex items-center justify-center flex-shrink-0" style="background:#EFF6FF;color:#2563EB"><i class="fa-solid fa-video text-[16px]"></i></div>
-    <div class="flex-1 leading-tight">
-      <div class="text-[14px] font-semibold text-[#0F172A]">Shoot unboxing video</div>
-      <div class="text-[11.5px] mt-0.5" style="color:#64748B">Record while opening — fastest way to settle any claim</div>
+  <!-- Two states · default "Shoot unboxing video" (blue) → after a clip is recorded: clip thumbnail + "Unboxing video added" (green) + Retake -->
+  <label class="card hide-pending" id="unboxTile" style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;transition:background .2s,border-color .2s">
+    <div id="unboxIcon" class="w-10 h-10 rounded-[11px] flex items-center justify-center flex-shrink-0 relative overflow-hidden" style="background:#EFF6FF;color:#2563EB"><i class="fa-solid fa-video text-[16px]"></i></div>
+    <div class="flex-1 min-w-0 leading-tight">
+      <div id="unboxTitle" class="text-[14px] font-semibold text-[#0F172A]">Shoot unboxing video</div>
+      <div id="unboxSub" class="text-[11.5px] mt-0.5" style="color:#64748B">Record while opening — fastest way to settle any claim</div>
     </div>
-    <span class="inline-flex items-center justify-center w-9 h-9 rounded-full flex-shrink-0" style="background:#EFF6FF;color:#2563EB"><i class="fa-solid fa-circle-dot text-[14px]"></i></span>
+    <span id="unboxAction" class="inline-flex items-center justify-center w-9 h-9 rounded-full flex-shrink-0" style="background:#EFF6FF;color:#2563EB"><i class="fa-solid fa-circle-dot text-[14px]"></i></span>
     <input type="file" accept="video/*" capture="environment" id="unboxVideo" style="display:none"/>
   </label>
 
@@ -1354,7 +1355,52 @@
 
       // Unboxing video · standalone card · device camera capture · confirm once a clip is chosen
       const unbox = document.getElementById('unboxVideo');
-      if (unbox) unbox.addEventListener('change', () => { if (unbox.files && unbox.files.length) { setTimeout(() => alert('Unboxing video attached · our team will review and get back within 24 hours.'), 200); } });
+      // After a clip is recorded the tile flips to its "added" state · clip thumbnail + duration + Retake (only the Retake pill re-opens the camera)
+      function unboxDone(file){
+        const tile = document.getElementById('unboxTile'), ic = document.getElementById('unboxIcon'), act = document.getElementById('unboxAction');
+        if (!tile) return;
+        tile.dataset.done = '1';
+        tile.style.cursor = 'default';
+        tile.style.background = '#F0FDF4';
+        tile.style.borderColor = '#BBF7D0';
+        ic.style.background = '#DCFCE7'; ic.style.color = '#258046';
+        ic.innerHTML = '<i class="fa-solid fa-circle-check text-[18px]"></i>';
+        document.getElementById('unboxTitle').textContent = 'Unboxing video added';
+        const sub = document.getElementById('unboxSub');
+        sub.style.color = '#258046';
+        sub.innerHTML = '<i class="fa-solid fa-shield-halved text-[10px]"></i> Saved as order proof';
+        act.className = 'inline-flex items-center justify-center gap-1.5 h-9 px-3 rounded-full flex-shrink-0 text-[12px] font-semibold';
+        act.style.cssText = 'background:#FFFFFF;color:#258046;border:1px solid #BBF7D0;cursor:pointer';
+        act.innerHTML = '<i class="fa-solid fa-rotate-right text-[11px]"></i> Retake';
+        if (!file) return;
+        // Real clip · first frame as the thumbnail + its length in the subtitle
+        const v = document.createElement('video');
+        v.muted = true; v.playsInline = true; v.preload = 'auto';
+        v.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover';
+        v.addEventListener('loadedmetadata', () => {
+          if (isFinite(v.duration) && v.duration > 0) {
+            const t = Math.round(v.duration);
+            sub.innerHTML = '<i class="fa-solid fa-shield-halved text-[10px]"></i> ' + Math.floor(t / 60) + ':' + ('0' + (t % 60)).slice(-2) + ' · Saved as order proof';
+          }
+        });
+        v.addEventListener('loadeddata', () => {
+          ic.innerHTML = '';
+          ic.appendChild(v);
+          ic.insertAdjacentHTML('beforeend', '<span style="position:absolute;right:-1px;bottom:-1px;width:16px;height:16px;border-radius:50%;background:#258046;border:1.5px solid #fff;color:#fff;display:flex;align-items:center;justify-content:center;font-size:7px"><i class="fa-solid fa-check"></i></span>');
+          ic.style.overflow = 'visible'; v.style.borderRadius = '11px';
+        });
+        v.src = URL.createObjectURL(file) + '#t=0.1';
+      }
+      if (unbox) {
+        unbox.addEventListener('change', () => { if (unbox.files && unbox.files.length) unboxDone(unbox.files[0]); });
+        // Added state · a tap on the tile does nothing, only Retake re-opens the camera
+        document.getElementById('unboxTile').addEventListener('click', e => {
+          if (e.target === unbox) return;
+          if (e.currentTarget.dataset.done === '1' && !e.target.closest('#unboxAction')) e.preventDefault();
+        });
+        // Demo · order-details.html?unbox=1 opens with the video already added
+        if (new URLSearchParams(location.search).get('unbox') === '1') unboxDone(null);
+      }
 
       // Return / replace form · choice + product select + reason + description + photo-video + voice note
       (function(){

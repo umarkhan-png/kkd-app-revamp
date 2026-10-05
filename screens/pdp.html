@@ -965,6 +965,108 @@
 </div>
 
 <script>
+  // Product-aware PDP · ?p=antivirus / ?p=plantoveer render that product's own identity, packs, price, tabs + description
+  // Data = katyayanikrishidirect.com product pages (Oct 2026). Runs before the variant/stock scripts so they bind to the rebuilt tiles.
+  window.PDP_PRODUCTS = {
+    antivirus: {
+      name: 'Antivirus', tech: 'Herbal viricide · Leaf curl &amp; yellow vein virus',
+      cat: 'Viricide', catIc: 'fa-virus-slash', rating: '4.5',
+      imgs: ['https://katyayanikrishidirect.com/cdn/shop/files/AntiVirus_75248f94-8de8-47c9-9592-a7aa49e36eeb.webp',
+             'https://katyayanikrishidirect.com/cdn/shop/files/Antivirus_Slide_2_1.webp',
+             'https://katyayanikrishidirect.com/cdn/shop/files/Antivirus_Slide_3_1.webp',
+             'https://katyayanikrishidirect.com/cdn/shop/files/Antivirus_Slide_4_1.webp'],
+      unit: 'L', def: '250 ml',
+      packs: [ ['250 ml',327,741,0.25], ['500 ml',468,1240,0.5], ['1 L',881,2480,1,'500 ml × 2'], ['2 L',1648,4960,2,'500 ml × 4'],
+               ['2.5 L',2040,7410,2.5,'250 ml × 10'], ['5 L',3649,8700,5,'1 L × 5'], ['10 L',7000,17400,10,'1 L × 10'] ],
+      technical: [['Composition','Herbal plant extracts'],['Type','Organic viricide'],['Form','Liquid'],['Entry','Through leaf stomata'],['Protection','Up to 15 days'],['Crop safe','All crops']],
+      dose: ['<b class="font-extrabold">500 ml per acre</b> as a foliar spray','Effective for up to <b class="font-extrabold">15 days</b> after application','Safe on <b class="font-extrabold">all crops</b> — vegetables, fruits, pulses, cotton'],
+      doseStats: [['Per acre','500 ml'],['Method','Foliar spray'],['Lasts','15 days']],
+      diseases: ['Leaf curl virus','Mosaic virus','Yellow vein mosaic','Geminivirus','Papaya ringspot','Banana bunchy top','Cotton leaf curl'],
+      diseaseNote: 'Enters through the stomata, encapsulates virus particles and clears the blocked conductive tissue — new leaves emerge virus-free.',
+      desc: 'A broad-spectrum <span class="font-extrabold text-[#0F172A]">herbal viricide</span> extracted from plant herbs. It penetrates plant tissue, <span class="font-extrabold text-[#0F172A]">blocks viral replication</span> and restores plant vitality — protecting chilli, tomato, papaya, brinjal, okra, cotton, cucurbits and more from leaf-curl and mosaic viruses, with fresh growth and better yield.',
+      descStats: [['Dose','500 ml/acre'],['Protection','15 days'],['Crop safe','All']]
+    },
+    plantoveer: {
+      name: 'PlantoVeer', tech: 'Tebuconazole 50% + Trifloxystrobin 25% WG',
+      cat: 'Fungicide', catIc: 'fa-shield-virus', rating: null,
+      imgs: ['https://katyayanikrishidirect.com/cdn/shop/files/katyayani-plantoveer-tebuconazole-trifloxystrobin-main.png',
+             'https://katyayanikrishidirect.com/cdn/shop/files/katyayani-plantoveer-dual-action-fungicide.png',
+             'https://katyayanikrishidirect.com/cdn/shop/files/katyayani-plantoveer-recommended-crops.png',
+             'https://katyayanikrishidirect.com/cdn/shop/files/katyayani-plantoveer-how-to-use.png'],
+      unit: 'kg', def: '100 g',
+      packs: [ ['100 g',500,1250,0.1], ['250 g',1100,2850,0.25], ['300 g',1267,3750,0.3,'100 g × 3'], ['500 g',1830,3463,0.5],
+               ['5×100 g',2083,6250,0.5,'100 g × 5'], ['750 g',2668,8550,0.75,'250 g × 3'], ['1 kg',3515,6926,1,'500 g × 2'],
+               ['1.25 kg',4336,14250,1.25,'250 g × 5'], ['5 kg',17113,34630,5,'500 g × 10'] ],
+      technical: [['Composition','Tebuconazole 50% + Trifloxystrobin 25%'],['Form','WG · water-dispersible granules'],['Type','Systemic fungicide'],['Action','Preventive + curative'],['Movement','Systemic + translaminar'],['Crops','Rice, wheat, grapes, mango, tomato, chilli']],
+      dose: ['<b class="font-extrabold">Rice</b> — 80 g/acre · sheath blight, leaf &amp; neck blast','<b class="font-extrabold">Wheat</b> — 120 g/acre · yellow rust, powdery mildew','<b class="font-extrabold">Tomato</b> — 140 g/acre · early blight','<b class="font-extrabold">Chilli</b> — 100 g/acre · powdery mildew, anthracnose','<b class="font-extrabold">Grapes</b> — 70 g/acre · powdery mildew','<b class="font-extrabold">Mango</b> — 75–100 g per 100 L water'],
+      doseStats: [['Per acre','70–140 g'],['Method','Spray'],['Sprayer','Knapsack']],
+      diseases: ['Sheath blight','Blast','Neck blast','Rust','Yellow rust','Powdery mildew','Leaf spot','Anthracnose','Early blight'],
+      diseaseNote: 'Tebuconazole stops fungal cell-membrane build-up; Trifloxystrobin blocks fungal respiration — controls existing infection and prevents new ones.',
+      desc: 'A broad-spectrum <span class="font-extrabold text-[#0F172A]">systemic fungicide</span> with two actives — <span class="font-extrabold text-[#0F172A]">Tebuconazole 50% + Trifloxystrobin 25% WG</span>. Gives preventive and curative action with long-lasting, translaminar protection across cereals, vegetables and fruits, for healthier plants and better-quality produce.',
+      descStats: [['Action','Dual'],['Dose','70–140 g/acre'],['Mode','Systemic']]
+    }
+  };
+  (function(){
+    var key = new URLSearchParams(location.search).get('p');
+    var P = window.PDP_PRODUCTS[key]; if (!P) return;
+    window.PDP_PRODUCT = P;
+    var inr = function(n){ return '₹' + n.toLocaleString('en-IN'); };
+    var def = P.packs.filter(function(k){ return k[0] === P.def; })[0] || P.packs[0];
+    document.title = P.name + ' · KKD';
+    // gallery + sticky thumb
+    document.querySelectorAll('#imgScroll img').forEach(function(im, i){ if (P.imgs[i]) im.src = P.imgs[i]; });
+    var th = document.querySelector('.stickyhd .thumb img'); if (th) th.src = P.imgs[0];
+    if (P.rating) { var r = document.querySelector('#imgDots').parentNode.querySelector('.tnum'); if (r) r.textContent = P.rating; }
+    // identity
+    document.getElementById('pName').textContent = P.name;
+    document.getElementById('pTech').innerHTML = P.tech;
+    var pin = document.querySelector('.fa-flask.text-\\[9px\\]'); if (pin) pin.parentNode.innerHTML = '<i class="fa-solid ' + P.catIc + ' text-[9px]"></i> ' + P.cat;
+    // price row + sticky header
+    var pr = document.getElementById('priceRow');
+    pr.querySelector('.text-\\[28px\\]').textContent = inr(def[1]);
+    // packs · tile markup matches the static Humic tiles
+    function perU(k){ return inr(Math.round(k[1] / k[3])) + '/' + P.unit; }
+    function tile(k){
+      var on = k === def;
+      return '<button class="var' + (on ? ' bestseller active' : '') + '" data-size="' + k[0] + '" data-price="' + inr(k[1]) + '">'
+        + (on ? '<span class="vk-badge">Bestseller</span>' : '')
+        + '<div class="vk-size">' + k[0] + '</div><div class="vk-price tnum">' + inr(k[1]) + '</div><div class="vk-perL tnum">' + perU(k) + '</div></button>';
+    }
+    var grid = document.querySelector('.pack-grid'), more = document.getElementById('moreSizes');
+    var shown = P.packs.slice(0, 7), extra = P.packs.length - shown.length;
+    grid.querySelectorAll('.var').forEach(function(v){ v.remove(); });
+    more.insertAdjacentHTML('beforebegin', shown.map(tile).join(''));
+    if (extra > 0) more.querySelector('.lbl-sub').textContent = '+' + extra + ' size' + (extra > 1 ? 's' : '');
+    else more.style.display = 'none';
+    var cnt = grid.parentNode.querySelector('.text-\\[11px\\].font-semibold'); if (cnt) cnt.textContent = extra > 0 ? '7 of ' + P.packs.length + ' sizes' : P.packs.length + ' sizes';
+    document.querySelector('#sheet .grid').innerHTML = P.packs.map(tile).join('');
+    // How-to-use tabs
+    var pane = function(n){ return document.querySelector('#useTabs [data-pane="' + n + '"]'); };
+    pane('technical').querySelector('.grid').innerHTML = P.technical.map(function(t){ return '<div><div class="text-[10px] font-semibold uppercase tracking-wider" style="color:#94A3B8">' + t[0] + '</div><div class="font-bold mt-0.5">' + t[1] + '</div></div>'; }).join('');
+    var stat = function(s){ return '<div class="text-center"><div class="text-[9px] font-semibold uppercase tracking-wider" style="color:#64748B">' + s[0] + '</div><div class="text-[13px] font-semibold mt-0.5">' + s[1] + '</div></div>'; };
+    var dp = pane('dose');
+    dp.querySelector('.space-y-2\\.5').innerHTML = P.dose.map(function(d, i){ return '<div class="flex gap-2"><span class="font-extrabold text-[#258046] w-4">' + (i + 1) + '.</span><span>' + d + '</span></div>'; }).join('');
+    dp.querySelector('.grid-cols-3').innerHTML = P.doseStats.map(stat).join('');
+    var sp = pane('disease');
+    sp.querySelector('.flex-wrap').innerHTML = P.diseases.map(function(d){ return '<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-semibold" style="background:#ECFDF5;color:#258046;border:1px solid #A7F3D0">' + d + '</span>'; }).join('');
+    sp.querySelector('.leading-relaxed').innerHTML = P.diseaseNote;
+    // Product description
+    var dc = document.querySelector('.kkd-collapse');
+    dc.querySelector('p').innerHTML = P.desc;
+    dc.querySelector('.grid-cols-3').innerHTML = P.descStats.map(function(s){ return '<div class="text-center"><div class="text-[9px] font-semibold uppercase tracking-wider" style="color:#64748B">' + s[0] + '</div><div class="text-[14px] font-semibold text-[#0F172A] mt-0.5">' + s[1] + '</div></div>'; }).join('');
+    // MRP · % off · sticky header follow the selected pack
+    window.pdpPriceMeta = function(size){
+      var k = P.packs.filter(function(x){ return x[0] === size; })[0]; if (!k) return;
+      var off = Math.round((1 - k[1] / k[2]) * 100);
+      pr.querySelector('.line-through').textContent = inr(k[2]);
+      pr.querySelector('.text-\\[12\\.5px\\].font-semibold').textContent = off + '% off · You save ' + inr(k[2] - k[1]);
+      document.querySelector('.stickyhd .nm').innerHTML = P.name + ' <span class="font-medium" style="color:#64748B">· ' + (k[4] || k[0]) + '</span>';
+      document.querySelector('.stickyhd .pr').innerHTML = inr(k[1]) + ' <span class="strike">' + inr(k[2]) + '</span>';
+    };
+    window.pdpPriceMeta(def[0]);
+  })();
+</script>
+<script>
   // Image gallery
   (function(){
     const sc = document.getElementById('imgScroll');
@@ -1269,6 +1371,15 @@
   })();
 </script>
 
+<script>
+  // ?p=antivirus / ?p=plantoveer · keep MRP / % off / sticky header in step with the pack, and open on the product's default pack
+  (function(){
+    var P = window.PDP_PRODUCT; if (!P || !window.selectVariant) return;
+    var sv = window.selectVariant;
+    window.selectVariant = function(size, price){ sv(size, price); window.pdpPriceMeta(size); };
+    var d = document.querySelector('.pack-grid .var.active'); if (d) window.selectVariant(d.dataset.size, d.dataset.price);
+  })();
+</script>
   <script>
     // Your own submitted reviews · shown at the top of the list with a "Pending" badge until the admin approves them
     (function(){

@@ -775,6 +775,15 @@
     .cmp-reason{display:flex;align-items:center;gap:11px;width:100%;padding:13px;border-radius:11px;background:#fff;border:1px solid #E5E7EB;text-align:left;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#0F172A}
     .cmp-reason:active{background:#F8FAFC}
     .cmp-reason .rch{margin-left:auto;color:#94A3B8;font-size:11px;flex-shrink:0}
+    /* Return window closed · replaces the return/replace reasons in place · one line of why + call-back */
+    .cmp-closed{padding:13px;border-radius:12px;background:#F8FAFC;border:1px solid #E5E7EB}
+    .cmp-closed .row{display:flex;align-items:center;gap:11px}
+    .cmp-closed .ic{width:36px;height:36px;border-radius:10px;background:#F1F5F9;color:#475569;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+    .cmp-closed .t{font-size:13.5px;font-weight:700;color:#0F172A;line-height:1.3}
+    .cmp-closed .s{font-size:12px;color:#64748B;margin-top:2px}
+    .cmp-closed .cb{margin-top:11px;width:100%;height:44px;border-radius:10px;background:#FFFFFF;border:1.5px solid #258046;color:#258046;font-size:13.5px;font-weight:700;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+    .cmp-closed .cb:active{transform:scale(.98)}
+    .cmp-closed .cb.done{background:#ECFDF5;border-color:#A7F3D0;cursor:default}
     .cmp-back{width:32px;height:32px;border-radius:9999px;background:#F1F5F9;border:0;display:flex;align-items:center;justify-content:center;color:#475569;flex-shrink:0;cursor:pointer}
     .cmp-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#475569;background:#F1F5F9;padding:5px 11px;border-radius:9999px}
     .cmp-pill i{font-size:9px;color:#94A3B8}
@@ -1310,9 +1319,32 @@
           resCta.textContent='Submit request'; resCta.disabled=false; resCta.style.opacity='1';
           goRes();
         }
+        // Return window · 7 days from delivery · ?win=closed (demo: order #1102 in orders.html) → return/replace reasons swap for one "window closed" card + call-back, in the same place
+        const qpw=new URLSearchParams(location.search);
+        const winClosed=qpw.get('win')==='closed';
+        function winEnd(){
+          const t=((document.getElementById('deliveredOn')||{}).textContent||'').split(',')[0];
+          const d=new Date(t+' '+new Date().getFullYear()); if(isNaN(d)) return '';
+          d.setDate(d.getDate()+7); return d.getDate()+' '+d.toLocaleString('en-US',{month:'short'});
+        }
+        let cbDone=false;
+        function closedCard(){
+          const c=document.createElement('div'); c.className='cmp-closed';
+          const end=winEnd();
+          c.innerHTML='<div class="row"><span class="ic"><i class="fa-regular fa-calendar-xmark"></i></span><div class="min-w-0">'
+            +'<div class="t">Return / replacement window closed</div>'
+            +'<div class="s">'+(end?'Ended on '+end+' · ':'')+'7 days after delivery</div></div></div>'
+            +'<button type="button" class="cb"></button>';
+          const cb=c.querySelector('.cb');
+          function paint(){ cb.classList.toggle('done',cbDone); cb.innerHTML=cbDone?'<i class="fa-solid fa-circle-check"></i> Call back requested · within 24 hrs':'<i class="fa-solid fa-phone"></i> Request a call back'; }
+          cb.addEventListener('click', function(){ if(cbDone) return; cbDone=true; paint(); });
+          paint(); return c;
+        }
         function openReasons(catKey){
           const cat=CATS[catKey]; rTitle.textContent=cat.title; rList.innerHTML='';
+          let closedShown=false;
           cat.reasons.forEach(function(r){
+            if(winClosed && r.next==='form'){ if(!closedShown){ rList.appendChild(closedCard()); closedShown=true; } return; }
             const b=document.createElement('button'); b.type='button'; b.className='cmp-reason';
             b.innerHTML='<span>'+r.label+'</span><i class="fa-solid fa-chevron-right rch"></i>';
             b.addEventListener('click', function(){

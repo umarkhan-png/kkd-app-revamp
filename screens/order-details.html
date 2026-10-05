@@ -761,6 +761,56 @@
     </div>
   </div>
 
+  <!-- Complaint · return / replace evidence sheet (PO-04 S3) · opens from a return/replace reason while the 7-day window is open · replaces the old return form -->
+  <div id="evBd" class="modal-bd"></div>
+  <div id="evSheet" class="modal-sheet" style="padding:0;max-height:88vh;display:flex;flex-direction:column">
+    <div class="modal-handle"></div>
+    <div class="px-5 pt-3 pb-2 flex items-center gap-2.5" style="flex-shrink:0">
+      <button id="evBack" class="ev-back"><i class="fa-solid fa-arrow-left text-[13px]"></i></button>
+      <div class="text-[16px] font-bold leading-tight flex-1 min-w-0" id="evTitle">Damaged / leaked / broken</div>
+      <button id="evClose" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:#F1F5F9;border:0;flex-shrink:0"><i class="fa-solid fa-xmark text-[13px]" style="color:#475569"></i></button>
+    </div>
+    <div class="px-5 pb-3 overflow-y-auto" style="flex:1">
+      <div class="ev-chip" id="evChip"></div>
+      <div class="ev-lbl">Unboxing video <span class="req">REQUIRED</span></div>
+      <div id="evVid"></div>
+      <div class="ev-lbl">Optional</div>
+      <label class="ev-box add" id="evPhoto"><input type="file" accept="image/*" multiple id="evPhotoIn" style="display:none"/><span id="evPhotoTx"></span></label>
+      <button type="button" class="ev-box add" id="evVoice"></button>
+      <div class="ev-lbl">Describe the issue</div>
+      <div class="ev-txtwrap">
+        <textarea id="evTxt" placeholder="Type the issue in your words… (optional)"></textarea>
+        <button type="button" class="ev-mic" id="evMic" title="Record instead"><i class="fa-solid fa-microphone"></i></button>
+      </div>
+    </div>
+    <div class="px-5 pt-3 pb-5" style="border-top:1px solid #F1F5F9;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px);flex-shrink:0">
+      <button type="button" class="ev-cta" id="evCta"><i class="fa-solid fa-phone" style="font-size:13px"></i> Request a callback</button>
+      <div class="ev-hint" id="evHint">We need a photo or video of what you received to help you faster.</div>
+    </div>
+  </div>
+  <input type="file" accept="video/*" capture="environment" id="evVidIn" style="display:none"/>
+
+  <!-- Callback confirmation (PO-04 S4) · after "Request a callback" from the evidence sheet or the window-closed card -->
+  <div id="cbOkBd" class="modal-bd"></div>
+  <div id="cbOkSheet" class="modal-sheet" style="padding:0 0 16px">
+    <div class="modal-handle"></div>
+    <div class="px-6 pt-8 pb-2 text-center">
+      <div style="width:72px;height:72px;border-radius:50%;background:#ECFDF5;display:flex;align-items:center;justify-content:center;font-size:30px;color:#258046;margin:0 auto 16px"><i class="fa-solid fa-phone-volume"></i></div>
+      <div class="text-[19px] font-extrabold text-[#0F172A]">Thank you &mdash; our team will call you</div>
+      <div class="text-[13px] mt-2 leading-relaxed" style="color:#64748B" id="cbOkSub">About Order #KAT-2026-04-1198. We've noted what you told us — no need to repeat it on the call.</div>
+    </div>
+    <div class="px-5 pt-3">
+      <div class="ev-lbl" style="margin-top:4px">Anything you'd like to add? <span style="color:#94A3B8;text-transform:none;font-weight:600">(optional)</span></div>
+      <div class="ev-txtwrap">
+        <textarea id="cbOkTxt" placeholder="Optional voice note or note for our team…"></textarea>
+        <button type="button" class="ev-mic" id="cbOkMic" title="Record a voice note"><i class="fa-solid fa-microphone"></i></button>
+      </div>
+    </div>
+    <div class="px-5 pt-5 pb-5">
+      <button type="button" class="ev-cta" id="cbOkBack">Back to order details</button>
+    </div>
+  </div>
+
   <style>
     .hopt{ transition: background .15s ease; }
     .hopt:hover{ background:#F8FAFC; }
@@ -775,15 +825,37 @@
     .cmp-reason{display:flex;align-items:center;gap:11px;width:100%;padding:13px;border-radius:11px;background:#fff;border:1px solid #E5E7EB;text-align:left;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#0F172A}
     .cmp-reason:active{background:#F8FAFC}
     .cmp-reason .rch{margin-left:auto;color:#94A3B8;font-size:11px;flex-shrink:0}
-    /* Return window closed · replaces the return/replace reasons in place · one line of why + call-back */
-    .cmp-closed{padding:13px;border-radius:12px;background:#F8FAFC;border:1px solid #E5E7EB}
-    .cmp-closed .row{display:flex;align-items:center;gap:11px}
-    .cmp-closed .ic{width:36px;height:36px;border-radius:10px;background:#F1F5F9;color:#475569;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
-    .cmp-closed .t{font-size:13.5px;font-weight:700;color:#0F172A;line-height:1.3}
-    .cmp-closed .s{font-size:12px;color:#64748B;margin-top:2px}
-    .cmp-closed .cb{margin-top:11px;width:100%;height:44px;border-radius:10px;background:#FFFFFF;border:1.5px solid #258046;color:#258046;font-size:13.5px;font-weight:700;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
-    .cmp-closed .cb:active{transform:scale(.98)}
-    .cmp-closed .cb.done{background:#ECFDF5;border-color:#A7F3D0;cursor:default}
+    /* Return / replace evidence sheet (PO-04 S3 draft) · also styles the "window closed" card so both read the same */
+    .ev-chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#475569;background:#F1F5F9;padding:5px 11px;border-radius:9999px;margin:2px 0 12px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .ev-lbl{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#64748B;margin:16px 0 8px}
+    .ev-lbl .req{color:#DC2626;margin-left:4px}
+    .ev-box{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:12px;margin-bottom:9px}
+    .ev-box.done{background:#ECFDF5;border:1px solid #A7F3D0}
+    .ev-box.add{border:1.5px dashed #CBD5E1;background:#fff;justify-content:center;font-weight:700;color:#475569;font-size:12.5px;cursor:pointer;width:100%;font-family:inherit}
+    .ev-box.add.need{border-color:#FCA5A5}
+    .ev-box.rec{border:1.5px solid #FCA5A5;background:#FEF2F2;justify-content:center;font-weight:700;color:#DC2626;font-size:12.5px;cursor:pointer;width:100%;font-family:inherit}
+    label.ev-box.done,button.ev-box.done{justify-content:center;font-weight:700;color:#0F172A;font-size:12.5px;cursor:pointer;width:100%;font-family:inherit}
+    .ev-box.closed{background:#F8FAFC;border:1px solid #E5E7EB}
+    .ev-box .ic{width:40px;height:40px;border-radius:10px;background:#0F172A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+    .ev-box.closed .ic{background:#F1F5F9;color:#475569}
+    .ev-box .mt{flex:1;line-height:1.3;min-width:0}
+    .ev-box .mt b{display:block;font-size:13px;font-weight:800;color:#0F172A}
+    .ev-box .mt small{font-size:11px;font-weight:600;color:#258046}
+    .ev-box.closed .mt small{color:#64748B}
+    .ev-box .ok{font-size:11px;font-weight:800;color:#258046;display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
+    .ev-txtwrap{position:relative}
+    .ev-txtwrap textarea{width:100%;min-height:72px;border:1.5px solid #E5E7EB;border-radius:12px;background:#FAFAFA;font:inherit;font-size:13px;color:#0F172A;padding:11px 46px 11px 12px;resize:none;box-sizing:border-box;display:block}
+    .ev-mic{position:absolute;right:8px;bottom:8px;width:32px;height:32px;border-radius:50%;background:#258046;color:#fff;border:0;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer}
+    .ev-mic.on{background:#DC2626}
+    .ev-cta{width:100%;height:52px;border-radius:12px;border:0;background:#258046;color:#fff;font-weight:800;font-size:15px;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px -6px rgba(37,128,70,.45);cursor:pointer}
+    .ev-cta[disabled]{opacity:.45;box-shadow:none;cursor:default}
+    .ev-cta.done{background:#ECFDF5;color:#258046;box-shadow:none;border:1px solid #A7F3D0;cursor:default}
+    .ev-hint{font-size:11.5px;color:#DC2626;font-weight:600;margin-top:8px;display:none}
+    .ev-hint.show{display:block}
+    .ev-back{width:32px;height:32px;border-radius:9999px;background:#F1F5F9;border:0;display:flex;align-items:center;justify-content:center;color:#475569;flex-shrink:0;cursor:pointer}
+    .cmp-closed{padding:13px;border-radius:12px;background:#fff;border:1px solid #E5E7EB}
+    .cmp-closed .ev-chip{margin-top:0}
+    .cmp-closed .ev-box{margin-bottom:11px}
     .cmp-back{width:32px;height:32px;border-radius:9999px;background:#F1F5F9;border:0;display:flex;align-items:center;justify-content:center;color:#475569;flex-shrink:0;cursor:pointer}
     .cmp-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#475569;background:#F1F5F9;padding:5px 11px;border-radius:9999px}
     .cmp-pill i{font-size:9px;color:#94A3B8}
@@ -1327,19 +1399,75 @@
           const d=new Date(t+' '+new Date().getFullYear()); if(isNaN(d)) return '';
           d.setDate(d.getDate()+7); return d.getDate()+' '+d.toLocaleString('en-US',{month:'short'});
         }
+        // Order chip · "Order #ID · product names" · shared by the evidence sheet and the window-closed card
+        function chipHTML(){
+          const id=((document.getElementById('orderIdLabel')||{}).textContent||'').trim();
+          const names=[]; document.querySelectorAll('.prod-name').forEach(function(n){ const t=n.textContent.trim(); if(t && names.indexOf(t)<0) names.push(t); });
+          return '<i class="fa-solid fa-receipt" style="font-size:9px"></i> Order '+id+(names.length?' · '+names.join(', '):'');
+        }
+        // Callback confirmation sheet (PO-04 S4) · same for the evidence form and the window-closed card
+        const cbBd=document.getElementById('cbOkBd'), cbSheet=document.getElementById('cbOkSheet'), cbTxt=document.getElementById('cbOkTxt'), cbMic=document.getElementById('cbOkMic');
+        function callbackDone(){
+          const id=((document.getElementById('orderIdLabel')||{}).textContent||'').trim();
+          document.getElementById('cbOkSub').textContent='About Order '+id+'. We\'ve noted what you told us — no need to repeat it on the call.';
+          cbTxt.value=''; cbMic.classList.remove('on'); cbTxt.placeholder='Optional voice note or note for our team…';
+          setTimeout(function(){ openSheet(cbBd,cbSheet); }, 200);
+        }
+        cbMic.addEventListener('click', function(){ const on=!cbMic.classList.contains('on'); cbMic.classList.toggle('on',on); cbTxt.placeholder=on?'Listening… speak now':'Optional voice note or note for our team…'; });
+        document.getElementById('cbOkBack').addEventListener('click', function(){ closeSheet(cbBd,cbSheet); });
+        cbBd.addEventListener('click', function(){ closeSheet(cbBd,cbSheet); });
         let cbDone=false;
         function closedCard(){
           const c=document.createElement('div'); c.className='cmp-closed';
           const end=winEnd();
-          c.innerHTML='<div class="row"><span class="ic"><i class="fa-regular fa-calendar-xmark"></i></span><div class="min-w-0">'
-            +'<div class="t">Return / replacement window closed</div>'
-            +'<div class="s">'+(end?'Ended on '+end+' · ':'')+'7 days after delivery</div></div></div>'
-            +'<button type="button" class="cb"></button>';
-          const cb=c.querySelector('.cb');
-          function paint(){ cb.classList.toggle('done',cbDone); cb.innerHTML=cbDone?'<i class="fa-solid fa-circle-check"></i> Call back requested · within 24 hrs':'<i class="fa-solid fa-phone"></i> Request a call back'; }
-          cb.addEventListener('click', function(){ if(cbDone) return; cbDone=true; paint(); });
+          c.innerHTML='<div class="ev-chip">'+chipHTML()+'</div>'
+            +'<div class="ev-box closed"><span class="ic"><i class="fa-regular fa-calendar-xmark"></i></span><span class="mt"><b>Return / replacement window closed</b><small>'+(end?'Ended on '+end+' · ':'')+'7 days after delivery</small></span></div>'
+            +'<button type="button" class="ev-cta"></button>';
+          const cb=c.querySelector('.ev-cta');
+          function paint(){ cb.classList.toggle('done',cbDone); cb.innerHTML=cbDone?'<i class="fa-solid fa-circle-check" style="font-size:13px"></i> Callback requested':'<i class="fa-solid fa-phone" style="font-size:13px"></i> Request a callback'; }
+          cb.addEventListener('click', function(){ if(cbDone) return; cbDone=true; paint(); closeSheet(rBd,rSheet); callbackDone('Return / replacement'); });
           paint(); return c;
         }
+        // Evidence sheet (PO-04 S3) · unboxing video required (auto-attached when already recorded on this order) · photo / voice / text optional
+        const evBd=document.getElementById('evBd'), evSheet=document.getElementById('evSheet');
+        const evVid=document.getElementById('evVid'), evCta=document.getElementById('evCta'), evHint=document.getElementById('evHint');
+        const evVoice=document.getElementById('evVoice'), evMic=document.getElementById('evMic'), evTxt=document.getElementById('evTxt');
+        let evReason='', evVideo=false, evPhotos=0, evVoiceSt=0;   // voice: 0 none · 1 recording · 2 added
+        function unboxed(){ const t=document.getElementById('unboxTile'); return !!(t && t.dataset.done==='1'); }
+        function evPaint(){
+          const auto=unboxed();
+          if(auto||evVideo){
+            evVid.innerHTML='<div class="ev-box done"><span class="ic"><i class="fa-solid fa-circle-play"></i></span><span class="mt"><b>Unboxing video</b><small>'+(auto?'Already recorded for this order — auto-attached':'Added from your camera')+'</small></span><span class="ok"><i class="fa-solid fa-circle-check"></i> Added</span></div>';
+          } else {
+            evVid.innerHTML='<button type="button" class="ev-box add need" id="evVidAdd"><i class="fa-solid fa-video" style="color:#258046;margin-right:8px"></i> Record unboxing video</button>';
+            document.getElementById('evVidAdd').addEventListener('click', function(){ document.getElementById('evVidIn').click(); });
+          }
+          const ph=document.getElementById('evPhoto'), phT=document.getElementById('evPhotoTx');
+          ph.className='ev-box '+(evPhotos?'done':'add');
+          phT.innerHTML=evPhotos?'<i class="fa-solid fa-circle-check" style="color:#258046;margin-right:8px"></i> '+evPhotos+' photo'+(evPhotos>1?'s':'')+' added':'<i class="fa-solid fa-camera" style="color:#258046;margin-right:8px"></i> Add a photo (optional)';
+          evVoice.className='ev-box '+(evVoiceSt===1?'rec':(evVoiceSt===2?'done':'add'));
+          evVoice.innerHTML=evVoiceSt===1?'<i class="fa-solid fa-circle" style="margin-right:8px;font-size:9px"></i> Recording… tap to stop'
+            :(evVoiceSt===2?'<i class="fa-solid fa-circle-check" style="color:#258046;margin-right:8px"></i> Voice note added':'<i class="fa-solid fa-microphone" style="color:#258046;margin-right:8px"></i> Record a voice note (optional)');
+          const okv=auto||evVideo||evPhotos>0;
+          evCta.disabled=!okv; evHint.classList.toggle('show',!okv);
+        }
+        document.getElementById('evVidIn').addEventListener('change', function(e){ if(e.target.files&&e.target.files.length){ evVideo=true; evPaint(); } });
+        document.getElementById('evPhotoIn').addEventListener('change', function(e){ evPhotos=(e.target.files||[]).length; evPaint(); });
+        evVoice.addEventListener('click', function(){ evVoiceSt=evVoiceSt===1?2:(evVoiceSt===2?0:1); evPaint(); });
+        evMic.addEventListener('click', function(){ const on=!evMic.classList.contains('on'); evMic.classList.toggle('on',on); evTxt.placeholder=on?'Listening… speak now':'Type the issue in your words… (optional)'; });
+        function openEvidence(r){
+          evReason=r.label; evVideo=false; evPhotos=0; evVoiceSt=0; evTxt.value=''; evMic.classList.remove('on');
+          document.getElementById('evPhotoIn').value='';
+          document.getElementById('evTitle').textContent=r.label;
+          document.getElementById('evChip').innerHTML=chipHTML();
+          evPaint();
+          closeSheet(rBd,rSheet); closeSheet(cmpBd,cmpSheet);
+          setTimeout(function(){ openSheet(evBd,evSheet); },180);
+        }
+        evCta.addEventListener('click', function(){ if(evCta.disabled) return; closeSheet(evBd,evSheet); callbackDone(evReason); });
+        document.getElementById('evBack').addEventListener('click', function(){ closeSheet(evBd,evSheet); setTimeout(function(){ openSheet(rBd,rSheet); },180); });
+        document.getElementById('evClose').addEventListener('click', function(){ closeSheet(evBd,evSheet); });
+        evBd.addEventListener('click', function(){ closeSheet(evBd,evSheet); });
         function openReasons(catKey){
           const cat=CATS[catKey]; rTitle.textContent=cat.title; rList.innerHTML='';
           let closedShown=false;
@@ -1349,7 +1477,7 @@
             b.innerHTML='<span>'+r.label+'</span><i class="fa-solid fa-chevron-right rch"></i>';
             b.addEventListener('click', function(){
               resBack='reasons';
-              if(r.next==='form') openReturnForm(r);
+              if(r.next==='form') openEvidence(r);
               else if(r.next==='remark') openRemark(r);
               else openInvestigate(r);
             });

@@ -360,7 +360,7 @@
   /* ---------- static bits ---------- */
   document.title = 'KKD · ' + C.name;
   document.getElementById('cName').textContent = C.name;
-  document.getElementById('cSub').innerHTML = C.sub;
+  document.getElementById('cSub').textContent = C.items.map(function(i){ return i.nm; }).join(', ');   // products inside the kit
   document.getElementById('gRating').textContent = C.rating;
   document.getElementById('gRcount').textContent = C.rcount;
   document.getElementById('fbNum').textContent = C.orders + '+';

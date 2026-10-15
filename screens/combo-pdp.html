@@ -5,6 +5,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Poppins','system-ui','sans-serif']}}}}</script>
 <script src="../assets/celebrate.js"></script>
+<script src="../assets/weight-ladder.js"></script>
 <!--
   Combo PDP · one screen for every combo kit · ?c=dhan (default) | trishul | antivirus | bph4 · ?state=oos = one item inside the kit is out of stock
   Data = CRM Mongo combos_v2 + products_v2 + orders_v2 (read-only, pulled 15 Oct 2026). Prices = kkd_app channel price.
@@ -24,24 +25,17 @@
   .pg-dot{width:6px;height:6px;border-radius:9999px;background:rgba(15,23,42,0.22);transition:all .25s ease}
   .pg-dot.active{width:20px;background:#258046}
 
-  /* Kit formula strip · under the title · [img ×2] + [img ×1] + … · the one-glance answer to "what do I get?" */
-  .kf{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;padding:4px 0 2px}
-  .kf::-webkit-scrollbar{display:none}
-  .kf-it{position:relative;flex-shrink:0;width:46px;height:46px;border-radius:12px;background:#FFFFFF;border:1px solid #EEF1F4;display:flex;align-items:center;justify-content:center;padding:5px;box-shadow:0 3px 8px -4px rgba(15,23,42,.18)}
-  .kf-it img{max-width:100%;max-height:100%;object-fit:contain}
-  .kf-q{position:absolute;right:-6px;bottom:-6px;min-width:22px;height:18px;padding:0 5px;border-radius:9999px;background:#0F172A;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #F8F8F8}
-  .kf-plus{flex-shrink:0;color:#94A3B8;font-size:13px;font-weight:800}
 
   /* Pack selector · same tile language as the normal PDP pack-size grid */
   .pack-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px 10px}
-  .var{position:relative;border:1.5px solid #EEF1F4;background:#FFFFFF;border-radius:12px;padding:16px 4px 13px;text-align:center;transition:all .15s;cursor:pointer;box-shadow:0 4px 11px -5px rgba(15,23,42,0.16),0 1px 3px -1px rgba(15,23,42,0.06)}
+  .var{position:relative;border:1.5px solid #EEF1F4;background:#FFFFFF;border-radius:12px;padding:16px 6px 13px;text-align:center;transition:all .15s;cursor:pointer;box-shadow:0 4px 11px -5px rgba(15,23,42,0.16),0 1px 3px -1px rgba(15,23,42,0.06)}
   .var.active{border-color:#258046;background:#ECFDF5;box-shadow:0 6px 14px -6px rgba(5,150,105,0.35)}
   .var.bestseller{padding-top:20px}
-  .vk-badge{position:absolute;top:-7px;left:50%;transform:translateX(-50%);background:#FBBF24;color:#0F172A;font-size:8.5px;font-weight:500;padding:2px 7px;border-radius:9999px;white-space:nowrap;box-shadow:0 2px 6px rgba(251,191,36,0.45)}
+  .vk-badge{position:absolute;top:-7px;left:50%;transform:translateX(-50%);background:#FBBF24;color:#0F172A;font-size:8.5px;font-weight:500;padding:2px 7px;border-radius:9999px;white-space:nowrap;box-shadow:0 2px 6px rgba(251,191,36,0.45);letter-spacing:0.02em}
   .vk-size{font-size:12.5px;font-weight:800;color:#0F172A;line-height:1.1}
   .vk-price{font-size:11px;color:#64748B;margin-top:5px;line-height:1}
   .vk-perL{font-size:9.5px;color:#94A3B8;margin-top:5px;line-height:1;font-weight:600}
-  .vk-arrow{display:none;position:absolute;top:-8px;right:-6px;width:20px;height:20px;border:2px solid #F8F8F8;border-radius:50%;background:#258046;color:#fff;align-items:center;justify-content:center;font-size:9px;box-shadow:0 2px 6px rgba(5,150,105,0.4);animation:vkBounce 1s ease-in-out infinite}
+  .vk-arrow{display:none;position:absolute;top:6px;right:6px;width:18px;height:18px;border-radius:50%;background:#258046;color:#fff;align-items:center;justify-content:center;font-size:9px;z-index:3;box-shadow:0 2px 6px rgba(5,150,105,0.4);animation:vkBounce 1s ease-in-out infinite}
   .var.cheaper .vk-arrow{display:flex}
   .var.cheaper .vk-perL{color:#258046;font-weight:800}
   @keyframes vkBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(2.5px)}}
@@ -64,8 +58,6 @@
   .it-tot .s{font-size:10.5px;color:#94A3B8;font-weight:600}
   .it.oos .it-img{opacity:.45;filter:grayscale(1)}
   .it-oos{display:inline-block;margin-top:5px;font-size:10px;font-weight:800;color:#DC2626;background:#FEF2F2;border:1px solid #FECACA;border-radius:9999px;padding:1px 8px}
-  .box-ft{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;background:#F8FAFC;border-top:1px solid #F1F5F9;font-size:12px;color:#475569;font-weight:600}
-  .box-ft b{color:#0F172A;font-weight:800}
   .more-it{width:100%;border:0;border-top:1px dashed #E5E7EB;background:#FFFFFF;padding:11px;font-size:12.5px;font-weight:700;color:#258046;cursor:pointer}
 
   /* Price + ADD (same as PDP) */
@@ -169,10 +161,6 @@
     </div>
     <a href="categories.html?cat=combo" class="flex-shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-semibold uppercase tracking-[0.06em]" style="background:#EEF1FB;color:#3D52A0;border:1px solid #C7D0F0"><i class="fa-solid fa-boxes-stacked text-[9px]"></i> Combo</a>
   </div>
-  <div class="mt-3">
-    <div class="text-[11px] font-semibold uppercase tracking-wider mb-1.5" style="color:#94A3B8">1 kit =</div>
-    <div class="kf" id="kitFormula"></div>
-  </div>
 </div>
 
 <!-- Price + ADD -->
@@ -198,7 +186,6 @@
 <div class="px-4 mt-5" id="packSec">
   <div class="flex items-baseline justify-between mb-3">
     <div class="text-[15px] font-semibold">Choose pack</div>
-    <div class="text-[11px] font-semibold text-[#64748B]">More kits = lower price per kit</div>
   </div>
   <div class="pack-grid" id="packGrid"></div>
 </div>
@@ -214,7 +201,6 @@
       <div class="seg" id="boxSeg"><button data-m="kit" class="on">1 kit</button><button data-m="pack" id="segPack">Pack of 5</button></div>
     </div>
     <div id="boxList"></div>
-    <div class="box-ft" id="boxFt"></div>
   </div>
 </div>
 
@@ -395,13 +381,8 @@
   }
   sc.addEventListener('scroll', onSlide); onSlide();
 
-  // kit formula strip · tap a thumb → jump the gallery to that item
-  document.getElementById('kitFormula').innerHTML = C.items.map(function(i,k){
-    return (k? '<span class="kf-plus">+</span>':'') + '<button class="kf-it" data-slide="'+(k+1)+'" title="'+i.nm+'" style="cursor:pointer"><img src="'+i.img+'" alt=""/><span class="kf-q tnum">×'+i.q+'</span></button>';
-  }).join('');
-  document.querySelectorAll('[data-slide]').forEach(function(b){ b.addEventListener('click', function(){ sc.scrollTo({left: sc.clientWidth * +b.dataset.slide, behavior:'smooth'}); }); });
 
-  // pack grid · per-kit price under each tile · ↓ arrow on packs cheaper per kit than the selected one
+  // pack grid · per-kit price under each tile · ↓ arrow on the ONE best-value pack (cheaper per kit than the selected one)
   var single = C.packs.length === 1;
   document.getElementById('packSec').style.display = single ? 'none' : '';
   document.getElementById('packGrid').innerHTML = C.packs.map(function(p,k){
@@ -443,9 +424,11 @@
     document.getElementById('pPerKit').innerHTML = n>1 ? (inr(p[1]/n) + ' per kit · ' + n + ' kits' + (p[1]/n < base ? '<br><span style="color:#258046;font-weight:700">' + inr(base*n - p[1]) + ' cheaper than ' + n + ' single kits</span>' : '')) : '';
     document.getElementById('sPrice').innerHTML = inr(p[1]) + ' <span class="strike">' + inr(p[2]) + '</span>' + (n>1 ? ' <span style="color:#64748B;font-weight:600;font-size:11.5px">· Pack of ' + n + '</span>' : '');
     // pack tiles
+    var best = -1, min = p[1]/n - 0.5;   // only ONE tile gets the arrow · the lowest per-kit pack that beats the selected one (same rule as PDP)
+    C.packs.forEach(function(q,k){ if (q[1]/q[0] < min) { min = q[1]/q[0]; best = k; } });
     document.querySelectorAll('#packGrid .var').forEach(function(b,k){
       b.classList.toggle('active', k===packIdx);
-      b.classList.toggle('cheaper', (C.packs[k][1]/C.packs[k][0]) < (p[1]/n) - 0.5);
+      b.classList.toggle('cheaper', k===best);
     });
     // segmented toggle · only when pack > 1
     var segPack = document.getElementById('segPack');
@@ -470,9 +453,6 @@
     if (list.length < C.items.length) html += '<button class="more-it" id="moreIt">Show ' + (C.items.length-list.length) + ' more item' + (C.items.length-list.length>1?'s':'') + ' <i class="fa-solid fa-chevron-down text-[10px]"></i></button>';
     document.getElementById('boxList').innerHTML = html;
     var mi = document.getElementById('moreIt'); if (mi) mi.addEventListener('click', function(){ showAll = true; render(); });
-    document.getElementById('boxFt').innerHTML = mode==='pack'
-      ? '<span><b class="tnum">' + upk*n + ' units</b> · ' + n + ' kits</span><span class="tnum">~' + kgTxt(C.kg*n) + '</span>'
-      : '<span><b class="tnum">' + upk + ' units</b> per kit</span><span class="tnum">~' + kgTxt(C.kg) + ' per kit</span>';
     // delivery weight
     document.getElementById('dWeight').textContent = '~' + kgTxt(C.kg*n*Math.max(qty,1));
     // ADD / stepper / cart bar

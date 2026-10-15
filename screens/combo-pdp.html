@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/><title>KKD · Combo PDP</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Poppins','system-ui','sans-serif']}}}}</script>
+<script src="../assets/celebrate.js"></script>
+<!--
+  Combo PDP · one screen for every combo kit · ?c=dhan (default) | trishul | antivirus | bph4 · ?state=oos = one item inside the kit is out of stock
+  Data = CRM Mongo combos_v2 + products_v2 + orders_v2 (read-only, pulled 15 Oct 2026). Prices = kkd_app channel price.
+  Two things this page must handle:
+   1. Pack of N  · the same kit sold as Pack of 1 / 2 / 5 / 10 (each pack is its own combo SKU in combos_v2.pack_qty)
+   2. Kit contents · each kit holds several products, each with its own size AND count (combos_v2.products[].item_qty) — e.g. NPK 1 kg × 2 + Boron 500 g × 1
+-->
+<style>
+  *{font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0;overflow-x:hidden}
+  body{min-height:100vh;background:#F8F8F8;color:#0F172A;padding-bottom:100px}
+  .tnum{font-variant-numeric:tabular-nums}
+  .img-blend{mix-blend-mode:multiply}
+  .scrollx{overflow-x:auto;scrollbar-width:none;scroll-snap-type:x mandatory}
+  .scrollx::-webkit-scrollbar{display:none}
+  .snap-c{scroll-snap-align:center}
+  .pg-dot{width:6px;height:6px;border-radius:9999px;background:rgba(15,23,42,0.22);transition:all .25s ease}
+  .pg-dot.active{width:20px;background:#258046}
+
+  /* Kit formula strip · under the title · [img ×2] + [img ×1] + … · the one-glance answer to "what do I get?" */
+  .kf{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;padding:4px 0 2px}
+  .kf::-webkit-scrollbar{display:none}
+  .kf-it{position:relative;flex-shrink:0;width:46px;height:46px;border-radius:12px;background:#FFFFFF;border:1px solid #EEF1F4;display:flex;align-items:center;justify-content:center;padding:5px;box-shadow:0 3px 8px -4px rgba(15,23,42,.18)}
+  .kf-it img{max-width:100%;max-height:100%;object-fit:contain}
+  .kf-q{position:absolute;right:-6px;bottom:-6px;min-width:22px;height:18px;padding:0 5px;border-radius:9999px;background:#0F172A;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #F8F8F8}
+  .kf-plus{flex-shrink:0;color:#94A3B8;font-size:13px;font-weight:800}
+
+  /* Pack selector · same tile language as the normal PDP pack-size grid */
+  .pack-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px 10px}
+  .var{position:relative;border:1.5px solid #EEF1F4;background:#FFFFFF;border-radius:12px;padding:16px 4px 13px;text-align:center;transition:all .15s;cursor:pointer;box-shadow:0 4px 11px -5px rgba(15,23,42,0.16),0 1px 3px -1px rgba(15,23,42,0.06)}
+  .var.active{border-color:#258046;background:#ECFDF5;box-shadow:0 6px 14px -6px rgba(5,150,105,0.35)}
+  .var.bestseller{padding-top:20px}
+  .vk-badge{position:absolute;top:-7px;left:50%;transform:translateX(-50%);background:#FBBF24;color:#0F172A;font-size:8.5px;font-weight:500;padding:2px 7px;border-radius:9999px;white-space:nowrap;box-shadow:0 2px 6px rgba(251,191,36,0.45)}
+  .vk-size{font-size:12.5px;font-weight:800;color:#0F172A;line-height:1.1}
+  .vk-price{font-size:11px;color:#64748B;margin-top:5px;line-height:1}
+  .vk-perL{font-size:9.5px;color:#94A3B8;margin-top:5px;line-height:1;font-weight:600}
+  .vk-arrow{display:none;position:absolute;top:-8px;right:-6px;width:20px;height:20px;border:2px solid #F8F8F8;border-radius:50%;background:#258046;color:#fff;align-items:center;justify-content:center;font-size:9px;box-shadow:0 2px 6px rgba(5,150,105,0.4);animation:vkBounce 1s ease-in-out infinite}
+  .var.cheaper .vk-arrow{display:flex}
+  .var.cheaper .vk-perL{color:#258046;font-weight:800}
+  @keyframes vkBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(2.5px)}}
+
+  /* What's inside · one bordered card · per-kit vs whole-pack toggle · dashed dividers between items */
+  .box{background:#FFFFFF;border:1px solid #EEF1F4;border-radius:16px;overflow:hidden;box-shadow:0 5px 14px -6px rgba(15,23,42,0.16),0 2px 5px -2px rgba(15,23,42,0.06)}
+  .seg{display:inline-flex;background:#F1F5F9;border-radius:9999px;padding:3px}
+  .seg button{border:0;background:transparent;font-size:11.5px;font-weight:700;color:#64748B;padding:5px 11px;border-radius:9999px;cursor:pointer;white-space:nowrap}
+  .seg button.on{background:#FFFFFF;color:#0F172A;box-shadow:0 1px 4px rgba(15,23,42,.14)}
+  .it{display:flex;align-items:center;gap:12px;padding:12px 14px;text-decoration:none;color:inherit}
+  .it + .it{border-top:1px dashed #E5E7EB}
+  .it-img{position:relative;width:56px;height:56px;border-radius:12px;background:#F8FAFC;border:1px solid #EEF1F4;display:flex;align-items:center;justify-content:center;padding:6px;flex-shrink:0}
+  .it-img img{max-width:100%;max-height:100%;object-fit:contain}
+  .it-nm{font-size:14px;font-weight:700;color:#0F172A;line-height:1.2}
+  .it-tech{font-size:11px;color:#94A3B8;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .it-chip{display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:12px;font-weight:700;color:#475569;background:#F1F5F9;border-radius:6px;padding:2px 8px}
+  .it-chip b{color:#0F172A;font-weight:800}
+  .it-tot{flex-shrink:0;text-align:right;line-height:1.15}
+  .it-tot .n{font-size:15px;font-weight:800;color:#0F172A}
+  .it-tot .s{font-size:10.5px;color:#94A3B8;font-weight:600}
+  .it.oos .it-img{opacity:.45;filter:grayscale(1)}
+  .it-oos{display:inline-block;margin-top:5px;font-size:10px;font-weight:800;color:#DC2626;background:#FEF2F2;border:1px solid #FECACA;border-radius:9999px;padding:1px 8px}
+  .box-ft{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;background:#F8FAFC;border-top:1px solid #F1F5F9;font-size:12px;color:#475569;font-weight:600}
+  .box-ft b{color:#0F172A;font-weight:800}
+  .more-it{width:100%;border:0;border-top:1px dashed #E5E7EB;background:#FFFFFF;padding:11px;font-size:12.5px;font-weight:700;color:#258046;cursor:pointer}
+
+  /* Price + ADD (same as PDP) */
+  .add-btn{height:48px;padding:0 22px;border-radius:12px;background:#258046;color:#FFFFFF;font-size:14.5px;font-weight:900;letter-spacing:0.06em;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 12px 22px -8px rgba(5,150,105,0.6),inset 0 1px 0 rgba(255,255,255,0.18);cursor:pointer;border:0;text-transform:uppercase}
+  .add-btn:active{transform:scale(.97)}
+  .add-btn.oos-add{background:#E2E8F0;color:#475569;box-shadow:none;letter-spacing:0;text-transform:none;font-weight:800}
+  .add-steps{display:none;height:48px;background:#258046;color:#FFFFFF;border-radius:12px;align-items:center;padding:0 4px;box-shadow:0 12px 22px -8px rgba(5,150,105,0.6)}
+  .add-steps button{width:38px;height:48px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#FFFFFF;background:transparent;border:0;cursor:pointer}
+  .add-steps .add-val{min-width:24px;text-align:center;font-size:14px;font-weight:900}
+
+  /* OOS banner */
+  .oos-bn{display:flex;gap:10px;align-items:flex-start;background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;padding:10px 12px;font-size:12px;color:#7F1D1D;line-height:1.4}
+  .oos-bn i{color:#DC2626;margin-top:2px}
+
+  /* Social proof */
+  .fb-card{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;background:linear-gradient(135deg,#ECFDF5 0%,#F0FDF4 100%);border:1px solid #A7F3D0}
+  .fb-avs{display:inline-flex;flex-shrink:0}
+  .fb-av{width:30px;height:30px;border-radius:50%;border:2px solid #FFFFFF;box-shadow:0 1px 3px rgba(15,23,42,0.15);background-size:cover;background-position:center}
+  .fb-av + .fb-av{margin-left:-10px}
+
+  /* Trust row + delivery (same as PDP) */
+  .trust-sep{height:1px;background:#F1F5F9;margin:18px 16px}
+  .trust-row{display:grid;grid-template-columns:1fr 1fr 1fr}
+  .trust-cell{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:0 4px}
+  .trust-ic-wrap{width:44px;height:44px;border-radius:12px;background:#ECFDF5;display:flex;align-items:center;justify-content:center}
+  .trust-ic-wrap i{color:#258046;font-size:18px}
+  .trust-cap{font-size:11.5px;color:#94A3B8;line-height:1.25}
+  .deliv-card{background:#FFFFFF;border:1px solid #EEF1F4;border-radius:14px;overflow:hidden;box-shadow:0 5px 14px -6px rgba(15,23,42,0.16),0 2px 5px -2px rgba(15,23,42,0.06)}
+  .deliv-ic{width:32px;height:32px;border-radius:10px;background:#ECFDF5;color:#258046;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+
+  /* Ask expert + certs + cart bar (same as PDP) */
+  .expert-banner{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;text-decoration:none;color:#FFFFFF;background:linear-gradient(145deg,#10B981,#065F46);box-shadow:0 8px 22px -6px rgba(16,185,129,0.55)}
+  .expert-banner .ph{width:46px;height:46px;border-radius:9999px;object-fit:cover;border:2px solid #FFFFFF;display:block}
+  .cert-strip{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap}
+  .cert-strip img{height:46px;width:auto;object-fit:contain;filter:grayscale(.65);opacity:.82}
+  .cart-fab{position:fixed;left:12px;right:12px;bottom:14px;z-index:60;display:none;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:18px;background:#0F172A;color:#FFFFFF;text-decoration:none;box-shadow:0 10px 28px rgba(0,0,0,0.28)}
+  .cart-fab .cart-ic{width:38px;height:38px;border-radius:9999px;background:#258046;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+  /* Sticky mini-header */
+  .stickyhd{position:fixed;top:28px;left:0;right:0;z-index:60;background:#FFFFFF;border-bottom:1px solid #F1F5F9;padding:12px 14px;display:flex;align-items:center;gap:12px;transform:translateY(-150%);transition:transform .25s ease;box-shadow:0 4px 12px -6px rgba(15,23,42,0.12)}
+  body.scrolled-past .stickyhd{transform:translateY(0)}
+  .stickyhd .back{width:36px;height:36px;border-radius:9999px;background:#FFFFFF;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#0F172A}
+  .stickyhd .thumb{width:44px;height:44px;border-radius:10px;background:#F8FAFC;border:1px solid #E5E7EB;padding:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  .stickyhd .thumb img{max-width:100%;max-height:100%;object-fit:contain}
+  .stickyhd .nm{font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .stickyhd .pr{font-size:13px;font-weight:800;margin-top:2px}
+  .stickyhd .pr .strike{color:#94A3B8;text-decoration:line-through;font-weight:500;margin-left:5px;font-size:11.5px}
+  .stickyhd .add-mini{flex-shrink:0;padding:0 16px;height:40px;border-radius:10px;background:#258046;color:#FFFFFF;font-size:13.5px;font-weight:900;letter-spacing:0.06em;border:0;cursor:pointer}
+  .stickyhd .add-mini.oos-add{background:#E2E8F0;color:#475569;letter-spacing:0}
+
+  /* FAQ */
+  .faq{background:#FFFFFF;border:1px solid #E5E7EB;border-radius:10px}
+  .faq summary{list-style:none;cursor:pointer;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:600}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq[open] summary i{transform:rotate(180deg)}
+  .faq summary i{transition:transform .2s;color:#94A3B8}
+  .faq p{margin:0;padding:0 14px 13px;font-size:12.5px;color:#475569;line-height:1.5}
+</style></head>
+<body>
+
+<!-- Sticky mini-header -->
+<div class="stickyhd" id="stickyHd">
+  <button class="back" onclick="if(document.referrer && history.length>1){history.back()}else{location.href='home.html'}"><i class="fa-solid fa-arrow-left text-[12px]"></i></button>
+  <div class="thumb"><img id="sThumb" src="" alt=""/></div>
+  <div class="flex-1 min-w-0 leading-tight">
+    <div class="nm" id="sName"></div>
+    <div class="pr tnum" id="sPrice"></div>
+  </div>
+  <button class="add-mini" id="sAdd">ADD</button>
+</div>
+
+<div class="flex items-center justify-between px-4 pt-3 text-[11px] font-semibold"><span>9:41</span><div class="flex items-center gap-1.5"><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 16h2M6 13h2M10 10h2M14 7h2M18 4h2" stroke="#0F172A" stroke-width="2.5"/></svg><svg width="14" height="10" viewBox="0 0 24 18" fill="none"><path d="M2 9c5-7 15-7 20 0M6 12c3-4 9-4 12 0M10 15c1-2 3-2 4 0" stroke="#0F172A" stroke-width="2"/></svg><svg width="20" height="11" viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="20" height="11" rx="2" stroke="#0F172A" stroke-width="1.5"/><rect x="3" y="3" width="14" height="7" rx="1" fill="#0F172A"/><rect x="22" y="4" width="2" height="5" rx="1" fill="#0F172A"/></svg></div></div>
+
+<!-- Top bar -->
+<div class="flex items-center justify-between px-4 pt-3">
+  <button onclick="if(document.referrer && history.length>1){history.back()}else{location.href='home.html'}" class="w-10 h-10 rounded-full bg-white/80 border border-[#E5E7EB] flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+  <div class="flex items-center gap-2">
+    <a href="search.html" aria-label="Search" class="w-10 h-10 rounded-full bg-white/80 border border-[#E5E7EB] flex items-center justify-center"><i class="fa-solid fa-magnifying-glass text-[15px]" style="color:#0F172A"></i></a>
+    <button aria-label="Share" class="w-10 h-10 rounded-full bg-white/80 border border-[#E5E7EB] flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg></button>
+  </div>
+</div>
+
+<!-- Gallery · slide 1 = kit photo, then one slide per item inside -->
+<div class="relative mt-2 mx-4" id="galWrap">
+  <div id="imgScroll" class="scrollx flex bg-[#ECEFF3] rounded-2xl aspect-square"></div>
+  <span class="absolute top-3 left-3 inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-md tracking-wide" style="background:#3D52A0;color:#fff"><i class="fa-solid fa-boxes-stacked text-[10px]"></i> COMBO KIT</span>
+  <span class="absolute top-3 right-3 inline-flex items-center gap-1.5 bg-white/95 px-2.5 py-1.5 rounded-full text-[13px] font-semibold shadow-sm">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="#FBBF24"><path d="M12 .587l3.668 7.568L24 9.423l-6 5.85L19.336 24 12 19.897 4.664 24 6 15.273 0 9.423l8.332-1.268z"/></svg>
+    <span class="tnum" id="gRating"></span><span class="font-medium tnum" style="color:#64748B" id="gRcount"></span>
+  </span>
+  <span id="gLabel" class="absolute bottom-9 left-1/2 -translate-x-1/2 text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap" style="background:rgba(15,23,42,.72);color:#fff"></span>
+  <div id="imgDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5"></div>
+</div>
+
+<!-- Title + kit formula -->
+<div class="px-4 mt-4">
+  <div class="flex items-start justify-between gap-3">
+    <div class="flex-1 min-w-0">
+      <h1 class="text-[23px] font-extrabold leading-tight" id="cName"></h1>
+      <div class="text-[12.5px] text-[#475569] mt-1 font-medium" id="cSub"></div>
+    </div>
+    <a href="categories.html?cat=combo" class="flex-shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-semibold uppercase tracking-[0.06em]" style="background:#EEF1FB;color:#3D52A0;border:1px solid #C7D0F0"><i class="fa-solid fa-boxes-stacked text-[9px]"></i> Combo</a>
+  </div>
+  <div class="mt-3">
+    <div class="text-[11px] font-semibold uppercase tracking-wider mb-1.5" style="color:#94A3B8">1 kit =</div>
+    <div class="kf" id="kitFormula"></div>
+  </div>
+</div>
+
+<!-- Price + ADD -->
+<div class="px-4 mt-4 flex items-center justify-between gap-3">
+  <div>
+    <div class="flex items-end gap-2 flex-wrap">
+      <span class="text-[28px] font-black tnum leading-none" id="pPrice"></span>
+      <span class="text-[14px] text-[#94A3B8] line-through tnum leading-none" id="pMrp"></span>
+    </div>
+    <div class="text-[12.5px] font-semibold mt-1" style="color:#258046" id="pSave"></div>
+    <div class="text-[11.5px] font-medium mt-0.5" style="color:#64748B" id="pPerKit"></div>
+  </div>
+  <div>
+    <button class="add-btn" id="addBtn"></button>
+    <div class="add-steps" id="addSteps"><button id="addDec">−</button><span class="add-val tnum" id="addVal">1</span><button id="addInc">+</button></div>
+  </div>
+</div>
+
+<!-- OOS banner · ?state=oos -->
+<div class="px-4 mt-3" id="oosWrap" style="display:none"><div class="oos-bn"><i class="fa-solid fa-circle-exclamation"></i><div id="oosTxt"></div></div></div>
+
+<!-- Pack selector · Pack of 1 / 2 / 5 / 10 · hidden when the kit is sold only as one pack -->
+<div class="px-4 mt-5" id="packSec">
+  <div class="flex items-baseline justify-between mb-3">
+    <div class="text-[15px] font-semibold">Choose pack</div>
+    <div class="text-[11px] font-semibold text-[#64748B]">More kits = lower price per kit</div>
+  </div>
+  <div class="pack-grid" id="packGrid"></div>
+</div>
+
+<!-- What's inside · per kit vs whole pack -->
+<div class="px-4 mt-5">
+  <div class="box">
+    <div class="flex items-center justify-between gap-2 px-4 pt-3.5 pb-2.5">
+      <div class="min-w-0">
+        <div class="text-[15px] font-bold">What's inside</div>
+        <div class="text-[11.5px] font-medium mt-0.5" style="color:#64748B" id="boxSub"></div>
+      </div>
+      <div class="seg" id="boxSeg"><button data-m="kit" class="on">1 kit</button><button data-m="pack" id="segPack">Pack of 5</button></div>
+    </div>
+    <div id="boxList"></div>
+    <div class="box-ft" id="boxFt"></div>
+  </div>
+</div>
+
+<!-- Farmers ordered · real order count from orders_v2, last 6 months -->
+<div class="px-4 mt-4">
+  <div class="fb-card">
+    <div class="fb-avs">
+      <span class="fb-av" style="background-image:url('https://images.unsplash.com/photo-1627638458498-71e9fdf12a05?w=120&q=80')"></span>
+      <span class="fb-av" style="background-image:url('https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?w=120&q=80')"></span>
+      <span class="fb-av" style="background-image:url('https://images.unsplash.com/photo-1572177812156-58036aae439c?w=120&q=80')"></span>
+    </div>
+    <div class="leading-tight"><div class="text-[13px] font-extrabold"><span class="tnum" style="color:#258046" id="fbNum"></span> farmers ordered this kit</div><div class="text-[10.5px] font-semibold mt-0.5" style="color:#64748B">in the last 6 months</div></div>
+  </div>
+</div>
+
+<div class="trust-sep"></div>
+<div class="px-4">
+  <div class="trust-row">
+    <div class="trust-cell"><span class="trust-ic-wrap"><i class="fa-solid fa-rotate-left"></i></span><span class="trust-cap">7-Day Return</span></div>
+    <div class="trust-cell"><span class="trust-ic-wrap"><i class="fa-solid fa-indian-rupee-sign"></i></span><span class="trust-cap">Cash on Delivery</span></div>
+    <div class="trust-cell"><span class="trust-ic-wrap"><i class="fa-solid fa-shield-halved"></i></span><span class="trust-cap">Katyayani Assured</span></div>
+  </div>
+</div>
+
+<!-- Delivery · weight changes with the pack -->
+<div class="px-4 mt-5">
+  <div class="deliv-card">
+    <div class="flex items-center gap-2.5 px-3.5 py-3">
+      <span class="deliv-ic"><i class="fa-solid fa-truck-fast"></i></span>
+      <div class="flex-1 leading-tight">
+        <div class="text-[14.5px] font-semibold">Tomorrow, 16 Oct</div>
+        <div class="text-[11.5px] mt-0.5" style="color:#64748B">All items arrive together · <span id="dWeight" class="font-bold text-[#0F172A]"></span></div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2.5 px-3.5 py-2.5" style="background:#F8FAFC;border-top:1px solid #F1F5F9">
+      <i class="fa-solid fa-location-dot text-[14px]" style="color:#94A3B8"></i>
+      <div class="flex-1 min-w-0 text-[12.5px] font-semibold truncate" style="color:#475569">Mahidpur, Ujjain · 456440</div>
+      <a href="addresses.html" class="text-[12px] font-extrabold uppercase" style="color:#258046;text-decoration:none">Change</a>
+    </div>
+  </div>
+</div>
+
+<!-- How to use · each item keeps its own dose · send farmer to the item -->
+<div class="px-4 mt-5">
+  <div class="text-[16px] font-bold mb-2">How to use</div>
+  <div class="box px-4 py-3.5">
+    <div class="text-[12.5px] leading-relaxed" style="color:#475569" id="useTxt"></div>
+    <div class="flex flex-wrap gap-1.5 mt-3" id="useChips"></div>
+  </div>
+</div>
+
+<!-- FAQ · combo-specific -->
+<div class="px-4 mt-6">
+  <div class="text-[16px] font-bold mb-3">Questions &amp; answers</div>
+  <div class="space-y-2" id="faqList"></div>
+</div>
+
+<div class="px-4 mt-6 mb-6">
+  <a href="doctor-call.html" class="expert-banner">
+    <img src="../assets/expert.png" class="ph" alt="Krishi expert"/>
+    <span class="flex-1 leading-tight"><span class="block text-[14px] font-semibold">Ask Expert</span><span class="block text-[11px] font-semibold" style="color:rgba(255,255,255,0.85)">Not sure which kit? Free call · 5 mins</span></span>
+    <span class="text-[18px] font-extrabold">→</span>
+  </a>
+</div>
+
+<div class="px-4 mb-6 mt-4">
+  <div class="text-[11px] font-semibold uppercase tracking-wider text-center mb-3" style="color:#94A3B8">Certified &amp; quality assured</div>
+  <div class="cert-strip">
+    <img src="../assets/certs/iso.png" alt="ISO"/><img src="../assets/certs/gmp.png" alt="GMP"/><img src="../assets/certs/organic.png" alt="Organic"/><img src="../assets/certs/eurocert.png" alt="EURO CERT"/>
+  </div>
+</div>
+
+<!-- Floating cart bar -->
+<a href="cart.html" id="cartBar" class="cart-fab">
+  <div class="flex items-center gap-3 min-w-0">
+    <div class="cart-ic"><i class="fa-solid fa-bag-shopping text-white text-[14px]"></i></div>
+    <div class="leading-tight min-w-0">
+      <div class="text-[18px] font-bold tnum" id="cbTotal"></div>
+      <div class="text-[11px] text-white/70 font-medium truncate" id="cbSub"></div>
+    </div>
+  </div>
+  <div class="flex items-center gap-1.5 text-[12.5px] font-semibold flex-shrink-0"><span>View cart</span><i class="fa-solid fa-arrow-right text-[10px]"></i></div>
+</a>
+
+<script>
+(function(){
+  var CDN = 'https://cdn.shopify.com/s/files/1/0762/3639/0696/files/';
+  // u: GM | KG | ML | L · v: size of one unit · q: units of this product in ONE kit (combos_v2.products[].item_qty)
+  // packs: [pack_qty, kkd_app price, mrp, combo SKU]
+  window.KKD_COMBOS = {
+    dhan: {
+      name:'Dhan Bali Vikas Combo', sub:'For paddy · bigger, fuller bali (panicle)', crop:'Paddy',
+      rating:'4.5', rcount:'(312)', orders:185, kg:2.7, defPack:1,
+      hero: CDN+'Dhan_-_Bali_Vikas_Combo_1.jpg?v=1779865474&width=800',
+      packs:[[1,1933,4074,'K-8423'],[2,3834,8148,'K-8424'],[5,9461,20370,'K-8425'],[10,18481,40740,'K-8426']],
+      items:[
+        {nm:'NPK 00:52:34', tech:'Mono Potassium Phosphate', v:1, u:'KG', q:2, img:CDN+'NPK00-52-34Front_a003f055-4bcd-49ed-ab41-c3de4e8cf1ea.webp?v=1758103243&width=300'},
+        {nm:'Boron 20%', tech:'Boron 20% EDTA', v:500, u:'GM', q:1, img:CDN+'boron_20.jpg?v=1779859197&width=300'},
+        {nm:'Mix Micronutrient', tech:'Zinc 3% + Iron 2% + Mn 1% + Cu 0.5% + B 0.5%', v:100, u:'GM', q:2, img:CDN+'Mix_Micro_2.webp?v=1770201699&width=300'}
+      ]
+    },
+    trishul: {
+      name:'Paddy Trishul Combo', sub:'For paddy · stem borer control + strong roots', crop:'Paddy',
+      rating:'4.6', rcount:'(204)', orders:139, kg:11, defPack:1,
+      hero: CDN+'Paddy_trishul_combo.png?v=1784267419&width=800',
+      packs:[[1,2499,4500,'K-7734'],[2,4600,8280,'K-7735'],[5,8751,15750,'K-7736'],[10,17299,31140,'K-7737']],
+      items:[
+        {nm:'Fantastic GR', tech:'Chlorantraniliprole 0.4% GR', v:4, u:'KG', q:1, img:CDN+'fantasticBori_1.jpg?v=1784535196&width=300'},
+        {nm:'Humic + Fulvic 98', tech:'Humic Acid 98% + Fulvic Acid', v:1, u:'KG', q:2, img:CDN+'Humic_1_4325fa3d-821f-4a80-af25-0f2909c0f0f4.jpg?v=1779783915&width=300'},
+        {nm:'Zinc Sulphate 33%', tech:'Zinc Sulphate Monohydrate', v:1, u:'KG', q:5, img:CDN+'zinc_sulphate_33.jpg?v=1785318323&width=300'}
+      ]
+    },
+    antivirus: {
+      name:'Anti Virus Kit', sub:'For all crops · leaf curl &amp; mosaic virus', crop:'All crops',
+      rating:'4.4', rcount:'(486)', orders:303, kg:0.75, defPack:1,
+      hero: CDN+'1_ecde74aa-75d4-4656-bf8b-351cafcc327e.png?v=1782480718&width=800',
+      packs:[[1,1034,2472,'K-6060']],
+      items:[
+        {nm:'Sarvashakti', tech:'Plant extracts + essential organic oil', v:250, u:'ML', q:1, img:CDN+'Sarvashakti.webp?v=1750227035&width=300'},
+        {nm:'Anti Virus', tech:'Herbal viricide', v:250, u:'ML', q:2, img:CDN+'Buy1get1free_2.webp?v=1764654266&width=300', p:'antivirus'}
+      ]
+    },
+    bph4: {
+      name:'Paddy 4th BPH Management Combo', sub:'For paddy · 55–70 days · milk to dough stage', crop:'Paddy',
+      rating:'4.5', rcount:'(167)', orders:219, kg:0.49, defPack:1,
+      hero: CDN+'Paddy_4th_Spray_BPH_Management_Combo_1.png?v=1790228521&width=800',
+      packs:[[1,1283,2956,'K-10725']],
+      items:[
+        {nm:'BPH Super+', tech:'Dinotefuran 15% + Pymetrozine 45% WG', v:134, u:'GM', q:1, img:CDN+'BPH_Super_Plus.webp?v=1728539169&width=300'},
+        {nm:'Azotri Pro', tech:'Azoxystrobin 16.7% + Tricyclazole 33.3% SC', v:100, u:'ML', q:1, img:CDN+'azotri_pro_1.jpg?v=1781073994&width=300'},
+        {nm:'Kmycin', tech:'Streptomycin Sulphate 90% + Tetracycline 10%', v:6, u:'GM', q:1, img:'https://katyayanikrishidirect.com/cdn/shop/files/Kmycin.webp?v=1749560516&width=300'},
+        {nm:'Catalyser', tech:'Silicon 50% · spreader', v:250, u:'ML', q:1, img:CDN+'5427824_2.webp?v=1757505380&width=300'}
+      ]
+    }
+  };
+
+  var Q = new URLSearchParams(location.search);
+  var C = KKD_COMBOS[Q.get('c')] || KKD_COMBOS.dhan;
+  var OOS = Q.get('state') === 'oos';
+  var oosIdx = OOS ? Math.min(1, C.items.length-1) : -1;   // demo: 2nd item in the kit is out of stock
+  var packIdx = Math.max(0, C.packs.findIndex(function(p){ return p[0] === (+Q.get('pack') || C.defPack); }));
+  var mode = 'kit', qty = 0, showAll = false;
+
+  function inr(n){ return '₹' + Math.round(n).toLocaleString('en-IN'); }
+  function sizeTxt(v,u){ return v + ' ' + ({GM:'g',KG:'kg',ML:'ml',L:'L'})[u]; }
+  // total amount of one product · converts g→kg and ml→L once it crosses 1000
+  function amt(v,u,n){
+    var t = v*n;
+    if (u==='GM' && t>=1000) return +(t/1000).toFixed(2) + ' kg';
+    if (u==='ML' && t>=1000) return +(t/1000).toFixed(2) + ' L';
+    return +t.toFixed(2) + ' ' + ({GM:'g',KG:'kg',ML:'ml',L:'L'})[u];
+  }
+  function unitsPerKit(){ return C.items.reduce(function(s,i){ return s+i.q; },0); }
+  function kgTxt(k){ return k<1 ? Math.round(k*1000)+' g' : (+k.toFixed(1))+' kg'; }
+  function cur(){ return C.packs[packIdx]; }
+
+  /* ---------- static bits ---------- */
+  document.title = 'KKD · ' + C.name;
+  document.getElementById('cName').textContent = C.name;
+  document.getElementById('cSub').innerHTML = C.sub;
+  document.getElementById('gRating').textContent = C.rating;
+  document.getElementById('gRcount').textContent = C.rcount;
+  document.getElementById('fbNum').textContent = C.orders + '+';
+  document.getElementById('sThumb').src = C.hero;
+  document.getElementById('sName').textContent = C.name;
+
+  // gallery
+  var slides = [{img:C.hero, lb:'Full kit · ' + C.items.length + ' products'}].concat(C.items.map(function(i){ return {img:i.img, lb:i.nm + ' · ' + sizeTxt(i.v,i.u) + ' × ' + i.q}; }));
+  document.getElementById('imgScroll').innerHTML = slides.map(function(s,k){
+    return '<div class="snap-c w-full flex-shrink-0 flex items-center justify-center ' + (k? 'p-10':'p-3') + '"><img src="'+s.img+'" class="img-blend max-h-full max-w-full object-contain rounded-xl" alt=""/></div>';
+  }).join('');
+  document.getElementById('imgDots').innerHTML = slides.map(function(_,k){ return '<span class="pg-dot'+(k?'':' active')+'"></span>'; }).join('');
+  var sc = document.getElementById('imgScroll'), gl = document.getElementById('gLabel');
+  function onSlide(){
+    var k = Math.round(sc.scrollLeft / sc.clientWidth);
+    document.querySelectorAll('#imgDots .pg-dot').forEach(function(d,j){ d.classList.toggle('active', j===k); });
+    gl.textContent = slides[k] ? slides[k].lb : '';
+  }
+  sc.addEventListener('scroll', onSlide); onSlide();
+
+  // kit formula strip · tap a thumb → jump the gallery to that item
+  document.getElementById('kitFormula').innerHTML = C.items.map(function(i,k){
+    return (k? '<span class="kf-plus">+</span>':'') + '<button class="kf-it" data-slide="'+(k+1)+'" title="'+i.nm+'" style="cursor:pointer"><img src="'+i.img+'" alt=""/><span class="kf-q tnum">×'+i.q+'</span></button>';
+  }).join('');
+  document.querySelectorAll('[data-slide]').forEach(function(b){ b.addEventListener('click', function(){ sc.scrollTo({left: sc.clientWidth * +b.dataset.slide, behavior:'smooth'}); }); });
+
+  // pack grid · per-kit price under each tile · ↓ arrow on packs cheaper per kit than the selected one
+  var single = C.packs.length === 1;
+  document.getElementById('packSec').style.display = single ? 'none' : '';
+  document.getElementById('packGrid').innerHTML = C.packs.map(function(p,k){
+    return '<button class="var' + (k===0?' bestseller':'') + '" data-i="'+k+'">' + (k===0?'<span class="vk-badge">Bestseller</span>':'') +
+      '<span class="vk-arrow"><i class="fa-solid fa-arrow-down"></i></span>' +
+      '<div class="vk-size">Pack of ' + p[0] + '</div><div class="vk-price tnum">' + inr(p[1]) + '</div><div class="vk-perL tnum">' + inr(p[1]/p[0]) + '/kit</div></button>';
+  }).join('');
+  document.querySelectorAll('#packGrid .var').forEach(function(b){ b.addEventListener('click', function(){ packIdx = +b.dataset.i; if (cur()[0]===1) mode='kit'; render(); }); });
+
+  document.querySelectorAll('#boxSeg button').forEach(function(b){ b.addEventListener('click', function(){ mode = b.dataset.m; render(); }); });
+
+  // use + FAQ
+  document.getElementById('useTxt').innerHTML = 'Every product in this kit keeps <b class="text-[#0F172A]">its own dose and spray timing</b>. Tap a product below to see how much to use per acre and when.';
+  document.getElementById('useChips').innerHTML = C.items.map(function(i){
+    return '<a href="pdp.html'+(i.p?'?p='+i.p:'')+'" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-semibold" style="background:#ECFDF5;color:#258046;border:1px solid #A7F3D0;text-decoration:none">'+i.nm+' dose <i class="fa-solid fa-chevron-right text-[9px]"></i></a>';
+  }).join('');
+  var faqs = [
+    ['Can I return just one item from the kit?', 'Returns are taken for the full kit. If one item reached you damaged or wrong, raise it within 7 days and we replace that item.'],
+    ['Is the kit cheaper than buying items one by one?', 'Yes. The kit price is lower than the total MRP of the items inside, and bigger packs lower the price per kit further.'],
+    ['Will all items come in one delivery?', 'Yes. Every item in the kit is packed and delivered together.']
+  ];
+  if (!single) faqs.splice(1,0,['What does "Pack of ' + C.packs[C.packs.length-1][0] + '" mean?', 'You get ' + C.packs[C.packs.length-1][0] + ' full kits. Each kit has the same items listed under "What\'s inside". Switch to the "Pack of" tab there to see the total quantity you receive.']);
+  document.getElementById('faqList').innerHTML = faqs.map(function(f){ return '<details class="faq"><summary>'+f[0]+'<i class="fa-solid fa-chevron-down text-[12px]"></i></summary><p>'+f[1]+'</p></details>'; }).join('');
+
+  if (OOS) {
+    document.getElementById('oosWrap').style.display = '';
+    document.getElementById('oosTxt').innerHTML = '<b>' + C.items[oosIdx].nm + '</b> is out of stock, so this kit can\'t be ordered right now. We\'ll notify you when it\'s back.';
+  }
+
+  /* ---------- render (changes with pack / mode / qty) ---------- */
+  function render(){
+    var p = cur(), n = p[0], kits = n;
+    var off = Math.round((1 - p[1]/p[2]) * 100);
+    // price
+    document.getElementById('pPrice').textContent = inr(p[1]);
+    document.getElementById('pMrp').textContent = 'MRP ' + inr(p[2]);
+    document.getElementById('pSave').textContent = off + '% off · You save ' + inr(p[2]-p[1]);
+    var base = C.packs[0][1] / C.packs[0][0];
+    document.getElementById('pPerKit').innerHTML = n>1 ? (inr(p[1]/n) + ' per kit · ' + n + ' kits' + (p[1]/n < base ? '<br><span style="color:#258046;font-weight:700">' + inr(base*n - p[1]) + ' cheaper than ' + n + ' single kits</span>' : '')) : '';
+    document.getElementById('sPrice').innerHTML = inr(p[1]) + ' <span class="strike">' + inr(p[2]) + '</span>' + (n>1 ? ' <span style="color:#64748B;font-weight:600;font-size:11.5px">· Pack of ' + n + '</span>' : '');
+    // pack tiles
+    document.querySelectorAll('#packGrid .var').forEach(function(b,k){
+      b.classList.toggle('active', k===packIdx);
+      b.classList.toggle('cheaper', (C.packs[k][1]/C.packs[k][0]) < (p[1]/n) - 0.5);
+    });
+    // segmented toggle · only when pack > 1
+    var segPack = document.getElementById('segPack');
+    document.getElementById('boxSeg').style.display = n>1 ? '' : 'none';
+    segPack.textContent = 'Pack of ' + n;
+    document.querySelectorAll('#boxSeg button').forEach(function(b){ b.classList.toggle('on', b.dataset.m===mode); });
+    var mult = mode==='pack' ? n : 1;
+    var upk = unitsPerKit();
+    document.getElementById('boxSub').textContent = mode==='pack'
+      ? 'Total you get in ' + n + ' kits'
+      : C.items.length + ' products · ' + upk + ' units in each kit';
+    // item rows
+    var LIM = 3, list = (showAll || C.items.length <= LIM+1) ? C.items : C.items.slice(0, LIM);
+    var html = list.map(function(i){
+      var k = C.items.indexOf(i), units = i.q * mult, isOos = k===oosIdx;
+      return '<a class="it'+(isOos?' oos':'')+'" href="pdp.html'+(i.p?'?p='+i.p:'')+'">' +
+        '<span class="it-img"><img src="'+i.img+'" alt=""/></span>' +
+        '<span class="flex-1 min-w-0"><span class="it-nm block">'+i.nm+'</span><span class="it-tech block">'+i.tech+'</span>' +
+        '<span class="it-chip tnum">'+sizeTxt(i.v,i.u)+' <b>× '+units+'</b></span>' + (isOos?'<br><span class="it-oos">Out of stock</span>':'') + '</span>' +
+        '<span class="it-tot"><span class="n block tnum">'+amt(i.v,i.u,units)+'</span><span class="s block">'+units+' '+(units>1?'units':'unit')+'</span></span></a>';
+    }).join('');
+    if (list.length < C.items.length) html += '<button class="more-it" id="moreIt">Show ' + (C.items.length-list.length) + ' more item' + (C.items.length-list.length>1?'s':'') + ' <i class="fa-solid fa-chevron-down text-[10px]"></i></button>';
+    document.getElementById('boxList').innerHTML = html;
+    var mi = document.getElementById('moreIt'); if (mi) mi.addEventListener('click', function(){ showAll = true; render(); });
+    document.getElementById('boxFt').innerHTML = mode==='pack'
+      ? '<span><b class="tnum">' + upk*n + ' units</b> · ' + n + ' kits</span><span class="tnum">~' + kgTxt(C.kg*n) + '</span>'
+      : '<span><b class="tnum">' + upk + ' units</b> per kit</span><span class="tnum">~' + kgTxt(C.kg) + ' per kit</span>';
+    // delivery weight
+    document.getElementById('dWeight').textContent = '~' + kgTxt(C.kg*n*Math.max(qty,1));
+    // ADD / stepper / cart bar
+    var add = document.getElementById('addBtn'), steps = document.getElementById('addSteps'), sAdd = document.getElementById('sAdd'), bar = document.getElementById('cartBar');
+    if (OOS) {
+      add.className = 'add-btn oos-add'; add.innerHTML = '<i class="fa-regular fa-bell"></i> Notify me'; add.style.display='flex'; steps.style.display='none';
+      sAdd.className = 'add-mini oos-add'; sAdd.textContent = 'Notify'; bar.style.display = 'none'; return;
+    }
+    add.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ADD';
+    add.style.display = qty ? 'none' : 'flex';
+    steps.style.display = qty ? 'flex' : 'none';
+    document.getElementById('addVal').textContent = qty;
+    sAdd.textContent = qty ? qty + ' added' : 'ADD';
+    bar.style.display = qty ? 'flex' : 'none';
+    document.getElementById('cbTotal').textContent = inr(p[1]*qty);
+    document.getElementById('cbSub').textContent = qty + ' × ' + (n>1 ? 'Pack of ' + n + ' = ' + qty*n + ' kits' : '1 kit');
+  }
+
+  function inc(){ if (OOS) { return notify(); } qty++; render(); }
+  function notify(){ var a = document.getElementById('addBtn'); a.innerHTML = '<i class="fa-solid fa-check"></i> We\'ll notify you'; document.getElementById('sAdd').textContent = 'Notified'; }
+  document.getElementById('addBtn').addEventListener('click', inc);
+  document.getElementById('sAdd').addEventListener('click', function(){ if (!qty || OOS) inc(); });
+  document.getElementById('addInc').addEventListener('click', inc);
+  document.getElementById('addDec').addEventListener('click', function(){ qty = Math.max(0, qty-1); render(); });
+
+  // sticky header after the gallery
+  var gw = document.getElementById('galWrap');
+  window.addEventListener('scroll', function(){ document.body.classList.toggle('scrolled-past', gw.getBoundingClientRect().bottom < 60); });
+
+  if (Q.get('added')) qty = 1;
+  if (Q.get('view') === 'pack' && cur()[0] > 1) mode = 'pack';
+  render();
+})();
+</script>
+</body></html>

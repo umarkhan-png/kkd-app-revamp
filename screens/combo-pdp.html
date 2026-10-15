@@ -157,10 +157,10 @@
   <div class="flex items-start justify-between gap-3">
     <div class="flex-1 min-w-0">
       <h1 class="text-[23px] font-extrabold leading-tight" id="cName"></h1>
-      <div class="text-[12.5px] text-[#475569] mt-1 font-medium" id="cSub"></div>
     </div>
     <a href="categories.html?cat=combo" class="flex-shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-semibold uppercase tracking-[0.06em]" style="background:#EEF1FB;color:#3D52A0;border:1px solid #C7D0F0"><i class="fa-solid fa-boxes-stacked text-[9px]"></i> Combo</a>
   </div>
+  <div class="text-[12.5px] text-[#475569] mt-1 font-medium whitespace-nowrap overflow-hidden text-ellipsis" id="cSub"></div>
 </div>
 
 <!-- Price + ADD -->
@@ -448,7 +448,7 @@
         '<span class="it-img"><img src="'+i.img+'" alt=""/></span>' +
         '<span class="flex-1 min-w-0"><span class="it-nm block">'+i.nm+'</span><span class="it-tech block">'+i.tech+'</span>' +
         '<span class="it-chip tnum">'+sizeTxt(i.v,i.u)+' <b>× '+units+'</b></span>' + (isOos?'<br><span class="it-oos">Out of stock</span>':'') + '</span>' +
-        '<span class="it-tot"><span class="n block tnum">'+amt(i.v,i.u,units)+'</span><span class="s block">'+units+' '+(units>1?'units':'unit')+'</span></span></a>';
+        '<span class="it-tot"><span class="n block tnum">'+amt(i.v,i.u,units)+'</span></span></a>';
     }).join('');
     if (list.length < C.items.length) html += '<button class="more-it" id="moreIt">Show ' + (C.items.length-list.length) + ' more item' + (C.items.length-list.length>1?'s':'') + ' <i class="fa-solid fa-chevron-down text-[10px]"></i></button>';
     document.getElementById('boxList').innerHTML = html;

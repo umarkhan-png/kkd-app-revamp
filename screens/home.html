@@ -1285,60 +1285,26 @@
           </div>
         </a>
 
-      </div>
-    </section>
+        <!-- Combo bestseller · full-width (spans both columns) so the 2×2 grid stays even · kit photo left, items × qty + pack options right · opens combo-pdp.html -->
+        <a href="combo-pdp.html?c=dhan" class="nu col-span-2 rounded-2xl overflow-hidden flex" style="background:#FFFFFF;border:1px solid #EEF1F4;box-shadow:0 5px 14px -6px rgba(15,23,42,0.18),0 2px 5px -2px rgba(15,23,42,0.07)">
+          <div class="relative flex items-center justify-center p-2 flex-shrink-0" style="background:#F8FAFC;width:42%">
+            <img src="https://cdn.shopify.com/s/files/1/0762/3639/0696/files/Dhan_-_Bali_Vikas_Combo_1.jpg?v=1779865474&width=400" class="max-h-full object-contain rounded-lg" alt=""/>
+            <span class="absolute top-2 left-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-semibold tracking-wider" style="background:#3D52A0;color:#FFFFFF"><i class="fa-solid fa-boxes-stacked text-[7.5px]"></i>COMBO</span>
+          </div>
+          <div class="p-2.5 flex-1 min-w-0 flex flex-col">
+            <div class="text-[14.5px] font-semibold text-[#0F172A] leading-tight">Dhan Bali Vikas Combo</div>
+            <div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">NPK + Boron + Mix Micro</div>
+            <div class="inline-flex self-start items-center px-2 py-0.5 rounded text-[11px] font-semibold mt-1.5" style="background:#F1F5F9;color:#475569">Pack of 1 · 2 · 5 · 10</div>
+            <div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">
+              <span class="text-[18px] font-bold tnum text-[#0F172A]">₹1,933</span>
+              <span class="text-[11.5px] text-[#94A3B8] line-through tnum">₹4,074</span>
+              <span class="text-[10.5px] font-semibold" style="color:#258046">53% off</span>
+            </div>
+            <span class="mt-auto pt-2"><span class="w-full h-8 rounded-lg text-[12.5px] font-semibold text-white flex items-center justify-center" style="background:#258046">4 Options</span></span>
+          </div>
+        </a>
 
-    <!-- Combo kits · most-ordered combos (CRM orders_v2, last 6 months) · each card shows the kit formula (item thumbs × qty) + "Pack of" options · opens combo-pdp.html -->
-    <section class="mt-8">
-      <div class="px-4 mb-3 flex items-baseline justify-between">
-        <div>
-          <h2 class="text-[21px] font-extrabold tracking-tight">Combo kits</h2>
-          <div class="text-[12px] font-medium mt-0.5" style="color:#64748B">Everything for one spray, in one box</div>
-        </div>
-        <a href="categories.html?cat=combo" class="nu text-[13px] font-semibold" style="color:#258046">See all</a>
       </div>
-      <style>
-        .ck-card{flex-shrink:0;width:250px;background:#FFFFFF;border:1px solid #EEF1F4;border-radius:16px;overflow:hidden;box-shadow:0 5px 14px -6px rgba(15,23,42,0.18),0 2px 5px -2px rgba(15,23,42,0.07);text-decoration:none;color:#0F172A;display:flex;flex-direction:column}
-        .ck-img{height:150px;background:#F8FAFC;position:relative;display:flex;align-items:center;justify-content:center;padding:8px}
-        .ck-img img{max-width:100%;max-height:100%;object-fit:contain;border-radius:10px}
-        .ck-tag{position:absolute;top:8px;left:8px;display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;background:#3D52A0;color:#fff}
-        .ck-packs{position:absolute;bottom:8px;left:8px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:9999px;background:rgba(255,255,255,.95);color:#3D52A0;border:1px solid #C7D0F0}
-        .ck-f{display:flex;align-items:center;gap:4px;margin-top:8px}
-        .ck-f .t{position:relative;width:32px;height:32px;border-radius:8px;background:#F8FAFC;border:1px solid #EEF1F4;display:flex;align-items:center;justify-content:center;padding:3px}
-        .ck-f .t img{max-width:100%;max-height:100%;object-fit:contain}
-        .ck-f .t b{position:absolute;right:-5px;bottom:-5px;font-size:8.5px;font-weight:800;background:#0F172A;color:#fff;border-radius:9999px;padding:0 4px;line-height:14px;border:1.5px solid #fff}
-        .ck-f .p{font-size:11px;font-weight:800;color:#94A3B8}
-      </style>
-      <div class="flex gap-3 px-4 pb-2" style="overflow-x:auto;scrollbar-width:none" id="comboRail"></div>
-      <script>
-        (function(){
-          var CDN='https://cdn.shopify.com/s/files/1/0762/3639/0696/files/';
-          // [key, name, sub, hero, packs[], price(pack 1), mrp(pack 1), items [[img, qty]], units, orders]
-          var K=[
-            ['dhan','Dhan Bali Vikas Combo','For paddy · fuller bali',CDN+'Dhan_-_Bali_Vikas_Combo_1.jpg?v=1779865474&width=500',[1,2,5,10],1933,4074,[[CDN+'NPK00-52-34Front_a003f055-4bcd-49ed-ab41-c3de4e8cf1ea.webp?v=1758103243&width=120',2],[CDN+'boron_20.jpg?v=1779859197&width=120',1],[CDN+'Mix_Micro_2.webp?v=1770201699&width=120',2]]],
-            ['antivirus','Anti Virus Kit','All crops · leaf curl virus',CDN+'1_ecde74aa-75d4-4656-bf8b-351cafcc327e.png?v=1782480718&width=500',[1],1034,2472,[[CDN+'Sarvashakti.webp?v=1750227035&width=120',1],[CDN+'Buy1get1free_2.webp?v=1764654266&width=120',2]]],
-            ['bph4','Paddy 4th BPH Combo','For paddy · 55–70 days',CDN+'Paddy_4th_Spray_BPH_Management_Combo_1.png?v=1790228521&width=500',[1],1283,2956,[[CDN+'BPH_Super_Plus.webp?v=1728539169&width=120',1],[CDN+'azotri_pro_1.jpg?v=1781073994&width=120',1],['https://katyayanikrishidirect.com/cdn/shop/files/Kmycin.webp?v=1749560516&width=120',1],[CDN+'5427824_2.webp?v=1757505380&width=120',1]]],
-            ['trishul','Paddy Trishul Combo','For paddy · stem borer',CDN+'Paddy_trishul_combo.png?v=1784267419&width=500',[1,2,5,10],2499,4500,[[CDN+'fantasticBori_1.jpg?v=1784535196&width=120',1],[CDN+'Humic_1_4325fa3d-821f-4a80-af25-0f2909c0f0f4.jpg?v=1779783915&width=120',2],[CDN+'zinc_sulphate_33.jpg?v=1785318323&width=120',5]]]
-          ];
-          document.getElementById('comboRail').innerHTML=K.map(function(c){
-            var units=c[7].reduce(function(s,i){return s+i[1];},0), multi=c[4].length>1, off=Math.round((1-c[5]/c[6])*100);
-            return '<a class="ck-card" href="combo-pdp.html?c='+c[0]+'">'+
-              '<div class="ck-img"><img src="'+c[3]+'" alt=""/><span class="ck-tag"><i class="fa-solid fa-boxes-stacked text-[8px]"></i>COMBO</span>'+
-              (multi?'<span class="ck-packs">Pack of '+c[4].join(' · ')+'</span>':'')+'</div>'+
-              '<div class="p-3 flex flex-col flex-1">'+
-                '<div class="text-[14.5px] font-semibold leading-tight truncate">'+c[1]+'</div>'+
-                '<div class="text-[11px] mt-0.5 truncate" style="color:#94A3B8">'+c[2]+'</div>'+
-                '<div class="ck-f">'+c[7].map(function(i,k){return (k?'<span class="p">+</span>':'')+'<span class="t"><img src="'+i[0]+'" alt=""/><b>×'+i[1]+'</b></span>';}).join('')+'</div>'+
-                '<div class="text-[10.5px] font-semibold mt-2" style="color:#64748B">'+c[7].length+' products · '+units+' units per kit</div>'+
-                '<div class="flex items-baseline gap-1.5 mt-1.5 flex-wrap">'+(multi?'<span class="text-[11px] font-medium" style="color:#64748B">from</span>':'')+
-                  '<span class="text-[18px] font-bold tnum">₹'+c[5].toLocaleString('en-IN')+'</span>'+
-                  '<span class="text-[11.5px] line-through tnum" style="color:#94A3B8">₹'+c[6].toLocaleString('en-IN')+'</span>'+
-                  '<span class="text-[10.5px] font-semibold" style="color:#258046">'+off+'% off</span></div>'+
-                '<span class="mt-2.5 w-full h-8 rounded-lg text-[12.5px] font-semibold text-white flex items-center justify-center" style="background:#258046">'+(multi?c[4].length+' Pack options':'View kit')+'</span>'+
-              '</div></a>';
-          }).join('');
-        })();
-      </script>
     </section>
 
     <!-- Recently viewed · light-purple full-bleed section · cards match the Bestseller product-card style -->

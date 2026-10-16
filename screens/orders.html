@@ -683,4 +683,11 @@
   })();
   </script>
   <script src="../assets/weight-ladder.js"></script>
+<script>
+  // Opening an order from here → Order Details' back does a real history back to this page (see kkdBackToOrders)
+  document.addEventListener('click', function(e){
+    const a = e.target.closest && e.target.closest('a[href^="order-details.html"]');
+    if (a) { try { sessionStorage.setItem('kkd.odFromOrders', '1'); } catch(err){} }
+  }, true);
+</script>
 </body></html>

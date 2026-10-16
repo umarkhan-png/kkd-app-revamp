@@ -724,7 +724,7 @@
     <div class="px-3 pt-2 space-y-2">
       <button type="button" class="cmp-cat" data-cat="received"><span class="ic" style="background:#FEF3C7;color:#B45309"><i class="fa-solid fa-box-open"></i></span><span class="tx">I received it, but there's a problem</span><i class="fa-solid fa-chevron-right ch"></i></button>
       <button type="button" class="cmp-cat" data-cat="notreceived"><span class="ic" style="background:#FEE2E2;color:#DC2626"><i class="fa-solid fa-truck-ramp-box"></i></span><span class="tx">I never received it</span><i class="fa-solid fa-chevron-right ch"></i></button>
-      <button type="button" class="cmp-cat" data-act="track"><span class="ic" style="background:#ECFDF5;color:#258046"><i class="fa-solid fa-location-crosshairs"></i></span><span class="tx">Track my refund / replacement</span><i class="fa-solid fa-chevron-right ch"></i></button>
+      <button type="button" class="cmp-cat" data-act="track"><span class="ic" style="background:#ECFDF5;color:#258046"><i class="fa-solid fa-location-crosshairs"></i></span><span class="tx">Track my complaint</span><i class="fa-solid fa-chevron-right ch"></i></button>
       <button type="button" class="cmp-cat" data-act="other"><span class="ic" style="background:#EFF6FF;color:#2563EB"><i class="fa-solid fa-headset"></i></span><span class="tx">Something else</span><i class="fa-solid fa-chevron-right ch"></i></button>
     </div>
   </div>
@@ -951,6 +951,10 @@
     .cmp-st{display:inline-flex;align-items:center;gap:4px;margin-left:6px;padding:2px 8px;border-radius:9999px;font-size:10px;font-weight:700;vertical-align:1px}
     .cmp-st.open{background:#FEF3C7;color:#B45309}
     .cmp-st.closed{background:#ECFDF5;color:#258046}
+    .cmp-st.rej{background:#FEF2F2;color:#DC2626}
+    .tl-badge.cmp-rej{background:#DC2626;color:#FFFFFF}
+    .rtl.rej .dot{background:#DC2626;border-color:#DC2626;color:#fff}
+    .rtl.rej .a{color:#991B1B;font-weight:800}
     .tl-cmp-btn{display:inline-flex;align-items:center;gap:7px;margin-top:8px;font-size:11.5px;font-weight:700;color:#0F172A;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:10px;padding:7px 11px;cursor:pointer;font-family:inherit;font-variant-numeric:tabular-nums}
     .tl-cmp-btn .ch{font-size:9px;color:#94A3B8}
     .tl-cmp-btn:active{transform:scale(.98)}
@@ -1879,36 +1883,64 @@
   <script src="../assets/modify-order.js"></script>
   <script src="../assets/weight-ladder.js"></script>
 <script>
-  // Complaint tickets · every Need-help request gets a unique ticket ID, shows up in the Order Timeline with its live status,
-  // and only ONE request per order can be open at a time (a new one unlocks once the open one is resolved).
-  // Demo: ?cmp=open (one under review) · ?cmp=resolved (one resolved, new request allowed) · ?cmp=clear
+  // Complaint tickets · mirrors Sahyog / RRF tickets (CRM return_refunds): status open → in_progress → under_review (dept-by-dept) → closed | rejected, plus reopen.
+  // Every Need-help request gets an RRF-style ticket ID, shows up in the Order Timeline with its live status,
+  // and only ONE request per order can be open at a time (a new one unlocks once the open one is closed or rejected).
+  // Demo: ?cmp=open | in_progress | under_review | reopen | rejected | closed (=resolved) | closed_cn | closed_replace | history | clear
   (function(){
     const oid = ((document.getElementById('orderIdLabel')||{}).textContent||'').trim().replace('#','') || 'KAT-2026-04-1198';
-    const KEY = 'kkd.tickets.' + oid;
-    const STEPS = [
-      {k:'raised',     a:'Complaint raised',  b:'We’ve logged your request'},
-      {k:'review',     a:'Under review',      b:'Our team is verifying your request & proof'},
-      {k:'resolution', a:'Resolution shared', b:'Refund, replacement or fix — based on the review'},
-      {k:'closed',     a:'Resolved',          b:'Request closed'}
-    ];
-    const LABEL = {raised:'Raised', review:'Under review', resolution:'Resolution shared', closed:'Resolved'};
+    const KEY = 'kkd.tickets.v2.' + oid;
+    const LABEL = {open:'Raised', in_progress:'In progress', under_review:'Under review', reopen:'Reopened', rejected:'Rejected', closed:'Resolved'};
+    const TONE  = {open:'open', in_progress:'open', under_review:'open', reopen:'open', rejected:'rej', closed:'closed'};
+    // RRF routed departments → farmer-friendly names
+    const DEPT  = {support:'Support team', sales_head:'Approvals team', accounts:'Accounts team', dispatch:'Pickup & dispatch team', agronomist:'Agronomy expert', agronomist_head:'Agronomy expert', admin:'Admin team', gilehri:'Quality lab', retailer:'Retailer team', sales:'Sales team'};
     function load(){ try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e){ return []; } }
     function save(l){ try { localStorage.setItem(KEY, JSON.stringify(l)); } catch(e){} }
     let list = load();
+
+    const H = 3600*1000, now = Date.now();
+    const SEED = {
+      open:         () => ({id:'RRF-35420', reason:'Damaged / leaked / broken', type:'return', at:now-2*H, status:'open', log:[]}),
+      in_progress:  () => ({id:'RRF-35215', reason:'Missing item(s)', type:'refund', at:now-20*H, status:'in_progress', pickedAt:now-18*H, log:[]}),
+      under_review: () => ({id:'RRF-35010', reason:'Damaged / leaked / broken', type:'refund', at:now-50*H, status:'under_review', pickedAt:now-49*H,
+                            log:[{dept:'support', at:now-48*H}, {dept:'sales_head', at:now-46*H}], current:'accounts'}),
+      reopen:       () => ({id:'RRF-13152', reason:'Received wrong product', type:'replacement', at:now-9*24*H, status:'reopen', pickedAt:now-9*24*H+H,
+                            log:[{dept:'support', at:now-9*24*H+2*H}, {dept:'sales_head', at:now-8*24*H}, {dept:'accounts', at:now-7*24*H}], reopenedAt:now-5*H, reopenCount:1, current:'support'}),
+      rejected:     () => ({id:'RRF-34871', reason:'Quality issue (less quantity / expired)', type:'return', at:now-4*24*H, status:'rejected', pickedAt:now-4*24*H+H,
+                            log:[{dept:'support', at:now-3*24*H}], closedAt:now-3*24*H+3*H, rejectReason:'Seal was intact in the unboxing video — product is within spec.'}),
+      closed:       () => ({id:'RRF-34492', reason:'Missing item(s)', type:'refund', at:now-6*24*H, status:'closed', pickedAt:now-6*24*H+H,
+                            log:[{dept:'support', at:now-6*24*H+2*H}, {dept:'sales_head', at:now-5*24*H}, {dept:'accounts', at:now-4*24*H}], closedAt:now-4*24*H,
+                            outcome:{kind:'refund', amount:376, ref:'IN42628856478098'}}),
+      closed_cn:    () => ({id:'RRF-33907', reason:'Damaged / leaked / broken', type:'return', at:now-10*24*H, status:'closed', pickedAt:now-10*24*H+H,
+                            log:[{dept:'support', at:now-10*24*H+2*H}, {dept:'dispatch', at:now-8*24*H}, {dept:'accounts', at:now-7*24*H}], closedAt:now-7*24*H,
+                            outcome:{kind:'cn', amount:327, ref:'CNKSK01929'}}),
+      closed_replace: () => ({id:'RRF-33512', reason:'Received wrong product', type:'replacement', at:now-12*24*H, status:'closed', pickedAt:now-12*24*H+H,
+                            log:[{dept:'support', at:now-12*24*H+2*H}, {dept:'sales_head', at:now-11*24*H}, {dept:'dispatch', at:now-10*24*H}], closedAt:now-10*24*H,
+                            outcome:{kind:'replacement', ref:'KAT-2026-04-1302'}})
+    };
     const demo = new URLSearchParams(location.search).get('cmp');
     if (demo) {
-      const y = Date.now() - 26*3600*1000;
-      if (demo === 'clear') list = [];
-      if (demo === 'open') list = [{id:'TKT-482913', reason:'Damaged / leaked / broken', at:y, status:'review'}];
-      if (demo === 'resolved') list = [{id:'TKT-471206', reason:'Missing item(s)', at:y - 3*86400000, status:'closed', closedAt:y}];
+      const k = demo === 'resolved' ? 'closed' : demo;
+      if (k === 'clear') list = [];
+      else if (k === 'history') list = [SEED.closed_cn(), SEED.rejected(), SEED.under_review()];
+      else if (SEED[k]) list = [SEED[k]()];
       save(list);
     }
-    const isOpen = t => t.status !== 'closed';
+    const isOpen = t => t.status !== 'closed' && t.status !== 'rejected';
     const openOne = () => list.find(isOpen);
+    const inr = n => '₹' + Number(n).toLocaleString('en-IN');
     function fmt(ts){ const d = new Date(ts); return d.getDate() + ' ' + d.toLocaleString('en-US',{month:'short'}) + ', ' + d.toLocaleString('en-US',{hour:'numeric',minute:'2-digit'}); }
-    function newId(){ let id; do { id = 'TKT-' + String(Math.floor(100000 + Math.random()*900000)); } while (list.some(t => t.id === id)); return id; }
+    function newId(){ let id; do { id = 'RRF-' + String(Math.floor(35500 + Math.random()*4000)); } while (list.some(t => t.id === id)); return id; }
     function openS(bd, sh){ document.getElementById(bd).classList.add('open'); document.getElementById(sh).classList.add('open'); }
     function closeS(bd, sh){ document.getElementById(bd).classList.remove('open'); document.getElementById(sh).classList.remove('open'); }
+    function pill(t, extra){ return '<span class="cmp-st ' + TONE[t.status] + '"' + (extra||'') + '>' + LABEL[t.status] + '</span>'; }
+    function outcomeLine(o){
+      if (!o) return 'Request closed';
+      if (o.kind === 'refund') return 'Refund of ' + inr(o.amount) + ' sent to your bank · UTR ' + o.ref;
+      if (o.kind === 'cn') return 'Credit note ' + o.ref + ' · ' + inr(o.amount) + ' added to your Wallet';
+      if (o.kind === 'replacement') return 'Replacement order #' + o.ref + ' placed';
+      return 'Request closed';
+    }
 
     // Order Timeline · one "Complaint raised" entry per ticket, after the delivery steps
     function paintTimeline(){
@@ -1920,11 +1952,11 @@
       if (list.length && last && !last.querySelector(':scope > .tl-line')) { ln = document.createElement('div'); ln.className = 'tl-line'; ln.dataset.cmp = '1'; last.insertBefore(ln, last.children[1]); }
       if (ln) { ln.style.display = list.length ? '' : 'none'; ln.classList.toggle('done', document.body.classList.contains('state-delivered')); }
       list.forEach((t, i) => {
-        const open = isOpen(t);
+        const tone = TONE[t.status];
         const el = document.createElement('div'); el.className = 'tl-item tl-cmp';
-        el.innerHTML = '<div class="tl-badge ' + (open ? 'cmp-open' : 'cmp-closed') + '"><i class="fa-solid ' + (open ? 'fa-headset' : 'fa-check') + '"></i></div>'
+        el.innerHTML = '<div class="tl-badge cmp-' + tone + '"><i class="fa-solid ' + (tone === 'closed' ? 'fa-check' : (tone === 'rej' ? 'fa-xmark' : 'fa-headset')) + '"></i></div>'
           + (i < list.length - 1 ? '<div class="tl-line"></div>' : '')
-          + '<div class="tl-title">Complaint raised<span class="cmp-st ' + (open ? 'open' : 'closed') + '">' + LABEL[t.status] + '</span></div>'
+          + '<div class="tl-title">Complaint raised' + pill(t) + '</div>'
           + '<div class="tl-time">' + fmt(t.at) + ' &middot; ' + t.reason + '</div>'
           + '<button type="button" class="tl-cmp-btn"><i class="fa-solid fa-ticket" style="font-size:10px;color:#64748B"></i> Ticket #' + t.id + ' &middot; View status <i class="fa-solid fa-chevron-right ch"></i></button>';
         el.querySelector('.tl-cmp-btn').addEventListener('click', () => show(t.id));
@@ -1961,6 +1993,35 @@
       if (ban && ban.animate) ban.animate([{transform:'translateX(0)'},{transform:'translateX(-5px)'},{transform:'translateX(5px)'},{transform:'translateX(0)'}], {duration:260});
     }, true);
 
+    // Status banner · one per RRF status
+    function banner(t){
+      const amber = (ic, tx) => '<div class="rounded-[12px] p-3 mb-4 flex items-center gap-3" style="background:#FFFBEB;border:1px solid #FCD34D"><i class="fa-solid ' + ic + ' text-[15px]" style="color:#B45309"></i><div class="text-[12px] font-semibold" style="color:#78350F">' + tx + '</div></div>';
+      if (t.status === 'open') return amber('fa-inbox', 'Request received — our support team will pick it up shortly');
+      if (t.status === 'in_progress') return amber('fa-user-check', 'Our support team has picked up your request');
+      if (t.status === 'under_review') return amber('fa-shield-halved', 'With the ' + (DEPT[t.current] || 'review team').toLowerCase() + ' — usually resolved within 24–48 hrs');
+      if (t.status === 'reopen') return amber('fa-rotate-right', 'Ticket reopened' + (t.reopenCount > 1 ? ' (' + t.reopenCount + ' times)' : '') + ' — we’re looking at it again');
+      if (t.status === 'rejected') return '<div class="rounded-[12px] p-3 mb-4 flex items-start gap-3" style="background:#FEF2F2;border:1px solid #FECACA"><i class="fa-solid fa-circle-xmark text-[15px]" style="color:#DC2626;margin-top:1px"></i><div class="text-[12px] font-semibold" style="color:#991B1B">Request rejected' + (t.rejectReason ? '<span style="display:block;font-weight:500;margin-top:2px">' + t.rejectReason + '</span>' : '') + '<span style="display:block;font-weight:500;margin-top:4px;color:#7F1D1D">Not satisfied? You can raise a new request from Need help.</span></div></div>';
+      return '<div class="rounded-[12px] p-3 mb-4 flex items-start gap-3" style="background:#ECFDF5;border:1px solid #A7F3D0"><i class="fa-solid fa-circle-check text-[15px]" style="color:#258046;margin-top:1px"></i><div class="text-[12px] font-semibold" style="color:#166534">Resolved' + (t.closedAt ? ' on ' + fmt(t.closedAt) : '') + '<span style="display:block;font-weight:500;margin-top:2px;font-variant-numeric:tabular-nums">' + outcomeLine(t.outcome) + '</span></div></div>';
+    }
+
+    // Step timeline · raised → picked up → review (one row per department that acted) → [reopened] → resolved | rejected
+    function steps(t){
+      const rows = [];
+      const row = (cls, a, b, ic) => rows.push('<div class="rtl ' + cls + '"><div class="dot">' + (cls === 'done' ? '<i class="fa-solid fa-check"></i>' : (cls === 'on' ? '<i class="fa-solid ' + (ic || 'fa-magnifying-glass') + ' text-[8px]"></i>' : (cls === 'rej' ? '<i class="fa-solid fa-xmark"></i>' : ''))) + '</div><div><div class="a">' + a + '</div><div class="b">' + b + '</div></div></div>');
+      const s = t.status, log = t.log || [];
+      row('done', 'Complaint raised', fmt(t.at));
+      if (s === 'open') row('on', 'Picked up by support', 'Usually within a few hours', 'fa-hourglass-half');
+      else row('done', 'Picked up by support', t.pickedAt ? fmt(t.pickedAt) : '');
+      log.forEach(l => row('done', 'Reviewed by ' + (DEPT[l.dept] || l.dept), fmt(l.at)));
+      if (s === 'reopen') row('on', 'Reopened', (t.reopenedAt ? fmt(t.reopenedAt) + ' · ' : '') + 'Back with the ' + (DEPT[t.current] || 'support team').toLowerCase(), 'fa-rotate-right');
+      if (s === 'in_progress' || (s === 'under_review' && !t.current)) row('on', 'Under review', 'Our team is verifying your request & proof');
+      if (s === 'under_review' && t.current) row('on', 'With the ' + (DEPT[t.current] || t.current), 'Under review');
+      if (s === 'rejected') row('rej', 'Rejected', t.closedAt ? fmt(t.closedAt) : '');
+      else if (s === 'closed') row('done', 'Resolved', (t.closedAt ? fmt(t.closedAt) + ' · ' : '') + outcomeLine(t.outcome));
+      else row('', 'Resolution', t.type === 'replacement' ? 'Replacement, once the review is done' : (t.type === 'refund' ? 'Refund to bank or Wallet credit, once approved' : 'Refund, Wallet credit or replacement — based on the review'));
+      return '<div class="px-1">' + rows.join('') + '</div>';
+    }
+
     // Status sheet · ticket ID + current status + step timeline (+ other requests on this order)
     function show(id){
       const body = document.getElementById('rtnDetBody'); if (!body) return;
@@ -1968,27 +2029,16 @@
       document.getElementById('rtnDetTitle').textContent = 'Complaint status';
       if (!t) {
         document.getElementById('rtnDetProd').textContent = 'Order #' + oid;
-        body.innerHTML = '<div class="rounded-[12px] p-4 text-center" style="background:#F8FAFC;border:1px solid #E5E7EB"><i class="fa-regular fa-folder-open text-[20px]" style="color:#94A3B8"></i><div class="text-[13px] font-bold mt-2">No requests yet</div><div class="text-[11.5px] mt-1" style="color:#64748B">Requests you raise from Need help will show up here.</div></div>';
+        body.innerHTML = '<div class="rounded-[12px] p-4 text-center" style="background:#F8FAFC;border:1px solid #E5E7EB"><i class="fa-regular fa-folder-open text-[20px]" style="color:#94A3B8"></i><div class="text-[13px] font-bold mt-2">No complaints yet</div><div class="text-[11.5px] mt-1" style="color:#64748B">Complaints you raise from Need help will show up here.</div></div>';
         openS('rtnDetBd','rtnDetSheet'); return;
       }
       document.getElementById('rtnDetProd').textContent = 'Order #' + oid + ' · ' + t.reason;
-      const idx = STEPS.findIndex(s => s.k === t.status);
-      const open = isOpen(t);
-      let h = '<div class="flex items-center justify-between mb-3"><span class="tk-id"><i class="fa-solid fa-ticket" style="font-size:9px"></i> Ticket #' + t.id + '</span><span class="cmp-st ' + (open ? 'open' : 'closed') + '" style="margin:0">' + LABEL[t.status] + '</span></div>';
-      h += open
-        ? '<div class="rounded-[12px] p-3 mb-4 flex items-center gap-3" style="background:#FFFBEB;border:1px solid #FCD34D"><i class="fa-solid fa-shield-halved text-[15px]" style="color:#B45309"></i><div class="text-[12px] font-semibold" style="color:#78350F">We’re reviewing your request — usually resolved within 24–48 hrs</div></div>'
-        : '<div class="rounded-[12px] p-3 mb-4 flex items-center gap-3" style="background:#ECFDF5;border:1px solid #A7F3D0"><i class="fa-solid fa-circle-check text-[15px]" style="color:#258046"></i><div class="text-[12px] font-semibold" style="color:#166534">Resolved' + (t.closedAt ? ' on ' + fmt(t.closedAt) : '') + ' · you can raise a new request if needed</div></div>';
-      h += '<div class="px-1">';
-      STEPS.forEach((s, i) => {
-        const cls = (i < idx || (i === idx && !open)) ? 'done' : (i === idx ? 'on' : '');
-        const sub = i === 0 ? fmt(t.at) : (s.k === 'closed' && t.closedAt ? fmt(t.closedAt) : s.b);
-        h += '<div class="rtl ' + cls + '"><div class="dot">' + (cls === 'done' ? '<i class="fa-solid fa-check"></i>' : (cls === 'on' ? '<i class="fa-solid fa-magnifying-glass text-[8px]"></i>' : '')) + '</div><div><div class="a">' + s.a + '</div><div class="b">' + sub + '</div></div></div>';
-      });
-      h += '</div>';
+      let h = '<div class="flex items-center justify-between mb-3"><span class="tk-id"><i class="fa-solid fa-ticket" style="font-size:9px"></i> Ticket #' + t.id + '</span>' + pill(t, ' style="margin:0"') + '</div>';
+      h += banner(t) + steps(t);
       const others = list.filter(x => x.id !== t.id);
       if (others.length) {
-        h += '<div class="text-[11px] font-semibold uppercase tracking-wider mt-5 mb-2" style="color:#64748B">Other requests on this order</div>';
-        others.slice().reverse().forEach(x => { h += '<button type="button" class="tk-row" data-tk="' + x.id + '"><span class="t"><b>Ticket #' + x.id + '</b><small>' + x.reason + ' · ' + fmt(x.at) + '</small></span><span class="cmp-st ' + (isOpen(x) ? 'open' : 'closed') + '" style="margin:0">' + LABEL[x.status] + '</span></button>'; });
+        h += '<div class="text-[11px] font-semibold uppercase tracking-wider mt-5 mb-2" style="color:#64748B">Other complaints on this order</div>';
+        others.slice().reverse().forEach(x => { h += '<button type="button" class="tk-row" data-tk="' + x.id + '"><span class="t"><b>Ticket #' + x.id + '</b><small>' + x.reason + ' · ' + fmt(x.at) + '</small></span>' + pill(x, ' style="margin:0"') + '</button>'; });
       }
       h += '<a href="policy.html?doc=returns" class="inline-flex items-center gap-1.5 mt-4 text-[12px] font-semibold" style="color:#258046;text-decoration:none"><i class="fa-solid fa-circle-info text-[11px]"></i> Returns &amp; refund policy</a>';
       body.innerHTML = h;
@@ -1999,7 +2049,7 @@
 
     function raise(reason){
       const cur = openOne(); if (cur) return cur;   // one open request per order · the UI already blocks this, guard anyway
-      const t = {id:newId(), reason:reason || 'Request', at:Date.now(), status:'review'};
+      const t = {id:newId(), reason:reason || 'Request', type:'return', at:Date.now(), status:'open', log:[]};
       list.push(t); save(list); paintTimeline(); paintNeedHelp();
       return t;
     }

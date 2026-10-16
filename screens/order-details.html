@@ -1334,6 +1334,8 @@
         const rBd=document.getElementById('cmpRBd'), rSheet=document.getElementById('cmpRSheet'), rList=document.getElementById('cmpRList'), rTitle=document.getElementById('cmpRTitle');
         const resBd=document.getElementById('cmpResBd'), resSheet=document.getElementById('cmpResSheet');
         if(!cmpSheet) return;
+        // Never-delivered order (in transit / pending) · drop the "I received it, but there's a problem" option and its whole flow
+        if(!document.body.classList.contains('state-delivered')){ const rc=cmpSheet.querySelector('.cmp-cat[data-cat="received"]'); if(rc) rc.remove(); }
         const resReason=document.getElementById('cmpResReason').querySelector('span'), resHead=document.getElementById('cmpResHead'), resSub=document.getElementById('cmpResSub'), resBody=document.getElementById('cmpResBody'), resCta=document.getElementById('cmpResCta');
         const ok=document.getElementById('rtnOk'), okTitle=document.getElementById('rtnOkTitle'), okSub=document.getElementById('rtnOkSub');
 

@@ -297,7 +297,7 @@
 
   <!-- Sticky header · title only · no subtitle -->
   <div class="top-stk px-4 pt-3 pb-3 flex items-center gap-3 relative">
-    <a href="orders.html" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB;text-decoration:none">
+    <a href="orders.html" id="odBack" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#FFFFFF;border:1px solid #E5E7EB;text-decoration:none">
       <i class="fa-solid fa-arrow-left text-[14px]" style="color:#0F172A"></i>
     </a>
     <h1 class="flex-1 text-[18px] font-bold leading-tight" style="color:#0F172A">Order Details</h1>
@@ -1248,7 +1248,7 @@
       });
       document.getElementById('cancelOkDone').addEventListener('click', () => {
         closeSheet(okBd, okSheet);
-        setTimeout(() => { window.location.href = 'orders.html'; }, 280);
+        setTimeout(() => { window.kkdBackToOrders ? window.kkdBackToOrders() : location.replace('orders.html'); }, 280);
       });
       okBd.addEventListener('click', () => closeSheet(okBd, okSheet));
 
@@ -1848,4 +1848,16 @@
   </script>
   <script src="../assets/modify-order.js"></script>
   <script src="../assets/weight-ladder.js"></script>
+<script>
+  // Back to My Orders · opened from My Orders → real history back (no duplicate orders entry); otherwise replace this page with My Orders
+  // so My Orders' own back never lands on Order Details again
+  (function(){
+    let fromOrders = false;
+    try { fromOrders = sessionStorage.getItem('kkd.odFromOrders') === '1'; sessionStorage.removeItem('kkd.odFromOrders'); } catch(e){}
+    if (!fromOrders && document.referrer) { try { fromOrders = new URL(document.referrer).pathname.endsWith('/orders.html'); } catch(e){} }
+    window.kkdBackToOrders = function(){ if (fromOrders && history.length > 1) history.back(); else location.replace('orders.html'); };
+    const b = document.getElementById('odBack');
+    if (b) b.addEventListener('click', function(e){ e.preventDefault(); window.kkdBackToOrders(); });
+  })();
+</script>
 </body></html>
